@@ -17,7 +17,7 @@ install:
 before_script:
   - if [ $DB = 'mysql' ]; then mysql -e 'create database fusio;'; fi;
 script:
-  - cd vendor/bin/phpunit
+  - vendor/bin/phpunit
 env:
   - DB=mysql
   - DB=sqlite
