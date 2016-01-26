@@ -134,7 +134,7 @@ class Container extends DefaultContainer
         $parsers[] = new Parser\Directory(
             $this->get('action_factory'),
             $this->get('connection'),
-            $this->get('config')->get('fusio_src_custom') . '/Action',
+            PSX_PATH_LIBRARY . '/Action',
             'Fusio\Custom\Action',
             'Fusio\Engine\ActionInterface'
         );
@@ -181,7 +181,7 @@ class Container extends DefaultContainer
         $parsers[] = new Parser\Directory(
             $this->get('action_factory'),
             $this->get('connection'),
-            $this->get('config')->get('fusio_src_custom') . '/Connection',
+            PSX_PATH_LIBRARY . '/Connection',
             'Fusio\Custom\Connection',
             'Fusio\Engine\ConnectionInterface'
         );
@@ -321,7 +321,6 @@ class Container extends DefaultContainer
             'fusio_expire_app'       => 'P2D',
             'fusio_expire_backend'   => 'PT1H',
             'fusio_expire_consumer'  => 'PT1H',
-            'fusio_src_custom'       => __DIR__ . '/../../src-custom',
         ));
     }
 }
