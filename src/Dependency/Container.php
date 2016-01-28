@@ -307,6 +307,13 @@ class Container extends DefaultContainer
 
         $application->add(new Console\ImportSchemaCommand($this->get('schema_service')));
 
+        $application->add(new Console\GenerateAccessTokenCommand(
+            $this->get('app_service'), 
+            $this->get('scope_service'), 
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), 
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\User')
+        ));
+
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
         $application->add(new SymfonyCommand\ListCommand());

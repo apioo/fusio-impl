@@ -212,6 +212,10 @@ class App
 
     public function generateAccessToken($appId, $userId, array $scopes, $ip, DateInterval $expire)
     {
+        if (empty($scopes)) {
+            throw new StatusCode\BadRequestException('No scopes provided');
+        }
+
         $expires = new \DateTime();
         $expires->add($expire);
         $now     = new \DateTime();
