@@ -91,6 +91,10 @@ class Schema
 
     public function create($name, $source)
     {
+        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $name)) {
+            throw new StatusCode\BadRequestException('Invalid schema name');
+        }
+
         $this->schemaTable->create(array(
             'status' => TableSchema::STATUS_ACTIVE,
             'name'   => $name,

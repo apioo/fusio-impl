@@ -305,6 +305,8 @@ class Container extends DefaultContainer
 
         $application->add(new Console\ExportSchemaCommand($this->get('connection')));
 
+        $application->add(new Console\ImportSchemaCommand($this->get('schema_service')));
+
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
         $application->add(new SymfonyCommand\ListCommand());
