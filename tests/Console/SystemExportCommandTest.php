@@ -139,7 +139,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
             "name": "Welcome",
             "class": "Fusio\\Impl\\Action\\StaticResponse",
             "config": {
-                "response": "{\r\n    \"message\": \"Congratulations the installation of Fusio was successful\",\r\n    \"links\": [{\r\n        \"rel\": \"about\",\r\n        \"name\": \"http:\/\/fusio-project.org\"\r\n    }]\r\n}"
+                "response": "{\n    \"message\": \"Congratulations the installation of Fusio was successful\",\n    \"links\": [\n        {\n            \"rel\": \"about\",\n            \"name\": \"http:\\\/\\\/fusio-project.org\"\n        }\n    ]\n}"
             }
         }
     ],

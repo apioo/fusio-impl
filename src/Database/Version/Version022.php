@@ -477,15 +477,13 @@ class Version022 implements VersionInterface
 
     protected function getWelcomeResponse()
     {
-        return <<<'JSON'
-{
-    "message": "Congratulations the installation of Fusio was successful",
-    "links": [{
-        "rel": "about",
-        "name": "http://fusio-project.org"
-    }]
-}
-JSON;
+        return json_encode([
+            'message' => 'Congratulations the installation of Fusio was successful',
+            'links' => [[
+                'rel' => 'about',
+                'name' => 'http://fusio-project.org',
+            ]]
+        ], JSON_PRETTY_PRINT);
     }
 
     protected function getWelcomeConfig()
