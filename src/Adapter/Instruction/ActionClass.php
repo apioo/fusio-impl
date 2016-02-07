@@ -37,6 +37,11 @@ class ActionClass extends InstructionAbstract
         return 'Action Class';
     }
 
+    public function getKey()
+    {
+        return 'actionClass';
+    }
+
     public function getDescription()
     {
         return $this->payload;

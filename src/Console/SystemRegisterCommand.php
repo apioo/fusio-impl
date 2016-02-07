@@ -27,6 +27,7 @@ use Fusio\Impl\Adapter\Installer;
 use Fusio\Impl\Adapter\Instruction;
 use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Backend\Filter\Routes\Path as PathFilter;
+use Fusio\Impl\Service;
 use Psr\Log\LoggerInterface;
 use PSX\Dispatch;
 use PSX\Json;
@@ -38,32 +39,32 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * RegisterAdapterCommand
+ * SystemRegisterCommand
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RegisterAdapterCommand extends Command
+class SystemRegisterCommand extends Command
 {
     protected $connection;
     protected $installer;
     protected $parser;
 
-    public function __construct(Dispatch $dispatch, Connection $connection, LoggerInterface $logger)
+    public function __construct(Service\System\Import $importService, Connection $connection)
     {
         parent::__construct();
 
         $this->connection = $connection;
-        $this->installer  = new Installer($dispatch, $connection, $logger);
+        $this->installer  = new Installer($importService);
         $this->parser     = new InstructionParser();
     }
 
     protected function configure()
     {
         $this
-            ->setName('register')
-            ->setDescription('Registers an adapter to the system')
+            ->setName('system:register')
+            ->setDescription('Register an adapter to the system')
             ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the adapter class (Acme\Fusio\Adapter)');
     }
 

@@ -162,6 +162,34 @@ trait Service
     }
 
     /**
+     * @return \Fusio\Impl\Service\System\Import
+     */
+    public function getImportService()
+    {
+        return new Impl\Service\System\Import(
+            $this->get('dispatch'),
+            $this->get('connection'),
+            $this->get('action_parser'),
+            $this->get('connection_parser'),
+            $this->get('logger')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\System\Export
+     */
+    public function getExportService()
+    {
+        return new Impl\Service\System\Export(
+            $this->get('dispatch'),
+            $this->get('connection'),
+            $this->get('action_parser'),
+            $this->get('connection_parser'),
+            $this->get('logger')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Schema
      */
     public function getSchemaService()

@@ -37,6 +37,11 @@ class Action extends InstructionAbstract
         return 'Action';
     }
 
+    public function getKey()
+    {
+        return 'action';
+    }
+
     public function getDescription()
     {
         return isset($this->payload->name) ? $this->payload->name : null;

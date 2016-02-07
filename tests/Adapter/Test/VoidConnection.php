@@ -46,5 +46,6 @@ class VoidConnection implements ConnectionInterface
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
+        $builder->add($elementFactory->newInput('foo', 'Foo', 'text', 'Description'));
     }
 }

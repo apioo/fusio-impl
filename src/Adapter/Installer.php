@@ -21,19 +21,9 @@
 
 namespace Fusio\Impl\Adapter;
 
-use DateTime;
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Base;
-use Psr\Log\LoggerInterface;
-use PSX\Dispatch;
-use PSX\Http\PostRequest;
-use PSX\Http\Response;
-use PSX\Http\Stream\TempStream;
+use Fusio\Impl\Service;
 use PSX\Json;
-use PSX\Url;
-use ReflectionClass;
-use RuntimeException;
+use stdClass;
 
 /**
  * The installer inserts only the action and connection classes through the
@@ -45,204 +35,32 @@ use RuntimeException;
  */
 class Installer
 {
-    protected $dispatch;
-    protected $connection;
-    protected $logger;
+    protected $importService;
 
-    protected $accessToken;
-
-    public function __construct(Dispatch $dispatch, Connection $connection, LoggerInterface $logger)
+    public function __construct(Service\System\Import $importService)
     {
-        $this->dispatch   = $dispatch;
-        $this->connection = $connection;
-        $this->logger     = $logger;
+        $this->importService = $importService;
     }
 
     public function install(array $instructions, $basePath = null)
     {
-        $this->installActionClass($instructions);
-        $this->installConnectionClass($instructions);
+        $data = new stdClass();
 
-        $this->installConnection($instructions);
-        $this->installSchema($instructions);
-        $this->installAction($instructions);
-        $this->installRoute($instructions, $basePath);
-    }
-
-    protected function installActionClass(array $instructions)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\ActionClass');
         foreach ($instructions as $instruction) {
-            $this->registerClass('fusio_action_class', $instruction->getPayload(), 'Fusio\Engine\ActionInterface');
-        }
-    }
-
-    protected function installConnectionClass(array $instructions)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\ConnectionClass');
-        foreach ($instructions as $instruction) {
-            $this->registerClass('fusio_connection_class', $instruction->getPayload(), 'Fusio\Engine\ConnectionInterface');
-        }
-    }
-
-    protected function installConnection(array $instructions)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\Connection');
-        foreach ($instructions as $instruction) {
-            $this->submitData($instruction, 'backend/connection');
-        }
-    }
-
-    protected function installSchema(array $instructions)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\Schema');
-        foreach ($instructions as $instruction) {
-            $this->submitData($instruction, 'backend/schema');
-        }
-    }
-
-    protected function installAction(array $instructions)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\Action');
-        foreach ($instructions as $instruction) {
-            $this->submitData($instruction, 'backend/action');
-        }
-    }
-
-    protected function installRoute(array $instructions, $basePath)
-    {
-        $instructions = $this->getInstructionByType($instructions, 'Fusio\Impl\Adapter\Instruction\Route');
-        foreach ($instructions as $instruction) {
-            if (!empty($basePath)) {
+            if ($instruction instanceof Instruction\Route && $basePath !== null) {
                 $instruction->setBasePath($basePath);
             }
 
-            $this->submitData($instruction, 'backend/routes');
-        }
-    }
+            $key   = $instruction->getKey();
+            $value = $instruction->getPayload();
 
-    protected function getInstructionByType(array $instructions, $type)
-    {
-        return array_filter($instructions, function ($value) use ($type) {
-            return $value instanceof $type;
-        });
-    }
-
-    protected function registerClass($tableName, $className, $interface)
-    {
-        if (!is_string($className)) {
-            throw new RuntimeException('Class name must be a string ' . gettype($className) . ' given');
-        }
-
-        $class = new ReflectionClass($className);
-
-        if ($class->implementsInterface($interface)) {
-            $id = $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE class = :class', [
-                'class' => $class->getName(),
-            ]);
-
-            if (empty($id)) {
-                $this->connection->insert($tableName, [
-                    'class' => $class->getName(),
-                ]);
-            } else {
-                $this->logger->notice('Class ' . $class->getName() . ' already registered');
-            }
-        } else {
-            throw new RuntimeException('Class ' . $class->getName() . ' must implement the interface ' . $interface);
-        }
-    }
-
-    protected function submitData(InstructionAbstract $instruction, $endpoint)
-    {
-        $header   = ['User-Agent' => 'Fusio-Installer v' . Base::getVersion(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
-        $body     = Json::encode($this->substituteParameters($instruction->getPayload()));
-        $request  = new PostRequest(new Url('http://127.0.0.1/' . $endpoint), $header, $body);
-        $response = new Response();
-        $response->setBody(new TempStream(fopen('php://memory', 'r+')));
-
-        $this->dispatch->route($request, $response);
-
-        $body = (string) $response->getBody();
-        $data = Json::decode($body, false);
-
-        if (isset($data->success) && $data->success === true) {
-            // installation successful
-            $message = isset($data->message) ? $data->message : 'Insert ' . $instruction->getName() . ' successful';
-
-            $this->logger->notice($message);
-        } else {
-            $message = isset($data->message) ? $data->message : 'Unknown error occured';
-
-            throw new RuntimeException($message);
-        }
-    }
-
-    protected function getAccessToken()
-    {
-        if (empty($this->accessToken)) {
-            // insert access token
-            $token  = TokenGenerator::generateToken();
-            $expire = new DateTime('+30 minute');
-            $now    = new DateTime();
-
-            $this->connection->insert('fusio_app_token', [
-                'appId'  => 1,
-                'userId' => 1,
-                'status' => 1,
-                'token'  => $token,
-                'scope'  => 'backend',
-                'ip'     => '127.0.0.1',
-                'expire' => $expire->format('Y-m-d H:i:s'),
-                'date'   => $now->format('Y-m-d H:i:s'),
-            ]);
-
-            return $this->accessToken = $token;
-        } else {
-            return $this->accessToken;
-        }
-    }
-
-    protected function substituteParameters(\stdClass $payload)
-    {
-        $data = json_encode($payload);
-        $data = preg_replace_callback('/\$\{([A-z0-9\-]+)\.([A-z0-9\-]+)\}/', function ($matches) {
-
-            $type  = isset($matches[1]) ? $matches[1] : null;
-            $id    = isset($matches[2]) ? $matches[2] : null;
-            $value = $id;
-
-            switch ($type) {
-                case 'action':
-                    $value = $this->connection->fetchColumn('SELECT id FROM fusio_action WHERE name = :name', [
-                        'name' => $id
-                    ]);
-                    break;
-
-                case 'connection':
-                    $value = $this->connection->fetchColumn('SELECT id FROM fusio_connection WHERE name = :name', [
-                        'name' => $id
-                    ]);
-                    break;
-
-                case 'schema':
-                    $value = $this->connection->fetchColumn('SELECT id FROM fusio_schema WHERE name = :name', [
-                        'name' => $id
-                    ]);
-                    break;
-
-                default:
-                    throw new RuntimeException('Invalid type identifier "' . $type . '"');
+            if (!isset($data->$key)) {
+                $data->$key = [];
             }
 
-            if (empty($value)) {
-                throw new RuntimeException(ucfirst($type) . ' with the id "' . $id . '" does not exist');
-            }
+            array_push($data->$key, $value);
+        }
 
-            return $value;
-
-        }, $data);
-
-        return json_decode($data);
+        return $this->importService->import(Json::encode($data));
     }
 }

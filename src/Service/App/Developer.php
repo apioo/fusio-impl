@@ -30,6 +30,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * Developer
@@ -65,13 +66,11 @@ class Developer
             $condition->like('name', '%' . $search . '%');
         }
 
-        $this->appTable->setRestrictedFields(['url', 'appSecret']);
-
         return new ResultSet(
             $this->appTable->getCount($condition),
             $startIndex,
             16,
-            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'appSecret']))
         );
     }
 

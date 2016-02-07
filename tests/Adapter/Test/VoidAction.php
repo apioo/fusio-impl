@@ -48,5 +48,7 @@ class VoidAction implements ActionInterface
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
+        $builder->add($elementFactory->newInput('foo', 'Foo', 'text', 'Foo description'));
+        $builder->add($elementFactory->newConnection('connection', 'Connection', 'Connection description'));
     }
 }

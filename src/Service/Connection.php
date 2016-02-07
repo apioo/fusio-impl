@@ -34,6 +34,7 @@ use PSX\Http\Exception as StatusCode;
 use PSX\OpenSsl;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * Connection
@@ -61,13 +62,18 @@ class Connection
     {
         $condition = !empty($search) ? new Condition(['name', 'LIKE', '%' . $search . '%']) : null;
 
-        $this->connectionTable->setRestrictedFields(['class', 'config']);
-
         return new ResultSet(
             $this->connectionTable->getCount($condition),
             $startIndex,
             16,
-            $this->connectionTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->connectionTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['class', 'config'])
+            )
         );
     }
 
@@ -79,7 +85,7 @@ class Connection
             $config = self::decryptConfig($connection['config'], $this->secretKey);
 
             // remove all password fields from the config
-            if (is_array($config)) {
+            if (!empty($config) && is_array($config)) {
                 $form = $this->connectionParser->getForm($connection['class']);
                 foreach ($form as $element) {
                     $data = $element->getRecordInfo()->getData();
@@ -90,7 +96,7 @@ class Connection
                     }
                 }
             } else {
-                $config = null;
+                $config = new \stdClass();
             }
 
             $connection['config'] = $config;

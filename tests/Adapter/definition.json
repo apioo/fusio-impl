@@ -12,9 +12,9 @@
                 "active": true,
                 "public": true,
                 "name": "GET",
-                "action": "${action.Void-Action}",
-                "request": "${schema.Adapter-Schema}",
-                "response": "${schema.Passthru}"
+                "action": "Void-Action",
+                "request": "Adapter-Schema",
+                "response": "Passthru"
             }]
         }]
     }],
@@ -23,7 +23,7 @@
         "class": "Fusio\\Impl\\Adapter\\Test\\VoidAction",
         "config": {
             "foo": "bar",
-            "connection": "${connection.Adapter-Connection}"
+            "connection": "Adapter-Connection"
         }
     }],
     "schema": [{

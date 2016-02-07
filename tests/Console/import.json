@@ -1,0 +1,83 @@
+{
+    "actionClass": [
+        "Fusio\\Impl\\Action\\CacheResponse",
+        "Fusio\\Impl\\Action\\Composite",
+        "Fusio\\Impl\\Action\\Condition",
+        "Fusio\\Impl\\Action\\HttpProxy",
+        "Fusio\\Impl\\Action\\HttpRequest",
+        "Fusio\\Impl\\Action\\MongoDelete",
+        "Fusio\\Impl\\Action\\MongoFetchAll",
+        "Fusio\\Impl\\Action\\MongoFetchRow",
+        "Fusio\\Impl\\Action\\MongoInsert",
+        "Fusio\\Impl\\Action\\MongoUpdate",
+        "Fusio\\Impl\\Action\\MqAmqp",
+        "Fusio\\Impl\\Action\\MqBeanstalk",
+        "Fusio\\Impl\\Action\\Pipe",
+        "Fusio\\Impl\\Action\\Processor",
+        "Fusio\\Impl\\Action\\SqlExecute",
+        "Fusio\\Impl\\Action\\SqlFetchAll",
+        "Fusio\\Impl\\Action\\SqlFetchRow",
+        "Fusio\\Impl\\Action\\StaticResponse",
+        "Fusio\\Impl\\Action\\Transform",
+        "Fusio\\Impl\\Action\\Validator"
+    ],
+    "connectionClass": [
+        "Fusio\\Impl\\Connection\\Beanstalk",
+        "Fusio\\Impl\\Connection\\DBAL",
+        "Fusio\\Impl\\Connection\\DBALAdvanced",
+        "Fusio\\Impl\\Connection\\MongoDB",
+        "Fusio\\Impl\\Connection\\Native",
+        "Fusio\\Impl\\Connection\\RabbitMQ"
+    ],
+    "connection": [
+        {
+            "name": "New-Connection",
+            "class": "Fusio\\Impl\\Connection\\DBAL",
+            "config": {
+                "type": "pdo_mysql",
+                "host": "127.0.0.1",
+                "username": "root",
+                "database": "bar"
+            }
+        }
+    ],
+    "schema": [
+        {
+            "name": "New-Schema",
+            "source": "{\n    \"id\": \"http:\/\/phpsx.org#\",\n    \"title\": \"test\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\n            \"type\": \"string\"\n        },\n        \"content\": {\n            \"type\": \"string\"\n        },\n        \"date\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n        }\n    }\n}"
+        }
+    ],
+    "action": [
+        {
+            "name": "Conditional-Action",
+            "class": "Fusio\\Impl\\Action\\Condition",
+            "config": {
+                "condition": "rateLimit.getRequestsPerMonth() < 20",
+                "true": "Sql-Fetch-Row",
+                "false": "Welcome"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "methods": "GET|POST|PUT|DELETE",
+            "path": "\/bar",
+            "config": [
+                {
+                    "active": true,
+                    "status": 4,
+                    "name": "1",
+                    "methods": [
+                        {
+                            "active": true,
+                            "public": true,
+                            "name": "GET",
+                            "action": "Conditional-Action",
+                            "response": "New-Schema"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

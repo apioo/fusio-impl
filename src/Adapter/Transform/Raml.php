@@ -161,9 +161,9 @@ class Raml implements TransformInterface
             'active'   => true,
             'public'   => true,
             'name'     => $methodName,
-            'action'   => '${action.' . $action . '}',
-            'request'  => '${schema.' . $request . '}',
-            'response' => '${schema.' . $response . '}',
+            'action'   => $action,
+            'request'  => $request,
+            'response' => $response,
         ];
     }
 

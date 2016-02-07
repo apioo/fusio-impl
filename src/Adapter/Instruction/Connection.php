@@ -37,6 +37,11 @@ class Connection extends InstructionAbstract
         return 'Connection';
     }
 
+    public function getKey()
+    {
+        return 'connection';
+    }
+
     public function getDescription()
     {
         return isset($this->payload->name) ? $this->payload->name : null;

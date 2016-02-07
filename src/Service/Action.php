@@ -28,6 +28,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * Action
@@ -63,13 +64,18 @@ class Action
             $condition->raw('id IN (' . $sql . ')', [$routeId]);
         }
 
-        $this->actionTable->setRestrictedFields(['class', 'config']);
-
         return new ResultSet(
             $this->actionTable->getCount($condition),
             $startIndex,
             16,
-            $this->actionTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->actionTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['class', 'config'])
+            )
         );
     }
 

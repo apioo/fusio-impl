@@ -61,7 +61,13 @@ class Scope
             $this->scopeTable->getCount($condition),
             $startIndex,
             16,
-            $this->scopeTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->scopeTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition
+            )
         );
     }
 

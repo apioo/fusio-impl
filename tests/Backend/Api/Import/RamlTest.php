@@ -69,9 +69,9 @@ class RamlTest extends ControllerDbTestCase
                             "active": true,
                             "public": true,
                             "name": "GET",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.Passthru}",
-                            "response": "${schema.api-pet-petId-GET-response}"
+                            "action": "Welcome",
+                            "request": "Passthru",
+                            "response": "api-pet-petId-GET-response"
                         }
                     ]
                 }
@@ -90,17 +90,17 @@ class RamlTest extends ControllerDbTestCase
                             "active": true,
                             "public": true,
                             "name": "POST",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.api-pet-POST-request}",
-                            "response": "${schema.Passthru}"
+                            "action": "Welcome",
+                            "request": "api-pet-POST-request",
+                            "response": "Passthru"
                         },
                         {
                             "active": true,
                             "public": true,
                             "name": "PUT",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.api-pet-PUT-request}",
-                            "response": "${schema.Passthru}"
+                            "action": "Welcome",
+                            "request": "api-pet-PUT-request",
+                            "response": "Passthru"
                         }
                     ]
                 }

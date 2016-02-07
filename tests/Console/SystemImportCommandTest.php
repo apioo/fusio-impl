@@ -27,13 +27,13 @@ use PSX\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * RegisterAdapterCommandTest
+ * SystemImportCommandTest
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RegisterAdapterCommandTest extends ControllerDbTestCase
+class SystemImportCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,64 +42,47 @@ class RegisterAdapterCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('register');
+        $command = Environment::getService('console')->find('system:import');
 
         $commandTester = new CommandTester($command);
-
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream('y' . "\n" . '/import' . "\n"));
-
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Impl\Adapter\TestAdapter',
+            'file'    => __DIR__ . '/import.json',
         ]);
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Registration successful/', $display, $display);
-
-        // check action class
-        $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Adapter\Test\VoidAction',
-        ]);
-
-        $this->assertEquals(21, $actionId);
-
-        // check connection class
-        $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Adapter\Test\VoidConnection',
-        ]);
-
-        $this->assertEquals(7, $connectionId);
+        $this->assertRegExp('/Import successful!/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
-            'name' => 'Adapter-Connection',
+            'name' => 'New-Connection',
         ]);
 
         $this->assertEquals(4, $connection['id']);
-        $this->assertEquals('Fusio\Impl\Adapter\Test\VoidConnection', $connection['class']);
-        $this->assertEquals(69, strlen($connection['config']));
+        $this->assertEquals('Fusio\Impl\Connection\DBAL', $connection['class']);
+        $this->assertEquals(177, strlen($connection['config']));
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, propertyName, source, cache FROM fusio_schema WHERE name = :name', [
-            'name' => 'Adapter-Schema',
+            'name' => 'New-Schema',
         ]);
 
         $source = <<<JSON
 {
-    "id": "http://fusio-project.org",
-    "title": "process",
+    "id": "http://phpsx.org#",
+    "title": "test",
     "type": "object",
     "properties": {
-        "logId": {
-            "type": "integer"
-        },
         "title": {
             "type": "string"
         },
         "content": {
             "type": "string"
+        },
+        "date": {
+            "type": "string",
+            "format": "date-time"
         }
     }
 }
@@ -112,16 +95,16 @@ JSON;
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
-            'name' => 'Void-Action',
+            'name' => 'Conditional-Action',
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Adapter\Test\VoidAction', $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => '4'], unserialize($action['config']));
+        $this->assertEquals('Fusio\Impl\Action\Condition', $action['class']);
+        $this->assertEquals(['condition' => 'rateLimit.getRequestsPerMonth() < 20', 'true' => '3', 'false' => '1'], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller, config FROM fusio_routes WHERE path = :path', [
-            'path' => '/import/void',
+            'path' => '/bar',
         ]);
 
         $this->assertEquals(51, $route['id']);
@@ -146,18 +129,9 @@ JSON;
                 'public' => true,
                 'name' => 'GET',
                 'action' => 4,
-                'request' => 3,
-                'response' => 1,
+                'response' => 3
             ]]
         ]], $data);
     }
-
-    protected function getInputStream($input)
-    {
-        $stream = fopen('php://memory', 'r+', false);
-        fputs($stream, $input);
-        rewind($stream);
-
-        return $stream;
-    }
 }
+

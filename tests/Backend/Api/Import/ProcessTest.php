@@ -56,7 +56,14 @@ class ProcessTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Import successful"
+    "message": "Import successful",
+    "result": [
+        "[CREATED] schema api-pet-petId-GET-response",
+        "[CREATED] schema api-pet-POST-request",
+        "[CREATED] schema api-pet-PUT-request",
+        "[CREATED] routes \/api\/pet\/:petId",
+        "[CREATED] routes \/api\/pet"
+    ]
 }
 JSON;
 
@@ -84,9 +91,9 @@ JSON;
                             "active": true,
                             "public": true,
                             "name": "GET",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.Passthru}",
-                            "response": "${schema.api-pet-petId-GET-response}"
+                            "action": "Welcome",
+                            "request": "Passthru",
+                            "response": "api-pet-petId-GET-response"
                         }
                     ]
                 }
@@ -105,17 +112,17 @@ JSON;
                             "active": true,
                             "public": true,
                             "name": "POST",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.api-pet-POST-request}",
-                            "response": "${schema.Passthru}"
+                            "action": "Welcome",
+                            "request": "api-pet-POST-request",
+                            "response": "Passthru"
                         },
                         {
                             "active": true,
                             "public": true,
                             "name": "PUT",
-                            "action": "${action.Welcome}",
-                            "request": "${schema.api-pet-PUT-request}",
-                            "response": "${schema.Passthru}"
+                            "action": "Welcome",
+                            "request": "api-pet-PUT-request",
+                            "response": "Passthru"
                         }
                     ]
                 }

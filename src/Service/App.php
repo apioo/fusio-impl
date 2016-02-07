@@ -34,6 +34,7 @@ use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * App
@@ -68,13 +69,18 @@ class App
             $condition->like('name', '%' . $search . '%');
         }
 
-        $this->appTable->setRestrictedFields(['url', 'appSecret']);
-
         return new ResultSet(
             $this->appTable->getCount($condition),
             $startIndex,
             16,
-            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->appTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['url', 'appSecret'])
+            )
         );
     }
 
@@ -102,9 +108,7 @@ class App
         $condition->equals('appKey', $appKey);
         $condition->equals('status', TableApp::STATUS_ACTIVE);
 
-        $this->appTable->setRestrictedFields(['userId', 'status', 'appKey', 'appSecret', 'date']);
-
-        $app = $this->appTable->getOneBy($condition);
+        $app = $this->appTable->getOneBy($condition, Fields::blacklist(['userId', 'status', 'appKey', 'appSecret', 'date']));
 
         if (!empty($app)) {
             $app['scopes'] = $this->appScopeTable->getByApp($app['id'], $scope, ['backend']);

@@ -295,7 +295,9 @@ class Container extends DefaultContainer
         // fusio commands
         $application->add(new Console\InstallCommand($this->get('connection')));
         $application->add(new Console\AddUserCommand($this->get('user_service')));
-        $application->add(new Console\RegisterAdapterCommand($this->get('dispatch'), $this->get('connection'), $this->get('logger')));
+        $application->add(new Console\SystemRegisterCommand($this->get('import_service'), $this->get('connection')));
+        $application->add(new Console\SystemExportCommand($this->get('export_service')));
+        $application->add(new Console\SystemImportCommand($this->get('import_service'), $this->get('connection')));
 
         $application->add(new Console\ListActionCommand($this->get('action_parser')));
         $application->add(new Console\DetailActionCommand($this->get('action_factory'), $this->get('connection')));

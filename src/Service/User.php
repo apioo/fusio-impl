@@ -31,6 +31,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * User
@@ -67,7 +68,14 @@ class User
             $this->userTable->getCount($condition),
             $startIndex,
             16,
-            $this->userTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->userTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition,
+                Fields::blacklist(['password'])
+            )
         );
     }
 
@@ -76,10 +84,8 @@ class User
         $user = $this->userTable->get($userId);
 
         if (!empty($user)) {
-            $this->appTable->setRestrictedFields(['userId', 'appSecret']);
-
             $user['scopes'] = $this->userTable->getScopeNames($user['id']);
-            $user['apps']   = $this->appTable->getByUserId($user['id']);
+            $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'appSecret']));
 
             return $user;
         } else {

@@ -31,6 +31,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 use RuntimeException;
 
 /**
@@ -68,13 +69,18 @@ class Schema
             $condition->raw('id IN (' . $sql . ')', [$routeId]);
         }
 
-        $this->schemaTable->setRestrictedFields(['propertyName', 'source', 'cache']);
-
         return new ResultSet(
             $this->schemaTable->getCount($condition),
             $startIndex,
             16,
-            $this->schemaTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->schemaTable->getAll(
+                $startIndex, 
+                16, 
+                'id',
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['propertyName', 'source', 'cache'])
+            )
         );
     }
 

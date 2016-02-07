@@ -37,6 +37,11 @@ class Schema extends InstructionAbstract
         return 'Schema';
     }
 
+    public function getKey()
+    {
+        return 'schema';
+    }
+
     public function getDescription()
     {
         return isset($this->payload->name) ? $this->payload->name : null;

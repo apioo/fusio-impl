@@ -28,6 +28,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * Log
@@ -49,13 +50,18 @@ class Log
     {
         $condition = $filter->getCondition();
 
-        $this->logTable->setRestrictedFields(['header', 'body']);
-
         return new ResultSet(
             $this->logTable->getCount($condition),
             $startIndex,
             16,
-            $this->logTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->logTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['header', 'body'])
+            )
         );
     }
 

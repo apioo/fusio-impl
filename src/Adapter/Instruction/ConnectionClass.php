@@ -37,6 +37,11 @@ class ConnectionClass extends InstructionAbstract
         return 'Connection Class';
     }
 
+    public function getKey()
+    {
+        return 'connectionClass';
+    }
+
     public function getDescription()
     {
         return $this->payload;

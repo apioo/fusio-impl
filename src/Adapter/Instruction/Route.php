@@ -37,6 +37,11 @@ class Route extends InstructionAbstract
         return 'Route';
     }
 
+    public function getKey()
+    {
+        return 'routes';
+    }
+
     public function getDescription()
     {
         $methods = isset($this->payload->methods) ? $this->payload->methods : null;

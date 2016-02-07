@@ -30,6 +30,7 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 
 /**
  * Routes
@@ -63,13 +64,18 @@ class Routes
             $condition->like('path', '%' . $search . '%');
         }
 
-        $this->routesTable->setRestrictedFields(['config']);
-
         return new ResultSet(
             $this->routesTable->getCount($condition),
             $startIndex,
             16,
-            $this->routesTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition)
+            $this->routesTable->getAll(
+                $startIndex, 
+                16, 
+                'id', 
+                Sql::SORT_DESC, 
+                $condition, 
+                Fields::blacklist(['config'])
+            )
         );
     }
 
@@ -90,6 +96,18 @@ class Routes
 
     public function create($methods, $path, $config)
     {
+        // check whether an active route already exists with this path
+        $condition  = new Condition();
+        $condition->equals('status', TableRoutes::STATUS_ACTIVE);
+        $condition->equals('path', $path);
+
+        $route = $this->routesTable->getOneBy($condition);
+
+        if (!empty($route)) {
+            throw new StatusCode\BadRequestException('Route already exists');
+        }
+
+        // create route
         $this->routesTable->create(array(
             'methods'    => $methods,
             'path'       => $path,

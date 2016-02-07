@@ -50,6 +50,13 @@ abstract class InstructionAbstract
     abstract public function getName();
 
     /**
+     * Returns the key of the payload
+     *
+     * @return string
+     */
+    abstract public function getKey();
+
+    /**
      * Returns a description what the payload does
      *
      * @return string

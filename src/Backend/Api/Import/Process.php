@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Import;
 
-use Fusio\Impl\Adapter\Installer;
+use Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Controller\ApiAbstract;
+use PSX\Json;
 
 /**
  * Process
@@ -39,31 +40,23 @@ class Process extends ApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Dispatch
+     * @var \Fusio\Impl\Service\System\Import
      */
-    protected $dispatch;
-
-    /**
-     * @Inject
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected $importService;
 
     public function onPost()
     {
-        $installer = new Installer($this->dispatch, $this->connection, $this->logger);
-        $parser    = new InstructionParser();
-
         try {
             $this->connection->beginTransaction();
 
-            $installer->install($parser->parse($this->getBody()));
+            $result = $this->importService->import(Json::encode($this->getBody()));
 
             $this->connection->commit();
 
             $this->setBody([
                 'success' => true,
-                'message' => 'Import successful'
+                'message' => 'Import successful',
+                'result'  => $result,
             ]);
         } catch (\Exception $e) {
             $this->connection->rollback();
