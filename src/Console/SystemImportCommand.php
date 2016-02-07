@@ -23,6 +23,8 @@ namespace Fusio\Impl\Console;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
+use Monolog\Handler\NullHandler;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,12 +42,13 @@ class SystemImportCommand extends Command
     protected $importService;
     protected $connection;
 
-    public function __construct(Service\System\Import $importService, Connection $connection)
+    public function __construct(Service\System\Import $importService, Connection $connection, LoggerInterface $logger)
     {
         parent::__construct();
 
         $this->importService = $importService;
         $this->connection    = $connection;
+        $this->logger        = $logger;
     }
 
     protected function configure()
@@ -59,9 +62,13 @@ class SystemImportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $file = $input->getArgument('file');
-
         if (!is_file($file)) {
             throw new RuntimeException('File does not exists');
+        }
+
+        $verbose = $output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL;
+        if (!$verbose) {
+            $this->logger->pushHandler(new NullHandler());
         }
 
         try {
@@ -85,6 +92,10 @@ class SystemImportCommand extends Command
             $output->writeln('');
             $output->writeln('Message: ' . $e->getMessage());
             $output->writeln('Trace: ' . $e->getTraceAsString());
+        }
+
+        if (!$verbose) {
+            $this->logger->popHandler();
         }
     }
 }
