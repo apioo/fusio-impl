@@ -96,6 +96,17 @@ class Scope
 
     public function create($name, $description, array $routes = null)
     {
+        // check whether scope exists
+        $condition  = new Condition();
+        $condition->equals('name', $name);
+
+        $scope = $this->scopeTable->getOneBy($condition);
+
+        if (!empty($scope)) {
+            throw new StatusCode\BadRequestException('Scope already exists');
+        }
+
+        // create scope
         $this->scopeTable->create(array(
             'name'        => $name,
             'description' => $description,

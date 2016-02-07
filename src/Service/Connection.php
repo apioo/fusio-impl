@@ -109,6 +109,17 @@ class Connection
 
     public function create($name, $class, $config)
     {
+        // check whether connection exists
+        $condition  = new Condition();
+        $condition->equals('name', $name);
+
+        $connection = $this->connectionTable->getOneBy($condition);
+
+        if (!empty($connection)) {
+            throw new StatusCode\BadRequestException('Connection already exists');
+        }
+
+        // create connection
         $this->connectionTable->create(array(
             'name'   => $name,
             'class'  => $class,

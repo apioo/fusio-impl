@@ -96,7 +96,7 @@ class Routes
 
     public function create($methods, $path, $config)
     {
-        // check whether an active route already exists with this path
+        // check whether route exists
         $condition  = new Condition();
         $condition->equals('status', TableRoutes::STATUS_ACTIVE);
         $condition->equals('path', $path);

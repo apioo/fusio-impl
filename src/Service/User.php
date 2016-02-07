@@ -121,6 +121,18 @@ class User
 
     public function create($status, $name, array $scopes = null)
     {
+        // check whether user exists
+        $condition  = new Condition();
+        $condition->notEquals('status', TableUser::STATUS_DELETED);
+        $condition->equals('name', $name);
+
+        $user = $this->userTable->getOneBy($condition);
+
+        if (!empty($user)) {
+            throw new StatusCode\BadRequestException('User already exists');
+        }
+
+        // create user
         $password = TokenGenerator::generateUserPassword();
 
         $this->userTable->create(array(

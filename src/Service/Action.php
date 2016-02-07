@@ -92,6 +92,17 @@ class Action
 
     public function create($name, $class, $config)
     {
+        // check whether action exists
+        $condition  = new Condition();
+        $condition->equals('name', $name);
+
+        $action = $this->actionTable->getOneBy($condition);
+
+        if (!empty($action)) {
+            throw new StatusCode\BadRequestException('Action already exists');
+        }
+
+        // create action
         $this->actionTable->create(array(
             'status' => TableAction::STATUS_ACTIVE,
             'name'   => $name,

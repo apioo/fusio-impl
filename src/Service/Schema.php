@@ -101,6 +101,17 @@ class Schema
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
+        // check whether schema exists
+        $condition  = new Condition();
+        $condition->equals('name', $name);
+
+        $connection = $this->schemaTable->getOneBy($condition);
+
+        if (!empty($connection)) {
+            throw new StatusCode\BadRequestException('Connection already exists');
+        }
+
+        // create schema
         $this->schemaTable->create(array(
             'status' => TableSchema::STATUS_ACTIVE,
             'name'   => $name,

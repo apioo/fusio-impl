@@ -140,6 +140,19 @@ class App
 
     public function create($userId, $status, $name, $url, array $scopes = null)
     {
+        // check whether app exists
+        $condition  = new Condition();
+        $condition->equals('userId', $userId);
+        $condition->notEquals('status', TableApp::STATUS_DELETED);
+        $condition->equals('name', $name);
+
+        $app = $this->appTable->getOneBy($condition);
+
+        if (!empty($app)) {
+            throw new StatusCode\BadRequestException('App already exists');
+        }
+
+        // create app
         $appKey    = TokenGenerator::generateAppKey();
         $appSecret = TokenGenerator::generateAppSecret();
 
