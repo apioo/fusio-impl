@@ -18,7 +18,7 @@
     "ircmaxell/random-lib": "1.1.0",
     "symfony/expression-language": "2.6.4",
     "pda/pheanstalk": "^3.0",
-    "videlalvaro/php-amqplib": "^2.5",
+    "php-amqplib/php-amqplib": "^2.6",
     "twig/twig": "^1.18"
   },
   "require-dev": {
