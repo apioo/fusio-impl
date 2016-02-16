@@ -16,7 +16,7 @@
     "fusio/engine": "^0.1@dev",
     "ircmaxell/password-compat": "^1.0",
     "ircmaxell/random-lib": "^1.1",
-    "symfony/expression-language": "^3.0",
+    "symfony/expression-language": "^2.8",
     "pda/pheanstalk": "^3.0",
     "php-amqplib/php-amqplib": "^2.6",
     "twig/twig": "^1.18"
