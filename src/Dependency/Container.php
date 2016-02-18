@@ -37,6 +37,7 @@ use Fusio\Impl\Processor;
 use Fusio\Impl\Response;
 use Fusio\Impl\Schema;
 use Fusio\Impl\Template;
+use Fusio\Impl\User;
 use Fusio\Impl\Validate;
 use Monolog\Handler as LogHandler;
 use PSX\Api;
@@ -235,6 +236,14 @@ class Container extends DefaultContainer
     public function getAppLoader()
     {
         return new App\Loader($this->get('connection'));
+    }
+
+    /**
+     * @return \Fusio\Engine\User\LoaderInterface
+     */
+    public function getUserLoader()
+    {
+        return new User\Loader($this->get('connection'));
     }
 
     /**

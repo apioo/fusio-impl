@@ -23,6 +23,7 @@ namespace Fusio\Impl;
 
 use Fusio\Impl\Model\Action;
 use Fusio\Impl\Model\App;
+use Fusio\Impl\Model\User;
 use Fusio\Impl\Template\Parser;
 use Psr\Http\Message\StreamInterface;
 use PSX\Data\Record;
@@ -65,11 +66,17 @@ trait ActionTestCaseTrait
         $app->setUrl('http://google.com');
         $app->setAppKey('5347307d-d801-4075-9aaa-a21a29a448c5');
 
+        $user = new User();
+        $user->setAnonymous(false);
+        $user->setId(2);
+        $user->setStatus(0);
+        $user->setName('Consumer');
+
         $action = new Action();
         $action->setId(uniqid());
         $action->setName('foo');
         $action->setDate(date('Y-m-d H:i:s'));
 
-        return new Context(34, $app, $action);
+        return new Context(34, $app, $user, $action);
     }
 }

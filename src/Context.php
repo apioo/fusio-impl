@@ -24,6 +24,7 @@ namespace Fusio\Impl;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Model\ActionInterface;
 use Fusio\Engine\Model\AppInterface;
+use Fusio\Engine\Model\UserInterface;
 
 /**
  * Context
@@ -36,13 +37,15 @@ class Context implements ContextInterface
 {
     protected $routeId;
     protected $app;
+    protected $user;
     protected $action;
     protected $connection;
 
-    public function __construct($routeId, AppInterface $app, ActionInterface $action = null)
+    public function __construct($routeId, AppInterface $app, UserInterface $user, ActionInterface $action = null)
     {
         $this->routeId = $routeId;
         $this->app     = $app;
+        $this->user    = $user;
         $this->action  = $action;
     }
 
@@ -65,6 +68,17 @@ class Context implements ContextInterface
     public function getApp()
     {
         return $this->app;
+    }
+
+    /**
+     * Returns the user which has authenticated through the app. Can also be an 
+     * anonymous user if authorization is not required for the endpoint
+     *
+     * @return \Fusio\Engine\Model\UserInterface
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

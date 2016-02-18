@@ -87,9 +87,25 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
+     * @var \Fusio\Engine\User\LoaderInterface
+     */
+    protected $userLoader;
+
+    /**
+     * @Inject
      * @var \PSX\Cache\CacheItemPoolInterface
      */
     protected $cache;
+
+    /**
+     * @var \Fusio\Engine\Model\AppInterface
+     */
+    protected $app;
+
+    /**
+     * @var \Fusio\Engine\Model\UserInterface
+     */
+    protected $user;
 
     /**
      * @var integer
@@ -97,9 +113,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     protected $appId;
 
     /**
-     * @var \Fusio\Engine\Model\AppInterface
+     * @var integer
      */
-    protected $app;
+    protected $userId;
 
     /**
      * @var integer
@@ -113,12 +129,14 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         parent::onLoad();
 
         // load app
-        $this->app = $this->appLoader->getById($this->appId);
+        $this->app  = $this->appLoader->getById($this->appId);
+        $this->user = $this->userLoader->getById($this->userId);
 
         // log request
         $this->logId = $this->apiLogger->log(
-            $this->appId,
             $this->context->get('fusio.routeId'),
+            $this->appId,
+            $this->userId,
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
             $this->request
         );
@@ -136,7 +154,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         if (!$isPublic) {
             $filter[] = new Oauth2Filter($this->connection, $this->request->getMethod(), $this->context->get('fusio.routeId'), function ($accessToken) {
 
-                $this->appId = $accessToken['appId'];
+                $this->appId  = $accessToken['appId'];
+                $this->userId = $accessToken['userId'];
 
             });
         }
@@ -241,7 +260,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
         if (is_int($actionId)) {
             try {
-                $context    = new FusioContext($this->context->get('fusio.routeId'), $this->app);
+                $context    = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
                 $request    = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
                 $response   = $this->processor->execute($actionId, $request, $context);
                 $statusCode = $response->getStatusCode();

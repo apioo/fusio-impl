@@ -56,8 +56,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
                 $args['date'] = substr($args['date'], 0, 16);
 
                 $expect = [
-                    'appId'     => 1,
                     'routeId'   => 1,
+                    'appId'     => 1,
+                    'userId'    => 1,
                     'ip'        => '127.0.0.1',
                     'userAgent' => null,
                     'method'    => null,
@@ -78,7 +79,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
 
         $logger = new Logger($connection);
-        $logId  = $logger->log(1, 1, '127.0.0.1', $request);
+        $logId  = $logger->log(1, 1, 1, '127.0.0.1', $request);
 
         $this->assertEquals(1, $logId);
     }

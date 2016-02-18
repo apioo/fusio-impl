@@ -119,8 +119,9 @@ class Version022 implements VersionInterface
 
         $logTable = $schema->createTable('fusio_log');
         $logTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $logTable->addColumn('appId', 'integer', array('notnull' => false));
         $logTable->addColumn('routeId', 'integer', array('notnull' => false));
+        $logTable->addColumn('appId', 'integer', array('notnull' => false));
+        $logTable->addColumn('userId', 'integer', array('notnull' => false));
         $logTable->addColumn('ip', 'string', array('length' => 40));
         $logTable->addColumn('userAgent', 'string', array('length' => 255));
         $logTable->addColumn('method', 'string', array('length' => 16));

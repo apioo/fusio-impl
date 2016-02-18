@@ -43,13 +43,14 @@ class Logger implements LoggerInterface
         $this->connection = $connection;
     }
 
-    public function log($appId, $routeId, $ip, RequestInterface $request)
+    public function log($routeId, $appId, $userId, $ip, RequestInterface $request)
     {
         $now = new \DateTime();
 
         $this->connection->insert('fusio_log', array(
-            'appId'     => $appId,
             'routeId'   => $routeId,
+            'appId'     => $appId,
+            'userId'    => $userId,
             'ip'        => $ip,
             'userAgent' => $request->getHeader('User-Agent'),
             'method'    => $request->getMethod(),
