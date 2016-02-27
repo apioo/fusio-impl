@@ -23,6 +23,7 @@ namespace Fusio\Impl\Authorization;
 
 use PSX\Util\Uuid;
 use RandomLib\Factory;
+use RandomLib\Generator;
 
 /**
  * TokenGenerator
@@ -44,9 +45,9 @@ class TokenGenerator
         $generator = $factory->getMediumStrengthGenerator();
 
         return implode('-', [
-            $generator->generateString(20),
-            $generator->generateString(48),
-            $generator->generateString(10)
+            $generator->generateString(20, Generator::CHAR_ALNUM),
+            $generator->generateString(48, Generator::CHAR_ALNUM),
+            $generator->generateString(10, Generator::CHAR_ALNUM)
         ]);
     }
 
@@ -60,7 +61,7 @@ class TokenGenerator
         $factory   = new Factory();
         $generator = $factory->getMediumStrengthGenerator();
 
-        return $generator->generateString(16);
+        return $generator->generateString(16, Generator::CHAR_ALNUM);
     }
 
     /**
@@ -83,7 +84,7 @@ class TokenGenerator
         $factory   = new Factory();
         $generator = $factory->getMediumStrengthGenerator();
 
-        return $generator->generateString(64);
+        return $generator->generateString(64, Generator::CHAR_ALNUM);
     }
 
     /**
@@ -96,6 +97,6 @@ class TokenGenerator
         $factory   = new Factory();
         $generator = $factory->getMediumStrengthGenerator();
 
-        return $generator->generateString(20);
+        return $generator->generateString(20, Generator::CHAR_ALNUM);
     }
 }
