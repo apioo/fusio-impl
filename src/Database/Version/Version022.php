@@ -265,22 +265,6 @@ class Version022 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
-        // encrypt connection config
-        $result = $connection->fetchAll('SELECT id, config FROM fusio_connection ORDER BY id ASC');
-        $key    = '42eec18ffdbffc9fda6110dcc705d6ce';
-
-        foreach ($result as $row) {
-            $config = $row['config'];
-            if (!empty($config)) {
-                $config = ConnectionService::encryptConfig(unserialize($config), $key);
-
-                $connection->update('fusio_connection', [
-                    'config' => $config
-                ], [
-                    'id' => $row['id']
-                ]);
-            }
-        }
     }
 
     public function getInstallInserts()
