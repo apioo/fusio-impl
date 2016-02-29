@@ -155,8 +155,6 @@ class App
         // parse parameters
         if ($parameters !== null) {
             $parameters = $this->parseParameters($parameters);
-        } else {
-            $parameters = $app['parameters'];
         }
 
         // create app
