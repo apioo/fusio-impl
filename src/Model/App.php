@@ -38,6 +38,7 @@ class App implements AppInterface
     protected $status;
     protected $name;
     protected $url;
+    protected $parameters;
     protected $appKey;
     protected $scopes;
 
