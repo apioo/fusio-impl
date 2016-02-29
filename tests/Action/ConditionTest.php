@@ -51,6 +51,7 @@ class ConditionTest extends DbTestCase
         $expression.= 'rateLimit.getRequestsOfRoutePerMonth() == 0 && ';
         $expression.= 'rateLimit.getRequestsOfRoutePerDay() == 0 && ';
         $expression.= 'app.getName() == "Foo-App" && ';
+        $expression.= 'app.getParameter("foo") == "bar" && ';
         $expression.= 'uriFragments.get("news_id") == 1 && ';
         $expression.= 'parameters.get("count") == 4 && ';
         $expression.= 'body.get("foo") == "bar" ';

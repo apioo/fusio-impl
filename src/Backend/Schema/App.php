@@ -42,6 +42,7 @@ class App extends SchemaAbstract
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_]{3,64}');
         $sb->string('url');
+        $sb->string('parameters');
         $sb->string('appKey');
         $sb->string('appSecret');
         $sb->dateTime('date');

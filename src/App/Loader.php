@@ -63,23 +63,30 @@ class Loader implements LoaderInterface
         }
 
         $sql = 'SELECT id,
-				       userId,
-				       status,
-				       name,
-				       url,
-				       appKey
-				  FROM fusio_app
-				 WHERE id = :appId';
+                       userId,
+                       status,
+                       name,
+                       url,
+                       parameters,
+                       appKey
+                  FROM fusio_app
+                 WHERE id = :appId';
 
         $row = $this->connection->fetchAssoc($sql, array('appId' => $appId));
 
         if (!empty($row)) {
+            $parameters = [];
+            if (!empty($row['parameters'])) {
+                parse_str($row['parameters'], $parameters);
+            }
+
             $app = new App();
             $app->setId($row['id']);
             $app->setUserId($row['userId']);
             $app->setStatus($row['status']);
             $app->setName($row['name']);
             $app->setUrl($row['url']);
+            $app->setParameters($parameters);
             $app->setAppKey($row['appKey']);
 
             return $app;
@@ -91,10 +98,10 @@ class Loader implements LoaderInterface
     protected function getScopes($appId)
     {
         $sql = '    SELECT scope.name
-				      FROM fusio_app_scope appScope
-				INNER JOIN fusio_scope scope
-				        ON scope.id = appScope.scopeId
-				     WHERE appScope.appId = :appId';
+                      FROM fusio_app_scope appScope
+                INNER JOIN fusio_scope scope
+                        ON scope.id = appScope.scopeId
+                     WHERE appScope.appId = :appId';
 
         $result = $this->connection->fetchAll($sql, array('appId' => $appId)) ?: array();
         $names  = array();

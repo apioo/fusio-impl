@@ -57,6 +57,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Foo-App",
     "url": "http:\/\/google.com",
+    "parameters": "",
     "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
     "appSecret": "342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d",
     "date": "[datetime]",
@@ -93,11 +94,12 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 2,
-            'userId' => 2,
-            'name'   => 'Bar',
-            'url'    => 'http://microsoft.com',
-            'scopes' => ['foo', 'bar']
+            'status'     => 2,
+            'userId'     => 2,
+            'name'       => 'Bar',
+            'url'        => 'http://microsoft.com',
+            'parameters' => 'foo=bar',
+            'scopes'     => ['foo', 'bar']
         ]));
 
         $body   = (string) $response->getBody();
@@ -113,7 +115,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
+            ->select('id', 'status', 'userId', 'name', 'url', 'parameters')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -127,6 +129,7 @@ JSON;
         $this->assertEquals(2, $row['userId']);
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
+        $this->assertEquals('foo=bar', $row['parameters']);
 
         $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(5);
 

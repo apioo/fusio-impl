@@ -64,6 +64,7 @@ trait ActionTestCaseTrait
         $app->setStatus(1);
         $app->setName('Foo-App');
         $app->setUrl('http://google.com');
+        $app->setParameters(['foo' => 'bar']);
         $app->setAppKey('5347307d-d801-4075-9aaa-a21a29a448c5');
 
         $user = new User();

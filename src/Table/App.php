@@ -53,6 +53,7 @@ class App extends TableAbstract
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'url' => self::TYPE_VARCHAR,
+            'parameters' => self::TYPE_VARCHAR,
             'appKey' => self::TYPE_VARCHAR,
             'appSecret' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,

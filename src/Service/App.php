@@ -79,7 +79,7 @@ class App
                 'id', 
                 Sql::SORT_DESC, 
                 $condition, 
-                Fields::blacklist(['url', 'appSecret'])
+                Fields::blacklist(['url', 'parameters', 'appSecret'])
             )
         );
     }
@@ -108,7 +108,7 @@ class App
         $condition->equals('appKey', $appKey);
         $condition->equals('status', TableApp::STATUS_ACTIVE);
 
-        $app = $this->appTable->getOneBy($condition, Fields::blacklist(['userId', 'status', 'appKey', 'appSecret', 'date']));
+        $app = $this->appTable->getOneBy($condition, Fields::blacklist(['userId', 'status', 'parameters', 'appKey', 'appSecret', 'date']));
 
         if (!empty($app)) {
             $app['scopes'] = $this->appScopeTable->getByApp($app['id'], $scope, ['backend']);
@@ -138,7 +138,7 @@ class App
         return $this->appTable->getOneBy($condition);
     }
 
-    public function create($userId, $status, $name, $url, array $scopes = null)
+    public function create($userId, $status, $name, $url, $parameters = null, array $scopes = null)
     {
         // check whether app exists
         $condition  = new Condition();
@@ -152,27 +152,37 @@ class App
             throw new StatusCode\BadRequestException('App already exists');
         }
 
+        // parse parameters
+        if ($parameters !== null) {
+            $parameters = $this->parseParameters($parameters);
+        } else {
+            $parameters = $app['parameters'];
+        }
+
         // create app
         $appKey    = TokenGenerator::generateAppKey();
         $appSecret = TokenGenerator::generateAppSecret();
 
         $this->appTable->create(array(
-            'userId'    => $userId,
-            'status'    => $status,
-            'name'      => $name,
-            'url'       => $url,
-            'appKey'    => $appKey,
-            'appSecret' => $appSecret,
-            'date'      => new DateTime(),
+            'userId'     => $userId,
+            'status'     => $status,
+            'name'       => $name,
+            'url'        => $url,
+            'parameters' => $parameters,
+            'appKey'     => $appKey,
+            'appSecret'  => $appSecret,
+            'date'       => new DateTime(),
         ));
 
         $appId = $this->appTable->getLastInsertId();
 
-        // insert scopes
-        $this->insertScopes($appId, $scopes);
+        if ($scopes !== null) {
+            // insert scopes
+            $this->insertScopes($appId, $scopes);
+        }
     }
 
-    public function update($appId, $status, $name, $url, array $scopes = null)
+    public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null)
     {
         $app = $this->appTable->get($appId);
 
@@ -181,18 +191,28 @@ class App
                 throw new StatusCode\GoneException('App was deleted');
             }
 
+            // parse parameters
+            if ($parameters !== null) {
+                $parameters = $this->parseParameters($parameters);
+            } else {
+                $parameters = $app['parameters'];
+            }
+
             $this->appTable->update(array(
-                'id'     => $app->getId(),
-                'status' => $status,
-                'name'   => $name,
-                'url'    => $url,
+                'id'         => $app['id'],
+                'status'     => $status,
+                'name'       => $name,
+                'url'        => $url,
+                'parameters' => $parameters,
             ));
 
-            // delete existing scopes
-            $this->appScopeTable->deleteAllFromApp($appId);
+            if ($scopes !== null) {
+                // delete existing scopes
+                $this->appScopeTable->deleteAllFromApp($app['id']);
 
-            // insert scopes
-            $this->insertScopes($appId, $scopes);
+                // insert scopes
+                $this->insertScopes($app['id'], $scopes);
+            }
         } else {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -272,5 +292,23 @@ class App
                 ));
             }
         }
+    }
+
+    protected function parseParameters($parameters)
+    {
+        parse_str($parameters, $data);
+
+        $params = [];
+        foreach ($data as $key => $value) {
+            if (!ctype_alnum($key)) {
+                throw new StatusCode\BadRequestException('Invalid parameter key only alnum characters are allowed');
+            }
+            if (!preg_match('/^[\x21-\x7E]*$/', $value)) {
+                throw new StatusCode\BadRequestException('Invalid parameter value only printable ascii characters are allowed');
+            }
+            $params[$key] = $value;
+        }
+
+        return http_build_query($params, '', '&');
     }
 }

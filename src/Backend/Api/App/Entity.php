@@ -105,6 +105,7 @@ class Entity extends SchemaApiAbstract
             $record->getStatus(),
             $record->getName(),
             $record->getUrl(),
+            $record->getParameters(),
             $record->getScopes()
         );
 

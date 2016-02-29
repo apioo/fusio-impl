@@ -85,7 +85,7 @@ class User
 
         if (!empty($user)) {
             $user['scopes'] = $this->userTable->getScopeNames($user['id']);
-            $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'appSecret']));
+            $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'parameters', 'appSecret']));
 
             return $user;
         } else {

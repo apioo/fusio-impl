@@ -70,7 +70,7 @@ class Developer
             $this->appTable->getCount($condition),
             $startIndex,
             16,
-            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'appSecret']))
+            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret']))
         );
     }
 
@@ -83,7 +83,12 @@ class Developer
                 throw new StatusCode\BadRequestException('App does not belong to the user');
             }
 
-            return $this->appService->get($appId);
+            $app = $this->appService->get($appId);
+
+            // remove parameters
+            $app['parameters'] = null;
+
+            return $app;
         } else {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -110,6 +115,7 @@ class Developer
             $this->appApproval === false ? TableApp::STATUS_ACTIVE : TableApp::STATUS_PENDING,
             $name, 
             $url, 
+            null,
             $scopes
         );
     }
@@ -133,6 +139,7 @@ class Developer
                 $app['status'],
                 $name,
                 $url,
+                null,
                 $scopes
             );
         } else {

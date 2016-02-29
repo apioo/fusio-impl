@@ -125,4 +125,19 @@ class App implements AppInterface
     {
         return in_array($name, $this->scopes);
     }
+
+    public function setParameters(array $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    public function getParameter($name)
+    {
+        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+    }
 }

@@ -104,11 +104,12 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 0,
-            'userId' => 1,
-            'name'   => 'Foo',
-            'url'    => 'http://google.com',
-            'scopes' => ['foo', 'bar']
+            'status'     => 0,
+            'userId'     => 1,
+            'name'       => 'Foo',
+            'url'        => 'http://google.com',
+            'parameters' => 'foo=bar&bar=1',
+            'scopes'     => ['foo', 'bar']
         ]));
 
         $body   = (string) $response->getBody();
@@ -124,7 +125,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
+            ->select('id', 'status', 'userId', 'name', 'url', 'parameters')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -138,6 +139,7 @@ JSON;
         $this->assertEquals(1, $row['userId']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
+        $this->assertEquals('foo=bar&bar=1', $row['parameters']);
 
         $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(6);
 
