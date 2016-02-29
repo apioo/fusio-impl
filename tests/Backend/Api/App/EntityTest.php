@@ -94,6 +94,53 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
+            'status' => 2,
+            'userId' => 2,
+            'name'   => 'Bar',
+            'url'    => 'http://microsoft.com',
+            'scopes' => ['foo', 'bar']
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "App successful updated"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status', 'userId', 'name', 'url', 'parameters')
+            ->from('fusio_app')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(2, $row['status']);
+        $this->assertEquals(2, $row['userId']);
+        $this->assertEquals('Bar', $row['name']);
+        $this->assertEquals('http://microsoft.com', $row['url']);
+        $this->assertEquals('', $row['parameters']);
+
+        $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(5);
+
+        $this->assertEquals(['foo', 'bar'], $scopes);
+    }
+
+    public function testPutWithParameters()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/app/5', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
             'status'     => 2,
             'userId'     => 2,
             'name'       => 'Bar',
