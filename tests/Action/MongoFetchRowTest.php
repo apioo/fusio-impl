@@ -25,7 +25,7 @@ use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
 use Fusio\Impl\MongoTestCase;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * MongoFetchRowTest

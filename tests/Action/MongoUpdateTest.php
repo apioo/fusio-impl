@@ -25,8 +25,8 @@ use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
 use Fusio\Impl\MongoTestCase;
-use PSX\Data\Record;
-use PSX\Test\Environment;
+use PSX\Record\Record;
+use PSX\Framework\Test\Environment;
 
 /**
  * MongoUpdateTest
