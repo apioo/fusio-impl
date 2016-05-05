@@ -49,6 +49,8 @@ class HttpProxyTest extends \PHPUnit_Framework_TestCase
             ->with($this->callback(function ($request) {
                 /** @var \PSX\Http\RequestInterface $request */
                 $this->assertInstanceOf('PSX\Http\RequestInterface', $request);
+                $this->assertEquals('application/json', $request->getHeader('Content-Type'));
+                $this->assertEquals('foo', $request->getHeader('X-Api-Key'));
                 $this->assertJsonStringEqualsJsonString('{"foo":"bar"}', (string) $request->getBody());
 
                 return true;
@@ -62,8 +64,9 @@ class HttpProxyTest extends \PHPUnit_Framework_TestCase
         $action->setProcessor(Environment::getService('io'));
 
         $parameters = $this->getParameters([
-            'url'  => 'http://127.0.0.1/bar',
-            'body' => '{{ request.body|json }}',
+            'url'     => 'http://127.0.0.1/bar',
+            'headers' => 'Content-Type=application/json&X-Api-Key=foo',
+            'body'    => '{{ request.body|json }}',
         ]);
 
         $body = Record::fromArray([

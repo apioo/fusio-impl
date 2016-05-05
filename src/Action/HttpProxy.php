@@ -40,7 +40,7 @@ class HttpProxy extends HttpRequest
      * @Inject
      * @var \PSX\Data\Processor
      */
-    protected $processor;
+    protected $io;
 
     public function getName()
     {
@@ -52,13 +52,13 @@ class HttpProxy extends HttpRequest
         $response = $this->executeRequest($request, $configuration, $context);
         
         $body = (string) $response->getBody();
-        $data = $this->processor->parse(Payload::create($body, $response->getHeader("Content-Type")));
+        $data = $this->io->parse(Payload::create($body, $response->getHeader("Content-Type")));
 
         return $this->response->build($response->getStatusCode(), [], $data);
     }
 
     public function setProcessor(Processor $processor)
     {
-        $this->processor = $processor;
+        $this->io = $processor;
     }
 }

@@ -91,7 +91,7 @@ class HttpRequest implements ActionInterface
 
         $builder->add($elementFactory->newInput('url', 'Url', 'text', 'Sends a HTTP request to the given url'));
         $builder->add($elementFactory->newSelect('method', 'Method', $methods, 'The used request method'));
-        //$builder->add($elementFactory->newTextArea('headers', 'Headers', 'yaml', 'Optional the '));
+        $builder->add($elementFactory->newInput('headers', 'Headers', 'text', 'Optional request headers i.e.: <code>User-Agent=foo&X-Api-Key=bar</code>'));
         $builder->add($elementFactory->newTextArea('body', 'Body', 'text', 'The request body. Inside the body it is possible to use a template syntax to add dynamic data. Click <a ng-click="help.showDialog(\'help/template.md\')">here</a> for more informations about the template syntax.'));
     }
 
@@ -110,24 +110,28 @@ class HttpRequest implements ActionInterface
         $this->response = $response;
     }
 
-    protected function parserHeaders($headers)
+    protected function parserHeaders($data)
     {
-        $result  = [];
-        $yaml    = new Parser();
-        $headers = $yaml->parse($headers);
+        $headers = [];
+        parse_str($data, $headers);
 
-        if (is_array($headers)) {
-            foreach ($headers as $key => $value) {
-                if (is_string($key) && is_string($value)) {
-                    $result[$key] = $value;
-                }
+        // remove empty values
+        $headers = array_filter($headers);
+
+        // set user agent if not available
+        $found = false;
+        foreach ($headers as $key => $value) {
+            if (strtolower($key) == 'user-agent') {
+                $found = true;
+                break;
             }
         }
 
-        // set user agent
-        $headers['User-Agent'] = 'Fusio v' . Base::getVersion();
+        if ($found === false) {
+            $headers['User-Agent'] = 'Fusio v' . Base::getVersion();
+        }
 
-        return $result;
+        return $headers;
     }
 
     protected function executeRequest(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
