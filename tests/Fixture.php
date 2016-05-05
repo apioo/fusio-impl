@@ -43,7 +43,7 @@ class Fixture
             return self::$dataSet;
         }
 
-        $version = new Version\Version023();
+        $version = new Version\Version030();
         $dataSet = array_merge_recursive($version->getInstallInserts(), self::getTestInserts());
 
         return self::$dataSet = new \PHPUnit_Extensions_Database_DataSet_ArrayDataSet($dataSet);
