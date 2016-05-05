@@ -23,10 +23,9 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Table\Log as TableLog;
 use Fusio\Impl\Table\Log\QueryFilter;
-use PSX\Data\ResultSet;
-use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 

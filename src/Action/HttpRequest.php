@@ -30,9 +30,9 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
 use Fusio\Engine\Template\FactoryInterface;
 use Fusio\Impl\Base;
-use PSX\Http;
+use PSX\Http\Client;
 use PSX\Http\Request;
-use PSX\Url;
+use PSX\Uri\Url;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -46,9 +46,9 @@ class HttpRequest implements ActionInterface
 {
     /**
      * @Inject
-     * @var \PSX\Http
+     * @var \PSX\Http\Client
      */
-    protected $http;
+    protected $httpClient;
 
     /**
      * @Inject
@@ -95,9 +95,9 @@ class HttpRequest implements ActionInterface
         $builder->add($elementFactory->newTextArea('body', 'Body', 'text', 'The request body. Inside the body it is possible to use a template syntax to add dynamic data. Click <a ng-click="help.showDialog(\'help/template.md\')">here</a> for more informations about the template syntax.'));
     }
 
-    public function setHttp(Http $http)
+    public function setHttpClient(Client $httpClient)
     {
-        $this->http = $http;
+        $this->httpClient = $httpClient;
     }
 
     public function setTemplateFactory(FactoryInterface $templateFactory)
@@ -141,6 +141,6 @@ class HttpRequest implements ActionInterface
         $headers  = $this->parserHeaders($configuration->get('headers'));
         $request  = new Request(new Url($configuration->get('url')), $method, $headers, $body);
 
-        return $this->http->request($request);
+        return $this->httpClient->request($request);
     }
 }

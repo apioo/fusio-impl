@@ -23,7 +23,7 @@ namespace Fusio\Impl;
 
 use MongoConnectionException;
 use MongoDB;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * MongoTestCase
@@ -78,7 +78,7 @@ class MongoTestCase extends DbTestCase
     {
         parent::tearDown();
 
-        if (self::$hasConnection) {
+        if (self::$hasConnection && $this->mongodb) {
             $this->mongodb->dropCollection('app_news');
         }
     }

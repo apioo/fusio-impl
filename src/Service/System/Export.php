@@ -22,8 +22,7 @@
 namespace Fusio\Impl\Service\System;
 
 use Fusio\Impl\Form\Element;
-use PSX\Json;
-use RuntimeException;
+use PSX\Json\Parser;
 use stdClass;
 
 /**
@@ -65,7 +64,7 @@ class Export extends SystemAbstract
             }
         }
 
-        return Json::encode($data, JSON_PRETTY_PRINT);
+        return Parser::encode($data, JSON_PRETTY_PRINT);
     }
 
     protected function exportType($type, $index, array &$result)

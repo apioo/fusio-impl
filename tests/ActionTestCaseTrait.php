@@ -26,10 +26,10 @@ use Fusio\Impl\Model\App;
 use Fusio\Impl\Model\User;
 use Fusio\Impl\Template\Parser;
 use Psr\Http\Message\StreamInterface;
-use PSX\Data\Record;
-use PSX\Data\RecordInterface;
+use PSX\Record\Record;
+use PSX\Record\RecordInterface;
 use PSX\Http\Request as HttpRequest;
-use PSX\Uri;
+use PSX\Uri\Uri;
 
 /**
  * ActionTestCaseTrait

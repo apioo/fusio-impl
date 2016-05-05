@@ -29,7 +29,8 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
-use PSX\Cache;
+use Psr\Cache\CacheItemPoolInterface;
+use PSX\Cache\Pool;
 
 /**
  * CacheResponse
@@ -54,7 +55,7 @@ class CacheResponse implements ActionInterface
 
     /**
      * @Inject
-     * @var \PSX\Cache
+     * @var \PSX\Cache\Pool
      */
     protected $cache;
 
@@ -97,7 +98,7 @@ class CacheResponse implements ActionInterface
         $this->processor = $processor;
     }
 
-    public function setCache(Cache $cache)
+    public function setCache(CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
     }

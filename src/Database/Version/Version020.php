@@ -27,8 +27,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
-use PSX\Data\Record;
-use PSX\Data\Schema\Property;
+use PSX\Record\Record;
+use PSX\Schema\Property;
 
 /**
  * Version020

@@ -3,7 +3,7 @@
 $loader = require(__DIR__ . '/../vendor/autoload.php');
 $loader->addPsr4('Fusio\\Impl\\', 'tests');
 
-PSX\Test\Environment::setup(__DIR__ . '/..', function ($fromSchema) {
+PSX\Framework\Test\Environment::setup(__DIR__ . '/..', function ($fromSchema) {
 
     $version = new Fusio\Impl\Database\Version\Version023();
     $schema  = $version->getSchema();

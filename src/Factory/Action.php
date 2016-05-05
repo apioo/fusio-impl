@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Factory;
 
 use Fusio\Engine\Factory\ActionInterface;
-use PSX\Dependency\ObjectBuilderInterface;
+use PSX\Framework\Dependency\ObjectBuilderInterface;
 
 /**
  * Action

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema;
 
-use PSX\Data\SchemaAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * Log

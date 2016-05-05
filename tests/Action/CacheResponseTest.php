@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\Action;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Cache;
-use PSX\Cache\Handler\Memory;
-use PSX\Test\Environment;
+use PSX\Cache\Pool;
+use PSX\Framework\Test\Environment;
 
 /**
  * CacheResponseTest
@@ -42,7 +42,7 @@ class CacheResponseTest extends DbTestCase
 
     public function testHandle()
     {
-        $cache = new Cache(new Memory());
+        $cache = new Pool(new ArrayCache());
 
         $action = new CacheResponse();
         $action->setConnection(Environment::getService('connection'));

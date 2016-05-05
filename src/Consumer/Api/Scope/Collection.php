@@ -24,14 +24,12 @@ namespace Fusio\Impl\Consumer\Api\Scope;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Table\Scope;
-use PSX\Api\Documentation;
 use PSX\Api\Resource;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\RecordInterface;
-use PSX\Filter as PSXFilter;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\RecordInterface;
+use PSX\Validate\Filter as PSXFilter;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
+use PSX\Framework\Loader\Context;
 use PSX\Sql;
 use PSX\Sql\Condition;
 use PSX\Validate;
@@ -50,7 +48,7 @@ class Collection extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Data\Schema\SchemaManagerInterface
+     * @var \PSX\Schema\SchemaManagerInterface
      */
     protected $schemaManager;
 
@@ -61,9 +59,9 @@ class Collection extends SchemaApiAbstract
     protected $scopeService;
 
     /**
-     * @return \PSX\Api\DocumentationInterface
+     * @return \PSX\Api\Resource
      */
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
@@ -71,16 +69,15 @@ class Collection extends SchemaApiAbstract
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Scope\Collection'))
         );
 
-        return new Documentation\Simple($resource);
+        return $resource;
     }
 
     /**
      * Returns the GET response
      *
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doGet(Version $version)
+    protected function doGet()
     {
         return $this->scopeService->getByUser($this->userId);
     }

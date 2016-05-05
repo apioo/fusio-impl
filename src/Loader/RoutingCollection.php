@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Loader;
 
-use PSX\Loader\RoutingCollection as PSXRoutingCollection;
+use PSX\Framework\Loader\RoutingCollection as PSXRoutingCollection;
 
 /**
  * RoutingCollection

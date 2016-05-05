@@ -24,13 +24,11 @@ namespace Fusio\Impl\Consumer\Api\App\Developer;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Table\App;
-use PSX\Api\Documentation;
 use PSX\Api\Resource;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\RecordInterface;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\RecordInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
+use PSX\Framework\Loader\Context;
 
 /**
  * Entity
@@ -46,7 +44,7 @@ class Entity extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Data\Schema\SchemaManagerInterface
+     * @var \PSX\Schema\SchemaManagerInterface
      */
     protected $schemaManager;
 
@@ -57,9 +55,9 @@ class Entity extends SchemaApiAbstract
     protected $appDeveloperService;
 
     /**
-     * @return \PSX\Api\DocumentationInterface
+     * @return \PSX\Api\Resource
      */
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
@@ -76,16 +74,15 @@ class Entity extends SchemaApiAbstract
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
         );
 
-        return new Documentation\Simple($resource);
+        return $resource;
     }
 
     /**
      * Returns the GET response
      *
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doGet(Version $version)
+    protected function doGet()
     {
         return $this->appDeveloperService->get(
             $this->userId,
@@ -96,18 +93,17 @@ class Entity extends SchemaApiAbstract
     /**
      * Returns the PUT response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doPut(RecordInterface $record, Version $version)
+    protected function doPut($record)
     {
         $this->appDeveloperService->update(
             $this->userId,
             (int) $this->getUriFragment('app_id'),
-            $record->getName(),
-            $record->getUrl(),
-            $record->getScopes()
+            $record->name,
+            $record->url,
+            $record->scopes
         );
 
         return array(
@@ -119,11 +115,10 @@ class Entity extends SchemaApiAbstract
     /**
      * Returns the DELETE response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doDelete(RecordInterface $record, Version $version)
+    protected function doDelete($record)
     {
         $this->appDeveloperService->delete(
             $this->userId,

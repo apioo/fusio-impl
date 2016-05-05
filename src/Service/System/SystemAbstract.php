@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\System;
 
-use DateTime;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
@@ -29,12 +28,13 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Form;
 use Monolog\Handler\NullHandler;
 use Psr\Log\LoggerInterface;
-use PSX\Dispatch;
+use DateTime;
+use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Request;
 use PSX\Http\Response;
 use PSX\Http\Stream\TempStream;
-use PSX\Json;
-use PSX\Url;
+use PSX\Json\Parser;
+use PSX\Uri\Url;
 use RuntimeException;
 use stdClass;
 
@@ -70,7 +70,7 @@ abstract class SystemAbstract
     protected function doRequest($method, $endpoint, $body = null)
     {
         $header   = ['User-Agent' => 'Fusio-System v' . Base::getVersion(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
-        $body     = $body !== null ? Json::encode($body) : null;
+        $body     = $body !== null ? Parser::encode($body) : null;
         $request  = new Request(new Url('http://127.0.0.1/backend/' . $endpoint), $method, $header, $body);
         $response = new Response();
         $response->setBody(new TempStream(fopen('php://memory', 'r+')));
@@ -82,7 +82,7 @@ abstract class SystemAbstract
         $this->logger->popHandler();
 
         $body = (string) $response->getBody();
-        $data = Json::decode($body, false);
+        $data = Parser::decode($body, false);
 
         return $data;
     }
@@ -210,8 +210,9 @@ abstract class SystemAbstract
         $config = new stdClass();
 
         if ($form instanceof Form\Container) {
-            foreach ($form as $element) {
-                $data = $element->getRecordInfo()->getData();
+            $elements = $form->getElements();
+            foreach ($elements as $element) {
+                $data = $element->getProperties();
 
                 if (!isset($entity->config->{$data['name']})) {
                     continue;

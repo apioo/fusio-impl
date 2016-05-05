@@ -25,8 +25,8 @@ use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Data\Record;
-use PSX\Test\Environment;
+use PSX\Record\Record;
+use PSX\Framework\Test\Environment;
 
 /**
  * ValidatorTest
@@ -90,8 +90,8 @@ YAML;
     }
 
     /**
-     * @expectedException PSX\Validate\ValidationException
-     * @expectedExceptionMessage /~path/bar contains an invalid value
+     * @expectedException \PSX\Validate\ValidationException
+     * @expectedExceptionMessage /bar contains an invalid value
      */
     public function testHandleInvalidPath()
     {
@@ -115,8 +115,8 @@ YAML;
     }
 
     /**
-     * @expectedException PSX\Validate\ValidationException
-     * @expectedExceptionMessage /~query/foo contains an invalid value
+     * @expectedException \PSX\Validate\ValidationException
+     * @expectedExceptionMessage /foo contains an invalid value
      */
     public function testHandleInvalidQuery()
     {
@@ -140,7 +140,7 @@ YAML;
     }
 
     /**
-     * @expectedException PSX\Validate\ValidationException
+     * @expectedException \PSX\Validate\ValidationException
      * @expectedExceptionMessage /id contains an invalid value
      */
     public function testHandleInvalidBodyId()
@@ -165,7 +165,7 @@ YAML;
     }
 
     /**
-     * @expectedException PSX\Validate\ValidationException
+     * @expectedException \PSX\Validate\ValidationException
      * @expectedExceptionMessage /title contains a custom error message
      */
     public function testHandleInvalidBodyTitle()
@@ -190,7 +190,7 @@ YAML;
     }
 
     /**
-     * @expectedException PSX\Validate\ValidationException
+     * @expectedException \PSX\Validate\ValidationException
      * @expectedExceptionMessage /author/name contains an invalid value
      */
     public function testHandleInvalidBodyAuthorName()

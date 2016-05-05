@@ -30,9 +30,10 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\App\RateLimit;
-use PSX\Cache;
+use Psr\Cache\CacheItemPoolInterface;
+use PSX\Cache\Pool;
 use PSX\Data\Accessor;
-use PSX\Validate;
+use PSX\Validate\Validate;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\ParsedExpression;
 use Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface;
@@ -60,7 +61,7 @@ class Condition implements ActionInterface, ParserCacheInterface
 
     /**
      * @Inject
-     * @var \PSX\Cache
+     * @var \PSX\Cache\Pool
      */
     protected $cache;
 
@@ -121,7 +122,7 @@ class Condition implements ActionInterface, ParserCacheInterface
         $this->processor = $processor;
     }
 
-    public function setCache(Cache $cache)
+    public function setCache(CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
     }

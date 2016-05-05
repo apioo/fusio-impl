@@ -12,8 +12,9 @@
   ],
   "require": {
     "php": ">=5.3",
-    "psx/psx": "^1.2",
-    "fusio/engine": "^0.1@dev",
+    "psx/psx": "^2.0-RC1",
+    "psx/openssl": "^0.1",
+    "fusio/engine": "^0.2@dev",
     "ircmaxell/password-compat": "^1.0",
     "ircmaxell/random-lib": "^1.1",
     "symfony/expression-language": "^2.8",

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Form;
 
-use PSX\Data\RecordAbstract;
+use PSX\Record\RecordObject;
 
 /**
  * Element
@@ -30,7 +30,7 @@ use PSX\Data\RecordAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Element extends RecordAbstract
+class Element extends RecordObject
 {
     protected $name;
     protected $title;
@@ -38,6 +38,8 @@ class Element extends RecordAbstract
 
     public function __construct($name, $title, $help = null)
     {
+        parent::__construct();
+
         $this->name  = $name;
         $this->title = $title;
         $this->help  = $help;

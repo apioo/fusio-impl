@@ -24,20 +24,16 @@ namespace Fusio\Impl\Consumer\Api\Authorize;
 use DateTime;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Table\App;
-use PSX\Api\Documentation;
 use PSX\Api\Resource;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\RecordInterface;
-use PSX\Filter as PSXFilter;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\RecordInterface;
+use PSX\Validate\Filter as PSXFilter;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
-use PSX\OpenSsl;
-use PSX\Sql;
+use PSX\Framework\Loader\Context;
 use PSX\Sql\Condition;
-use PSX\Uri;
-use PSX\Url;
-use PSX\Validate;
+use PSX\Uri\Uri;
+use PSX\Uri\Url;
+use PSX\Validate\Validate;
 
 /**
  * Authorize
@@ -52,7 +48,7 @@ class Authorize extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Data\Schema\SchemaManagerInterface
+     * @var \PSX\Schema\SchemaManagerInterface
      */
     protected $schemaManager;
 
@@ -81,9 +77,9 @@ class Authorize extends SchemaApiAbstract
     protected $appCodeService;
 
     /**
-     * @return \PSX\Api\DocumentationInterface
+     * @return \PSX\Api\Resource
      */
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
@@ -92,33 +88,31 @@ class Authorize extends SchemaApiAbstract
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Authorize\Response'))
         );
 
-        return new Documentation\Simple($resource);
+        return $resource;
     }
 
     /**
      * Returns the GET response
      *
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doGet(Version $version)
+    protected function doGet()
     {
     }
 
     /**
      * Returns the POST response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doPost(RecordInterface $record, Version $version)
+    protected function doPost($record)
     {
-        $responseType = $record->getResponseType();
-        $clientId     = $record->getClientId();
-        $redirectUri  = $record->getRedirectUri();
-        $scope        = $record->getScope();
-        $state        = $record->getState();
+        $responseType = $record->responseType;
+        $clientId     = $record->clientId;
+        $redirectUri  = $record->redirectUri;
+        $scope        = $record->scope;
+        $state        = $record->state;
 
         // response type
         if (!in_array($responseType, ['code', 'token'])) {
@@ -164,9 +158,9 @@ class Authorize extends SchemaApiAbstract
 
         // save the decision of the user. We save the decision so that it is 
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($app['id'], $record->getAllow());
+        $this->saveUserDecision($app['id'], $record->allow);
 
-        if ($record->getAllow()) {
+        if ($record->allow) {
             if ($responseType == 'token') {
                 // check whether implicit grant is allowed
                 if ($this->config['fusio_grant_implicit'] !== true) {
@@ -187,13 +181,13 @@ class Authorize extends SchemaApiAbstract
                     new \DateInterval($this->config->get('fusio_expire_implicit'))
                 );
 
-                $parameters = $accessToken->getRecordInfo()->getData();
+                $parameters = $accessToken->getProperties();
 
                 if (!empty($state)) {
                     $parameters['state'] = $state;
                 }
 
-                $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'));
+                $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
 
                 return [
                     'type' => 'token',
@@ -215,7 +209,7 @@ class Authorize extends SchemaApiAbstract
                     $parameters['code'] = $code;
                     $parameters['state'] = $state;
 
-                    $redirectUri = $redirectUri->withParameters($parameters);
+                    $redirectUri = $redirectUri->withParameters($parameters)->toString();
                 } else {
                     $redirectUri = '#';
                 }
@@ -238,9 +232,9 @@ class Authorize extends SchemaApiAbstract
                 }
 
                 if ($responseType == 'token') {
-                    $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'));
+                    $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
                 } else {
-                    $redirectUri = $redirectUri->withParameters($parameters);
+                    $redirectUri = $redirectUri->withParameters($parameters)->toString();
                 }
             } else {
                 $redirectUri = '#';
@@ -256,22 +250,20 @@ class Authorize extends SchemaApiAbstract
     /**
      * Returns the PUT response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doPut(RecordInterface $record, Version $version)
+    protected function doPut($record)
     {
     }
 
     /**
      * Returns the DELETE response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doDelete(RecordInterface $record, Version $version)
+    protected function doDelete($record)
     {
     }
 

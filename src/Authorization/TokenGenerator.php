@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use PSX\Util\Uuid;
+use PSX\Framework\Util\Uuid;
 use RandomLib\Factory;
 use RandomLib\Generator;
 

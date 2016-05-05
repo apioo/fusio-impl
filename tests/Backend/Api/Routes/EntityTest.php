@@ -23,8 +23,8 @@ namespace Fusio\Impl\Backend\Api\Routes;
 
 use Fusio\Impl\Fixture;
 use Fusio\Impl\Table\Routes as TableRoutes;
-use PSX\Test\ControllerDbTestCase;
-use PSX\Test\Environment;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest
@@ -114,9 +114,18 @@ JSON;
                 'status'  => 4,
                 'name'    => '1',
                 'methods' => [[
-                    'name' => 'GET',
+                    'active'   => true,
+                    'public'   => true,
+                    'name'     => 'GET',
+                    'action'   => 3,
+                    'response' => 1,
                 ], [
-                    'name' => 'POST',
+                    'active'   => true,
+                    'public'   => false,
+                    'name'     => 'POST',
+                    'action'   => 3,
+                    'request'  => 2,
+                    'response' => 1,
                 ], [
                     'name' => 'PUT',
                 ], [
@@ -152,7 +161,37 @@ JSON;
         $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
         $this->assertEquals('/foo', $row['path']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
-        $this->assertEquals('a:1:{i:0;C:15:"PSX\Data\Record":517:{a:2:{s:4:"name";s:6:"config";s:6:"fields";a:3:{s:6:"status";i:4;s:4:"name";s:1:"1";s:7:"methods";a:4:{i:0;C:15:"PSX\Data\Record":70:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:3:"GET";}}}i:1;C:15:"PSX\Data\Record":71:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:4:"POST";}}}i:2;C:15:"PSX\Data\Record":70:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:3:"PUT";}}}i:3;C:15:"PSX\Data\Record":73:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:6:"DELETE";}}}}}}}}', $row['config']);
+        
+        $config = unserialize($row['config']);
+
+        $this->assertContainsOnlyInstancesOf('PSX\Record\Record', $config);
+        $this->assertEquals(1, count($config));
+
+        $resource = reset($config);
+
+        $this->assertInstanceOf('PSX\Record\Record', $resource);
+        $this->assertEquals('config', $resource->getDisplayName());
+        $this->assertEquals(4, $resource->status);
+        $this->assertEquals('1', $resource->name);
+        $this->assertContainsOnlyInstancesOf('PSX\Record\Record', $resource->methods);
+        $this->assertEquals(4, count($resource->methods));
+
+        $this->assertEquals('GET', $resource->methods[0]->name);
+        $this->assertEquals(true, $resource->methods[0]->active);
+        $this->assertEquals(true, $resource->methods[0]->public);
+        $this->assertEquals(3, $resource->methods[0]->action);
+        $this->assertEquals(1, $resource->methods[0]->response);
+        
+        $this->assertEquals('POST', $resource->methods[1]->name);
+        $this->assertEquals(true, $resource->methods[1]->active);
+        $this->assertEquals(false, $resource->methods[1]->public);
+        $this->assertEquals(3, $resource->methods[1]->action);
+        $this->assertEquals(2, $resource->methods[1]->request);
+        $this->assertEquals(1, $resource->methods[1]->response);
+        
+        $this->assertEquals('PUT', $resource->methods[2]->name);
+        
+        $this->assertEquals('DELETE', $resource->methods[3]->name);
     }
 
     public function testDelete()

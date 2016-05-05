@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Form;
 
 use Fusio\Engine\Form\BuilderInterface;
-use PSX\Data\RecordInterface;
+use PSX\Record\RecordInterface;
 
 /**
  * Builder

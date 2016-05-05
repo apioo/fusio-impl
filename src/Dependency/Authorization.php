@@ -24,7 +24,7 @@ namespace Fusio\Impl\Dependency;
 use Fusio\Impl\Authorization as ApiAuthorization;
 use Fusio\Impl\Backend\Authorization as BackendAuthorization;
 use Fusio\Impl\Consumer\Authorization as ConsumerAuthorization;
-use PSX\Oauth2\Provider\GrantTypeFactory;
+use PSX\Framework\Oauth2\GrantTypeFactory;
 
 /**
  * Authorization
@@ -36,7 +36,7 @@ use PSX\Oauth2\Provider\GrantTypeFactory;
 trait Authorization
 {
     /**
-     * @return \PSX\Oauth2\Provider\GrantTypeFactory
+     * @return \PSX\Framework\Oauth2\GrantTypeFactory
      */
     public function getApiGrantTypeFactory()
     {
@@ -60,7 +60,7 @@ trait Authorization
     }
 
     /**
-     * @return \PSX\Oauth2\Provider\GrantTypeFactory
+     * @return \PSX\Framework\Oauth2\GrantTypeFactory
      */
     public function getBackendGrantTypeFactory()
     {
@@ -75,7 +75,7 @@ trait Authorization
     }
 
     /**
-     * @return \PSX\Oauth2\Provider\GrantTypeFactory
+     * @return \PSX\Framework\Oauth2\GrantTypeFactory
      */
     public function getConsumerGrantTypeFactory()
     {

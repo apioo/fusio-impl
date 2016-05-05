@@ -28,11 +28,11 @@ use Fusio\Impl\Table\App\Scope as TableAppScope;
 use Fusio\Impl\Table\App\Token as TableAppToken;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User\Scope as TableUserScope;
-use PSX\Data\ResultSet;
-use PSX\DateTime;
+use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
+use PSX\Model\Common\ResultSet;
 use PSX\Oauth2\AccessToken;
-use PSX\Sql;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 

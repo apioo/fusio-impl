@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use PSX\Controller\ApiAbstract;
+use PSX\Framework\Controller\ApiAbstract;
 use PSX\Http\Exception as StatusCode;
 
 /**

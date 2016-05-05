@@ -23,15 +23,12 @@ namespace Fusio\Impl\Consumer\Api\App\Grant;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
-use PSX\Api\Documentation;
 use PSX\Api\Resource;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\RecordInterface;
-use PSX\Filter as PSXFilter;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\RecordInterface;
+use PSX\Validate\Filter as PSXFilter;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
-use PSX\OpenSsl;
+use PSX\Framework\Loader\Context;
 use PSX\Sql;
 use PSX\Sql\Condition;
 use PSX\Validate;
@@ -50,7 +47,7 @@ class Entity extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Data\Schema\SchemaManagerInterface
+     * @var \PSX\Schema\SchemaManagerInterface
      */
     protected $schemaManager;
 
@@ -61,25 +58,24 @@ class Entity extends SchemaApiAbstract
     protected $appGrantService;
 
     /**
-     * @return \PSX\Api\DocumentationInterface
+     * @return \PSX\Api\Resource
      */
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE'));
 
-        return new Documentation\Simple($resource);
+        return $resource;
     }
 
     /**
      * Returns the DELETE response
      *
-     * @param \PSX\Data\RecordInterface $record
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doDelete(RecordInterface $record, Version $version)
+    protected function doDelete($record)
     {
         $this->appGrantService->delete(
             $this->userId,

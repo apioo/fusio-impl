@@ -23,8 +23,8 @@ namespace Fusio\Impl\Backend\Api\App;
 
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
-use PSX\Test\Environment;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest

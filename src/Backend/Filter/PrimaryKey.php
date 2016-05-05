@@ -19,34 +19,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Action;
+namespace Fusio\Impl\Backend\Filter;
 
-use Fusio\Impl\Backend\Filter\PrimaryKey;
-use PSX\Api\Resource\MethodAbstract;
-use PSX\Data\Validator\Property;
-use PSX\Data\Validator\Validator;
-use PSX\Validate\Validate;
+use PSX\Record\RecordInterface;
+use PSX\Sql\TableInterface;
+use PSX\Validate\FilterAbstract;
 
 /**
- * ValidatorTrait
+ * Path
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-trait ValidatorTrait
+class PrimaryKey extends FilterAbstract
 {
     /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
+     * @var \PSX\Sql\TableInterface
      */
-    protected $tableManager;
-
-    protected function getValidator(MethodAbstract $method)
+    protected $table;
+    
+    public function __construct(TableInterface $table)
     {
-        return new Validator(array(
-            new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
-            new Property('/config/connection', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Connection')))),
-        ));
+        $this->table = $table;
+    }
+
+    public function apply($value)
+    {
+        $id = (int) $value;
+
+        if (empty($id)) {
+            return false;
+        }
+
+        $record = $this->table->get($id);
+        if ($record instanceof RecordInterface) {
+            return $id;
+        } else {
+            return false;
+        }
+    }
+    
+    public function getErrorMessage()
+    {
+        return '%s must be a valid primary key';
     }
 }

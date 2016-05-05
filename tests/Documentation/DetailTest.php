@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Documentation;
 
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * DetailTest
@@ -48,14 +48,14 @@ class DetailTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "path": "\/foo",
-    "version": 1,
+    "version": "*",
     "status": 4,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "type": "object",
         "definitions": {
-            "ref1f48a85d4ba4eea96e191b48f552281e": {
+            "ref60fecdc9cdbb564bbf31377e11525059": {
                 "type": "object",
                 "title": "test",
                 "properties": {
@@ -72,16 +72,10 @@ class DetailTest extends ControllerDbTestCase
                 "additionalProperties": false
             },
             "POST-request": {
-                "$ref": "#\/definitions\/ref1f48a85d4ba4eea96e191b48f552281e"
+                "$ref": "#\/definitions\/ref60fecdc9cdbb564bbf31377e11525059"
             }
         }
     },
-    "versions": [
-        {
-            "version": 1,
-            "status": 4
-        }
-    ],
     "methods": {
         "POST": {
             "request": "#\/definitions\/POST-request",
@@ -93,15 +87,15 @@ class DetailTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "wsdl",
-            "href": "\/export\/wsdl\/1\/foo"
+            "href": "\/export\/wsdl\/*\/foo"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/1\/foo"
+            "href": "\/export\/swagger\/*\/foo"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/1\/foo"
+            "href": "\/export\/raml\/*\/foo"
         }
     ]
 }

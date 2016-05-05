@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Scope;
 
-use PSX\Filter as PSXFilter;
-use PSX\Validate;
-use PSX\Validate\Property;
-use PSX\Validate\Validator;
+use Fusio\Impl\Backend\Filter\PrimaryKey;
+use PSX\Api\Resource\MethodAbstract;
+use PSX\Data\Validator\Property;
+use PSX\Data\Validator\Validator;
+use PSX\Validate\Validate;
 
 /**
  * ValidatorTrait
@@ -41,10 +42,10 @@ trait ValidatorTrait
      */
     protected $tableManager;
 
-    protected function getImportValidator()
+    protected function getValidator(MethodAbstract $method)
     {
         return new Validator(array(
-            new Property('/id', Validate::TYPE_INTEGER, array(new PSXFilter\PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Scope')))),
+            new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Scope')))),
         ));
     }
 }

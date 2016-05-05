@@ -28,8 +28,8 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\Connection as ConnectionService;
-use PSX\Data\Record;
-use PSX\Data\Schema\Property;
+use PSX\Record\Record;
+use PSX\Schema\Property;
 
 /**
  * Version023
@@ -383,12 +383,12 @@ class Version023 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                 'controller' => 'Fusio\Impl\Authorization\Token',                              'config' => null],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/authorization/whoami',                'controller' => 'Fusio\Impl\Authorization\Whoami',                             'config' => null],
 
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc',                                 'controller' => 'PSX\Controller\Tool\DocumentationController::doIndex',        'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc/:version/*path',                  'controller' => 'PSX\Controller\Tool\DocumentationController::doDetail',       'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc',                                 'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doIndex',  'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc/:version/*path',                  'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doDetail', 'config' => null],
 
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',          'controller' => 'PSX\Controller\Tool\WsdlGeneratorController',                 'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',          'controller' => 'PSX\Controller\Tool\RamlGeneratorController',                 'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',       'controller' => 'PSX\Controller\Tool\SwaggerGeneratorController::doDetail',    'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\WsdlController',               'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\RamlController',               'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',       'controller' => 'PSX\Framework\Controller\Generator\SwaggerController::doDetail',  'config' => null],
 
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                    'controller' => 'Fusio\Impl\Controller\SchemaApiController',                   'config' => $config],
             ],

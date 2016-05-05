@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Console;
 
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
-use PSX\Test\Environment;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -107,7 +107,7 @@ JSON;
         $this->assertEquals(3, $schema['id']);
         $this->assertEquals(null, $schema['propertyName']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Data\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [

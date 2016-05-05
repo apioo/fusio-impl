@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Form;
 
-use PSX\Data\CollectionAbstract;
-use PSX\Data\RecordInfo;
+use PSX\Record\RecordInterface;
+use PSX\Record\RecordObject;
 
 /**
  * Container
@@ -31,12 +31,17 @@ use PSX\Data\RecordInfo;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Container extends CollectionAbstract
+class Container extends RecordObject
 {
-    public function getRecordInfo()
+    protected $element = array();
+
+    public function add(RecordInterface $record)
     {
-        return new RecordInfo('container', array(
-            'element' => $this->collection
-        ));
+        $this->element[] = $record;
+    }
+    
+    public function getElements()
+    {
+        return $this->element;
     }
 }

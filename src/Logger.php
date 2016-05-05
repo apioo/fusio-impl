@@ -23,7 +23,7 @@ namespace Fusio\Impl;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\LoggerInterface;
-use PSX\DisplayException;
+use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
 

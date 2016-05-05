@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Validate;
 
-use PSX\Cache;
-use PSX\FilterAbstract;
+use Psr\Cache\CacheItemPoolInterface;
+use PSX\Validate\FilterAbstract;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\ParsedExpression;
 use Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface;
@@ -41,7 +41,7 @@ class ExpressionFilter extends FilterAbstract implements ParserCacheInterface
     protected $expression;
     protected $message;
 
-    public function __construct(ServiceContainer $container, Cache $cache, $expression, $message)
+    public function __construct(ServiceContainer $container, CacheItemPoolInterface $cache, $expression, $message)
     {
         $this->container  = $container;
         $this->cache      = $cache;

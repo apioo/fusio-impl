@@ -24,14 +24,13 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
 use Fusio\Impl\Table\Schema as TableSchema;
-use PSX\Data\ResultSet;
-use PSX\Data\Schema\Generator;
-use PSX\Data\SchemaInterface;
-use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Schema\SchemaInterface;
+use PSX\Schema\Generator;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
+use PSX\Sql\Sql;
 use RuntimeException;
 
 /**

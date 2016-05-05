@@ -79,13 +79,13 @@ class DependencyManager
         $schemas = $this->schemaLinkTable->getByRouteId($routeId);
         foreach ($schemas as $schema) {
             $condition = new Condition();
-            $condition->equals('schemaId', $schema->getId());
+            $condition->equals('schemaId', $schema->id);
             $condition->equals('status', RoutesSchema::STATUS_REQUIRED);
 
             $count = $this->schemaLinkTable->getCount($condition);
             if ($count == 0) {
                 $this->schemaTable->update([
-                    'id'     => $schema->getId(),
+                    'id'     => $schema->id,
                     'status' => TableSchema::STATUS_ACTIVE,
                 ]);
             }
@@ -94,13 +94,13 @@ class DependencyManager
         $actions = $this->actionLinkTable->getByRouteId($routeId);
         foreach ($actions as $action) {
             $condition = new Condition();
-            $condition->equals('actionId', $action->getId());
+            $condition->equals('actionId', $action->id);
             $condition->equals('status', RoutesAction::STATUS_REQUIRED);
 
             $count = $this->actionLinkTable->getCount($condition);
             if ($count == 0) {
                 $this->actionTable->update([
-                    'id'     => $action->getId(),
+                    'id'     => $action->id,
                     'status' => TableAction::STATUS_ACTIVE,
                 ]);
             }
@@ -145,9 +145,9 @@ class DependencyManager
     {
         $schemas = $this->schemaLinkTable->getByRouteId($routeId);
         foreach ($schemas as $schema) {
-            if ($schema->getStatus() == RoutesSchema::STATUS_REQUIRED) {
+            if ($schema->status == RoutesSchema::STATUS_REQUIRED) {
                 $this->schemaTable->update([
-                    'id'     => $schema->getSchemaId(),
+                    'id'     => $schema->schemaId,
                     'status' => TableSchema::STATUS_LOCKED,
                 ]);
             }
@@ -155,9 +155,9 @@ class DependencyManager
 
         $actions = $this->actionLinkTable->getByRouteId($routeId);
         foreach ($actions as $action) {
-            if ($action->getStatus() == RoutesAction::STATUS_REQUIRED) {
+            if ($action->status == RoutesAction::STATUS_REQUIRED) {
                 $this->actionTable->update([
-                    'id'     => $action->getActionId(),
+                    'id'     => $action->actionId,
                     'status' => TableAction::STATUS_LOCKED,
                 ]);
             }
@@ -174,21 +174,21 @@ class DependencyManager
     {
         $schemas = [];
         foreach ($config as $version) {
-            if ($version->getActive()) {
-                foreach ($version->getMethods() as $method) {
-                    if ($method->getActive()) {
+            if ($version->active) {
+                foreach ($version->methods as $method) {
+                    if ($method->active) {
                         $schemaIds = [];
 
-                        if (is_int($method->getRequest())) {
-                            $schemaIds[] = $method->getRequest();
+                        if (is_int($method->request)) {
+                            $schemaIds[] = $method->request;
                         }
 
-                        if (is_int($method->getResponse())) {
-                            $schemaIds[] = $method->getResponse();
+                        if (is_int($method->response)) {
+                            $schemaIds[] = $method->response;
                         }
 
                         foreach ($schemaIds as $schemaId) {
-                            if (in_array($version->getStatus(), [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
+                            if (in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
                                 $status = RoutesSchema::STATUS_REQUIRED;
                             } else {
                                 $status = RoutesSchema::STATUS_OPTIONAL;
@@ -225,13 +225,13 @@ class DependencyManager
     {
         $actions = [];
         foreach ($config as $version) {
-            if ($version->getActive()) {
-                foreach ($version->getMethods() as $method) {
-                    if ($method->getActive()) {
-                        if (is_int($method->getAction())) {
-                            $actionId = $method->getAction();
+            if ($version->active) {
+                foreach ($version->methods as $method) {
+                    if ($method->active) {
+                        if (is_int($method->action)) {
+                            $actionId = $method->action;
 
-                            if (in_array($version->getStatus(), [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
+                            if (in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
                                 $status = RoutesAction::STATUS_REQUIRED;
                             } else {
                                 $status = RoutesAction::STATUS_OPTIONAL;
@@ -289,12 +289,13 @@ class DependencyManager
     protected function getDependingActionsByAction($actionId)
     {
         $action  = $this->actionTable->get($actionId);
-        $config  = $action->getConfig();
-        $form    = $this->actionParser->getForm($action->getClass());
+        $config  = $action->config;
+        $form    = $this->actionParser->getForm($action->class);
         $actions = [];
 
         if ($form instanceof Form\Container) {
-            foreach ($form as $element) {
+            $elements = $form->getElements();
+            foreach ($elements as $element) {
                 if ($element instanceof Form\Element\Action) {
                     $name = $element->getName();
                     if (isset($config[$name]) && is_int($config[$name])) {

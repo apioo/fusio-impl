@@ -29,8 +29,7 @@ use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Backend\Filter\Routes\Path as PathFilter;
 use Fusio\Impl\Service;
 use Psr\Log\LoggerInterface;
-use PSX\Dispatch;
-use PSX\Json;
+use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -78,7 +77,7 @@ class SystemRegisterCommand extends Command
 
             if ($adapter instanceof AdapterInterface) {
                 // parse definition
-                $definition   = Json::decode(file_get_contents($adapter->getDefinition()), false);
+                $definition   = Parser::decode(file_get_contents($adapter->getDefinition()), false);
                 $instructions = $this->parser->parse($definition);
                 $rows         = array();
                 $hasRoutes    = false;

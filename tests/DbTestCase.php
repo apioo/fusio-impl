@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl;
 
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * DbTestCase

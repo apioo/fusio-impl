@@ -29,11 +29,10 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Engine\Template\FactoryInterface;
-use PSX\Cache;
 use PSX\Data\Record;
 use PSX\Data\Record\Transformer;
 use PSX\Http\Exception as StatusCode;
-use PSX\Json;
+use PSX\Json\Parser;
 use PSX\Json\Patch;
 
 /**
@@ -69,7 +68,7 @@ class Transform implements ActionInterface
         $response = $parser->parse($request, $context, $configuration->get('patch'));
 
         // patch
-        $patch = new Patch(Json::decode($response, false));
+        $patch = new Patch(Parser::decode($response, false));
         $body  = $patch->patch(Transformer::toStdClass($request->getBody()));
         $body  = Transformer::toRecord($body);
 

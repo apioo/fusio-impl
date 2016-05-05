@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Adapter\Transform\Raml as RamlTransformer;
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Controller\ApiAbstract;
+use PSX\Framework\Controller\ApiAbstract;
 
 /**
  * Raml

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Consumer\Api\App\Grant;
 
 use Fusio\Impl\Table\App;
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * CollectionTest

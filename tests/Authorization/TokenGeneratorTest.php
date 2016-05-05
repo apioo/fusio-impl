@@ -23,7 +23,6 @@ namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
 
 /**
  * TokenGeneratorTest

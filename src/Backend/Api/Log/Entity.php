@@ -22,13 +22,10 @@
 namespace Fusio\Impl\Backend\Api\Log;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Api\Documentation;
 use PSX\Api\Resource;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\RecordInterface;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
 
 /**
  * Entity
@@ -43,7 +40,7 @@ class Entity extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Data\Schema\SchemaManagerInterface
+     * @var \PSX\Schema\SchemaManagerInterface
      */
     protected $schemaManager;
 
@@ -54,9 +51,9 @@ class Entity extends SchemaApiAbstract
     protected $logService;
 
     /**
-     * @return \PSX\Api\DocumentationInterface
+     * @return \PSX\Api\Resource
      */
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
@@ -64,16 +61,15 @@ class Entity extends SchemaApiAbstract
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Log'))
         );
 
-        return new Documentation\Simple($resource);
+        return $resource;
     }
 
     /**
      * Returns the GET response
      *
-     * @param \PSX\Api\Version $version
-     * @return array|\PSX\Data\RecordInterface
+     * @return array|\PSX\Record\RecordInterface
      */
-    protected function doGet(Version $version)
+    protected function doGet()
     {
         return $this->logService->get(
             (int) $this->getUriFragment('log_id')

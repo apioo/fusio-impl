@@ -22,7 +22,7 @@
 namespace Fusio\Impl;
 
 use Fusio\Engine\RequestInterface;
-use PSX\Data\RecordInterface;
+use PSX\Record\RecordInterface;
 use PSX\Http\RequestInterface as HttpRequestInterface;
 
 /**

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service\System;
 
 use Fusio\Impl\Form\Element;
-use PSX\Json;
+use PSX\Json\Parser;
 use ReflectionClass;
 use RuntimeException;
 use stdClass;
@@ -38,7 +38,7 @@ class Import extends SystemAbstract
 {
     public function import($data)
     {
-        $data   = Json::decode($data, false);
+        $data   = Parser::decode($data, false);
         $result = [];
 
         if (!$data instanceof stdClass) {

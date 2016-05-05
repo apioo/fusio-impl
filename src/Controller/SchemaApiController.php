@@ -25,18 +25,16 @@ use Fusio\Impl\Authorization\Oauth2Filter;
 use Fusio\Impl\Context as FusioContext;
 use Fusio\Impl\Request;
 use Fusio\Impl\Schema\LazySchema;
-use PSX\Api\Documentation;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
-use PSX\Api\Version;
-use PSX\Controller\SchemaApiAbstract;
-use PSX\Data\Record;
-use PSX\Data\RecordInterface;
-use PSX\Data\SchemaInterface;
-use PSX\Dispatch\Filter\UserAgentEnforcer;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\Record;
+use PSX\Record\RecordInterface;
+use PSX\Schema\SchemaInterface;
+use PSX\Framework\Filter\UserAgentEnforcer;
 use PSX\Http\Exception as StatusCode;
-use PSX\Loader\Context;
+use PSX\Framework\Loader\Context;
 
 /**
  * SchemaApiController
@@ -93,7 +91,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \PSX\Cache\CacheItemPoolInterface
+     * @var \Psr\Cache\CacheItemPoolInterface
      */
     protected $cache;
 
@@ -144,7 +142,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     public function getPreFilter()
     {
-        $isPublic = $this->getActiveMethod()->getPublic();
+        $isPublic = $this->getActiveMethod()->public;
         $filter   = array();
 
         // it is required for every request to have an user agent which
@@ -163,68 +161,79 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return $filter;
     }
 
-    public function getDocumentation()
+    public function getDocumentation($version = null)
     {
-        $doc    = new Documentation\Version();
-        $config = $this->context->get('fusio.config');
+        $versions = $this->context->get('fusio.config');
+        $config   = null;
 
-        foreach ($config as $version) {
-            $resource = new Resource($version->getStatus(), $this->context->get(Context::KEY_PATH));
-            $methods  = $version->getMethods();
+        if ($version == '*' || empty($version)) {
+            $version = $this->getLatestVersionFromConfig();
+        }
+
+        foreach ($versions as $row) {
+            if ($row->name == $version) {
+                $config = $row;
+                break;
+            }
+        }
+
+        if ($config instanceof RecordInterface) {
+            $resource = new Resource($config->status, $this->context->get(Context::KEY_PATH));
+            $methods  = $config->methods;
 
             foreach ($methods as $method) {
-                if ($method->getActive()) {
-                    $resourceMethod = Resource\Factory::getMethod($method->getName());
+                if ($method->active) {
+                    $resourceMethod = Resource\Factory::getMethod($method->name);
 
-                    if (is_int($method->getRequest())) {
-                        $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method->getRequest()));
-                    } elseif ($method->getRequest() instanceof SchemaInterface) {
-                        $resourceMethod->setRequest($method->getRequest());
+                    if (is_int($method->request)) {
+                        $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method->request));
+                    } elseif ($method->request instanceof SchemaInterface) {
+                        $resourceMethod->setRequest($method->request);
                     }
 
-                    if (is_int($method->getResponse())) {
-                        $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method->getResponse()));
-                    } elseif ($method->getRequest() instanceof SchemaInterface) {
-                        $resourceMethod->addResponse(200, $method->getResponse());
+                    if (is_int($method->response)) {
+                        $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method->response));
+                    } elseif ($method->response instanceof SchemaInterface) {
+                        $resourceMethod->addResponse(200, $method->response);
                     }
 
                     $resource->addMethod($resourceMethod);
                 }
             }
 
-            $doc->addResource($version->getName(), $resource);
+            return $resource;
         }
 
-        return $doc;
+        return null;
     }
 
-    protected function doGet(Version $version)
+    protected function doGet()
     {
-        return $this->executeAction(new Record(), $version);
+        return $this->executeAction(new Record());
     }
 
-    protected function doPost(RecordInterface $record, Version $version)
+    protected function doPost($record)
     {
-        return $this->executeAction($record, $version);
+        return $this->executeAction($record);
     }
 
-    protected function doPut(RecordInterface $record, Version $version)
+    protected function doPut($record)
     {
-        return $this->executeAction($record, $version);
+        return $this->executeAction($record);
     }
 
-    protected function doDelete(RecordInterface $record, Version $version)
+    protected function doDelete($record)
     {
-        return $this->executeAction($record, $version);
+        return $this->executeAction($record);
     }
 
     protected function parseRequest(MethodAbstract $method)
     {
         if ($method->hasRequest()) {
             if ($method->getRequest()->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
-                return $this->import(new Record());
+                return $this->getBody();
             } else {
-                return $this->import($method->getRequest());
+                return $this->getBodyAs($method->getRequest());
             }
         } else {
             return new Record();
@@ -246,7 +255,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             if ($schema->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
                 $this->setBody($response);
             } else {
-                $this->setBody($this->schemaAssimilator->assimilate($schema, $response));
+                $this->setBodyAs($schema, $response);
             }
         } else {
             $this->setResponseCode(204);
@@ -254,9 +263,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
     }
 
-    private function executeAction(RecordInterface $record, Version $version)
+    private function executeAction($record)
     {
-        $actionId = $this->getActiveMethod()->getAction();
+        $actionId = $this->getActiveMethod()->action;
 
         if (is_int($actionId)) {
             try {
@@ -294,48 +303,85 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
 
         $version = $this->getSubmittedVersionNumber();
-        $methods = $this->getAvailableMethods();
+        $method  = $this->getAvailableMethod($version);
 
-        if ($version !== null) {
-            if (isset($methods[$version])) {
-                $method = $methods[$version];
-            } else {
-                throw new StatusCode\UnsupportedMediaTypeException('Provided media type does not exist');
-            }
-        } else {
-            $method = end($methods);
-        }
-
-        if (empty($method)) {
-            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $this->getAllowedMethods());
+        if ($method === null) {
+            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $this->getAllowedMethods($version));
         }
 
         return $this->activeMethod = $method;
     }
 
-    private function getAvailableMethods()
+    private function getAvailableMethod($version)
     {
         $config = $this->context->get('fusio.config');
-        $result = array();
 
-        foreach ($config as $version) {
-            $methods = $version->getMethods();
-            foreach ($methods as $method) {
-                if ($method->getName() == $this->request->getMethod() && $method->getActive()) {
-                    $result[$version->getName()] = $method;
+        foreach ($config as $resource) {
+            if ($resource->name == $version) {
+                $methods = $resource->methods;
+                foreach ($methods as $method) {
+                    if ($method->name == $this->request->getMethod() && $method->active) {
+                        return $method;
+                    }
                 }
             }
         }
 
-        ksort($result);
-
-        return $result;
+        return null;
     }
 
-    private function getAllowedMethods()
+    private function getAllowedMethods($version)
     {
-        // @TODO return allowed request methods
+        $config  = $this->context->get('fusio.config');
+        $allowed = [];
 
-        return array();
+        foreach ($config as $resource) {
+            if ($resource->name == $version) {
+                $methods = $resource->methods;
+                foreach ($methods as $method) {
+                    if ($method->active) {
+                        $allowed[] = $method->name;
+                    }
+                }
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
+     * Returns the version number which was submitted by the client in the
+     * accept header field
+     *
+     * @return integer
+     */
+    private function getSubmittedVersionNumber()
+    {
+        $accept  = $this->getHeader('Accept');
+        $matches = array();
+
+        preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
+
+        $version = isset($matches[2]) ? $matches[2] : null;
+
+        // if null get latest version
+        if ($version === null) {
+            $version = $this->getLatestVersionFromConfig();
+        }
+
+        return $version;
+    }
+    
+    private function getLatestVersionFromConfig()
+    {
+        $config   = $this->context->get('fusio.config');
+        $versions = [];
+
+        foreach ($config as $resource) {
+            $versions[] = (int) $resource->name;
+        }
+        rsort($versions);
+
+        return reset($versions);
     }
 }

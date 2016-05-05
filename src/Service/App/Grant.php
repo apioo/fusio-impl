@@ -25,12 +25,11 @@ use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\App\Token as TableAppToken;
 use Fusio\Impl\Table\User\Grant as TableUserGrant;
 use Fusio\Impl\Service\App as ServiceApp;
-use PSX\Data\ResultSet;
-use PSX\DateTime;
+use PSX\Data\Util\CurveArray;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
-use PSX\Util\CurveArray;
 
 /**
  * Grant

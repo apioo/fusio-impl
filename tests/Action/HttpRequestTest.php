@@ -24,9 +24,9 @@ namespace Fusio\Impl\Action;
 use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
-use PSX\Data\Record;
+use PSX\Record\Record;
 use PSX\Http\Response;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * HttpRequestTest
@@ -41,9 +41,9 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $http = $this->getMock('PSX\Http', array('request'));
+        $httpClient = $this->getMock('PSX\Http\Client', array('request'));
 
-        $http->expects($this->once())
+        $httpClient->expects($this->once())
             ->method('request')
             ->with($this->callback(function ($request) {
                 /** @var \PSX\Http\RequestInterface $request */
@@ -55,7 +55,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new Response(200)));
 
         $action = new HttpRequest();
-        $action->setHttp($http);
+        $action->setHttpClient($httpClient);
         $action->setTemplateFactory(Environment::getService('template_factory'));
         $action->setResponse(Environment::getService('response'));
 

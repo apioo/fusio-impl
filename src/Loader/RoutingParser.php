@@ -23,10 +23,10 @@ namespace Fusio\Impl\Loader;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Table\Routes as TableRoutes;
+use PSX\Framework\Loader\Context;
+use PSX\Framework\Loader\LocationFinderInterface;
+use PSX\Framework\Loader\PathMatcher;
 use PSX\Http\RequestInterface;
-use PSX\Loader\Context;
-use PSX\Loader\LocationFinderInterface;
-use PSX\Loader\PathMatcher;
 
 /**
  * RoutingParser

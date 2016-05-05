@@ -25,10 +25,10 @@ use Fusio\Impl\Table\Routes as TableRoutes;
 use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
 use Fusio\Impl\Service\Routes\DependencyManager;
 use PSX\Api\Resource;
-use PSX\Data\ResultSet;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 
@@ -135,7 +135,7 @@ class Routes
             }
 
             $this->routesTable->update(array(
-                'id'         => $route->getId(),
+                'id'         => $route->id,
                 'methods'    => $methods,
                 'path'       => $path,
                 'controller' => 'Fusio\Impl\Controller\SchemaApiController',
@@ -143,16 +143,16 @@ class Routes
             ));
 
             // remove all dependency links
-            $this->dependencyManager->removeExistingDependencyLinks($route->getId());
+            $this->dependencyManager->removeExistingDependencyLinks($route->id);
 
             // unlock dependencies
-            $this->dependencyManager->unlockExistingDependencies($route->getId());
+            $this->dependencyManager->unlockExistingDependencies($route->id);
 
             // insert dependency links
-            $this->dependencyManager->insertDependencyLinks($route->getId(), $config);
+            $this->dependencyManager->insertDependencyLinks($route->id, $config);
 
             // lock dependencies
-            $this->dependencyManager->lockExistingDependencies($route->getId());
+            $this->dependencyManager->lockExistingDependencies($route->id);
         } else {
             throw new StatusCode\NotFoundException('Could not find route');
         }
@@ -168,16 +168,16 @@ class Routes
             }
 
             // check whether route has a production version
-            if ($this->hasProductionVersion($route->getConfig())) {
+            if ($this->hasProductionVersion($route->config)) {
                 throw new StatusCode\ConflictException('It is not possible to delete a route which contains a production version');
             }
 
             // unlock dependencies
-            $this->dependencyManager->unlockExistingDependencies($route->getId());
+            $this->dependencyManager->unlockExistingDependencies($route->id);
 
             // delete route
             $this->routesTable->update(array(
-                'id'     => $route->getId(),
+                'id'     => $route->id,
                 'status' => TableRoutes::STATUS_DELETED
             ));
         } else {
@@ -188,7 +188,7 @@ class Routes
     protected function hasProductionVersion(array $config)
     {
         foreach ($config as $version) {
-            if ($version->getActive() && in_array($version->getStatus(), [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
+            if ($version->active && in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
                 return true;
             }
         }

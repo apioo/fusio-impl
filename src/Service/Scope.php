@@ -25,10 +25,9 @@ use Fusio\Impl\Table\App\Scope as TableAppScope;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
 use Fusio\Impl\Table\User\Scope as TableUserScope;
-use PSX\Data\ResultSet;
-use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 
 /**
@@ -188,12 +187,12 @@ class Scope
     {
         if (!empty($routes) && is_array($routes)) {
             foreach ($routes as $route) {
-                if ($route->getAllow()) {
+                if ($route->allow) {
                     $this->scopeRouteTable->create(array(
                         'scopeId' => $scopeId,
-                        'routeId' => $route->getRouteId(),
-                        'allow'   => $route->getAllow() ? 1 : 0,
-                        'methods' => $route->getMethods(),
+                        'routeId' => $route->routeId,
+                        'allow'   => $route->allow ? 1 : 0,
+                        'methods' => $route->methods,
                     ));
                 }
             }

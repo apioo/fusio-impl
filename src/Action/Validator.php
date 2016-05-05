@@ -30,10 +30,10 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Validate\ExpressionFilter;
 use Fusio\Impl\Validate\ServiceContainer;
-use PSX\Cache;
+use PSX\Cache\Pool;
 use PSX\Http\Exception as StatusCode;
-use PSX\Validate\Property;
-use PSX\Validate\Validator as PSXValidator;
+use PSX\Data\Validator\Property;
+use PSX\Data\Validator\Validator as PSXValidator;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -59,7 +59,7 @@ class Validator implements ActionInterface
 
     /**
      * @Inject
-     * @var \PSX\Cache
+     * @var \PSX\Cache\Pool
      */
     protected $cache;
 
@@ -74,27 +74,39 @@ class Validator implements ActionInterface
         $rules = $yaml->parse($configuration->get('rules'));
 
         if (is_array($rules)) {
-            $validator = $this->buildValidator($rules);
+            $pathRules  = [];
+            $queryRules = [];
+            $bodyRules  = [];
 
-            // fragments
-            $fragments = $request->getUriFragments();
-            foreach ($fragments as $key => $value) {
-                $validator->validateProperty('/~path/' . $key, $value);
+            foreach ($rules as $key => $value) {
+                if (substr($key, 0, 7) == '/~path/') {
+                    $pathRules[substr($key, 7)] = $value;
+                } elseif (substr($key, 0, 8) == '/~query/') {
+                    $queryRules[substr($key, 8)] = $value;
+                } else {
+                    $bodyRules[$key] = $value;
+                }
             }
 
-            // parameters
-            $parameters = $request->getParameters();
-            foreach ($parameters as $key => $value) {
-                $validator->validateProperty('/~query/' . $key, $value);
-            }
+            $parts = [
+                [$pathRules, $request->getUriFragments()],
+                [$queryRules, $request->getParameters()],
+                [$bodyRules, $request->getBody()],
+            ];
+            
+            foreach ($parts as $part) {
+                list($rules, $data) = $part;
 
-            // body
-            $validator->validate($request->getBody());
+                if (!empty($rules)) {
+                    $validator = $this->buildValidator($rules);
+                    $validator->validate($data);
 
-            // check whether all required fields are available
-            $fields = $validator->getRequiredNames();
-            if (!empty($fields)) {
-                throw new StatusCode\BadRequestException('Missing required fields: ' . implode(', ', $fields));
+                    // check whether all required fields are available
+                    $fields = $validator->getRequiredNames();
+                    if (!empty($fields)) {
+                        throw new StatusCode\BadRequestException('Missing required fields: ' . implode(', ', $fields));
+                    }
+                }
             }
         }
 
@@ -112,7 +124,7 @@ class Validator implements ActionInterface
         $this->processor = $processor;
     }
 
-    public function setCache(Cache $cache)
+    public function setCache(Pool $cache)
     {
         $this->cache = $cache;
     }

@@ -26,8 +26,8 @@ use Fusio\Impl\Request;
 use Fusio\Impl\Template\Extension;
 use Fusio\Impl\Template\StackLoader;
 use PSX\Data\Accessor;
-use PSX\DisplayException;
-use PSX\Validate;
+use PSX\Framework\DisplayException;
+use PSX\Validate\Validate;
 
 /**
  * BaseAbstract

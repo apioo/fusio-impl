@@ -23,10 +23,10 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Table\Action as TableAction;
 use Fusio\Impl\Table\Routes\Action as TableRoutesAction;
-use PSX\Data\ResultSet;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 
@@ -120,7 +120,7 @@ class Action
             $this->checkLocked($action);
 
             $this->actionTable->update(array(
-                'id'     => $action->getId(),
+                'id'     => $action->id,
                 'name'   => $name,
                 'class'  => $class,
                 'config' => $config,

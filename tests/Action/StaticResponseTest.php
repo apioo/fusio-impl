@@ -24,7 +24,7 @@ namespace Fusio\Impl\Action;
 use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * StaticResponseTest
@@ -60,7 +60,7 @@ class StaticResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Exception
+     * @expectedException \RuntimeException
      */
     public function testHandleInvalidResponseFormat()
     {

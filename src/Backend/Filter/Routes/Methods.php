@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\Filter\Routes;
 
-use PSX\FilterAbstract;
+use PSX\Validate\FilterAbstract;
 
 /**
  * Methods

@@ -24,7 +24,8 @@ namespace Fusio\Impl\Action;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use PSX\Data\Extractor;
+use PSX\Data\Processor;
+use PSX\Data\Payload;
 
 /**
  * HttpProxy
@@ -37,9 +38,9 @@ class HttpProxy extends HttpRequest
 {
     /**
      * @Inject
-     * @var \PSX\Data\Extractor
+     * @var \PSX\Data\Processor
      */
-    protected $extractor;
+    protected $processor;
 
     public function getName()
     {
@@ -49,13 +50,15 @@ class HttpProxy extends HttpRequest
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $response = $this->executeRequest($request, $configuration, $context);
-        $data     = $this->extractor->extract($response);
+        
+        $body = (string) $response->getBody();
+        $data = $this->processor->parse(Payload::create($body, $response->getHeader("Content-Type")));
 
         return $this->response->build($response->getStatusCode(), [], $data);
     }
 
-    public function setExtractor(Extractor $extractor)
+    public function setProcessor(Processor $processor)
     {
-        $this->extractor = $extractor;
+        $this->processor = $processor;
     }
 }

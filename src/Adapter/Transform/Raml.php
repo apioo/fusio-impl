@@ -24,8 +24,8 @@ namespace Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Adapter\TransformInterface;
 use InvalidArgumentException;
 use PSX\Json;
-use PSX\Uri;
-use PSX\Util\CurveArray;
+use PSX\Uri\Uri;
+use PSX\Data\Util\CurveArray;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -186,7 +186,7 @@ class Raml implements TransformInterface
                     }
 
                     // check whether we have a json format and prettify
-                    $schema = Json::encode(Json::decode($schema, false), JSON_PRETTY_PRINT);
+                    $schema = Json\Parser::encode(Json\Parser::decode($schema, false), JSON_PRETTY_PRINT);
 
                     $this->schema[] = [
                         'name'   => $name,

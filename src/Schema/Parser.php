@@ -23,10 +23,9 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Schema\ParserInterface;
-use PSX\Data\Schema\Parser\JsonSchema;
-use PSX\Data\Schema\Parser\JsonSchema\RefResolver;
-use PSX\Data\Schema\Property;
-use PSX\File;
+use PSX\Schema\Parser\JsonSchema;
+use PSX\Schema\Parser\JsonSchema\RefResolver;
+use PSX\Schema\Property\ComplexType;
 use PSX\Validate;
 use RuntimeException;
 
@@ -64,7 +63,7 @@ class Parser implements ParserInterface
         $parser = new JsonSchema(null, $resolver);
         $schema = $parser->parse($source);
 
-        if (!$schema->getDefinition() instanceof Property\ComplexType) {
+        if (!$schema->getDefinition() instanceof ComplexType) {
             throw new RuntimeException('Schema must be an object');
         }
 

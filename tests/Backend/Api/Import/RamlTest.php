@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Fixture;
 use PSX\Http\Stream\StringStream;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * RamlTest

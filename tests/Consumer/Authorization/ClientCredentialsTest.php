@@ -23,8 +23,8 @@ namespace Fusio\Impl\Consumer\Authorization;
 
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Fixture;
-use PSX\Json;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Json\Parser;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * ClientCredentialsTest
@@ -49,7 +49,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         $body = (string) $response->getBody();
-        $data = Json::decode($body);
+        $data = Parser::decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 
@@ -84,7 +84,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         $body = (string) $response->getBody();
-        $data = Json::decode($body);
+        $data = Parser::decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Adapter;
 
 use Fusio\Impl\Service;
-use PSX\Json;
+use PSX\Json\Parser;
 use stdClass;
 
 /**
@@ -61,6 +61,6 @@ class Installer
             array_push($data->$key, $value);
         }
 
-        return $this->importService->import(Json::encode($data));
+        return $this->importService->import(Parser::encode($data));
     }
 }

@@ -21,20 +21,16 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Factory\ConnectionInterface;
 use Fusio\Engine\Parser\ParserInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Form\Container;
 use Fusio\Impl\Form\Element;
 use Fusio\Impl\Table\Connection as TableConnection;
-use Fusio\Impl\Parameters;
-use PSX\Data\ResultSet;
-use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\OpenSsl;
-use PSX\Sql;
+use PSX\Model\Common\ResultSet;
+use PSX\OpenSsl\OpenSsl;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
+use PSX\Sql\Sql;
 
 /**
  * Connection
@@ -87,11 +83,13 @@ class Connection
             // remove all password fields from the config
             if (!empty($config) && is_array($config)) {
                 $form = $this->connectionParser->getForm($connection['class']);
-                foreach ($form as $element) {
-                    $data = $element->getRecordInfo()->getData();
-                    if ($element instanceof Element\Input && $data['type'] == 'password') {
-                        if (isset($config[$data['name']])) {
-                            unset($config[$data['name']]);
+                if ($form instanceof Container) {
+                    $elements = $form->getElements();
+                    foreach ($elements as $element) {
+                        if ($element instanceof Element\Input && $element['type'] == 'password') {
+                            if (isset($config[$element['name']])) {
+                                unset($config[$element['name']]);
+                            }
                         }
                     }
                 }
@@ -133,7 +131,7 @@ class Connection
 
         if (!empty($connection)) {
             $this->connectionTable->update(array(
-                'id'     => $connection->getId(),
+                'id'     => $connection->id,
                 'name'   => $name,
                 'class'  => $class,
                 'config' => self::encryptConfig($config, $this->secretKey),
@@ -149,7 +147,7 @@ class Connection
 
         if (!empty($connection)) {
             $this->connectionTable->delete(array(
-                'id' => $connection->getId()
+                'id' => $connection->id
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find connection');

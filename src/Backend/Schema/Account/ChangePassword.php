@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Backend\Schema\Account;
 
-use PSX\Data\Schema\Property;
-use PSX\Data\SchemaAbstract;
+use PSX\Schema\Property;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * ChangePassword

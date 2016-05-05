@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Data;
 
 use Doctrine\DBAL\Connection;
-use PSX\Data\Schema\InvalidSchemaException;
-use PSX\Data\Schema\SchemaManagerInterface;
+use PSX\Schema\InvalidSchemaException;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * SchemaManager

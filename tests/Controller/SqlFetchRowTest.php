@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * SqlFetchRowTest
@@ -44,7 +44,7 @@ class SqlFetchRowTest extends ControllerDbTestCase
 {
     "title": "foo",
     "content": "bar",
-    "date": "2015-07-04T13:03:00"
+    "date": "2015-07-04T13:03:00Z"
 }
 JSON;
 

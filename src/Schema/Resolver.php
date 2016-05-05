@@ -22,11 +22,11 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use PSX\Data\Schema\Parser\JsonSchema\Document;
-use PSX\Data\Schema\Parser\JsonSchema\RefResolver;
-use PSX\Data\Schema\Parser\JsonSchema\ResolverInterface;
 use PSX\Json;
-use PSX\Uri;
+use PSX\Schema\Parser\JsonSchema\Document;
+use PSX\Schema\Parser\JsonSchema\RefResolver;
+use PSX\Schema\Parser\JsonSchema\ResolverInterface;
+use PSX\Uri\Uri;
 use RuntimeException;
 
 /**
@@ -51,7 +51,7 @@ class Resolver implements ResolverInterface
         $row  = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE name LIKE :name', array('name' => $name));
 
         if (!empty($row)) {
-            $data = Json::decode($row['source']);
+            $data = Json\Parser::decode($row['source'], true);
 
             if (is_array($data)) {
                 $document = new Document($data, $resolver, null, $uri);

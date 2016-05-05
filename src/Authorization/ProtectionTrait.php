@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use PSX\Dispatch\Filter\UserAgentEnforcer;
+use PSX\Framework\Filter\UserAgentEnforcer;
 
 /**
  * ProtectionTrait

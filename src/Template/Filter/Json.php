@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Template\Filter;
 
-use PSX\Data\Record;
-use PSX\Data\RecordInterface;
+use PSX\Record\Record;
+use PSX\Record\RecordInterface;
 use PSX\Data\Writer;
 
 /**

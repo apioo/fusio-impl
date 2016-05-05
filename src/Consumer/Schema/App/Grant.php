@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App;
 
-use PSX\Data\SchemaAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * Grant

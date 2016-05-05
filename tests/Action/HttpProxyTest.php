@@ -24,10 +24,10 @@ namespace Fusio\Impl\Action;
 use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
-use PSX\Data\Record;
+use PSX\Record\Record;
 use PSX\Http\Response;
 use PSX\Http\Stream\StringStream;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * HttpProxyTest
@@ -42,9 +42,9 @@ class HttpProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $http = $this->getMock('PSX\Http', array('request'));
+        $httpClient = $this->getMock('PSX\Http\Client', array('request'));
 
-        $http->expects($this->once())
+        $httpClient->expects($this->once())
             ->method('request')
             ->with($this->callback(function ($request) {
                 /** @var \PSX\Http\RequestInterface $request */
@@ -56,10 +56,10 @@ class HttpProxyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new Response(200, [], new StringStream(json_encode(['bar' => 'foo'])))));
 
         $action = new HttpProxy();
-        $action->setHttp($http);
+        $action->setHttpClient($httpClient);
         $action->setTemplateFactory(Environment::getService('template_factory'));
         $action->setResponse(Environment::getService('response'));
-        $action->setExtractor(Environment::getService('extractor'));
+        $action->setProcessor(Environment::getService('io'));
 
         $parameters = $this->getParameters([
             'url'  => 'http://127.0.0.1/bar',

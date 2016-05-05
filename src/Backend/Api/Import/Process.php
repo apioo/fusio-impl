@@ -24,8 +24,8 @@ namespace Fusio\Impl\Backend\Api\Import;
 use Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Controller\ApiAbstract;
-use PSX\Json;
+use PSX\Framework\Controller\ApiAbstract;
+use PSX\Json\Parser;
 
 /**
  * Process
@@ -49,7 +49,7 @@ class Process extends ApiAbstract
         try {
             $this->connection->beginTransaction();
 
-            $result = $this->importService->import(Json::encode($this->getBody()));
+            $result = $this->importService->import(Parser::encode($this->getBody()));
 
             $this->connection->commit();
 

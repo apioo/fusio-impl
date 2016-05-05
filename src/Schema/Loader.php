@@ -23,7 +23,7 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Schema\LoaderInterface;
-use PSX\Data\SchemaInterface;
+use PSX\Schema\SchemaInterface;
 use RuntimeException;
 
 /**

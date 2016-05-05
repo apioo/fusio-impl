@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Factory;
 
 use Fusio\Engine\Factory\ConnectionInterface;
-use PSX\Dependency\ObjectBuilderInterface;
+use PSX\Framework\Dependency\ObjectBuilderInterface;
 
 /**
  * Connection

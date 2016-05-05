@@ -25,7 +25,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * MostUsedRoutesTest

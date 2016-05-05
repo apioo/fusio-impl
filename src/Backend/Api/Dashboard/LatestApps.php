@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Dashboard;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Controller\ApiAbstract;
+use PSX\Framework\Controller\ApiAbstract;
 
 /**
  * LatestApps

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Adapter;
 
-use PSX\Json;
 use stdClass;
 
 /**

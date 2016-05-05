@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Form;
-use PSX\Controller\ApiAbstract;
+use PSX\Framework\Controller\ApiAbstract;
 
 /**
  * ListActions

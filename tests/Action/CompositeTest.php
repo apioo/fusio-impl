@@ -25,7 +25,7 @@ use Fusio\Impl\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Test\Environment;
+use PSX\Framework\Test\Environment;
 
 /**
  * CompositeTest

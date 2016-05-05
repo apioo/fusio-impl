@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Dashboard;
 
 use Fusio\Impl\Fixture;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
  * LatestAppsTest

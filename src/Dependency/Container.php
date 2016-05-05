@@ -40,12 +40,11 @@ use Fusio\Impl\Template;
 use Fusio\Impl\User;
 use Fusio\Impl\Validate;
 use Monolog\Handler as LogHandler;
-use PSX\Api;
-use PSX\Console as PSXCommand;
-use PSX\Console\Reader;
-use PSX\Data\Importer;
-use PSX\Dependency\DefaultContainer;
-use PSX\Log;
+use PSX\Data\Exporter\Popo;
+use PSX\Framework\Console as PSXCommand;
+use PSX\Framework\Api\CachedListing;
+use PSX\Framework\Dependency\DefaultContainer;
+use PSX\Schema\Console\SchemaCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
 
@@ -75,7 +74,7 @@ class Container extends DefaultContainer
     */
 
     /**
-     * @return \PSX\Loader\RoutingParserInterface
+     * @return \PSX\Framework\Loader\RoutingParserInterface
      */
     public function getRoutingParser()
     {
@@ -83,7 +82,7 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \PSX\Loader\LocationFinderInterface
+     * @return \PSX\Framework\Loader\LocationFinderInterface
      */
     public function getLoaderLocationFinder()
     {
@@ -91,7 +90,7 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \PSX\Data\Schema\SchemaManagerInterface
+     * @return \PSX\Schema\SchemaManagerInterface
      */
     public function getApiSchemaManager()
     {
@@ -99,7 +98,7 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \PSX\Api\Resource\ListingInterface
+     * @return \PSX\Api\ListingInterface
      */
     public function getResourceListing()
     {
@@ -108,7 +107,7 @@ class Container extends DefaultContainer
         if ($this->get('config')->get('psx_debug')) {
             return $resourceListing;
         } else {
-            return new Api\Resource\Listing\CachedListing($resourceListing, $this->get('cache'));
+            return new CachedListing($resourceListing, $this->get('cache'));
         }
     }
 
@@ -298,8 +297,11 @@ class Container extends DefaultContainer
     {
         // psx commands
         $application->add(new PSXCommand\ContainerCommand($this));
+        $application->add(new PSXCommand\ResourceCommand($this->get('config'), $this->get('resource_listing'), new Popo($this->get('annotation_reader'))));
         $application->add(new PSXCommand\RouteCommand($this->get('routing_parser')));
         $application->add(new PSXCommand\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
+        $application->add(new PSXCommand\GenerateCommand());
+        $application->add(new SchemaCommand($this->get('annotation_reader'), $this->get('config')->get('psx_soap_namespace')));
 
         // fusio commands
         $application->add(new Console\InstallCommand($this->get('connection')));
@@ -315,7 +317,6 @@ class Container extends DefaultContainer
         $application->add(new Console\DetailConnectionCommand($this->get('connection_factory'), $this->get('connection')));
 
         $application->add(new Console\ExportSchemaCommand($this->get('connection')));
-
         $application->add(new Console\ImportSchemaCommand($this->get('schema_service')));
 
         $application->add(new Console\GenerateAccessTokenCommand(

@@ -21,11 +21,13 @@
 
 namespace Fusio\Impl\Backend\Api\Routes;
 
-use Fusio\Impl\Backend\Filter\Routes as Filter;
-use PSX\Filter as PSXFilter;
-use PSX\Validate;
-use PSX\Validate\Property;
-use PSX\Validate\Validator;
+use Fusio\Impl\Backend\Filter\PrimaryKey;
+use Fusio\Impl\Backend\Filter\Routes\Methods;
+use Fusio\Impl\Backend\Filter\Routes\Path;
+use PSX\Api\Resource\MethodAbstract;
+use PSX\Data\Validator\Property;
+use PSX\Data\Validator\Validator;
+use PSX\Validate\Validate;
 
 /**
  * ValidatorTrait
@@ -42,15 +44,15 @@ trait ValidatorTrait
      */
     protected $tableManager;
 
-    protected function getImportValidator()
+    protected function getValidator(MethodAbstract $method)
     {
         return new Validator(array(
-            new Property('/id', Validate::TYPE_INTEGER, array(new PSXFilter\PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Routes')))),
-            new Property('/methods', Validate::TYPE_STRING, array(new Filter\Methods())),
-            new Property('/path', Validate::TYPE_STRING, array(new Filter\Path())),
-            new Property('/config/\d+/methods/\d+/action', Validate::TYPE_INTEGER, array(new PSXFilter\PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
-            new Property('/config/\d+/methods/\d+/request', Validate::TYPE_INTEGER, array(new PSXFilter\PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
-            new Property('/config/\d+/methods/\d+/response', Validate::TYPE_INTEGER, array(new PSXFilter\PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
+            new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Routes')))),
+            new Property('/methods', Validate::TYPE_STRING, array(new Methods())),
+            new Property('/path', Validate::TYPE_STRING, array(new Path())),
+            new Property('/config/\d+/methods/\d+/action', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
+            new Property('/config/\d+/methods/\d+/request', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
+            new Property('/config/\d+/methods/\d+/response', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
         ));
     }
 }

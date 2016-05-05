@@ -23,8 +23,8 @@ namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Fixture;
-use PSX\Json;
-use PSX\Test\ControllerDbTestCase;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Json\Parser;
 
 /**
  * PasswordTest
@@ -49,7 +49,7 @@ class PasswordTest extends ControllerDbTestCase
         ], $body);
 
         $body = (string) $response->getBody();
-        $data = Json::decode($body);
+        $data = Parser::decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
 

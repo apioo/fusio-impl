@@ -23,6 +23,8 @@ namespace Fusio\Impl;
 
 use Fusio\Impl\Database\Version;
 use Fusio\Impl\Service\Connection;
+use PSX\Record\Record;
+use PSX\Schema\Parser\JsonSchema;
 
 /**
  * Fixture
@@ -69,6 +71,31 @@ class Fixture
 }
 JSON;
 
+        $parser = new JsonSchema();
+        $schema = $parser->parse($schemaSource);
+
+        $config = [Record::fromArray([
+            'active' => 1,
+            'status' => 4,
+            'name'   => '1',
+            'methods' => [Record::fromArray([
+                'name'     => 'GET',
+                'action'   => 3,
+                'response' => 2,
+            ], 'method'), Record::fromArray([
+                'active'   => true,
+                'public'   => 0,
+                'name'     => 'POST',
+                'action'   => 3,
+                'request'  => 2,
+                'response' => 1,
+            ], 'method'), Record::fromArray([
+                'name'     => 'PUT',
+            ], 'method'), Record::fromArray([
+                'name'     => 'DELETE',
+            ], 'method')],
+        ], 'config')];
+        
         return [
             'fusio_user' => [
                 ['status' => 0, 'name' => 'Consumer', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
@@ -93,7 +120,7 @@ JSON;
                 ['name' => 'MongoDB', 'class' => 'Fusio\Impl\Connection\MongoDB', 'config' => 'gj1VZ1lN1aJEMMLsdglwiQ==.ub6hTzbrd9MW8taKtEC8exyr71IWlRvJC0b330c+ORea+MxnatgMjQu4phtVkzuNWUeAyj0izLKGUs+rJSkwOu7SNAL3tZ6cDWUE4IGZG84='],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController', 'config' => 'a:1:{i:0;C:15:"PSX\Data\Record":660:{a:2:{s:4:"name";s:6:"config";s:6:"fields";a:4:{s:6:"active";b:1;s:6:"status";i:4;s:4:"name";s:1:"1";s:7:"methods";a:4:{i:0;C:15:"PSX\Data\Record":106:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:3:{s:4:"name";s:3:"GET";s:6:"action";i:3;s:8:"response";i:2;}}}i:1;C:15:"PSX\Data\Record":159:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:6:{s:6:"active";b:1;s:6:"public";b:0;s:4:"name";s:4:"POST";s:6:"action";i:3;s:7:"request";i:2;s:8:"response";i:1;}}}i:2;C:15:"PSX\Data\Record":70:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:3:"PUT";}}}i:3;C:15:"PSX\Data\Record":73:{a:2:{s:4:"name";s:6:"method";s:6:"fields";a:1:{s:4:"name";s:6:"DELETE";}}}}}}}}'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController', 'config' => serialize($config)],
             ],
             'fusio_routes_action' => [
                 ['routeId' => 50, 'actionId' => 3, 'status' => 0],
@@ -110,7 +137,7 @@ JSON;
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_schema' => [
-                ['status' => 1, 'name' => 'Foo-Schema', 'source' => $schemaSource, 'cache' => 'C:15:"PSX\Data\Schema":819:{C:36:"PSX\Data\Schema\Property\ComplexType":769:{a:5:{s:10:"properties";a:3:{s:5:"title";C:35:"PSX\Data\Schema\Property\StringType":158:{a:8:{s:9:"minLength";N;s:9:"maxLength";N;s:7:"pattern";N;s:11:"enumeration";N;s:4:"name";s:5:"title";s:11:"description";N;s:8:"required";N;s:9:"reference";N;}}s:7:"content";C:35:"PSX\Data\Schema\Property\StringType":160:{a:8:{s:9:"minLength";N;s:9:"maxLength";N;s:7:"pattern";N;s:11:"enumeration";N;s:4:"name";s:7:"content";s:11:"description";N;s:8:"required";N;s:9:"reference";N;}}s:4:"date";C:37:"PSX\Data\Schema\Property\DateTimeType":157:{a:8:{s:9:"minLength";N;s:9:"maxLength";N;s:7:"pattern";N;s:11:"enumeration";N;s:4:"name";s:4:"date";s:11:"description";N;s:8:"required";N;s:9:"reference";N;}}}s:4:"name";s:4:"test";s:11:"description";N;s:8:"required";N;s:9:"reference";N;}}}'],
+                ['status' => 1, 'name' => 'Foo-Schema', 'source' => $schemaSource, 'cache' => serialize($schema)],
             ],
             'fusio_scope' => [
                 ['name' => 'foo', 'description' => 'Foo access'],

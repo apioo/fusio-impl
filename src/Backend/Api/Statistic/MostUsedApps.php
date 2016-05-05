@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Statistic;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Table\Log;
-use PSX\Controller\ApiAbstract;
+use PSX\Framework\Controller\ApiAbstract;
 
 /**
  * MostUsedApps
