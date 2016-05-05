@@ -32,13 +32,13 @@ use PSX\Record\Record;
 use PSX\Schema\Property;
 
 /**
- * Version023
+ * Version030
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Version023 implements VersionInterface
+class Version030 implements VersionInterface
 {
     public function getSchema()
     {
