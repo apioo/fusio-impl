@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": ">=5.5",
-    "psx/psx": "^2.0-RC1",
+    "psx/psx": "^2.0",
     "psx/openssl": "^0.1",
     "fusio/engine": "^0.2@dev",
     "ircmaxell/password-compat": "^1.0",
