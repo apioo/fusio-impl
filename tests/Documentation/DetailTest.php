@@ -56,8 +56,8 @@ class DetailTest extends ControllerDbTestCase
         "type": "object",
         "definitions": {
             "ref60fecdc9cdbb564bbf31377e11525059": {
-                "type": "object",
                 "title": "test",
+                "type": "object",
                 "properties": {
                     "title": {
                         "type": "string"
@@ -66,7 +66,8 @@ class DetailTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "date": {
-                        "type": "string"
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "additionalProperties": false
