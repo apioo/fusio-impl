@@ -35,13 +35,16 @@ class Connection extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('config');
+        $sb->setAdditionalProperties(Property::getString());
+        $config = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('connection');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_]{3,64}');
         $sb->string('class');
-        $sb->anyType('config')
-            ->setPrototype(Property::getString('value'));
+        $sb->complexType('config', $config);
 
         return $sb->getProperty();
     }
