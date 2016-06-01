@@ -49,8 +49,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
             'command' => $command->getName(),
         ]);
 
-        $display = $commandTester->getDisplay();
-
+        $actual = $commandTester->getDisplay();
         $expect = <<<'JSON'
 {
     "actionClass": [
@@ -200,6 +199,6 @@ class SystemExportCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertJsonStringEqualsJsonString($expect, $display, $display);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 }
