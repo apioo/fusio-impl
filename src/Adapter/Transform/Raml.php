@@ -186,7 +186,7 @@ class Raml implements TransformInterface
                     }
 
                     // check whether we have a json format and prettify
-                    $schema = Json\Parser::encode(Json\Parser::decode($schema, false), JSON_PRETTY_PRINT);
+                    $schema = Json\Parser::decode($schema, false);
 
                     $this->schema[] = [
                         'name'   => $name,
