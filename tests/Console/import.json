@@ -44,7 +44,23 @@
     "schema": [
         {
             "name": "New-Schema",
-            "source": "{\n    \"id\": \"http:\/\/phpsx.org#\",\n    \"title\": \"test\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\n            \"type\": \"string\"\n        },\n        \"content\": {\n            \"type\": \"string\"\n        },\n        \"date\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n        }\n    }\n}"
+            "source": {
+                "id": "http:\/\/phpsx.org#",
+                "title": "test",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
         }
     ],
     "action": [

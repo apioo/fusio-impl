@@ -49,12 +49,6 @@ class Schema extends InstructionAbstract
 
     public function getPayload()
     {
-        // in case the source is not a string the schema was embedded into the
-        // adapter specification so transform the schema to json
-        if (isset($this->payload->source) && !is_string($this->payload->source)) {
-            $this->payload->source = json_encode($this->payload->source, JSON_PRETTY_PRINT);
-        }
-
         return $this->payload;
     }
 }

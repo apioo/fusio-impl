@@ -110,11 +110,33 @@ class SystemExportCommandTest extends ControllerDbTestCase
     "schema": [
         {
             "name": "Foo-Schema",
-            "source": "{\n    \"id\": \"http:\/\/phpsx.org#\",\n    \"title\": \"test\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\n            \"type\": \"string\"\n        },\n        \"content\": {\n            \"type\": \"string\"\n        },\n        \"date\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n        }\n    }\n}"
+            "source": {
+                "id": "http:\/\/phpsx.org#",
+                "title": "test",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
         },
         {
             "name": "Passthru",
-            "source": "{\n    \"id\": \"http:\\\/\\\/fusio-project.org\",\n    \"title\": \"passthru\",\n    \"type\": \"object\",\n    \"description\": \"No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format.\",\n    \"properties\": {}\n}"
+            "source": {
+                "id": "http:\/\/fusio-project.org",
+                "title": "passthru",
+                "type": "object",
+                "description": "No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format.",
+                "properties": []
+            }
         }
     ],
     "action": [

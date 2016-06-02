@@ -47,7 +47,7 @@ class Schema extends TableAbstract
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
-            'source' => self::TYPE_TEXT,
+            'source' => self::TYPE_JSON,
             'cache' => self::TYPE_TEXT,
         );
     }

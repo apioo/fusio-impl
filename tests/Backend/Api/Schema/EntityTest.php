@@ -52,7 +52,13 @@ class EntityTest extends ControllerDbTestCase
     "id": 1,
     "status": 1,
     "name": "Passthru",
-    "source": "{\n    \"id\": \"http:\\\/\\\/fusio-project.org\",\n    \"title\": \"passthru\",\n    \"type\": \"object\",\n    \"description\": \"No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format.\",\n    \"properties\": {}\n}"
+    "source": {
+        "id": "http:\/\/fusio-project.org",
+        "title": "passthru",
+        "type": "object",
+        "description": "No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format.",
+        "properties": []
+    }
 }
 JSON;
 
@@ -76,24 +82,22 @@ JSON;
 
     public function testPut()
     {
-        $schema = <<<'JSON'
-{
-    "id": "http://phpsx.org#",
-    "title": "test",
-    "type": "object",
-    "properties": {
-        "title": {
-            "type": "string"
-        },
-        "foo": {
-            "type": "string"
-        },
-        "bar": {
-            "type": "string"
-        }
-    }
-}
-JSON;
+        $schema = [
+            'id' => 'http://phpsx.org#',
+            'title' => 'test',
+            'type' => 'object',
+            'properties' => [
+                'title' => [
+                    'type' => 'string'
+                ],
+                'foo' => [
+                    'type' => 'string'
+                ],
+                'bar' => [
+                    'type' => 'string'
+                ],
+            ],
+        ];
 
         $response = $this->sendRequest('http://127.0.0.1/backend/schema/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -128,7 +132,7 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('Test-Schema', $row['name']);
         $this->assertEquals(null, $row['propertyName']);
-        $this->assertEquals($schema, $row['source']);
+        $this->assertJsonStringEqualsJsonString(json_encode($schema), $row['source']);
         $this->assertTrue(!empty($row['cache']));
     }
 

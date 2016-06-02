@@ -34,12 +34,16 @@ class Schema extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('source');
+        $sb->setAdditionalProperties(true);
+        $source = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('schema');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_]{3,64}');
-        $sb->string('source');
+        $sb->complexType('source', $source);
 
         return $sb->getProperty();
     }

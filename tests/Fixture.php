@@ -95,7 +95,7 @@ JSON;
                 'name'     => 'DELETE',
             ], 'method')],
         ], 'config')];
-        
+
         return [
             'fusio_user' => [
                 ['status' => 0, 'name' => 'Consumer', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],

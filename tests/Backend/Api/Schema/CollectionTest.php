@@ -82,7 +82,7 @@ JSON;
             "type": "string"
         },
         "foo": {
-        	"$ref": "schema:///Foo-Schema"
+            "$ref": "schema:///Foo-Schema"
         }
     }
 }
@@ -93,7 +93,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Bar-Schema',
-            'source' => $schema,
+            'source' => json_decode($schema),
         ]));
 
         $body   = (string) $response->getBody();
@@ -121,7 +121,7 @@ JSON;
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('Bar-Schema', $row['name']);
         $this->assertEquals(null, $row['propertyName']);
-        $this->assertEquals($schema, $row['source']);
+        $this->assertJsonStringEqualsJsonString($schema, $row['source']);
         $this->assertTrue(!empty($row['cache']));
     }
 

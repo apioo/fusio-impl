@@ -26,6 +26,7 @@ use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
 use Fusio\Impl\Table\Schema as TableSchema;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
+use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\Generator;
 use PSX\Sql\Condition;
@@ -115,7 +116,7 @@ class Schema
             'status' => TableSchema::STATUS_ACTIVE,
             'name'   => $name,
             'source' => $source,
-            'cache'  => $this->schemaParser->parse($source, $name),
+            'cache'  => $this->schemaParser->parse(json_encode($source), $name),
         ));
     }
 
@@ -130,7 +131,7 @@ class Schema
                 'id'     => $schema['id'],
                 'name'   => $name,
                 'source' => $source,
-                'cache'  => $this->schemaParser->parse($source, $name),
+                'cache'  => $this->schemaParser->parse(json_encode($source), $name),
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');
