@@ -30,5 +30,10 @@
     "psr-4": {
       "Fusio\\Impl\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Fusio\\Impl\\Tests\\": "tests/"
+    }
   }
 }
