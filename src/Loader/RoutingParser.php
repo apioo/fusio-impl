@@ -27,6 +27,7 @@ use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\PathMatcher;
 use PSX\Http\RequestInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * RoutingParser
@@ -49,11 +50,14 @@ class RoutingParser implements LocationFinderInterface
         $sql = 'SELECT id,
 				       methods,
 				       path,
-				       controller,
-				       config
+				       controller
 				  FROM fusio_routes
 				 WHERE status = :status
 				   AND methods LIKE :method';
+
+        // @TODO we could add a priority column to the routes table so that
+        // often visited routes are at the top. For this we need to have a cron
+        // to set the priority depending on the entries in the log table
 
         $method      = $request->getMethod();
         $pathMatcher = new PathMatcher($request->getUri()->getPath());
@@ -67,13 +71,10 @@ class RoutingParser implements LocationFinderInterface
 
             if (in_array($method, explode('|', $row['methods'])) &&
                 $pathMatcher->match($row['path'], $parameters)) {
-                $config = $row['config'];
-                $config = !empty($config) ? unserialize($config) : null;
 
                 $context->set(Context::KEY_FRAGMENT, $parameters);
                 $context->set(Context::KEY_PATH, $row['path']);
                 $context->set(Context::KEY_SOURCE, $row['controller']);
-                $context->set('fusio.config', $config);
                 $context->set('fusio.routeId', $row['id']);
 
                 return $request;

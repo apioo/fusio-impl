@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Tests\Console;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -166,54 +166,40 @@ class SystemExportCommandTest extends ControllerDbTestCase
     ],
     "routes": [
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/foo",
-            "config": [
+            "methods": [
                 {
-                    "active": true,
+                    "method": "GET",
+                    "version": 1,
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
-                            "name": "GET",
-                            "action": "Sql-Fetch-Row",
-                            "response": "Foo-Schema"
-                        },
-                        {
-                            "active": true,
-                            "public": false,
-                            "name": "POST",
-                            "action": "Sql-Fetch-Row",
-                            "request": "Foo-Schema",
-                            "response": "Passthru"
-                        },
-                        {
-                            "name": "PUT"
-                        },
-                        {
-                            "name": "DELETE"
-                        }
-                    ]
+                    "active": true,
+                    "public": true,
+                    "response": "Foo-Schema",
+                    "action": "Sql-Fetch-Row"
+                },
+                {
+                    "method": "POST",
+                    "version": 1,
+                    "status": 4,
+                    "active": true,
+                    "public": false,
+                    "request": "Foo-Schema",
+                    "response": "Passthru",
+                    "action": "Sql-Fetch-Row"
                 }
             ]
         },
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/",
-            "config": [
+            "methods": [
                 {
-                    "active": true,
+                    "method": "GET",
+                    "version": 1,
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
-                            "active": true,
-                            "public": true,
-                            "name": "GET",
-                            "action": "Welcome",
-                            "response": "Passthru"
-                        }
-                    ]
+                    "active": true,
+                    "public": true,
+                    "response": "Passthru",
+                    "action": "Welcome"
                 }
             ]
         }

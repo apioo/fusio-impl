@@ -46,11 +46,10 @@ class DatabaseRoutes implements RoutingParserInterface
     public function getCollection()
     {
         if ($this->_collection === null) {
-            $sql = 'SELECT id, 
-                           methods, 
-                           path, 
-                           controller, 
-                           config 
+            $sql = 'SELECT id,
+                           methods,
+                           path,
+                           controller
                       FROM fusio_routes 
                      WHERE status = :status';
 
@@ -58,9 +57,7 @@ class DatabaseRoutes implements RoutingParserInterface
             $result     = $this->connection->fetchAll($sql, ['status' => TableRoutes::STATUS_ACTIVE]);
 
             foreach ($result as $row) {
-                $config = !empty($row['config']) ? unserialize($row['config']) : array();
-
-                $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $config);
+                $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id']);
             }
 
             $this->_collection = $collection;

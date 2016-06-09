@@ -21,8 +21,10 @@
 
 namespace Fusio\Impl\Controller;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\Oauth2Filter;
 use Fusio\Impl\Context as FusioContext;
+use Fusio\Impl\Processor\RepositoryInterface;
 use Fusio\Impl\Request;
 use Fusio\Impl\Schema\LazySchema;
 use PSX\Api\DocumentedInterface;
@@ -55,7 +57,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Engine\ProcessorInterface
+     * @var \Fusio\Impl\Processor
      */
     protected $processor;
 
@@ -67,7 +69,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Engine\LoggerInterface
+     * @var \Fusio\Impl\Logger
      */
     protected $apiLogger;
 
@@ -88,6 +90,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * @var \Fusio\Engine\User\LoaderInterface
      */
     protected $userLoader;
+
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\Routes\Method
+     */
+    protected $routesMethodService;
 
     /**
      * @Inject
@@ -161,50 +169,21 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return $filter;
     }
 
+    /**
+     * Select all methods from the routes method table and build a resource 
+     * based on the data. If the route is in production mode read the schema 
+     * from the cache else resolve it
+     * 
+     * @param integer $version
+     * @return null|Resource
+     */
     public function getDocumentation($version = null)
     {
-        $versions = $this->context->get('fusio.config');
-        $config   = null;
-
-        if ($version == '*' || empty($version)) {
-            $version = $this->getLatestVersionFromConfig();
-        }
-
-        foreach ($versions as $row) {
-            if ($row->name == $version) {
-                $config = $row;
-                break;
-            }
-        }
-
-        if ($config instanceof RecordInterface) {
-            $resource = new Resource($config->status, $this->context->get(Context::KEY_PATH));
-            $methods  = $config->methods;
-
-            foreach ($methods as $method) {
-                if ($method->active) {
-                    $resourceMethod = Resource\Factory::getMethod($method->name);
-
-                    if (is_int($method->request)) {
-                        $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method->request));
-                    } elseif ($method->request instanceof SchemaInterface) {
-                        $resourceMethod->setRequest($method->request);
-                    }
-
-                    if (is_int($method->response)) {
-                        $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method->response));
-                    } elseif ($method->response instanceof SchemaInterface) {
-                        $resourceMethod->addResponse(200, $method->response);
-                    }
-
-                    $resource->addMethod($resourceMethod);
-                }
-            }
-
-            return $resource;
-        }
-
-        return null;
+        return $this->routesMethodService->getDocumentation(
+            $this->context->get('fusio.routeId'),
+            $version,
+            $this->context->get(Context::KEY_PATH)
+        );
     }
 
     protected function doGet()
@@ -265,34 +244,62 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     private function executeAction($record)
     {
-        $actionId = $this->getActiveMethod()->action;
+        $method  = $this->getActiveMethod();
+        $context = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
+        $request = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
 
-        if (is_int($actionId)) {
-            try {
-                $context    = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
-                $request    = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
-                $response   = $this->processor->execute($actionId, $request, $context);
-                $statusCode = $response->getStatusCode();
-                $headers    = $response->getHeaders();
+        if ($method['status'] == Resource::STATUS_ACTIVE) {
+            // in case of a production method we execute the action from the
+            // cache so that it does not depend on values from the db
+            $repository = unserialize($method['actionCache']);
 
-                if (!empty($statusCode)) {
-                    $this->setResponseCode($statusCode);
+            if ($repository instanceof RepositoryInterface) {
+                $this->processor->push($repository);
+
+                try {
+                    $response = $this->processor->execute(1, $request, $context);
+                } catch (\Exception $e) {
+                    $this->apiLogger->appendError($this->logId, $e);
+
+                    throw $e;
                 }
 
-                if (!empty($headers)) {
-                    foreach ($headers as $name => $value) {
-                        $this->setHeader($name, $value);
-                    }
-                }
-
-                return $response->getBody();
-            } catch (\Exception $e) {
-                $this->apiLogger->appendError($this->logId, $e);
-
-                throw $e;
+                $this->processor->pop();
+            } else {
+                throw new StatusCode\ServiceUnavailableException('Invalid action cache');
             }
         } else {
-            throw new StatusCode\ServiceUnavailableException('No action provided');
+            $actionId = $method['action'];
+            if (is_int($actionId)) {
+                try {
+                    $response = $this->processor->execute($actionId, $request, $context);
+                } catch (\Exception $e) {
+                    $this->apiLogger->appendError($this->logId, $e);
+
+                    throw $e;
+                }
+            } else {
+                throw new StatusCode\ServiceUnavailableException('No action provided');
+            }
+        }
+
+        if ($response instanceof ResponseInterface) {
+            $statusCode = $response->getStatusCode();
+            $headers    = $response->getHeaders();
+
+            if (!empty($statusCode)) {
+                $this->setResponseCode($statusCode);
+            }
+
+            if (!empty($headers)) {
+                foreach ($headers as $name => $value) {
+                    $this->setHeader($name, $value);
+                }
+            }
+
+            return $response->getBody();
+        } else {
+            throw new StatusCode\InternalServerErrorException('Invalid action response');
         }
     }
 
@@ -303,50 +310,22 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
 
         $version = $this->getSubmittedVersionNumber();
-        $method  = $this->getAvailableMethod($version);
+        $method  = $this->routesMethodService->getMethod(
+            $this->context->get('fusio.routeId'),
+            $version,
+            $this->request->getMethod()
+        );
 
-        if ($method === null) {
-            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $this->getAllowedMethods($version));
+        if (empty($method)) {
+            $allowedMethods = $this->routesMethodService->getAllowedMethods(
+                $this->context->get('fusio.routeId'),
+                $version
+            );
+
+            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $allowedMethods);
         }
 
         return $this->activeMethod = $method;
-    }
-
-    private function getAvailableMethod($version)
-    {
-        $config = $this->context->get('fusio.config');
-
-        foreach ($config as $resource) {
-            if ($resource->name == $version) {
-                $methods = $resource->methods;
-                foreach ($methods as $method) {
-                    if ($method->name == $this->request->getMethod() && $method->active) {
-                        return $method;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private function getAllowedMethods($version)
-    {
-        $config  = $this->context->get('fusio.config');
-        $allowed = [];
-
-        foreach ($config as $resource) {
-            if ($resource->name == $version) {
-                $methods = $resource->methods;
-                foreach ($methods as $method) {
-                    if ($method->active) {
-                        $allowed[] = $method->name;
-                    }
-                }
-            }
-        }
-
-        return $allowed;
     }
 
     /**
@@ -362,26 +341,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
         preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
 
-        $version = isset($matches[2]) ? $matches[2] : null;
-
-        // if null get latest version
-        if ($version === null) {
-            $version = $this->getLatestVersionFromConfig();
-        }
-
-        return $version;
-    }
-    
-    private function getLatestVersionFromConfig()
-    {
-        $config   = $this->context->get('fusio.config');
-        $versions = [];
-
-        foreach ($config as $resource) {
-            $versions[] = (int) $resource->name;
-        }
-        rsort($versions);
-
-        return reset($versions);
+        return isset($matches[2]) ? $matches[2] : null;
     }
 }

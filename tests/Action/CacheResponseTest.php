@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Action;
+namespace Fusio\Impl\Tests\Action;
 
 use Doctrine\Common\Cache\ArrayCache;
-use Fusio\Impl\ActionTestCaseTrait;
+use Fusio\Impl\Action\CacheResponse;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\DbTestCase;
+use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
 use PSX\Cache\Pool;
 use PSX\Framework\Test\Environment;

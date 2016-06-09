@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl;
+namespace Fusio\Impl\Tests;
 
 use PSX\Framework\Test\Environment;
 
@@ -34,6 +34,9 @@ class DbTestCase extends \PHPUnit_Extensions_Database_TestCase
 {
     protected static $con;
 
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
     public function getConnection()

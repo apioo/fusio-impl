@@ -94,9 +94,8 @@ class Collection extends SchemaApiAbstract
     protected function doPost($record)
     {
         $this->routesService->create(
-            $record->methods,
             $record->path,
-            $record->config
+            $record->methods
         );
 
         return array(

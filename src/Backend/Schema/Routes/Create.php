@@ -37,7 +37,6 @@ class Create extends SchemaAbstract
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Routes');
         $schema->get('methods')->setRequired(true);
         $schema->get('path')->setRequired(true);
-        $schema->get('config')->setRequired(true);
 
         return $schema;
     }

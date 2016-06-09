@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Tests\Console;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -103,7 +104,7 @@ JSON;
         $this->assertEquals(['condition' => 'rateLimit.getRequestsPerMonth() < 20', 'true' => '3', 'false' => '1'], unserialize($action['config']));
 
         // check routes
-        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller, config FROM fusio_routes WHERE path = :path', [
+        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/bar',
         ]);
 
@@ -112,26 +113,13 @@ JSON;
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
-        $versions = unserialize($route['config']);
-        $data     = array();
+        // check methods
+        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
 
-        foreach ($versions as $config) {
-            // transforms the complete object structure to an array
-            $data[] = json_decode(json_encode($config), true);
-        }
-
-        $this->assertEquals([[
-            'active' => true,
-            'status' => 4,
-            'name' => '1',
-            'methods' => [[
-                'active' => true,
-                'public' => true,
-                'name' => 'GET',
-                'action' => 4,
-                'response' => 3
-            ]]
-        ]], $data);
+        $this->assertEquals(1, count($methods));
+        $this->assertEquals(['routeId' => 51, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
     }
 }
 

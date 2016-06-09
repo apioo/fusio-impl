@@ -24,8 +24,8 @@ namespace Fusio\Impl\Service\Routes;
 use Fusio\Impl\Table\Action as TableAction;
 use Fusio\Impl\Table\Routes;
 use Fusio\Impl\Table\Routes\Action as RoutesAction;
+use Fusio\Impl\Table\Routes\Method as RoutesMethod;
 use Fusio\Impl\Table\Routes\Schema as RoutesSchema;
-use Fusio\Impl\Table\Schema as TableSchema;
 use Fusio\Impl\Form;
 use Fusio\Impl\Parser\ParserAbstract;
 use PSX\Api\Resource;
@@ -33,9 +33,8 @@ use PSX\Sql\Condition;
 
 /**
  * The dependency manager inserts all schema and action ids which are used by
- * a route. If the route is in production status all dependencies are locked so
- * that they can not change. The locking is somewhat complicated so this manager
- * encapsulate all the logic
+ * a route. Because of that we can i.e. show all actions which are used by a 
+ * route
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -43,18 +42,37 @@ use PSX\Sql\Condition;
  */
 class DependencyManager
 {
-    protected $schemaTable;
+    /**
+     * @var \Fusio\Impl\Table\Routes\Method
+     */
+    protected $methodTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Schema
+     */
     protected $schemaLinkTable;
-    protected $actionTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Action
+     */
     protected $actionLinkTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Action
+     */
+    protected $actionTable;
+
+    /**
+     * @var \Fusio\Impl\Parser\ParserAbstract
+     */
     protected $actionParser;
 
-    public function __construct(TableSchema $schemaTable, RoutesSchema $schemaLinkTable, TableAction $actionTable, RoutesAction $actionLinkTable, ParserAbstract $actionParser)
+    public function __construct(RoutesMethod $methodTable, RoutesSchema $schemaLinkTable, RoutesAction $actionLinkTable, TableAction $actionTable, ParserAbstract $actionParser)
     {
-        $this->schemaTable     = $schemaTable;
+        $this->methodTable     = $methodTable;
         $this->schemaLinkTable = $schemaLinkTable;
-        $this->actionTable     = $actionTable;
         $this->actionLinkTable = $actionLinkTable;
+        $this->actionTable     = $actionTable;
         $this->actionParser    = $actionParser;
     }
 
@@ -70,54 +88,21 @@ class DependencyManager
     }
 
     /**
-     * Unlocks all existing dependencies if no other dependency exist
-     *
-     * @param integer $routeId
-     */
-    public function unlockExistingDependencies($routeId)
-    {
-        $schemas = $this->schemaLinkTable->getByRouteId($routeId);
-        foreach ($schemas as $schema) {
-            $condition = new Condition();
-            $condition->equals('schemaId', $schema->id);
-            $condition->equals('status', RoutesSchema::STATUS_REQUIRED);
-
-            $count = $this->schemaLinkTable->getCount($condition);
-            if ($count == 0) {
-                $this->schemaTable->update([
-                    'id'     => $schema->id,
-                    'status' => TableSchema::STATUS_ACTIVE,
-                ]);
-            }
-        }
-
-        $actions = $this->actionLinkTable->getByRouteId($routeId);
-        foreach ($actions as $action) {
-            $condition = new Condition();
-            $condition->equals('actionId', $action->id);
-            $condition->equals('status', RoutesAction::STATUS_REQUIRED);
-
-            $count = $this->actionLinkTable->getCount($condition);
-            if ($count == 0) {
-                $this->actionTable->update([
-                    'id'     => $action->id,
-                    'status' => TableAction::STATUS_ACTIVE,
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Inserts the new schema and action dependency links
+     * Reads all dependencies of the rpovided route and writes them to the 
+     * tables
      *
      * @param integer $routeId
      * @param array $config
      */
-    public function insertDependencyLinks($routeId, array $config)
+    public function updateDependencyLinks($routeId)
     {
+        // remove all existing entries
+        $this->removeExistingDependencyLinks($routeId);
+
         // get dependencies of the config
-        $schemas = $this->getDependingSchemas($config);
-        $actions = $this->getDependingActions($config);
+        $methods = $this->methodTable->getByRouteId($routeId);
+        $schemas = $this->getDependingSchemas($methods);
+        $actions = $this->getDependingActions($methods);
 
         foreach ($schemas as $schemaId => $status) {
             $this->schemaLinkTable->create(array(
@@ -137,153 +122,70 @@ class DependencyManager
     }
 
     /**
-     * Locks all required dependencies
-     *
-     * @param integer $routeId
-     */
-    public function lockExistingDependencies($routeId)
-    {
-        $schemas = $this->schemaLinkTable->getByRouteId($routeId);
-        foreach ($schemas as $schema) {
-            if ($schema->status == RoutesSchema::STATUS_REQUIRED) {
-                $this->schemaTable->update([
-                    'id'     => $schema->schemaId,
-                    'status' => TableSchema::STATUS_LOCKED,
-                ]);
-            }
-        }
-
-        $actions = $this->actionLinkTable->getByRouteId($routeId);
-        foreach ($actions as $action) {
-            if ($action->status == RoutesAction::STATUS_REQUIRED) {
-                $this->actionTable->update([
-                    'id'     => $action->actionId,
-                    'status' => TableAction::STATUS_LOCKED,
-                ]);
-            }
-        }
-    }
-
-    /**
      * Returns all schema ids which are required by the config
      *
-     * @param array $config
+     * @param array $methods
      * @return array
      */
-    protected function getDependingSchemas(array $config)
+    protected function getDependingSchemas(array $methods)
     {
-        $schemas = [];
-        foreach ($config as $version) {
-            if ($version->active) {
-                foreach ($version->methods as $method) {
-                    if ($method->active) {
-                        $schemaIds = [];
+        $schemaIds = [];
+        foreach ($methods as $row) {
+            if ($row['active']) {
+                if (is_int($row['request'])) {
+                    $schemaIds[] = $row['request'];
+                }
 
-                        if (is_int($method->request)) {
-                            $schemaIds[] = $method->request;
-                        }
-
-                        if (is_int($method->response)) {
-                            $schemaIds[] = $method->response;
-                        }
-
-                        foreach ($schemaIds as $schemaId) {
-                            if (in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
-                                $status = RoutesSchema::STATUS_REQUIRED;
-                            } else {
-                                $status = RoutesSchema::STATUS_OPTIONAL;
-                            }
-
-                            if (isset($schemas[$schemaId])) {
-                                $existingStatus = $schemas[$schemaId];
-
-                                if ($status == RoutesSchema::STATUS_REQUIRED || $existingStatus == RoutesSchema::STATUS_REQUIRED) {
-                                    $schemas[$schemaId] = RoutesSchema::STATUS_REQUIRED;
-                                } else {
-                                    $schemas[$schemaId] = RoutesSchema::STATUS_OPTIONAL;
-                                }
-                            } else {
-                                $schemas[$schemaId] = $status;
-                            }
-                        }
-                    }
+                if (is_int($row['response'])) {
+                    $schemaIds[] = $row['response'];
                 }
             }
         }
 
-        return $schemas;
+        // @TODO it would be great to resolve also schemas which are referenced
+        // by the provided schemas i.e. through $ref: schema://
+
+        return array_unique($schemaIds);
     }
 
     /**
      * Returns all action ids which are required by the config. Resolves also
      * action ids which depend on another action
      *
-     * @param array $config
+     * @param array $methods
      * @return array
      */
-    protected function getDependingActions(array $config)
+    protected function getDependingActions(array $methods)
     {
-        $actions = [];
-        foreach ($config as $version) {
-            if ($version->active) {
-                foreach ($version->methods as $method) {
-                    if ($method->active) {
-                        if (is_int($method->action)) {
-                            $actionId = $method->action;
-
-                            if (in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
-                                $status = RoutesAction::STATUS_REQUIRED;
-                            } else {
-                                $status = RoutesAction::STATUS_OPTIONAL;
-                            }
-
-                            if (isset($actions[$actionId])) {
-                                $existingStatus = $actions[$actionId];
-
-                                if ($status == RoutesAction::STATUS_REQUIRED || $existingStatus == RoutesAction::STATUS_REQUIRED) {
-                                    $actions[$actionId] = RoutesAction::STATUS_REQUIRED;
-                                } else {
-                                    $actions[$actionId] = RoutesAction::STATUS_OPTIONAL;
-                                }
-                            } else {
-                                $actions[$actionId] = $status;
-                            }
-                        }
-                    }
+        $actionIds = [];
+        foreach ($methods as $row) {
+            if ($row['active']) {
+                if (is_int($row['action'])) {
+                    $actionIds[] = $row['action'];
                 }
             }
         }
 
-        return $this->resolveDependingActions($actions);
+        return $this->resolveDependingActions($actionIds);
     }
 
     protected function resolveDependingActions(array $actions)
     {
         $result = [];
-        foreach ($actions as $actionId => $status) {
+        foreach ($actions as $actionId) {
             // add self action
-            $result[$actionId] = $status;
+            $result[] = $actionId;
 
             // add depending actions
             $dependingActions = $this->getDependingActionsByAction($actionId);
             if (count($dependingActions) > 0) {
                 foreach ($dependingActions as $depActionId) {
-                    if (isset($result[$depActionId])) {
-                        $existingStatus = $result[$depActionId];
-
-                        if ($status == RoutesAction::STATUS_REQUIRED || $existingStatus == RoutesAction::STATUS_REQUIRED) {
-                            $result[$depActionId] = RoutesAction::STATUS_REQUIRED;
-                        } else {
-                            $result[$depActionId] = RoutesAction::STATUS_OPTIONAL;
-                        }
-                    } else {
-                        $result[$depActionId] = $status;
-                    }
+                    $result[] = $depActionId;
                 }
             }
         }
 
-        return $result;
+        return array_unique($result);
     }
 
     protected function getDependingActionsByAction($actionId)

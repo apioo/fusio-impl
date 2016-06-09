@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Tests\Console;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -50,7 +51,7 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Impl\Adapter\TestAdapter',
+            'class'   => 'Fusio\Impl\Tests\Adapter\TestAdapter',
         ]);
 
         $display = $commandTester->getDisplay();
@@ -59,14 +60,14 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
 
         // check action class
         $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Adapter\Test\VoidAction',
+            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidAction',
         ]);
 
         $this->assertEquals(21, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Adapter\Test\VoidConnection',
+            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
         ]);
 
         $this->assertEquals(7, $connectionId);
@@ -77,7 +78,7 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(4, $connection['id']);
-        $this->assertEquals('Fusio\Impl\Adapter\Test\VoidConnection', $connection['class']);
+        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidConnection', $connection['class']);
         $this->assertEquals(69, strlen($connection['config']));
 
         // check schema
@@ -115,11 +116,11 @@ JSON;
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Adapter\Test\VoidAction', $action['class']);
+        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
         $this->assertEquals(['foo' => 'bar', 'connection' => '4'], unserialize($action['config']));
 
         // check routes
-        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller, config FROM fusio_routes WHERE path = :path', [
+        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/import/void',
         ]);
 
@@ -128,27 +129,13 @@ JSON;
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
-        $versions = unserialize($route['config']);
-        $data     = array();
+        // check methods
+        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
 
-        foreach ($versions as $config) {
-            // transforms the complete object structure to an array
-            $data[] = json_decode(json_encode($config), true);
-        }
-
-        $this->assertEquals([[
-            'active' => true,
-            'status' => 4,
-            'name' => '1',
-            'methods' => [[
-                'active' => true,
-                'public' => true,
-                'name' => 'GET',
-                'action' => 4,
-                'request' => 3,
-                'response' => 1,
-            ]]
-        ]], $data);
+        $this->assertEquals(1, count($methods));
+        $this->assertEquals(['routeId' => 51, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
     }
 
     protected function getInputStream($input)

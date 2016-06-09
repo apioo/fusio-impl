@@ -36,12 +36,9 @@ class Routes extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('routes');
         $sb->integer('id');
-        $sb->string('methods')
-            ->setMinLength(3)
-            ->setMaxLength(20);
         $sb->string('path');
-        $sb->arrayType('config')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Version'));
+        $sb->arrayType('methods')
+            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
 
         return $sb->getProperty();
     }

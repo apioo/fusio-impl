@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Documentation;
+namespace Fusio\Impl\Tests\Documentation;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -72,12 +72,20 @@ class DetailTest extends ControllerDbTestCase
                 },
                 "additionalProperties": false
             },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/ref60fecdc9cdbb564bbf31377e11525059"
+            },
             "POST-request": {
                 "$ref": "#\/definitions\/ref60fecdc9cdbb564bbf31377e11525059"
             }
         }
     },
     "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
         "POST": {
             "request": "#\/definitions\/POST-request",
             "responses": {

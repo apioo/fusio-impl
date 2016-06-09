@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Statistic;
+namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**

@@ -35,12 +35,14 @@ class Method extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('method');
+        $sb->string('method');
+        $sb->integer('version');
+        $sb->integer('status');
         $sb->boolean('active');
         $sb->boolean('public');
-        $sb->string('name');
-        $sb->integer('action');
         $sb->integer('request');
         $sb->integer('response');
+        $sb->integer('action');
 
         return $sb->getProperty();
     }

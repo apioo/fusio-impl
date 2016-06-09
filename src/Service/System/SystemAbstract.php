@@ -169,36 +169,35 @@ abstract class SystemAbstract
     {
         unset($entity->id);
 
-        $versions = isset($entity->config) ? $entity->config : [];
+        $methods = isset($entity->methods) ? $entity->methods : [];
 
-        foreach ($versions as $versionIndex => $config) {
+        if (!is_array($methods)) {
+            throw new RuntimeException('Methods must be an array');
+        }
 
-            $methods = isset($config->methods) ? $config->methods : [];
-
-            foreach ($methods as $methodIndex => $method) {
-                if (isset($method->action)) {
-                    $name = $this->getReference('fusio_action', $method->action);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve action ' . $method->action);
-                    }
-                    $entity->config[$versionIndex]->methods[$methodIndex]->action = $name;
+        foreach ($methods as $index => $config) {
+            if (isset($config->action)) {
+                $name = $this->getReference('fusio_action', $config->action);
+                if (empty($name)) {
+                    throw new RuntimeException('Could not resolve action ' . $config->action);
                 }
+                $entity->methods[$index]->action = $name;
+            }
 
-                if (isset($method->request)) {
-                    $name = $this->getReference('fusio_schema', $method->request);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve schema ' . $method->request);
-                    }
-                    $entity->config[$versionIndex]->methods[$methodIndex]->request = $name;
+            if (isset($config->request)) {
+                $name = $this->getReference('fusio_schema', $config->request);
+                if (empty($name)) {
+                    throw new RuntimeException('Could not resolve schema ' . $config->request);
                 }
+                $entity->methods[$index]->request = $name;
+            }
 
-                if (isset($method->response)) {
-                    $name = $this->getReference('fusio_schema', $method->response);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve schema ' . $method->response);
-                    }
-                    $entity->config[$versionIndex]->methods[$methodIndex]->response = $name;
+            if (isset($config->response)) {
+                $name = $this->getReference('fusio_schema', $config->response);
+                if (empty($name)) {
+                    throw new RuntimeException('Could not resolve schema ' . $config->response);
                 }
+                $entity->methods[$index]->response = $name;
             }
         }
 

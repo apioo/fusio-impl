@@ -19,7 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Template\Filter;
+namespace Fusio\Impl\Tests\Template\Filter;
+
+use Fusio\Impl\Template\Filter\Prepare;
 
 /**
  * PrepareTest

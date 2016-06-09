@@ -19,7 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Log;
+namespace Fusio\Impl\Tests\Table\Log;
+
+use Fusio\Impl\Table\Log\QueryFilter;
 
 /**
  * QueryFilterTest

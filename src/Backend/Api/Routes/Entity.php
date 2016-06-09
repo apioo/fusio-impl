@@ -96,9 +96,7 @@ class Entity extends SchemaApiAbstract
     {
         $this->routesService->update(
             (int) $this->getUriFragment('route_id'),
-            $record->methods,
-            $record->path,
-            $record->config
+            $record->methods
         );
 
         return array(

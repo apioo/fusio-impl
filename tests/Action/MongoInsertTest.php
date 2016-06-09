@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Action;
+namespace Fusio\Impl\Tests\Action;
 
-use Fusio\Impl\ActionTestCaseTrait;
+use Fusio\Impl\Action\MongoInsert;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
-use Fusio\Impl\MongoTestCase;
+use Fusio\Impl\Tests\MongoTestCase;
 use PSX\Record\Record;
 use PSX\Framework\Test\Environment;
 
@@ -93,6 +94,6 @@ class MongoInsertTest extends MongoTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf('Fusio\Impl\Tests\Form\Container', $builder->getForm());
     }
 }

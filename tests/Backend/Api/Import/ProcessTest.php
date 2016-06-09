@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Tests\Backend\Api\Import;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Http\Stream\StringStream;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -81,50 +81,41 @@ JSON;
         {
             "methods": "GET|POST|PUT|DELETE",
             "path": "\/api\/pet\/:petId",
-            "config": [
+            "methods": [
                 {
-                    "active": true,
+                    "method": "GET",
+                    "version": "1",
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
-                            "active": true,
-                            "public": true,
-                            "name": "GET",
-                            "action": "Welcome",
-                            "request": "Passthru",
-                            "response": "api-pet-petId-GET-response"
-                        }
-                    ]
+                    "active": true,
+                    "public": true,
+                    "action": "Welcome",
+                    "request": "Passthru",
+                    "response": "api-pet-petId-GET-response"
                 }
             ]
         },
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/api\/pet",
-            "config": [
+            "methods": [
                 {
-                    "active": true,
+                    "method": "POST",
+                    "version": 1,
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
-                            "active": true,
-                            "public": true,
-                            "name": "POST",
-                            "action": "Welcome",
-                            "request": "api-pet-POST-request",
-                            "response": "Passthru"
-                        },
-                        {
-                            "active": true,
-                            "public": true,
-                            "name": "PUT",
-                            "action": "Welcome",
-                            "request": "api-pet-PUT-request",
-                            "response": "Passthru"
-                        }
-                    ]
+                    "active": true,
+                    "public": true,
+                    "action": "Welcome",
+                    "request": "api-pet-POST-request",
+                    "response": "Passthru"
+                },
+                {
+                    "method": "PUT",
+                    "version": 1,
+                    "status": 4,
+                    "active": true,
+                    "public": true,
+                    "action": "Welcome",
+                    "request": "api-pet-PUT-request",
+                    "response": "Passthru"
                 }
             ]
         }

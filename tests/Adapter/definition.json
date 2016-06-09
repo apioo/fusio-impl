@@ -1,26 +1,22 @@
 {
-    "actionClass": ["Fusio\\Impl\\Adapter\\Test\\VoidAction"],
-    "connectionClass": ["Fusio\\Impl\\Adapter\\Test\\VoidConnection"],
+    "actionClass": ["Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction"],
+    "connectionClass": ["Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection"],
     "routes": [{
-        "methods": "GET|POST|PUT|DELETE",
         "path": "/void",
-        "config": [{
-            "active": true,
+        "methods": [{
+            "method": "GET",
+            "version": 1,
             "status": 4,
-            "name": "1",
-            "methods": [{
-                "active": true,
-                "public": true,
-                "name": "GET",
-                "action": "Void-Action",
-                "request": "Adapter-Schema",
-                "response": "Passthru"
-            }]
+            "active": true,
+            "public": true,
+            "action": "Void-Action",
+            "request": "Adapter-Schema",
+            "response": "Passthru"
         }]
     }],
     "action": [{
         "name": "Void-Action",
-        "class": "Fusio\\Impl\\Adapter\\Test\\VoidAction",
+        "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction",
         "config": {
             "foo": "bar",
             "connection": "Adapter-Connection"
@@ -47,7 +43,7 @@
     }],
     "connection": [{
         "name": "Adapter-Connection",
-        "class": "Fusio\\Impl\\Adapter\\Test\\VoidConnection",
+        "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection",
         "config": {
             "foo": "bar"
         }

@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Routes;
+namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
-use Fusio\Impl\Fixture;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -54,12 +54,10 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 50,
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/foo"
         },
         {
             "id": 49,
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/"
         }
     ]
@@ -76,29 +74,24 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'methods' => 'GET|POST|PUT|DELETE',
             'path'    => '/bar',
-            'config'  => [[
-                'status'  => 4,
-                'name'    => '1',
-                'methods' => [[
-                    'active'   => true,
-                    'public'   => true,
-                    'name'     => 'GET',
-                    'action'   => 3,
-                    'response' => 1,
-                ], [
-                    'active'   => true,
-                    'public'   => false,
-                    'name'     => 'POST',
-                    'action'   => 3,
-                    'request'  => 2,
-                    'response' => 1,
-                ], [
-                    'name' => 'PUT',
-                ], [
-                    'name' => 'DELETE',
-                ]],
+            'methods' => [[
+                'method'   => 'GET',
+                'version'  => 1,
+                'status'   => 4,
+                'active'   => true,
+                'public'   => true,
+                'response' => 1,
+                'action'   => 3,
+            ], [
+                'method'   => 'POST',
+                'version'  => 1,
+                'status'   => 4,
+                'active'   => true,
+                'public'   => true,
+                'request'  => 2,
+                'response' => 1,
+                'action'   => 3,
             ]],
         ]));
 
@@ -115,7 +108,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'methods', 'path', 'controller', 'config')
+            ->select('id', 'status', 'methods', 'path', 'controller')
             ->from('fusio_routes')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -130,36 +123,34 @@ JSON;
         $this->assertEquals('/bar', $row['path']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
 
-        $config = unserialize($row['config']);
+        // check methods
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'request', 'response', 'action')
+            ->from('fusio_routes_method')
+            ->where('routeId = :routeId')
+            ->orderBy('id', 'ASC')
+            ->setFirstResult(0)
+            ->getSQL();
 
-        $this->assertContainsOnlyInstancesOf('PSX\Record\Record', $config);
-        $this->assertEquals(1, count($config));
+        $result = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
 
-        $resource = reset($config);
+        $this->assertEquals(2, count($result));
 
-        $this->assertInstanceOf('PSX\Record\Record', $resource);
-        $this->assertEquals('config', $resource->getDisplayName());
-        $this->assertEquals(4, $resource->status);
-        $this->assertEquals('1', $resource->name);
-        $this->assertContainsOnlyInstancesOf('PSX\Record\Record', $resource->methods);
-        $this->assertEquals(4, count($resource->methods));
+        $this->assertEquals('GET', $result[0]['method']);
+        $this->assertEquals(1, $result[0]['version']);
+        $this->assertEquals(4, $result[0]['status']);
+        $this->assertEquals(1, $result[0]['active']);
+        $this->assertEquals(1, $result[0]['public']);
+        $this->assertEquals(null, $result[0]['request']);
+        $this->assertEquals(3, $result[0]['action']);
 
-        $this->assertEquals('GET', $resource->methods[0]->name);
-        $this->assertEquals(true, $resource->methods[0]->active);
-        $this->assertEquals(true, $resource->methods[0]->public);
-        $this->assertEquals(3, $resource->methods[0]->action);
-        $this->assertEquals(1, $resource->methods[0]->response);
-
-        $this->assertEquals('POST', $resource->methods[1]->name);
-        $this->assertEquals(true, $resource->methods[1]->active);
-        $this->assertEquals(false, $resource->methods[1]->public);
-        $this->assertEquals(3, $resource->methods[1]->action);
-        $this->assertEquals(2, $resource->methods[1]->request);
-        $this->assertEquals(1, $resource->methods[1]->response);
-
-        $this->assertEquals('PUT', $resource->methods[2]->name);
-
-        $this->assertEquals('DELETE', $resource->methods[3]->name);
+        $this->assertEquals('POST', $result[1]['method']);
+        $this->assertEquals(1, $result[1]['version']);
+        $this->assertEquals(4, $result[1]['status']);
+        $this->assertEquals(1, $result[1]['active']);
+        $this->assertEquals(1, $result[1]['public']);
+        $this->assertEquals(2, $result[1]['request']);
+        $this->assertEquals(3, $result[1]['action']);
     }
 
     public function testPut()

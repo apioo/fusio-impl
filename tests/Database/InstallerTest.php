@@ -19,10 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Database;
+namespace Fusio\Impl\Tests\Database;
 
 use Fusio\Impl\Base;
-use Fusio\Impl\DbTestCase;
+use Fusio\Impl\Database\Installer;
+use Fusio\Impl\Tests\DbTestCase;
 
 /**
  * InstallerTest
@@ -66,7 +67,7 @@ class InstallerTest extends DbTestCase
 
         // execute install
         $installer = new Installer($this->connection);
-        $installer->install('0.2.0');
+        $installer->install('0.3.0');
 
         // @TODO make checks to verify that the installation works
 
@@ -94,7 +95,7 @@ class InstallerTest extends DbTestCase
 
         // execute upgrade
         $installer = new Installer($this->connection);
-        $installer->upgrade('0.2.0', Base::getVersion());
+        $installer->upgrade('0.3.0', Base::getVersion());
 
         // @TODO make checks to verify that the installation works
 

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Adapter\Test;
+namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ContextInterface;

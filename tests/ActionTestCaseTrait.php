@@ -19,11 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl;
+namespace Fusio\Impl\Tests;
 
+use Fusio\Impl\Context;
 use Fusio\Impl\Model\Action;
 use Fusio\Impl\Model\App;
 use Fusio\Impl\Model\User;
+use Fusio\Impl\Parameters;
+use Fusio\Impl\Request;
 use Fusio\Impl\Template\Parser;
 use Psr\Http\Message\StreamInterface;
 use PSX\Record\Record;

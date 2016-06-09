@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use PSX\Sql\Condition;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -48,7 +51,57 @@ class Routes extends TableAbstract
             'methods' => self::TYPE_VARCHAR,
             'path' => self::TYPE_VARCHAR,
             'controller' => self::TYPE_VARCHAR,
-            'config' => self::TYPE_ARRAY,
         );
+    }
+
+    public function getRoutes($startIndex = 0, $search = null)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', self::STATUS_ACTIVE);
+        $condition->notLike('path', '/backend%');
+        $condition->notLike('path', '/consumer%');
+        $condition->notLike('path', '/doc%');
+        $condition->notLike('path', '/authorization%');
+        $condition->notLike('path', '/export%');
+
+        if (!empty($search)) {
+            $condition->like('path', '%' . $search . '%');
+        }
+
+        $definition = [
+            'totalResults' => $this->getCount($condition),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => 16,
+            'entry' => $this->doCollection([$this, 'getAll'], [$startIndex, 16, null, Sql::SORT_DESC, $condition], [
+                'id' => 'id',
+                'status' => 'status',
+                'path' => 'path',
+                'controller' => 'controller',
+            ]),
+        ];
+
+        return $this->build($definition);
+    }
+
+    public function getRoute($id)
+    {
+        $definition = $this->doEntity([$this, 'get'], [$id], [
+            'id' => 'id',
+            'status' => 'status',
+            'path' => 'path',
+            'controller' => 'controller',
+            'methods' => $this->doCollection([$this->getTable('Fusio\Impl\Table\Routes\Method'), 'getMethods'], [new Reference('id')], [
+                'method' => 'method',
+                'version' => 'version',
+                'status' => 'status',
+                'active' => 'active',
+                'public' => 'public',
+                'request' => 'request',
+                'response' => 'response',
+                'action' => 'action',
+            ]),
+        ]);
+
+        return $this->build($definition);
     }
 }

@@ -28,6 +28,7 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\Connection as ConnectionService;
+use PSX\Api\Resource;
 use PSX\Record\Record;
 use PSX\Schema\Property;
 
@@ -147,7 +148,6 @@ class Version030 implements VersionInterface
         $routesTable->addColumn('methods', 'string', array('length' => 64));
         $routesTable->addColumn('path', 'string', array('length' => 255));
         $routesTable->addColumn('controller', 'string', array('length' => 255));
-        $routesTable->addColumn('config', 'blob', array('notnull' => false));
         $routesTable->setPrimaryKey(array('id'));
 
         $routesActionTable = $schema->createTable('fusio_routes_action');
@@ -157,6 +157,23 @@ class Version030 implements VersionInterface
         $routesActionTable->addColumn('status', 'integer');
         $routesActionTable->setPrimaryKey(array('id'));
         $routesActionTable->addUniqueIndex(array('routeId', 'actionId'));
+
+        $routesMethodTable = $schema->createTable('fusio_routes_method');
+        $routesMethodTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $routesMethodTable->addColumn('routeId', 'integer');
+        $routesMethodTable->addColumn('method', 'string', array('length' => 8));
+        $routesMethodTable->addColumn('version', 'integer');
+        $routesMethodTable->addColumn('status', 'integer');
+        $routesMethodTable->addColumn('active', 'integer', array('default' => 0));
+        $routesMethodTable->addColumn('public', 'integer', array('default' => 0));
+        $routesMethodTable->addColumn('request', 'integer', array('notnull' => false));
+        $routesMethodTable->addColumn('requestCache', 'text', array('notnull' => false));
+        $routesMethodTable->addColumn('response', 'integer', array('notnull' => false));
+        $routesMethodTable->addColumn('responseCache', 'text', array('notnull' => false));
+        $routesMethodTable->addColumn('action', 'integer', array('notnull' => false));
+        $routesMethodTable->addColumn('actionCache', 'text', array('notnull' => false));
+        $routesMethodTable->setPrimaryKey(array('id'));
+        $routesMethodTable->addUniqueIndex(array('routeId', 'method', 'version'));
 
         $routesSchemaTable = $schema->createTable('fusio_routes_schema');
         $routesSchemaTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -238,6 +255,11 @@ class Version030 implements VersionInterface
         $routesActionTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesActionRouteId');
         $routesActionTable->addForeignKeyConstraint($actionTable, array('actionId'), array('id'), array(), 'routesActionActionId');
 
+        $routesMethodTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesMethodRouteId');
+        $routesMethodTable->addForeignKeyConstraint($schemaTable, array('request'), array('id'), array(), 'routesMethodRequest');
+        $routesMethodTable->addForeignKeyConstraint($schemaTable, array('response'), array('id'), array(), 'routesMethodResponse');
+        $routesMethodTable->addForeignKeyConstraint($actionTable, array('action'), array('id'), array(), 'routesMethodAction');
+
         $routesSchemaTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesSchemaRouteId');
         $routesSchemaTable->addForeignKeyConstraint($schemaTable, array('schemaId'), array('id'), array(), 'routesSchemaSchemaId');
 
@@ -282,7 +304,6 @@ class Version030 implements VersionInterface
         $schema    = $this->getPassthruSchema();
         $cache     = $parser->parse($schema);
         $response  = $this->getWelcomeResponse();
-        $config    = $this->getWelcomeConfig();
 
         return [
             'fusio_user' => [
@@ -337,60 +358,63 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache]
             ],
             'fusio_routes' => [
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action',                      'controller' => 'Fusio\Impl\Backend\Api\Action\Collection',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/list',                 'controller' => 'Fusio\Impl\Backend\Api\Action\ListActions::doIndex',          'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/form',                 'controller' => 'Fusio\Impl\Backend\Api\Action\ListActions::doDetail',         'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action/:action_id',           'controller' => 'Fusio\Impl\Backend\Api\Action\Entity',                        'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app',                         'controller' => 'Fusio\Impl\Backend\Api\App\Collection',                       'config' => null],
-                ['status' => 1, 'methods' => 'DELETE',              'path' => '/backend/app/:app_id/token/:token_id', 'controller' => 'Fusio\Impl\Backend\Api\App\Token::doRemove',                  'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app/:app_id',                 'controller' => 'Fusio\Impl\Backend\Api\App\Entity',                           'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection',                  'controller' => 'Fusio\Impl\Backend\Api\Connection\Collection',                'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/form',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doDetail', 'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/list',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doIndex',  'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection/:connection_id',   'controller' => 'Fusio\Impl\Backend\Api\Connection\Entity',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/log',                         'controller' => 'Fusio\Impl\Backend\Api\Log\Collection',                       'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/log/:log_id',                 'controller' => 'Fusio\Impl\Backend\Api\Log\Entity',                           'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes',                      'controller' => 'Fusio\Impl\Backend\Api\Routes\Collection',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes/:route_id',            'controller' => 'Fusio\Impl\Backend\Api\Routes\Entity',                        'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/schema',                      'controller' => 'Fusio\Impl\Backend\Api\Schema\Collection',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/schema/:schema_id',           'controller' => 'Fusio\Impl\Backend\Api\Schema\Entity',                        'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/schema/preview/:schema_id',   'controller' => 'Fusio\Impl\Backend\Api\Schema\Preview',                       'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/scope',                       'controller' => 'Fusio\Impl\Backend\Api\Scope\Collection',                     'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/scope/:scope_id',             'controller' => 'Fusio\Impl\Backend\Api\Scope\Entity',                         'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/user',                        'controller' => 'Fusio\Impl\Backend\Api\User\Collection',                      'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/user/:user_id',               'controller' => 'Fusio\Impl\Backend\Api\User\Entity',                          'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/dashboard/latest_requests',   'controller' => 'Fusio\Impl\Backend\Api\Dashboard\LatestRequests',             'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/dashboard/latest_apps',       'controller' => 'Fusio\Impl\Backend\Api\Dashboard\LatestApps',                 'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/incoming_requests', 'controller' => 'Fusio\Impl\Backend\Api\Statistic\IncomingRequests',           'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_routes',  'controller' => 'Fusio\Impl\Backend\Api\Statistic\MostUsedRoutes',             'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_apps',    'controller' => 'Fusio\Impl\Backend\Api\Statistic\MostUsedApps',               'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/errors_per_route',  'controller' => 'Fusio\Impl\Backend\Api\Statistic\ErrorsPerRoute',             'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/account/change_password',     'controller' => 'Fusio\Impl\Backend\Api\Account\ChangePassword',               'config' => null],
-                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/raml',                 'controller' => 'Fusio\Impl\Backend\Api\Import\Raml',                          'config' => null],
-                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/process',              'controller' => 'Fusio\Impl\Backend\Api\Import\Process',                       'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/backend/token',                       'controller' => 'Fusio\Impl\Backend\Authorization\Token',                      'config' => null],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action',                      'controller' => 'Fusio\Impl\Backend\Api\Action\Collection'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/list',                 'controller' => 'Fusio\Impl\Backend\Api\Action\ListActions::doIndex'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/form',                 'controller' => 'Fusio\Impl\Backend\Api\Action\ListActions::doDetail'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action/:action_id',           'controller' => 'Fusio\Impl\Backend\Api\Action\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app',                         'controller' => 'Fusio\Impl\Backend\Api\App\Collection'],
+                ['status' => 1, 'methods' => 'DELETE',              'path' => '/backend/app/:app_id/token/:token_id', 'controller' => 'Fusio\Impl\Backend\Api\App\Token::doRemove'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app/:app_id',                 'controller' => 'Fusio\Impl\Backend\Api\App\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection',                  'controller' => 'Fusio\Impl\Backend\Api\Connection\Collection'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/form',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doDetail'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/list',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doIndex'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection/:connection_id',   'controller' => 'Fusio\Impl\Backend\Api\Connection\Entity'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/log',                         'controller' => 'Fusio\Impl\Backend\Api\Log\Collection'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/log/:log_id',                 'controller' => 'Fusio\Impl\Backend\Api\Log\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes',                      'controller' => 'Fusio\Impl\Backend\Api\Routes\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes/:route_id',            'controller' => 'Fusio\Impl\Backend\Api\Routes\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/schema',                      'controller' => 'Fusio\Impl\Backend\Api\Schema\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/schema/:schema_id',           'controller' => 'Fusio\Impl\Backend\Api\Schema\Entity'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/schema/preview/:schema_id',   'controller' => 'Fusio\Impl\Backend\Api\Schema\Preview'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/scope',                       'controller' => 'Fusio\Impl\Backend\Api\Scope\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/scope/:scope_id',             'controller' => 'Fusio\Impl\Backend\Api\Scope\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/user',                        'controller' => 'Fusio\Impl\Backend\Api\User\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/user/:user_id',               'controller' => 'Fusio\Impl\Backend\Api\User\Entity'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/dashboard/latest_requests',   'controller' => 'Fusio\Impl\Backend\Api\Dashboard\LatestRequests'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/dashboard/latest_apps',       'controller' => 'Fusio\Impl\Backend\Api\Dashboard\LatestApps'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/incoming_requests', 'controller' => 'Fusio\Impl\Backend\Api\Statistic\IncomingRequests'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_routes',  'controller' => 'Fusio\Impl\Backend\Api\Statistic\MostUsedRoutes'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_apps',    'controller' => 'Fusio\Impl\Backend\Api\Statistic\MostUsedApps'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/errors_per_route',  'controller' => 'Fusio\Impl\Backend\Api\Statistic\ErrorsPerRoute'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/account/change_password',     'controller' => 'Fusio\Impl\Backend\Api\Account\ChangePassword'],
+                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/raml',                 'controller' => 'Fusio\Impl\Backend\Api\Import\Raml'],
+                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/process',              'controller' => 'Fusio\Impl\Backend\Api\Import\Process'],
+                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/backend/token',                       'controller' => 'Fusio\Impl\Backend\Authorization\Token'],
 
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/developer',              'controller' => 'Fusio\Impl\Consumer\Api\App\Developer\Collection',            'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/developer/:app_id',      'controller' => 'Fusio\Impl\Consumer\Api\App\Developer\Entity',                'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant',                  'controller' => 'Fusio\Impl\Consumer\Api\App\Grant\Collection',                'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant/:grant_id',        'controller' => 'Fusio\Impl\Consumer\Api\App\Grant\Entity',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/meta',                   'controller' => 'Fusio\Impl\Consumer\Api\App\Meta\Entity',                     'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/authorize',                  'controller' => 'Fusio\Impl\Consumer\Api\Authorize\Authorize',                 'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/scope',                      'controller' => 'Fusio\Impl\Consumer\Api\Scope\Collection',                    'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/consumer/token',                      'controller' => 'Fusio\Impl\Consumer\Authorization\Token',                     'config' => null],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/developer',              'controller' => 'Fusio\Impl\Consumer\Api\App\Developer\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/developer/:app_id',      'controller' => 'Fusio\Impl\Consumer\Api\App\Developer\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant',                  'controller' => 'Fusio\Impl\Consumer\Api\App\Grant\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant/:grant_id',        'controller' => 'Fusio\Impl\Consumer\Api\App\Grant\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/meta',                   'controller' => 'Fusio\Impl\Consumer\Api\App\Meta\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/authorize',                  'controller' => 'Fusio\Impl\Consumer\Api\Authorize\Authorize'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/scope',                      'controller' => 'Fusio\Impl\Consumer\Api\Scope\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/consumer/token',                      'controller' => 'Fusio\Impl\Consumer\Authorization\Token'],
 
-                ['status' => 1, 'methods' => 'POST',                'path' => '/authorization/revoke',                'controller' => 'Fusio\Impl\Authorization\Revoke',                             'config' => null],
-                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                 'controller' => 'Fusio\Impl\Authorization\Token',                              'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/authorization/whoami',                'controller' => 'Fusio\Impl\Authorization\Whoami',                             'config' => null],
+                ['status' => 1, 'methods' => 'POST',                'path' => '/authorization/revoke',                'controller' => 'Fusio\Impl\Authorization\Revoke'],
+                ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                 'controller' => 'Fusio\Impl\Authorization\Token'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/authorization/whoami',                'controller' => 'Fusio\Impl\Authorization\Whoami'],
 
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc',                                 'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doIndex',  'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc/:version/*path',                  'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doDetail', 'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc',                                 'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doIndex'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/doc/:version/*path',                  'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doDetail'],
 
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\WsdlController',               'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\RamlController',               'config' => null],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',       'controller' => 'PSX\Framework\Controller\Generator\SwaggerController::doDetail',  'config' => null],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\WsdlController'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\RamlController'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',       'controller' => 'PSX\Framework\Controller\Generator\SwaggerController::doDetail'],
 
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                    'controller' => 'Fusio\Impl\Controller\SchemaApiController',                   'config' => $config],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                    'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
+            ],
+            'fusio_routes_method' => [
+                ['routeId' => 49, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -470,23 +494,5 @@ class Version030 implements VersionInterface
                 'name' => 'http://fusio-project.org',
             ]]
         ], JSON_PRETTY_PRINT);
-    }
-
-    protected function getWelcomeConfig()
-    {
-        $config = [Record::fromArray([
-            'active' => true,
-            'status' => 4,
-            'name' => '1',
-            'methods' => [Record::fromArray([
-                'active' => true,
-                'public' => true,
-                'name' => 'GET',
-                'action' => 1,
-                'response' => 1,
-            ])],
-        ])];
-
-        return serialize($config);
     }
 }

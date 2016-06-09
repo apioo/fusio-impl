@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
 use Fusio\Impl\Service\Routes\DependencyManager;
 use PSX\Api\Resource;
@@ -41,47 +42,42 @@ use PSX\Sql\Fields;
  */
 class Routes
 {
+    /**
+     * @var \Fusio\Impl\Table\Routes
+     */
     protected $routesTable;
 
-    public function __construct(TableRoutes $routesTable, TableScopeRoute $scopeRoutesTable, DependencyManager $dependencyManager)
+    /**
+     * @var \Fusio\Impl\Table\Routes\Method
+     */
+    protected $methodTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Scope\Route
+     */
+    protected $scopeRoutesTable;
+
+    /**
+     * @var \Fusio\Impl\Service\Routes\DependencyManager
+     */
+    protected $dependencyManager;
+
+    public function __construct(TableRoutes $routesTable, TableRoutesMethod $routesMethodTable, TableScopeRoute $scopeRoutesTable, DependencyManager $dependencyManager)
     {
         $this->routesTable       = $routesTable;
+        $this->routesMethodTable = $routesMethodTable;
         $this->scopeRoutesTable  = $scopeRoutesTable;
         $this->dependencyManager = $dependencyManager;
     }
 
     public function getAll($startIndex = 0, $search = null)
     {
-        $condition  = new Condition();
-        $condition->equals('status', TableRoutes::STATUS_ACTIVE);
-        $condition->notLike('path', '/backend%');
-        $condition->notLike('path', '/consumer%');
-        $condition->notLike('path', '/doc%');
-        $condition->notLike('path', '/authorization%');
-        $condition->notLike('path', '/export%');
-
-        if (!empty($search)) {
-            $condition->like('path', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->routesTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->routesTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
-                $condition, 
-                Fields::blacklist(['config'])
-            )
-        );
+        return $this->routesTable->getRoutes($startIndex, $search);
     }
 
     public function get($routeId)
     {
-        $route = $this->routesTable->get($routeId);
+        $route = $this->routesTable->getRoute($routeId);
 
         if (!empty($route)) {
             if ($route['status'] == TableRoutes::STATUS_DELETED) {
@@ -94,7 +90,7 @@ class Routes
         }
     }
 
-    public function create($methods, $path, $config)
+    public function create($path, $methods)
     {
         // check whether route exists
         $condition  = new Condition();
@@ -108,24 +104,20 @@ class Routes
         }
 
         // create route
-        $this->routesTable->create(array(
-            'methods'    => $methods,
+        $this->routesTable->create([
+            'status'     => TableRoutes::STATUS_ACTIVE,
+            'methods'    => 'GET|POST|PUT|DELETE',
             'path'       => $path,
             'controller' => 'Fusio\Impl\Controller\SchemaApiController',
-            'config'     => $config,
-        ));
+        ]);
 
         // get last insert id
         $routeId = $this->routesTable->getLastInsertId();
 
-        // insert dependency links
-        $this->dependencyManager->insertDependencyLinks($routeId, $config);
-
-        // lock dependencies
-        $this->dependencyManager->lockExistingDependencies($routeId);
+        $this->handleMethods($routeId, $methods);
     }
 
-    public function update($routeId, $methods, $path, $config)
+    public function update($routeId, $methods)
     {
         $route = $this->routesTable->get($routeId);
 
@@ -134,25 +126,7 @@ class Routes
                 throw new StatusCode\GoneException('Route was deleted');
             }
 
-            $this->routesTable->update(array(
-                'id'         => $route->id,
-                'methods'    => $methods,
-                'path'       => $path,
-                'controller' => 'Fusio\Impl\Controller\SchemaApiController',
-                'config'     => $config,
-            ));
-
-            // remove all dependency links
-            $this->dependencyManager->removeExistingDependencyLinks($route->id);
-
-            // unlock dependencies
-            $this->dependencyManager->unlockExistingDependencies($route->id);
-
-            // insert dependency links
-            $this->dependencyManager->insertDependencyLinks($route->id, $config);
-
-            // lock dependencies
-            $this->dependencyManager->lockExistingDependencies($route->id);
+            $this->handleMethods($route->id, $methods);
         } else {
             throw new StatusCode\NotFoundException('Could not find route');
         }
@@ -168,12 +142,9 @@ class Routes
             }
 
             // check whether route has a production version
-            if ($this->hasProductionVersion($route->config)) {
-                throw new StatusCode\ConflictException('It is not possible to delete a route which contains a production version');
+            if ($this->routesMethodTable->hasProductionVersion($route->id)) {
+                throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
             }
-
-            // unlock dependencies
-            $this->dependencyManager->unlockExistingDependencies($route->id);
 
             // delete route
             $this->routesTable->update(array(
@@ -185,14 +156,50 @@ class Routes
         }
     }
 
-    protected function hasProductionVersion(array $config)
+    protected function handleMethods($routeId, $methods)
     {
-        foreach ($config as $version) {
-            if ($version->active && in_array($version->status, [Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED])) {
-                return true;
+        // delete existing
+        $this->routesMethodTable->deleteAllFromRoute($routeId);
+
+        // insert methods
+        $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+
+        foreach ($methods as $config) {
+            // check method
+            $method = isset($config['method']) ? $config['method'] : null;
+            if (!in_array($method, $availableMethods)) {
+                throw new StatusCode\BadRequestException('Invalid request method');
             }
+
+            // check version
+            $version = isset($config['version']) ? intval($config['version']) : 0;
+            if ($version <= 0) {
+                throw new StatusCode\BadRequestException('Version must be a positive integer');
+            }
+
+            // check status
+            $status = isset($config['status']) ? $config['status'] : 0;
+            if (!in_array($status, [Resource::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
+                throw new StatusCode\BadRequestException('Invalid status value');
+            }
+
+            $active = isset($config['active']) ? $config['active'] : false;
+            $public = isset($config['public']) ? $config['public'] : false;
+
+            $this->routesMethodTable->create([
+                'routeId'  => $routeId,
+                'method'   => $method,
+                'version'  => $version,
+                'status'   => $status,
+                'active'   => $active ? 1 : 0,
+                'public'   => $public ? 1 : 0,
+                'request'  => isset($config['request'])  ? $config['request']  : null,
+                'response' => isset($config['response']) ? $config['response'] : null,
+                'action'   => isset($config['action'])   ? $config['action']   : null,
+            ]);
         }
 
-        return false;
+        // update dependency links
+        $this->dependencyManager->updateDependencyLinks($routeId);
     }
 }

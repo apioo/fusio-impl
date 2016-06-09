@@ -47,7 +47,17 @@ class Route extends InstructionAbstract
         $methods = isset($this->payload->methods) ? $this->payload->methods : null;
         $path    = isset($this->payload->path)    ? $this->payload->path    : null;
 
-        return $methods . ' ' . $path;
+        $usedMethods = [];
+        if (is_array($methods)) {
+            foreach ($methods as $method) {
+                $name = isset($method->method) ? $method->method : null;
+                if (!empty($name)) {
+                    $usedMethods[] = $name;
+                }
+            }
+        }
+
+        return implode(', ', $usedMethods) . ' ' . $path;
     }
 
     public function setBasePath($basePath)
