@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
+use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use Fusio\Impl\Table\Schema as TableSchema;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -43,13 +44,31 @@ use RuntimeException;
  */
 class Schema
 {
+    /**
+     * @var \Fusio\Impl\Table\Schema
+     */
     protected $schemaTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Schema
+     */
+    protected $routesSchemaTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Method
+     */
+    protected $routesMethodTable;
+
+    /**
+     * @var \Fusio\Engine\Schema\ParserInterface
+     */
     protected $schemaParser;
 
-    public function __construct(TableSchema $schemaTable, TableRoutesSchema $routesSchemaTable, ParserInterface $schemaParser)
+    public function __construct(TableSchema $schemaTable, TableRoutesSchema $routesSchemaTable, TableRoutesMethod $routesMethodTable, ParserInterface $schemaParser)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesSchemaTable = $routesSchemaTable;
+        $this->routesMethodTable = $routesMethodTable;
         $this->schemaParser      = $schemaParser;
     }
 
@@ -116,7 +135,7 @@ class Schema
             'status' => TableSchema::STATUS_ACTIVE,
             'name'   => $name,
             'source' => $source,
-            'cache'  => $this->schemaParser->parse(json_encode($source), $name),
+            'cache'  => $this->schemaParser->parse(json_encode($source)),
         ));
     }
 
@@ -125,13 +144,11 @@ class Schema
         $schema = $this->schemaTable->get($schemaId);
 
         if (!empty($schema)) {
-            $this->checkLocked($schema);
-
             $this->schemaTable->update(array(
                 'id'     => $schema['id'],
                 'name'   => $name,
                 'source' => $source,
-                'cache'  => $this->schemaParser->parse(json_encode($source), $name),
+                'cache'  => $this->schemaParser->parse(json_encode($source)),
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');
@@ -143,7 +160,10 @@ class Schema
         $schema = $this->schemaTable->get($schemaId);
 
         if (!empty($schema)) {
-            $this->checkLocked($schema);
+            // check whether we have routes which depend on this schema
+            if ($this->routesMethodTable->hasSchema($schemaId)) {
+                throw new StatusCode\BadRequestException('Cannot delete schema because a route depends on it');
+            }
 
             // delete route dependencies
             $this->routesSchemaTable->deleteBySchema($schema['id']);
@@ -171,17 +191,6 @@ class Schema
             }
         } else {
             throw new StatusCode\NotFoundException('Invalid schema id');
-        }
-    }
-
-    protected function checkLocked($schema)
-    {
-        if ($schema['status'] == TableSchema::STATUS_LOCKED) {
-            $paths = $this->routesSchemaTable->getDependingRoutePaths($schema['id']);
-
-            $paths = implode(', ', $paths);
-
-            throw new StatusCode\ConflictException('Schema is locked because it is used by a route. Change the route status to "Development" or "Closed" to unlock the schema. The following routes reference this schema: ' . $paths);
         }
     }
 }

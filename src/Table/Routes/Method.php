@@ -68,6 +68,34 @@ class Method extends TableAbstract
         ]);
     }
 
+    public function hasSchema($schemaId)
+    {
+        $sql = 'SELECT COUNT(id) AS cnt
+                  FROM fusio_routes_method method
+                 WHERE method.request = :requestId
+                    OR method.response = :responseId';
+
+        $count = $this->connection->fetchColumn($sql, [
+            'requestId'  => $schemaId,
+            'responseId' => $schemaId,
+        ]);
+
+        return $count > 0;
+    }
+
+    public function hasAction($actionId)
+    {
+        $sql = 'SELECT COUNT(id) AS cnt
+                  FROM fusio_routes_method method
+                 WHERE method.action = :actionId';
+
+        $count = $this->connection->fetchColumn($sql, [
+            'actionId' => $actionId,
+        ]);
+
+        return $count > 0;
+    }
+
     public function getMethods($routeId, $version = null)
     {
         $sql = '  SELECT method.method, 

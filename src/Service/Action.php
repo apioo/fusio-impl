@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Table\Action as TableAction;
 use Fusio\Impl\Table\Routes\Action as TableRoutesAction;
+use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -39,13 +40,26 @@ use PSX\Sql\Fields;
  */
 class Action
 {
+    /**
+     * @var \Fusio\Impl\Table\Action
+     */
     protected $actionTable;
-    protected $actionRoutesTable;
 
-    public function __construct(TableAction $actionTable, TableRoutesAction $actionRoutesTable)
+    /**
+     * @var \Fusio\Impl\Table\Routes\Action
+     */
+    protected $routesActionTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Method
+     */
+    protected $routesMethodTable;
+
+    public function __construct(TableAction $actionTable, TableRoutesAction $routesActionTable, TableRoutesMethod $routesMethodTable)
     {
         $this->actionTable       = $actionTable;
-        $this->actionRoutesTable = $actionRoutesTable;
+        $this->routesActionTable = $routesActionTable;
+        $this->routesMethodTable = $routesMethodTable;
     }
 
     public function getAll($startIndex = 0, $search = null, $routeId = null)
@@ -117,8 +131,6 @@ class Action
         $action = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
-            $this->checkLocked($action);
-
             $this->actionTable->update(array(
                 'id'     => $action->id,
                 'name'   => $name,
@@ -136,27 +148,19 @@ class Action
         $action = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
-            $this->checkLocked($action);
+            // check depending
+            if ($this->routesMethodTable->hasAction($actionId)) {
+                throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
+            }
 
             // delete route dependencies
-            $this->actionRoutesTable->deleteByAction($action['id']);
+            $this->routesActionTable->deleteByAction($action['id']);
 
             $this->actionTable->delete(array(
                 'id' => $action['id']
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
-        }
-    }
-
-    protected function checkLocked($action)
-    {
-        if ($action['status'] == TableAction::STATUS_LOCKED) {
-            $paths = $this->actionTable->getDependingRoutePaths($action['id']);
-
-            $paths = implode(', ', $paths);
-
-            throw new StatusCode\ConflictException('Action is locked because it is used by a route. Change the route status to "Development" or "Closed" to unlock the schema. The following routes reference this schema: ' . $paths);
         }
     }
 }

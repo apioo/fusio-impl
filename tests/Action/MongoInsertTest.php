@@ -94,6 +94,6 @@ class MongoInsertTest extends MongoTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Tests\Form\Container', $builder->getForm());
+        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
     }
 }

@@ -76,7 +76,8 @@ trait Service
     {
         return new Impl\Service\Action(
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action')
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method')
         );
     }
 
@@ -209,6 +210,7 @@ trait Service
         return new Impl\Service\Schema(
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Schema'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Schema'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
             $this->get('schema_parser')
         );
     }
