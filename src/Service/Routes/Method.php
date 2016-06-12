@@ -25,6 +25,7 @@ use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use Fusio\Engine\Schema\LoaderInterface;
 use PSX\Api\Resource;
+use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -51,14 +52,14 @@ class Method
         $this->methodTable  = $methodTable;
         $this->schemaLoader = $schemaLoader;
     }
-    
+
     public function getDocumentation($routeId, $version, $path)
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         }
 
-        $methods  = $this->methodTable->getMethods($routeId, $version);
+        $methods  = $this->methodTable->getMethods($routeId, $version, true);
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
 
         foreach ($methods as $method) {
@@ -70,7 +71,10 @@ class Method
                 }
             } else {
                 if (!empty($method['requestCache'])) {
-                    $resourceMethod->setRequest(unserialize($method['requestCache']));
+                    $request = unserialize($method['requestCache']);
+                    if ($request instanceof SchemaInterface) {
+                        $resourceMethod->setRequest($request);
+                    }
                 }
             }
 
@@ -80,7 +84,10 @@ class Method
                 }
             } else {
                 if (!empty($method['responseCache'])) {
-                    $resourceMethod->addResponse(200, unserialize($method['responseCache']));
+                    $response = unserialize($method['responseCache']);
+                    if ($response instanceof SchemaInterface) {
+                        $resourceMethod->addResponse(200, $response);
+                    }
                 }
             }
 

@@ -106,8 +106,13 @@ class Method extends TableAbstract
         return $count > 0;
     }
 
-    public function getMethods($routeId, $version = null)
+    public function getMethods($routeId, $version = null, $includeCache = false)
     {
+        $cache = '';
+        if ($includeCache) {
+            $cache.= 'method.requestCache,method.responseCache,method.actionCache,';
+        }
+
         $sql = '  SELECT method.id,
                          method.routeId, 
                          method.version, 
@@ -115,6 +120,7 @@ class Method extends TableAbstract
                          method.method, 
                          method.active, 
                          method.public, 
+                         ' . $cache . '
                          method.request, 
                          method.response, 
                          method.action
@@ -123,7 +129,7 @@ class Method extends TableAbstract
                      AND method.active = 1';
 
         $params = ['routeId' => $routeId];
-        
+
         if ($version !== null) {
             $sql.= ' AND method.version = :version ';
             $params['version'] = $version;
