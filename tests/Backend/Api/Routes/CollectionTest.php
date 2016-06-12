@@ -74,24 +74,25 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'    => '/bar',
-            'methods' => [[
-                'method'   => 'GET',
-                'version'  => 1,
-                'status'   => 4,
-                'active'   => true,
-                'public'   => true,
-                'response' => 1,
-                'action'   => 3,
-            ], [
-                'method'   => 'POST',
-                'version'  => 1,
-                'status'   => 4,
-                'active'   => true,
-                'public'   => true,
-                'request'  => 2,
-                'response' => 1,
-                'action'   => 3,
+            'path'   => '/bar',
+            'config' => [[
+                'version' => 1,
+                'status'  => 4,
+                'methods' => [
+                    'GET' => [
+                        'active'   => true,
+                        'public'   => true,
+                        'response' => 1,
+                        'action'   => 3,
+                    ],
+                    'POST' => [
+                        'active'   => true,
+                        'public'   => true,
+                        'request'  => 2,
+                        'response' => 1,
+                        'action'   => 3,
+                    ]
+                ],
             ]],
         ]));
 

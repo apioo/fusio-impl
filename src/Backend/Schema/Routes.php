@@ -34,11 +34,21 @@ class Routes extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('methods');
+        $sb->addPatternProperty('^(GET|POST|PUT|DELETE)$', $this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
+        $methods = $sb->getProperty();
+
+        $sb = $this->getSchemaBuilder('version');
+        $sb->integer('version');
+        $sb->integer('status');
+        $sb->complexType('methods', $methods);
+        $version = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('routes');
         $sb->integer('id');
         $sb->string('path');
-        $sb->arrayType('methods')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
+        $sb->arrayType('config')
+            ->setPrototype($version);
 
         return $sb->getProperty();
     }

@@ -154,7 +154,6 @@ class Version030 implements VersionInterface
         $routesActionTable->addColumn('id', 'integer', array('autoincrement' => true));
         $routesActionTable->addColumn('routeId', 'integer');
         $routesActionTable->addColumn('actionId', 'integer');
-        $routesActionTable->addColumn('status', 'integer');
         $routesActionTable->setPrimaryKey(array('id'));
         $routesActionTable->addUniqueIndex(array('routeId', 'actionId'));
 
@@ -179,7 +178,6 @@ class Version030 implements VersionInterface
         $routesSchemaTable->addColumn('id', 'integer', array('autoincrement' => true));
         $routesSchemaTable->addColumn('routeId', 'integer');
         $routesSchemaTable->addColumn('schemaId', 'integer');
-        $routesSchemaTable->addColumn('status', 'integer');
         $routesSchemaTable->setPrimaryKey(array('id'));
         $routesSchemaTable->addUniqueIndex(array('routeId', 'schemaId'));
 

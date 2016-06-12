@@ -95,7 +95,7 @@ class Collection extends SchemaApiAbstract
     {
         $this->routesService->create(
             $record->path,
-            $record->methods
+            $record->config
         );
 
         return array(

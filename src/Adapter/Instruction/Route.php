@@ -44,20 +44,18 @@ class Route extends InstructionAbstract
 
     public function getDescription()
     {
-        $methods = isset($this->payload->methods) ? $this->payload->methods : null;
-        $path    = isset($this->payload->path)    ? $this->payload->path    : null;
+        $path   = isset($this->payload->path)   ? $this->payload->path   : null;
+        $config = isset($this->payload->config) ? $this->payload->config : null;
 
         $usedMethods = [];
-        if (is_array($methods)) {
-            foreach ($methods as $method) {
-                $name = isset($method->method) ? $method->method : null;
-                if (!empty($name)) {
-                    $usedMethods[] = $name;
-                }
+        if (is_array($config)) {
+            foreach ($config as $version) {
+                $methods = (array) $version->methods;
+                $usedMethods = array_merge($usedMethods, array_keys($methods));
             }
         }
 
-        return implode(', ', $usedMethods) . ' ' . $path;
+        return implode(', ', array_unique($usedMethods)) . ' ' . $path;
     }
 
     public function setBasePath($basePath)

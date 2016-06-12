@@ -3,15 +3,18 @@
     "connectionClass": ["Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection"],
     "routes": [{
         "path": "/void",
-        "methods": [{
-            "method": "GET",
+        "config": [{
             "version": 1,
             "status": 4,
-            "active": true,
-            "public": true,
-            "action": "Void-Action",
-            "request": "Adapter-Schema",
-            "response": "Passthru"
+            "methods": {
+                "GET": {
+                    "active": true,
+                    "public": true,
+                    "action": "Void-Action",
+                    "request": "Adapter-Schema",
+                    "response": "Passthru"
+                }
+            }
         }]
     }],
     "action": [{

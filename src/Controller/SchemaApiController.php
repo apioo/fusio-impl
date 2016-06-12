@@ -244,33 +244,36 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     private function executeAction($record)
     {
-        $method  = $this->getActiveMethod();
-        $context = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
-        $request = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
+        $method   = $this->getActiveMethod();
+        $context  = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
+        $request  = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
+        $response = null;
+        $actionId = $method['action'];
 
-        if ($method['status'] == Resource::STATUS_ACTIVE) {
-            // in case of a production method we execute the action from the
-            // cache so that it does not depend on values from the db
-            $repository = unserialize($method['actionCache']);
+        if ($actionId > 0) {
+            if ($method['status'] != Resource::STATUS_DEVELOPMENT) {
+                // if the method is not in dev mode we load the action from the
+                // cache
+                $repository = unserialize($method['actionCache']);
 
-            if ($repository instanceof RepositoryInterface) {
-                $this->processor->push($repository);
+                if ($repository instanceof RepositoryInterface) {
+                    $this->processor->push($repository);
 
-                try {
-                    $response = $this->processor->execute(1, $request, $context);
-                } catch (\Exception $e) {
-                    $this->apiLogger->appendError($this->logId, $e);
+                    try {
+                        $response = $this->processor->execute($actionId, $request, $context);
+                    } catch (\Exception $e) {
+                        $this->apiLogger->appendError($this->logId, $e);
 
-                    throw $e;
+                        throw $e;
+                    }
+
+                    $this->processor->pop();
+                } else {
+                    throw new StatusCode\ServiceUnavailableException('Invalid action cache');
                 }
-
-                $this->processor->pop();
             } else {
-                throw new StatusCode\ServiceUnavailableException('Invalid action cache');
-            }
-        } else {
-            $actionId = $method['action'];
-            if (is_int($actionId)) {
+                // if the action is in dev mode we load the values direct from
+                // the table
                 try {
                     $response = $this->processor->execute($actionId, $request, $context);
                 } catch (\Exception $e) {
@@ -278,9 +281,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
                     throw $e;
                 }
-            } else {
-                throw new StatusCode\ServiceUnavailableException('No action provided');
             }
+        } else {
+            throw new StatusCode\ServiceUnavailableException('No action provided');
         }
 
         if ($response instanceof ResponseInterface) {

@@ -58,14 +58,24 @@ class Method extends TableAbstract
         );
     }
 
-    public function deleteAllFromRoute($routeId)
+    public function deleteAllFromRoute($routeId, $version = null, $status = null)
     {
         $sql = 'DELETE FROM fusio_routes_method
                       WHERE routeId = :id';
 
-        $this->connection->executeQuery($sql, [
-            'id' => $routeId
-        ]);
+        $params = ['id' => $routeId];
+
+        if ($version !== null) {
+            $sql.= ' AND version = :version';
+            $params['version'] = $version;
+        }
+
+        if ($status !== null) {
+            $sql.= ' AND status = :status';
+            $params['status'] = $status;
+        }
+
+        $this->connection->executeQuery($sql, $params);
     }
 
     public function hasSchema($schemaId)
@@ -98,9 +108,11 @@ class Method extends TableAbstract
 
     public function getMethods($routeId, $version = null)
     {
-        $sql = '  SELECT method.method, 
+        $sql = '  SELECT method.id,
+                         method.routeId, 
                          method.version, 
                          method.status, 
+                         method.method, 
                          method.active, 
                          method.public, 
                          method.request, 

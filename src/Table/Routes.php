@@ -90,16 +90,37 @@ class Routes extends TableAbstract
             'status' => 'status',
             'path' => 'path',
             'controller' => 'controller',
-            'methods' => $this->doCollection([$this->getTable('Fusio\Impl\Table\Routes\Method'), 'getMethods'], [new Reference('id')], [
-                'method' => 'method',
-                'version' => 'version',
-                'status' => 'status',
-                'active' => 'active',
-                'public' => 'public',
-                'request' => 'request',
+            'config' => $this->doCollection([$this->getTable('Fusio\Impl\Table\Routes\Method'), 'getMethods'], [new Reference('id')], [
+                'version'  => 'version',
+                'status'   => 'status',
+                'method'   => 'method',
+                'active'   => 'active',
+                'public'   => 'public',
+                'request'  => 'request',
                 'response' => 'response',
-                'action' => 'action',
-            ]),
+                'action'   => 'action',
+            ], null, function(array $result){
+                $data = [];
+                foreach ($result as $row) {
+                    if (!isset($data[$row['version']])) {
+                        $data[$row['version']] = [
+                            'version' => $row['version'],
+                            'status'  => $row['status'],
+                            'methods' => [],
+                        ];
+                    }
+
+                    $data[$row['version']]['methods'][$row['method']] = [
+                        'active'   => $row['active'],
+                        'public'   => $row['public'],
+                        'request'  => $row['request'],
+                        'response' => $row['response'],
+                        'action'   => $row['action'],
+                    ];
+                }
+
+                return array_values($data);
+            }),
         ]);
 
         return $this->build($definition);

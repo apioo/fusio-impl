@@ -79,43 +79,45 @@ JSON;
 {
     "routes": [
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/api\/pet\/:petId",
-            "methods": [
+            "config": [
                 {
-                    "method": "GET",
-                    "version": "1",
+                    "version": 1,
                     "status": 4,
-                    "active": true,
-                    "public": true,
-                    "action": "Welcome",
-                    "request": "Passthru",
-                    "response": "api-pet-petId-GET-response"
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "action": "Welcome",
+                            "request": "Passthru",
+                            "response": "api-pet-petId-GET-response"
+                        }
+                    }
                 }
             ]
         },
         {
             "path": "\/api\/pet",
-            "methods": [
+            "config": [
                 {
-                    "method": "POST",
                     "version": 1,
                     "status": 4,
-                    "active": true,
-                    "public": true,
-                    "action": "Welcome",
-                    "request": "api-pet-POST-request",
-                    "response": "Passthru"
-                },
-                {
-                    "method": "PUT",
-                    "version": 1,
-                    "status": 4,
-                    "active": true,
-                    "public": true,
-                    "action": "Welcome",
-                    "request": "api-pet-PUT-request",
-                    "response": "Passthru"
+                    "methods": {
+                        "POST": {
+                            "active": true,
+                            "public": true,
+                            "action": "Welcome",
+                            "request": "api-pet-POST-request",
+                            "response": "Passthru"
+                        },
+                        "PUT": {
+                            "active": true,
+                            "public": true,
+                            "action": "Welcome",
+                            "request": "api-pet-PUT-request",
+                            "response": "Passthru"
+                        }
+                    }
                 }
             ]
         }

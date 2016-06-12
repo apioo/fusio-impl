@@ -167,39 +167,42 @@ class SystemExportCommandTest extends ControllerDbTestCase
     "routes": [
         {
             "path": "\/foo",
-            "methods": [
+            "config": [
                 {
-                    "method": "GET",
                     "version": 1,
                     "status": 4,
-                    "active": true,
-                    "public": true,
-                    "response": "Foo-Schema",
-                    "action": "Sql-Fetch-Row"
-                },
-                {
-                    "method": "POST",
-                    "version": 1,
-                    "status": 4,
-                    "active": true,
-                    "public": false,
-                    "request": "Foo-Schema",
-                    "response": "Passthru",
-                    "action": "Sql-Fetch-Row"
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "response": "Foo-Schema",
+                            "action": "Sql-Fetch-Row"
+                        },
+                        "POST": {
+                            "active": true,
+                            "public": false,
+                            "request": "Foo-Schema",
+                            "response": "Passthru",
+                            "action": "Sql-Fetch-Row"
+                        }
+                    }
                 }
             ]
         },
         {
             "path": "\/",
-            "methods": [
+            "config": [
                 {
-                    "method": "GET",
                     "version": 1,
                     "status": 4,
-                    "active": true,
-                    "public": true,
-                    "response": "Passthru",
-                    "action": "Welcome"
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "response": "Passthru",
+                            "action": "Welcome"
+                        }
+                    }
                 }
             ]
         }

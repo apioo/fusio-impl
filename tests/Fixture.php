@@ -130,11 +130,11 @@ JSON;
                 ['routeId' => 50, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
             ],
             'fusio_routes_action' => [
-                ['routeId' => 50, 'actionId' => 3, 'status' => 0],
+                ['routeId' => 50, 'actionId' => 3],
             ],
             'fusio_routes_schema' => [
-                ['routeId' => 50, 'schemaId' => 2, 'status' => 0],
-                ['routeId' => 50, 'schemaId' => 1, 'status' => 0],
+                ['routeId' => 50, 'schemaId' => 2],
+                ['routeId' => 50, 'schemaId' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => date('Y-m-d 00:00:00')],

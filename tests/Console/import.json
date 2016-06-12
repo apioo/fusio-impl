@@ -77,14 +77,17 @@
     "routes": [
         {
             "path": "\/bar",
-            "methods": [{
-                "method": "GET",
+            "config": [{
                 "version": 1,
                 "status": 4,
-                "active": true,
-                "public": true,
-                "action": "Conditional-Action",
-                "response": "New-Schema"
+                "methods": {
+                    "GET": {
+                        "active": true,
+                        "public": true,
+                        "action": "Conditional-Action",
+                        "response": "New-Schema"
+                    }
+                }
             }]
         }
     ]

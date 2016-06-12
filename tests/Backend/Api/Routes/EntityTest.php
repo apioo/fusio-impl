@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Table\Routes as TableRoutes;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -52,25 +53,25 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 50,
     "path": "\/foo",
-    "methods": [
+    "config": [
         {
-            "method": "GET",
             "version": 1,
             "status": 4,
-            "active": true,
-            "public": true,
-            "response": 2,
-            "action": 3
-        },
-        {
-            "method": "POST",
-            "version": 1,
-            "status": 4,
-            "active": true,
-            "public": false,
-            "request": 2,
-            "response": 1,
-            "action": 3
+            "methods": {
+                "GET": {
+                    "active": true,
+                    "public": true,
+                    "response": 2,
+                    "action": 3
+                },
+                "POST": {
+                    "active": true,
+                    "public": false,
+                    "request": 2,
+                    "response": 1,
+                    "action": 3
+                }
+            }
         }
     ]
 }
@@ -100,24 +101,25 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'path'    => '/foo',
-            'methods' => [[
-                'method'   => 'GET',
-                'version'  => 1,
-                'status'   => 4,
-                'active'   => true,
-                'public'   => true,
-                'action'   => 3,
-                'response' => 1,
-            ], [
-                'method'   => 'POST',
-                'version'  => 1,
-                'status'   => 4,
-                'active'   => true,
-                'public'   => false,
-                'action'   => 3,
-                'request'  => 2,
-                'response' => 1,
+            'path'   => '/foo',
+            'config' => [[
+                'version' => 1,
+                'status'  => 4,
+                'methods' => [
+                    'GET' => [
+                        'active'   => true,
+                        'public'   => true,
+                        'action'   => 3,
+                        'response' => 1,
+                    ],
+                    'POST' => [
+                        'active'   => true,
+                        'public'   => false,
+                        'action'   => 3,
+                        'request'  => 2,
+                        'response' => 1,
+                    ],
+                ],
             ]],
         ]));
 
@@ -168,6 +170,7 @@ JSON;
         $this->assertEquals(1, $result[0]['active']);
         $this->assertEquals(1, $result[0]['public']);
         $this->assertEquals(null, $result[0]['request']);
+        $this->assertEquals(1, $result[0]['response']);
         $this->assertEquals(3, $result[0]['action']);
 
         $this->assertEquals('POST', $result[1]['method']);
@@ -176,6 +179,94 @@ JSON;
         $this->assertEquals(1, $result[1]['active']);
         $this->assertEquals(0, $result[1]['public']);
         $this->assertEquals(2, $result[1]['request']);
+        $this->assertEquals(1, $result[1]['response']);
+        $this->assertEquals(3, $result[1]['action']);
+    }
+
+    public function testPutDeploy()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/routes/50', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'path'   => '/foo',
+            'config' => [[
+                'version' => 1,
+                'status'  => Resource::STATUS_ACTIVE,
+                'methods' => [
+                    'GET' => [
+                        'active'   => true,
+                        'public'   => true,
+                        'action'   => 3,
+                        'response' => 1,
+                    ],
+                    'POST' => [
+                        'active'   => true,
+                        'public'   => false,
+                        'action'   => 3,
+                        'request'  => 2,
+                        'response' => 1,
+                    ],
+                ],
+            ]],
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Routes successful updated"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status', 'methods', 'path', 'controller')
+            ->from('fusio_routes')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(50, $row['id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
+        $this->assertEquals('/foo', $row['path']);
+        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
+
+        // check methods
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'request', 'response', 'action')
+            ->from('fusio_routes_method')
+            ->where('routeId = :routeId')
+            ->orderBy('id', 'ASC')
+            ->getSQL();
+
+        $result = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+
+        $this->assertEquals(2, count($result));
+
+        $this->assertEquals('GET', $result[0]['method']);
+        $this->assertEquals(1, $result[0]['version']);
+        $this->assertEquals(Resource::STATUS_ACTIVE, $result[0]['status']);
+        $this->assertEquals(1, $result[0]['active']);
+        $this->assertEquals(1, $result[0]['public']);
+        $this->assertEquals(null, $result[0]['request']);
+        $this->assertEquals(2, $result[0]['response']);
+        $this->assertEquals(3, $result[0]['action']);
+
+        $this->assertEquals('POST', $result[1]['method']);
+        $this->assertEquals(1, $result[1]['version']);
+        $this->assertEquals(Resource::STATUS_ACTIVE, $result[1]['status']);
+        $this->assertEquals(1, $result[1]['active']);
+        $this->assertEquals(0, $result[1]['public']);
+        $this->assertEquals(2, $result[1]['request']);
+        $this->assertEquals(1, $result[1]['response']);
         $this->assertEquals(3, $result[1]['action']);
     }
 

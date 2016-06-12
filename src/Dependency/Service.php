@@ -54,7 +54,8 @@ trait Service
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope\Route'),
-            $this->get('routes_dependency_manager')
+            $this->get('routes_deploy_service'),
+            $this->get('routes_relation_service')
         );
     }
 
@@ -229,14 +230,27 @@ trait Service
     }
 
     /**
-     * @return \Fusio\Impl\Service\Routes\DependencyManager
+     * @return \Fusio\Impl\Service\Routes\Relation
      */
-    public function getRoutesDependencyManager()
+    public function getRoutesRelationService()
     {
-        return new Impl\Service\Routes\DependencyManager(
+        return new Impl\Service\Routes\Relation(
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Schema'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
+            $this->get('action_parser')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Routes\Deploy
+     */
+    public function getRoutesDeployService()
+    {
+        return new Impl\Service\Routes\Deploy(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Schema'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
             $this->get('action_parser')
         );

@@ -35,7 +35,7 @@ class Update extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Routes');
-        $schema->get('methods')->setRequired(true);
+        $schema->get('config')->setRequired(true);
 
         return $schema;
     }

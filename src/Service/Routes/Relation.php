@@ -22,40 +22,39 @@
 namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Impl\Table\Action as TableAction;
-use Fusio\Impl\Table\Routes;
-use Fusio\Impl\Table\Routes\Action as RoutesAction;
-use Fusio\Impl\Table\Routes\Method as RoutesMethod;
-use Fusio\Impl\Table\Routes\Schema as RoutesSchema;
+use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Table\Routes\Action as TableRoutesAction;
+use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
+use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
 use Fusio\Impl\Form;
 use Fusio\Impl\Parser\ParserAbstract;
 use PSX\Api\Resource;
 use PSX\Sql\Condition;
 
 /**
- * The dependency manager inserts all schema and action ids which are used by
- * a route. Because of that we can i.e. show all actions which are used by a 
- * route
+ * The relation service determines all schema and action ids which are used by a 
+ * route and inserts them into a table
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DependencyManager
+class Relation
 {
     /**
      * @var \Fusio\Impl\Table\Routes\Method
      */
-    protected $methodTable;
+    protected $routesMethodTable;
 
     /**
      * @var \Fusio\Impl\Table\Routes\Schema
      */
-    protected $schemaLinkTable;
+    protected $routesSchemaTable;
 
     /**
      * @var \Fusio\Impl\Table\Routes\Action
      */
-    protected $actionLinkTable;
+    protected $routesActionTable;
 
     /**
      * @var \Fusio\Impl\Table\Action
@@ -67,13 +66,13 @@ class DependencyManager
      */
     protected $actionParser;
 
-    public function __construct(RoutesMethod $methodTable, RoutesSchema $schemaLinkTable, RoutesAction $actionLinkTable, TableAction $actionTable, ParserAbstract $actionParser)
+    public function __construct(TableRoutesMethod $routesMethodTable, TableRoutesSchema $routesSchemaTable, TableRoutesAction $routesActionTable, TableAction $actionTable, ParserAbstract $actionParser)
     {
-        $this->methodTable     = $methodTable;
-        $this->schemaLinkTable = $schemaLinkTable;
-        $this->actionLinkTable = $actionLinkTable;
-        $this->actionTable     = $actionTable;
-        $this->actionParser    = $actionParser;
+        $this->routesMethodTable = $routesMethodTable;
+        $this->routesSchemaTable = $routesSchemaTable;
+        $this->routesActionTable = $routesActionTable;
+        $this->actionTable       = $actionTable;
+        $this->actionParser      = $actionParser;
     }
 
     /**
@@ -81,42 +80,38 @@ class DependencyManager
      *
      * @param integer $routeId
      */
-    public function removeExistingDependencyLinks($routeId)
+    public function removeExistingRelations($routeId)
     {
-        $this->schemaLinkTable->deleteAllFromRoute($routeId);
-        $this->actionLinkTable->deleteAllFromRoute($routeId);
+        $this->routesSchemaTable->deleteAllFromRoute($routeId);
+        $this->routesActionTable->deleteAllFromRoute($routeId);
     }
 
     /**
-     * Reads all dependencies of the rpovided route and writes them to the 
-     * tables
+     * Reads all relations of the provided route and writes them to the tables
      *
      * @param integer $routeId
-     * @param array $config
      */
-    public function updateDependencyLinks($routeId)
+    public function updateRelations($routeId)
     {
         // remove all existing entries
-        $this->removeExistingDependencyLinks($routeId);
+        $this->removeExistingRelations($routeId);
 
         // get dependencies of the config
-        $methods = $this->methodTable->getByRouteId($routeId);
+        $methods = $this->routesMethodTable->getMethods($routeId);
         $schemas = $this->getDependingSchemas($methods);
         $actions = $this->getDependingActions($methods);
 
-        foreach ($schemas as $schemaId => $status) {
-            $this->schemaLinkTable->create(array(
+        foreach ($schemas as $schemaId) {
+            $this->routesSchemaTable->create(array(
                 'routeId'  => $routeId,
                 'schemaId' => $schemaId,
-                'status'   => $status,
             ));
         }
 
-        foreach ($actions as $actionId => $status) {
-            $this->actionLinkTable->create(array(
+        foreach ($actions as $actionId) {
+            $this->routesActionTable->create(array(
                 'routeId'  => $routeId,
                 'actionId' => $actionId,
-                'status'   => $status,
             ));
         }
     }
@@ -131,14 +126,12 @@ class DependencyManager
     {
         $schemaIds = [];
         foreach ($methods as $row) {
-            if ($row['active']) {
-                if (is_int($row['request'])) {
-                    $schemaIds[] = $row['request'];
-                }
+            if ($row['request'] > 0) {
+                $schemaIds[] = $row['request'];
+            }
 
-                if (is_int($row['response'])) {
-                    $schemaIds[] = $row['response'];
-                }
+            if ($row['response'] > 0) {
+                $schemaIds[] = $row['response'];
             }
         }
 
@@ -159,10 +152,8 @@ class DependencyManager
     {
         $actionIds = [];
         foreach ($methods as $row) {
-            if ($row['active']) {
-                if (is_int($row['action'])) {
-                    $actionIds[] = $row['action'];
-                }
+            if ($row['action'] > 0) {
+                $actionIds[] = $row['action'];
             }
         }
 
