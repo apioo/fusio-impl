@@ -57,52 +57,45 @@ class RamlTest extends ControllerDbTestCase
 {
     "routes": [
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/api\/pet\/:petId",
             "config": [
                 {
-                    "active": true,
+                    "version": 1,
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
+                    "methods": {
+                        "GET": {
                             "active": true,
                             "public": true,
-                            "name": "GET",
                             "action": "Welcome",
                             "request": "Passthru",
                             "response": "api-pet-petId-GET-response"
                         }
-                    ]
+                    }
                 }
             ]
         },
         {
-            "methods": "GET|POST|PUT|DELETE",
             "path": "\/api\/pet",
             "config": [
                 {
-                    "active": true,
+                    "version": 1,
                     "status": 4,
-                    "name": "1",
-                    "methods": [
-                        {
+                    "methods": {
+                        "POST": {
                             "active": true,
                             "public": true,
-                            "name": "POST",
                             "action": "Welcome",
                             "request": "api-pet-POST-request",
                             "response": "Passthru"
                         },
-                        {
+                        "PUT": {
                             "active": true,
                             "public": true,
-                            "name": "PUT",
                             "action": "Welcome",
                             "request": "api-pet-PUT-request",
                             "response": "Passthru"
                         }
-                    ]
+                    }
                 }
             ]
         }

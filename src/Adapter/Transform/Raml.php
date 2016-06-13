@@ -99,20 +99,18 @@ class Raml implements TransformInterface
 
         foreach ($methods as $method) {
             if (isset($data[$method])) {
-                $config[] = $this->parseMethod($method, $data[$method], $path);
+                $config[$method] = $this->parseMethod($method, $data[$method], $path);
             }
         }
 
         $this->parsePaths($path, $data);
 
         $this->routes[] = [
-            'methods' => implode('|', $methods),
-            'path'    => $path,
-            'config'  => [[
-                'active'  => true,
+            'path'   => $path,
+            'config' => [[
+                'version' => (integer) $this->version,
                 'status'  => 4,
-                'name'    => (string) $this->version,
-                'methods' => $config,
+                'methods' => $config
             ]],
         ];
     }
@@ -160,7 +158,6 @@ class Raml implements TransformInterface
         return [
             'active'   => true,
             'public'   => true,
-            'name'     => $methodName,
             'action'   => $action,
             'request'  => $request,
             'response' => $response,

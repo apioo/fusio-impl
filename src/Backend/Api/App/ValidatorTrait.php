@@ -46,6 +46,7 @@ trait ValidatorTrait
     {
         return new Validator(array(
             new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\App')))),
+            new Property('/userId', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\User')))),
         ));
     }
 }

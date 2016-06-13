@@ -49,10 +49,9 @@ trait ValidatorTrait
         return new Validator(array(
             new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Routes')))),
             new Property('/path', Validate::TYPE_STRING, array(new Path())),
-            new Property('/methods/\d+/routeId', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Routes')))),
-            new Property('/methods/\d+/action', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
-            new Property('/methods/\d+/request', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
-            new Property('/methods/\d+/response', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
+            new Property('/config/(\d+)/methods/([A-Z]+)/request', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
+            new Property('/config/(\d+)/methods/([A-Z]+)/response', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
+            new Property('/config/(\d+)/methods/([A-Z]+)/action', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
         ));
     }
 }
