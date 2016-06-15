@@ -74,7 +74,7 @@ class AddUserCommand extends Command
         $question = new Question('Enter the username of the account: ');
         $question->setValidator(function ($value) {
             if (!preg_match('/^[A-z0-9\-\_\.]{3,32}$/', $value)) {
-                throw new \Exception('The username must match the following regexp [A-z0-9\-\_\.]{3,32}');
+                throw new \Exception('Username must match the following regexp [A-z0-9\-\_\.]{3,32}');
             }
 
             return $value;
@@ -82,17 +82,32 @@ class AddUserCommand extends Command
 
         $name = $helper->ask($input, $output, $question);
 
+        // email
+        $question = new Question('Enter the email of the account: ');
+        $question->setValidator(function ($value) {
+            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception('Email must have a valid format i.e. foo@bar.com');
+            }
+
+            return $value;
+        });
+
+        $email = $helper->ask($input, $output, $question);
+
         // scopes
         if ($status === 0) {
             $scopes = ['consumer', 'authorization'];
         } elseif ($status === 1) {
-            $scopes = ['backend', 'authorization'];
+            $scopes = ['backend', 'consumer', 'authorization'];
+        } else {
+            $scopes = [];
         }
 
         // password
         $password = $this->userService->create(
             $status,
             $name,
+            $email,
             $scopes
         );
 

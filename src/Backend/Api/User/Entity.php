@@ -99,6 +99,7 @@ class Entity extends SchemaApiAbstract
             (int) $this->getUriFragment('user_id'),
             $record->status,
             $record->name,
+            $record->email,
             $record->scopes
         );
 

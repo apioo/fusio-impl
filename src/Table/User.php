@@ -48,6 +48,7 @@ class User extends TableAbstract
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
+            'email' => self::TYPE_VARCHAR,
             'password' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
         );

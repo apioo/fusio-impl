@@ -96,6 +96,7 @@ class Collection extends SchemaApiAbstract
         $password = $this->userService->create(
             $record->status, 
             $record->name, 
+            $record->email, 
             $record->scopes
         );
 

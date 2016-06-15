@@ -40,6 +40,7 @@ class User extends SchemaAbstract
         $sb->integer('status');
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_\.]{3,32}');
+        $sb->string('email');
         $sb->arrayType('scopes')
             ->setPrototype(Property::getString('name'));
         $sb->arrayType('apps')

@@ -55,6 +55,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 2,
     "status": 0,
     "name": "Consumer",
+    "email": "consumer@localhost.com",
     "scopes": [
         "consumer",
         "authorization",

@@ -208,10 +208,12 @@ class Version030 implements VersionInterface
         $userTable->addColumn('id', 'integer', array('autoincrement' => true));
         $userTable->addColumn('status', 'integer');
         $userTable->addColumn('name', 'string', array('length' => 64));
+        $userTable->addColumn('email', 'string', array('length' => 128));
         $userTable->addColumn('password', 'string', array('length' => 255));
         $userTable->addColumn('date', 'datetime');
         $userTable->setPrimaryKey(array('id'));
         $userTable->addUniqueIndex(array('name'));
+        $userTable->addUniqueIndex(array('email'));
 
         $scopeRoutesTable = $schema->createTable('fusio_scope_routes');
         $scopeRoutesTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -305,7 +307,7 @@ class Version030 implements VersionInterface
 
         return [
             'fusio_user' => [
-                ['status' => 1, 'name' => 'Administrator', 'password' => $password, 'date' => $now->format('Y-m-d H:i:s')],
+                ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'date' => $now->format('Y-m-d H:i:s')],
             ],
             'fusio_app' => [
                 ['userId' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $backendAppKey, 'appSecret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],

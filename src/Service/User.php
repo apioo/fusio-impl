@@ -119,7 +119,7 @@ class User
         return null;
     }
 
-    public function create($status, $name, array $scopes = null)
+    public function create($status, $name, $email, array $scopes = null)
     {
         // check whether user exists
         $condition  = new Condition();
@@ -138,6 +138,7 @@ class User
         $this->userTable->create(array(
             'status'   => $status,
             'name'     => $name,
+            'email'    => $email,
             'password' => \password_hash($password, PASSWORD_DEFAULT),
             'date'     => new DateTime(),
         ));
@@ -148,7 +149,7 @@ class User
         return $password;
     }
 
-    public function update($userId, $status, $name, array $scopes = null)
+    public function update($userId, $status, $name, $email, array $scopes = null)
     {
         $user = $this->userTable->get($userId);
 
@@ -157,6 +158,7 @@ class User
                 'id'     => $user['id'],
                 'status' => $status,
                 'name'   => $name,
+                'email'  => $email,
             ));
 
             // delete existing scopes

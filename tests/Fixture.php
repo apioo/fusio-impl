@@ -75,34 +75,12 @@ JSON;
         $parser = new JsonSchema();
         $schema = $parser->parse($schemaSource);
 
-        $config = [Record::fromArray([
-            'active' => 1,
-            'status' => 4,
-            'name'   => '1',
-            'methods' => [Record::fromArray([
-                'name'     => 'GET',
-                'action'   => 3,
-                'response' => 2,
-            ], 'method'), Record::fromArray([
-                'active'   => true,
-                'public'   => 0,
-                'name'     => 'POST',
-                'action'   => 3,
-                'request'  => 2,
-                'response' => 1,
-            ], 'method'), Record::fromArray([
-                'name'     => 'PUT',
-            ], 'method'), Record::fromArray([
-                'name'     => 'DELETE',
-            ], 'method')],
-        ], 'config')];
-
         return [
             'fusio_user' => [
-                ['status' => 0, 'name' => 'Consumer', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
-                ['status' => 2, 'name' => 'Disabled', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Developer', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
-                ['status' => 3, 'name' => 'Deleted', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
+                ['status' => 0, 'name' => 'Consumer', 'email' => 'consumer@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
+                ['status' => 2, 'name' => 'Disabled', 'email' => 'disabled@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Developer', 'email' => 'developer@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
+                ['status' => 3, 'name' => 'Deleted', 'email' => 'deleted@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_action' => [
                 ['status' => 1, 'name' => 'Sql-Fetch-All', 'class' => 'Fusio\Impl\Action\SqlFetchAll', 'config' => serialize(['connection' => 1, 'sql' => 'SELECT * FROM app_news']), 'date' => '2015-02-27 19:59:15'],
@@ -121,7 +99,7 @@ JSON;
                 ['name' => 'MongoDB', 'class' => 'Fusio\Impl\Connection\MongoDB', 'config' => 'gj1VZ1lN1aJEMMLsdglwiQ==.ub6hTzbrd9MW8taKtEC8exyr71IWlRvJC0b330c+ORea+MxnatgMjQu4phtVkzuNWUeAyj0izLKGUs+rJSkwOu7SNAL3tZ6cDWUE4IGZG84='],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController', 'config' => serialize($config)],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_routes_method' => [
                 ['routeId' => 50, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],

@@ -58,24 +58,28 @@ class CollectionTest extends ControllerDbTestCase
             "id": 4,
             "status": 1,
             "name": "Developer",
+            "email": "developer@localhost.com",
             "date": "[datetime]"
         },
         {
             "id": 3,
             "status": 2,
             "name": "Disabled",
+            "email": "disabled@localhost.com",
             "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 0,
             "name": "Consumer",
+            "email": "consumer@localhost.com",
             "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 1,
             "name": "Administrator",
+            "email": "admin@localhost.com",
             "date": "[datetime]"
         }
     ]
@@ -94,6 +98,7 @@ JSON;
         ), json_encode([
             'status' => 0,
             'name'   => 'test',
+            'email'  => 'test@localhost.com',
             'scopes' => ['foo', 'bar'],
         ]));
 
@@ -115,7 +120,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name')
+            ->select('id', 'status', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -127,6 +132,7 @@ JSON;
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(0, $row['status']);
         $this->assertEquals('test', $row['name']);
+        $this->assertEquals('test@localhost.com', $row['email']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'userId', 'scopeId')

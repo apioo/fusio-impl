@@ -37,6 +37,7 @@ class Create extends SchemaAbstract
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\User');
         $schema->get('status')->setRequired(true);
         $schema->get('name')->setRequired(true);
+        $schema->get('email')->setRequired(true);
 
         return $schema;
     }
