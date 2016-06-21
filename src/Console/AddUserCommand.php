@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console;
 
 use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table\Scope;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Service\User as ServiceUser;
@@ -39,6 +40,8 @@ use Symfony\Component\Console\Question\Question;
  */
 class AddUserCommand extends Command
 {
+    use ValidatorTrait;
+
     protected $userService;
 
     public function __construct(ServiceUser $userService)
@@ -72,28 +75,32 @@ class AddUserCommand extends Command
         $status = $helper->ask($input, $output, $question);
 
         // username
-        $question = new Question('Enter the username of the account: ');
+        $question = new Question('Enter the username: ');
         $question->setValidator(function ($value) {
-            if (!preg_match('/^[A-z0-9\-\_\.]{3,32}$/', $value)) {
-                throw new \Exception('Username must match the following regexp [A-z0-9\-\_\.]{3,32}');
-            }
-
+            $this->assertName($value);
             return $value;
         });
 
         $name = $helper->ask($input, $output, $question);
 
         // email
-        $question = new Question('Enter the email of the account: ');
+        $question = new Question('Enter the email: ');
         $question->setValidator(function ($value) {
-            if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception('Email must have a valid format i.e. foo@bar.com');
-            }
-
+            $this->assertEmail($value);
             return $value;
         });
 
         $email = $helper->ask($input, $output, $question);
+
+        // password
+        $question = new Question('Enter the password: ');
+        $question->setHidden(true);
+        $question->setValidator(function ($value) {
+            $this->assertPassword($value);
+            return $value;
+        });
+
+        $password = $helper->ask($input, $output, $question);
 
         // scopes
         if ($status === 0) {
@@ -103,9 +110,6 @@ class AddUserCommand extends Command
         } else {
             $scopes = [];
         }
-
-        // generate password
-        $password = TokenGenerator::generateUserPassword();
 
         // password
         $this->userService->create(
@@ -117,7 +121,5 @@ class AddUserCommand extends Command
         );
 
         $output->writeln('Created user ' . $name . ' successful');
-        $output->writeln('The following passord was assigned to the account:');
-        $output->writeln($password);
     }
 }

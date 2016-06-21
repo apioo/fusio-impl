@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User as TableUser;
@@ -43,6 +43,8 @@ use PSX\Sql\Fields;
  */
 class User
 {
+    use ValidatorTrait;
+
     /**
      * @var \Fusio\Impl\Table\Scope
      */
@@ -319,80 +321,4 @@ class User
         }
     }
 
-    protected function assertName($name)
-    {
-        if (empty($name)) {
-            throw new StatusCode\BadRequestException('Name must not be empty');
-        }
-
-        $len = strlen($name);
-
-        if ($len < 3) {
-            throw new StatusCode\BadRequestException('Name must have at least 3 characters');
-        }
-
-        for ($i = 0; $i < $len; $i++) {
-            $value = ord($name[$i]);
-            if ($value >= 0x21 && $value <= 0x7E) {
-            } else {
-                throw new StatusCode\BadRequestException('Name must contain only ascii characters in the range of 0x21-0x7E');
-            }
-        }
-    }
-
-    protected function assertEmail($email)
-    {
-        if (empty($email)) {
-            throw new StatusCode\BadRequestException('Email must not be empty');
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new StatusCode\BadRequestException('Invalid email format');
-        }
-    }
-
-    protected function assertPassword($password)
-    {
-        if (empty($password)) {
-            throw new StatusCode\BadRequestException('Password must not be empty');
-        }
-
-        $len     = strlen($password);
-        $alpha   = 0;
-        $numeric = 0;
-        $special = 0;
-
-        if ($len < 8) {
-            throw new StatusCode\BadRequestException('Password must have at least 8 characters');
-        }
-
-        for ($i = 0; $i < $len; $i++) {
-            $value = ord($password[$i]);
-            if ($value >= 0x21 && $value <= 0x7E) {
-                if ($value >= 0x30 && $value <= 0x39) {
-                    $numeric++;
-                } elseif ($value >= 0x41 && $value <= 0x5A) {
-                    $alpha++;
-                } elseif ($value >= 0x61 && $value <= 0x7A) {
-                    $alpha++;
-                } else {
-                    $special++;
-                }
-            } else {
-                throw new StatusCode\BadRequestException('Password must contain only ascii characters in the range of 0x21-0x7E');
-            }
-        }
-
-        if ($alpha === 0) {
-            throw new StatusCode\BadRequestException('Password must have at least one alphabetic character (a-z, A-Z)');
-        }
-
-        if ($numeric === 0) {
-            throw new StatusCode\BadRequestException('Password must have at least one numeric character (0-9)');
-        }
-
-        if ($special === 0) {
-            throw new StatusCode\BadRequestException('Password must have at least one special character i.e. (!#$%&*@_~)');
-        }
-    }
 }
