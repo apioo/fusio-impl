@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console;
 
+use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table\Scope;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Service\User as ServiceUser;
@@ -103,11 +104,15 @@ class AddUserCommand extends Command
             $scopes = [];
         }
 
+        // generate password
+        $password = TokenGenerator::generateUserPassword();
+
         // password
-        $password = $this->userService->create(
+        $this->userService->create(
             $status,
             $name,
             $email,
+            $password,
             $scopes
         );
 

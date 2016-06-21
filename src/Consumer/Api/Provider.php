@@ -19,39 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\User;
+namespace Fusio\Impl\Consumer\Api;
 
+use DateTime;
 use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Table\User;
+use Fusio\Impl\Table\App;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Record\RecordInterface;
+use PSX\Validate\Filter as PSXFilter;
+use PSX\Http\Exception as StatusCode;
 use PSX\Framework\Loader\Context;
 use PSX\Sql\Condition;
+use PSX\Uri\Uri;
+use PSX\Uri\Url;
 use PSX\Validate\Validate;
 
 /**
- * Collection
+ * Provider
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Provider extends SchemaApiAbstract
 {
-    use ProtectionTrait;
-    use ValidatorTrait;
-
     /**
      * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
+     * @var \Fusio\Impl\Service\Consumer
      */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\User
-     */
-    protected $userService;
+    protected $consumer;
 
     /**
      * @return \PSX\Api\Resource
@@ -60,29 +57,12 @@ class Collection extends SchemaApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\User\Collection'))
-        );
-
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\User\Create'))
-            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\User\Message'))
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Provider'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\JWT'))
         );
 
         return $resource;
-    }
-
-    /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doGet()
-    {
-        $startIndex = $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0;
-        $search     = $this->getParameter('search', Validate::TYPE_STRING) ?: null;
-
-        return $this->userService->getAll($startIndex, $search);
     }
 
     /**
@@ -93,17 +73,19 @@ class Collection extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $this->userService->create(
-            $record->status, 
-            $record->name, 
-            $record->email, 
-            $record->password, 
-            $record->scopes
-        );
+        $provider    = $this->getUriFragment('provider');
+        $code        = $record->code;
+        $clientId    = $record->clientId;
+        $redirectUri = $record->redirectUri;
 
-        return array(
-            'success'  => true,
-            'message'  => 'User successful created',
-        );
+        $token = $this->consumer->provider($provider, $code, $clientId, $redirectUri);
+
+        if (!empty($token)) {
+            return [
+                'token' => $token,
+            ];
+        } else {
+            throw new StatusCode\UnauthorizedException('Invalid data', 'Basic');
+        }
     }
 }

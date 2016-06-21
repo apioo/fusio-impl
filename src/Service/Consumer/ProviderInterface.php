@@ -19,28 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\User;
+namespace Fusio\Impl\Service\Consumer;
 
-use PSX\Schema\Property\StringType;
-use PSX\Schema\SchemaAbstract;
+use PSX\Http\Client;
 
 /**
- * Create
+ * ProviderInterface
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+interface ProviderInterface
 {
-    public function getDefinition()
-    {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\User');
-        $schema->get('status')->setRequired(true);
-        $schema->get('name')->setRequired(true);
-        $schema->get('email')->setRequired(true);
-        $schema->add('password', new StringType())->setRequired(true);
+    const PROVIDER_SYSTEM   = 0x1;
+    const PROVIDER_FACEBOOK = 0x2;
+    const PROVIDER_GOOGLE   = 0x3;
+    const PROVIDER_GITHUB   = 0x4;
 
-        return $schema;
-    }
+    /**
+     * Returns an id to identify the provider
+     * 
+     * @return integer
+     */
+    public function getId();
+
+    /**
+     * Requests user informations of an remote provider
+     * 
+     * @param string $code
+     * @param string $clientId
+     * @param string $redirectUri
+     * @param array $config
+     * @return \Fusio\Impl\Service\Consumer\Model\User
+     */
+    public function requestUser($code, $clientId, $redirectUri, array $config);
 }

@@ -19,28 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\User;
+namespace Fusio\Impl\Service\Consumer;
 
-use PSX\Schema\Property\StringType;
-use PSX\Schema\SchemaAbstract;
+use PSX\Http\Client;
 
 /**
- * Create
+ * ProviderAbstract
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+abstract class ProviderAbstract implements ProviderInterface
 {
-    public function getDefinition()
-    {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\User');
-        $schema->get('status')->setRequired(true);
-        $schema->get('name')->setRequired(true);
-        $schema->get('email')->setRequired(true);
-        $schema->add('password', new StringType())->setRequired(true);
+    /**
+     * @var \PSX\Http\Client
+     */
+    protected $httpClient;
 
-        return $schema;
+    /**
+     * @var string
+     */
+    protected $ua = 'Fusio-Consumer (http://www.fusio-project.org/)';
+
+    public function __construct(Client $httpClient)
+    {
+        $this->httpClient = $httpClient;
     }
+
+    abstract public function requestUser($code, $clientId, $redirectUri, array $config);
 }

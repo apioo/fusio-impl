@@ -46,7 +46,9 @@ class User extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'provider' => self::TYPE_INT,
             'status' => self::TYPE_INT,
+            'remoteId' => self::TYPE_VARCHAR,
             'name' => self::TYPE_VARCHAR,
             'email' => self::TYPE_VARCHAR,
             'password' => self::TYPE_VARCHAR,

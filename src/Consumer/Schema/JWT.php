@@ -19,28 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\User;
+namespace Fusio\Impl\Consumer\Schema;
 
-use PSX\Schema\Property\StringType;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Create
+ * JWT
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+class JWT extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\User');
-        $schema->get('status')->setRequired(true);
-        $schema->get('name')->setRequired(true);
-        $schema->get('email')->setRequired(true);
-        $schema->add('password', new StringType())->setRequired(true);
+        $sb = $this->getSchemaBuilder('jwt');
+        $sb->string('token');
 
-        return $schema;
+        return $sb->getProperty();
     }
 }

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\User;
 
+use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -96,10 +97,11 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 0,
-            'name'   => 'test',
-            'email'  => 'test@localhost.com',
-            'scopes' => ['foo', 'bar'],
+            'status'   => 0,
+            'name'     => 'test',
+            'email'    => 'test@localhost.com',
+            'password' => 'fooo123!',
+            'scopes'   => ['foo', 'bar'],
         ]));
 
         $body = (string) $response->getBody();
@@ -110,8 +112,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "User successful created",
-    "password": "[password]"
+    "message": "User successful created"
 }
 JSON;
 
@@ -120,7 +121,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'email')
+            ->select('id', 'status', 'name', 'email', 'password')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -133,6 +134,7 @@ JSON;
         $this->assertEquals(0, $row['status']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('test@localhost.com', $row['email']);
+        $this->assertTrue(password_verify('fooo123!', $row['password']));
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'userId', 'scopeId')

@@ -36,9 +36,29 @@ use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
  */
 class Oauth2Filter extends Oauth2Authentication
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
+
+    /**
+     * @var string
+     */
     protected $requestMethod;
+
+    /**
+     * @var integer
+     */
     protected $routeId;
+
+    /**
+     * @var string
+     */
+    protected $tokenSecret;
+
+    /**
+     * @var Closure
+     */
     protected $appCallback;
 
     public function __construct(Connection $connection, $requestMethod, $routeId, Closure $appCallback)

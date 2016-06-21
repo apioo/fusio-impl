@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Authorize;
+namespace Fusio\Impl\Consumer\Api;
 
 use DateTime;
 use Fusio\Impl\Authorization\ProtectionTrait;

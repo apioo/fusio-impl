@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Service\Consumer\ProviderInterface;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User as TableUser;
@@ -42,9 +43,24 @@ use PSX\Sql\Fields;
  */
 class User
 {
+    /**
+     * @var \Fusio\Impl\Table\Scope
+     */
     protected $scopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\User
+     */
     protected $userTable;
+
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
     protected $appTable;
+
+    /**
+     * @var \Fusio\Impl\Table\User\Scope
+     */
     protected $userScopeTable;
 
     public function __construct(TableUser $userTable, TableScope $scopeTable, TableApp $appTable, TableUserScope $userScopeTable)
@@ -104,6 +120,10 @@ class User
      */
     public function authenticateUser($username, $password, array $status)
     {
+        if (empty($password)) {
+            return null;
+        }
+
         $condition = new Condition();
         $condition->equals('name', $username);
         $condition->in('status', $status);
@@ -111,6 +131,20 @@ class User
         $user = $this->userTable->getOneBy($condition);
 
         if (!empty($user)) {
+            // we can authenticate only local users
+            if ($user->provider != ProviderInterface::PROVIDER_SYSTEM) {
+                return null;
+            }
+
+            if ($user->status == TableUser::STATUS_DISABLED) {
+                throw new StatusCode\BadRequestException('The assigned account is disabled');
+            }
+
+            if ($user->status == TableUser::STATUS_DELETED) {
+                throw new StatusCode\BadRequestException('The assigned account is deleted');
+            }
+
+            // check password
             if (password_verify($password, $user['password'])) {
                 return $user['id'];
             }
@@ -119,7 +153,7 @@ class User
         return null;
     }
 
-    public function create($status, $name, $email, array $scopes = null)
+    public function create($status, $name, $email, $password, array $scopes = null)
     {
         // check whether user exists
         $condition  = new Condition();
@@ -132,21 +166,71 @@ class User
             throw new StatusCode\BadRequestException('User already exists');
         }
 
-        // create user
-        $password = TokenGenerator::generateUserPassword();
+        // check values
+        $this->assertName($name);
+        $this->assertEmail($email);
+        $this->assertPassword($password);
 
+        // create user
         $this->userTable->create(array(
+            'provider' => ProviderInterface::PROVIDER_SYSTEM,
             'status'   => $status,
             'name'     => $name,
             'email'    => $email,
-            'password' => \password_hash($password, PASSWORD_DEFAULT),
+            'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
             'date'     => new DateTime(),
         ));
 
-        // add scopes
-        $this->insertScopes($this->userTable->getLastInsertId(), $scopes);
+        $userId = $this->userTable->getLastInsertId();
 
-        return $password;
+        // add scopes
+        $this->insertScopes($userId, $scopes);
+
+        return $userId;
+    }
+
+    public function createRemote($provider, $id, $name, $email, array $scopes = null)
+    {
+        // check whether user exists
+        $condition  = new Condition();
+        $condition->equals('provider', $provider);
+        $condition->equals('remoteId', $id);
+
+        $user = $this->userTable->getOneBy($condition);
+
+        if (!empty($user)) {
+            return $user->id;
+        }
+
+        // replace spaces with a dot
+        $name = str_replace(' ', '.', $name);
+
+        // check values
+        $this->assertName($name);
+
+        if (!empty($email)) {
+            $this->assertEmail($email);
+        } else {
+            $email = null;
+        }
+
+        // create user
+        $this->userTable->create(array(
+            'provider' => $provider,
+            'status'   => TableUser::STATUS_CONSUMER,
+            'remoteId' => $id,
+            'name'     => $name,
+            'email'    => $email,
+            'password' => null,
+            'date'     => new DateTime(),
+        ));
+
+        $userId = $this->userTable->getLastInsertId();
+
+        // add scopes
+        $this->insertScopes($userId, $scopes);
+
+        return $userId;
     }
 
     public function update($userId, $status, $name, $email, array $scopes = null)
@@ -154,6 +238,10 @@ class User
         $user = $this->userTable->get($userId);
 
         if (!empty($user)) {
+            // check values
+            $this->assertName($name);
+            $this->assertEmail($email);
+
             $this->userTable->update(array(
                 'id'     => $user['id'],
                 'status' => $status,
@@ -212,6 +300,11 @@ class User
         return $this->userScopeTable->getValidScopes($userId, $scopes, $exclude);
     }
 
+    public function getAvailableScopes($userId)
+    {
+        return $this->userScopeTable->getAvailableScopes($userId);
+    }
+
     protected function insertScopes($userId, $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
@@ -223,6 +316,83 @@ class User
                     'scopeId' => $scope['id'],
                 ));
             }
+        }
+    }
+
+    protected function assertName($name)
+    {
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name must not be empty');
+        }
+
+        $len = strlen($name);
+
+        if ($len < 3) {
+            throw new StatusCode\BadRequestException('Name must have at least 3 characters');
+        }
+
+        for ($i = 0; $i < $len; $i++) {
+            $value = ord($name[$i]);
+            if ($value >= 0x21 && $value <= 0x7E) {
+            } else {
+                throw new StatusCode\BadRequestException('Name must contain only ascii characters in the range of 0x21-0x7E');
+            }
+        }
+    }
+
+    protected function assertEmail($email)
+    {
+        if (empty($email)) {
+            throw new StatusCode\BadRequestException('Email must not be empty');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new StatusCode\BadRequestException('Invalid email format');
+        }
+    }
+
+    protected function assertPassword($password)
+    {
+        if (empty($password)) {
+            throw new StatusCode\BadRequestException('Password must not be empty');
+        }
+
+        $len     = strlen($password);
+        $alpha   = 0;
+        $numeric = 0;
+        $special = 0;
+
+        if ($len < 8) {
+            throw new StatusCode\BadRequestException('Password must have at least 8 characters');
+        }
+
+        for ($i = 0; $i < $len; $i++) {
+            $value = ord($password[$i]);
+            if ($value >= 0x21 && $value <= 0x7E) {
+                if ($value >= 0x30 && $value <= 0x39) {
+                    $numeric++;
+                } elseif ($value >= 0x41 && $value <= 0x5A) {
+                    $alpha++;
+                } elseif ($value >= 0x61 && $value <= 0x7A) {
+                    $alpha++;
+                } else {
+                    $special++;
+                }
+            } else {
+                throw new StatusCode\BadRequestException('Password must contain only ascii characters in the range of 0x21-0x7E');
+            }
+        }
+
+        if ($alpha === 0) {
+            throw new StatusCode\BadRequestException('Password must have at least one alphabetic character (a-z, A-Z)');
+        }
+
+        if ($numeric === 0) {
+            throw new StatusCode\BadRequestException('Password must have at least one numeric character (0-9)');
+        }
+
+        if ($special === 0) {
+            throw new StatusCode\BadRequestException('Password must have at least one special character i.e. (!#$%&*@_~)');
         }
     }
 }

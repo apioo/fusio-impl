@@ -91,8 +91,8 @@ trait Service
             $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token')
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token'),
+            $this->get('config')->get('fusio_project_key')
         );
     }
 
@@ -253,6 +253,22 @@ trait Service
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Schema'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
             $this->get('action_parser')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Consumer
+     */
+    public function getConsumer()
+    {
+        return new Impl\Service\Consumer(
+            $this->get('user_service'),
+            $this->get('app_service'),
+            $this->get('http_client'),
+            $this->get('config')->get('fusio_login_provider'),
+            $this->get('config')->get('fusio_project_key'),
+            $this->get('config')->get('fusio_expire_consumer'),
+            $this->get('config')->get('fusio_scopes_default')
         );
     }
 }

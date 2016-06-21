@@ -118,6 +118,7 @@ JSON;
         ), json_encode([
             'status' => 1,
             'name'   => 'bar',
+            'email'  => 'bar@bar.com',
             'scopes' => ['bar'],
         ]));
 
@@ -134,7 +135,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name')
+            ->select('id', 'status', 'name', 'email')
             ->from('fusio_user')
             ->where('id = 4')
             ->setFirstResult(0)
@@ -146,6 +147,7 @@ JSON;
         $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
+        $this->assertEquals('bar@bar.com', $row['email']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('userId', 'scopeId')

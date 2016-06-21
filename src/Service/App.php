@@ -27,7 +27,6 @@ use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\App\Scope as TableAppScope;
 use Fusio\Impl\Table\App\Token as TableAppToken;
 use Fusio\Impl\Table\Scope as TableScope;
-use Fusio\Impl\Table\User\Scope as TableUserScope;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -45,19 +44,38 @@ use PSX\Sql\Fields;
  */
 class App
 {
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
     protected $appTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Scope
+     */
     protected $scopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\App\Scope
+     */
     protected $appScopeTable;
-    protected $userScopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\App\Token
+     */
     protected $appTokenTable;
 
-    public function __construct(TableApp $appTable, TableScope $scopeTable, TableAppScope $appScopeTable, TableUserScope $userScopeTable, TableAppToken $appTokenTable)
+    /**
+     * @var string
+     */
+    protected $tokenSecret;
+
+    public function __construct(TableApp $appTable, TableScope $scopeTable, TableAppScope $appScopeTable, TableAppToken $appTokenTable, $tokenSecret)
     {
         $this->appTable       = $appTable;
         $this->scopeTable     = $scopeTable;
         $this->appScopeTable  = $appScopeTable;
-        $this->userScopeTable = $userScopeTable;
         $this->appTokenTable  = $appTokenTable;
+        $this->tokenSecret    = $tokenSecret;
     }
 
     public function getAll($startIndex = 0, $search = null)

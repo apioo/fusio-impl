@@ -69,6 +69,25 @@ class Scope extends TableAbstract
 
     public function getValidScopes($userId, array $scopes, array $exclude = array())
     {
+        $result = $this->getAvailableScopes($userId);
+        $data   = array();
+
+        foreach ($result as $scopeName) {
+            if (in_array($scopeName, $scopes)) {
+                // is the scope excluded
+                if (in_array($scopeName, $exclude)) {
+                    continue;
+                }
+
+                $data[] = $scopeName;
+            }
+        }
+
+        return $data;
+    }
+
+    public function getAvailableScopes($userId)
+    {
         $sql = '    SELECT scope.name
                       FROM fusio_user_scope userScope
                 INNER JOIN fusio_scope scope
@@ -80,14 +99,7 @@ class Scope extends TableAbstract
         $data   = array();
 
         foreach ($result as $availableScope) {
-            if (in_array($availableScope['name'], $scopes)) {
-                // is the scope excluded
-                if (in_array($availableScope['name'], $exclude)) {
-                    continue;
-                }
-
-                $data[] = $availableScope['name'];
-            }
+            $data[] = $availableScope['name'];
         }
 
         return $data;
