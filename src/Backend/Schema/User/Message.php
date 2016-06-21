@@ -37,7 +37,6 @@ class Message extends SchemaAbstract
         $sb = $this->getSchemaBuilder('message');
         $sb->boolean('success');
         $sb->string('message');
-        $sb->string('password');
 
         return $sb->getProperty();
     }
