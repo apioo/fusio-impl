@@ -32,6 +32,8 @@ use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
+use Fusio\Impl\Mail\Mailer;
+use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Parser;
 use Fusio\Impl\Processor;
 use Fusio\Impl\Response;
@@ -291,6 +293,16 @@ class Container extends DefaultContainer
         $this->appendConsoleCommands($application);
 
         return $application;
+    }
+
+    /**
+     * @return \Fusio\Impl\Mail\MailerInterface
+     */
+    public function getMailer()
+    {
+        return new Mailer(
+            $this->get('logger')
+        );
     }
 
     protected function appendConsoleCommands(Application $application)

@@ -29,6 +29,7 @@ use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\Connection as ConnectionService;
 use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Record\Record;
 use PSX\Schema\Property;
@@ -105,6 +106,14 @@ class Version030 implements VersionInterface
         $appCodeTable->addColumn('date', 'datetime');
         $appCodeTable->setPrimaryKey(array('id'));
         $appCodeTable->addUniqueIndex(array('code'));
+
+        $configTable = $schema->createTable('fusio_config');
+        $configTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $configTable->addColumn('type', 'integer', array('default' => 1));
+        $configTable->addColumn('name', 'string', array('length' => 64));
+        $configTable->addColumn('description', 'string', array('length' => 255));
+        $configTable->addColumn('value', 'string');
+        $configTable->setPrimaryKey(array('id'));
 
         $connectionTable = $schema->createTable('fusio_connection');
         $connectionTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -317,6 +326,13 @@ class Version030 implements VersionInterface
                 ['userId' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $backendAppKey, 'appSecret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
                 ['userId' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $consumerAppKey, 'appSecret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
             ],
+            'fusio_config' => [
+                ['name' => 'fusio_app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => '', 'value' => 0],
+                ['name' => 'fusio_app_consumer', 'type' => Table\Config::FORM_NUMBER, 'description' => '', 'value' => 16],
+                ['name' => 'fusio_scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => '', 'value' => 'authorization,consumer'],
+                ['name' => 'fusio_mail_register', 'type' => Table\Config::FORM_TEXT, 'description' => '', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . '{link}'],
+                ['name' => 'fusio_mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => '', 'value' => 'fusio@localhost.com'],
+            ],
             'fusio_connection' => [
                 ['name' => 'Native-Connection', 'class' => 'Fusio\Impl\Connection\Native', 'config' => null]
             ],
@@ -369,6 +385,8 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app',                         'controller' => 'Fusio\Impl\Backend\Api\App\Collection'],
                 ['status' => 1, 'methods' => 'DELETE',              'path' => '/backend/app/:app_id/token/:token_id', 'controller' => 'Fusio\Impl\Backend\Api\App\Token::doRemove'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app/:app_id',                 'controller' => 'Fusio\Impl\Backend\Api\App\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/config',                      'controller' => 'Fusio\Impl\Backend\Api\Config\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/config/:config_id',           'controller' => 'Fusio\Impl\Backend\Api\Config\Entity'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection',                  'controller' => 'Fusio\Impl\Backend\Api\Connection\Collection'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/form',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doDetail'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/list',             'controller' => 'Fusio\Impl\Backend\Api\Connection\ListConnections::doIndex'],
@@ -438,31 +456,32 @@ class Version030 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 6,  'allow' => 1, 'methods' => 'DELETE'],
                 ['scopeId' => 1, 'routeId' => 7,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 8,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 9,  'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 10, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 11, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 9,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 10,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 11,  'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 12, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 13, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 14, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 15, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 13, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 14, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 15, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 16, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 17, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 18, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 18, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 19, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 20, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 20, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 21, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 22, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 23, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 24, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 23, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 24, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 25, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 26, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 27, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 28, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 29, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 29, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'POST'],
 
-                ['scopeId' => 2, 'routeId' => 33, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 34, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -473,9 +492,10 @@ class Version030 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 41, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 42, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 43, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 44, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 44, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 46, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 45, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 47, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

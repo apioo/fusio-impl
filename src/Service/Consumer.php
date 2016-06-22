@@ -24,11 +24,13 @@ namespace Fusio\Impl\Service;
 use DateInterval;
 use DateTime;
 use Firebase\JWT\JWT;
+use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service\Consumer\Model\User as ModelUser;
 use Fusio\Impl\Service\Consumer\ProviderInterface;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User as TableUser;
+use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http;
 use PSX\Sql\Condition;
@@ -59,34 +61,22 @@ class Consumer
     protected $httpClient;
 
     /**
-     * @var array
+     * @var \Fusio\Impl\Mail\MailerInterface
      */
-    protected $providers;
+    protected $mailer;
 
     /**
-     * @var string
+     * @var \PSX\Framework\Config\Config
      */
-    protected $tokenSecret;
+    protected $config;
 
-    /**
-     * @var string
-     */
-    protected $expires;
-
-    /**
-     * @var string
-     */
-    protected $scopes;
-
-    public function __construct(User $user, App $app, Http\Client $httpClient, array $providers, $tokenSecret, $expires, $scopes)
+    public function __construct(User $user, App $app, Http\Client $httpClient, MailerInterface $mailer, Config $config)
     {
-        $this->user        = $user;
-        $this->app         = $app;
-        $this->httpClient  = $httpClient;
-        $this->providers   = $providers;
-        $this->tokenSecret = $tokenSecret;
-        $this->expires     = $expires;
-        $this->scopes      = $scopes;
+        $this->user       = $user;
+        $this->app        = $app;
+        $this->httpClient = $httpClient;
+        $this->mailer     = $mailer;
+        $this->config     = $config;
     }
 
     public function login($name, $password)
@@ -103,14 +93,19 @@ class Consumer
     {
         $scopes = $this->getDefaultScopes();
         $userId = $this->user->create(
-            TableUser::STATUS_CONSUMER,
+            TableUser::STATUS_DISABLED,
             $name,
             $email,
             $password,
             $scopes
         );
 
-        return $this->createToken($userId, $scopes);
+        // send activation mail
+    }
+
+    public function activate($token)
+    {
+        $payload = JWT::decode($token, $this->tokenSecret, ['HS256']);
     }
 
     public function provider($providerName, $code, $clientId, $redirectUri)
@@ -193,5 +188,21 @@ class Consumer
             // security issue
             return !empty($scope) && $scope != 'backend';
         });
+    }
+
+    protected function sendActivationMail($userId, $email)
+    {
+        $payload = [
+            'sub' => $userId,
+            'iat' => time(),
+        ];
+
+        $token = JWT::encode($payload, $this->tokenSecret);
+
+        $body = '';
+        
+        $this->mailer->send($email, [$email], $body);
+
+        
     }
 }

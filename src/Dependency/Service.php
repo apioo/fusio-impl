@@ -134,6 +134,16 @@ trait Service
     }
 
     /**
+     * @return \Fusio\Impl\Service\Config
+     */
+    public function getConfigService()
+    {
+        return new Impl\Service\Config(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Config')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Connection
      */
     public function getConnectionService()
@@ -265,10 +275,8 @@ trait Service
             $this->get('user_service'),
             $this->get('app_service'),
             $this->get('http_client'),
-            $this->get('config')->get('fusio_login_provider'),
-            $this->get('config')->get('fusio_project_key'),
-            $this->get('config')->get('fusio_expire_consumer'),
-            $this->get('config')->get('fusio_scopes_default')
+            $this->get('mailer'),
+            $this->get('config')
         );
     }
 }
