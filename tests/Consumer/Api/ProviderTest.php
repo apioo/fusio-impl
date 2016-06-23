@@ -80,7 +80,7 @@ class ProviderTest extends ControllerDbTestCase
         });
 
         Environment::getService('http_client')->setHandler($handler);
-        Environment::getService('config')->set('fusio_login_provider', ['facebook' => ['secret' => 'facebook']]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 7]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/facebook', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -91,51 +91,11 @@ class ProviderTest extends ControllerDbTestCase
             'redirectUri' => 'http://google.com',
         ]));
 
-        $body  = (string) $response->getBody();
-        $data  = json_decode($body);
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $body = (string) $response->getBody();
+        $data = json_decode($body);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals(6, $token->sub);
-        $this->assertNotEmpty($token->iat);
-        $this->assertNotEmpty($token->exp);
-        $this->assertNotEmpty($token->jti);
-
-        // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(1, $row['appId']);
-        $this->assertEquals(6, $row['userId']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->jti);
-        $this->assertEquals(Environment::getService('config')->get('fusio_scopes_default'), $row['scope']);
-        $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertNotEmpty($row['expire']);
-
-        // check new user
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('status', 'provider', 'remoteId', 'name', 'email', 'password')
-            ->from('fusio_user')
-            ->where('id = :id')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['userId']]);
-
-        $this->assertEquals(User::STATUS_CONSUMER, $row['status']);
-        $this->assertEquals(ProviderInterface::PROVIDER_FACEBOOK, $row['provider']);
-        $this->assertEquals('1', $row['remoteId']);
-        $this->assertEquals('octocat', $row['name']);
-        $this->assertEquals('octocat@github.com', $row['email']);
-        $this->assertEquals(null, $row['password']);
+        $this->assertToken($data->token, ProviderInterface::PROVIDER_FACEBOOK);
     }
 
     public function testPostGithub()
@@ -165,7 +125,7 @@ class ProviderTest extends ControllerDbTestCase
         });
 
         Environment::getService('http_client')->setHandler($handler);
-        Environment::getService('config')->set('fusio_login_provider', ['github' => ['secret' => 'github']]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 9]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -176,51 +136,11 @@ class ProviderTest extends ControllerDbTestCase
             'redirectUri' => 'http://google.com',
         ]));
 
-        $body  = (string) $response->getBody();
-        $data  = json_decode($body);
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $body = (string) $response->getBody();
+        $data = json_decode($body);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals(6, $token->sub);
-        $this->assertNotEmpty($token->iat);
-        $this->assertNotEmpty($token->exp);
-        $this->assertNotEmpty($token->jti);
-
-        // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(1, $row['appId']);
-        $this->assertEquals(6, $row['userId']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->jti);
-        $this->assertEquals(Environment::getService('config')->get('fusio_scopes_default'), $row['scope']);
-        $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertNotEmpty($row['expire']);
-
-        // check new user
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('status', 'provider', 'remoteId', 'name', 'email', 'password')
-            ->from('fusio_user')
-            ->where('id = :id')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['userId']]);
-
-        $this->assertEquals(User::STATUS_CONSUMER, $row['status']);
-        $this->assertEquals(ProviderInterface::PROVIDER_GITHUB, $row['provider']);
-        $this->assertEquals('1', $row['remoteId']);
-        $this->assertEquals('octocat', $row['name']);
-        $this->assertEquals('octocat@github.com', $row['email']);
-        $this->assertEquals(null, $row['password']);
+        $this->assertToken($data->token, ProviderInterface::PROVIDER_GITHUB);
     }
 
     public function testPostGoogle()
@@ -250,7 +170,7 @@ class ProviderTest extends ControllerDbTestCase
         });
 
         Environment::getService('http_client')->setHandler($handler);
-        Environment::getService('config')->set('fusio_login_provider', ['google' => ['secret' => 'google']]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 8]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/google', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -261,51 +181,11 @@ class ProviderTest extends ControllerDbTestCase
             'redirectUri' => 'http://google.com',
         ]));
 
-        $body  = (string) $response->getBody();
-        $data  = json_decode($body);
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $body = (string) $response->getBody();
+        $data = json_decode($body);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals(6, $token->sub);
-        $this->assertNotEmpty($token->iat);
-        $this->assertNotEmpty($token->exp);
-        $this->assertNotEmpty($token->jti);
-
-        // check database access token
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
-            ->from('fusio_app_token')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(1, $row['appId']);
-        $this->assertEquals(6, $row['userId']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->jti);
-        $this->assertEquals(Environment::getService('config')->get('fusio_scopes_default'), $row['scope']);
-        $this->assertEquals('127.0.0.1', $row['ip']);
-        $this->assertNotEmpty($row['expire']);
-
-        // check new user
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('status', 'provider', 'remoteId', 'name', 'email', 'password')
-            ->from('fusio_user')
-            ->where('id = :id')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['userId']]);
-
-        $this->assertEquals(User::STATUS_CONSUMER, $row['status']);
-        $this->assertEquals(ProviderInterface::PROVIDER_GOOGLE, $row['provider']);
-        $this->assertEquals('1', $row['remoteId']);
-        $this->assertEquals('octocat', $row['name']);
-        $this->assertEquals('octocat@github.com', $row['email']);
-        $this->assertEquals(null, $row['password']);
+        $this->assertToken($data->token, ProviderInterface::PROVIDER_GOOGLE);
     }
 
     public function testPut()
@@ -334,5 +214,51 @@ class ProviderTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
 
         $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+    
+    protected function assertToken($token, $provider)
+    {
+        $token = JWT::decode($token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+
+        $this->assertEquals(6, $token->sub);
+        $this->assertNotEmpty($token->iat);
+        $this->assertNotEmpty($token->exp);
+        $this->assertNotEmpty($token->jti);
+
+        // check database access token
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
+            ->from('fusio_app_token')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(1, $row['appId']);
+        $this->assertEquals(6, $row['userId']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertNotEmpty($row['token']);
+        $this->assertEquals($row['token'], $token->jti);
+        $this->assertEquals('authorization,consumer', $row['scope']);
+        $this->assertEquals('127.0.0.1', $row['ip']);
+        $this->assertNotEmpty($row['expire']);
+
+        // check new user
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('status', 'provider', 'remoteId', 'name', 'email', 'password')
+            ->from('fusio_user')
+            ->where('id = :id')
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['userId']]);
+
+        $this->assertEquals(User::STATUS_CONSUMER, $row['status']);
+        $this->assertEquals($provider, $row['provider']);
+        $this->assertEquals('1', $row['remoteId']);
+        $this->assertEquals('octocat', $row['name']);
+        $this->assertEquals('octocat@github.com', $row['email']);
+        $this->assertEquals(null, $row['password']);
     }
 }

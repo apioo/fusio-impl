@@ -269,11 +269,12 @@ trait Service
     /**
      * @return \Fusio\Impl\Service\Consumer
      */
-    public function getConsumer()
+    public function getConsumerService()
     {
         return new Impl\Service\Consumer(
             $this->get('user_service'),
             $this->get('app_service'),
+            $this->get('config_service'),
             $this->get('http_client'),
             $this->get('mailer'),
             $this->get('config')

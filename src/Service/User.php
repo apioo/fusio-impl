@@ -275,6 +275,20 @@ class User
         }
     }
 
+    public function changeStatus($userId, $status)
+    {
+        $user = $this->userTable->get($userId);
+
+        if (!empty($user)) {
+            $this->userTable->update(array(
+                'id'     => $user['id'],
+                'status' => $status,
+            ));
+        } else {
+            throw new StatusCode\NotFoundException('Could not find user');
+        }
+    }
+
     public function changePassword($userId, $appId, $oldPassword, $newPassword, $verifyPassword)
     {
         // we can only change the password through the backend app

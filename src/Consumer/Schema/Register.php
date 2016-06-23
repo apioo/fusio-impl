@@ -41,6 +41,7 @@ class Register extends SchemaAbstract
             ->setRequired(true);
         $sb->string('password')
             ->setRequired(true);
+        $sb->string('captcha');
 
         return $sb->getProperty();
     }

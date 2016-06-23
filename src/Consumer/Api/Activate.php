@@ -36,13 +36,13 @@ use PSX\Uri\Url;
 use PSX\Validate\Validate;
 
 /**
- * Register
+ * Activate
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Register extends SchemaApiAbstract
+class Activate extends SchemaApiAbstract
 {
     /**
      * @Inject
@@ -58,7 +58,7 @@ class Register extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Register'))
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Activate'))
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
         );
 
@@ -73,16 +73,13 @@ class Register extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $this->consumerService->register(
-            $record->name, 
-            $record->email, 
-            $record->password, 
-            $record->captcha
+        $this->consumerService->activate(
+            $record->token
         );
 
         return array(
             'success' => true,
-            'message' => 'Registration successful',
+            'message' => 'Activation successful',
         );
     }
 }

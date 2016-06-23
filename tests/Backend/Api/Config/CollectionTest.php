@@ -49,43 +49,78 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 10,
     "startIndex": 0,
     "entry": [
         {
-            "id": 5,
-            "type": 1,
-            "name": "fusio_mail_sender",
-            "description": "",
-            "value": "fusio@localhost.com"
-        },
-        {
-            "id": 4,
-            "type": 6,
-            "name": "fusio_mail_register",
-            "description": "",
-            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\n{link}"
-        },
-        {
-            "id": 3,
-            "type": 1,
-            "name": "fusio_scopes_default",
-            "description": "",
-            "value": "authorization,consumer"
+            "id": 1,
+            "type": 2,
+            "name": "app_approval",
+            "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
+            "value": "0"
         },
         {
             "id": 2,
             "type": 3,
-            "name": "fusio_app_consumer",
-            "description": "",
+            "name": "app_consumer",
+            "description": "The max amount of apps a consumer can register",
             "value": "16"
         },
         {
-            "id": 1,
-            "type": 2,
-            "name": "fusio_app_approval",
-            "description": "",
-            "value": "0"
+            "id": 5,
+            "type": 6,
+            "name": "mail_register_body",
+            "description": "Body of the activation mail",
+            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
+        },
+        {
+            "id": 4,
+            "type": 1,
+            "name": "mail_register_subject",
+            "description": "Subject of the activation mail",
+            "value": "Fusio registration"
+        },
+        {
+            "id": 6,
+            "type": 1,
+            "name": "mail_sender",
+            "description": "Email address which is used in the \"From\" header",
+            "value": ""
+        },
+        {
+            "id": 7,
+            "type": 6,
+            "name": "provider_facebook_secret",
+            "description": "Facebook app secret",
+            "value": ""
+        },
+        {
+            "id": 9,
+            "type": 6,
+            "name": "provider_github_secret",
+            "description": "GitHub app secret",
+            "value": ""
+        },
+        {
+            "id": 8,
+            "type": 6,
+            "name": "provider_google_secret",
+            "description": "Google app secret",
+            "value": ""
+        },
+        {
+            "id": 10,
+            "type": 6,
+            "name": "recaptcha_secret",
+            "description": "ReCaptcha secret",
+            "value": ""
+        },
+        {
+            "id": 3,
+            "type": 1,
+            "name": "scopes_default",
+            "description": "If a user registers through the consumer API he gets the following scopes assigned",
+            "value": "authorization,consumer"
         }
     ]
 }

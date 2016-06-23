@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Mail;
 
+use Fusio\Impl\Service\Config;
+use Psr\Log\LoggerInterface;
+
 /**
  * Mailer
  *
@@ -30,21 +33,45 @@ namespace Fusio\Impl\Mail;
  */
 class Mailer implements MailerInterface
 {
+    /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $config;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var \Swift_Mailer
+     */
     protected $mailer;
 
-    public function __construct()
+    public function __construct(Config $config, LoggerInterface $logger, \Swift_Transport $transport = null)
     {
-        $transport = \Swift_MailTransport::newInstance();
-
-        $this->mailer = \Swift_Mailer::newInstance($transport);
+        $this->config = $config;
+        $this->logger = $logger;
+        $this->mailer = \Swift_Mailer::newInstance($transport !== null ? $transport : \Swift_MailTransport::newInstance());
     }
 
     public function send($subject, array $to, $body)
     {
         $message = \Swift_Message::newInstance();
         $message->setSubject($subject);
+
+        $sender = $this->config->getValue('mail_sender');
+        if (!empty($sender)) {
+            $message->setFrom([$sender]);
+        }
+
         $message->setTo($to);
         $message->setBody($body);
+
+        $this->logger->info('Send registration mail', [
+            'subject' => $subject,
+            'body'    => $body,
+        ]);
 
         $this->mailer->send($message);
     }

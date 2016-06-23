@@ -89,6 +89,26 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/config",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/config\/:config_id",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/connection",
             "methods": [
                 "GET",
@@ -304,6 +324,16 @@ class IndexTest extends ControllerDbTestCase
         },
         {
             "path": "\/consumer\/provider\/:provider",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/consumer\/activate",
             "methods": [
                 "GET",
                 "POST",

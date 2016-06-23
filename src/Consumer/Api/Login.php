@@ -48,7 +48,7 @@ class Login extends SchemaApiAbstract
      * @Inject
      * @var \Fusio\Impl\Service\Consumer
      */
-    protected $consumer;
+    protected $consumerService;
 
     /**
      * @return \PSX\Api\Resource
@@ -73,7 +73,7 @@ class Login extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $token = $this->consumer->login($record->name, $record->password);
+        $token = $this->consumerService->login($record->name, $record->password);
 
         if (!empty($token)) {
             return [

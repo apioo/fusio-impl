@@ -38,6 +38,7 @@ class Config extends TableAbstract
     const FORM_DATETIME = 4;
     const FORM_EMAIL    = 5;
     const FORM_TEXT     = 6;
+    const FORM_SECRET   = 7;
 
     public function getName()
     {

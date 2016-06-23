@@ -114,6 +114,7 @@ class Version030 implements VersionInterface
         $configTable->addColumn('description', 'string', array('length' => 255));
         $configTable->addColumn('value', 'string');
         $configTable->setPrimaryKey(array('id'));
+        $configTable->addUniqueIndex(array('name'));
 
         $connectionTable = $schema->createTable('fusio_connection');
         $connectionTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -327,11 +328,16 @@ class Version030 implements VersionInterface
                 ['userId' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $consumerAppKey, 'appSecret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
             ],
             'fusio_config' => [
-                ['name' => 'fusio_app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => '', 'value' => 0],
-                ['name' => 'fusio_app_consumer', 'type' => Table\Config::FORM_NUMBER, 'description' => '', 'value' => 16],
-                ['name' => 'fusio_scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => '', 'value' => 'authorization,consumer'],
-                ['name' => 'fusio_mail_register', 'type' => Table\Config::FORM_TEXT, 'description' => '', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . '{link}'],
-                ['name' => 'fusio_mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => '', 'value' => 'fusio@localhost.com'],
+                ['name' => 'app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', 'value' => 0],
+                ['name' => 'app_consumer', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The max amount of apps a consumer can register', 'value' => 16],
+                ['name' => 'scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => 'If a user registers through the consumer API he gets the following scopes assigned', 'value' => 'authorization,consumer'],
+                ['name' => 'mail_register_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the activation mail', 'value' => 'Fusio registration'],
+                ['name' => 'mail_register_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the activation mail', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}'],
+                ['name' => 'mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => 'Email address which is used in the "From" header', 'value' => ''],
+                ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'Facebook app secret', 'value' => ''],
+                ['name' => 'provider_google_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'Google app secret', 'value' => ''],
+                ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'GitHub app secret', 'value' => ''],
+                ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'ReCaptcha secret', 'value' => ''],
             ],
             'fusio_connection' => [
                 ['name' => 'Native-Connection', 'class' => 'Fusio\Impl\Connection\Native', 'config' => null]
@@ -424,6 +430,7 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/login',                      'controller' => 'Fusio\Impl\Consumer\Api\Login'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/register',                   'controller' => 'Fusio\Impl\Consumer\Api\Register'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/provider/:provider',         'controller' => 'Fusio\Impl\Consumer\Api\Provider'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/activate',                   'controller' => 'Fusio\Impl\Consumer\Api\Activate'],
 
                 ['status' => 1, 'methods' => 'POST',                'path' => '/authorization/revoke',                'controller' => 'Fusio\Impl\Authorization\Revoke'],
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                 'controller' => 'Fusio\Impl\Authorization\Token'],
@@ -439,7 +446,7 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                    'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 52, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+                ['routeId' => 55, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -482,7 +489,6 @@ class Version030 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'POST'],
                 ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'POST'],
 
-                ['scopeId' => 2, 'routeId' => 34, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 37, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -493,9 +499,11 @@ class Version030 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 42, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 43, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 44, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 45, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 46, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 45, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 47, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 47, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 49, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

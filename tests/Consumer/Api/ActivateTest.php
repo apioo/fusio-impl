@@ -27,13 +27,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * RegisterTest
+ * ActivateTest
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RegisterTest extends ControllerDbTestCase
+class ActivateTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class RegisterTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -54,97 +54,113 @@ class RegisterTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
-            'name'     => 'baz',
-            'email'    => 'baz@localhost.com',
-            'password' => 'foobar!123',
-        ]));
+        Environment::getService('consumer_service')->register('baz', 'baz@localhost.com', 'test1234!', null);
 
-        $body  = (string) $response->getBody();
-        $data  = json_decode($body);
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals(true, $data->success);
-        $this->assertEquals('Registration successful', $data->message);
-
-        // check database user
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('provider', 'status', 'remoteId', 'name', 'email')
+            ->select('id', 'provider', 'status', 'remoteId', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
-
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
+        $this->assertEquals(6, $row['id']);
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals('', $row['remoteId']);
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
-    }
 
-    public function testPostInvalidEmail()
-    {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $payload = [
+            'sub' => 6,
+            'exp' => time() + (60 * 60),
+        ];
+
+        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'name'     => 'baz',
-            'email'    => 'baz',
-            'password' => 'foo!12',
+            'token' => $token,
         ]));
 
         $body = (string) $response->getBody();
-        $data = json_decode($body, true);
+        $data = json_decode($body);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Invalid email format', substr($data['message'], 0, 20), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals(true, $data->success);
+        $this->assertEquals('Activation successful', $data->message);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('provider', 'status', 'remoteId', 'name', 'email')
+            ->from('fusio_user')
+            ->where('id = :id')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 6]);
+
+        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(0, $row['status']);
+        $this->assertEquals('', $row['remoteId']);
+        $this->assertEquals('baz', $row['name']);
+        $this->assertEquals('baz@localhost.com', $row['email']);
     }
 
-    public function testPostInvalidPasswordLength()
+    public function testPostExpiredToken()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $payload = [
+            'sub' => 6,
+            'exp' => time() - 60,
+        ];
+
+        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'name'     => 'baz',
-            'email'    => 'baz@bar.com',
-            'password' => 'foo!12',
+            'token' => $token,
         ]));
 
         $body = (string) $response->getBody();
-        $data = json_decode($body, true);
+        $data = json_decode($body);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must have at least 8 characters', substr($data['message'], 0, 40), $body);
+        $this->assertEquals(500, $response->getStatusCode(), $body);
+        $this->assertEquals(false, $data->success);
+        $this->assertEquals('Expired token', substr($data->message, 0, 13));
     }
 
-    public function testPostInvalidPasswordComplexity()
+    public function testPostInvalidUserId()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $payload = [
+            'sub' => 16,
+            'exp' => time() + 60,
+        ];
+
+        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'name'     => 'baz',
-            'email'    => 'baz@bar.com',
-            'password' => 'foobarfoobar',
+            'token' => $token,
         ]));
 
         $body = (string) $response->getBody();
-        $data = json_decode($body, true);
+        $data = json_decode($body);
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must have at least one numeric character (0-9)', substr($data['message'], 0, 55), $body);
+        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(false, $data->success);
+        $this->assertEquals('Could not find user', substr($data->message, 0, 19));
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -158,7 +174,7 @@ class RegisterTest extends ControllerDbTestCase
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

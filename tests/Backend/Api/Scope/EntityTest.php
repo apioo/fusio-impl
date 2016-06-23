@@ -54,12 +54,12 @@ class EntityTest extends ControllerDbTestCase
     "description": "Bar access",
     "routes": [
         {
-            "routeId": 53,
+            "routeId": 56,
             "allow": true,
             "methods": "GET|POST|PUT|DELETE"
         },
         {
-            "routeId": 52,
+            "routeId": 55,
             "allow": true,
             "methods": "GET|POST|PUT|DELETE"
         }

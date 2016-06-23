@@ -300,8 +300,16 @@ class Container extends DefaultContainer
      */
     public function getMailer()
     {
+        if ($this->get('config')->get('psx_debug') === false) {
+            $transport = \Swift_MailTransport::newInstance();
+        } else {
+            $transport = \Swift_NullTransport::newInstance();
+        }
+
         return new Mailer(
-            $this->get('logger')
+            $this->get('config_service'),
+            $this->get('logger'),
+            $transport
         );
     }
 

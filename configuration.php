@@ -2,26 +2,6 @@
 
 return array(
 
-    // If a user registers through the consumer API he gets the following scopes
-    // assigned. You must add your own scopes so that a client can access
-    // protected parts of the API
-    'fusio_scopes_default'    => 'authorization,consumer',
-
-    // The max amount of apps a consumer can register
-    'fusio_app_per_consumer'  => 16,
-
-    // If true the status of a new app is PENDING so that an administrator has 
-    // to manually activate the app. If false the app is direct ACTIVE
-    'fusio_app_approval'      => false,
-
-    // To allow logins from different providers you have to provide the app
-    // secret for each supported provider
-    'fusio_login_provider'    => [
-        'facebook' => ['secret' => ''],
-        'google'   => ['secret' => ''],
-        'github'   => ['secret' => ''],
-    ],
-
     // Whether the implicit flow is allowed. This is mostly needed for 
     // javascript apps
     'fusio_grant_implicit'    => true,

@@ -52,8 +52,8 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 3,
     "type": 1,
-    "name": "fusio_scopes_default",
-    "description": "",
+    "name": "scopes_default",
+    "description": "If a user registers through the consumer API he gets the following scopes assigned",
     "value": "authorization,consumer"
 }
 JSON;
@@ -107,8 +107,8 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['type']);
-        $this->assertEquals('fusio_scopes_default', $row['name']);
-        $this->assertEquals('', $row['description']);
+        $this->assertEquals('scopes_default', $row['name']);
+        $this->assertEquals('If a user registers through the consumer API he gets the following scopes assigned', $row['description']);
         $this->assertEquals('foo,bar', $row['value']);
     }
 

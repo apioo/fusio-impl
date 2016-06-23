@@ -19,39 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Consumer;
+namespace Fusio\Impl\Consumer\Schema;
 
-use PSX\Http\Client;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * ProviderAbstract
+ * Activate
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class ProviderAbstract implements ProviderInterface
+class Activate extends SchemaAbstract
 {
-    /**
-     * @var \PSX\Http\Client
-     */
-    protected $httpClient;
-
-    /**
-     * @var string
-     */
-    protected $secret;
-
-    /**
-     * @var string
-     */
-    protected $ua = 'Fusio-Consumer (http://www.fusio-project.org/)';
-
-    public function __construct(Client $httpClient, $secret)
+    public function getDefinition()
     {
-        $this->httpClient = $httpClient;
-        $this->secret     = $secret;
-    }
+        $sb = $this->getSchemaBuilder('activate');
+        $sb->string('token')
+            ->setRequired(true);
 
-    abstract public function requestUser($code, $clientId, $redirectUri);
+        return $sb->getProperty();
+    }
 }

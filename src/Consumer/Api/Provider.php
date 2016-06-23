@@ -48,7 +48,7 @@ class Provider extends SchemaApiAbstract
      * @Inject
      * @var \Fusio\Impl\Service\Consumer
      */
-    protected $consumer;
+    protected $consumerService;
 
     /**
      * @return \PSX\Api\Resource
@@ -78,7 +78,7 @@ class Provider extends SchemaApiAbstract
         $clientId    = $record->clientId;
         $redirectUri = $record->redirectUri;
 
-        $token = $this->consumer->provider($provider, $code, $clientId, $redirectUri);
+        $token = $this->consumerService->provider($provider, $code, $clientId, $redirectUri);
 
         if (!empty($token)) {
             return [

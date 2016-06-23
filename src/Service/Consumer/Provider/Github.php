@@ -43,10 +43,9 @@ class Github extends ProviderAbstract
         return self::PROVIDER_GITHUB;
     }
 
-    public function requestUser($code, $clientId, $redirectUri, array $config)
+    public function requestUser($code, $clientId, $redirectUri)
     {
-        $clientSecret = isset($config['secret']) ? $config['secret'] : null;
-        $accessToken  = $this->getAccessToken($code, $clientId, $clientSecret, $redirectUri);
+        $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
 
         if (!empty($accessToken)) {
             $url      = new Url('https://api.github.com/user');

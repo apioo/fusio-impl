@@ -63,8 +63,8 @@ class Config
             $this->configTable->getAll(
                 $startIndex,
                 16,
-                'id',
-                Sql::SORT_DESC,
+                'name',
+                Sql::SORT_ASC,
                 $condition
             )
         );

@@ -64,9 +64,11 @@ class LoginTest extends ControllerDbTestCase
 
         $body  = (string) $response->getBody();
         $data  = json_decode($body);
-        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+
         $this->assertEquals(2, $token->sub);
         $this->assertNotEmpty($token->iat);
         $this->assertNotEmpty($token->exp);
