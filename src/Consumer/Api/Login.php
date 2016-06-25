@@ -73,14 +73,14 @@ class Login extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $token = $this->consumerService->login($record->name, $record->password);
+        $token = $this->consumerService->login($record->username, $record->password);
 
         if (!empty($token)) {
             return [
                 'token' => $token,
             ];
         } else {
-            throw new StatusCode\UnauthorizedException('Invalid name or password', 'Basic');
+            throw new StatusCode\BadRequestException('Invalid name or password');
         }
     }
 }

@@ -58,7 +58,7 @@ class LoginTest extends ControllerDbTestCase
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'name'     => 'Consumer',
+            'username' => 'Consumer',
             'password' => 'qf2vX10Ec3wFZHx0K1eL',
         ]));
 
@@ -101,14 +101,14 @@ class LoginTest extends ControllerDbTestCase
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'name'     => 'Consumer',
+            'username' => 'Consumer',
             'password' => 'foo',
         ]));
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(401, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals('Invalid name or password', substr($data['message'], 0, 24), $body);
     }
 

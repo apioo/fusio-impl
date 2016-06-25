@@ -89,28 +89,28 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 7,
-            "type": 6,
+            "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
             "value": ""
         },
         {
             "id": 9,
-            "type": 6,
+            "type": 1,
             "name": "provider_github_secret",
             "description": "GitHub app secret",
             "value": ""
         },
         {
             "id": 8,
-            "type": 6,
+            "type": 1,
             "name": "provider_google_secret",
             "description": "Google app secret",
             "value": ""
         },
         {
             "id": 10,
-            "type": 6,
+            "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
             "value": ""

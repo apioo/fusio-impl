@@ -35,7 +35,7 @@ class Login extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('user');
-        $sb->string('name');
+        $sb->string('username');
         $sb->string('password');
 
         return $sb->getProperty();

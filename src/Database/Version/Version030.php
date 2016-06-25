@@ -334,10 +334,10 @@ class Version030 implements VersionInterface
                 ['name' => 'mail_register_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the activation mail', 'value' => 'Fusio registration'],
                 ['name' => 'mail_register_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the activation mail', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}'],
                 ['name' => 'mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => 'Email address which is used in the "From" header', 'value' => ''],
-                ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'Facebook app secret', 'value' => ''],
-                ['name' => 'provider_google_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'Google app secret', 'value' => ''],
-                ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'GitHub app secret', 'value' => ''],
-                ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_TEXT, 'description' => 'ReCaptcha secret', 'value' => ''],
+                ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Facebook app secret', 'value' => ''],
+                ['name' => 'provider_google_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Google app secret', 'value' => ''],
+                ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'GitHub app secret', 'value' => ''],
+                ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
             ],
             'fusio_connection' => [
                 ['name' => 'Native-Connection', 'class' => 'Fusio\Impl\Connection\Native', 'config' => null]
