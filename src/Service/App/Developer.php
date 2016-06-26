@@ -96,6 +96,10 @@ class Developer
 
     public function create($userId, $name, $url, array $scopes = null)
     {
+        // validate data
+        $this->assertName($name);
+        $this->assertUrl($url);
+
         // check limit of apps which an user can create
         $condition = new Condition();
         $condition->equals('userId', $userId);
@@ -128,6 +132,10 @@ class Developer
             if ($app['userId'] != $userId) {
                 throw new StatusCode\BadRequestException('App does not belong to the user');
             }
+
+            // validate data
+            $this->assertName($name);
+            $this->assertUrl($url);
 
             $scopes = $this->getValidUserScopes($userId, $scopes);
             if (empty($scopes)) {
@@ -188,5 +196,21 @@ class Developer
         return array_map(function($scope){
             return $scope['name'];
         }, $scopes);
+    }
+    
+    protected function assertName($name)
+    {
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Invalid name');
+        }
+    }
+    
+    protected function assertUrl($url)
+    {
+        if (!empty($url)) {
+            if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                throw new StatusCode\BadRequestException('Invalid url format');
+            }
+        }
     }
 }
