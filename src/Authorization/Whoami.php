@@ -35,22 +35,14 @@ class Whoami extends ApiAbstract
 {
     use ProtectionTrait;
 
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\User
+     */
+    protected $userService;
+
     public function onGet()
     {
-        $sql = 'SELECT id,
-				       status,
-				       name
-				  FROM fusio_user
-				 WHERE id = :id';
-
-        $user = $this->connection->fetchAssoc($sql, array(
-            'id' => $this->userId
-        ));
-
-        if (!empty($user)) {
-            $this->setBody($user);
-        } else {
-            throw new StatusCode\UnauthorizedException('Not authenticated', 'Bearer');
-        }
+        $this->setBody($this->userService->get($this->userId));
     }
 }

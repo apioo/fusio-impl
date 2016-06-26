@@ -108,7 +108,7 @@ class User
 
     public function get($userId)
     {
-        $user = $this->userTable->get($userId);
+        $user = $this->userTable->get($userId, Fields::blacklist(['password']));
 
         if (!empty($user)) {
             return $user;
