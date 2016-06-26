@@ -220,10 +220,10 @@ class ProviderTest extends ControllerDbTestCase
     {
         $token = JWT::decode($token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
 
-        $this->assertEquals(6, $token->sub);
+        $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
         $this->assertNotEmpty($token->exp);
-        $this->assertNotEmpty($token->jti);
+        $this->assertEquals('octocat', $token->name);
 
         // check database access token
         $sql = Environment::getService('connection')->createQueryBuilder()
@@ -240,7 +240,7 @@ class ProviderTest extends ControllerDbTestCase
         $this->assertEquals(6, $row['userId']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->jti);
+        $this->assertEquals($row['token'], $token->sub);
         $this->assertEquals('authorization,consumer', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);

@@ -51,7 +51,7 @@ class Collection extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Sql\TableManager
+     * @var \Fusio\Impl\Service\App\Grant
      */
     protected $appGrantService;
 

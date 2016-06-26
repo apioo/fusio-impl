@@ -171,11 +171,13 @@ class Consumer
             new DateInterval($this->psxConfig->get('fusio_expire_consumer'))
         );
 
+        $user = $this->user->get($userId);
+
         $payload = [
-            'sub' => $userId,
-            'iat' => time(),
-            'exp' => $token->getExpiresIn(),
-            'jti' => $token->getAccessToken(),
+            'sub'  => $token->getAccessToken(),
+            'iat'  => time(),
+            'exp'  => $token->getExpiresIn(),
+            'name' => $user['name']
         ];
 
         return JWT::encode($payload, $this->psxConfig->get('fusio_project_key'));

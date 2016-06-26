@@ -53,12 +53,7 @@ class Grant
 
     public function getAll($userId)
     {
-        return new ResultSet(
-            null,
-            null,
-            null,
-            CurveArray::nest($this->appTable->getAuthorizedApps($userId))
-        );
+        return $this->appTable->getAuthorizedApps($userId);
     }
 
     public function delete($userId, $grantId)

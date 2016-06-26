@@ -98,7 +98,6 @@ JSON;
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'status' => 2,
-            'userId' => 2,
             'name'   => 'Bar',
             'url'    => 'http://microsoft.com',
             'scopes' => ['foo', 'bar']

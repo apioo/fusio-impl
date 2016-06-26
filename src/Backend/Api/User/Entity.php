@@ -82,7 +82,7 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->userService->get(
+        return $this->userService->getDetail(
             (int) $this->getUriFragment('user_id')
         );
     }

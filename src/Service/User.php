@@ -97,14 +97,20 @@ class User
         );
     }
 
+    public function getDetail($userId)
+    {
+        $user = $this->get($userId);
+        $user['scopes'] = $this->userTable->getScopeNames($user['id']);
+        $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'parameters', 'appSecret']));
+
+        return $user;
+    }
+
     public function get($userId)
     {
         $user = $this->userTable->get($userId);
 
         if (!empty($user)) {
-            $user['scopes'] = $this->userTable->getScopeNames($user['id']);
-            $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'parameters', 'appSecret']));
-
             return $user;
         } else {
             throw new StatusCode\NotFoundException('Could not find user');

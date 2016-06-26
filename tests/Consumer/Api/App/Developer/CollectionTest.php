@@ -58,7 +58,6 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 2,
-            "userId": 1,
             "status": 1,
             "name": "Consumer",
             "appKey": "[app_key]",
@@ -66,7 +65,6 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 1,
-            "userId": 1,
             "status": 1,
             "name": "Backend",
             "appKey": "[app_key]",
@@ -87,7 +85,6 @@ JSON;
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'status' => 3, // status and userID are ignored so it doesnt matter
-            'userId' => 2, // if they are available
             'name'   => 'Foo',
             'url'    => 'http://google.com',
             'scopes' => ['foo', 'bar']

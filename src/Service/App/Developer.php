@@ -61,6 +61,7 @@ class Developer
         $condition = new Condition();
         $condition->equals('userId', $userId);
         $condition->equals('status', TableApp::STATUS_ACTIVE);
+
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
         }

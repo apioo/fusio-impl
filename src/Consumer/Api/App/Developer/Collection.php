@@ -66,11 +66,11 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\App\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Collection'))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\App\Create'))
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Create'))
             ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
         );
 

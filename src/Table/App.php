@@ -63,10 +63,10 @@ class App extends TableAbstract
     public function getAuthorizedApps($userId)
     {
         $sql = '    SELECT userGrant.id,
-                           userGrant.date AS createDate,
-                           userGrant.appId AS app_id,
-                           app.name AS app_name,
-                           app.url AS app_url
+                           userGrant.date,
+                           userGrant.appId AS appId,
+                           app.name AS appName,
+                           app.url AS appUrl
                       FROM fusio_user_grant userGrant
                 INNER JOIN fusio_app app
                         ON userGrant.appId = app.id
@@ -74,10 +74,19 @@ class App extends TableAbstract
                        AND userGrant.userId = :userId
                        AND app.status = :status';
 
-        return $this->connection->fetchAll($sql, [
-            'userId' => $userId,
-            'status' => self::STATUS_ACTIVE
-        ]);
+        $definition = [
+            'entry' => $this->doCollection($sql, ['userId' => $userId, 'status' => self::STATUS_ACTIVE], [
+                'id' => 'id',
+                'createDate' => 'date',
+                'app' => [
+                    'id' => 'appId',
+                    'name' => 'appName',
+                    'url' => 'appUrl',
+                ],
+            ]),
+        ];
+
+        return $this->build($definition);
     }
 
     public function getByAppKeyAndSecret($appKey, $appSecret)

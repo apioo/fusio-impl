@@ -66,7 +66,7 @@ class Entity extends SchemaApiAbstract
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\App\Update'))
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Update'))
             ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
         );
 
