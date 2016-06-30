@@ -77,7 +77,7 @@ class EntityTest extends ControllerDbTestCase
     ],
     "indexes": [
         {
-            "name": "primary",
+            "name": "PRIMARY",
             "columns": [
                 "id"
             ],

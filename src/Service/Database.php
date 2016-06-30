@@ -201,7 +201,7 @@ class Database
 
         foreach ($indexes as $index) {
             $result[] = [
-                'name'    => $index->getName(),
+                'name'    => strtoupper($index->getName()),
                 'columns' => $index->getColumns(),
                 'primary' => $index->isPrimary(),
                 'unique'  => $index->isUnique(),
