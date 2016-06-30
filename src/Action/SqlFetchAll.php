@@ -85,7 +85,7 @@ class SqlFetchAll implements ActionInterface
             $key    = $configuration->get('propertyName') ?: 'entry';
 
             return $this->response->build(200, [], [
-                $key => CurveArray::nest($result),
+                $key => $result,
             ]);
         } else {
             throw new ConfigurationException('Given connection must be a DBAL connection');

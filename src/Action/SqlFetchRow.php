@@ -88,7 +88,7 @@ class SqlFetchRow implements ActionInterface
                 throw new StatusCode\NotFoundException('Entry not available');
             }
 
-            return $this->response->build(200, [], CurveArray::nest($result));
+            return $this->response->build(200, [], $result);
         } else {
             throw new ConfigurationException('Given connection must be an DBAL connection');
         }

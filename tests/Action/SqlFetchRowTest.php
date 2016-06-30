@@ -54,16 +54,10 @@ class SqlFetchRowTest extends DbTestCase
 
         $response = $action->handle($this->getRequest('GET', ['news_id' => 2]), $parameters, $this->getContext());
 
-        $body = new \stdClass();
-        $body->id = 2;
-        $body->title = 'bar';
-        $body->content = 'foo';
-        $body->date = '2015-02-27 19:59:15';
-
         $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
-        $this->assertEquals($body, $response->getBody());
+        $this->assertEquals(['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'], $response->getBody());
     }
 
     public function testGetForm()

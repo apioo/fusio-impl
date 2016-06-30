@@ -57,13 +57,13 @@ class SqlFetchAllTest extends DbTestCase
 
         $result = [];
 
-        $result[] = (object) [
+        $result[] = [
             'id' => 2,
             'title' => 'bar',
             'content' => 'foo',
             'date' => '2015-02-27 19:59:15',
         ];
-        $result[] = (object) [
+        $result[] = [
             'id' => 1,
             'title' => 'foo',
             'content' => 'bar',

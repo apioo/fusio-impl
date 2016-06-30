@@ -69,16 +69,10 @@ class ConditionTest extends DbTestCase
 
         $response = $action->handle($this->getRequest('POST', ['news_id' => 1], ['count' => 4], [], $body), $parameters, $this->getContext());
 
-        $body = new \stdClass();
-        $body->id = 1;
-        $body->title = 'foo';
-        $body->content = 'bar';
-        $body->date = '2015-02-27 19:59:15';
-
         $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
-        $this->assertEquals($body, $response->getBody());
+        $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
     }
 
     public function testGetForm()
