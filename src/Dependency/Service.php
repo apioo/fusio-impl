@@ -156,6 +156,16 @@ trait Service
     }
 
     /**
+     * @return \Fusio\Impl\Service\Database
+     */
+    public function getDatabaseService()
+    {
+        return new Impl\Service\Database(
+            $this->get('connector')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Dashboard
      */
     public function getDashboardService()

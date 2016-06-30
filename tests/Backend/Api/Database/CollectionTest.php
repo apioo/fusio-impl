@@ -19,8 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Scope;
+namespace Fusio\Impl\Tests\Backend\Api\Database;
 
+use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -41,7 +42,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -49,33 +50,75 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
-    "startIndex": 0,
     "entry": [
         {
-            "id": 5,
-            "name": "bar",
-            "description": "Bar access"
+            "name": "app_news"
         },
         {
-            "id": 4,
-            "name": "foo",
-            "description": "Foo access"
+            "name": "fusio_action"
         },
         {
-            "id": 3,
-            "name": "authorization",
-            "description": "Authorization API endpoint"
+            "name": "fusio_action_class"
         },
         {
-            "id": 2,
-            "name": "consumer",
-            "description": "Consumer API endpoint"
+            "name": "fusio_app"
         },
         {
-            "id": 1,
-            "name": "backend",
-            "description": "Access to the backend API"
+            "name": "fusio_app_code"
+        },
+        {
+            "name": "fusio_app_scope"
+        },
+        {
+            "name": "fusio_app_token"
+        },
+        {
+            "name": "fusio_config"
+        },
+        {
+            "name": "fusio_connection"
+        },
+        {
+            "name": "fusio_connection_class"
+        },
+        {
+            "name": "fusio_log"
+        },
+        {
+            "name": "fusio_log_error"
+        },
+        {
+            "name": "fusio_meta"
+        },
+        {
+            "name": "fusio_routes"
+        },
+        {
+            "name": "fusio_routes_action"
+        },
+        {
+            "name": "fusio_routes_method"
+        },
+        {
+            "name": "fusio_routes_schema"
+        },
+        {
+            "name": "fusio_schema"
+        },
+        {
+            "name": "fusio_scope"
+        },
+        {
+            "name": "fusio_scope_routes"
+        },
+        {
+            "name": "fusio_user"
+        },
+        {
+            "name": "fusio_user_grant"
+        },
+        {
+            "name": "fusio_user_scope"
         }
     ]
 }
@@ -87,28 +130,25 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'test',
-            'description' => 'Test description',
-            'routes' => [[
-                'routeId' => 1,
-                'allow'   => 1,
-                'methods' => 'GET|POST|PUT|DELETE',
-            ], [
-                'routeId' => 2,
-                'allow'   => 1,
-                'methods' => 'GET|POST|PUT|DELETE',
-            ]]
+            'name'   => 'foo_table',
+            'columns'  => [[
+                'name' => 'id',
+                'type' => 'integer',
+            ],[
+                'name' => 'name',
+                'type' => 'string',
+            ]],
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Scope successful created"
+    "message": "Table successful created"
 }
 JSON;
 
@@ -116,47 +156,20 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description')
-            ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
+        /** @var Schema $schema */
+        $schema = Environment::getService('connection')->getSchemaManager()->createSchema();
+        $table  = $schema->getTable('foo_table');
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(6, $row['id']);
-        $this->assertEquals('test', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'scopeId', 'routeId', 'allow', 'methods')
-            ->from('fusio_scope_routes')
-            ->where('scopeId = :scopeId')
-            ->orderBy('id', 'DESC')
-            ->getSQL();
-
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scopeId' => 6]);
-
-        $this->assertEquals([[
-            'id'      => 53,
-            'scopeId' => 6,
-            'routeId' => 2,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
-        ], [
-            'id'      => 52,
-            'scopeId' => 6,
-            'routeId' => 1,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
-        ]], $routes);
+        $this->assertEquals(2, count($table->getColumns()));
+        $this->assertEquals('id', $table->getColumn('id')->getName());
+        $this->assertEquals('integer', $table->getColumn('id')->getType()->getName());
+        $this->assertEquals('name', $table->getColumn('name')->getName());
+        $this->assertEquals('string', $table->getColumn('name')->getType()->getName());
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -170,7 +183,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
