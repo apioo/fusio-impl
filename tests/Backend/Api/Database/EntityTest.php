@@ -168,7 +168,19 @@ JSON;
      */
     public function testDelete()
     {
-        Environment::getService('connection')->executeUpdate('CREATE TABLE foo (id INTEGER, name VARCHAR)');
+        /** @var Schema $toSchema */
+        $connection = Environment::getService('connection');
+        $toSchema = $connection->getSchemaManager()->createSchema();
+        $table = $toSchema->createTable('foo');
+        $table->addColumn('id', 'integer');
+        $table->addColumn('name', 'string');
+
+        /** @var Schema $fromSchema */
+        $fromSchema = $connection->getSchemaManager()->createSchema();
+        $queries = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+        foreach ($queries as $query) {
+            $connection->query($query);
+        }
 
         $response = $this->sendRequest('http://127.0.0.1/backend/database/1/foo', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',

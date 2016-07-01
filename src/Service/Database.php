@@ -166,10 +166,14 @@ class Database
             $table->addColumn($column['name'], $column['type'], $options);
         }
 
-        $table->setPrimaryKey($primaryKeys);
+        if (!empty($primaryKeys)) {
+            $table->setPrimaryKey($primaryKeys);
+        }
 
-        foreach ($uniqueKeys as $uniqueKey) {
-            $table->addUniqueIndex($uniqueKey);
+        if (!empty($uniqueKeys)) {
+            foreach ($uniqueKeys as $uniqueKey) {
+                $table->addUniqueIndex($uniqueKey);
+            }
         }
 
         return $table;
