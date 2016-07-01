@@ -112,26 +112,32 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'app_news',
-            'columns'  => [[
-                'name' => 'id',
-                'type' => 'integer',
-                'null' => false,
+            'name'    => 'app_news',
+            'columns' => [[
+                'name'   => 'id',
+                'type'   => 'integer',
+                'null'   => false,
             ],[
-                'name' => 'title',
-                'type' => 'string',
+                'name'   => 'title',
+                'type'   => 'string',
                 'length' => 64,
-                'null' => false,
+                'null'   => false,
             ],[
-                'name' => 'content',
-                'type' => 'string',
+                'name'   => 'content',
+                'type'   => 'string',
                 'length' => 240,
-                'null' => false,
+                'null'   => false,
             ],[
-                'name' => 'date',
-                'type' => 'datetime',
-                'null' => false,
+                'name'   => 'date',
+                'type'   => 'datetime',
+                'null'   => false,
             ]],
+            'indexes' => [[
+                'name'    => 'PRIMARY',
+                'columns' => ['id'],
+                'primary' => true,
+                'unique'  => true,
+            ]]
         ]));
 
         $body   = (string) $response->getBody();

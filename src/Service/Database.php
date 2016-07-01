@@ -110,7 +110,7 @@ class Database
         }
     }
 
-    public function update($connectionId, $tableName, $columns, $primaryKeys, $uniqueKeys)
+    public function update($connectionId, $tableName, $columns, $indexes, $uniqueKeys)
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
@@ -118,7 +118,7 @@ class Database
             $schema->dropTable($tableName);
 
             $table = $schema->createTable($tableName);
-            $this->createTable($table, $columns, $primaryKeys, $uniqueKeys);
+            $this->createTable($table, $columns, $indexes, $uniqueKeys);
 
             // execute queries
             $fromSchema = $connection->getSchemaManager()->createSchema();
@@ -151,7 +151,7 @@ class Database
         }
     }
 
-    protected function createTable(Table $table, $columns, $primaryKeys, $uniqueKeys)
+    protected function createTable(Table $table, $columns, $indexes, $foreignKeys)
     {
         $fields = ['notnull', 'default', 'autoincrement', 'length', 'fixed', 'precision', 'scale'];
 
@@ -166,13 +166,27 @@ class Database
             $table->addColumn($column['name'], $column['type'], $options);
         }
 
-        if (!empty($primaryKeys)) {
-            $table->setPrimaryKey($primaryKeys);
+        if (!empty($indexes)) {
+            foreach ($indexes as $index) {
+                if ($index['primary'] && $index['unique']) {
+                    $table->setPrimaryKey($index['columns']);
+                } elseif (!$index['primary'] && $index['unique']) {
+                    $table->addUniqueIndex($index['columns']);
+                } elseif (!$index['primary'] && !$index['unique']) {
+                    $table->addIndex($index['columns']);
+                }
+            }
         }
 
-        if (!empty($uniqueKeys)) {
-            foreach ($uniqueKeys as $uniqueKey) {
-                $table->addUniqueIndex($uniqueKey);
+        if (!empty($foreignKeys)) {
+            foreach ($foreignKeys as $foreignKey) {
+                $table->addForeignKeyConstraint(
+                    $foreignKey['foreignTable'],
+                    $foreignKey['columns'],
+                    $foreignKey['foreignColumns'],
+                    [],
+                    $foreignKey['name']
+                );
             }
         }
 
