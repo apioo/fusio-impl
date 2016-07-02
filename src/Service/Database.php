@@ -56,6 +56,11 @@ class Database
             $result     = [];
 
             foreach ($tableNames as $tableName) {
+                // skip fusio tables
+                if (strpos($tableName, 'fusio_') === 0) {
+                    continue;
+                }
+
                 $result[] = [
                     'name' => $tableName,
                 ];
@@ -76,6 +81,11 @@ class Database
             $tableNames = $connection->getSchemaManager()->listTableNames();
             
             if (in_array($tableName, $tableNames)) {
+                // skip fusio tables
+                if (strpos($tableName, 'fusio_') === 0) {
+                    throw new StatusCode\BadRequestException('Invalid table');
+                }
+
                 return [
                     'name'        => $tableName,
                     'columns'     => $this->getColumns($connection, $tableName),
@@ -94,6 +104,11 @@ class Database
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
+            // skip fusio tables
+            if (strpos($tableName, 'fusio_') === 0) {
+                throw new StatusCode\BadRequestException('Invalid table');
+            }
+
             $schema = $connection->getSchemaManager()->createSchema();
 
             $table = $schema->createTable($tableName);
@@ -115,6 +130,11 @@ class Database
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
+            // skip fusio tables
+            if (strpos($tableName, 'fusio_') === 0) {
+                throw new StatusCode\BadRequestException('Invalid table');
+            }
+
             $schema = $connection->getSchemaManager()->createSchema();
             $table  = $schema->createTable($tableName);
 
@@ -130,6 +150,11 @@ class Database
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
+            // skip fusio tables
+            if (strpos($tableName, 'fusio_') === 0) {
+                throw new StatusCode\BadRequestException('Invalid table');
+            }
+
             $schema = $connection->getSchemaManager()->createSchema();
             $table  = $schema->getTable($tableName);
 
@@ -145,6 +170,11 @@ class Database
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
+            // skip fusio tables
+            if (strpos($tableName, 'fusio_') === 0) {
+                throw new StatusCode\BadRequestException('Invalid table');
+            }
+
             $schema = $connection->getSchemaManager()->createSchema();
             $schema->dropTable($tableName);
 
