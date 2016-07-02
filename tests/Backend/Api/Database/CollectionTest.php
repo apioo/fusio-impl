@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Database;
 
+use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -183,8 +185,21 @@ JSON;
             ]],
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $body = (string) $response->getBody();
+
+        $platform = Environment::getService('connection')->getDatabasePlatform();
+        if ($platform instanceof MySqlPlatform) {
+            $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Table successful created",
+    "queries": [
+        "CREATE TABLE bar_table (id INT NOT NULL, name VARCHAR(255) NOT NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB"
+    ]
+}
+JSON;
+        } elseif ($platform instanceof SqlitePlatform) {
+            $expect = <<<'JSON'
 {
     "success": true,
     "message": "Table successful created",
@@ -193,6 +208,9 @@ JSON;
     ]
 }
 JSON;
+        } else {
+            $this->fail('Invalid database platform');
+        }
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
