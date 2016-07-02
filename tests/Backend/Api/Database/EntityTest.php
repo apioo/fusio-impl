@@ -84,7 +84,8 @@ class EntityTest extends ControllerDbTestCase
             "primary": true,
             "unique": true
         }
-    ]
+    ],
+    "foreignKeys": []
 }
 JSON;
 
@@ -169,6 +170,59 @@ JSON;
         $this->assertEquals('datetime', $table->getColumn('date')->getType()->getName());
     }
 
+    public function testPutPreview()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news?preview=1', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'name'    => 'app_news',
+            'columns' => [[
+                'name'   => 'id',
+                'type'   => 'integer',
+                'null'   => false,
+            ],[
+                'name'   => 'title',
+                'type'   => 'string',
+                'length' => 64,
+                'null'   => false,
+            ],[
+                'name'   => 'content',
+                'type'   => 'string',
+                'length' => 240,
+                'null'   => false,
+            ],[
+                'name'   => 'date',
+                'type'   => 'datetime',
+                'null'   => false,
+            ]],
+            'indexes' => [[
+                'name'    => 'PRIMARY',
+                'columns' => ['id'],
+                'primary' => true,
+                'unique'  => true,
+            ]]
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Table successful updated",
+    "queries": [
+        "CREATE TEMPORARY TABLE __temp__app_news AS SELECT id, title, date, content FROM app_news",
+        "DROP TABLE app_news",
+        "CREATE TABLE app_news (id INTEGER NOT NULL, title VARCHAR(64) NOT NULL COLLATE BINARY, date DATETIME NOT NULL, content VARCHAR(240) NOT NULL COLLATE BINARY, PRIMARY KEY(id))",
+        "INSERT INTO app_news (id, title, date, content) SELECT id, title, date, content FROM __temp__app_news",
+        "DROP TABLE __temp__app_news"
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     /**
      * @expectedException \Doctrine\DBAL\Schema\SchemaException
      */
@@ -208,5 +262,27 @@ JSON;
         /** @var Schema $schema */
         $schema = Environment::getService('connection')->getSchemaManager()->createSchema();
         $schema->getTable('foo');
+    }
+
+    public function testDeletePreview()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news?preview=1', 'DELETE', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Table successful deleted",
+    "queries": [
+        "DROP TABLE app_news"
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

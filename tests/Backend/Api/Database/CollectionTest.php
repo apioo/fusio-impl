@@ -167,6 +167,37 @@ JSON;
         $this->assertEquals('string', $table->getColumn('name')->getType()->getName());
     }
 
+    public function testPostPreview()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1?preview=1', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'name'   => 'bar_table',
+            'columns'  => [[
+                'name' => 'id',
+                'type' => 'integer',
+            ],[
+                'name' => 'name',
+                'type' => 'string',
+            ]],
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Table successful created",
+    "queries": [
+        "CREATE TABLE bar_table (id INTEGER NOT NULL, name VARCHAR(255) NOT NULL)"
+    ]
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPut()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/database/1', 'PUT', array(

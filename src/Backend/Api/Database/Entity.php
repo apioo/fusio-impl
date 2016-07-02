@@ -27,6 +27,7 @@ use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
+use PSX\Validate\Validate;
 
 /**
  * Entity
@@ -64,11 +65,11 @@ class Entity extends SchemaApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
             ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Database\Table'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Database\Message'))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Database\Message'))
         );
 
         return $resource;
@@ -95,17 +96,19 @@ class Entity extends SchemaApiAbstract
      */
     protected function doPut($record)
     {
-        $this->databaseService->update(
+        $queries = $this->databaseService->update(
             (int) $this->getUriFragment('connection_id'),
             $this->getUriFragment('table'),
             $record->columns,
             $record->indexes ?: [],
-            $record->foreignKeys ?: []
+            $record->foreignKeys ?: [],
+            $this->getParameter('preview', Validate::TYPE_BOOLEAN)
         );
 
         return array(
             'success' => true,
             'message' => 'Table successful updated',
+            'queries' => $queries,
         );
     }
 
@@ -117,14 +120,16 @@ class Entity extends SchemaApiAbstract
      */
     protected function doDelete($record)
     {
-        $this->databaseService->delete(
+        $queries = $this->databaseService->delete(
             (int) $this->getUriFragment('connection_id'),
-            $this->getUriFragment('table')
+            $this->getUriFragment('table'),
+            $this->getParameter('preview', Validate::TYPE_BOOLEAN)
         );
 
         return array(
             'success' => true,
             'message' => 'Table successful deleted',
+            'queries' => $queries,
         );
     }
 }

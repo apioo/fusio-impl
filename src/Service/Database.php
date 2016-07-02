@@ -76,10 +76,10 @@ class Database
             
             if (in_array($tableName, $tableNames)) {
                 return [
-                    'name'    => $tableName,
-                    'columns' => $this->getColumns($connection, $tableName),
-                    'indexes' => $this->getIndexes($connection, $tableName),
-                    'fks'     => $this->getForeignKeys($connection, $tableName),
+                    'name'        => $tableName,
+                    'columns'     => $this->getColumns($connection, $tableName),
+                    'indexes'     => $this->getIndexes($connection, $tableName),
+                    'foreignKeys' => $this->getForeignKeys($connection, $tableName),
                 ];
             } else {
                 throw new StatusCode\NotFoundException('Invalid table');
@@ -89,7 +89,7 @@ class Database
         }
     }
 
-    public function create($connectionId, $tableName, $columns, $primaryKeys, $uniqueKeys)
+    public function preview($connectionId, $tableName, $columns, $primaryKeys, $uniqueKeys)
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
@@ -98,19 +98,34 @@ class Database
             $table = $schema->createTable($tableName);
             $this->createTable($table, $columns, $primaryKeys, $uniqueKeys);
 
-            // execute queries
+            // generate queries
             $fromSchema = $connection->getSchemaManager()->createSchema();
             $queries    = $fromSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());
 
-            foreach ($queries as $query) {
-                $connection->query($query);
-            }
+            return [
+                'queries' => $queries,
+            ];
         } else {
             throw new StatusCode\NotFoundException('Invalid connection');
         }
     }
 
-    public function update($connectionId, $tableName, $columns, $indexes, $uniqueKeys)
+    public function create($connectionId, $tableName, $columns, $primaryKeys, $uniqueKeys, $preview = true)
+    {
+        $connection = $this->connector->getConnection($connectionId);
+        if ($connection instanceof DBALConnection) {
+            $schema = $connection->getSchemaManager()->createSchema();
+
+            $table = $schema->createTable($tableName);
+            $this->createTable($table, $columns, $primaryKeys, $uniqueKeys);
+
+            return $this->executeQuery($connection, $schema, $preview);
+        } else {
+            throw new StatusCode\NotFoundException('Invalid connection');
+        }
+    }
+
+    public function update($connectionId, $tableName, $columns, $indexes, $uniqueKeys, $preview = true)
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
@@ -120,34 +135,37 @@ class Database
             $table = $schema->createTable($tableName);
             $this->createTable($table, $columns, $indexes, $uniqueKeys);
 
-            // execute queries
-            $fromSchema = $connection->getSchemaManager()->createSchema();
-            $queries    = $fromSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());
-    
-            foreach ($queries as $query) {
-                $connection->query($query);
-            }
+            return $this->executeQuery($connection, $schema, $preview);
         } else {
             throw new StatusCode\NotFoundException('Invalid connection');
         }
     }
 
-    public function delete($connectionId, $tableName)
+    public function delete($connectionId, $tableName, $preview = true)
     {
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
             $schema = $connection->getSchemaManager()->createSchema();
             $schema->dropTable($tableName);
 
-            // execute queries
-            $fromSchema = $connection->getSchemaManager()->createSchema();
-            $queries    = $fromSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());
+            return $this->executeQuery($connection, $schema, $preview);
+        } else {
+            throw new StatusCode\NotFoundException('Invalid connection');
+        }
+    }
 
+    protected function executeQuery(DBALConnection $connection, Schema $schema, $preview)
+    {
+        $fromSchema = $connection->getSchemaManager()->createSchema();
+        $queries    = $fromSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());
+
+        if ($preview === true) {
+            return $queries;
+        } else {
             foreach ($queries as $query) {
                 $connection->query($query);
             }
-        } else {
-            throw new StatusCode\NotFoundException('Invalid connection');
+            return null;
         }
     }
 
@@ -236,8 +254,8 @@ class Database
 
         foreach ($fks as $fk) {
             $result[] = [
-                'name'    => $fk->getName(),
-                'columns' => $fk->getColumns(),
+                'name'           => $fk->getName(),
+                'columns'        => $fk->getColumns(),
                 'foreignTable'   => $fk->getForeignTableName(),
                 'foreignColumns' => $fk->getForeignColumns(),
             ];

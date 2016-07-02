@@ -66,7 +66,7 @@ class Collection extends SchemaApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Database\Table'))
-            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Database\Message'))
         );
 
         return $resource;
@@ -92,17 +92,19 @@ class Collection extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $this->databaseService->create(
+        $queries = $this->databaseService->create(
             (int) $this->getUriFragment('connection_id'),
             $record->name,
             $record->columns,
             $record->indexes ?: [],
-            $record->foreignKeys ?: []
+            $record->foreignKeys ?: [],
+            $this->getParameter('preview', Validate::TYPE_BOOLEAN)
         );
 
         return array(
             'success' => true,
             'message' => 'Table successful created',
+            'queries' => $queries,
         );
     }
 }
