@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Connector;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
@@ -115,8 +116,8 @@ class Database
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
             $schema = $connection->getSchemaManager()->createSchema();
+            $table  = $schema->createTable($tableName);
 
-            $table = $schema->createTable($tableName);
             $this->createTable($table, $columns, $primaryKeys, $uniqueKeys);
 
             return $this->executeQuery($connection, $schema, $preview);
@@ -130,10 +131,9 @@ class Database
         $connection = $this->connector->getConnection($connectionId);
         if ($connection instanceof DBALConnection) {
             $schema = $connection->getSchemaManager()->createSchema();
-            $schema->dropTable($tableName);
+            $table  = $schema->getTable($tableName);
 
-            $table = $schema->createTable($tableName);
-            $this->createTable($table, $columns, $indexes, $uniqueKeys);
+            $this->updateTable($table, $columns, $indexes, $uniqueKeys);
 
             return $this->executeQuery($connection, $schema, $preview);
         } else {
@@ -186,18 +186,92 @@ class Database
 
         if (!empty($indexes)) {
             foreach ($indexes as $index) {
-                if ($index['primary'] && $index['unique']) {
+                if ($index['primary']) {
                     $table->setPrimaryKey($index['columns']);
-                } elseif (!$index['primary'] && $index['unique']) {
-                    $table->addUniqueIndex($index['columns']);
-                } elseif (!$index['primary'] && !$index['unique']) {
-                    $table->addIndex($index['columns']);
+                } else {
+                    if ($index['unique']) {
+                        $table->addUniqueIndex($index['columns'], $index['name']);
+                    } else {
+                        $table->addIndex($index['columns'], $index['name']);
+                    }
                 }
             }
         }
 
         if (!empty($foreignKeys)) {
             foreach ($foreignKeys as $foreignKey) {
+                $table->addForeignKeyConstraint(
+                    $foreignKey['foreignTable'],
+                    $foreignKey['columns'],
+                    $foreignKey['foreignColumns'],
+                    [],
+                    $foreignKey['name']
+                );
+            }
+        }
+
+        return $table;
+    }
+
+    protected function updateTable(Table $table, $columns, $indexes, $foreignKeys)
+    {
+        $fields = ['type', 'notnull', 'default', 'autoincrement', 'length', 'fixed', 'precision', 'scale'];
+        $newColumns = [];
+
+        foreach ($columns as $column) {
+            $options = [];
+            foreach ($fields as $field) {
+                if (isset($column[$field])) {
+                    if ($field === 'type') {
+                        $options[$field] = Type::getType($column[$field]);
+                    } else {
+                        $options[$field] = $column[$field];
+                    }
+                }
+            }
+
+            if ($table->hasColumn($column['name'])) {
+                $table->changeColumn($column['name'], $options);
+            } else {
+                $table->addColumn($column['name'], $column['type'], $options);
+            }
+
+            $newColumns[] = $column['name'];
+        }
+
+        $removeColumns = array_diff(array_keys($table->getColumns()), $newColumns);
+        foreach ($removeColumns as $columnName) {
+            $table->dropColumn($columnName);
+        }
+
+        if (!empty($indexes)) {
+            foreach ($indexes as $index) {
+                if ($index['primary']) {
+                    if ($table->hasPrimaryKey()) {
+                        $table->dropPrimaryKey();
+                    }
+
+                    $table->setPrimaryKey($index['columns']);
+                } else {
+                    if ($table->hasIndex($index['name'])) {
+                        $table->dropIndex($index['name']);
+                    }
+
+                    if ($index['unique']) {
+                        $table->addUniqueIndex($index['columns'], $index['name']);
+                    } else {
+                        $table->addIndex($index['columns'], $index['name']);
+                    }
+                }
+            }
+        }
+
+        if (!empty($foreignKeys)) {
+            foreach ($foreignKeys as $foreignKey) {
+                if ($table->hasForeignKey($foreignKey['name'])) {
+                    $table->removeForeignKey($foreignKey['name']);
+                }
+
                 $table->addForeignKeyConstraint(
                     $foreignKey['foreignTable'],
                     $foreignKey['columns'],

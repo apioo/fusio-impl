@@ -40,6 +40,48 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        /** @var Schema $toSchema */
+        $connection = Environment::getService('connection');
+        $toSchema   = $connection->getSchemaManager()->createSchema();
+
+        $table = $toSchema->createTable('foo');
+        $table->addColumn('id', 'integer');
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('date', 'datetime');
+        $table->setPrimaryKey(['id']);
+
+        /** @var Schema $fromSchema */
+        $fromSchema = $connection->getSchemaManager()->createSchema();
+        $queries    = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+        foreach ($queries as $query) {
+            $connection->query($query);
+        }
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        /** @var Schema $toSchema */
+        $connection = Environment::getService('connection');
+        $toSchema   = $connection->getSchemaManager()->createSchema();
+
+        if ($toSchema->hasTable('foo')) {
+            $toSchema->dropTable('foo');
+
+            /** @var Schema $fromSchema */
+            $fromSchema = $connection->getSchemaManager()->createSchema();
+            $queries    = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+            foreach ($queries as $query) {
+                $connection->query($query);
+            }
+        }
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news', 'GET', array(
@@ -109,11 +151,11 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/foo', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'    => 'app_news',
+            'name'    => 'foo',
             'columns' => [[
                 'name'   => 'id',
                 'type'   => 'integer',
@@ -155,7 +197,7 @@ JSON;
         // check database
         /** @var Schema $schema */
         $schema = Environment::getService('connection')->getSchemaManager()->createSchema();
-        $table  = $schema->getTable('app_news');
+        $table  = $schema->getTable('foo');
 
         $this->assertEquals(4, count($table->getColumns()));
         $this->assertEquals('id', $table->getColumn('id')->getName());
@@ -172,11 +214,11 @@ JSON;
 
     public function testPutPreview()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news?preview=1', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/foo?preview=1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'    => 'app_news',
+            'name'    => 'foo',
             'columns' => [[
                 'name'   => 'id',
                 'type'   => 'integer',
@@ -210,11 +252,11 @@ JSON;
     "success": true,
     "message": "Table successful updated",
     "queries": [
-        "CREATE TEMPORARY TABLE __temp__app_news AS SELECT id, title, date, content FROM app_news",
-        "DROP TABLE app_news",
-        "CREATE TABLE app_news (id INTEGER NOT NULL, title VARCHAR(64) NOT NULL COLLATE BINARY, date DATETIME NOT NULL, content VARCHAR(240) NOT NULL COLLATE BINARY, PRIMARY KEY(id))",
-        "INSERT INTO app_news (id, title, date, content) SELECT id, title, date, content FROM __temp__app_news",
-        "DROP TABLE __temp__app_news"
+        "CREATE TEMPORARY TABLE __temp__foo AS SELECT id, date FROM foo",
+        "DROP TABLE foo",
+        "CREATE TABLE foo (id INTEGER NOT NULL, date DATETIME NOT NULL, title VARCHAR(64) NOT NULL, content VARCHAR(240) NOT NULL, PRIMARY KEY(id))",
+        "INSERT INTO foo (id, date) SELECT id, date FROM __temp__foo",
+        "DROP TABLE __temp__foo"
     ]
 }
 JSON;
@@ -228,20 +270,6 @@ JSON;
      */
     public function testDelete()
     {
-        /** @var Schema $toSchema */
-        $connection = Environment::getService('connection');
-        $toSchema = $connection->getSchemaManager()->createSchema();
-        $table = $toSchema->createTable('foo');
-        $table->addColumn('id', 'integer');
-        $table->addColumn('name', 'string');
-
-        /** @var Schema $fromSchema */
-        $fromSchema = $connection->getSchemaManager()->createSchema();
-        $queries = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
-        foreach ($queries as $query) {
-            $connection->query($query);
-        }
-
         $response = $this->sendRequest('http://127.0.0.1/backend/database/1/foo', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -266,7 +294,7 @@ JSON;
 
     public function testDeletePreview()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/app_news?preview=1', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/database/1/foo?preview=1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -277,7 +305,7 @@ JSON;
     "success": true,
     "message": "Table successful deleted",
     "queries": [
-        "DROP TABLE app_news"
+        "DROP TABLE foo"
     ]
 }
 JSON;
