@@ -99,24 +99,28 @@ class EntityTest extends ControllerDbTestCase
         {
             "name": "id",
             "type": "integer",
-            "null": false
+            "null": false,
+            "autoincrement": true
         },
         {
             "name": "title",
             "type": "string",
             "length": 64,
-            "null": false
+            "null": false,
+            "autoincrement": false
         },
         {
             "name": "content",
             "type": "string",
             "length": 255,
-            "null": false
+            "null": false,
+            "autoincrement": false
         },
         {
             "name": "date",
             "type": "datetime",
-            "null": false
+            "null": false,
+            "autoincrement": false
         }
     ],
     "indexes": [

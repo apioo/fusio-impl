@@ -40,8 +40,8 @@ class Column extends SchemaAbstract
         $sb->string('type');
         $sb->integer('length');
         $sb->boolean('null');
+        $sb->boolean('autoincrement');
         $sb->string('default');
-        $sb->string('comment');
 
         return $sb->getProperty();
     }

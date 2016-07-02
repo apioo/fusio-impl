@@ -171,17 +171,8 @@ class Database
 
     protected function createTable(Table $table, $columns, $indexes, $foreignKeys)
     {
-        $fields = ['notnull', 'default', 'autoincrement', 'length', 'fixed', 'precision', 'scale'];
-
         foreach ($columns as $column) {
-            $options = [];
-            foreach ($fields as $field) {
-                if (isset($column[$field])) {
-                    $options[$field] = $column[$field];
-                }
-            }
-
-            $table->addColumn($column['name'], $column['type'], $options);
+            $table->addColumn($column['name'], $column['type'], $this->getColumnOptions($column));
         }
 
         if (!empty($indexes)) {
@@ -215,25 +206,12 @@ class Database
 
     protected function updateTable(Table $table, $columns, $indexes, $foreignKeys)
     {
-        $fields = ['type', 'notnull', 'default', 'autoincrement', 'length', 'fixed', 'precision', 'scale'];
         $newColumns = [];
-
         foreach ($columns as $column) {
-            $options = [];
-            foreach ($fields as $field) {
-                if (isset($column[$field])) {
-                    if ($field === 'type') {
-                        $options[$field] = Type::getType($column[$field]);
-                    } else {
-                        $options[$field] = $column[$field];
-                    }
-                }
-            }
-
             if ($table->hasColumn($column['name'])) {
-                $table->changeColumn($column['name'], $options);
+                $table->changeColumn($column['name'], $this->getColumnOptions($column));
             } else {
-                $table->addColumn($column['name'], $column['type'], $options);
+                $table->addColumn($column['name'], $column['type'], $this->getColumnOptions($column));
             }
 
             $newColumns[] = $column['name'];
@@ -285,6 +263,25 @@ class Database
         return $table;
     }
 
+    protected function getColumnOptions($options)
+    {
+        $fields = ['type', 'length', 'null', 'default', 'autoincrement'];
+        $result = [];
+        foreach ($fields as $field) {
+            if (isset($options[$field])) {
+                if ($field === 'type') {
+                    $result[$field] = Type::getType($options[$field]);
+                } elseif ($field === 'null') {
+                    $result['notnull'] = !$options[$field];
+                } else {
+                    $result[$field] = $options[$field];
+                }
+            }
+        }
+        
+        return $result;
+    }
+
     protected function getColumns(DBALConnection $connection, $tableName)
     {
         $columns = $connection->getSchemaManager()->listTableColumns($tableName);
@@ -297,7 +294,7 @@ class Database
                 'length'  => $column->getLength(),
                 'null'    => $column->getNotnull() === false,
                 'default' => $column->getDefault(),
-                'comment' => $column->getComment(),
+                'autoincrement' => $column->getAutoincrement(),
             ];
         }
         
