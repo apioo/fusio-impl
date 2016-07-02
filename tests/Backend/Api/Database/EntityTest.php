@@ -257,7 +257,7 @@ JSON;
     "success": true,
     "message": "Table successful updated",
     "queries": [
-        "ALTER TABLE foo ADD title VARCHAR(64) NOT NULL, ADD content VARCHAR(240) NOT NULL, DROP name",
+        "ALTER TABLE foo ADD title VARCHAR(64) NOT NULL, ADD content VARCHAR(240) NOT NULL, DROP name"
     ]
 }
 JSON;
