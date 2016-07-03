@@ -272,6 +272,9 @@ class User
         $user = $this->userTable->get($userId);
 
         if (!empty($user)) {
+            // check values
+            $this->assertEmail($email);
+
             $this->userTable->update(array(
                 'id'    => $user['id'],
                 'email' => $email,
