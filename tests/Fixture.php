@@ -101,17 +101,17 @@ JSON;
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 58, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
-                ['routeId' => 58, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 2, 'response' => 1, 'action' => 3],
-                ['routeId' => 58, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
-                ['routeId' => 58, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
+                ['routeId' => 60, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
+                ['routeId' => 60, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 2, 'response' => 1, 'action' => 3],
+                ['routeId' => 60, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
+                ['routeId' => 60, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
             ],
             'fusio_routes_action' => [
-                ['routeId' => 58, 'actionId' => 3],
+                ['routeId' => 60, 'actionId' => 3],
             ],
             'fusio_routes_schema' => [
-                ['routeId' => 58, 'schemaId' => 2],
-                ['routeId' => 58, 'schemaId' => 1],
+                ['routeId' => 60, 'schemaId' => 2],
+                ['routeId' => 60, 'schemaId' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => date('Y-m-d 00:00:00')],
@@ -137,10 +137,11 @@ JSON;
                 ['appId' => 2, 'userId' => 1, 'status' => 1, 'token' => 'b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2', 'scope' => 'consumer,authorization', 'ip' => '127.0.0.1', 'date' => '2015-06-25 22:49:09'],
                 ['appId' => 3, 'userId' => 2, 'status' => 1, 'token' => 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'scope' => 'bar', 'ip' => '127.0.0.1', 'date' => '2015-06-25 22:49:09'],
                 ['appId' => 1, 'userId' => 4, 'status' => 1, 'token' => 'e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f', 'scope' => 'backend', 'ip' => '127.0.0.1', 'date' => '2015-06-25 22:49:09'],
+                ['appId' => 2, 'userId' => 2, 'status' => 1, 'token' => '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'scope' => 'consumer', 'ip' => '127.0.0.1', 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_scope_routes' => [
-                ['scopeId' => 5, 'routeId' => 57, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 5, 'routeId' => 58, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 5, 'routeId' => 59, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 5, 'routeId' => 60, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 4],

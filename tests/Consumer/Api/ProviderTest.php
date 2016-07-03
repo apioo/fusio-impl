@@ -47,8 +47,7 @@ class ProviderTest extends ControllerDbTestCase
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
@@ -83,8 +82,7 @@ class ProviderTest extends ControllerDbTestCase
         Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 7]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/facebook', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
@@ -128,8 +126,7 @@ class ProviderTest extends ControllerDbTestCase
         Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 9]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
@@ -173,8 +170,7 @@ class ProviderTest extends ControllerDbTestCase
         Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 8]);
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/google', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
             'clientId' => 'bar',
@@ -191,8 +187,7 @@ class ProviderTest extends ControllerDbTestCase
     public function testPut()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -205,8 +200,7 @@ class ProviderTest extends ControllerDbTestCase
     public function testDelete()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -229,14 +223,12 @@ class ProviderTest extends ControllerDbTestCase
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
 
-        $this->assertEquals(1, $row['appId']);
+        $this->assertEquals(2, $row['appId']);
         $this->assertEquals(6, $row['userId']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);

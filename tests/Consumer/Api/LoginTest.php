@@ -43,8 +43,7 @@ class LoginTest extends ControllerDbTestCase
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
@@ -55,8 +54,7 @@ class LoginTest extends ControllerDbTestCase
     public function testPost()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'username' => 'Consumer',
             'password' => 'qf2vX10Ec3wFZHx0K1eL',
@@ -78,14 +76,12 @@ class LoginTest extends ControllerDbTestCase
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
 
-        $this->assertEquals(1, $row['appId']);
+        $this->assertEquals(2, $row['appId']);
         $this->assertEquals(2, $row['userId']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
@@ -98,8 +94,7 @@ class LoginTest extends ControllerDbTestCase
     public function testPostInvalidCredentials()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'username' => 'Consumer',
             'password' => 'foo',
@@ -115,8 +110,7 @@ class LoginTest extends ControllerDbTestCase
     public function testPut()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -129,8 +123,7 @@ class LoginTest extends ControllerDbTestCase
     public function testDelete()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));

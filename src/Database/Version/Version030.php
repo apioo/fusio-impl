@@ -433,7 +433,9 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/register',                      'controller' => 'Fusio\Impl\Consumer\Api\Register'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/provider/:provider',            'controller' => 'Fusio\Impl\Consumer\Api\Provider'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/activate',                      'controller' => 'Fusio\Impl\Consumer\Api\Activate'],
-   
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account',                       'controller' => 'Fusio\Impl\Consumer\Api\Account'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account/change_password',       'controller' => 'Fusio\Impl\Consumer\Api\Account\ChangePassword'],
+
                 ['status' => 1, 'methods' => 'POST',                'path' => '/authorization/revoke',                   'controller' => 'Fusio\Impl\Authorization\Revoke'],
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                    'controller' => 'Fusio\Impl\Authorization\Token'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/authorization/whoami',                   'controller' => 'Fusio\Impl\Authorization\Whoami'],
@@ -448,7 +450,7 @@ class Version030 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                       'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 57, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+                ['routeId' => 59, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -505,9 +507,11 @@ class Version030 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 46, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 47, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 48, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 49, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 50, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 49, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 51, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 51, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 53, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

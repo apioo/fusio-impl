@@ -53,11 +53,11 @@ class CollectionTest extends ControllerDbTestCase
     "startIndex": 0,
     "entry": [
         {
-            "id": 58,
+            "id": 60,
             "path": "\/foo"
         },
         {
-            "id": 57,
+            "id": 59,
             "path": "\/"
         }
     ]
@@ -118,7 +118,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(59, $row['id']);
+        $this->assertEquals(61, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
         $this->assertEquals('/bar', $row['path']);

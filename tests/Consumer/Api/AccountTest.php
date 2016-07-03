@@ -19,20 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Account;
+namespace Fusio\Impl\Tests\Consumer;
 
+use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * ChangePasswordTest
+ * AccountTest
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangePasswordTest extends ControllerDbTestCase
+class AccountTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -41,21 +42,28 @@ class ChangePasswordTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "name": "Administrator",
+    "email": "admin@localhost.com"
+}
+JSON;
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -67,42 +75,46 @@ class ChangePasswordTest extends ControllerDbTestCase
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
-            'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL',
-            'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL',
+            'name'  => 'fooo', // the name is ignore
+            'email' => 'foo@bar.com',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "success": true,
-    "message": "Password successful changed"
+    "message": "Account update successful"
 }
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
-        // check database password
+        // check database user
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('password')
+            ->select('provider', 'status', 'remoteId', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 4]);
 
-        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL', $row['password']));
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
+
+        $this->assertEquals(1, $row['provider']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals('', $row['remoteId']);
+        $this->assertEquals('Administrator', $row['name']);
+        $this->assertEquals('foo@bar.com', $row['email']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'foo' => 'bar',
         ]));

@@ -44,7 +44,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
@@ -56,7 +55,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'name'     => 'baz',
             'email'    => 'baz@localhost.com',
@@ -92,7 +90,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'name'     => 'baz',
             'email'    => 'baz',
@@ -110,7 +107,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
@@ -128,7 +124,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
@@ -146,7 +141,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -160,7 +154,6 @@ class RegisterTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
             'foo' => 'bar',
         ]));

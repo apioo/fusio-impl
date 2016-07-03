@@ -267,6 +267,20 @@ class User
         }
     }
 
+    public function updateMeta($userId, $email)
+    {
+        $user = $this->userTable->get($userId);
+
+        if (!empty($user)) {
+            $this->userTable->update(array(
+                'id'    => $user['id'],
+                'email' => $email,
+            ));
+        } else {
+            throw new StatusCode\NotFoundException('Could not find user');
+        }
+    }
+
     public function delete($userId)
     {
         $user = $this->userTable->get($userId);
@@ -298,8 +312,16 @@ class User
     public function changePassword($userId, $appId, $oldPassword, $newPassword, $verifyPassword)
     {
         // we can only change the password through the backend app
-        if ($appId != 1) {
-            throw new StatusCode\BadRequestException('Changing the password is only possible through the backend app');
+        if (!in_array($appId, [1, 2])) {
+            throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
+        }
+
+        if (empty($newPassword)) {
+            throw new StatusCode\BadRequestException('New password must not be empty');
+        }
+
+        if (empty($oldPassword)) {
+            throw new StatusCode\BadRequestException('Old password must not be empty');
         }
 
         // check verify password

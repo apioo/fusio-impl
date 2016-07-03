@@ -19,8 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Account;
+namespace Fusio\Impl\Tests\Consumer\Account;
 
+use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -41,9 +42,9 @@ class ChangePasswordTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ));
 
         $body = (string) $response->getBody();
@@ -53,9 +54,9 @@ class ChangePasswordTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -67,9 +68,9 @@ class ChangePasswordTest extends ControllerDbTestCase
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
             'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL',
@@ -93,16 +94,16 @@ JSON;
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 4]);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 2]);
 
         $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL', $row['password']));
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'foo' => 'bar',
         ]));

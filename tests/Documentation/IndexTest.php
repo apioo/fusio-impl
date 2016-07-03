@@ -363,6 +363,26 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/consumer\/account",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/consumer\/account\/change_password",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/",
             "methods": [
                 "GET",

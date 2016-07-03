@@ -43,8 +43,7 @@ class ActivateTest extends ControllerDbTestCase
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ));
 
         $body = (string) $response->getBody();
@@ -80,8 +79,7 @@ class ActivateTest extends ControllerDbTestCase
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
         ]));
@@ -120,8 +118,7 @@ class ActivateTest extends ControllerDbTestCase
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
         ]));
@@ -144,8 +141,7 @@ class ActivateTest extends ControllerDbTestCase
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
         ]));
@@ -161,8 +157,7 @@ class ActivateTest extends ControllerDbTestCase
     public function testPut()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -175,8 +170,7 @@ class ActivateTest extends ControllerDbTestCase
     public function testDelete()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));

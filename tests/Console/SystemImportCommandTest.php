@@ -108,7 +108,7 @@ JSON;
             'path' => '/bar',
         ]);
 
-        $this->assertEquals(59, $route['id']);
+        $this->assertEquals(61, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -119,7 +119,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => 59, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => 61, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
     }
 }
 

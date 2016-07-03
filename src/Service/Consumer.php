@@ -159,9 +159,9 @@ class Consumer
 
     protected function createToken($userId, array $scopes)
     {
-        // @TODO we need an id of an app this must be probably the fusio 
-        // consumer app
-        $appId = 1;
+        // @TODO this is the consumer app. Probably we need a better way to
+        // define this id
+        $appId = 2;
 
         $token = $this->app->generateAccessToken(
             $appId,
