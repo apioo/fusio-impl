@@ -373,6 +373,7 @@ class Version030 implements VersionInterface
                 ['class' => 'Fusio\Impl\Action\MqBeanstalk'],
                 ['class' => 'Fusio\Impl\Action\Pipe'],
                 ['class' => 'Fusio\Impl\Action\Processor'],
+                ['class' => 'Fusio\Impl\Action\SqlBuilder'],
                 ['class' => 'Fusio\Impl\Action\SqlExecute'],
                 ['class' => 'Fusio\Impl\Action\SqlFetchAll'],
                 ['class' => 'Fusio\Impl\Action\SqlFetchRow'],

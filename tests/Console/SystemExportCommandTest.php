@@ -67,6 +67,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
         "Fusio\\Impl\\Action\\MqBeanstalk",
         "Fusio\\Impl\\Action\\Pipe",
         "Fusio\\Impl\\Action\\Processor",
+        "Fusio\\Impl\\Action\\SqlBuilder",
         "Fusio\\Impl\\Action\\SqlExecute",
         "Fusio\\Impl\\Action\\SqlFetchAll",
         "Fusio\\Impl\\Action\\SqlFetchRow",

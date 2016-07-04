@@ -106,6 +106,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Impl\\Action\\Processor"
         },
         {
+            "name": "SQL-Builder",
+            "class": "Fusio\\Impl\\Action\\SqlBuilder"
+        },
+        {
             "name": "SQL-Execute",
             "class": "Fusio\\Impl\\Action\\SqlExecute"
         },
