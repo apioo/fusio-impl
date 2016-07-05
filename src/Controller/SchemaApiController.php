@@ -30,6 +30,7 @@ use Fusio\Impl\Schema\LazySchema;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
+use PSX\Data\Record\Transformer;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
@@ -210,7 +211,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     {
         if ($method->hasRequest()) {
             if ($method->getRequest()->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
-                return $this->getBody();
+                return Transformer::toRecord($this->getBody());
             } else {
                 return $this->getBodyAs($method->getRequest());
             }
