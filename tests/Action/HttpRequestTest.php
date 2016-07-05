@@ -82,6 +82,49 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $response->getBody());
     }
 
+    public function testHandleVariableUrl()
+    {
+        $httpClient = $this->getMock('PSX\Http\Client', array('request'));
+
+        $httpClient->expects($this->once())
+            ->method('request')
+            ->with($this->callback(function ($request) {
+                /** @var \PSX\Http\RequestInterface $request */
+                $this->assertInstanceOf('PSX\Http\RequestInterface', $request);
+                $this->assertEquals('http://127.0.0.1/bar/1', $request->getUri()->toString());
+                $this->assertJsonStringEqualsJsonString('{"foo":"bar"}', (string) $request->getBody());
+
+                return true;
+            }))
+            ->will($this->returnValue(new Response(200)));
+
+        $action = new HttpRequest();
+        $action->setHttpClient($httpClient);
+        $action->setTemplateFactory(Environment::getService('template_factory'));
+        $action->setResponse(Environment::getService('response'));
+
+        $parameters = $this->getParameters([
+            'url'  => 'http://127.0.0.1/bar/:id',
+            'body' => '{{ request.body|json }}',
+        ]);
+
+        $body = Record::fromArray([
+            'foo' => 'bar'
+        ]);
+
+        $response = $action->handle($this->getRequest('POST', ['id' => 1], [], [], $body), $parameters, $this->getContext());
+
+        $body = [
+            'success' => true,
+            'message' => 'Request successful'
+        ];
+
+        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals([], $response->getHeaders());
+        $this->assertEquals($body, $response->getBody());
+    }
+
     public function testGetForm()
     {
         $action  = new HttpRequest();

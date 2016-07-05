@@ -134,6 +134,16 @@ class HttpRequest implements ActionInterface
         return $headers;
     }
 
+    protected function parseUrl($url, RequestInterface $request)
+    {
+        $fragments = $request->getUriFragments();
+        foreach ($fragments as $key => $value) {
+            $url = str_replace(':' . $key, $value, $url);
+        }
+
+        return $url;
+    }
+
     protected function executeRequest(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         // parse body
@@ -143,7 +153,8 @@ class HttpRequest implements ActionInterface
         // build request
         $method   = $configuration->get('method') ?: 'POST';
         $headers  = $this->parserHeaders($configuration->get('headers'));
-        $request  = new Request(new Url($configuration->get('url')), $method, $headers, $body);
+        $url      = $this->parseUrl($configuration->get('url'), $request);
+        $request  = new Request(new Url($url), $method, $headers, $body);
 
         return $this->httpClient->request($request);
     }
