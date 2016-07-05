@@ -98,7 +98,7 @@ class SqlBuilder implements ActionInterface
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The SQL connection which should be used'));
-        $builder->add($elementFactory->newTextArea('definition', 'Definition', 'json', 'The JSON definition to build a nested response. Click <a ng-click="help.showDialog(\'help/sql-builder.md\')">here</a> for more informations about the JSON format.'));
+        $builder->add($elementFactory->newTextArea('definition', 'Definition', 'json', 'The JSON definition to build a nested response. Click <a ng-click="help.showDialog(\'help/action/sql-builder.md\')">here</a> for more informations about the JSON format.'));
     }
 
     public function setConnection(Connection $connection)
