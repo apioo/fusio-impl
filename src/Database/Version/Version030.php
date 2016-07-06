@@ -159,6 +159,7 @@ class Version030 implements VersionInterface
         $routesTable->addColumn('methods', 'string', array('length' => 64));
         $routesTable->addColumn('path', 'string', array('length' => 255));
         $routesTable->addColumn('controller', 'string', array('length' => 255));
+        $routesTable->addColumn('config', 'blob', array('notnull' => false));
         $routesTable->setPrimaryKey(array('id'));
 
         $routesActionTable = $schema->createTable('fusio_routes_action');
@@ -302,6 +303,52 @@ class Version030 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        $result = $connection->fetchAll('SELECT id, config FROM fusio_routes WHERE config IS NOT NULL');
+
+        foreach ($result as $row) {
+            $config = $row['config'];
+            if (!empty($config)) {
+                $versions = unserialize($config);
+
+                foreach ($versions as $version) {
+                    $methods = $version['methods'];
+
+                    foreach ($methods as $method) {
+                        if (!empty($method['request'])) {
+                            $request = $method['request'];
+                        } else {
+                            $request = null;
+                        }
+
+                        if (!empty($method['response'])) {
+                            $response = $method['response'];
+                        } else {
+                            $response = null;
+                        }
+
+                        if (!empty($method['action'])) {
+                            $action = $method['action'];
+                        } else {
+                            $action = null;
+                        }
+
+                        $connection->insert('fusio_routes_method', [
+                            'request'  => $request,
+                            'response' => $response,
+                            'action'   => $action,
+                            'routeId'  => $row['id'],
+                            'method'   => $method['name'],
+                            'version'  => $version['name'],
+                            'status'   => 4,
+                            'active'   => $method['active'] ? 1 : 0,
+                            'public'   => $method['public'] ? 1 : 0,
+                        ]);
+                    }
+                }
+            }
+        }
+
+        $connection->executeUpdate('UPDATE fusio_routes SET config = NULL');
     }
 
     public function getInstallInserts()
