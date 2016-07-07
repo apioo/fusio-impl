@@ -32,6 +32,7 @@ use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Data\Record\Transformer;
 use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Filter\CORS;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaInterface;
@@ -100,6 +101,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
+
+    /**
+     * @Inject
      * @var \Psr\Cache\CacheItemPoolInterface
      */
     protected $cache;
@@ -157,6 +164,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // it is required for every request to have an user agent which
         // identifies the client
         $filter[] = new UserAgentEnforcer();
+
+        // cors header
+        $allowOrigin = $this->configService->getValue('cors_allow_origin');
+        if (!empty($allowOrigin)) {
+            $filter[] = new CORS($allowOrigin);
+        }
 
         if (!$isPublic) {
             $filter[] = new Oauth2Filter($this->connection, $this->request->getMethod(), $this->context->get('fusio.routeId'), function ($accessToken) {
