@@ -49,7 +49,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 10,
+    "totalResults": 11,
     "startIndex": 0,
     "entry": [
         {
@@ -65,6 +65,13 @@ class CollectionTest extends ControllerDbTestCase
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
             "value": "16"
+        },
+        {
+            "id": 11,
+            "type": 1,
+            "name": "cors_allow_origin",
+            "description": "If set each API response contains a Access-Control-Allow-Origin header with the provided value",
+            "value": ""
         },
         {
             "id": 5,
@@ -119,7 +126,7 @@ class CollectionTest extends ControllerDbTestCase
             "id": 3,
             "type": 1,
             "name": "scopes_default",
-            "description": "If a user registers through the consumer API he gets the following scopes assigned",
+            "description": "If a user registers through the consumer API the following scopes are assigned",
             "value": "authorization,consumer"
         }
     ]
