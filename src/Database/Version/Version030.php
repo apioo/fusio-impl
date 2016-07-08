@@ -222,7 +222,7 @@ class Version030 implements VersionInterface
         $userTable->addColumn('status', 'integer');
         $userTable->addColumn('remoteId', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
         $userTable->addColumn('name', 'string', array('length' => 64));
-        $userTable->addColumn('email', 'string', array('length' => 128));
+        $userTable->addColumn('email', 'string', array('length' => 128, 'notnull' => false, 'default' => null));
         $userTable->addColumn('password', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
         $userTable->addColumn('date', 'datetime');
         $userTable->setPrimaryKey(array('id'));
@@ -303,6 +303,9 @@ class Version030 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        // set alias to unserialize the old record class
+        class_alias('Fusio\Impl\Database\Version\OldRecord', 'PSX\Data\Record');
+
         $result = $connection->fetchAll('SELECT id, config FROM fusio_routes WHERE config IS NOT NULL');
 
         foreach ($result as $row) {
@@ -598,3 +601,19 @@ class Version030 implements VersionInterface
         ], JSON_PRETTY_PRINT);
     }
 }
+
+class OldRecord extends Record
+{
+    public function serialize()
+    {
+        return null;
+    }
+
+    public function unserialize($data)
+    {
+        $record = unserialize($data);
+        $this->setDisplayName($record['name']);
+        $this->setProperties($record['fields']);
+    }
+}
+
