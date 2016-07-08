@@ -358,6 +358,37 @@ class Version030 implements VersionInterface
         foreach ($installInserts['fusio_config'] as $config) {
             $connection->insert('fusio_config', $config);
         }
+
+        // insert new routes
+        foreach ($installInserts['fusio_routes'] as $route) {
+            $id = $connection->fetchColumn('SELECT id FROM fusio_routes WHERE path LIKE :path', ['path' => $route['path']]);
+            if (empty($id)) {
+                $connection->insert('fusio_routes', $route);
+
+                $routeId = $connection->lastInsertId();
+                $scopeId = 0;
+
+                if (strpos($route['path'], '/backend') !== false) {
+                    $scopeId = 1;
+                } elseif (strpos($route['path'], '/consumer') !== false) {
+                    $scopeId = 2;
+                }
+
+                if ($routeId > 0 && $scopeId > 0) {
+                    $connection->insert('fusio_scope_routes', [
+                        'scopeId' => $scopeId,
+                        'routeId' => $routeId,
+                        'allow'   => 1,
+                        'methods' => 'GET|POST|PUT|DELETE',
+                    ]);
+                }
+            }
+        }
+
+        // insert action class
+        $connection->insert('fusio_action_class', [
+            'class' => 'Fusio\Impl\Action\SqlBuilder',
+        ]);
     }
 
     public function getInstallInserts()
