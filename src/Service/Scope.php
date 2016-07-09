@@ -132,6 +132,11 @@ class Scope
         $scope = $this->scopeTable->get($scopeId);
 
         if (!empty($scope)) {
+            // check whether this is a system scope
+            if (in_array($scope['id'], [1, 2, 3])) {
+                throw new StatusCode\BadRequestException('It is not possible to change this scope');
+            }
+
             try {
                 $this->scopeTable->beginTransaction();
 
@@ -171,6 +176,11 @@ class Scope
             $userScopes = $this->userScopeTable->getCount(new Condition(['scopeId', '=', $scope['id']]));
             if ($userScopes > 0) {
                 throw new StatusCode\ConflictException('Scope is assgined to an user. Remove the scope from the user in order to delete the scope');
+            }
+
+            // check whether this is a system scope
+            if (in_array($scope['id'], [1, 2, 3])) {
+                throw new StatusCode\BadRequestException('It is not possible to change this scope');
             }
 
             try {
