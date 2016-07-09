@@ -385,6 +385,15 @@ class Version030 implements VersionInterface
             }
         }
 
+        // regenerate the schema cache
+        $schemas = $connection->fetchAll('SELECT id, source FROM fusio_schema');
+        $parser  = new Parser($connection);
+
+        foreach ($schemas as $schema) {
+            $cache = $parser->parse($schema['source']);
+            $connection->update('fusio_schema', ['cache' => $cache], ['id' => $schema['id']]);
+        }
+
         // insert action class
         $connection->insert('fusio_action_class', [
             'class' => 'Fusio\Impl\Action\SqlBuilder',
