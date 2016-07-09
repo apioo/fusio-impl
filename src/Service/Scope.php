@@ -105,16 +105,26 @@ class Scope
             throw new StatusCode\BadRequestException('Scope already exists');
         }
 
-        // create scope
-        $this->scopeTable->create(array(
-            'name'        => $name,
-            'description' => $description,
-        ));
+        try {
+            $this->scopeTable->beginTransaction();
 
-        // insert routes
-        $scopeId = $this->scopeTable->getLastInsertId();
+            // create scope
+            $this->scopeTable->create(array(
+                'name'        => $name,
+                'description' => $description,
+            ));
 
-        $this->insertRoutes($scopeId, $routes);
+            // insert routes
+            $scopeId = $this->scopeTable->getLastInsertId();
+
+            $this->insertRoutes($scopeId, $routes);
+
+            $this->scopeTable->commit();
+        } catch (\Exception $e) {
+            $this->scopeTable->rollBack();
+
+            throw $e;
+        }
     }
 
     public function update($scopeId, $name, $description, array $routes = null)
@@ -122,15 +132,26 @@ class Scope
         $scope = $this->scopeTable->get($scopeId);
 
         if (!empty($scope)) {
-            $this->scopeTable->update(array(
-                'id'          => $scope['id'],
-                'name'        => $name,
-                'description' => $description,
-            ));
+            try {
+                $this->scopeTable->beginTransaction();
 
-            $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+                $this->scopeTable->update(array(
+                    'id'          => $scope['id'],
+                    'name'        => $name,
+                    'description' => $description,
+                ));
 
-            $this->insertRoutes($scope['id'], $routes);
+                $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+
+                $this->insertRoutes($scope['id'], $routes);
+
+                $this->scopeTable->commit();
+            } catch (\Exception $e) {
+                $this->scopeTable->rollBack();
+
+                throw $e;
+            }
+
         } else {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -152,12 +173,22 @@ class Scope
                 throw new StatusCode\ConflictException('Scope is assgined to an user. Remove the scope from the user in order to delete the scope');
             }
 
-            // delete all routes assigned to the scope
-            $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+            try {
+                $this->scopeTable->beginTransaction();
 
-            $this->scopeTable->delete(array(
-                'id' => $scope['id']
-            ));
+                // delete all routes assigned to the scope
+                $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+
+                $this->scopeTable->delete(array(
+                    'id' => $scope['id']
+                ));
+
+                $this->scopeTable->commit();
+            } catch (\Exception $e) {
+                $this->scopeTable->rollBack();
+
+                throw $e;
+            }
         } else {
             throw new StatusCode\NotFoundException('Could not find scope');
         }

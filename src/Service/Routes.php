@@ -107,18 +107,28 @@ class Routes
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
-        // create route
-        $this->routesTable->create([
-            'status'     => TableRoutes::STATUS_ACTIVE,
-            'methods'    => 'GET|POST|PUT|DELETE',
-            'path'       => $path,
-            'controller' => 'Fusio\Impl\Controller\SchemaApiController',
-        ]);
+        try {
+            $this->routesTable->beginTransaction();
 
-        // get last insert id
-        $routeId = $this->routesTable->getLastInsertId();
+            // create route
+            $this->routesTable->create([
+                'status'     => TableRoutes::STATUS_ACTIVE,
+                'methods'    => 'GET|POST|PUT|DELETE',
+                'path'       => $path,
+                'controller' => 'Fusio\Impl\Controller\SchemaApiController',
+            ]);
 
-        $this->handleConfig($routeId, $config);
+            // get last insert id
+            $routeId = $this->routesTable->getLastInsertId();
+
+            $this->handleConfig($routeId, $config);
+
+            $this->routesTable->commit();
+        } catch (\Exception $e) {
+            $this->routesTable->rollBack();
+
+            throw $e;
+        }
     }
 
     public function update($routeId, $config)
@@ -130,7 +140,17 @@ class Routes
                 throw new StatusCode\GoneException('Route was deleted');
             }
 
-            $this->handleConfig($route->id, $config);
+            try {
+                $this->routesTable->beginTransaction();
+
+                $this->handleConfig($route->id, $config);
+
+                $this->routesTable->commit();
+            } catch (\Exception $e) {
+                $this->routesTable->rollBack();
+
+                throw $e;
+            }
         } else {
             throw new StatusCode\NotFoundException('Could not find route');
         }

@@ -62,10 +62,20 @@ class Grant
 
         if (!empty($grant)) {
             if ($grant['userId'] == $userId) {
-                $this->userGrantTable->delete($grant);
+                try {
+                    $this->userGrantTable->beginTransaction();
 
-                // delete tokens
-                $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
+                    $this->userGrantTable->delete($grant);
+
+                    // delete tokens
+                    $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
+
+                    $this->userGrantTable->commit();
+                } catch (\Exception $e) {
+                    $this->userGrantTable->rollBack();
+
+                    throw $e;
+                }
             } else {
                 throw new StatusCode\BadRequestException('Invalid grant id');
             }

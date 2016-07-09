@@ -179,20 +179,30 @@ class User
         $this->assertEmail($email);
         $this->assertPassword($password);
 
-        // create user
-        $this->userTable->create(array(
-            'provider' => ProviderInterface::PROVIDER_SYSTEM,
-            'status'   => $status,
-            'name'     => $name,
-            'email'    => $email,
-            'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
-            'date'     => new DateTime(),
-        ));
+        try {
+            $this->userTable->beginTransaction();
 
-        $userId = $this->userTable->getLastInsertId();
+            // create user
+            $this->userTable->create(array(
+                'provider' => ProviderInterface::PROVIDER_SYSTEM,
+                'status'   => $status,
+                'name'     => $name,
+                'email'    => $email,
+                'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
+                'date'     => new DateTime(),
+            ));
 
-        // add scopes
-        $this->insertScopes($userId, $scopes);
+            $userId = $this->userTable->getLastInsertId();
+
+            // add scopes
+            $this->insertScopes($userId, $scopes);
+
+            $this->userTable->commit();
+        } catch (\Exception $e) {
+            $this->userTable->rollBack();
+
+            throw $e;
+        }
 
         return $userId;
     }
@@ -222,21 +232,31 @@ class User
             $email = null;
         }
 
-        // create user
-        $this->userTable->create(array(
-            'provider' => $provider,
-            'status'   => TableUser::STATUS_CONSUMER,
-            'remoteId' => $id,
-            'name'     => $name,
-            'email'    => $email,
-            'password' => null,
-            'date'     => new DateTime(),
-        ));
+        try {
+            $this->userTable->beginTransaction();
 
-        $userId = $this->userTable->getLastInsertId();
+            // create user
+            $this->userTable->create(array(
+                'provider' => $provider,
+                'status'   => TableUser::STATUS_CONSUMER,
+                'remoteId' => $id,
+                'name'     => $name,
+                'email'    => $email,
+                'password' => null,
+                'date'     => new DateTime(),
+            ));
 
-        // add scopes
-        $this->insertScopes($userId, $scopes);
+            $userId = $this->userTable->getLastInsertId();
+
+            // add scopes
+            $this->insertScopes($userId, $scopes);
+
+            $this->userTable->commit();
+        } catch (\Exception $e) {
+            $this->userTable->rollBack();
+
+            throw $e;
+        }
 
         return $userId;
     }
@@ -250,18 +270,28 @@ class User
             $this->assertName($name);
             $this->assertEmail($email);
 
-            $this->userTable->update(array(
-                'id'     => $user['id'],
-                'status' => $status,
-                'name'   => $name,
-                'email'  => $email,
-            ));
+            try {
+                $this->userTable->beginTransaction();
 
-            // delete existing scopes
-            $this->userScopeTable->deleteAllFromUser($user['id']);
+                $this->userTable->update(array(
+                    'id'     => $user['id'],
+                    'status' => $status,
+                    'name'   => $name,
+                    'email'  => $email,
+                ));
 
-            // add scopes
-            $this->insertScopes($user['id'], $scopes);
+                // delete existing scopes
+                $this->userScopeTable->deleteAllFromUser($user['id']);
+
+                // add scopes
+                $this->insertScopes($user['id'], $scopes);
+
+                $this->userTable->commit();
+            } catch (\Exception $e) {
+                $this->userTable->rollBack();
+
+                throw $e;
+            }
         } else {
             throw new StatusCode\NotFoundException('Could not find user');
         }

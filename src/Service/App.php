@@ -179,22 +179,32 @@ class App
         $appKey    = TokenGenerator::generateAppKey();
         $appSecret = TokenGenerator::generateAppSecret();
 
-        $this->appTable->create(array(
-            'userId'     => $userId,
-            'status'     => $status,
-            'name'       => $name,
-            'url'        => $url,
-            'parameters' => $parameters,
-            'appKey'     => $appKey,
-            'appSecret'  => $appSecret,
-            'date'       => new DateTime(),
-        ));
+        try {
+            $this->appTable->beginTransaction();
 
-        $appId = $this->appTable->getLastInsertId();
+            $this->appTable->create(array(
+                'userId'     => $userId,
+                'status'     => $status,
+                'name'       => $name,
+                'url'        => $url,
+                'parameters' => $parameters,
+                'appKey'     => $appKey,
+                'appSecret'  => $appSecret,
+                'date'       => new DateTime(),
+            ));
 
-        if ($scopes !== null) {
-            // insert scopes
-            $this->insertScopes($appId, $scopes);
+            $appId = $this->appTable->getLastInsertId();
+
+            if ($scopes !== null) {
+                // insert scopes
+                $this->insertScopes($appId, $scopes);
+            }
+
+            $this->appTable->commit();
+        } catch (\Exception $e) {
+            $this->appTable->rollBack();
+
+            throw $e;
         }
     }
 
@@ -214,20 +224,30 @@ class App
                 $parameters = $app['parameters'];
             }
 
-            $this->appTable->update(array(
-                'id'         => $app['id'],
-                'status'     => $status,
-                'name'       => $name,
-                'url'        => $url,
-                'parameters' => $parameters,
-            ));
+            try {
+                $this->appTable->beginTransaction();
 
-            if ($scopes !== null) {
-                // delete existing scopes
-                $this->appScopeTable->deleteAllFromApp($app['id']);
+                $this->appTable->update(array(
+                    'id'         => $app['id'],
+                    'status'     => $status,
+                    'name'       => $name,
+                    'url'        => $url,
+                    'parameters' => $parameters,
+                ));
 
-                // insert scopes
-                $this->insertScopes($app['id'], $scopes);
+                if ($scopes !== null) {
+                    // delete existing scopes
+                    $this->appScopeTable->deleteAllFromApp($app['id']);
+
+                    // insert scopes
+                    $this->insertScopes($app['id'], $scopes);
+                }
+
+                $this->appTable->commit();
+            } catch (\Exception $e) {
+                $this->appTable->rollBack();
+
+                throw $e;
             }
         } else {
             throw new StatusCode\NotFoundException('Could not find app');
