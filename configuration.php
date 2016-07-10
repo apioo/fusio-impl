@@ -49,6 +49,13 @@ return array(
     // Path to the library folder
     'psx_path_library'        => __DIR__ . '/src',
 
+    // Supported writers
+    'psx_supported_writer'    => [
+        \PSX\Data\Writer\Json::class,
+        \PSX\Data\Writer\Jsonp::class,
+        \PSX\Data\Writer\Jsonx::class,
+    ],
+
     // Class name of the error controller
     //'psx_error_controller'    => null,
 
