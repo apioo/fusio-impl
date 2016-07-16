@@ -300,9 +300,11 @@ class Database
         foreach ($fields as $field) {
             if (isset($options[$field])) {
                 if ($field === 'type') {
-                    $result[$field] = Type::getType($options[$field]);
+                    $result['type'] = Type::getType($options[$field]);
                 } elseif ($field === 'null') {
                     $result['notnull'] = !$options[$field];
+                } elseif ($field === 'default') {
+                    $result['default'] = !empty($options[$field]) ? $options[$field] : null;
                 } else {
                     $result[$field] = $options[$field];
                 }
