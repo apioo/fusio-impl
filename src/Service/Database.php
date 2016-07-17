@@ -22,12 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
+use Doctrine\DBAL\Schema\Schema as DBALSchema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Fusio\Impl\Connector;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use Doctrine\DBAL\Schema\Schema;
 use PSX\Sql;
 use PSX\Sql\Condition;
 use RuntimeException;
@@ -184,7 +184,7 @@ class Database
         }
     }
 
-    protected function executeQuery(DBALConnection $connection, Schema $schema, $preview)
+    protected function executeQuery(DBALConnection $connection, DBALSchema $schema, $preview)
     {
         $fromSchema = $connection->getSchemaManager()->createSchema();
         $queries    = $fromSchema->getMigrateToSql($schema, $connection->getDatabasePlatform());

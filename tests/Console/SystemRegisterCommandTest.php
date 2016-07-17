@@ -46,7 +46,7 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
         $command = Environment::getService('console')->find('system:register');
 
         $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream('y' . "\n" . '/import' . "\n"));
+        $helper->setInputStream($this->getInputStream('y' . "\n" . '/import' . "\n" . "1"));
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -80,6 +80,18 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
         $this->assertEquals(4, $connection['id']);
         $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidConnection', $connection['class']);
         $this->assertEquals(69, strlen($connection['config']));
+
+        // check database
+        $this->assertContains('app_todo', $this->connection->getSchemaManager()->listTableNames());
+
+        $table   = $this->connection->getSchemaManager()->listTableDetails('app_todo');
+        $columns = $table->getColumns();
+
+        $this->assertTrue($table->hasPrimaryKey());
+        $this->assertEquals(3, count($columns));
+        $this->assertArrayHasKey('id', $columns);
+        $this->assertArrayHasKey('title', $columns);
+        $this->assertArrayHasKey('insertdate', $columns);
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, propertyName, source, cache FROM fusio_schema WHERE name = :name', [

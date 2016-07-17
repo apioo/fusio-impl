@@ -55,7 +55,7 @@ abstract class SystemAbstract
     protected $connectionParser;
     protected $logger;
 
-    protected $types = ['connection', 'schema', 'action', 'routes'];
+    protected $types = ['connection', 'database', 'schema', 'action', 'routes'];
     protected $accessToken;
 
     public function __construct(Dispatch $dispatch, Connection $connection, ParserInterface $actionParser, ParserInterface $connectionParser, LoggerInterface $logger)
@@ -119,6 +119,10 @@ abstract class SystemAbstract
                 return $this->transformConnection($entity);
                 break;
 
+            case 'database':
+                return $this->transformDatabase($entity);
+                break;
+
             case 'schema':
                 return $this->transformSchema($entity);
                 break;
@@ -143,6 +147,11 @@ abstract class SystemAbstract
         $form   = $this->connectionParser->getForm($entity->class);
         $entity = $this->handleFormReferences($entity, $form);
 
+        return $entity;
+    }
+
+    protected function transformDatabase(stdClass $entity)
+    {
         return $entity;
     }
 

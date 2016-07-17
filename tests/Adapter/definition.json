@@ -44,6 +44,24 @@
             }
         }
     }],
+    "database": [{
+        "name": "app_todo",
+        "columns": [{
+            "name": "id",
+            "type": "integer"
+        },{
+            "name": "title",
+            "type": "string"
+        },{
+            "name": "insertDate",
+            "type": "datetime"
+        }],
+        "indexes": [{
+            "name": "PRIMARY",
+            "columns": ["id"],
+            "primary": true
+        }]
+    }],
     "connection": [{
         "name": "Adapter-Connection",
         "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection",
