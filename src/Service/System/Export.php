@@ -48,9 +48,9 @@ class Export extends SystemAbstract
             $data->connectionClass = $classes;
         }
 
-        // @TODO for schema and action exports there can be a problem with the 
-        // order. In case a schema reference another schema and the depending 
-        // schema is listed afterwards the import will not work. The same 
+        // @TODO for schema and action exports there can be a problem with the
+        // order. In case a schema reference another schema and the depending
+        // schema is listed afterwards the import will not work. The same
         // problem exists for actions. There must be a sorting to list entries
         // with dependencies at the bottom
 

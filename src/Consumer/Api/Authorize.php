@@ -154,7 +154,7 @@ class Authorize extends SchemaApiAbstract
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
 
-        // save the decision of the user. We save the decision so that it is 
+        // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
         $this->saveUserDecision($app['id'], $record->allow);
 
@@ -172,10 +172,10 @@ class Authorize extends SchemaApiAbstract
 
                 // generate access token
                 $accessToken = $this->appService->generateAccessToken(
-                    $app['id'], 
-                    $this->userId, 
-                    $scopes, 
-                    isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1', 
+                    $app['id'],
+                    $this->userId,
+                    $scopes,
+                    isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
                     new \DateInterval($this->config->get('fusio_expire_implicit'))
                 );
 

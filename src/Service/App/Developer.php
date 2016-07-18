@@ -115,10 +115,10 @@ class Developer
         }
 
         $this->appService->create(
-            $userId, 
+            $userId,
             $this->appApproval === false ? TableApp::STATUS_ACTIVE : TableApp::STATUS_PENDING,
-            $name, 
-            $url, 
+            $name,
+            $url,
             null,
             $scopes
         );
@@ -193,7 +193,7 @@ class Developer
 
         });
 
-        return array_map(function($scope){
+        return array_map(function ($scope) {
             return $scope['name'];
         }, $scopes);
     }

@@ -208,7 +208,7 @@ class Container extends DefaultContainer
     public function getConnector()
     {
         return new Connector(
-            $this->get('connection'), 
+            $this->get('connection'),
             $this->get('connection_factory'),
             $this->get('config')->get('fusio_project_key')
         );
@@ -339,9 +339,9 @@ class Container extends DefaultContainer
         $application->add(new Console\ImportSchemaCommand($this->get('schema_service')));
 
         $application->add(new Console\GenerateAccessTokenCommand(
-            $this->get('app_service'), 
-            $this->get('scope_service'), 
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), 
+            $this->get('app_service'),
+            $this->get('scope_service'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\User')
         ));
 

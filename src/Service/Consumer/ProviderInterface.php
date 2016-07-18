@@ -37,14 +37,14 @@ interface ProviderInterface
 
     /**
      * Returns an id to identify the provider
-     * 
+     *
      * @return integer
      */
     public function getId();
 
     /**
      * Requests user informations of an remote provider
-     * 
+     *
      * @param string $code
      * @param string $clientId
      * @param string $redirectUri

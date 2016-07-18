@@ -50,7 +50,7 @@ class DatabaseRoutes implements RoutingParserInterface
                            methods,
                            path,
                            controller
-                      FROM fusio_routes 
+                      FROM fusio_routes
                      WHERE status = :status';
 
             $collection = new RoutingCollection();

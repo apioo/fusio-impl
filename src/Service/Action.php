@@ -83,11 +83,11 @@ class Action
             $startIndex,
             16,
             $this->actionTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
-                $condition, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
+                $condition,
                 Fields::blacklist(['class', 'config'])
             )
         );

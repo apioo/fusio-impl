@@ -655,4 +655,3 @@ class OldRecord extends Record
         $this->setProperties($record['fields']);
     }
 }
-

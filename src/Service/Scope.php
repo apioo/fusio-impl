@@ -61,10 +61,10 @@ class Scope
             $startIndex,
             16,
             $this->scopeTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
                 $condition
             )
         );
@@ -156,7 +156,6 @@ class Scope
 
                 throw $e;
             }
-
         } else {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -205,7 +204,7 @@ class Scope
     }
 
     /**
-     * Returns all scope names which are valid for the app and the user. The 
+     * Returns all scope names which are valid for the app and the user. The
      * scopes are a comma seperated list. All scopes which are listed in the
      * $exclude array are excluded
      *

@@ -53,8 +53,8 @@ class ClientCredentials extends ClientCredentialsAbstract
     protected function generate(Credentials $credentials, $scope)
     {
         $userId = $this->userService->authenticateUser(
-            $credentials->getClientId(), 
-            $credentials->getClientSecret(), 
+            $credentials->getClientId(),
+            $credentials->getClientSecret(),
             [User::STATUS_ADMINISTRATOR]
         );
 
@@ -69,9 +69,9 @@ class ClientCredentials extends ClientCredentialsAbstract
 
             // generate access token
             return $this->appService->generateAccessToken(
-                App::BACKEND, 
-                $userId, 
-                $scopes, 
+                App::BACKEND,
+                $userId,
+                $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
                 new \DateInterval($this->expireBackend)
             );

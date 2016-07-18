@@ -62,8 +62,8 @@ class Password extends PasswordAbstract
         if (!empty($app)) {
             // check user
             $userId = $this->userService->authenticateUser(
-                $username, 
-                $password, 
+                $username,
+                $password,
                 [User::STATUS_ADMINISTRATOR, User::STATUS_CONSUMER]
             );
 
@@ -76,9 +76,9 @@ class Password extends PasswordAbstract
 
                 // generate access token
                 return $this->appService->generateAccessToken(
-                    $app['id'], 
-                    $userId, 
-                    $scopes, 
+                    $app['id'],
+                    $userId,
+                    $scopes,
                     isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
                     new \DateInterval($this->expireApp)
                 );

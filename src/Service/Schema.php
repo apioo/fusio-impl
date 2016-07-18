@@ -92,11 +92,11 @@ class Schema
             $startIndex,
             16,
             $this->schemaTable->getAll(
-                $startIndex, 
-                16, 
+                $startIndex,
+                16,
                 'id',
-                Sql::SORT_DESC, 
-                $condition, 
+                Sql::SORT_DESC,
+                $condition,
                 Fields::blacklist(['propertyName', 'source', 'cache'])
             )
         );

@@ -182,10 +182,10 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     }
 
     /**
-     * Select all methods from the routes method table and build a resource 
-     * based on the data. If the route is in production mode read the schema 
+     * Select all methods from the routes method table and build a resource
+     * based on the data. If the route is in production mode read the schema
      * from the cache else resolve it
-     * 
+     *
      * @param integer $version
      * @return null|Resource
      */

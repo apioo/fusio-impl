@@ -114,15 +114,15 @@ class Method extends TableAbstract
         }
 
         $sql = '  SELECT method.id,
-                         method.routeId, 
-                         method.version, 
-                         method.status, 
-                         method.method, 
-                         method.active, 
-                         method.public, 
+                         method.routeId,
+                         method.version,
+                         method.status,
+                         method.method,
+                         method.active,
+                         method.public,
                          ' . $cache . '
-                         method.request, 
-                         method.response, 
+                         method.request,
+                         method.response,
                          method.action
                     FROM fusio_routes_method method
                    WHERE method.routeId = :routeId
@@ -154,8 +154,8 @@ class Method extends TableAbstract
 
     public function getLatestVersion($routeId)
     {
-        $sql = 'SELECT MAX(version) 
-                  FROM fusio_routes_method 
+        $sql = 'SELECT MAX(version)
+                  FROM fusio_routes_method
                  WHERE routeId = :id
                    AND status = :status';
 
@@ -167,8 +167,8 @@ class Method extends TableAbstract
         if (empty($version)) {
             // in case we have no production version we try to select any max
             // version
-            $sql = 'SELECT MAX(version) 
-                      FROM fusio_routes_method 
+            $sql = 'SELECT MAX(version)
+                      FROM fusio_routes_method
                      WHERE routeId = :id';
 
             return $this->connection->fetchColumn($sql, [
@@ -181,8 +181,8 @@ class Method extends TableAbstract
 
     public function hasProductionVersion($routeId)
     {
-        $sql = 'SELECT COUNT(id) 
-                  FROM fusio_routes_method 
+        $sql = 'SELECT COUNT(id)
+                  FROM fusio_routes_method
                  WHERE routeId = :id
                    AND status IN (:production, :deprecated)
                    AND active = :active';

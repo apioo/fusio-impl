@@ -129,5 +129,4 @@ class Entity extends SchemaApiAbstract
             'message' => 'Schema successful deleted',
         );
     }
-
 }

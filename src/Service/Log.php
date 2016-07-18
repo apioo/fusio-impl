@@ -54,11 +54,11 @@ class Log
             $startIndex,
             16,
             $this->logTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
-                $condition, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
+                $condition,
                 Fields::blacklist(['header', 'body'])
             )
         );

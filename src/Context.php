@@ -71,7 +71,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * Returns the user which has authenticated through the app. Can also be an 
+     * Returns the user which has authenticated through the app. Can also be an
      * anonymous user if authorization is not required for the endpoint
      *
      * @return \Fusio\Engine\Model\UserInterface

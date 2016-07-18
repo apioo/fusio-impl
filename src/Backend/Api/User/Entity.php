@@ -106,7 +106,7 @@ class Entity extends SchemaApiAbstract
         return array(
             'success' => true,
             'message' => 'User successful updated',
-        );        
+        );
     }
 
     /**

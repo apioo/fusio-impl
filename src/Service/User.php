@@ -87,10 +87,10 @@ class User
             $startIndex,
             16,
             $this->userTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
                 $condition,
                 Fields::blacklist(['password'])
             )
@@ -395,5 +395,4 @@ class User
             }
         }
     }
-
 }

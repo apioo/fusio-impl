@@ -55,14 +55,14 @@ class AuthorizationCode extends AuthorizationCodeAbstract
     protected function generate(Credentials $credentials, $code, $redirectUri, $clientId)
     {
         $code = $this->appCodeService->getCode(
-            $credentials->getClientId(), 
+            $credentials->getClientId(),
             $credentials->getClientSecret(),
             $code,
             $redirectUri ?: ''
         );
 
         if (!empty($code)) {
-            // check whether the code is older then 30 minutes. After that we 
+            // check whether the code is older then 30 minutes. After that we
             // can not exchange it for an access token
             if (time() - strtotime($code['date']) > 60 * 30) {
                 throw new ServerErrorException('Code is expired');
@@ -76,9 +76,9 @@ class AuthorizationCode extends AuthorizationCodeAbstract
 
             // generate access token
             return $this->appService->generateAccessToken(
-                $code['appId'], 
-                $code['userId'], 
-                $scopes, 
+                $code['appId'],
+                $code['userId'],
+                $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
                 new \DateInterval($this->expireApp)
             );

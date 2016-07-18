@@ -63,11 +63,11 @@ class Connection
             $startIndex,
             16,
             $this->connectionTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
-                $condition, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
+                $condition,
                 Fields::blacklist(['class', 'config'])
             )
         );

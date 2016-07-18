@@ -99,7 +99,7 @@ class Routes extends TableAbstract
                 'request'  => 'request',
                 'response' => 'response',
                 'action'   => 'action',
-            ], null, function(array $result){
+            ], null, function (array $result) {
                 $data = [];
                 foreach ($result as $row) {
                     if (!isset($data[$row['version']])) {

@@ -94,10 +94,10 @@ class Collection extends SchemaApiAbstract
     protected function doPost($record)
     {
         $this->userService->create(
-            $record->status, 
-            $record->name, 
-            $record->email, 
-            $record->password, 
+            $record->status,
+            $record->name,
+            $record->email,
+            $record->password,
             $record->scopes
         );
 

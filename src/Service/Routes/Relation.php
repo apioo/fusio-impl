@@ -32,7 +32,7 @@ use PSX\Api\Resource;
 use PSX\Sql\Condition;
 
 /**
- * The relation service determines all schema and action ids which are used by a 
+ * The relation service determines all schema and action ids which are used by a
  * route and inserts them into a table
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>

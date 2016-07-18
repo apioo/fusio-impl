@@ -92,11 +92,11 @@ class App
             $startIndex,
             16,
             $this->appTable->getAll(
-                $startIndex, 
-                16, 
-                'id', 
-                Sql::SORT_DESC, 
-                $condition, 
+                $startIndex,
+                16,
+                'id',
+                Sql::SORT_DESC,
+                $condition,
                 Fields::blacklist(['url', 'parameters', 'appSecret'])
             )
         );
