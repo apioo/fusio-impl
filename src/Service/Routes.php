@@ -21,11 +21,11 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Service\Routes\Deploy;
+use Fusio\Impl\Service\Routes\Relation;
 use Fusio\Impl\Table\Routes as TableRoutes;
 use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
-use Fusio\Impl\Service\Routes\Deploy;
-use Fusio\Impl\Service\Routes\Relation;
 use PSX\Api\Resource;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;

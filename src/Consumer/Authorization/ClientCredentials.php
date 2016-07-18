@@ -21,17 +21,13 @@
 
 namespace Fusio\Impl\Consumer\Authorization;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Service\App as AppService;
 use Fusio\Impl\Service\User as UserService;
 use Fusio\Impl\Table\App;
-use Fusio\Impl\Table\App\Token as AppToken;
 use Fusio\Impl\Table\User;
 use PSX\DateTime;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\ClientCredentialsAbstract;
-use PSX\Oauth2\AccessToken;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
 
 /**

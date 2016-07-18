@@ -23,9 +23,9 @@ namespace Fusio\Impl\Adapter\Transform;
 
 use Fusio\Impl\Adapter\TransformInterface;
 use InvalidArgumentException;
+use PSX\Data\Util\CurveArray;
 use PSX\Json;
 use PSX\Uri\Uri;
-use PSX\Data\Util\CurveArray;
 use Symfony\Component\Yaml\Parser;
 
 /**

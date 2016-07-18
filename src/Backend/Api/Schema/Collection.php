@@ -25,9 +25,9 @@ use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
-use PSX\Validate\Filter as PSXFilter;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
 /**

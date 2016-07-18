@@ -21,15 +21,15 @@
 
 namespace Fusio\Impl\Service\App;
 
+use Fusio\Impl\Service\App as ServiceApp;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User\Scope as TableUserScope;
-use Fusio\Impl\Service\App as ServiceApp;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
-use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
+use PSX\Sql\Sql;
 
 /**
  * Developer

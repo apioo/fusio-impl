@@ -31,9 +31,9 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Validate\ExpressionFilter;
 use Fusio\Impl\Validate\ServiceContainer;
 use PSX\Cache\Pool;
-use PSX\Http\Exception as StatusCode;
 use PSX\Data\Validator\Property;
 use PSX\Data\Validator\Validator as PSXValidator;
+use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Yaml\Parser;
 
 /**

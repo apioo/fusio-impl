@@ -26,19 +26,17 @@ use Fusio\Impl\Authorization\Oauth2Filter;
 use Fusio\Impl\Context as FusioContext;
 use Fusio\Impl\Processor\RepositoryInterface;
 use Fusio\Impl\Request;
-use Fusio\Impl\Schema\LazySchema;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Data\Record\Transformer;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Filter\CORS;
-use PSX\Record\Record;
-use PSX\Record\RecordInterface;
-use PSX\Schema\SchemaInterface;
 use PSX\Framework\Filter\UserAgentEnforcer;
-use PSX\Http\Exception as StatusCode;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception as StatusCode;
+use PSX\Record\Record;
+use PSX\Schema\SchemaInterface;
 
 /**
  * SchemaApiController

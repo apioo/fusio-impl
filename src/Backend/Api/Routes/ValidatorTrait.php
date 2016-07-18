@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Backend\Api\Routes;
 
 use Fusio\Impl\Backend\Filter\PrimaryKey;
-use Fusio\Impl\Backend\Filter\Routes\Methods;
 use Fusio\Impl\Backend\Filter\Routes\Path;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Data\Validator\Property;

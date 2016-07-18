@@ -24,12 +24,12 @@ namespace Fusio\Impl\Console;
 use DateInterval;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
-use RuntimeException;
 
 /**
  * GenerateAccessTokenCommand

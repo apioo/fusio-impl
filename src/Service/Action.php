@@ -27,9 +27,9 @@ use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
-use PSX\Sql\Sql;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
+use PSX\Sql\Sql;
 
 /**
  * Action

@@ -27,8 +27,8 @@ use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
 use Fusio\Impl\Table\User\Scope as TableUserScope;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
-use PSX\Sql\Sql;
 use PSX\Sql\Condition;
+use PSX\Sql\Sql;
 
 /**
  * Scope

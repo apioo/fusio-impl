@@ -32,7 +32,6 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
 use Fusio\Engine\Template\FactoryInterface;
 use Fusio\Impl\ConfigurationException;
-use PSX\Data\Util\CurveArray;
 
 /**
  * SqlFetchAll

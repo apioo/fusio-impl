@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Adapter\Transform;
-use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Framework\Controller\ApiAbstract;
 use PSX\Json\Parser;

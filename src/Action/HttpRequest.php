@@ -33,7 +33,6 @@ use Fusio\Impl\Base;
 use PSX\Http\Client;
 use PSX\Http\Request;
 use PSX\Uri\Url;
-use Symfony\Component\Yaml\Parser;
 
 /**
  * HttpRequest

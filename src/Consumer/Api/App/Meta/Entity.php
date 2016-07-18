@@ -26,13 +26,12 @@ use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Table\App;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Record\RecordInterface;
-use PSX\Validate\Filter as PSXFilter;
-use PSX\Http\Exception as StatusCode;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
 use PSX\Validate;
+use PSX\Validate\Filter as PSXFilter;
 
 /**
  * Entity

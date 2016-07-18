@@ -25,11 +25,9 @@ use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Record\RecordInterface;
-use PSX\Validate\Filter as PSXFilter;
 use PSX\Framework\Loader\Context;
 use PSX\Sql\Condition;
-use PSX\Validate\Validate;
+use PSX\Validate\Filter as PSXFilter;
 
 /**
  * Collection

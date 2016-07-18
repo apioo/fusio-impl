@@ -28,7 +28,6 @@ use Fusio\Impl\Adapter\Instruction;
 use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Backend\Filter\Routes\Path as PathFilter;
 use Fusio\Impl\Service;
-use Psr\Log\LoggerInterface;
 use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

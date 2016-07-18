@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Table\App;
 
-use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table\App;
 use PSX\Sql\TableAbstract;
 

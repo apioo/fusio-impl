@@ -24,8 +24,8 @@ namespace Fusio\Impl\Action;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use PSX\Data\Processor;
 use PSX\Data\Payload;
+use PSX\Data\Processor;
 
 /**
  * HttpProxy

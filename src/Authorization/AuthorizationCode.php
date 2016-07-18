@@ -21,16 +21,13 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service\App as AppService;
 use Fusio\Impl\Service\App\Code as AppCodeService;
 use Fusio\Impl\Service\Scope as ScopeService;
 use Fusio\Impl\Table\App;
-use Fusio\Impl\Table\App\Token as AppToken;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
-use PSX\Oauth2\AccessToken;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
 
 /**

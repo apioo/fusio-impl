@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Service\Consumer;
 
-use PSX\Http\Client;
-
 /**
  * ProviderInterface
  *

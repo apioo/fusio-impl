@@ -21,11 +21,10 @@
 
 namespace Fusio\Impl\Console;
 
-use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Service\User as ServiceUser;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table\Scope;
 use Fusio\Impl\Table\User;
-use Fusio\Impl\Service\User as ServiceUser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

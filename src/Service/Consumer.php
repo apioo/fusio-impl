@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Service;
 
 use DateInterval;
-use DateTime;
 use Firebase\JWT\JWT;
 use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service\Consumer\Model\User as ModelUser;
@@ -30,12 +29,11 @@ use Fusio\Impl\Service\Consumer\ProviderInterface;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Table\Scope as TableScope;
 use Fusio\Impl\Table\User as TableUser;
-use PSX\Http\Exception as StatusCode;
+use PSX\Framework\Config\Config as PSXConfig;
 use PSX\Http;
+use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 use PSX\Sql\Condition;
-use PSX\Framework\Config\Config as PSXConfig;
-use RuntimeException;
 
 /**
  * Consumer

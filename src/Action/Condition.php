@@ -31,7 +31,6 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\App\RateLimit;
 use Psr\Cache\CacheItemPoolInterface;
-use PSX\Cache\Pool;
 use PSX\Data\Accessor;
 use PSX\Validate\Validate;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;

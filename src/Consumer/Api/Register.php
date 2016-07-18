@@ -21,19 +21,13 @@
 
 namespace Fusio\Impl\Consumer\Api;
 
-use DateTime;
-use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Table\App;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Record\RecordInterface;
-use PSX\Validate\Filter as PSXFilter;
-use PSX\Http\Exception as StatusCode;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use PSX\Uri\Uri;
-use PSX\Uri\Url;
-use PSX\Validate\Validate;
+use PSX\Validate\Filter as PSXFilter;
 
 /**
  * Register

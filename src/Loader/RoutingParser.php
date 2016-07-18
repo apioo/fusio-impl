@@ -26,8 +26,8 @@ use Fusio\Impl\Table\Routes as TableRoutes;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\PathMatcher;
-use PSX\Http\RequestInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Http\RequestInterface;
 
 /**
  * RoutingParser

@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Service\Routes;
 
+use Fusio\Engine\Schema\LoaderInterface;
 use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
-use Fusio\Engine\Schema\LoaderInterface;
 use PSX\Api\Resource;
 use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;

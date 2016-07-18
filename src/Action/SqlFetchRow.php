@@ -33,7 +33,6 @@ use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
 use Fusio\Engine\Template\FactoryInterface;
 use Fusio\Impl\ConfigurationException;
 use PSX\Http\Exception as StatusCode;
-use PSX\Data\Util\CurveArray;
 
 /**
  * SqlFetchRow

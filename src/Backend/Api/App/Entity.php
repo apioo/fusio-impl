@@ -26,7 +26,6 @@ use Fusio\Impl\Table\App as TableApp;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
-use PSX\Record\RecordInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**

@@ -30,7 +30,6 @@ use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;
 use PSX\Sql\Condition;
-use RuntimeException;
 
 /**
  * Database

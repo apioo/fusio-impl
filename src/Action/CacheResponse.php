@@ -30,7 +30,6 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use PSX\Cache\Pool;
 
 /**
  * CacheResponse

@@ -32,11 +32,10 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
 use Fusio\Engine\Template\FactoryInterface;
 use Fusio\Impl\ConfigurationException;
-use PSX\Data\Util\CurveArray;
 use PSX\Sql\Builder;
+use PSX\Sql\Field;
 use PSX\Sql\Provider;
 use PSX\Sql\Reference;
-use PSX\Sql\Field;
 
 /**
  * SqlBuilder

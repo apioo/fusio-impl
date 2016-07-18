@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Template\Filter;
 
+use PSX\Data\Writer;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
-use PSX\Data\Writer;
 
 /**
  * Json
