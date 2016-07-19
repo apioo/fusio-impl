@@ -246,7 +246,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             if ($schema->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
                 $this->setBody($response);
             } else {
-                $this->setBodyAs($schema, $response);
+                $this->setBodyAs($response, $schema);
             }
         } else {
             $this->setResponseCode(204);

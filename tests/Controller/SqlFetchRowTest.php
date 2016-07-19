@@ -38,6 +38,26 @@ class SqlFetchRowTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testGet()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "title": "foo",
+    "content": "bar",
+    "date": "2015-02-27T19:59:15Z"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+    
     public function testPost()
     {
         $body = <<<'JSON'
