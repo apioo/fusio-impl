@@ -238,7 +238,7 @@ class Routes
                     ];
 
                     $this->routesMethodTable->create($data);
-                } else {
+                } elseif ($active === true) {
                     // if the method is not in development mode we create only
                     // the schema/action cache on the transition from dev to
                     // prod in every other case we dont change any values
