@@ -81,6 +81,6 @@ class Path extends FilterAbstract
 
     protected function getReservedSegments()
     {
-        return ['backend', 'doc', 'authorization', 'export'];
+        return ['backend', 'consumer', 'doc', 'authorization', 'export'];
     }
 }
