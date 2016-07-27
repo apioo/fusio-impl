@@ -55,6 +55,10 @@ class DBAL implements ConnectionInterface
             'driver'   => $config->get('type'),
         );
 
+        if ($config->get('type') == 'pdo_mysql') {
+            $params['charset'] = 'utf8';
+        }
+
         return DriverManager::getConnection($params);
     }
 
