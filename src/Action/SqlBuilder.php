@@ -36,6 +36,7 @@ use PSX\Sql\Builder;
 use PSX\Sql\Field;
 use PSX\Sql\Provider;
 use PSX\Sql\Reference;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * SqlBuilder
@@ -88,6 +89,10 @@ class SqlBuilder implements ActionInterface
                 $this->parseDefinition($connection, json_decode($definition, true))
             );
 
+            if (empty($result)) {
+                throw new StatusCode\NotFoundException('Entry not available');
+            }
+
             return $this->response->build(200, [], $result);
         } else {
             throw new ConfigurationException('Given connection must be a DBAL connection');
@@ -128,7 +133,7 @@ class SqlBuilder implements ActionInterface
         $parameters = [];
         if (isset($definition['!parameters']) && is_array($definition['!parameters'])) {
             foreach ($definition['!parameters'] as $key => $value) {
-                if ($value[0] == '$') {
+                if (isset($value[0]) && $value[0] == '$') {
                     $parameters[$key] = new Reference(substr($value, 1));
                 } else {
                     $parameters[$key] = $value;
