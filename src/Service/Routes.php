@@ -183,7 +183,7 @@ class Routes
     protected function handleConfig($routeId, $result)
     {
         // get existing methods
-        $existingMethods = $this->routesMethodTable->getMethods($routeId);
+        $existingMethods = $this->routesMethodTable->getMethods($routeId, null, false, null);
 
         // insert methods
         $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
@@ -225,23 +225,40 @@ class Routes
                 }
 
                 if ($status == Resource::STATUS_DEVELOPMENT) {
-                    $data = [
-                        'routeId'  => $routeId,
-                        'method'   => $method,
-                        'version'  => $ver,
-                        'status'   => $status,
-                        'active'   => $active ? 1 : 0,
-                        'public'   => $public ? 1 : 0,
-                        'request'  => isset($config['request'])  ? $config['request']  : null,
-                        'response' => isset($config['response']) ? $config['response'] : null,
-                        'action'   => isset($config['action'])   ? $config['action']   : null,
-                    ];
+                    if ($existingMethod === null || $existingMethod['status'] == Resource::STATUS_DEVELOPMENT) {
+                        $data = [
+                            'routeId'  => $routeId,
+                            'method'   => $method,
+                            'version'  => $ver,
+                            'status'   => $status,
+                            'active'   => $active ? 1 : 0,
+                            'public'   => $public ? 1 : 0,
+                            'request'  => isset($config['request'])  ? $config['request']  : null,
+                            'response' => isset($config['response']) ? $config['response'] : null,
+                            'action'   => isset($config['action'])   ? $config['action']   : null,
+                        ];
 
-                    $this->routesMethodTable->create($data);
+                        $this->routesMethodTable->create($data);
+                    } else {
+                        // change only the status if we transition from prod to dev
+                        $this->routesMethodTable->update([
+                            'id'       => $existingMethod['id'],
+                            'routeId'  => $routeId,
+                            'method'   => $method,
+                            'version'  => $ver,
+                            'status'   => $status,
+                            'active'   => $active ? 1 : 0,
+                            'public'   => $public ? 1 : 0,
+                            'request'  => isset($config['request'])  ? $config['request']  : null,
+                            'response' => isset($config['response']) ? $config['response'] : null,
+                            'action'   => isset($config['action'])   ? $config['action']   : null,
+                        ]);
+                    }
                 } elseif ($active === true) {
                     // if the method is not in development mode we create only
                     // the schema/action cache on the transition from dev to
-                    // prod in every other case we dont change any values
+                    // prod in every other case we dont change any values except
+                    // for the status
                     if ($existingMethod === null) {
                         throw new StatusCode\BadRequestException('A new resource can only start in development mode');
                     }

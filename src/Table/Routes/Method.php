@@ -106,7 +106,16 @@ class Method extends TableAbstract
         return $count > 0;
     }
 
-    public function getMethods($routeId, $version = null, $includeCache = false)
+    /**
+     * Returns only active methods for the route
+     * 
+     * @param integer $routeId
+     * @param integer $version
+     * @param boolean $includeCache
+     * @param boolean $active
+     * @return array
+     */
+    public function getMethods($routeId, $version = null, $includeCache = false, $active = true)
     {
         $cache = '';
         if ($includeCache) {
@@ -125,13 +134,16 @@ class Method extends TableAbstract
                          method.response,
                          method.action
                     FROM fusio_routes_method method
-                   WHERE method.routeId = :routeId
-                     AND method.active = 1';
+                   WHERE method.routeId = :routeId';
 
         $params = ['routeId' => $routeId];
 
+        if ($active !== null) {
+            $sql.= ' AND method.active = ' . ($active ? '1' : '0');
+        }
+
         if ($version !== null) {
-            $sql.= ' AND method.version = :version ';
+            $sql.= ' AND method.version = :version';
             $params['version'] = $version;
         }
 

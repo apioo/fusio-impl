@@ -241,7 +241,7 @@ JSON;
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'request', 'response', 'action')
+            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'request', 'requestCache', 'response', 'responseCache', 'action', 'actionCache')
             ->from('fusio_routes_method')
             ->where('routeId = :routeId')
             ->orderBy('id', 'ASC')
@@ -257,8 +257,11 @@ JSON;
         $this->assertEquals(1, $result[0]['active']);
         $this->assertEquals(1, $result[0]['public']);
         $this->assertEquals(null, $result[0]['request']);
+        $this->assertEmpty($result[0]['requestCache']);
         $this->assertEquals(2, $result[0]['response']);
+        $this->assertNotEmpty($result[0]['responseCache']);
         $this->assertEquals(3, $result[0]['action']);
+        $this->assertNotEmpty($result[0]['actionCache']);
 
         $this->assertEquals('POST', $result[1]['method']);
         $this->assertEquals(1, $result[1]['version']);
@@ -266,8 +269,11 @@ JSON;
         $this->assertEquals(1, $result[1]['active']);
         $this->assertEquals(0, $result[1]['public']);
         $this->assertEquals(2, $result[1]['request']);
+        $this->assertNotEmpty($result[1]['requestCache']);
         $this->assertEquals(1, $result[1]['response']);
+        $this->assertNotEmpty($result[1]['responseCache']);
         $this->assertEquals(3, $result[1]['action']);
+        $this->assertNotEmpty($result[1]['actionCache']);
     }
 
     public function testDelete()
