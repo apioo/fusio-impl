@@ -23,6 +23,7 @@ namespace Fusio\Impl;
 
 use Fusio\Engine\RequestInterface;
 use PSX\Http\RequestInterface as HttpRequestInterface;
+use PSX\Json\Pointer;
 use PSX\Record\RecordInterface;
 
 /**
@@ -83,5 +84,13 @@ class Request implements RequestInterface
         $self->body = $body;
 
         return $self;
+    }
+
+    public function queryPointer($pointer)
+    {
+        $pointer = new Pointer('/' . ltrim($pointer, '/'));
+        $value   = $pointer->evaluate($this->body);
+
+        return $value;
     }
 }
