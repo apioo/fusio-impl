@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Template\Parser;
 
+use Fusio\Engine\Template\Parser\SqlInterface;
 use Fusio\Impl\Template\Extension;
-use Fusio\Impl\Template\Filter\Prepare;
 
 /**
  * Sql
@@ -31,15 +31,34 @@ use Fusio\Impl\Template\Filter\Prepare;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Sql extends BaseAbstract
+class Sql extends BaseAbstract implements SqlInterface
 {
+    protected static $parameters = [];
+
     public function getSqlParameters()
     {
-        return $this->twig->getFilter(Prepare::FILTER_NAME)->getCallable()->getParameters();
+        $parameters = self::$parameters;
+        self::$parameters = [];
+
+        return $parameters;
     }
 
     protected function getExtension()
     {
         return new Extension\Sql();
+    }
+
+    public static function getParameters()
+    {
+        return self::$parameters;
+    }
+
+    /**
+     * @internal
+     * @param mixed $parameter
+     */
+    public static function addSqlParameter($parameter)
+    {
+        self::$parameters[] = $parameter;
     }
 }

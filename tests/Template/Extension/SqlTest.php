@@ -19,23 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Template\Filter;
+namespace Fusio\Impl\Tests\Template\Extension;
 
-use Fusio\Impl\Template\Filter\Json;
+use Fusio\Impl\Template\Extension as func;
+use Fusio\Impl\Template\Extension\Sql;
+use Fusio\Impl\Template\Factory;
 
 /**
- * JsonTest
+ * SqlTest
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class SqlTest extends \PHPUnit_Framework_TestCase
 {
-    public function testInvoke()
+    protected function setUp()
     {
-        $json = new Json();
+        // setup the extension so that we include the file and thus load the
+        // filter functions
+        new Sql();
+    }
 
-        $this->assertJsonStringEqualsJsonString('{"foo": "bar"}', $json(['foo' => 'bar']));
+    public function testFilterPrepare()
+    {
+        $this->assertEquals('?', func\fusio_prepare_filter('foo'));
+
+        $factory = new Factory(false);
+        $parser  = $factory->newSqlParser();
+
+        $this->assertEquals(['foo'], $parser->getSqlParameters());
     }
 }

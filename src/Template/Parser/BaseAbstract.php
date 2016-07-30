@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Template\Parser;
 
-use Fusio\Impl\Context;
-use Fusio\Impl\Request;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Engine\Template\ParserInterface;
 use Fusio\Impl\Template\Extension;
 use Fusio\Impl\Template\StackLoader;
 use PSX\Data\Accessor;
@@ -36,7 +37,7 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class BaseAbstract
+abstract class BaseAbstract implements ParserInterface
 {
     protected $loader;
     protected $twig;
@@ -49,7 +50,6 @@ abstract class BaseAbstract
             'debug'            => $debug,
             'cache'            => $cache ? PSX_PATH_CACHE : false,
             'autoescape'       => false,
-            'auto_reload'      => true,
             'strict_variables' => false,
         ]);
 
@@ -63,7 +63,7 @@ abstract class BaseAbstract
         $this->cacheKey = $cacheKey;
     }
 
-    public function parse(Request $request, Context $context, $template)
+    public function parse(RequestInterface $request, ContextInterface $context, $template)
     {
         $cacheKey     = $context->getAction()->getId();
         $lastModified = $context->getAction()->getDate();

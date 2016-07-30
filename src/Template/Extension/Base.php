@@ -101,7 +101,6 @@ class Base extends Twig_Extension_Core
             new \Twig_SimpleTest('none', null, array('node_class' => 'Twig_Node_Expression_Test_Null')),
             new \Twig_SimpleTest('null', null, array('node_class' => 'Twig_Node_Expression_Test_Null')),
             new \Twig_SimpleTest('divisibleby', null, array('node_class' => 'Twig_Node_Expression_Test_Divisibleby')),
-            new \Twig_SimpleTest('divisible by', null, array('node_class' => 'Twig_Node_Expression_Test_Divisibleby')),
             new \Twig_SimpleTest('constant', null, array('node_class' => 'Twig_Node_Expression_Test_Constant')),
             new \Twig_SimpleTest('empty', 'twig_test_empty'),
             new \Twig_SimpleTest('iterable', 'twig_test_iterable'),

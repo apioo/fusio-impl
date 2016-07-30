@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Template\Extension;
 
-use Fusio\Impl\Template\Filter\Json;
-use Fusio\Impl\Template\Filter\Prepare;
+use Fusio\Impl\Template\Parser;
+use PSX\DateTime\DateTime;
+use PSX\Record\RecordInterface;
 
 /**
  * Sql
@@ -31,13 +32,29 @@ use Fusio\Impl\Template\Filter\Prepare;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Sql extends Base
+class Sql extends Text
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setDateFormat(DateTime::SQL);
+    }
+
     public function getFilters()
     {
         return array_merge(parent::getFilters(), [
-            new \Twig_SimpleFilter(Json::FILTER_NAME, new Json()),
-            new \Twig_SimpleFilter(Prepare::FILTER_NAME, new Prepare()),
+            new \Twig_SimpleFilter('prepare', __NAMESPACE__ . '\\fusio_prepare_filter'),
         ]);
     }
+}
+
+function fusio_prepare_filter($value) {
+    if ($value instanceof RecordInterface || $value instanceof \stdClass || is_array($value)) {
+        $value = serialize($value);
+    }
+
+    Parser\Sql::addSqlParameter($value);
+
+    return '?';
 }
