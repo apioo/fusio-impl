@@ -76,6 +76,7 @@ class Condition implements ActionInterface, ParserCacheInterface
         $values    = array(
             'rateLimit'    => new RateLimit($this->connection, $context),
             'app'          => $context->getApp(),
+            'user'         => $context->getUser(),
             'routeId'      => $context->getRouteId(),
             'uriFragments' => $request->getUriFragments(),
             'parameters'   => $request->getParameters(),
