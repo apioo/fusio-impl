@@ -180,6 +180,14 @@ class Routes
         }
     }
 
+    /**
+     * Method which handles data change of each API method. Basically an API 
+     * method can only change if it is in development mode. In every other 
+     * case we can only change the status
+     * 
+     * @param integer $routeId
+     * @param \PSX\Record\RecordInterface $result
+     */
     protected function handleConfig($routeId, $result)
     {
         // get existing methods
@@ -225,6 +233,7 @@ class Routes
                 }
 
                 if ($status == Resource::STATUS_DEVELOPMENT) {
+                    // we can change the API only if we are in development mode
                     if ($existingMethod === null || $existingMethod['status'] == Resource::STATUS_DEVELOPMENT) {
                         $data = [
                             'routeId'  => $routeId,
@@ -240,7 +249,6 @@ class Routes
 
                         $this->routesMethodTable->create($data);
                     } else {
-                        // change only the status if we transition from prod to dev
                         $this->routesMethodTable->update([
                             'id'       => $existingMethod['id'],
                             'routeId'  => $routeId,
