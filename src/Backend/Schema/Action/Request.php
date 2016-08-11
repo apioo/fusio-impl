@@ -19,47 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Database;
+namespace Fusio\Impl\Backend\Schema\Action;
 
-use Doctrine\DBAL\Connection;
+use PSX\Schema\Property\StringType;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * VersionInterface
+ * Request
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface VersionInterface
+class Request extends SchemaAbstract
 {
-    /**
-     * Returns the schema for this version
-     *
-     * @return \Doctrine\DBAL\Schema\Schema
-     */
-    public function getSchema();
+    public function getDefinition()
+    {
+        $sb = $this->getSchemaBuilder('uriFragments');
+        $sb->setAdditionalProperties(new StringType());
+        $uriFragments = $sb->getProperty();
 
-    /**
-     * Executes additional queries which can update database fields after an
-     * install
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function executeInstall(Connection $connection);
+        $sb = $this->getSchemaBuilder('parameters');
+        $sb->setAdditionalProperties(new StringType());
+        $parameters = $sb->getProperty();
 
-    /**
-     * Executes additional queries which can update database fields after an
-     * upgrade
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function executeUpgrade(Connection $connection);
+        $sb = $this->getSchemaBuilder('body');
+        $sb->setAdditionalProperties(true);
+        $body = $sb->getProperty();
 
-    /**
-     * Returns an associative array where the key is the table name and the 
-     * value is an array of SQL queries
-     * 
-     * @return array
-     */
-    public function getInstallInserts();
+        $sb = $this->getSchemaBuilder('request');
+        $sb->integer('actionId');
+        $sb->complexType('uriFragments', $uriFragments);
+        $sb->complexType('parameters', $parameters);
+        $sb->complexType('body', $body);
+
+        return $sb->getProperty();
+    }
 }

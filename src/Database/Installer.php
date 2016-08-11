@@ -79,24 +79,6 @@ class Installer
     }
 
     /**
-     * Returns the complete upgrade path
-     *
-     * @return array
-     */
-    public function getUpgradePath()
-    {
-        return [
-            '0.3.3',
-            '0.3.2',
-            '0.3.1',
-            '0.3.0',
-            '0.2.2',
-            '0.2.1',
-            '0.2.0',
-        ];
-    }
-
-    /**
      * Returns the upgrade path between two versions
      *
      * @param string $fromVersion
@@ -105,7 +87,7 @@ class Installer
      */
     public function getPathBetweenVersions($fromVersion, $toVersion)
     {
-        $path      = array_reverse($this->getUpgradePath());
+        $path      = array_reverse(self::getUpgradePath());
         $indexFrom = $this->getIndexOf($fromVersion);
         $indexTo   = $this->getIndexOf($toVersion);
 
@@ -123,7 +105,7 @@ class Installer
 
     protected function getIndexOf($version)
     {
-        $upgradePath = array_reverse($this->getUpgradePath());
+        $upgradePath = array_reverse(self::getUpgradePath());
         foreach ($upgradePath as $index => $schemaVersion) {
             if (version_compare($schemaVersion, $version, '==')) {
                 return $index;
@@ -162,6 +144,31 @@ class Installer
         }
     }
 
+    /**
+     * Returns the complete upgrade path
+     *
+     * @return array
+     */
+    public static function getUpgradePath()
+    {
+        return [
+            '0.3.4',
+            '0.3.3',
+            '0.3.2',
+            '0.3.1',
+            '0.3.0',
+            '0.2.2',
+            '0.2.1',
+            '0.2.0',
+        ];
+    }
+
+    /**
+     * Returns the version object by the provided version string
+     * 
+     * @param string $version
+     * @return \Fusio\Impl\Database\VersionInterface
+     */
     public static function getVersion($version)
     {
         $version   = str_pad(str_replace('.', '', $version), 3, '0');
@@ -172,5 +179,17 @@ class Installer
         } else {
             return null;
         }
+    }
+
+    /**
+     * Returns the latest version
+     * 
+     * @return \Fusio\Impl\Database\VersionInterface
+     */
+    public static function getLatestVersion()
+    {
+        $versions = self::getUpgradePath();
+
+        return self::getVersion($versions[0]);
     }
 }

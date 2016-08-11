@@ -47,10 +47,7 @@ class InstallerTest extends DbTestCase
      */
     public function testUpgradePath()
     {
-        $installer = new Installer($this->connection);
-        $path      = $installer->getUpgradePath();
-
-        $this->assertEquals(Base::getVersion(), current($path), 'The current version must be in the upgrade path');
+        $this->assertEquals(Base::getVersion(), current(Installer::getUpgradePath()), 'The current version must be in the upgrade path');
     }
 
     /**
@@ -67,7 +64,7 @@ class InstallerTest extends DbTestCase
 
         // execute install
         $installer = new Installer($this->connection);
-        $installer->install('0.3.0');
+        $installer->install(Base::getVersion());
 
         // @TODO make checks to verify that the installation works
 

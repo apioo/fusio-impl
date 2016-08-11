@@ -78,7 +78,10 @@ trait Service
         return new Impl\Service\Action(
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method')
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
+            $this->get('processor'),
+            $this->get('app_loader'),
+            $this->get('user_loader')
         );
     }
 
