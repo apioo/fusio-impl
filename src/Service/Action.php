@@ -191,7 +191,7 @@ class Action
         }
     }
 
-    public function execute($actionId, array $uriFragments = null, array $parameters = null, array $headers = null, RecordInterface $body = null)
+    public function execute($actionId, $uriFragments, $parameters, $headers, RecordInterface $body = null)
     {
         $action = $this->actionTable->get($actionId);
 
@@ -203,11 +203,15 @@ class Action
             $app  = $this->appLoader->getById(1);
             $user = $this->userLoader->getById(1);
 
+            $uriFragments = $this->parseQueryString($uriFragments);
+            $parameters   = $this->parseQueryString($parameters);
+            $headers      = $this->parseQueryString($headers);
+
             $context = new Context($actionId, $app, $user);
             $request = new Request(
-                new HttpRequest(new Uri('/'), 'POST', $headers ?: []), 
-                $uriFragments ?: [], 
-                $parameters ?: [], 
+                new HttpRequest(new Uri('/'), 'POST', $headers),
+                $uriFragments,
+                $parameters, 
                 $body
             );
 
@@ -215,5 +219,14 @@ class Action
         } else {
             return null;
         }
+    }
+    
+    private function parseQueryString($data)
+    {
+        $result = array();
+        if (!empty($data)) {
+            parse_str($data, $result);
+        }
+        return $result;
     }
 }

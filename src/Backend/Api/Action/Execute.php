@@ -89,8 +89,8 @@ class Execute extends SchemaApiAbstract
             if ($response === null) {
                 return array(
                     'statusCode' => 204,
-                    'headers'    => new \stdClass(),
-                    'body'       => new \stdClass(),
+                    'headers'    => [],
+                    'body'       => [],
                 );
             } else {
                 return array(

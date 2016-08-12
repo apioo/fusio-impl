@@ -35,22 +35,15 @@ class Request extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('uriFragments');
-        $sb->setAdditionalProperties(new StringType());
-        $uriFragments = $sb->getProperty();
-
-        $sb = $this->getSchemaBuilder('parameters');
-        $sb->setAdditionalProperties(new StringType());
-        $parameters = $sb->getProperty();
-
         $sb = $this->getSchemaBuilder('body');
         $sb->setAdditionalProperties(true);
         $body = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('request');
         $sb->integer('actionId');
-        $sb->complexType('uriFragments', $uriFragments);
-        $sb->complexType('parameters', $parameters);
+        $sb->string('uriFragments');
+        $sb->string('parameters');
+        $sb->string('headers');
         $sb->complexType('body', $body);
 
         return $sb->getProperty();
