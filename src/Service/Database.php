@@ -243,7 +243,7 @@ class Database
                 $table->addColumn($column['name'], $column['type'], $this->getColumnOptions($column));
             }
 
-            $newColumns[] = $column['name'];
+            $newColumns[] = strtolower($column['name']);
         }
 
         $removeColumns = array_diff(array_keys($table->getColumns()), $newColumns);
