@@ -38,15 +38,21 @@ class PreviewTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    /**
-     * @TODO at the moment we cant run this test since the serialized cache
-     * contains null bytes which we cant insert into the xml fixture
-     */
     public function testGet()
     {
-        $this->markTestSkipped('Cache fixture not available');
-
         $response = $this->sendRequest('http://127.0.0.1/backend/schema/preview/2', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
+    public function testPost()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/schema/preview/2', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -54,10 +60,36 @@ class PreviewTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
+    "preview": "<div id=\"psx-type-60fecdc9cdbb564bbf31377e11525059\" class=\"psx-complex-type\"><h1>test<\/h1><table class=\"table psx-type-properties\"><colgroup><col width=\"20%\" \/><col width=\"20%\" \/><col width=\"40%\" \/><col width=\"20%\" \/><\/colgroup><thead><tr><th>Property<\/th><th>Type<\/th><th>Description<\/th><th>Constraints<\/th><\/tr><\/thead><tbody><tr><td><span class=\"psx-property-name psx-property-optional\">title<\/span><\/td><td><span class=\"psx-property-type psx-property-type-string\">String<\/span><\/td><td><span class=\"psx-property-description\"><\/span><\/td><td><\/td><\/tr><tr><td><span class=\"psx-property-name psx-property-optional\">content<\/span><\/td><td><span class=\"psx-property-type psx-property-type-string\">String<\/span><\/td><td><span class=\"psx-property-description\"><\/span><\/td><td><\/td><\/tr><tr><td><span class=\"psx-property-name psx-property-optional\">date<\/span><\/td><td><span class=\"psx-property-type psx-property-type-datetime\"><a href=\"http:\/\/tools.ietf.org\/html\/rfc3339#section-5.6\" title=\"RFC3339\">DateTime<\/a><\/span><\/td><td><span class=\"psx-property-description\"><\/span><\/td><td><\/td><\/tr><\/tbody><\/table><\/div>"
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $body);
-        $this->assertXmlStringEqualsXmlString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
+
+    public function testPut()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/schema/preview/2', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
+    public function testDelete()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/schema/preview/2', 'DELETE', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
 }

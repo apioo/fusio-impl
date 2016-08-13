@@ -24,6 +24,7 @@ namespace Fusio\Impl\Table\App;
 use DateTime;
 use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Token
@@ -75,11 +76,15 @@ class Token extends TableAbstract
 				 WHERE appId = :appId
 				   AND id = :id';
 
-        $this->connection->executeUpdate($sql, array(
+        $affectedRows = $this->connection->executeUpdate($sql, array(
             'status' => self::STATUS_DELETED,
             'appId'  => $appId,
             'id'     => $tokenId
         ));
+
+        if ($affectedRows == 0) {
+            throw new StatusCode\NotFoundException('Invalid token');
+        }
     }
 
     public function removeAllTokensFromAppAndUser($appId, $userId)

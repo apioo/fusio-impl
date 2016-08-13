@@ -59,7 +59,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/action\/execute",
+            "path": "\/backend\/action\/:action_id",
             "methods": [
                 "GET",
                 "POST",
@@ -69,7 +69,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/action\/:action_id",
+            "path": "\/backend\/action\/execute\/:action_id",
             "methods": [
                 "GET",
                 "POST",
@@ -90,6 +90,16 @@ class IndexTest extends ControllerDbTestCase
         },
         {
             "path": "\/backend\/app\/:app_id",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/app\/:app_id\/token\/:token_id",
             "methods": [
                 "GET",
                 "POST",
@@ -161,14 +171,20 @@ class IndexTest extends ControllerDbTestCase
         {
             "path": "\/backend\/log",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/log\/:log_id",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
             ],
             "version": "*"
         },
@@ -204,6 +220,16 @@ class IndexTest extends ControllerDbTestCase
         },
         {
             "path": "\/backend\/schema\/:schema_id",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/schema\/preview\/:schema_id",
             "methods": [
                 "GET",
                 "POST",

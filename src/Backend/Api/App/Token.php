@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Backend\Api\App;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
+use PSX\Api\Resource;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Loader\Context;
 
 /**
  * Token
@@ -31,9 +33,15 @@ use PSX\Framework\Controller\ApiAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Token extends ApiAbstract
+class Token extends SchemaApiAbstract
 {
     use ProtectionTrait;
+
+    /**
+     * @Inject
+     * @var \PSX\Schema\SchemaManagerInterface
+     */
+    protected $schemaManager;
 
     /**
      * @Inject
@@ -41,7 +49,27 @@ class Token extends ApiAbstract
      */
     protected $appService;
 
-    public function doRemove()
+    /**
+     * @return \PSX\Api\Resource
+     */
+    public function getDocumentation($version = null)
+    {
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+
+        $resource->addMethod(Resource\Factory::getMethod('DELETE')
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+        );
+
+        return $resource;
+    }
+
+    /**
+     * Returns the DELETE response
+     *
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
+     */
+    protected function doDelete($record)
     {
         $this->appService->removeToken(
             $this->getUriFragment('app_id'),

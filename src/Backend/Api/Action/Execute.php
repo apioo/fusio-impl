@@ -40,7 +40,6 @@ use PSX\Validate\Validate;
 class Execute extends SchemaApiAbstract
 {
     use ProtectionTrait;
-    use ValidatorTrait;
 
     /**
      * @Inject
@@ -62,8 +61,8 @@ class Execute extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Request'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Response'))
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Execute\Request'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Execute\Response'))
         );
 
         return $resource;
@@ -79,7 +78,7 @@ class Execute extends SchemaApiAbstract
     {
         try {
             $response = $this->actionService->execute(
-                $record->actionId,
+                (int) $this->getUriFragment('action_id'),
                 $record->uriFragments,
                 $record->parameters,
                 $record->headers,

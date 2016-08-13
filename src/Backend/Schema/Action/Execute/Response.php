@@ -19,31 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Action;
+namespace Fusio\Impl\Backend\Schema\Action\Execute;
 
 use PSX\Schema\Property\StringType;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Request
+ * Response
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends SchemaAbstract
+class Response extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('headers');
+        $sb->setAdditionalProperties(new StringType());
+        $headers = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('body');
         $sb->setAdditionalProperties(true);
         $body = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('request');
-        $sb->integer('actionId');
-        $sb->string('uriFragments');
-        $sb->string('parameters');
-        $sb->string('headers');
+        $sb = $this->getSchemaBuilder('response');
+        $sb->integer('statusCode');
+        $sb->complexType('headers', $headers);
         $sb->complexType('body', $body);
 
         return $sb->getProperty();
