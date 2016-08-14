@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Api\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -54,6 +55,12 @@ class Execute extends SchemaApiAbstract
     protected $actionService;
 
     /**
+     * @Inject
+     * @var \PSX\Framework\Exception\ConverterInterface
+     */
+    protected $exceptionConverter;
+
+    /**
      * @return \PSX\Api\Resource
      */
     public function getDocumentation($version = null)
@@ -85,28 +92,24 @@ class Execute extends SchemaApiAbstract
                 $record->body
             );
 
-            if ($response === null) {
-                return array(
-                    'statusCode' => 204,
-                    'headers'    => [],
-                    'body'       => [],
-                );
-            } else {
+            if ($response instanceof ResponseInterface) {
                 return array(
                     'statusCode' => $response->getStatusCode(),
                     'headers'    => $response->getHeaders(),
                     'body'       => $response->getBody(),
+                );
+            } else {
+                return array(
+                    'statusCode' => 204,
+                    'headers'    => [],
+                    'body'       => [],
                 );
             }
         } catch (\Exception $e) {
             return array(
                 'statusCode' => 500,
                 'headers'    => [],
-                'body'       => [
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                    'trace'   => $e->getTrace(),
-                ],
+                'body'       => $this->exceptionConverter->convert($e),
             );
         }
     }
