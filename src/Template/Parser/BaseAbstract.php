@@ -81,8 +81,8 @@ abstract class BaseAbstract implements ParserInterface
                 'body'    => new Accessor(new Validate(), $request->getBody()),
             ]);
         } catch (\Twig_Error_Runtime $e) {
-            // if we have an display exception throw the original exception
-            if ($e->getPrevious() instanceof DisplayException) {
+            // throw the original exception if available
+            if ($e->getPrevious() instanceof \Exception) {
                 throw $e->getPrevious();
             } else {
                 throw $e;
