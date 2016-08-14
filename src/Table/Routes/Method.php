@@ -80,10 +80,13 @@ class Method extends TableAbstract
 
     public function hasSchema($schemaId)
     {
-        $sql = 'SELECT COUNT(id) AS cnt
-                  FROM fusio_routes_method method
-                 WHERE method.request = :requestId
-                    OR method.response = :responseId';
+        $sql = '    SELECT COUNT(method.id) AS cnt
+                      FROM fusio_routes_method method
+                INNER JOIN fusio_routes routes
+                        ON routes.id = method.routeId
+                     WHERE routes.status = 1
+                       AND (method.request = :requestId 
+                           OR method.response = :responseId)';
 
         $count = $this->connection->fetchColumn($sql, [
             'requestId'  => $schemaId,
@@ -95,9 +98,12 @@ class Method extends TableAbstract
 
     public function hasAction($actionId)
     {
-        $sql = 'SELECT COUNT(id) AS cnt
-                  FROM fusio_routes_method method
-                 WHERE method.action = :actionId';
+        $sql = '    SELECT COUNT(method.id) AS cnt
+                      FROM fusio_routes_method method
+                INNER JOIN fusio_routes routes
+                        ON routes.id = method.routeId
+                     WHERE routes.status = 1
+                       AND method.action = :actionId';
 
         $count = $this->connection->fetchColumn($sql, [
             'actionId' => $actionId,
