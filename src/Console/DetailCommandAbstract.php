@@ -25,7 +25,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Factory\FactoryInterface;
 use Fusio\Impl\Form;
-use PSX\Data\RecordInterface;
+use PSX\Record\RecordInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,10 +60,10 @@ class DetailCommandAbstract extends Command
 
             $object->configure($builder, $elementFactory);
 
-            $fields = $builder->getForm()->getRecordInfo();
+            $fields = $builder->getForm();
             $rows   = [];
 
-            foreach ($fields->getField('element') as $element) {
+            foreach ($fields->getElements() as $element) {
                 $type    = substr(strrchr(get_class($element), '\\'), 1);
                 $details = $this->getDetails($element);
 
@@ -71,7 +71,7 @@ class DetailCommandAbstract extends Command
                     $details = substr($details, 0, 32) . ' [...]';
                 }
 
-                $rows[] = [$element->getName(), $type, $details];
+                $rows[] = [$element->name, $type, $details];
             }
 
             $table = $this->getHelper('table');
@@ -92,15 +92,15 @@ class DetailCommandAbstract extends Command
         } elseif ($element instanceof Form\Element\Connection) {
             return '';
         } elseif ($element instanceof Form\Element\Input) {
-            return $element->getType();
+            return $element->type;
         } elseif ($element instanceof Form\Element\Select) {
             $options = [];
-            foreach ($element->getOptions() as $option) {
+            foreach ($element->options as $option) {
                 $options[] = $option['key'] . ': ' . $option['value'];
             }
             return implode(', ', $options);
         } elseif ($element instanceof Form\Element\TextArea) {
-            return $element->getMode();
+            return $element->mode;
         } else {
             return '';
         }
