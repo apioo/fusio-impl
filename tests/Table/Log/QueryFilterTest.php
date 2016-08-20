@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Table\Log;
 
-use Fusio\Impl\Table\Log\QueryFilter;
+use Fusio\Impl\Service\Log\QueryFilter;
 
 /**
  * QueryFilterTest

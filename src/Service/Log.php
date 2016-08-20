@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Table\Log as TableLog;
-use Fusio\Impl\Table\Log\QueryFilter;
+use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
