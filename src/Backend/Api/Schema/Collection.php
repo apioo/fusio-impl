@@ -61,6 +61,7 @@ class Collection extends SchemaApiAbstract
     protected $schemaService;
 
     /**
+     * @param integer $version
      * @return \PSX\Api\Resource
      */
     public function getDocumentation($version = null)

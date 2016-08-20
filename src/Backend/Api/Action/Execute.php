@@ -61,6 +61,7 @@ class Execute extends SchemaApiAbstract
     protected $exceptionConverter;
 
     /**
+     * @param integer $version
      * @return \PSX\Api\Resource
      */
     public function getDocumentation($version = null)

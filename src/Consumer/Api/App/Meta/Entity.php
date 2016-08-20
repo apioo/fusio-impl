@@ -57,6 +57,7 @@ class Entity extends SchemaApiAbstract
     protected $appService;
 
     /**
+     * @param integer $version
      * @return \PSX\Api\Resource
      */
     public function getDocumentation($version = null)

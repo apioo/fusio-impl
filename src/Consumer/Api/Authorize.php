@@ -74,6 +74,7 @@ class Authorize extends SchemaApiAbstract
     protected $appCodeService;
 
     /**
+     * @param integer $version
      * @return \PSX\Api\Resource
      */
     public function getDocumentation($version = null)
