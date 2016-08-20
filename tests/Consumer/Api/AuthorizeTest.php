@@ -194,6 +194,7 @@ class AuthorizeTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
+        $expireTime = strtotime('+1 hour');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
@@ -203,7 +204,7 @@ class AuthorizeTest extends ControllerDbTestCase
         $this->assertTrue(is_array($data['token']), $body);
         $this->assertNotEmpty($data['token']['access_token'], $body);
         $this->assertEquals('bearer', $data['token']['token_type'], $body);
-        $this->assertEquals(strtotime('+1 hour'), $data['token']['expires_in'], $body);
+        $this->assertContains($data['token']['expires_in'], [$expireTime - 1, $expireTime], $body);
         $this->assertEquals('authorization,foo,bar', $data['token']['scope'], $body);
 
         // add state parameter which should be added by the server if available
