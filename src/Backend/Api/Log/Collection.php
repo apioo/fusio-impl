@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Log;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Table\Log;
+use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
@@ -76,7 +76,7 @@ class Collection extends SchemaApiAbstract
     {
         return $this->logService->getAll(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: null,
-            Log\QueryFilter::create($this->getParameters())
+            QueryFilter::create($this->getParameters())
         );
     }
 }

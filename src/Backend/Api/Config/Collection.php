@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Backend\Api\Config;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Table\App as TableApp;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;

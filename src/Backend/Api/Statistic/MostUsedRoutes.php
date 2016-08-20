@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Statistic;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Table\Log;
+use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Framework\Controller\ApiAbstract;
 
 /**
@@ -45,7 +45,7 @@ class MostUsedRoutes extends ApiAbstract
     public function onGet()
     {
         $this->setBody($this->statisticService->getMostUsedRoutes(
-            Log\QueryFilter::create($this->getParameters())
+            QueryFilter::create($this->getParameters())
         ));
     }
 }

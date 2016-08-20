@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Consumer\Api;
 
-use Fusio\Impl\Table\App;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
