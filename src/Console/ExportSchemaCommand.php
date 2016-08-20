@@ -23,8 +23,8 @@ namespace Fusio\Impl\Console;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Form;
-use PSX\Data\Schema\Generator;
-use PSX\Data\SchemaInterface;
+use PSX\Schema\Generator;
+use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
