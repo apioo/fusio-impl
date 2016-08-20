@@ -71,7 +71,8 @@ class CacheResponse implements ActionInterface
         if (!$item->isHit()) {
             $response = $this->processor->execute($configuration->get('action'), $request, $context);
 
-            $item->set($response, $configuration->get('expire'));
+            $item->set($response);
+            $item->expiresAfter($configuration->get('expire'));
 
             $this->cache->save($item);
         } else {
