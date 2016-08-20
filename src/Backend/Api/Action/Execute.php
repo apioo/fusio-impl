@@ -29,7 +29,6 @@ use PSX\Framework\Loader\Context;
 use PSX\Sql;
 use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
-use PSX\Validate\Validate;
 
 /**
  * Execute

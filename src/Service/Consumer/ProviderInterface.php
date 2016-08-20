@@ -48,7 +48,6 @@ interface ProviderInterface
      * @param string $code
      * @param string $clientId
      * @param string $redirectUri
-     * @param array $config
      * @return \Fusio\Impl\Service\Consumer\Model\User
      */
     public function requestUser($code, $clientId, $redirectUri);

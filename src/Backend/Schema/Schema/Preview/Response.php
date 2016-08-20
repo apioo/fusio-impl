@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Schema\Schema\Preview;
 
-use PSX\Schema\Property\StringType;
 use PSX\Schema\SchemaAbstract;
 
 /**
