@@ -23,8 +23,7 @@ namespace Fusio\Impl\Console;
 
 use Fusio\Impl\Service\User as ServiceUser;
 use Fusio\Impl\Service\User\ValidatorTrait;
-use Fusio\Impl\Table\Scope;
-use Fusio\Impl\Table\User;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -100,6 +99,19 @@ class AddUserCommand extends Command
         });
 
         $password = $helper->ask($input, $output, $question);
+
+        // repeat password
+        $question = new Question('Repeat the password: ');
+        $question->setHidden(true);
+        $question->setValidator(function ($value) use ($password) {
+            if ($value != $password) {
+                throw new RuntimeException('The password does not match');
+            } else {
+                return true;
+            }
+        });
+
+        $helper->ask($input, $output, $question);
 
         // scopes
         if ($status === 0) {
