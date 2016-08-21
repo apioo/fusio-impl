@@ -195,7 +195,6 @@ class Version034 implements VersionInterface
         $schemaTable->addColumn('id', 'integer', array('autoincrement' => true));
         $schemaTable->addColumn('status', 'integer');
         $schemaTable->addColumn('name', 'string', array('length' => 64));
-        $schemaTable->addColumn('propertyName', 'string', array('length' => 64, 'notnull' => false));
         $schemaTable->addColumn('source', 'text');
         $schemaTable->addColumn('cache', 'blob');
         $schemaTable->setPrimaryKey(array('id'));
