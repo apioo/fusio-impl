@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console;
 
 use Fusio\Impl\Service;
+use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,7 +49,7 @@ class ImportSchemaCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('import:jsonschema')
+            ->setName('import:schema')
             ->setDescription('Imports a jsonschema into the system')
             ->addArgument('name', InputArgument::REQUIRED, 'Name of the json schema')
             ->addArgument('file', InputArgument::REQUIRED, 'Path to the json schema file');
@@ -64,7 +65,7 @@ class ImportSchemaCommand extends Command
             return 1;
         }
 
-        $this->schemaService->create($name, file_get_contents($file));
+        $this->schemaService->create($name, Parser::decode(file_get_contents($file)));
 
         $output->writeln('Import successful!');
     }
