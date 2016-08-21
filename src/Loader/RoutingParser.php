@@ -48,23 +48,42 @@ class RoutingParser implements LocationFinderInterface
     public function resolve(RequestInterface $request, Context $context)
     {
         $sql = 'SELECT id,
-				       methods,
-				       path,
-				       controller
-				  FROM fusio_routes
-				 WHERE status = :status
-				   AND methods LIKE :method';
+                       methods,
+                       path,
+                       controller
+                  FROM fusio_routes
+                 WHERE status = :status ';
 
-        // @TODO we could add a priority column to the routes table so that
-        // often visited routes are at the top. For this we need to have a cron
-        // to set the priority depending on the entries in the log table
+        $paths  = ['backend', 'consumer', 'authorization', 'export', 'doc'];
+        $found  = false;
+        $path   = $request->getUri()->getPath();
+        $params = [
+            'status' => TableRoutes::STATUS_ACTIVE,
+        ];
+
+        // check whether we have a known system path
+        foreach ($paths as $systemPath) {
+            if (strpos($path, '/' . $systemPath) === 0) {
+                $found = true;
+                $sql  .= 'AND path LIKE :path';
+                $params['path'] = '/' . $systemPath . '%';
+                break;
+            }
+        }
+
+        // if not we only want to search the user routes and exclude all system
+        // paths
+        if (!$found) {
+            foreach ($paths as $index => $systemPath) {
+                $key = 'path_' . $index;
+                $sql.= 'AND path NOT LIKE :' . $key . ' ';
+                $params[$key] = '/' . $systemPath . '%';
+            }
+        }
 
         $method      = $request->getMethod();
-        $pathMatcher = new PathMatcher($request->getUri()->getPath());
-        $result      = $this->connection->fetchAll($sql, array(
-            'status' => TableRoutes::STATUS_ACTIVE,
-            'method' => '%' . $method . '%'
-        ));
+        $pathMatcher = new PathMatcher($path);
+        $result      = $this->connection->fetchAll($sql, $params);
 
         foreach ($result as $row) {
             $parameters = array();
