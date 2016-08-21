@@ -194,7 +194,6 @@ class AuthorizeTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
-        $expireTime = strtotime('+1 hour');
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertArrayHasKey('type', $data, $body);
@@ -204,7 +203,7 @@ class AuthorizeTest extends ControllerDbTestCase
         $this->assertTrue(is_array($data['token']), $body);
         $this->assertNotEmpty($data['token']['access_token'], $body);
         $this->assertEquals('bearer', $data['token']['token_type'], $body);
-        $this->assertContains($data['token']['expires_in'], [$expireTime - 1, $expireTime], $body);
+        $this->assertContains($data['token']['expires_in'], $this->getExpireTimes(), $body);
         $this->assertEquals('authorization,foo,bar', $data['token']['scope'], $body);
 
         // add state parameter which should be added by the server if available
@@ -230,7 +229,7 @@ class AuthorizeTest extends ControllerDbTestCase
         $this->assertEquals(1, $row['status']);
         $this->assertEquals($data['token']['access_token'], $row['token']);
         $this->assertEquals('authorization,foo,bar', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i:s', strtotime('+1 hour')), $row['expire']);
+        $this->assertContains($row['expire'], $this->getExpireTimes(false), $body);
     }
 
     public function testPostTokenWithoutRedirectUri()
@@ -411,5 +410,19 @@ class AuthorizeTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
 
         $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
+    private function getExpireTimes($timestamps = true)
+    {
+        $expireTime = strtotime('+1 hour');
+        $timeRange  = [$expireTime - 1, $expireTime];
+
+        if (!$timestamps) {
+            $timeRange = array_map(function($value) {
+                return date('Y-m-d H:i:s', $value);
+            }, $timeRange);
+        }
+
+        return $timeRange;
     }
 }
