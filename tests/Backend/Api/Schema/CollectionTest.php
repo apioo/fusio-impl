@@ -109,7 +109,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'propertyName', 'source', 'cache')
+            ->select('id', 'name', 'source', 'cache')
             ->from('fusio_schema')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -120,7 +120,6 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('Bar-Schema', $row['name']);
-        $this->assertEquals(null, $row['propertyName']);
         $this->assertJsonStringEqualsJsonString($schema, $row['source']);
         $this->assertTrue(!empty($row['cache']));
     }
