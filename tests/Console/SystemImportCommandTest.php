@@ -65,7 +65,7 @@ class SystemImportCommandTest extends ControllerDbTestCase
         $this->assertEquals(177, strlen($connection['config']));
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, propertyName, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
             'name' => 'New-Schema',
         ]);
 
@@ -90,7 +90,6 @@ class SystemImportCommandTest extends ControllerDbTestCase
 JSON;
 
         $this->assertEquals(3, $schema['id']);
-        $this->assertEquals(null, $schema['propertyName']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 

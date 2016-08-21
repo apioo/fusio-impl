@@ -94,7 +94,7 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
         $this->assertArrayHasKey('insertdate', $columns);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, propertyName, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
             'name' => 'Adapter-Schema',
         ]);
 
@@ -118,7 +118,6 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
 JSON;
 
         $this->assertEquals(3, $schema['id']);
-        $this->assertEquals(null, $schema['propertyName']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 
