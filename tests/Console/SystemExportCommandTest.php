@@ -73,6 +73,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
         "Fusio\\Impl\\Action\\SqlFetchRow",
         "Fusio\\Impl\\Action\\StaticResponse",
         "Fusio\\Impl\\Action\\Transform",
+        "Fusio\\Impl\\Action\\TryCatch",
         "Fusio\\Impl\\Action\\Validator"
     ],
     "connectionClass": [

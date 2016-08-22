@@ -130,6 +130,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Impl\\Action\\Transform"
         },
         {
+            "name": "Try-Catch",
+            "class": "Fusio\\Impl\\Action\\TryCatch"
+        },
+        {
             "name": "Validator",
             "class": "Fusio\\Impl\\Action\\Validator"
         }

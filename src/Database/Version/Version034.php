@@ -378,6 +378,7 @@ class Version034 implements VersionInterface
                 ['class' => 'Fusio\Impl\Action\SqlFetchRow'],
                 ['class' => 'Fusio\Impl\Action\StaticResponse'],
                 ['class' => 'Fusio\Impl\Action\Transform'],
+                ['class' => 'Fusio\Impl\Action\TryCatch'],
                 ['class' => 'Fusio\Impl\Action\Validator'],
             ],
             'fusio_schema' => [
