@@ -48,6 +48,11 @@ class Request implements RequestInterface
         $this->body         = $body;
     }
 
+    public function getMethod()
+    {
+        return $this->request->getMethod();
+    }
+
     public function getHeader($name)
     {
         return $this->request->getHeader($name);
