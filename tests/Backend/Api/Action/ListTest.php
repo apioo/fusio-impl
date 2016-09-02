@@ -122,6 +122,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Impl\\Action\\SqlFetchRow"
         },
         {
+            "name": "SQL-Table",
+            "class": "Fusio\\Impl\\Action\\SqlTable"
+        },
+        {
             "name": "Static-Response",
             "class": "Fusio\\Impl\\Action\\StaticResponse"
         },
