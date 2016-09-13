@@ -86,6 +86,7 @@ class Execute extends SchemaApiAbstract
         try {
             $response = $this->actionService->execute(
                 (int) $this->getUriFragment('action_id'),
+                $record->method,
                 $record->uriFragments,
                 $record->parameters,
                 $record->headers,

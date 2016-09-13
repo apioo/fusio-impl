@@ -191,7 +191,7 @@ class Action
         }
     }
 
-    public function execute($actionId, $uriFragments, $parameters, $headers, RecordInterface $body = null)
+    public function execute($actionId, $method, $uriFragments, $parameters, $headers, RecordInterface $body = null)
     {
         $action = $this->actionTable->get($actionId);
 
@@ -209,7 +209,7 @@ class Action
 
             $context = new Context($actionId, $app, $user);
             $request = new Request(
-                new HttpRequest(new Uri('/'), 'POST', $headers),
+                new HttpRequest(new Uri('/'), $method, $headers),
                 $uriFragments,
                 $parameters, 
                 $body
