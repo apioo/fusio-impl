@@ -114,7 +114,7 @@ class SqlTable implements ActionInterface
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The SQL connection which should be used'));
         $builder->add($elementFactory->newInput('table', 'Table', 'text', 'Name of the database table'));
         $builder->add($elementFactory->newInput('columns', 'Columns', 'text', 'Comma seperated list of columns which you want to expose i.e. <code>id,title,date</code>'));
-        $builder->add($elementFactory->newInput('primaryKey', 'primaryKey', 'text', 'Name of the primary key column'));
+        $builder->add($elementFactory->newInput('primaryKey', 'Primary Key', 'text', 'Name of the primary key column'));
     }
 
     public function setConnector(ConnectorInterface $connector)
