@@ -57,6 +57,10 @@ class FormTest extends ControllerDbTestCase
                     "value": "DBAL"
                 },
                 {
+                    "key": 4,
+                    "value": "Memcache"
+                },
+                {
                     "key": 3,
                     "value": "MongoDB"
                 },

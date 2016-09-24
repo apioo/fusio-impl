@@ -96,6 +96,7 @@ JSON;
             'fusio_connection' => [
                 ['name' => 'DBAL', 'class' => 'Fusio\Impl\Connection\DBAL', 'config' => 'gC8gwLG0bNnqXNnRKw8AaQ==.09NMz2hC+99vY6WK9xi1os8VWHTtfkjzX65Cy6uZ8sMgdMbYxkrC04PH9VYYFHWfMBq41/lTSRQjk1YvJUhzMCqWeg6BDDKpQ4PKXhSJKf8lVel3PGXDe0OH9kaAm2bmRoL5213TLkeailqqzbmuUHewWa9CRo3UAKOtKdL7anTAVW+3PASMXKtRxFJ+sT6R'],
                 ['name' => 'MongoDB', 'class' => 'Fusio\Impl\Connection\MongoDB', 'config' => 'gj1VZ1lN1aJEMMLsdglwiQ==.ub6hTzbrd9MW8taKtEC8exyr71IWlRvJC0b330c+ORea+MxnatgMjQu4phtVkzuNWUeAyj0izLKGUs+rJSkwOu7SNAL3tZ6cDWUE4IGZG84='],
+                ['name' => 'Memcache', 'class' => 'Fusio\Impl\Connection\Memcache', 'config' => 'elRCcwj3zNvzL4NChTLBvg==.osc90klLuxCFTnM8+QvmWckOTwTkys5aBvbss56xBWIRHDYVSLovg6tWulsQMt/Bh53LLq9sA23BfiBihItv8VhEOn+7AoiZUyB1a7Sx1TaHgKcEt3MJw8ADvsMDBgpNKCdG3XQfAM1AlEx9Q0K6kw=='],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],

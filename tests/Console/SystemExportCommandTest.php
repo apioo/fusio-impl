@@ -87,6 +87,13 @@ class SystemExportCommandTest extends ControllerDbTestCase
     ],
     "connection": [
         {
+            "name": "Memcache",
+            "class": "Fusio\\Impl\\Connection\\Memcache",
+            "config": {
+                "host": "127.0.0.1"
+            }
+        },
+        {
             "name": "MongoDB",
             "class": "Fusio\\Impl\\Connection\\MongoDB",
             "config": {
