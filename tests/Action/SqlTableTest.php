@@ -21,12 +21,13 @@
 
 namespace Fusio\Impl\Tests\Action;
 
-use Fusio\Impl\Action\SqlFetchAll;
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\SqlTable;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Record\Record;
 
@@ -73,7 +74,7 @@ class SqlTableTest extends DbTestCase
             ]]
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -101,7 +102,7 @@ class SqlTableTest extends DbTestCase
             'date' => '2015-02-27 19:59:15',
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -132,7 +133,7 @@ class SqlTableTest extends DbTestCase
             'message' => 'Entry successful created',
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -174,7 +175,7 @@ class SqlTableTest extends DbTestCase
             'message' => 'Entry successful updated',
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -211,7 +212,7 @@ class SqlTableTest extends DbTestCase
             'message' => 'Entry successful deleted',
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -229,6 +230,6 @@ class SqlTableTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

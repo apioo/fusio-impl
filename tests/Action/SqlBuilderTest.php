@@ -21,12 +21,14 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\SqlBuilder;
 use Fusio\Impl\Action\SqlFetchAll;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Data\Record\Transformer;
 use PSX\Framework\Test\Environment;
 
@@ -91,7 +93,7 @@ class SqlBuilderTest extends DbTestCase
 JSON;
 
         
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
@@ -105,6 +107,6 @@ JSON;
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

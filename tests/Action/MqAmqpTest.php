@@ -21,13 +21,19 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\MqAmqp;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Record\Record;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 use PSX\Framework\Test\Environment;
+use PSX\Record\Record;
 
 /**
  * MqAmqpTest
@@ -43,13 +49,13 @@ class MqAmqpTest extends DbTestCase
     public function testHandle()
     {
         // channel
-        $channel = $this->getMock('PhpAmqpLib\Channel\AMQPChannel', ['basic_publish'], [], '', false);
+        $channel = $this->getMock(AMQPChannel::class, ['basic_publish'], [], '', false);
 
         $channel->expects($this->once())
             ->method('basic_publish')
             ->with($this->callback(function ($message) {
                 /** @var \PhpAmqpLib\Message\AMQPMessage $message */
-                $this->assertInstanceOf('PhpAmqpLib\Message\AMQPMessage', $message);
+                $this->assertInstanceOf(AMQPMessage::class, $message);
                 $this->assertEquals(['content_type' => 'application/json', 'delivery_mode' => 2], $message->get_properties());
                 $this->assertJsonStringEqualsJsonString('{"foo": "bar"}', $message->body);
 
@@ -57,14 +63,14 @@ class MqAmqpTest extends DbTestCase
             }), $this->equalTo(''), $this->equalTo('foo'));
 
         // connection
-        $connection = $this->getMock('PhpAmqpLib\Connection\AMQPStreamConnection', ['channel'], [], '', false);
+        $connection = $this->getMock(AMQPStreamConnection::class, ['channel'], [], '', false);
 
         $connection->expects($this->once())
             ->method('channel')
             ->will($this->returnValue($channel));
 
         // connector
-        $connector = $this->getMock('Fusio\Engine\ConnectorInterface', ['getConnection'], [], '', false);
+        $connector = $this->getMock(ConnectorInterface::class, ['getConnection'], [], '', false);
 
         $connector->expects($this->once())
             ->method('getConnection')
@@ -91,7 +97,7 @@ class MqAmqpTest extends DbTestCase
             'message' => 'Push was successful'
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -105,6 +111,6 @@ class MqAmqpTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

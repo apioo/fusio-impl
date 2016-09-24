@@ -21,13 +21,15 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\Processor;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Record\Record;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Record\Record;
 
 /**
  * ProcessorTest
@@ -57,7 +59,7 @@ class ProcessorTest extends DbTestCase
         $request  = $this->getRequest(null, [], [], [], $body);
         $response = $action->handle($request, $parameters, $this->getContext());
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'], $response->getBody());
@@ -83,7 +85,7 @@ class ProcessorTest extends DbTestCase
         $body = new \stdClass();
         $body->error = 'foo';
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(500, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -113,7 +115,7 @@ class ProcessorTest extends DbTestCase
         $body = new \stdClass();
         $body->error = 'foo';
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(500, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -127,7 +129,7 @@ class ProcessorTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 
     protected function getProcess()

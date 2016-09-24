@@ -21,14 +21,18 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\MqBeanstalk;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
+use Pheanstalk\Pheanstalk;
 use PSX\Cache;
-use PSX\Record\Record;
 use PSX\Framework\Test\Environment;
+use PSX\Record\Record;
 
 /**
  * MqBeanstalkTest
@@ -44,7 +48,7 @@ class MqBeanstalkTest extends DbTestCase
     public function testHandle()
     {
         // connection
-        $connection = $this->getMock('Pheanstalk\Pheanstalk', ['useTube', 'put'], [], '', false);
+        $connection = $this->getMock(Pheanstalk::class, ['useTube', 'put'], [], '', false);
 
         $connection->expects($this->once())
             ->method('useTube')
@@ -61,7 +65,7 @@ class MqBeanstalkTest extends DbTestCase
             ->will($this->returnValue($connection));
 
         // connector
-        $connector = $this->getMock('Fusio\Engine\ConnectorInterface', ['getConnection'], [], '', false);
+        $connector = $this->getMock(ConnectorInterface::class, ['getConnection'], [], '', false);
 
         $connector->expects($this->once())
             ->method('getConnection')
@@ -89,7 +93,7 @@ class MqBeanstalkTest extends DbTestCase
             'message' => 'Push was successful'
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -103,6 +107,6 @@ class MqBeanstalkTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

@@ -21,10 +21,12 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\StaticResponse;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -54,7 +56,7 @@ class StaticResponseTest extends \PHPUnit_Framework_TestCase
         $body = new \stdClass();
         $body->foo = 'bar';
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -85,6 +87,6 @@ class StaticResponseTest extends \PHPUnit_Framework_TestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

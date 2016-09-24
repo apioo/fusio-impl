@@ -21,13 +21,15 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\MongoInsert;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\Tests\MongoTestCase;
-use PSX\Record\Record;
 use PSX\Framework\Test\Environment;
+use PSX\Record\Record;
 
 /**
  * MongoInsertTest
@@ -68,7 +70,7 @@ class MongoInsertTest extends MongoTestCase
         $body['success'] = true;
         $body['message'] = 'Execution was successful';
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -94,6 +96,6 @@ class MongoInsertTest extends MongoTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

@@ -21,11 +21,13 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\SqlFetchRow;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -54,7 +56,7 @@ class SqlFetchRowTest extends DbTestCase
 
         $response = $action->handle($this->getRequest('GET', ['news_id' => 2]), $parameters, $this->getContext());
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'], $response->getBody());
@@ -68,6 +70,6 @@ class SqlFetchRowTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

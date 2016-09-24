@@ -21,13 +21,17 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\HttpRequest;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
-use PSX\Record\Record;
-use PSX\Http\Response;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use PSX\Framework\Test\Environment;
+use PSX\Http\Client;
+use PSX\Http\RequestInterface;
+use PSX\Http\Response;
+use PSX\Record\Record;
 
 /**
  * HttpRequestTest
@@ -42,13 +46,13 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $httpClient = $this->getMock('PSX\Http\Client', array('request'));
+        $httpClient = $this->getMock(Client::class, array('request'));
 
         $httpClient->expects($this->once())
             ->method('request')
             ->with($this->callback(function ($request) {
                 /** @var \PSX\Http\RequestInterface $request */
-                $this->assertInstanceOf('PSX\Http\RequestInterface', $request);
+                $this->assertInstanceOf(RequestInterface::class, $request);
                 $this->assertJsonStringEqualsJsonString('{"foo":"bar"}', (string) $request->getBody());
 
                 return true;
@@ -76,7 +80,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
             'message' => 'Request successful'
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -84,13 +88,13 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleVariableUrl()
     {
-        $httpClient = $this->getMock('PSX\Http\Client', array('request'));
+        $httpClient = $this->getMock(Client::class, array('request'));
 
         $httpClient->expects($this->once())
             ->method('request')
             ->with($this->callback(function ($request) {
                 /** @var \PSX\Http\RequestInterface $request */
-                $this->assertInstanceOf('PSX\Http\RequestInterface', $request);
+                $this->assertInstanceOf(RequestInterface::class, $request);
                 $this->assertEquals('http://127.0.0.1/bar/1', $request->getUri()->toString());
                 $this->assertJsonStringEqualsJsonString('{"foo":"bar"}', (string) $request->getBody());
 
@@ -119,7 +123,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
             'message' => 'Request successful'
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
@@ -133,6 +137,6 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

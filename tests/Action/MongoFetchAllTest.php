@@ -21,10 +21,12 @@
 
 namespace Fusio\Impl\Tests\Action;
 
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\MongoFetchAll;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
 use Fusio\Impl\Form\Builder;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\Tests\MongoTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -79,7 +81,7 @@ class MongoFetchAllTest extends MongoTestCase
             'date' => '2015-02-27 19:59:15',
         ];
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['foo' => $result], $body);
@@ -93,6 +95,6 @@ class MongoFetchAllTest extends MongoTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }

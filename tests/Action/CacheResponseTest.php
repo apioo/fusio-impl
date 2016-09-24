@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\Tests\Action;
 
-use Doctrine\Common\Cache\ArrayCache;
+use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\CacheResponse;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
 use Fusio\Impl\App;
-use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Form\Builder;
-use PSX\Cache\Pool;
+use Fusio\Impl\Form\Container;
+use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
@@ -43,29 +43,23 @@ class CacheResponseTest extends DbTestCase
 
     public function testHandle()
     {
-        $cache = new Pool(new ArrayCache());
-
         $action = new CacheResponse();
         $action->setConnection(Environment::getService('connection'));
+        $action->setConnector(Environment::getService('connector'));
         $action->setProcessor(Environment::getService('processor'));
-        $action->setCache($cache);
 
         $parameters = $this->getParameters([
+            'connection' => 3,
             'action' => 3,
             'expire' => 3600,
         ]);
 
         $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-        $this->assertInstanceOf('Fusio\Engine\ResponseInterface', $response);
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
-
-        $item = $cache->getItem(md5(3 . '{}{}'));
-
-        $this->assertTrue($item->isHit());
-        $this->assertEquals($response, $item->get());
     }
 
     public function testGetForm()
@@ -76,6 +70,6 @@ class CacheResponseTest extends DbTestCase
 
         $action->configure($builder, $factory);
 
-        $this->assertInstanceOf('Fusio\Impl\Form\Container', $builder->getForm());
+        $this->assertInstanceOf(Container::class, $builder->getForm());
     }
 }
