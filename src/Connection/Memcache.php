@@ -26,6 +26,7 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Pheanstalk\Pheanstalk;
+use RuntimeException;
 
 /**
  * Memcache
@@ -47,6 +48,10 @@ class Memcache implements ConnectionInterface
      */
     public function getConnection(ParametersInterface $config)
     {
+        if (!class_exists('\Memcache')) {
+            throw new RuntimeException('PHP extension "memcache" is not installed');
+        }
+
         $memcache = new \Memcache();
         $memcache->connect($config->get('host'), $config->get('port') ?: 11211);
 

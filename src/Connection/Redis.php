@@ -25,7 +25,7 @@ use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
-use Pheanstalk\Pheanstalk;
+use RuntimeException;
 
 /**
  * Redis
@@ -47,6 +47,10 @@ class Redis implements ConnectionInterface
      */
     public function getConnection(ParametersInterface $config)
     {
+        if (!class_exists('\Redis')) {
+            throw new RuntimeException('PHP extension "redis" is not installed');
+        }
+
         $redis = new \Redis();
         $redis->connect($config->get('host'), $config->get('port') ?: 6379);
 
