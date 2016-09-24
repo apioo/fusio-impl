@@ -41,6 +41,15 @@ class CacheResponseTest extends DbTestCase
 {
     use ActionTestCaseTrait;
 
+    protected function setUp()
+    {
+        if (!class_exists('\Memcache')) {
+            $this->markTestSkipped('Memcache extension is not installed');
+        }
+
+        parent::setUp();
+    }
+
     public function testHandle()
     {
         $action = new CacheResponse();
@@ -49,7 +58,7 @@ class CacheResponseTest extends DbTestCase
         $action->setProcessor(Environment::getService('processor'));
 
         $parameters = $this->getParameters([
-            'connection' => 3,
+            'connection' => 4,
             'action' => 3,
             'expire' => 3600,
         ]);
@@ -60,6 +69,16 @@ class CacheResponseTest extends DbTestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
+
+        // the next requests should come from the cache
+        for ($i = 0; $i < 10; $i++) {
+            $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
+
+            $this->assertInstanceOf(ResponseInterface::class, $response);
+            $this->assertEquals(200, $response->getStatusCode());
+            $this->assertEquals([], $response->getHeaders());
+            $this->assertEquals(['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'], $response->getBody());
+        }
     }
 
     public function testGetForm()
