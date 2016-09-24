@@ -49,7 +49,7 @@ class RabbitMQ implements ConnectionInterface
     {
         return new AMQPStreamConnection(
             $config->get('host'),
-            $config->get('port'),
+            $config->get('port') ?: 5672,
             $config->get('user'),
             $config->get('password'),
             $config->get('vhost')
@@ -59,7 +59,7 @@ class RabbitMQ implements ConnectionInterface
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newInput('host', 'Host', 'text', 'The IP or hostname of the RabbitMQ server'));
-        $builder->add($elementFactory->newInput('port', 'Port', 'text', 'The port used to connect to the AMQP broker. The port default is 5672'));
+        $builder->add($elementFactory->newInput('port', 'Port', 'number', 'The port used to connect to the AMQP broker. The port default is 5672'));
         $builder->add($elementFactory->newInput('user', 'User', 'text', 'The login string used to authenticate with the AMQP broker'));
         $builder->add($elementFactory->newInput('password', 'Password', 'password', 'The password string used to authenticate with the AMQP broker'));
         $builder->add($elementFactory->newInput('vhost', 'VHost', 'text', 'The virtual host to use on the AMQP broker'));
