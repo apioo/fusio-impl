@@ -22,14 +22,15 @@
 namespace Fusio\Impl\Action;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\Common\Cache;
 use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
-use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * CacheResponse
@@ -48,15 +49,15 @@ class CacheResponse implements ActionInterface
 
     /**
      * @Inject
-     * @var \Fusio\Engine\ProcessorInterface
+     * @var \Fusio\Engine\ConnectorInterface
      */
-    protected $processor;
+    protected $connector;
 
     /**
      * @Inject
-     * @var \PSX\Cache\Pool
+     * @var \Fusio\Engine\ProcessorInterface
      */
-    protected $cache;
+    protected $processor;
 
     public function getName()
     {
@@ -65,18 +66,15 @@ class CacheResponse implements ActionInterface
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $key  = md5($configuration->get('action') . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
-        $item = $this->cache->getItem($key);
+        $key = md5($configuration->get('action') . json_encode($request->getUriFragments()) . json_encode($request->getParameters()));
 
-        if (!$item->isHit()) {
+        $handler  = $this->getCacheHandler($this->connector->getConnection($configuration->get('connection')));
+        $response = $handler->fetch($key);
+
+        if ($response === false) {
             $response = $this->processor->execute($configuration->get('action'), $request, $context);
 
-            $item->set($response);
-            $item->expiresAfter($configuration->get('expire'));
-
-            $this->cache->save($item);
-        } else {
-            $response = $item->get();
+            $handler->save($key, $response, $configuration->get('expire'));
         }
 
         return $response;
@@ -84,8 +82,9 @@ class CacheResponse implements ActionInterface
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
-        $builder->add($elementFactory->newAction('action', 'Action', 'The response of this action gets cached'));
-        $builder->add($elementFactory->newInput('expire', 'Expire', 'text', 'Number of seconds when the cache expires'));
+        $builder->add($elementFactory->newConnection('connection', 'Connection', 'Connection to a memcache or redis server'));
+        $builder->add($elementFactory->newAction('action', 'Action', 'The response of this action is cached'));
+        $builder->add($elementFactory->newInput('expire', 'Expire', 'number', 'Number of seconds when the cache expires. 0 means infinite cache lifetime.'));
     }
 
     public function setConnection(Connection $connection)
@@ -93,13 +92,32 @@ class CacheResponse implements ActionInterface
         $this->connection = $connection;
     }
 
+    public function setConnector(ConnectorInterface $connector)
+    {
+        $this->connector = $connector;
+    }
+
     public function setProcessor(ProcessorInterface $processor)
     {
         $this->processor = $processor;
     }
 
-    public function setCache(CacheItemPoolInterface $cache)
+    /**
+     * @param mixed $connection
+     * @return \Doctrine\Common\Cache\CacheProvider
+     */
+    protected function getCacheHandler($connection)
     {
-        $this->cache = $cache;
+        if ($connection instanceof \Memcache) {
+            $handler = new Cache\MemcacheCache();
+            $handler->setMemcache($connection);
+        } elseif ($connection instanceof \Redis) {
+            $handler = new Cache\RedisCache();
+            $handler->setRedis($connection);
+        } else {
+            $handler = new Cache\ArrayCache();
+        }
+
+        return $handler;
     }
 }
