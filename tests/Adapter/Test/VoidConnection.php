@@ -42,6 +42,7 @@ class VoidConnection implements ConnectionInterface
 
     public function getConnection(ParametersInterface $config)
     {
+        return new \stdClass();
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)

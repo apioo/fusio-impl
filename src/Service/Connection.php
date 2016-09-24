@@ -24,7 +24,9 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Form\Container;
 use Fusio\Impl\Form\Element;
+use Fusio\Impl\Parameters;
 use Fusio\Impl\Table\Connection as TableConnection;
+use Fusio\Impl\Factory;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\OpenSsl\OpenSsl;
@@ -45,13 +47,15 @@ class Connection
 
     protected $connectionTable;
     protected $connectionParser;
+    protected $connectionFactory;
     protected $secretKey;
 
-    public function __construct(TableConnection $connectionTable, ParserInterface $connectionParser, $secretKey)
+    public function __construct(TableConnection $connectionTable, ParserInterface $connectionParser, Factory\Connection $connectionFactory, $secretKey)
     {
-        $this->connectionTable  = $connectionTable;
-        $this->connectionParser = $connectionParser;
-        $this->secretKey        = $secretKey;
+        $this->connectionTable   = $connectionTable;
+        $this->connectionParser  = $connectionParser;
+        $this->connectionFactory = $connectionFactory;
+        $this->secretKey         = $secretKey;
     }
 
     public function getAll($startIndex = 0, $search = null)
@@ -117,6 +121,8 @@ class Connection
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
+        $this->testConnection($class, $config);
+
         // create connection
         $this->connectionTable->create(array(
             'name'   => $name,
@@ -130,6 +136,8 @@ class Connection
         $connection = $this->connectionTable->get($connectionId);
 
         if (!empty($connection)) {
+            $this->testConnection($class, $config);
+
             $this->connectionTable->update(array(
                 'id'     => $connection->id,
                 'name'   => $name,
@@ -151,6 +159,17 @@ class Connection
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find connection');
+        }
+    }
+
+    protected function testConnection($class, array $config)
+    {
+        // the connection should throw an exception if it is not possible to
+        // connect to the remote connection
+        $connection = $this->connectionFactory->factory($class)->getConnection(new Parameters($config));
+
+        if (!is_object($connection)) {
+            throw new StatusCode\BadRequestException('Invalid connection');
         }
     }
 

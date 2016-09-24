@@ -154,6 +154,7 @@ trait Service
         return new Impl\Service\Connection(
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Connection'),
             $this->get('connection_parser'),
+            $this->get('connection_factory'),
             $this->get('config')->get('fusio_project_key')
         );
     }
