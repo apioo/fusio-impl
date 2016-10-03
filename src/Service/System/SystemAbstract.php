@@ -26,7 +26,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Base;
-use Fusio\Impl\Form;
+use Fusio\Engine\Form;
 use Monolog\Handler\NullHandler;
 use Psr\Log\LoggerInterface;
 use PSX\Framework\Dispatch\Dispatch;

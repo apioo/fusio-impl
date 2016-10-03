@@ -26,9 +26,7 @@ use Firebase\JWT\JWT;
 use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service\Consumer\Model\User as ModelUser;
 use Fusio\Impl\Service\Consumer\ProviderInterface;
-use Fusio\Impl\Table\App as TableApp;
-use Fusio\Impl\Table\Scope as TableScope;
-use Fusio\Impl\Table\User as TableUser;
+use Fusio\Impl\Table;
 use PSX\Framework\Config\Config as PSXConfig;
 use PSX\Http;
 use PSX\Http\Exception as StatusCode;
@@ -86,7 +84,7 @@ class Consumer
 
     public function login($name, $password)
     {
-        $userId = $this->user->authenticateUser($name, $password, [TableUser::STATUS_ADMINISTRATOR, TableUser::STATUS_CONSUMER]);
+        $userId = $this->user->authenticateUser($name, $password, [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
         if ($userId > 0) {
             return $this->createToken($userId, $this->user->getAvailableScopes($userId));
         }
@@ -104,7 +102,7 @@ class Consumer
 
         $scopes = $this->getDefaultScopes();
         $userId = $this->user->create(
-            TableUser::STATUS_DISABLED,
+            Table\User::STATUS_DISABLED,
             $name,
             $email,
             $password,
@@ -122,7 +120,7 @@ class Consumer
         $expires = isset($payload->exp) ? $payload->exp : null;
 
         if (time() < $expires) {
-            $this->user->changeStatus($userId, TableUser::STATUS_CONSUMER);
+            $this->user->changeStatus($userId, Table\User::STATUS_CONSUMER);
         } else {
             throw new StatusCode\BadRequestException('Token is expired');
         }

@@ -60,7 +60,7 @@ class SystemImportCommandTest extends ControllerDbTestCase
             'name' => 'New-Connection',
         ]);
 
-        $this->assertEquals(5, $connection['id']);
+        $this->assertEquals(3, $connection['id']);
         $this->assertEquals('Fusio\Impl\Connection\DBAL', $connection['class']);
         $this->assertEquals(177, strlen($connection['config']));
 

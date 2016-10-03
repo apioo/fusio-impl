@@ -23,7 +23,7 @@ namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Engine\Schema\LoaderInterface;
 use Fusio\Impl\Schema\LazySchema;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
@@ -47,7 +47,7 @@ class Method
      */
     protected $schemaLoader;
 
-    public function __construct(TableRoutesMethod $methodTable, LoaderInterface $schemaLoader)
+    public function __construct(Table\Routes\Method $methodTable, LoaderInterface $schemaLoader)
     {
         $this->methodTable  = $methodTable;
         $this->schemaLoader = $schemaLoader;

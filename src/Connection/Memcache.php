@@ -48,12 +48,15 @@ class Memcache implements ConnectionInterface
      */
     public function getConnection(ParametersInterface $config)
     {
-        if (!class_exists('\Memcache')) {
-            throw new RuntimeException('PHP extension "memcache" is not installed');
+        if (class_exists('Memcached')) {
+            $memcache = new \Memcached();
+            $memcache->addServer($config->get('host'), $config->get('port') ?: 11211);
+        } elseif (class_exists('Memcache')) {
+            $memcache = new \Memcache();
+            $memcache->connect($config->get('host'), $config->get('port') ?: 11211);
+        } else {
+            throw new RuntimeException('PHP extension "memcached" or "memcache" is not installed');
         }
-
-        $memcache = new \Memcache();
-        $memcache->connect($config->get('host'), $config->get('port') ?: 11211);
 
         return $memcache;
     }

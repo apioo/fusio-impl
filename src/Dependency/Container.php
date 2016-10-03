@@ -21,9 +21,13 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Fusio\Engine\Connector;
+use Fusio\Engine\Processor;
+use Fusio\Engine\Response;
+use Fusio\Engine\Template;
 use Fusio\Impl\App;
 use Fusio\Impl\Base;
-use Fusio\Impl\Connector;
+use Fusio\Impl\Connector\DatabaseRepository as ConnectorDatabaseRepository;
 use Fusio\Impl\Console;
 use Fusio\Impl\Data\SchemaManager;
 use Fusio\Impl\Factory;
@@ -34,10 +38,8 @@ use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Parser;
-use Fusio\Impl\Processor;
-use Fusio\Impl\Response;
+use Fusio\Impl\Processor\DatabaseRepository as ProcessorDatabaseRepository;
 use Fusio\Impl\Schema;
-use Fusio\Impl\Template;
 use Fusio\Impl\User;
 use Fusio\Impl\Validate;
 use Monolog\Handler as LogHandler;
@@ -59,7 +61,8 @@ use Symfony\Component\Console\Command as SymfonyCommand;
 class Container extends DefaultContainer
 {
     use Authorization;
-    use Service;
+    use Engine;
+    use Services;
 
     /**
      * @return \Psr\Log\LoggerInterface
@@ -113,148 +116,6 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \Fusio\Engine\LoggerInterface
-     */
-    public function getApiLogger()
-    {
-        return new Logger($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\Parser\ParserInterface
-     */
-    public function getActionParser()
-    {
-        $parsers = [];
-        $parsers[] = new Parser\Database(
-            $this->get('action_factory'),
-            $this->get('connection'),
-            'fusio_action_class',
-            'Fusio\Engine\ActionInterface'
-        );
-        $parsers[] = new Parser\Directory(
-            $this->get('action_factory'),
-            $this->get('connection'),
-            PSX_PATH_LIBRARY . '/Action',
-            'Fusio\Custom\Action',
-            'Fusio\Engine\ActionInterface'
-        );
-
-        return new Parser\Composite(
-            $this->get('action_factory'),
-            $this->get('connection'),
-            $parsers
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Factory\ActionInterface
-     */
-    public function getActionFactory()
-    {
-        return new Factory\Action($this->get('object_builder'));
-    }
-
-    /**
-     * @return \Fusio\Engine\ProcessorInterface
-     */
-    public function getProcessor()
-    {
-        return new Processor(
-            new Processor\DatabaseRepository($this->get('connection')),
-            $this->get('action_factory')
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Parser\ParserInterface
-     */
-    public function getConnectionParser()
-    {
-        $parsers = [];
-        $parsers[] = new Parser\Database(
-            $this->get('connection_factory'),
-            $this->get('connection'),
-            'fusio_connection_class',
-            'Fusio\Engine\ConnectionInterface'
-        );
-
-        $parsers[] = new Parser\Directory(
-            $this->get('action_factory'),
-            $this->get('connection'),
-            PSX_PATH_LIBRARY . '/Connection',
-            'Fusio\Custom\Connection',
-            'Fusio\Engine\ConnectionInterface'
-        );
-
-        return new Parser\Composite(
-            $this->get('connection_factory'),
-            $this->get('connection'),
-            $parsers
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Factory\ConnectionInterface
-     */
-    public function getConnectionFactory()
-    {
-        return new Factory\Connection($this->get('object_builder'));
-    }
-
-    /**
-     * @return \Fusio\Engine\ConnectorInterface
-     */
-    public function getConnector()
-    {
-        return new Connector(
-            $this->get('connection'),
-            $this->get('connection_factory'),
-            $this->get('config')->get('fusio_project_key')
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Schema\ParserInterface
-     */
-    public function getSchemaParser()
-    {
-        return new Schema\Parser($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\Schema\LoaderInterface
-     */
-    public function getSchemaLoader()
-    {
-        return new Schema\Loader($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\App\LoaderInterface
-     */
-    public function getAppLoader()
-    {
-        return new App\Loader($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\User\LoaderInterface
-     */
-    public function getUserLoader()
-    {
-        return new User\Loader($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\Template\FactoryInterface
-     */
-    public function getTemplateFactory()
-    {
-        return new Template\Factory($this->get('config')->get('psx_debug'));
-    }
-
-    /**
      * @return \Fusio\Impl\Validate\ServiceContainer
      */
     public function getValidateServiceContainer()
@@ -264,22 +125,6 @@ class Container extends DefaultContainer
         $container->set('filter', new Validate\Service\Filter());
 
         return $container;
-    }
-
-    /**
-     * @return \Fusio\Engine\Form\ElementFactoryInterface
-     */
-    public function getFormElementFactory()
-    {
-        return new Form\ElementFactory($this->get('connection'));
-    }
-
-    /**
-     * @return \Fusio\Engine\Response\FactoryInterface
-     */
-    public function getResponse()
-    {
-        return new Response\Factory();
     }
 
     /**

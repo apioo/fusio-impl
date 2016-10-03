@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Validate\Service;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Connector;
+use Fusio\Engine\ConnectorInterface;
 use RuntimeException;
 
 /**
@@ -36,7 +36,7 @@ class Database
 {
     protected $connector;
 
-    public function __construct(Connector $connector)
+    public function __construct(ConnectorInterface $connector)
     {
         $this->connector = $connector;
     }

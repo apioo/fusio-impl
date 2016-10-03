@@ -21,11 +21,12 @@
 
 namespace Fusio\Impl\Controller;
 
+use Fusio\Engine\Request;
+use Fusio\Engine\Model;
+use Fusio\Engine\Repository;
 use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\Oauth2Filter;
-use Fusio\Impl\Context as FusioContext;
-use Fusio\Impl\Processor\RepositoryInterface;
-use Fusio\Impl\Request;
+use Fusio\Engine\Context as EngineContext;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
@@ -57,7 +58,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Processor
+     * @var \Fusio\Engine\Processor
      */
     protected $processor;
 
@@ -81,15 +82,15 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Engine\App\LoaderInterface
+     * @var \Fusio\Engine\Repository\AppInterface
      */
-    protected $appLoader;
+    protected $appRepository;
 
     /**
      * @Inject
-     * @var \Fusio\Engine\User\LoaderInterface
+     * @var \Fusio\Engine\Repository\UserInterface
      */
-    protected $userLoader;
+    protected $userRepository;
 
     /**
      * @Inject
@@ -140,9 +141,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     {
         parent::onLoad();
 
-        // load app
-        $this->app  = $this->appLoader->getById($this->appId);
-        $this->user = $this->userLoader->getById($this->userId);
+        // load app and user
+        $this->app  = $this->getApp($this->appId);
+        $this->user = $this->getUser($this->userId);
 
         // log request
         $this->logId = $this->apiLogger->log(
@@ -257,7 +258,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     private function executeAction($record)
     {
         $method   = $this->getActiveMethod();
-        $context  = new FusioContext($this->context->get('fusio.routeId'), $this->app, $this->user);
+        $context  = new EngineContext($this->context->get('fusio.routeId'), $this->app, $this->user);
         $request  = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
         $response = null;
         $actionId = $method['action'];
@@ -268,7 +269,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
                 // cache
                 $repository = unserialize($method['actionCache']);
 
-                if ($repository instanceof RepositoryInterface) {
+                if ($repository instanceof Repository\ActionInterface) {
                     $this->processor->push($repository);
 
                     try {
@@ -357,5 +358,30 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
 
         return isset($matches[2]) ? $matches[2] : null;
+    }
+
+    private function getApp($appId)
+    {
+        $app = $this->appRepository->get($this->appId);
+
+        if (!$app instanceof Model\AppInterface) {
+            $app = new Model\App();
+            $app->setAnonymous(true);
+            $app->setScopes([]);
+        }
+
+        return $app;
+    }
+
+    private function getUser($userId)
+    {
+        $user = $this->userRepository->get($this->userId);
+
+        if (!$user instanceof Model\UserInterface) {
+            $user = new Model\User();
+            $user->setAnonymous(true);
+        }
+
+        return $user;
     }
 }

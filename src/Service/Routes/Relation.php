@@ -21,13 +21,9 @@
 
 namespace Fusio\Impl\Service\Routes;
 
-use Fusio\Impl\Form;
-use Fusio\Impl\Parser\ParserAbstract;
-use Fusio\Impl\Table\Action as TableAction;
-use Fusio\Impl\Table\Routes as TableRoutes;
-use Fusio\Impl\Table\Routes\Action as TableRoutesAction;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
-use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
+use Fusio\Engine\Form;
+use Fusio\Engine\Parser\ParserAbstract;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Sql\Condition;
 
@@ -62,11 +58,11 @@ class Relation
     protected $actionTable;
 
     /**
-     * @var \Fusio\Impl\Parser\ParserAbstract
+     * @var \Fusio\Engine\Parser\ParserAbstract
      */
     protected $actionParser;
 
-    public function __construct(TableRoutesMethod $routesMethodTable, TableRoutesSchema $routesSchemaTable, TableRoutesAction $routesActionTable, TableAction $actionTable, ParserAbstract $actionParser)
+    public function __construct(Table\Routes\Method $routesMethodTable, Table\Routes\Schema $routesSchemaTable, Table\Routes\Action $routesActionTable, Table\Action $actionTable, ParserAbstract $actionParser)
     {
         $this->routesMethodTable = $routesMethodTable;
         $this->routesSchemaTable = $routesSchemaTable;

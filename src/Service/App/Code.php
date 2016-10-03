@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service\App;
 
 use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Table\App\Code as TableAppCode;
+use Fusio\Impl\Table;
 
 /**
  * Code
@@ -33,9 +33,12 @@ use Fusio\Impl\Table\App\Code as TableAppCode;
  */
 class Code
 {
+    /**
+     * @var \Fusio\Impl\Table\App\Code
+     */
     protected $appCodeTable;
 
-    public function __construct(TableAppCode $appCodeTable)
+    public function __construct(Table\App\Code $appCodeTable)
     {
         $this->appCodeTable = $appCodeTable;
     }

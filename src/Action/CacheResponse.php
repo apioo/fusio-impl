@@ -111,6 +111,9 @@ class CacheResponse implements ActionInterface
         if ($connection instanceof \Memcache) {
             $handler = new Cache\MemcacheCache();
             $handler->setMemcache($connection);
+        } elseif ($connection instanceof \Memcached) {
+            $handler = new Cache\MemcachedCache();
+            $handler->setMemcached($connection);
         } elseif ($connection instanceof \Redis) {
             $handler = new Cache\RedisCache();
             $handler->setRedis($connection);

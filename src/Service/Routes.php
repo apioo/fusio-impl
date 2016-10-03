@@ -23,9 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Service\Routes\Deploy;
 use Fusio\Impl\Service\Routes\Relation;
-use Fusio\Impl\Table\Routes as TableRoutes;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
-use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
@@ -65,7 +63,7 @@ class Routes
      */
     protected $relation;
 
-    public function __construct(TableRoutes $routesTable, TableRoutesMethod $routesMethodTable, TableScopeRoute $scopeRoutesTable, Deploy $deploy, Relation $relation)
+    public function __construct(Table\Routes $routesTable, Table\Routes\Method $routesMethodTable, Table\Scope\Route $scopeRoutesTable, Deploy $deploy, Relation $relation)
     {
         $this->routesTable       = $routesTable;
         $this->routesMethodTable = $routesMethodTable;
@@ -84,7 +82,7 @@ class Routes
         $route = $this->routesTable->getRoute($routeId);
 
         if (!empty($route)) {
-            if ($route['status'] == TableRoutes::STATUS_DELETED) {
+            if ($route['status'] == Table\Routes::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Route was deleted');
             }
 
@@ -98,7 +96,7 @@ class Routes
     {
         // check whether route exists
         $condition  = new Condition();
-        $condition->equals('status', TableRoutes::STATUS_ACTIVE);
+        $condition->equals('status', Table\Routes::STATUS_ACTIVE);
         $condition->equals('path', $path);
 
         $route = $this->routesTable->getOneBy($condition);
@@ -112,7 +110,7 @@ class Routes
 
             // create route
             $this->routesTable->create([
-                'status'     => TableRoutes::STATUS_ACTIVE,
+                'status'     => Table\Routes::STATUS_ACTIVE,
                 'methods'    => 'GET|POST|PUT|DELETE',
                 'path'       => $path,
                 'controller' => 'Fusio\Impl\Controller\SchemaApiController',
@@ -136,7 +134,7 @@ class Routes
         $route = $this->routesTable->get($routeId);
 
         if (!empty($route)) {
-            if ($route['status'] == TableRoutes::STATUS_DELETED) {
+            if ($route['status'] == Table\Routes::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Route was deleted');
             }
 
@@ -161,7 +159,7 @@ class Routes
         $route = $this->routesTable->get($routeId);
 
         if (!empty($route)) {
-            if ($route['status'] == TableRoutes::STATUS_DELETED) {
+            if ($route['status'] == Table\Routes::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Route was deleted');
             }
 
@@ -173,7 +171,7 @@ class Routes
             // delete route
             $this->routesTable->update(array(
                 'id'     => $route->id,
-                'status' => TableRoutes::STATUS_DELETED
+                'status' => Table\Routes::STATUS_DELETED
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find route');

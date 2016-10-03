@@ -21,13 +21,11 @@
 
 namespace Fusio\Impl\Service\Routes;
 
-use Fusio\Impl\Form;
-use Fusio\Impl\Model\Action;
-use Fusio\Impl\Parser\ParserAbstract;
-use Fusio\Impl\Processor\MemoryRepository;
-use Fusio\Impl\Table\Action as TableAction;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
-use Fusio\Impl\Table\Schema as TableSchema;
+use Fusio\Engine\Form;
+use Fusio\Engine\Model;
+use Fusio\Engine\Repository;
+use Fusio\Engine\Parser\ParserAbstract;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Sql\Condition;
 
@@ -57,11 +55,11 @@ class Deploy
     protected $actionTable;
 
     /**
-     * @var \Fusio\Impl\Parser\ParserAbstract
+     * @var \Fusio\Engine\Parser\ParserAbstract
      */
     protected $actionParser;
 
-    public function __construct(TableRoutesMethod $routesMethodTable, TableSchema $schemaTable, TableAction $actionTable, ParserAbstract $actionParser)
+    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser)
     {
         $this->routesMethodTable = $routesMethodTable;
         $this->schemaTable       = $schemaTable;
@@ -98,13 +96,13 @@ class Deploy
     
     protected function getActionCache($actionId)
     {
-        $repository = new MemoryRepository();
+        $repository = new Repository\ActionMemory();
         $this->buildRepository($actionId, $repository);
 
         return serialize($repository);
     }
 
-    protected function buildRepository($actionId, MemoryRepository $repository)
+    protected function buildRepository($actionId, Repository\ActionInterface $repository)
     {
         $action  = $this->actionTable->get($actionId);
         $config  = $action->config;
@@ -122,7 +120,7 @@ class Deploy
             }
         }
 
-        $entry = new Action();
+        $entry = new Model\Action();
         $entry->setId($action['id']);
         $entry->setName($action['name']);
         $entry->setClass($action['class']);

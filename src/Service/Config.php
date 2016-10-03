@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Table\Config as TableConfig;
-use Fusio\Impl\Table\Scope as TableScope;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
@@ -42,7 +41,7 @@ class Config
      */
     protected $configTable;
 
-    public function __construct(TableConfig $configTable)
+    public function __construct(Table\Config $configTable)
     {
         $this->configTable = $configTable;
     }
@@ -111,23 +110,23 @@ class Config
     protected function convertValueToType($value, $type)
     {
         switch ($type) {
-            case TableConfig::FORM_NUMBER:
+            case Table\Config::FORM_NUMBER:
                 return 0 + $value;
 
-            case TableConfig::FORM_BOOLEAN:
+            case Table\Config::FORM_BOOLEAN:
                 return (bool) $value;
 
-            case TableConfig::FORM_DATETIME:
+            case Table\Config::FORM_DATETIME:
                 return new \DateTime($value);
 
-            case TableConfig::FORM_TEXT:
+            case Table\Config::FORM_TEXT:
                 return $value;
 
-            case TableConfig::FORM_EMAIL:
+            case Table\Config::FORM_EMAIL:
                 return $value;
 
             default:
-            case TableConfig::FORM_STRING:
+            case Table\Config::FORM_STRING:
                 return $value;
         }
     }

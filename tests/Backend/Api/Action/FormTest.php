@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Impl\Action\SqlFetchRow;
+use Fusio\Impl\Tests\Controller\SqlFetchRowTest;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -40,7 +42,7 @@ class FormTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/action/form?class=' . urlencode('Fusio\\Impl\\Action\\SqlFetchRow'), 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/action/form?class=' . urlencode(SqlFetchRow::class), 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -55,14 +57,6 @@ class FormTest extends ControllerDbTestCase
                 {
                     "key": 2,
                     "value": "DBAL"
-                },
-                {
-                    "key": 4,
-                    "value": "Memcache"
-                },
-                {
-                    "key": 3,
-                    "value": "MongoDB"
                 },
                 {
                     "key": 1,

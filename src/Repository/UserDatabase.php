@@ -19,20 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\User;
+namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\User\LoaderInterface;
-use Fusio\Impl\Model\User;
+use Fusio\Impl\Table;
+use Fusio\Engine\Repository;
+use Fusio\Engine\Model\User;
 
 /**
- * Loader
+ * UserDatabase
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Loader implements LoaderInterface
+class UserDatabase implements Repository\UserInterface
 {
     protected $connection;
 
@@ -41,23 +42,33 @@ class Loader implements LoaderInterface
         $this->connection = $connection;
     }
 
-    public function getById($userId)
+    public function getAll()
     {
-        $user = $this->newUser($userId);
+        $sql = 'SELECT id,
+                       status,
+                       name
+                  FROM fusio_user
+                 WHERE status = :status_admin
+                    OR status = :status_consumer
+              ORDER BY id DESC';
 
-        if (!empty($userId)) {
-            $user->setAnonymous(false);
-        } else {
-            $user->setAnonymous(true);
+        $users  = [];
+        $result = $this->connection->fetchAll($sql, [
+            'status_admin'    => Table\User::STATUS_ADMINISTRATOR,
+            'status_consumer' => Table\User::STATUS_CONSUMER,
+        ]);
+
+        foreach ($result as $row) {
+            $users[] = $this->newUser($row);
         }
 
-        return $user;
+        return $users;
     }
 
-    protected function newUser($userId)
+    public function get($userId)
     {
         if (empty($userId)) {
-            return new User();
+            return null;
         }
 
         $sql = 'SELECT id,
@@ -69,14 +80,19 @@ class Loader implements LoaderInterface
         $row = $this->connection->fetchAssoc($sql, array('userId' => $userId));
 
         if (!empty($row)) {
-            $user = new User();
-            $user->setId($row['id']);
-            $user->setStatus($row['status']);
-            $user->setName($row['name']);
-
-            return $user;
+            return $this->newUser($row);
         } else {
-            throw new \RuntimeException('Invalid user id');
+            return null;
         }
+    }
+
+    protected function newUser(array $row)
+    {
+        $user = new User();
+        $user->setId($row['id']);
+        $user->setStatus($row['status']);
+        $user->setName($row['name']);
+
+        return $user;
     }
 }

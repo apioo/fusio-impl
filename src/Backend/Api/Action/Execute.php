@@ -49,9 +49,9 @@ class Execute extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Action
+     * @var \Fusio\Impl\Service\Action\Executor
      */
-    protected $actionService;
+    protected $actionExecutorService;
 
     /**
      * @Inject
@@ -84,7 +84,7 @@ class Execute extends SchemaApiAbstract
     protected function doPost($record)
     {
         try {
-            $response = $this->actionService->execute(
+            $response = $this->actionExecutorService->execute(
                 (int) $this->getUriFragment('action_id'),
                 $record->method,
                 $record->uriFragments,

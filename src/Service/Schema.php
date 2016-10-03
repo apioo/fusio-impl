@@ -22,9 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Schema\ParserInterface;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
-use Fusio\Impl\Table\Routes\Schema as TableRoutesSchema;
-use Fusio\Impl\Table\Schema as TableSchema;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Schema\Generator;
@@ -63,7 +61,7 @@ class Schema
      */
     protected $schemaParser;
 
-    public function __construct(TableSchema $schemaTable, TableRoutesSchema $routesSchemaTable, TableRoutesMethod $routesMethodTable, ParserInterface $schemaParser)
+    public function __construct(Table\Schema $schemaTable, Table\Routes\Schema $routesSchemaTable, Table\Routes\Method $routesMethodTable, ParserInterface $schemaParser)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesSchemaTable = $routesSchemaTable;
@@ -131,7 +129,7 @@ class Schema
 
         // create schema
         $this->schemaTable->create(array(
-            'status' => TableSchema::STATUS_ACTIVE,
+            'status' => Table\Schema::STATUS_ACTIVE,
             'name'   => $name,
             'source' => $source,
             'cache'  => $this->schemaParser->parse(json_encode($source)),

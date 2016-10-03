@@ -28,9 +28,9 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\ConfigurationException;
-use Fusio\Impl\Model\Action;
-use Fusio\Impl\Processor\MemoryRepository;
+use Fusio\Engine\Exception\ConfigurationException;
+use Fusio\Engine\Model\Action;
+use Fusio\Engine\Repository;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -57,7 +57,7 @@ class Processor implements ActionInterface
     {
         $yaml       = new Parser();
         $process    = $yaml->parse($configuration->get('process'));
-        $repository = new MemoryRepository();
+        $repository = new Repository\ActionMemory();
         $id         = 1;
 
         if (is_array($process)) {

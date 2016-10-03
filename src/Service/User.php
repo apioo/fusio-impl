@@ -23,10 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Service\Consumer\ProviderInterface;
 use Fusio\Impl\Service\User\ValidatorTrait;
-use Fusio\Impl\Table\App as TableApp;
-use Fusio\Impl\Table\Scope as TableScope;
-use Fusio\Impl\Table\User as TableUser;
-use Fusio\Impl\Table\User\Scope as TableUserScope;
+use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -65,7 +62,7 @@ class User
      */
     protected $userScopeTable;
 
-    public function __construct(TableUser $userTable, TableScope $scopeTable, TableApp $appTable, TableUserScope $userScopeTable)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable)
     {
         $this->userTable      = $userTable;
         $this->scopeTable     = $scopeTable;
@@ -76,7 +73,7 @@ class User
     public function getAll($startIndex = 0, $search = null)
     {
         $condition = new Condition();
-        $condition->notEquals('status', TableUser::STATUS_DELETED);
+        $condition->notEquals('status', Table\User::STATUS_DELETED);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -144,11 +141,11 @@ class User
                 return null;
             }
 
-            if ($user->status == TableUser::STATUS_DISABLED) {
+            if ($user->status == Table\User::STATUS_DISABLED) {
                 throw new StatusCode\BadRequestException('The assigned account is disabled');
             }
 
-            if ($user->status == TableUser::STATUS_DELETED) {
+            if ($user->status == Table\User::STATUS_DELETED) {
                 throw new StatusCode\BadRequestException('The assigned account is deleted');
             }
 
@@ -165,7 +162,7 @@ class User
     {
         // check whether user exists
         $condition  = new Condition();
-        $condition->notEquals('status', TableUser::STATUS_DELETED);
+        $condition->notEquals('status', Table\User::STATUS_DELETED);
         $condition->equals('name', $name);
 
         $user = $this->userTable->getOneBy($condition);
@@ -238,7 +235,7 @@ class User
             // create user
             $this->userTable->create(array(
                 'provider' => $provider,
-                'status'   => TableUser::STATUS_CONSUMER,
+                'status'   => Table\User::STATUS_CONSUMER,
                 'remoteId' => $id,
                 'name'     => $name,
                 'email'    => $email,
@@ -321,7 +318,7 @@ class User
         if (!empty($user)) {
             $this->userTable->update(array(
                 'id'     => $user['id'],
-                'status' => TableUser::STATUS_DELETED,
+                'status' => Table\User::STATUS_DELETED,
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find user');

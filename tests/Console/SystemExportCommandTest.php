@@ -58,11 +58,6 @@ class SystemExportCommandTest extends ControllerDbTestCase
         "Fusio\\Impl\\Action\\Condition",
         "Fusio\\Impl\\Action\\HttpProxy",
         "Fusio\\Impl\\Action\\HttpRequest",
-        "Fusio\\Impl\\Action\\MongoDelete",
-        "Fusio\\Impl\\Action\\MongoFetchAll",
-        "Fusio\\Impl\\Action\\MongoFetchRow",
-        "Fusio\\Impl\\Action\\MongoInsert",
-        "Fusio\\Impl\\Action\\MongoUpdate",
         "Fusio\\Impl\\Action\\MqAmqp",
         "Fusio\\Impl\\Action\\MqBeanstalk",
         "Fusio\\Impl\\Action\\Pipe",
@@ -86,21 +81,6 @@ class SystemExportCommandTest extends ControllerDbTestCase
         "Fusio\\Impl\\Connection\\RabbitMQ"
     ],
     "connection": [
-        {
-            "name": "Memcache",
-            "class": "Fusio\\Impl\\Connection\\Memcache",
-            "config": {
-                "host": "127.0.0.1"
-            }
-        },
-        {
-            "name": "MongoDB",
-            "class": "Fusio\\Impl\\Connection\\MongoDB",
-            "config": {
-                "url": "mongodb:\/\/localhost:27017",
-                "database": "bar"
-            }
-        },
         {
             "name": "DBAL",
             "class": "Fusio\\Impl\\Connection\\DBAL",

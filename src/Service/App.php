@@ -23,10 +23,7 @@ namespace Fusio\Impl\Service;
 
 use DateInterval;
 use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Table\App as TableApp;
-use Fusio\Impl\Table\App\Scope as TableAppScope;
-use Fusio\Impl\Table\App\Token as TableAppToken;
-use Fusio\Impl\Table\Scope as TableScope;
+use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -69,7 +66,7 @@ class App
      */
     protected $tokenSecret;
 
-    public function __construct(TableApp $appTable, TableScope $scopeTable, TableAppScope $appScopeTable, TableAppToken $appTokenTable, $tokenSecret)
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, $tokenSecret)
     {
         $this->appTable       = $appTable;
         $this->scopeTable     = $scopeTable;
@@ -81,7 +78,7 @@ class App
     public function getAll($startIndex = 0, $search = null)
     {
         $condition = new Condition();
-        $condition->in('status', [TableApp::STATUS_ACTIVE, TableApp::STATUS_PENDING]);
+        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -107,7 +104,7 @@ class App
         $app = $this->appTable->get($appId);
 
         if (!empty($app)) {
-            if ($app['status'] == TableApp::STATUS_DELETED) {
+            if ($app['status'] == Table\App::STATUS_DELETED) {
                 throw new StatusCode\GoneException('App was deleted');
             }
 
@@ -124,7 +121,7 @@ class App
     {
         $condition = new Condition();
         $condition->equals('appKey', $appKey);
-        $condition->equals('status', TableApp::STATUS_ACTIVE);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->getOneBy($condition, Fields::blacklist(['userId', 'status', 'parameters', 'appKey', 'appSecret', 'date']));
 
@@ -141,7 +138,7 @@ class App
     {
         $condition = new Condition();
         $condition->equals('appKey', $appKey);
-        $condition->equals('status', TableApp::STATUS_ACTIVE);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         return $this->appTable->getOneBy($condition);
     }
@@ -151,7 +148,7 @@ class App
         $condition = new Condition();
         $condition->equals('appKey', $appKey);
         $condition->equals('appSecret', $appSecret);
-        $condition->equals('status', TableApp::STATUS_ACTIVE);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         return $this->appTable->getOneBy($condition);
     }
@@ -161,7 +158,7 @@ class App
         // check whether app exists
         $condition  = new Condition();
         $condition->equals('userId', $userId);
-        $condition->notEquals('status', TableApp::STATUS_DELETED);
+        $condition->notEquals('status', Table\App::STATUS_DELETED);
         $condition->equals('name', $name);
 
         $app = $this->appTable->getOneBy($condition);
@@ -213,7 +210,7 @@ class App
         $app = $this->appTable->get($appId);
 
         if (!empty($app)) {
-            if ($app['status'] == TableApp::STATUS_DELETED) {
+            if ($app['status'] == Table\App::STATUS_DELETED) {
                 throw new StatusCode\GoneException('App was deleted');
             }
 
@@ -259,13 +256,13 @@ class App
         $app = $this->appTable->get($appId);
 
         if (!empty($app)) {
-            if ($app['status'] == TableApp::STATUS_DELETED) {
+            if ($app['status'] == Table\App::STATUS_DELETED) {
                 throw new StatusCode\GoneException('App was deleted');
             }
 
             $this->appTable->update(array(
                 'id'     => $app['id'],
-                'status' => TableApp::STATUS_DELETED,
+                'status' => Table\App::STATUS_DELETED,
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find app');
@@ -299,7 +296,7 @@ class App
         $this->appTokenTable->create([
             'appId'  => $appId,
             'userId' => $userId,
-            'status' => TableAppToken::STATUS_ACTIVE,
+            'status' => Table\App\Token::STATUS_ACTIVE,
             'token'  => $accessToken,
             'scope'  => implode(',', $scopes),
             'ip'     => $ip,

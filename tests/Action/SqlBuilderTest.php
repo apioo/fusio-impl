@@ -25,9 +25,9 @@ use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\SqlBuilder;
 use Fusio\Impl\Action\SqlFetchAll;
 use Fusio\Impl\App;
-use Fusio\Impl\Form\Builder;
-use Fusio\Impl\Form\Container;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Engine\Form\Builder;
+use Fusio\Engine\Form\Container;
+use Fusio\Engine\Test\EngineTestCaseTrait;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Data\Record\Transformer;
 use PSX\Framework\Test\Environment;
@@ -41,7 +41,7 @@ use PSX\Framework\Test\Environment;
  */
 class SqlBuilderTest extends DbTestCase
 {
-    use ActionTestCaseTrait;
+    use EngineTestCaseTrait;
 
     public function testHandle()
     {

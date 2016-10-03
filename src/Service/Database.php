@@ -25,7 +25,7 @@ use Doctrine\DBAL\Connection as DBALConnection;
 use Doctrine\DBAL\Schema\Schema as DBALSchema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
-use Fusio\Impl\Connector;
+use Fusio\Engine\Connector;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql;

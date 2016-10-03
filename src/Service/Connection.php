@@ -22,11 +22,11 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Parser\ParserInterface;
-use Fusio\Impl\Form\Container;
-use Fusio\Impl\Form\Element;
-use Fusio\Impl\Parameters;
-use Fusio\Impl\Table\Connection as TableConnection;
-use Fusio\Impl\Factory;
+use Fusio\Engine\Form\Container;
+use Fusio\Engine\Form\Element;
+use Fusio\Engine\Parameters;
+use Fusio\Engine\Factory;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\OpenSsl\OpenSsl;
@@ -50,7 +50,7 @@ class Connection
     protected $connectionFactory;
     protected $secretKey;
 
-    public function __construct(TableConnection $connectionTable, ParserInterface $connectionParser, Factory\Connection $connectionFactory, $secretKey)
+    public function __construct(Table\Connection $connectionTable, ParserInterface $connectionParser, Factory\Connection $connectionFactory, $secretKey)
     {
         $this->connectionTable   = $connectionTable;
         $this->connectionParser  = $connectionParser;

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Table\Log as TableLog;
+use Fusio\Impl\Table;
 use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
@@ -38,9 +38,12 @@ use PSX\Sql\Sql;
  */
 class Log
 {
+    /**
+     * @var \Fusio\Impl\Table\Log
+     */
     protected $logTable;
 
-    public function __construct(TableLog $logTable)
+    public function __construct(Table\Log $logTable)
     {
         $this->logTable = $logTable;
     }

@@ -25,9 +25,9 @@ use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Action\MqBeanstalk;
 use Fusio\Impl\App;
-use Fusio\Impl\Form\Builder;
-use Fusio\Impl\Form\Container;
-use Fusio\Impl\Tests\ActionTestCaseTrait;
+use Fusio\Engine\Form\Builder;
+use Fusio\Engine\Form\Container;
+use Fusio\Engine\Test\EngineTestCaseTrait;
 use Fusio\Impl\Tests\DbTestCase;
 use Pheanstalk\Pheanstalk;
 use PSX\Cache;
@@ -43,7 +43,7 @@ use PSX\Record\Record;
  */
 class MqBeanstalkTest extends DbTestCase
 {
-    use ActionTestCaseTrait;
+    use EngineTestCaseTrait;
 
     public function testHandle()
     {

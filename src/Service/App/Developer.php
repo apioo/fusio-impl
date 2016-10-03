@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Service\App;
 
-use Fusio\Impl\Service\App as ServiceApp;
-use Fusio\Impl\Table\App as TableApp;
-use Fusio\Impl\Table\Scope as TableScope;
-use Fusio\Impl\Table\User\Scope as TableUserScope;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
@@ -40,13 +38,32 @@ use PSX\Sql\Sql;
  */
 class Developer
 {
+    /**
+     * @var \Fusio\Impl\Service\App
+     */
     protected $appService;
+
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
     protected $appTable;
+
+    /**
+     * @var \Fusio\Impl\Table\User\Scope
+     */
     protected $userScopeTable;
+
+    /**
+     * @var integer
+     */
     protected $appCount;
+
+    /**
+     * @var boolean
+     */
     protected $appApproval;
 
-    public function __construct(ServiceApp $appService, TableApp $appTable, TableScope $scopeTable, TableUserScope $userScopeTable, $appCount, $appApproval)
+    public function __construct(Service\App $appService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, $appCount, $appApproval)
     {
         $this->appService     = $appService;
         $this->appTable       = $appTable;
@@ -60,7 +77,7 @@ class Developer
     {
         $condition = new Condition();
         $condition->equals('userId', $userId);
-        $condition->equals('status', TableApp::STATUS_ACTIVE);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -103,7 +120,7 @@ class Developer
         // check limit of apps which an user can create
         $condition = new Condition();
         $condition->equals('userId', $userId);
-        $condition->in('status', [TableApp::STATUS_ACTIVE, TableApp::STATUS_PENDING, TableApp::STATUS_DEACTIVATED]);
+        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
 
         if ($this->appTable->getCount($condition) > $this->appCount) {
             throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to register a new one');
@@ -116,7 +133,7 @@ class Developer
 
         $this->appService->create(
             $userId,
-            $this->appApproval === false ? TableApp::STATUS_ACTIVE : TableApp::STATUS_PENDING,
+            $this->appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING,
             $name,
             $url,
             null,

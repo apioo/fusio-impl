@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\System;
 
-use Fusio\Impl\Form\Element;
+use Fusio\Engine\Form\Element;
 use PSX\Json\Parser;
 use stdClass;
 

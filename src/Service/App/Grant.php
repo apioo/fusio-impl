@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Service\App;
 
-use Fusio\Impl\Service\App as ServiceApp;
-use Fusio\Impl\Table\App as TableApp;
-use Fusio\Impl\Table\App\Token as TableAppToken;
-use Fusio\Impl\Table\User\Grant as TableUserGrant;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -37,11 +35,22 @@ use PSX\Sql\Condition;
  */
 class Grant
 {
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
     protected $appTable;
+
+    /**
+     * @var \Fusio\Impl\Table\User\Grant
+     */
     protected $userGrantTable;
+
+    /**
+     * @var \Fusio\Impl\Table\App\Token
+     */
     protected $appTokenTable;
 
-    public function __construct(TableApp $appTable, TableUserGrant $userGrantTable, TableAppToken $appTokenTable)
+    public function __construct(Table\App $appTable, Table\User\Grant $userGrantTable, Table\App\Token $appTokenTable)
     {
         $this->appTable       = $appTable;
         $this->userGrantTable = $userGrantTable;

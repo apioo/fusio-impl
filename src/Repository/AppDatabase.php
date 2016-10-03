@@ -19,47 +19,64 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\App;
+namespace Fusio\Impl\Repository;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Engine\App\LoaderInterface;
-use Fusio\Impl\Model\App;
+use Doctrine\DBAL\Connection as DBALConnection;
+use Fusio\Engine\Repository;
+use Fusio\Engine\Model\App;
+use Fusio\Impl\Table;
 
 /**
- * Loader
+ * AppDatabase
  *
  * @author  Christoph Kappestein <k42b3.x@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Loader implements LoaderInterface
+class AppDatabase implements Repository\AppInterface
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
-    public function __construct(Connection $connection)
+    /**
+     * @param \Doctrine\DBAL\Connection $connection
+     */
+    public function __construct(DBALConnection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getById($appId)
+    public function getAll()
     {
-        $app = $this->newApp($appId);
+        $sql = 'SELECT id,
+                       userId,
+                       status,
+                       name,
+                       url,
+                       parameters,
+                       appKey
+                  FROM fusio_app
+                 WHERE status = :status
+              ORDER BY id DESC';
 
-        if (!empty($appId)) {
-            $app->setAnonymous(false);
-            $app->setScopes($this->getScopes($appId));
-        } else {
-            $app->setAnonymous(true);
-            $app->setScopes(array());
+        $apps   = [];
+        $result = $this->connection->fetchAll($sql, [
+            'status' => Table\App::STATUS_ACTIVE
+        ]);
+
+        foreach ($result as $row) {
+            $apps[] = $this->newApp($row);
         }
 
-        return $app;
+        return $apps;
     }
 
-    protected function newApp($appId)
+    public function get($appId)
     {
         if (empty($appId)) {
-            return new App();
+            return null;
         }
 
         $sql = 'SELECT id,
@@ -75,23 +92,12 @@ class Loader implements LoaderInterface
         $row = $this->connection->fetchAssoc($sql, array('appId' => $appId));
 
         if (!empty($row)) {
-            $parameters = [];
-            if (!empty($row['parameters'])) {
-                parse_str($row['parameters'], $parameters);
-            }
-
-            $app = new App();
-            $app->setId($row['id']);
-            $app->setUserId($row['userId']);
-            $app->setStatus($row['status']);
-            $app->setName($row['name']);
-            $app->setUrl($row['url']);
-            $app->setParameters($parameters);
-            $app->setAppKey($row['appKey']);
+            $app = $this->newApp($row);
+            $app->setScopes($this->getScopes($row['id']));
 
             return $app;
         } else {
-            throw new \RuntimeException('Invalid app id');
+            return null;
         }
     }
 
@@ -111,5 +117,24 @@ class Loader implements LoaderInterface
         }
 
         return $names;
+    }
+
+    protected function newApp(array $row)
+    {
+        $parameters = [];
+        if (!empty($row['parameters'])) {
+            parse_str($row['parameters'], $parameters);
+        }
+
+        $app = new App();
+        $app->setId($row['id']);
+        $app->setUserId($row['userId']);
+        $app->setStatus($row['status']);
+        $app->setName($row['name']);
+        $app->setUrl($row['url']);
+        $app->setParameters($parameters);
+        $app->setAppKey($row['appKey']);
+
+        return $app;
     }
 }

@@ -21,10 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Table\App\Scope as TableAppScope;
-use Fusio\Impl\Table\Scope as TableScope;
-use Fusio\Impl\Table\Scope\Route as TableScopeRoute;
-use Fusio\Impl\Table\User\Scope as TableUserScope;
+use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
@@ -39,12 +36,27 @@ use PSX\Sql\Sql;
  */
 class Scope
 {
+    /**
+     * @var \Fusio\Impl\Table\Scope
+     */
     protected $scopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Scope\Route
+     */
     protected $scopeRouteTable;
+
+    /**
+     * @var \Fusio\Impl\Table\App\Scope
+     */
     protected $appScopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\User\Scope
+     */
     protected $userScopeTable;
 
-    public function __construct(TableScope $scopeTable, TableScopeRoute $scopeRouteTable, TableAppScope $appScopeTable, TableUserScope $userScopeTable)
+    public function __construct(Table\Scope $scopeTable, Table\Scope\Route $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable)
     {
         $this->scopeTable      = $scopeTable;
         $this->scopeRouteTable = $scopeRouteTable;

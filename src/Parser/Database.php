@@ -23,6 +23,8 @@ namespace Fusio\Impl\Parser;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Factory\FactoryInterface;
+use Fusio\Engine\Parser\ParserAbstract;
+use Fusio\Engine\Form;
 
 /**
  * Database
@@ -33,13 +35,26 @@ use Fusio\Engine\Factory\FactoryInterface;
  */
 class Database extends ParserAbstract
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
+     * @var string
+     */
     protected $tableName;
+
+    /**
+     * @var string
+     */
     protected $instanceOf;
 
-    public function __construct(FactoryInterface $factory, Connection $connection, $tableName, $instanceOf)
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, Connection $connection, $tableName, $instanceOf)
     {
-        parent::__construct($factory, $connection);
+        parent::__construct($factory, $elementFactory);
 
+        $this->connection = $connection;
         $this->tableName  = $tableName;
         $this->instanceOf = $instanceOf;
     }

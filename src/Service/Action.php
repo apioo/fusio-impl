@@ -21,24 +21,14 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\ProcessorInterface;
-use Fusio\Impl\Context;
-use Fusio\Engine\App\LoaderInterface as AppLoaderInterface;
-use Fusio\Engine\User\LoaderInterface as UserLoaderInterface;
-use Fusio\Impl\Request;
-use Fusio\Impl\Table\Action as TableAction;
-use Fusio\Impl\Table\Routes\Action as TableRoutesAction;
-use Fusio\Impl\Table\Routes\Method as TableRoutesMethod;
+use Fusio\Engine\Repository;
+use Fusio\Impl\Table;
 use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\Request as HttpRequest;
 use PSX\Model\Common\ResultSet;
-use PSX\Record\Record;
-use PSX\Record\RecordInterface;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 use PSX\Sql\Sql;
-use PSX\Uri\Uri;
 
 /**
  * Action
@@ -64,29 +54,11 @@ class Action
      */
     protected $routesMethodTable;
 
-    /**
-     * @var \Fusio\Engine\ProcessorInterface
-     */
-    protected $processor;
-
-    /**
-     * @var \Fusio\Engine\App\LoaderInterface
-     */
-    protected $appLoader;
-
-    /**
-     * @var \Fusio\Engine\User\LoaderInterface
-     */
-    protected $userLoader;
-
-    public function __construct(TableAction $actionTable, TableRoutesAction $routesActionTable, TableRoutesMethod $routesMethodTable, ProcessorInterface $processor, AppLoaderInterface $appLoader, UserLoaderInterface $userLoader)
+    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable)
     {
         $this->actionTable       = $actionTable;
         $this->routesActionTable = $routesActionTable;
         $this->routesMethodTable = $routesMethodTable;
-        $this->processor         = $processor;
-        $this->appLoader         = $appLoader;
-        $this->userLoader        = $userLoader;
     }
 
     public function getAll($startIndex = 0, $search = null, $routeId = null)
@@ -145,7 +117,7 @@ class Action
 
         // create action
         $this->actionTable->create(array(
-            'status' => TableAction::STATUS_ACTIVE,
+            'status' => Table\Action::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
             'config' => $config,
@@ -189,44 +161,5 @@ class Action
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
         }
-    }
-
-    public function execute($actionId, $method, $uriFragments, $parameters, $headers, RecordInterface $body = null)
-    {
-        $action = $this->actionTable->get($actionId);
-
-        if (!empty($action)) {
-            if ($body === null) {
-                $body = new Record();
-            }
-
-            $app  = $this->appLoader->getById(1);
-            $user = $this->userLoader->getById(1);
-
-            $uriFragments = $this->parseQueryString($uriFragments);
-            $parameters   = $this->parseQueryString($parameters);
-            $headers      = $this->parseQueryString($headers);
-
-            $context = new Context($actionId, $app, $user);
-            $request = new Request(
-                new HttpRequest(new Uri('/'), $method, $headers),
-                $uriFragments,
-                $parameters, 
-                $body
-            );
-
-            return $this->processor->execute($action->id, $request, $context);
-        } else {
-            return null;
-        }
-    }
-    
-    private function parseQueryString($data)
-    {
-        $result = array();
-        if (!empty($data)) {
-            parse_str($data, $result);
-        }
-        return $result;
     }
 }
