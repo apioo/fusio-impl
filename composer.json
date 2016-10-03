@@ -14,7 +14,7 @@
     "php": ">=5.5",
     "psx/psx": "^2.0",
     "psx/openssl": "^1.0",
-    "fusio/engine": "dev-master",
+    "fusio/engine": "^0.4@dev",
     "ircmaxell/password-compat": "^1.0",
     "ircmaxell/random-lib": "^1.1",
     "symfony/expression-language": "^2.8",
