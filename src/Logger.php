@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2016 Christoph Kappestein <k42b3.x@gmail.com>
+ * Copyright (C) 2015-2016 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -29,19 +29,33 @@ use PSX\Http\Stream\Util;
 /**
  * Logger
  *
- * @author  Christoph Kappestein <k42b3.x@gmail.com>
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
 class Logger
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
+    /**
+     * @param \Doctrine\DBAL\Connection $connection
+     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
+    /**
+     * @param integer $routeId
+     * @param integer $appId
+     * @param integer $userId
+     * @param string $ip
+     * @param \PSX\Http\RequestInterface $request
+     * @return string
+     */
     public function log($routeId, $appId, $userId, $ip, RequestInterface $request)
     {
         $now = new \DateTime();
@@ -62,6 +76,10 @@ class Logger
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * @param integer $logId
+     * @param \Exception $exception
+     */
     public function appendError($logId, \Exception $exception)
     {
         if ($exception instanceof DisplayException) {
