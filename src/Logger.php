@@ -22,7 +22,6 @@
 namespace Fusio\Impl;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\LoggerInterface;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
@@ -34,7 +33,7 @@ use PSX\Http\Stream\Util;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Logger implements LoggerInterface
+class Logger
 {
     protected $connection;
 
