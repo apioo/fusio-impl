@@ -360,9 +360,13 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return isset($matches[2]) ? $matches[2] : null;
     }
 
+    /**
+     * @param integer $appId
+     * @return \Fusio\Engine\Model\AppInterface
+     */
     private function getApp($appId)
     {
-        $app = $this->appRepository->get($this->appId);
+        $app = $this->appRepository->get($appId);
 
         if (!$app instanceof Model\AppInterface) {
             $app = new Model\App();
@@ -373,9 +377,13 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return $app;
     }
 
+    /**
+     * @param integer $userId
+     * @return \Fusio\Engine\Model\UserInterface
+     */
     private function getUser($userId)
     {
-        $user = $this->userRepository->get($this->userId);
+        $user = $this->userRepository->get($userId);
 
         if (!$user instanceof Model\UserInterface) {
             $user = new Model\User();
