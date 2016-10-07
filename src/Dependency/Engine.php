@@ -21,16 +21,21 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Doctrine\Common\Cache as DoctrineCache;
+use Fusio\Engine\Cache;
 use Fusio\Engine\Connector;
+use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
 use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
+use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Engine\Schema;
 use Fusio\Engine\Template;
-use Fusio\Impl\Logger;
+use Fusio\Engine\Json;
+use Fusio\Engine\Http;
 use Fusio\Impl\Parser as ImplParser;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
@@ -77,7 +82,15 @@ trait Engine
      */
     public function getActionFactory()
     {
-        return new Factory\Action($this->get('object_builder'));
+        return new Factory\Action($this, [
+            ConnectorInterface::class => 'connector',
+            ProcessorInterface::class => 'processor',
+            Response\FactoryInterface::class => 'engine_response',
+            Template\FactoryInterface::class => 'engine_template_factory',
+            Http\ClientInterface::class => 'engine_http_client',
+            Json\ProcessorInterface::class => 'engine_json_processor',
+            Cache\ProviderInterface::class => 'engine_cache_provider',
+        ]);
     }
 
     /**
@@ -133,7 +146,7 @@ trait Engine
      */
     public function getConnectionFactory()
     {
-        return new Factory\Connection($this->get('object_builder'));
+        return new Factory\Connection($this);
     }
 
     /**
@@ -188,17 +201,6 @@ trait Engine
     }
 
     /**
-     * @return \Fusio\Engine\Template\FactoryInterface
-     */
-    public function getTemplateFactory()
-    {
-        return new Template\Factory(
-            $this->get('config')->get('psx_debug'),
-            PSX_PATH_CACHE
-        );
-    }
-
-    /**
      * @return \Fusio\Engine\Form\ElementFactoryInterface
      */
     public function getFormElementFactory()
@@ -212,16 +214,51 @@ trait Engine
     /**
      * @return \Fusio\Engine\Response\FactoryInterface
      */
-    public function getResponse()
+    public function getEngineResponse()
     {
         return new Response\Factory();
     }
 
     /**
-     * @return \Fusio\Engine\LoggerInterface
+     * @return \Fusio\Engine\Template\FactoryInterface
      */
-    public function getApiLogger()
+    public function getEngineTemplateFactory()
     {
-        return new Logger($this->get('connection'));
+        return new Template\Factory(
+            $this->get('config')->get('psx_debug'),
+            PSX_PATH_CACHE
+        );
+    }
+
+    /**
+     * @return \Fusio\Engine\Json\ProcessorInterface
+     */
+    public function getEngineJsonProcessor()
+    {
+        return new Json\Processor(
+            new \PSX\Data\Reader\Json(),
+            new \PSX\Data\Writer\Json()
+        );
+    }
+
+    /**
+     * @return \Fusio\Engine\Http\ClientInterface
+     */
+    public function getEngineHttpClient()
+    {
+        return new Http\Client(
+            new \PSX\Http\Client()
+        );
+    }
+
+    /**
+     * @return \Fusio\Engine\Cache\ProviderInterface
+     */
+    public function getEngineCacheProvider()
+    {
+        $tempDir  = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Fusio';
+        $provider = new DoctrineCache\FilesystemCache($tempDir);
+
+        return new Cache\Provider($provider);
     }
 }

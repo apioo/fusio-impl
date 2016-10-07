@@ -63,14 +63,14 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidAction',
         ]);
 
-        $this->assertEquals(19, $actionId);
+        $this->assertEquals(17, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
         ]);
 
-        $this->assertEquals(7, $connectionId);
+        $this->assertEquals(4, $connectionId);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [

@@ -37,7 +37,8 @@ class Column extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('column');
         $sb->string('name');
-        $sb->string('type');
+        $sb->string('type')
+            ->setEnumeration(['smallint', 'integer', 'bigint', 'decimal', 'float', 'string', 'text', 'guid', 'binary', 'blob', 'boolean', 'date', 'datetime', 'time', 'dateinterval', 'array', 'simple_array', 'json', 'json_array', 'object']);
         $sb->integer('length');
         $sb->boolean('null');
         $sb->boolean('autoincrement');

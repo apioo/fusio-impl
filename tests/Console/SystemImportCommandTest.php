@@ -61,7 +61,7 @@ class SystemImportCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(3, $connection['id']);
-        $this->assertEquals('Fusio\Impl\Connection\DBAL', $connection['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $connection['class']);
         $this->assertEquals(177, strlen($connection['config']));
 
         // check schema
@@ -99,8 +99,8 @@ JSON;
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Action\Condition', $action['class']);
-        $this->assertEquals(['condition' => 'rateLimit.getRequestsPerMonth() < 20', 'true' => '3', 'false' => '1'], unserialize($action['config']));
+        $this->assertEquals('Fusio\Adapter\Util\Action\UtilCondition', $action['class']);
+        $this->assertEquals(['condition' => 'uriFragments.get("news_id") == 1', 'true' => '3', 'false' => '1'], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [

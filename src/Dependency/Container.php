@@ -116,18 +116,6 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \Fusio\Impl\Validate\ServiceContainer
-     */
-    public function getValidateServiceContainer()
-    {
-        $container = new Validate\ServiceContainer();
-        $container->set('database', new Validate\Service\Database($this->get('connector')));
-        $container->set('filter', new Validate\Service\Filter());
-
-        return $container;
-    }
-
-    /**
      * @return \Symfony\Component\Console\Application
      */
     public function getConsole()
@@ -157,6 +145,14 @@ class Container extends DefaultContainer
         );
     }
 
+    /**
+     * @return \Fusio\Impl\Logger
+     */
+    public function getApiLogger()
+    {
+        return new Logger($this->get('connection'));
+    }
+
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
@@ -165,7 +161,7 @@ class Container extends DefaultContainer
         $application->add(new PSXCommand\RouteCommand($this->get('routing_parser')));
         $application->add(new PSXCommand\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
         $application->add(new PSXCommand\GenerateCommand());
-        $application->add(new SchemaCommand($this->get('annotation_reader'), $this->get('config')->get('psx_soap_namespace')));
+        $application->add(new SchemaCommand($this->get('schema_manager'), $this->get('config')->get('psx_soap_namespace')));
 
         // fusio commands
         $application->add(new Console\InstallCommand($this->get('connection')));

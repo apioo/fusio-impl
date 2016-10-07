@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
-use Fusio\Impl\Action\SqlFetchRow;
-use Fusio\Impl\Tests\Controller\SqlFetchRowTest;
+use Fusio\Adapter\Sql\Action\SqlFetchRow;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 

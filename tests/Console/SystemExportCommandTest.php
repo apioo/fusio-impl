@@ -53,37 +53,32 @@ class SystemExportCommandTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "actionClass": [
-        "Fusio\\Impl\\Action\\CacheResponse",
-        "Fusio\\Impl\\Action\\Composite",
-        "Fusio\\Impl\\Action\\Condition",
-        "Fusio\\Impl\\Action\\HttpProxy",
-        "Fusio\\Impl\\Action\\HttpRequest",
-        "Fusio\\Impl\\Action\\MqAmqp",
-        "Fusio\\Impl\\Action\\MqBeanstalk",
-        "Fusio\\Impl\\Action\\Pipe",
-        "Fusio\\Impl\\Action\\Processor",
-        "Fusio\\Impl\\Action\\SqlBuilder",
-        "Fusio\\Impl\\Action\\SqlExecute",
-        "Fusio\\Impl\\Action\\SqlFetchAll",
-        "Fusio\\Impl\\Action\\SqlFetchRow",
-        "Fusio\\Impl\\Action\\SqlTable",
-        "Fusio\\Impl\\Action\\StaticResponse",
-        "Fusio\\Impl\\Action\\Transform",
-        "Fusio\\Impl\\Action\\TryCatch",
-        "Fusio\\Impl\\Action\\Validator"
+        "Fusio\\Adapter\\Http\\Action\\HttpProxy",
+        "Fusio\\Adapter\\Http\\Action\\HttpRequest",
+        "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
+        "Fusio\\Adapter\\Sql\\Action\\SqlExecute",
+        "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
+        "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
+        "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+        "Fusio\\Adapter\\Util\\Action\\UtilCache",
+        "Fusio\\Adapter\\Util\\Action\\UtilComposite",
+        "Fusio\\Adapter\\Util\\Action\\UtilCondition",
+        "Fusio\\Adapter\\Util\\Action\\UtilPipe",
+        "Fusio\\Adapter\\Util\\Action\\UtilProcessor",
+        "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+        "Fusio\\Adapter\\Util\\Action\\UtilTransform",
+        "Fusio\\Adapter\\Util\\Action\\UtilTryCatch",
+        "Fusio\\Adapter\\Util\\Action\\UtilValidator"
     ],
     "connectionClass": [
-        "Fusio\\Impl\\Connection\\Beanstalk",
-        "Fusio\\Impl\\Connection\\DBAL",
-        "Fusio\\Impl\\Connection\\DBALAdvanced",
-        "Fusio\\Impl\\Connection\\MongoDB",
-        "Fusio\\Impl\\Connection\\Native",
-        "Fusio\\Impl\\Connection\\RabbitMQ"
+        "Fusio\\Adapter\\Sql\\Connection\\DBAL",
+        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced",
+        "Fusio\\Adapter\\Util\\Connection\\Native"
     ],
     "connection": [
         {
             "name": "DBAL",
-            "class": "Fusio\\Impl\\Connection\\DBAL",
+            "class": "Fusio\\Adapter\\Sql\\Connection\\DBAL",
             "config": {
                 "type": "pdo_mysql",
                 "host": "127.0.0.1",
@@ -93,7 +88,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
         },
         {
             "name": "Native-Connection",
-            "class": "Fusio\\Impl\\Connection\\Native",
+            "class": "Fusio\\Adapter\\Util\\Connection\\Native",
             "config": {}
         }
     ],
@@ -132,7 +127,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
     "action": [
         {
             "name": "Sql-Fetch-Row",
-            "class": "Fusio\\Impl\\Action\\SqlFetchRow",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
             "config": {
                 "connection": "Native-Connection",
                 "sql": "SELECT * FROM app_news"
@@ -140,7 +135,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
         },
         {
             "name": "Sql-Fetch-All",
-            "class": "Fusio\\Impl\\Action\\SqlFetchAll",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
             "config": {
                 "connection": "Native-Connection",
                 "sql": "SELECT * FROM app_news"
@@ -148,7 +143,7 @@ class SystemExportCommandTest extends ControllerDbTestCase
         },
         {
             "name": "Welcome",
-            "class": "Fusio\\Impl\\Action\\StaticResponse",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
                 "response": "{\n    \"message\": \"Congratulations the installation of Fusio was successful\",\n    \"links\": [\n        {\n            \"rel\": \"about\",\n            \"name\": \"http:\\\/\\\/fusio-project.org\"\n        }\n    ]\n}"
             }

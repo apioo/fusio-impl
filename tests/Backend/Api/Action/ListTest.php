@@ -50,76 +50,68 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
-            "name": "Cache-Response",
-            "class": "Fusio\\Impl\\Action\\CacheResponse"
-        },
-        {
-            "name": "Composite",
-            "class": "Fusio\\Impl\\Action\\Composite"
-        },
-        {
-            "name": "Condition",
-            "class": "Fusio\\Impl\\Action\\Condition"
-        },
-        {
             "name": "HTTP-Proxy",
-            "class": "Fusio\\Impl\\Action\\HttpProxy"
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpProxy"
         },
         {
             "name": "HTTP-Request",
-            "class": "Fusio\\Impl\\Action\\HttpRequest"
-        },
-        {
-            "name": "MQ-Amqp",
-            "class": "Fusio\\Impl\\Action\\MqAmqp"
-        },
-        {
-            "name": "MQ-Beanstalk",
-            "class": "Fusio\\Impl\\Action\\MqBeanstalk"
-        },
-        {
-            "name": "Pipe",
-            "class": "Fusio\\Impl\\Action\\Pipe"
-        },
-        {
-            "name": "Processor",
-            "class": "Fusio\\Impl\\Action\\Processor"
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpRequest"
         },
         {
             "name": "SQL-Builder",
-            "class": "Fusio\\Impl\\Action\\SqlBuilder"
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder"
         },
         {
             "name": "SQL-Execute",
-            "class": "Fusio\\Impl\\Action\\SqlExecute"
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlExecute"
         },
         {
             "name": "SQL-Fetch-All",
-            "class": "Fusio\\Impl\\Action\\SqlFetchAll"
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll"
         },
         {
             "name": "SQL-Fetch-Row",
-            "class": "Fusio\\Impl\\Action\\SqlFetchRow"
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow"
         },
         {
             "name": "SQL-Table",
-            "class": "Fusio\\Impl\\Action\\SqlTable"
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         },
         {
-            "name": "Static-Response",
-            "class": "Fusio\\Impl\\Action\\StaticResponse"
+            "name": "Util-Cache",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilCache"
         },
         {
-            "name": "Transform",
-            "class": "Fusio\\Impl\\Action\\Transform"
+            "name": "Util-Composite",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilComposite"
         },
         {
-            "name": "Try-Catch",
-            "class": "Fusio\\Impl\\Action\\TryCatch"
+            "name": "Util-Condition",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilCondition"
         },
         {
-            "name": "Validator",
-            "class": "Fusio\\Impl\\Action\\Validator"
+            "name": "Util-Pipe",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilPipe"
+        },
+        {
+            "name": "Util-Processor",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilProcessor"
+        },
+        {
+            "name": "Util-Static-Response",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
+        },
+        {
+            "name": "Util-Transform",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilTransform"
+        },
+        {
+            "name": "Util-Try-Catch",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilTryCatch"
+        },
+        {
+            "name": "Util-Validator",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilValidator"
         }
     ]
 }

@@ -75,7 +75,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
-            'class'  => 'Fusio\Impl\Connection\DBAL',
+            'class'  => 'Fusio\Adapter\Sql\Connection\DBAL',
             'config' => [
                 'type'     => 'pdo_mysql',
                 'host'     => '127.0.0.1',
@@ -109,7 +109,7 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Impl\Connection\DBAL', $row['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $row['class']);
         $this->assertEquals(217, strlen($row['config']));
     }
 

@@ -52,7 +52,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 3,
     "status": 1,
     "name": "Sql-Fetch-Row",
-    "class": "Fusio\\Impl\\Action\\SqlFetchRow",
+    "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
     "config": {
         "connection": "1",
         "sql": "SELECT * FROM app_news"
@@ -115,7 +115,7 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('Bar', $row['name']);
-        $this->assertEquals('Fusio\Impl\Action\SqlFetchRow', $row['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Action\SqlFetchRow', $row['class']);
         $this->assertEquals('a:2:{s:10:"connection";s:1:"2";s:3:"sql";s:17:"SELECT * FROM bar";}', $row['config']);
     }
 

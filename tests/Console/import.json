@@ -1,32 +1,31 @@
 {
     "actionClass": [
-        "Fusio\\Impl\\Action\\CacheResponse",
-        "Fusio\\Impl\\Action\\Composite",
-        "Fusio\\Impl\\Action\\Condition",
-        "Fusio\\Impl\\Action\\HttpProxy",
-        "Fusio\\Impl\\Action\\HttpRequest",
-        "Fusio\\Impl\\Action\\MqAmqp",
-        "Fusio\\Impl\\Action\\MqBeanstalk",
-        "Fusio\\Impl\\Action\\Pipe",
-        "Fusio\\Impl\\Action\\Processor",
-        "Fusio\\Impl\\Action\\SqlExecute",
-        "Fusio\\Impl\\Action\\SqlFetchAll",
-        "Fusio\\Impl\\Action\\SqlFetchRow",
-        "Fusio\\Impl\\Action\\StaticResponse",
-        "Fusio\\Impl\\Action\\Transform",
-        "Fusio\\Impl\\Action\\Validator"
+        "Fusio\\Adapter\\Http\\Action\\HttpProxy",
+        "Fusio\\Adapter\\Http\\Action\\HttpRequest",
+        "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
+        "Fusio\\Adapter\\Sql\\Action\\SqlExecute",
+        "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
+        "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
+        "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+        "Fusio\\Adapter\\Util\\Action\\UtilCache",
+        "Fusio\\Adapter\\Util\\Action\\UtilComposite",
+        "Fusio\\Adapter\\Util\\Action\\UtilCondition",
+        "Fusio\\Adapter\\Util\\Action\\UtilPipe",
+        "Fusio\\Adapter\\Util\\Action\\UtilProcessor",
+        "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+        "Fusio\\Adapter\\Util\\Action\\UtilTransform",
+        "Fusio\\Adapter\\Util\\Action\\UtilTryCatch",
+        "Fusio\\Adapter\\Util\\Action\\UtilValidator"
     ],
     "connectionClass": [
-        "Fusio\\Impl\\Connection\\Beanstalk",
-        "Fusio\\Impl\\Connection\\DBAL",
-        "Fusio\\Impl\\Connection\\DBALAdvanced",
-        "Fusio\\Impl\\Connection\\Native",
-        "Fusio\\Impl\\Connection\\RabbitMQ"
+        "Fusio\\Adapter\\Sql\\Connection\\DBAL",
+        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced",
+        "Fusio\\Adapter\\Util\\Connection\\Native"
     ],
     "connection": [
         {
             "name": "New-Connection",
-            "class": "Fusio\\Impl\\Connection\\DBAL",
+            "class": "Fusio\\Adapter\\Sql\\Connection\\DBAL",
             "config": {
                 "type": "pdo_mysql",
                 "host": "127.0.0.1",
@@ -60,9 +59,9 @@
     "action": [
         {
             "name": "Conditional-Action",
-            "class": "Fusio\\Impl\\Action\\Condition",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilCondition",
             "config": {
-                "condition": "rateLimit.getRequestsPerMonth() < 20",
+                "condition": "uriFragments.get(\"news_id\") == 1",
                 "true": "Sql-Fetch-Row",
                 "false": "Welcome"
             }
