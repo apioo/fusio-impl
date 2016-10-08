@@ -64,21 +64,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Data\SchemaManager
-     */
-    protected $apiSchemaManager;
-
-    /**
-     * @Inject
      * @var \Fusio\Impl\Logger
      */
     protected $apiLogger;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Schema\LoaderInterface
-     */
-    protected $schemaLoader;
 
     /**
      * @Inject
