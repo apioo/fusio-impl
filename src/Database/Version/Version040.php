@@ -344,20 +344,20 @@ class Version040 implements VersionInterface
         foreach ($tableClasses as $table => $classes) {
             foreach ($classes as $oldClass => $newClass) {
                 if ($newClass === null) {
-                    $connection->fetchColumn('DELETE FROM ' . $table . '_class WHERE class = :oldClass', [
+                    $connection->executeUpdate('DELETE FROM ' . $table . '_class WHERE class = :oldClass', [
                         'oldClass' => $oldClass,
                     ]);
 
-                    $connection->fetchColumn('DELETE FROM ' . $table . ' WHERE class = :oldClass', [
+                    $connection->executeUpdate('DELETE FROM ' . $table . ' WHERE class = :oldClass', [
                         'oldClass' => $oldClass,
                     ]);
                 } else {
-                    $connection->fetchColumn('UPDATE ' . $table . '_class SET class = :newClass WHERE class = :oldClass', [
+                    $connection->executeUpdate('UPDATE ' . $table . '_class SET class = :newClass WHERE class = :oldClass', [
                         'oldClass' => $oldClass,
                         'newClass' => $newClass,
                     ]);
 
-                    $connection->fetchColumn('UPDATE ' . $table . ' SET class = :newClass WHERE class = :oldClass', [
+                    $connection->executeUpdate('UPDATE ' . $table . ' SET class = :newClass WHERE class = :oldClass', [
                         'oldClass' => $oldClass,
                         'newClass' => $newClass,
                     ]);
