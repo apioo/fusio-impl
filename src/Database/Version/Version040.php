@@ -300,6 +300,70 @@ class Version040 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        // change action and connection classes
+        $connectionClasses = [
+            'Fusio\Impl\Connection\Beanstalk' => null,
+            'Fusio\Impl\Connection\DBAL' => 'Fusio\Adapter\Sql\Connection\DBAL',
+            'Fusio\Impl\Connection\DBALAdvanced' => 'Fusio\Adapter\Sql\Connection\DBALAdvanced',
+            'Fusio\Impl\Connection\MongoDB' => null,
+            'Fusio\Impl\Connection\Native' => 'Fusio\Adapter\Util\Connection\Native',
+            'Fusio\Impl\Connection\RabbitMQ' => null,
+        ];
+
+        $actionClasses = [
+            'Fusio\Impl\Action\CacheResponse' => 'Fusio\Adapter\Util\Action\UtilCache',
+            'Fusio\Impl\Action\Composite' => 'Fusio\Adapter\Util\Action\UtilComposite',
+            'Fusio\Impl\Action\Condition' => 'Fusio\Adapter\Util\Action\UtilCondition',
+            'Fusio\Impl\Action\HttpProxy' => 'Fusio\Adapter\Http\Action\HttpProxy',
+            'Fusio\Impl\Action\HttpRequest' => 'Fusio\Adapter\Http\Action\HttpRequest',
+            'Fusio\Impl\Action\MongoDelete' => null,
+            'Fusio\Impl\Action\MongoFetchAll' => null,
+            'Fusio\Impl\Action\MongoFetchRow' => null,
+            'Fusio\Impl\Action\MongoInsert' => null,
+            'Fusio\Impl\Action\MongoUpdate' => null,
+            'Fusio\Impl\Action\MqAmqp' => null,
+            'Fusio\Impl\Action\MqBeanstalk' => null,
+            'Fusio\Impl\Action\Pipe' => 'Fusio\Adapter\Util\Action\UtilPipe',
+            'Fusio\Impl\Action\Processor' => 'Fusio\Adapter\Util\Action\UtilProcessor',
+            'Fusio\Impl\Action\SqlBuilder' => 'Fusio\Adapter\Sql\Action\SqlBuilder',
+            'Fusio\Impl\Action\SqlExecute' => 'Fusio\Adapter\Sql\Action\SqlExecute',
+            'Fusio\Impl\Action\SqlFetchAll' => 'Fusio\Adapter\Sql\Action\SqlFetchAll',
+            'Fusio\Impl\Action\SqlFetchRow' => 'Fusio\Adapter\Sql\Action\SqlFetchRow',
+            'Fusio\Impl\Action\SqlTable' => 'Fusio\Adapter\Sql\Action\SqlTable',
+            'Fusio\Impl\Action\StaticResponse' => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+            'Fusio\Impl\Action\Transform' => 'Fusio\Adapter\Util\Action\UtilTransform',
+            'Fusio\Impl\Action\TryCatch' => 'Fusio\Adapter\Util\Action\UtilTryCatch',
+            'Fusio\Impl\Action\Validator' => 'Fusio\Adapter\Util\Action\UtilValidator',
+        ];
+
+        $tableClasses = [
+            'fusio_connection' => $connectionClasses,
+            'fusio_action'     => $actionClasses,
+        ];
+
+        foreach ($tableClasses as $table => $classes) {
+            foreach ($classes as $oldClass => $newClass) {
+                if ($newClass === null) {
+                    $connection->fetchColumn('DELETE FROM ' . $table . '_class WHERE class = :oldClass', [
+                        'oldClass' => $oldClass,
+                    ]);
+
+                    $connection->fetchColumn('DELETE FROM ' . $table . ' WHERE class = :oldClass', [
+                        'oldClass' => $oldClass,
+                    ]);
+                } else {
+                    $connection->fetchColumn('UPDATE ' . $table . '_class SET class = :newClass WHERE class = :oldClass', [
+                        'oldClass' => $oldClass,
+                        'newClass' => $newClass,
+                    ]);
+
+                    $connection->fetchColumn('UPDATE ' . $table . ' SET class = :newClass WHERE class = :oldClass', [
+                        'oldClass' => $oldClass,
+                        'newClass' => $newClass,
+                    ]);
+                }
+            }
+        }
     }
 
     public function getInstallInserts()

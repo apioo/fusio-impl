@@ -91,8 +91,16 @@ class InstallerTest extends DbTestCase
         $this->removeAllTables();
 
         // execute upgrade
+        $path = array_reverse(Installer::getUpgradePath());
+        $lastVersion = array_shift($path);
+
         $installer = new Installer($this->connection);
-        $installer->upgrade('0.3.0', Base::getVersion());
+        $installer->install($lastVersion);
+
+        foreach ($path as $version) {
+            $installer->upgrade($lastVersion, $version);
+            $lastVersion = $version;
+        }
 
         // @TODO make checks to verify that the installation works
 
