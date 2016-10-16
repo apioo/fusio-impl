@@ -224,6 +224,7 @@ class Version041 implements VersionInterface
 
         $ratePlanTable = $schema->createTable('fusio_rate_plan');
         $ratePlanTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $ratePlanTable->addColumn('status', 'integer');
         $ratePlanTable->addColumn('name', 'string', array('length' => 64));
         $ratePlanTable->addColumn('rateLimit', 'integer');
         $ratePlanTable->addColumn('timespan', 'string');

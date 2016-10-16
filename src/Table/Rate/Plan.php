@@ -32,6 +32,9 @@ use PSX\Sql\TableAbstract;
  */
 class Plan extends TableAbstract
 {
+    const STATUS_ACTIVE  = 1;
+    const STATUS_DELETED = 0;
+
     public function getName()
     {
         return 'fusio_rate_plan';
@@ -41,6 +44,7 @@ class Plan extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'status' => self::TYPE_INT,
             'name' => self::TYPE_INT,
             'rateLimit' => self::TYPE_INT,
             'timespan' => self::TYPE_VARCHAR,

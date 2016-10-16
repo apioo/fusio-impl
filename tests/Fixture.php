@@ -100,7 +100,7 @@ JSON;
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_rate_plan' => [
-                ['name' => 'name', 'rateLimit' => 8, 'timespan' => 'P1M'],
+                ['status' => 1, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
             ],
             'fusio_rate_allocation' => [
                 ['planId' => 1, 'routeId' => 65],

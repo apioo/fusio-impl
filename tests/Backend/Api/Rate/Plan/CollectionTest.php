@@ -90,7 +90,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'rateLimit', 'timespan')
+            ->select('id', 'status', 'name', 'rateLimit', 'timespan')
             ->from('fusio_rate_plan')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -100,6 +100,7 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(2, $row['id']);
+        $this->assertEquals(1, $row['status']);
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rateLimit']);
         $this->assertEquals('P2M', $row['timespan']);

@@ -49,6 +49,7 @@ class Plan
     public function getAll($startIndex = 0, $search = null)
     {
         $condition = new Condition();
+        $condition->equals('status', Table\Rate\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -82,6 +83,7 @@ class Plan
     public function create($name, $rateLimit, $timespan)
     {
         $this->planTable->create(array(
+            'status'    => Table\Rate\Plan::STATUS_ACTIVE,
             'name'      => $name,
             'rateLimit' => $rateLimit,
             'timespan'  => $timespan,
@@ -109,8 +111,9 @@ class Plan
         $plan = $this->planTable->get($planId);
 
         if (!empty($plan)) {
-            $this->planTable->delete(array(
-                'id' => $plan['id'],
+            $this->planTable->update(array(
+                'id'     => $plan['id'],
+                'status' => Table\Rate\Plan::STATUS_DELETED,
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find plan');
