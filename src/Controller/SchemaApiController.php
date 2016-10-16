@@ -94,9 +94,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Psr\Cache\CacheItemPoolInterface
+     * @var \Fusio\Impl\Service\RateLimit
      */
-    protected $cache;
+    protected $rateLimitService;
 
     /**
      * @var \Fusio\Engine\Model\AppInterface
@@ -129,16 +129,24 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     {
         parent::onLoad();
 
+        // get request ip
+        $remoteIp = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+
         // load app and user
         $this->app  = $this->getApp($this->appId);
         $this->user = $this->getUser($this->userId);
+
+        // check rate limit
+        if ($this->rateLimitService->hasExceeded($remoteIp, $this->context->get('fusio.routeId'), $this->app)) {
+            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
+        }
 
         // log request
         $this->logId = $this->apiLogger->log(
             $this->context->get('fusio.routeId'),
             $this->appId,
             $this->userId,
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $remoteIp,
             $this->request
         );
     }

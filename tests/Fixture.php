@@ -99,6 +99,12 @@ JSON;
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
+            'fusio_rate_plan' => [
+                ['name' => 'name', 'rateLimit' => 8, 'timespan' => 'P1M'],
+            ],
+            'fusio_rate_allocation' => [
+                ['planId' => 1, 'routeId' => 61],
+            ],
             'fusio_routes_method' => [
                 ['routeId' => 61, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
                 ['routeId' => 61, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 2, 'response' => 1, 'action' => 3],

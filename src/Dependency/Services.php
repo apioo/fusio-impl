@@ -304,4 +304,16 @@ trait Services
             $this->get('config')
         );
     }
+
+    /**
+     * @return \Fusio\Impl\Service\RateLimit
+     */
+    public function getRateLimitService()
+    {
+        return new Service\RateLimit(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Plan'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Allocation'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Log')
+        );
+    }
 }

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Controller;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * SqlFetchRowTest
@@ -57,7 +58,7 @@ JSON;
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
-    
+
     public function testPost()
     {
         $body = <<<'JSON'
@@ -84,6 +85,35 @@ JSON;
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    /**
+     * @depends testGet
+     * @depends testPost
+     */
+    public function testRateLimit()
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', false);
+
+        $response = null;
+        for ($i = 0; $i < 8; $i++) {
+            $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+                'User-Agent'    => 'Fusio TestCase',
+                'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+            ));
+        }
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "Rate limit exceeded"
+}
+JSON;
+
+        $this->assertEquals(429, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }
