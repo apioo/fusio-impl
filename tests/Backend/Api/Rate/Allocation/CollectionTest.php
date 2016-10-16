@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Scope;
+namespace Fusio\Impl\Tests\Backend\Api\Rate\Allocation;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -41,7 +41,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -49,33 +49,13 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 1,
     "startIndex": 0,
     "entry": [
         {
-            "id": 5,
-            "name": "bar",
-            "description": "Bar access"
-        },
-        {
-            "id": 4,
-            "name": "foo",
-            "description": "Foo access"
-        },
-        {
-            "id": 3,
-            "name": "authorization",
-            "description": "Authorization API endpoint"
-        },
-        {
-            "id": 2,
-            "name": "consumer",
-            "description": "Consumer API endpoint"
-        },
-        {
             "id": 1,
-            "name": "backend",
-            "description": "Access to the backend API"
+            "planId": 1,
+            "routeId": 65
         }
     ]
 }
@@ -87,28 +67,22 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'test',
-            'description' => 'Test description',
-            'routes' => [[
-                'routeId' => 1,
-                'allow'   => 1,
-                'methods' => 'GET|POST|PUT|DELETE',
-            ], [
-                'routeId' => 2,
-                'allow'   => 1,
-                'methods' => 'GET|POST|PUT|DELETE',
-            ]]
+            'planId'     => 1,
+            'routeId'    => 62,
+            'appId'      => 1,
+            'scopes'     => 'backend',
+            'parameters' => 'premium=1',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Scope successful created"
+    "message": "Allocation successful created"
 }
 JSON;
 
@@ -117,8 +91,8 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description')
-            ->from('fusio_scope')
+            ->select('id', 'planId', 'routeId', 'appId', 'scopes', 'parameters')
+            ->from('fusio_rate_allocation')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -126,37 +100,17 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(6, $row['id']);
-        $this->assertEquals('test', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'scopeId', 'routeId', 'allow', 'methods')
-            ->from('fusio_scope_routes')
-            ->where('scopeId = :scopeId')
-            ->orderBy('id', 'DESC')
-            ->getSQL();
-
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scopeId' => 6]);
-
-        $this->assertEquals([[
-            'id'      => 60,
-            'scopeId' => 6,
-            'routeId' => 2,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
-        ], [
-            'id'      => 59,
-            'scopeId' => 6,
-            'routeId' => 1,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
-        ]], $routes);
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(1, $row['planId']);
+        $this->assertEquals(62, $row['routeId']);
+        $this->assertEquals(1, $row['appId']);
+        $this->assertEquals('backend', $row['scopes']);
+        $this->assertEquals('premium=1', $row['parameters']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -170,7 +124,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

@@ -189,6 +189,46 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/rate\/allocation",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/rate\/allocation\/:allocation_id",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/rate\/plan",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/rate\/plan\/:plan_id",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/routes",
             "methods": [
                 "GET",
