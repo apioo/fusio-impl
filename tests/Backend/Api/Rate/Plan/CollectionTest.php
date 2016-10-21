@@ -54,7 +54,8 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
-            "name": "0",
+            "priority": 0,
+            "name": "silver",
             "rateLimit": 8,
             "timespan": "P1M"
         }
@@ -72,6 +73,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
+            'priority'  => 2,
             'name'      => 'Premium',
             'rateLimit' => 20,
             'timespan'  => 'P2M',
@@ -90,7 +92,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'rateLimit', 'timespan')
+            ->select('id', 'status', 'priority', 'name', 'rateLimit', 'timespan')
             ->from('fusio_rate_plan')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -101,6 +103,7 @@ JSON;
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(1, $row['status']);
+        $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rateLimit']);
         $this->assertEquals('P2M', $row['timespan']);

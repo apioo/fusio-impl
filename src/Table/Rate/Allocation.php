@@ -45,7 +45,7 @@ class Allocation extends TableAbstract
             'planId' => self::TYPE_INT,
             'routeId' => self::TYPE_INT,
             'appId' => self::TYPE_INT,
-            'scopes' => self::TYPE_VARCHAR,
+            'authenticated' => self::TYPE_INT,
             'parameters' => self::TYPE_VARCHAR,
         );
     }
@@ -58,21 +58,14 @@ class Allocation extends TableAbstract
                 INNER JOIN fusio_rate_plan ratePlan
                         ON rateAllocation.planId = ratePlan.id 
                      WHERE (rateAllocation.routeId IS NULL OR rateAllocation.routeId = :routeId)
-                       AND (rateAllocation.appId IS NULL OR rateAllocation.appId = :appId)';
+                       AND (rateAllocation.appId IS NULL OR rateAllocation.appId = :appId)
+                       AND (rateAllocation.authenticated IS NULL OR rateAllocation.authenticated = :authenticated)';
 
         $params = [
             'routeId' => $routeId,
-            'appId'   => $app->getId(),
+            'appId' => $app->getId(),
+            'authenticated' => $app->isAnonymous() ? 0 : 1,
         ];
-
-        $scopes = $app->getScopes();
-        if (!empty($scopes)) {
-            $sql.= ' AND (rateAllocation.scopes IS NULL OR ';
-            $sql.= $this->connection->getDatabasePlatform()->getLocateExpression(':scopes', 'rateAllocation.scopes');
-            $sql.= ' > 0)';
-
-            $params['scopes'] = implode(',', $scopes);
-        }
 
         $parameters = $app->getParameters();
         if (!empty($parameters)) {
@@ -82,6 +75,8 @@ class Allocation extends TableAbstract
 
             $params['parameters'] = http_build_query($parameters, '', '&');
         }
+
+        $sql.= ' ORDER BY ratePlan.priority DESC';
 
         return $this->connection->fetchAssoc($sql, $params);
     }

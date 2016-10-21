@@ -98,7 +98,7 @@ class Collection extends SchemaApiAbstract
             $record->planId,
             $record->routeId,
             $record->appId,
-            $record->scopes,
+            $record->authenticated,
             $record->parameters
         );
 

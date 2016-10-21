@@ -62,7 +62,7 @@ class Plan
             $this->planTable->getAll(
                 $startIndex,
                 16,
-                'id',
+                'priority',
                 Sql::SORT_DESC,
                 $condition
             )
@@ -80,23 +80,25 @@ class Plan
         }
     }
 
-    public function create($name, $rateLimit, $timespan)
+    public function create($priority, $name, $rateLimit, $timespan)
     {
         $this->planTable->create(array(
             'status'    => Table\Rate\Plan::STATUS_ACTIVE,
+            'priority'  => $priority,
             'name'      => $name,
             'rateLimit' => $rateLimit,
             'timespan'  => $timespan,
         ));
     }
 
-    public function update($planId, $name, $rateLimit, $timespan)
+    public function update($planId, $priority, $name, $rateLimit, $timespan)
     {
         $plan = $this->planTable->get($planId);
 
         if (!empty($plan)) {
             $this->planTable->update(array(
                 'id'        => $plan['id'],
+                'priority'  => $priority,
                 'name'      => $name,
                 'rateLimit' => $rateLimit,
                 'timespan'  => $timespan,

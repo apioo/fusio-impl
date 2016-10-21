@@ -81,11 +81,11 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'planId'     => 1,
-            'routeId'    => 62,
-            'appId'      => 1,
-            'scopes'     => 'backend',
-            'parameters' => 'premium=1',
+            'planId'        => 1,
+            'routeId'       => 62,
+            'appId'         => 1,
+            'authenticated' => 1,
+            'parameters'    => 'premium=1',
         ]));
 
         $body   = (string) $response->getBody();
@@ -101,7 +101,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'planId', 'routeId', 'appId', 'scopes', 'parameters')
+            ->select('id', 'planId', 'routeId', 'appId', 'authenticated', 'parameters')
             ->from('fusio_rate_allocation')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -114,7 +114,7 @@ JSON;
         $this->assertEquals(1, $row['planId']);
         $this->assertEquals(62, $row['routeId']);
         $this->assertEquals(1, $row['appId']);
-        $this->assertEquals('backend', $row['scopes']);
+        $this->assertEquals(1, $row['authenticated']);
         $this->assertEquals('premium=1', $row['parameters']);
     }
 

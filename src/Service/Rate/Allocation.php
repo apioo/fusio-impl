@@ -72,29 +72,29 @@ class Allocation
         }
     }
 
-    public function create($planId, $routeId, $appId, $scopes, $parameters)
+    public function create($planId, $routeId, $appId, $authenticated, $parameters)
     {
         $this->allocationTable->create(array(
-            'planId'     => $planId,
-            'routeId'    => $routeId,
-            'appId'      => $appId,
-            'scopes'     => $scopes,
-            'parameters' => $parameters,
+            'planId'        => $planId,
+            'routeId'       => $routeId,
+            'appId'         => $appId,
+            'authenticated' => $authenticated,
+            'parameters'    => $parameters,
         ));
     }
 
-    public function update($allocationId, $planId, $routeId, $appId, $scopes, $parameters)
+    public function update($allocationId, $planId, $routeId, $appId, $authenticated, $parameters)
     {
         $allocation = $this->allocationTable->get($allocationId);
 
         if (!empty($allocation)) {
             $this->allocationTable->update(array(
-                'id'         => $allocation['id'],
-                'planId'     => $planId,
-                'routeId'    => $routeId,
-                'appId'      => $appId,
-                'scopes'     => $scopes,
-                'parameters' => $parameters,
+                'id'            => $allocation['id'],
+                'planId'        => $planId,
+                'routeId'       => $routeId,
+                'appId'         => $appId,
+                'authenticated' => $authenticated,
+                'parameters'    => $parameters,
             ));
         } else {
             throw new StatusCode\NotFoundException('Could not find allocation');

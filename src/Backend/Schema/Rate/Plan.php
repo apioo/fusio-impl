@@ -37,6 +37,7 @@ class Plan extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('plan');
         $sb->integer('id');
+        $sb->integer('priority');
         $sb->string('name');
         $sb->integer('rateLimit');
         $sb->string('timespan');

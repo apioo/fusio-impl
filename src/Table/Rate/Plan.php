@@ -45,7 +45,8 @@ class Plan extends TableAbstract
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'status' => self::TYPE_INT,
-            'name' => self::TYPE_INT,
+            'priority' => self::TYPE_INT,
+            'name' => self::TYPE_VARCHAR,
             'rateLimit' => self::TYPE_INT,
             'timespan' => self::TYPE_VARCHAR,
         );

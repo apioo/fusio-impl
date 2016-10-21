@@ -40,7 +40,7 @@ class Allocation extends SchemaAbstract
         $sb->integer('planId');
         $sb->integer('routeId');
         $sb->integer('appId');
-        $sb->string('scopes');
+        $sb->integer('authenticated');
         $sb->string('parameters');
 
         return $sb->getProperty();

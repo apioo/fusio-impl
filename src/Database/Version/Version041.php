@@ -218,13 +218,14 @@ class Version041 implements VersionInterface
         $rateAllocationTable->addColumn('planId', 'integer');
         $rateAllocationTable->addColumn('routeId', 'integer', array('notnull' => false, 'default' => null));
         $rateAllocationTable->addColumn('appId', 'integer', array('notnull' => false, 'default' => null));
-        $rateAllocationTable->addColumn('scopes', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
+        $rateAllocationTable->addColumn('authenticated', 'integer', array('notnull' => false, 'default' => null));
         $rateAllocationTable->addColumn('parameters', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
         $rateAllocationTable->setPrimaryKey(array('id'));
 
         $ratePlanTable = $schema->createTable('fusio_rate_plan');
         $ratePlanTable->addColumn('id', 'integer', array('autoincrement' => true));
         $ratePlanTable->addColumn('status', 'integer');
+        $ratePlanTable->addColumn('priority', 'integer');
         $ratePlanTable->addColumn('name', 'string', array('length' => 64));
         $ratePlanTable->addColumn('rateLimit', 'integer');
         $ratePlanTable->addColumn('timespan', 'string');

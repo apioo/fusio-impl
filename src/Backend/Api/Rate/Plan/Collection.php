@@ -96,6 +96,7 @@ class Collection extends SchemaApiAbstract
     protected function doPost($record)
     {
         $this->ratePlanService->create(
+            $record->priority,
             $record->name,
             $record->rateLimit,
             $record->timespan

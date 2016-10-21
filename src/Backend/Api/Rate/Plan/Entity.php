@@ -97,6 +97,7 @@ class Entity extends SchemaApiAbstract
     {
         $this->ratePlanService->update(
             (int) $this->getUriFragment('plan_id'),
+            $record->priority,
             $record->name,
             $record->rateLimit,
             $record->timespan
