@@ -77,6 +77,11 @@ JSON;
             'name'      => 'Premium',
             'rateLimit' => 20,
             'timespan'  => 'P2M',
+            'allocation'  => [[
+                'routeId' => 1,
+                'authenticated' => true,
+                'parameters' => 'premium=1',
+            ]],
         ]));
 
         $body   = (string) $response->getBody();
@@ -107,6 +112,24 @@ JSON;
         $this->assertEquals('Premium', $row['name']);
         $this->assertEquals(20, $row['rateLimit']);
         $this->assertEquals('P2M', $row['timespan']);
+
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'rateId', 'routeId', 'appId', 'authenticated', 'parameters')
+            ->from('fusio_rate_allocation')
+            ->where('rateId = :rateId')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $result = Environment::getService('connection')->fetchAll($sql, ['rateId' => $row['id']]);
+
+        $this->assertEquals(2, $result[0]['id']);
+        $this->assertEquals(2, $result[0]['rateId']);
+        $this->assertEquals(1, $result[0]['routeId']);
+        $this->assertEquals(null, $result[0]['appId']);
+        $this->assertEquals(1, $result[0]['authenticated']);
+        $this->assertEquals('premium=1', $result[0]['parameters']);
     }
 
     public function testPut()

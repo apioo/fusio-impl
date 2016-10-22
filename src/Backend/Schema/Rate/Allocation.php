@@ -38,7 +38,7 @@ class Allocation extends SchemaAbstract
         $sb = $this->getSchemaBuilder('allocation');
         $sb->integer('routeId');
         $sb->integer('appId');
-        $sb->integer('authenticated');
+        $sb->boolean('authenticated');
         $sb->string('parameters');
 
         return $sb->getProperty();
