@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Rate\Plan;
+namespace Fusio\Impl\Backend\Schema\Rate;
 
 use PSX\Schema\SchemaAbstract;
 
@@ -34,6 +34,6 @@ class Update extends SchemaAbstract
 {
     public function getDefinition()
     {
-        return $this->getSchema('Fusio\Impl\Backend\Schema\Rate\Plan');
+        return $this->getSchema('Fusio\Impl\Backend\Schema\Rate');
     }
 }

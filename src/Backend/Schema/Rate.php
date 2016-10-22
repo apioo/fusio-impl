@@ -19,24 +19,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Rate\Allocation;
+namespace Fusio\Impl\Backend\Schema;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Create
+ * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+class Rate extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Rate\Allocation');
-        $schema->get('planId')->setRequired(true);
+        $sb = $this->getSchemaBuilder('rate');
+        $sb->integer('id');
+        $sb->integer('priority');
+        $sb->string('name');
+        $sb->integer('rateLimit');
+        $sb->string('timespan');
+        $sb->arrayType('allocation')
+            ->setPrototype($this->getSchema(Rate\Allocation::class));
 
-        return $schema;
+        return $sb->getProperty();
     }
 }

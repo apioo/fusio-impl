@@ -19,22 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Rate\Plan;
+namespace Fusio\Impl\Backend\Api\Rate;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
-use PSX\Http\Exception as StatusCode;
+use PSX\Sql;
+use PSX\Sql\Condition;
+use PSX\Validate\Filter as PSXFilter;
+use PSX\Validate\Validate;
 
 /**
- * Entity
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Collection extends SchemaApiAbstract
 {
     use ProtectionTrait;
     use ValidatorTrait;
@@ -47,9 +50,9 @@ class Entity extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Rate\Plan
+     * @var \Fusio\Impl\Service\Rate
      */
-    protected $ratePlanService;
+    protected $rateService;
 
     /**
      * @param integer $version
@@ -60,16 +63,12 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Plan'))
+            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Collection'))
         );
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Plan\Update'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
-        );
-
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+        $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Create'))
+            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
         );
 
         return $resource;
@@ -82,48 +81,31 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->ratePlanService->get(
-            (int) $this->getUriFragment('plan_id')
+        return $this->rateService->getAll(
+            $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
+            $this->getParameter('search', Validate::TYPE_STRING) ?: null
         );
     }
 
     /**
-     * Returns the PUT response
+     * Returns the POST response
      *
      * @param \PSX\Record\RecordInterface $record
      * @return array|\PSX\Record\RecordInterface
      */
-    protected function doPut($record)
+    protected function doPost($record)
     {
-        $this->ratePlanService->update(
-            (int) $this->getUriFragment('plan_id'),
+        $this->rateService->create(
             $record->priority,
             $record->name,
             $record->rateLimit,
-            $record->timespan
+            $record->timespan,
+            $record->allocation
         );
 
         return array(
             'success' => true,
-            'message' => 'Plan successful updated',
-        );
-    }
-
-    /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doDelete($record)
-    {
-        $this->ratePlanService->delete(
-            (int) $this->getUriFragment('plan_id')
-        );
-
-        return array(
-            'success' => true,
-            'message' => 'Plan successful deleted',
+            'message' => 'Rate successful created',
         );
     }
 }

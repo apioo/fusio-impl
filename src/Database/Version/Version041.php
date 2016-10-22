@@ -215,21 +215,21 @@ class Version041 implements VersionInterface
 
         $rateAllocationTable = $schema->createTable('fusio_rate_allocation');
         $rateAllocationTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $rateAllocationTable->addColumn('planId', 'integer');
+        $rateAllocationTable->addColumn('rateId', 'integer');
         $rateAllocationTable->addColumn('routeId', 'integer', array('notnull' => false, 'default' => null));
         $rateAllocationTable->addColumn('appId', 'integer', array('notnull' => false, 'default' => null));
         $rateAllocationTable->addColumn('authenticated', 'integer', array('notnull' => false, 'default' => null));
         $rateAllocationTable->addColumn('parameters', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
         $rateAllocationTable->setPrimaryKey(array('id'));
 
-        $ratePlanTable = $schema->createTable('fusio_rate_plan');
-        $ratePlanTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $ratePlanTable->addColumn('status', 'integer');
-        $ratePlanTable->addColumn('priority', 'integer');
-        $ratePlanTable->addColumn('name', 'string', array('length' => 64));
-        $ratePlanTable->addColumn('rateLimit', 'integer');
-        $ratePlanTable->addColumn('timespan', 'string');
-        $ratePlanTable->setPrimaryKey(array('id'));
+        $rateTable = $schema->createTable('fusio_rate');
+        $rateTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $rateTable->addColumn('status', 'integer');
+        $rateTable->addColumn('priority', 'integer');
+        $rateTable->addColumn('name', 'string', array('length' => 64));
+        $rateTable->addColumn('rateLimit', 'integer');
+        $rateTable->addColumn('timespan', 'string');
+        $rateTable->setPrimaryKey(array('id'));
 
         $userTable = $schema->createTable('fusio_user');
         $userTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -293,7 +293,7 @@ class Version041 implements VersionInterface
         $routesSchemaTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesSchemaRouteId');
         $routesSchemaTable->addForeignKeyConstraint($schemaTable, array('schemaId'), array('id'), array(), 'routesSchemaSchemaId');
 
-        $rateAllocationTable->addForeignKeyConstraint($ratePlanTable, array('planId'), array('id'), array(), 'rateAllocationPlanId');
+        $rateAllocationTable->addForeignKeyConstraint($rateTable, array('rateId'), array('id'), array(), 'rateAllocationRateId');
         $rateAllocationTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'rateAllocationRouteId');
         $rateAllocationTable->addForeignKeyConstraint($appTable, array('appId'), array('id'), array(), 'rateAllocationAppId');
 
@@ -322,70 +322,6 @@ class Version041 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
-        // change action and connection classes
-        $connectionClasses = [
-            'Fusio\Impl\Connection\Beanstalk' => null,
-            'Fusio\Impl\Connection\DBAL' => 'Fusio\Adapter\Sql\Connection\DBAL',
-            'Fusio\Impl\Connection\DBALAdvanced' => 'Fusio\Adapter\Sql\Connection\DBALAdvanced',
-            'Fusio\Impl\Connection\MongoDB' => null,
-            'Fusio\Impl\Connection\Native' => 'Fusio\Adapter\Util\Connection\Native',
-            'Fusio\Impl\Connection\RabbitMQ' => null,
-        ];
-
-        $actionClasses = [
-            'Fusio\Impl\Action\CacheResponse' => 'Fusio\Adapter\Util\Action\UtilCache',
-            'Fusio\Impl\Action\Composite' => 'Fusio\Adapter\Util\Action\UtilComposite',
-            'Fusio\Impl\Action\Condition' => 'Fusio\Adapter\Util\Action\UtilCondition',
-            'Fusio\Impl\Action\HttpProxy' => 'Fusio\Adapter\Http\Action\HttpProxy',
-            'Fusio\Impl\Action\HttpRequest' => 'Fusio\Adapter\Http\Action\HttpRequest',
-            'Fusio\Impl\Action\MongoDelete' => null,
-            'Fusio\Impl\Action\MongoFetchAll' => null,
-            'Fusio\Impl\Action\MongoFetchRow' => null,
-            'Fusio\Impl\Action\MongoInsert' => null,
-            'Fusio\Impl\Action\MongoUpdate' => null,
-            'Fusio\Impl\Action\MqAmqp' => null,
-            'Fusio\Impl\Action\MqBeanstalk' => null,
-            'Fusio\Impl\Action\Pipe' => 'Fusio\Adapter\Util\Action\UtilPipe',
-            'Fusio\Impl\Action\Processor' => 'Fusio\Adapter\Util\Action\UtilProcessor',
-            'Fusio\Impl\Action\SqlBuilder' => 'Fusio\Adapter\Sql\Action\SqlBuilder',
-            'Fusio\Impl\Action\SqlExecute' => 'Fusio\Adapter\Sql\Action\SqlExecute',
-            'Fusio\Impl\Action\SqlFetchAll' => 'Fusio\Adapter\Sql\Action\SqlFetchAll',
-            'Fusio\Impl\Action\SqlFetchRow' => 'Fusio\Adapter\Sql\Action\SqlFetchRow',
-            'Fusio\Impl\Action\SqlTable' => 'Fusio\Adapter\Sql\Action\SqlTable',
-            'Fusio\Impl\Action\StaticResponse' => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
-            'Fusio\Impl\Action\Transform' => 'Fusio\Adapter\Util\Action\UtilTransform',
-            'Fusio\Impl\Action\TryCatch' => 'Fusio\Adapter\Util\Action\UtilTryCatch',
-            'Fusio\Impl\Action\Validator' => 'Fusio\Adapter\Util\Action\UtilValidator',
-        ];
-
-        $tableClasses = [
-            'fusio_connection' => $connectionClasses,
-            'fusio_action'     => $actionClasses,
-        ];
-
-        foreach ($tableClasses as $table => $classes) {
-            foreach ($classes as $oldClass => $newClass) {
-                if ($newClass === null) {
-                    $connection->executeUpdate('DELETE FROM ' . $table . '_class WHERE class = :oldClass', [
-                        'oldClass' => $oldClass,
-                    ]);
-
-                    $connection->executeUpdate('DELETE FROM ' . $table . ' WHERE class = :oldClass', [
-                        'oldClass' => $oldClass,
-                    ]);
-                } else {
-                    $connection->executeUpdate('UPDATE ' . $table . '_class SET class = :newClass WHERE class = :oldClass', [
-                        'oldClass' => $oldClass,
-                        'newClass' => $newClass,
-                    ]);
-
-                    $connection->executeUpdate('UPDATE ' . $table . ' SET class = :newClass WHERE class = :oldClass', [
-                        'oldClass' => $oldClass,
-                        'newClass' => $newClass,
-                    ]);
-                }
-            }
-        }
     }
 
     public function getInstallInserts()
@@ -480,10 +416,8 @@ class Version041 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/database/:connection_id/:table', 'controller' => 'Fusio\Impl\Backend\Api\Database\Entity'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/log',                            'controller' => 'Fusio\Impl\Backend\Api\Log\Collection'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/log/:log_id',                    'controller' => 'Fusio\Impl\Backend\Api\Log\Entity'],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/allocation',                'controller' => 'Fusio\Impl\Backend\Api\Rate\Allocation\Collection'],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/allocation/:allocation_id', 'controller' => 'Fusio\Impl\Backend\Api\Rate\Allocation\Entity'],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/plan',                      'controller' => 'Fusio\Impl\Backend\Api\Rate\Plan\Collection'],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/plan/:plan_id',             'controller' => 'Fusio\Impl\Backend\Api\Rate\Plan\Entity'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate',                           'controller' => 'Fusio\Impl\Backend\Api\Rate\Collection'],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/:rate_id',                  'controller' => 'Fusio\Impl\Backend\Api\Rate\Entity'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes',                         'controller' => 'Fusio\Impl\Backend\Api\Routes\Collection'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/routes/:route_id',               'controller' => 'Fusio\Impl\Backend\Api\Routes\Entity'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/schema',                         'controller' => 'Fusio\Impl\Backend\Api\Schema\Collection'],
@@ -533,7 +467,7 @@ class Version041 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                       'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 64, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+                ['routeId' => 62, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -571,18 +505,18 @@ class Version041 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 27, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 28, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 29, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 34, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 37, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 1, 'routeId' => 40, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 37, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'POST'],
 
+                ['scopeId' => 2, 'routeId' => 40, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 41, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 42, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 43, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 44, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -595,11 +529,9 @@ class Version041 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 51, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 52, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 53, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 54, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 55, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 56, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 58, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 54, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 56, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

@@ -19,21 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Rate\Plan;
+namespace Fusio\Impl\Backend\Schema\Rate;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Delete
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Delete extends SchemaAbstract
+class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        return $this->getSchema('Fusio\Impl\Backend\Schema\Rate\Plan');
+        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Rate');
+        $schema->get('name')->setRequired(true);
+        $schema->get('rateLimit')->setRequired(true);
+        $schema->get('timespan')->setRequired(true);
+
+        return $schema;
     }
 }

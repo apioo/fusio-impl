@@ -306,32 +306,12 @@ trait Services
     }
 
     /**
-     * @return \Fusio\Impl\Service\Rate\Plan
+     * @return \Fusio\Impl\Service\Rate
      */
-    public function getRatePlanService()
+    public function getRateService()
     {
-        return new Service\Rate\Plan(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Plan')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Rate\Plan
-     */
-    public function getRateAllocationService()
-    {
-        return new Service\Rate\Allocation(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Allocation')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\RateLimit
-     */
-    public function getRateLimitService()
-    {
-        return new Service\RateLimit(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Plan'),
+        return new Service\Rate(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Allocation'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Log')
         );

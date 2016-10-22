@@ -42,7 +42,7 @@ class Allocation extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'planId' => self::TYPE_INT,
+            'rateId' => self::TYPE_INT,
             'routeId' => self::TYPE_INT,
             'appId' => self::TYPE_INT,
             'authenticated' => self::TYPE_INT,
@@ -50,13 +50,13 @@ class Allocation extends TableAbstract
         );
     }
 
-    public function getPlan($routeId, Model\App $app)
+    public function getRate($routeId, Model\App $app)
     {
-        $sql = '    SELECT ratePlan.rateLimit,
-                           ratePlan.timespan
+        $sql = '    SELECT rate.rateLimit,
+                           rate.timespan
                       FROM fusio_rate_allocation rateAllocation
-                INNER JOIN fusio_rate_plan ratePlan
-                        ON rateAllocation.planId = ratePlan.id 
+                INNER JOIN fusio_rate rate
+                        ON rateAllocation.rateId = rate.id 
                      WHERE (rateAllocation.routeId IS NULL OR rateAllocation.routeId = :routeId)
                        AND (rateAllocation.appId IS NULL OR rateAllocation.appId = :appId)
                        AND (rateAllocation.authenticated IS NULL OR rateAllocation.authenticated = :authenticated)';
@@ -76,8 +76,16 @@ class Allocation extends TableAbstract
             $params['parameters'] = http_build_query($parameters, '', '&');
         }
 
-        $sql.= ' ORDER BY ratePlan.priority DESC';
+        $sql.= ' ORDER BY rate.priority DESC';
 
         return $this->connection->fetchAssoc($sql, $params);
+    }
+
+    public function deleteAllFromRate($rateId)
+    {
+        $sql = 'DELETE FROM fusio_rate_allocation 
+                      WHERE rateId = :rateId';
+
+        $this->connection->executeUpdate($sql, ['rateId' => $rateId]);
     }
 }

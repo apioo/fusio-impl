@@ -19,27 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Rate\Plan;
+namespace Fusio\Impl\Table;
 
-use PSX\Schema\SchemaAbstract;
+use PSX\Sql\TableAbstract;
 
 /**
- * Collection
+ * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaAbstract
+class Rate extends TableAbstract
 {
-    public function getDefinition()
-    {
-        $sb = $this->getSchemaBuilder('collection');
-        $sb->integer('totalResults');
-        $sb->integer('startIndex');
-        $sb->arrayType('entry')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Rate\Plan'));
+    const STATUS_ACTIVE  = 1;
+    const STATUS_DELETED = 0;
 
-        return $sb->getProperty();
+    public function getName()
+    {
+        return 'fusio_rate';
+    }
+
+    public function getColumns()
+    {
+        return array(
+            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'status' => self::TYPE_INT,
+            'priority' => self::TYPE_INT,
+            'name' => self::TYPE_VARCHAR,
+            'rateLimit' => self::TYPE_INT,
+            'timespan' => self::TYPE_VARCHAR,
+        );
     }
 }

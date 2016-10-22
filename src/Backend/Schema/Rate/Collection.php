@@ -19,33 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Rate\Plan;
+namespace Fusio\Impl\Backend\Schema\Rate;
 
-use Fusio\Impl\Backend\Filter\PrimaryKey;
-use PSX\Api\Resource\MethodAbstract;
-use PSX\Data\Validator\Property;
-use PSX\Data\Validator\Validator;
-use PSX\Validate\Validate;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * ValidatorTrait
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-trait ValidatorTrait
+class Collection extends SchemaAbstract
 {
-    /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
-     */
-    protected $tableManager;
-
-    protected function getValidator(MethodAbstract $method)
+    public function getDefinition()
     {
-        return new Validator(array(
-            new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Rate\Plan')))),
-        ));
+        $sb = $this->getSchemaBuilder('collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Rate'));
+
+        return $sb->getProperty();
     }
 }

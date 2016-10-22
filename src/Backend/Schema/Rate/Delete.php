@@ -19,36 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Rate;
+namespace Fusio\Impl\Backend\Schema\Rate;
 
-use PSX\Sql\TableAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Delete
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends TableAbstract
+class Delete extends SchemaAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
+    public function getDefinition()
     {
-        return 'fusio_rate_plan';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'priority' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'rateLimit' => self::TYPE_INT,
-            'timespan' => self::TYPE_VARCHAR,
-        );
+        return $this->getSchema('Fusio\Impl\Backend\Schema\Rate');
     }
 }

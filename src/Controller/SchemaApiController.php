@@ -94,9 +94,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\RateLimit
+     * @var \Fusio\Impl\Service\Rate
      */
-    protected $rateLimitService;
+    protected $rateService;
 
     /**
      * @var \Fusio\Engine\Model\AppInterface
@@ -137,7 +137,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $this->user = $this->getUser($this->userId);
 
         // check rate limit
-        if ($this->rateLimitService->hasExceeded($remoteIp, $this->context->get('fusio.routeId'), $this->app)) {
+        if ($this->rateService->hasExceeded($remoteIp, $this->context->get('fusio.routeId'), $this->app)) {
             throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
 

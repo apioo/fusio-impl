@@ -19,20 +19,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Rate\Allocation;
+namespace Fusio\Impl\Tests\Backend\Api\Rate;
 
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Table\Routes as TableRoutes;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * CollectionTest
+ * EntityTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class EntityTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -41,7 +43,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -49,13 +51,14 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
-    "startIndex": 0,
-    "entry": [
+    "id": 1,
+    "priority": 0,
+    "name": "silver",
+    "rateLimit": 8,
+    "timespan": "P1M",
+    "allocation": [
         {
-            "id": 1,
-            "planId": 1,
-            "routeId": 65
+            "routeId": 63
         }
     ]
 }
@@ -67,32 +70,44 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'planId'        => 1,
-            'routeId'       => 62,
-            'appId'         => 1,
-            'authenticated' => 1,
-            'parameters'    => 'premium=1',
+            'foo' => 'bar',
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(405, $response->getStatusCode(), $body);
+    }
+
+    public function testPut()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/1', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'name'      => 'Gold',
+            'rateLimit' => 20,
+            'timespan'  => 'P2M',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Allocation successful created"
+    "message": "Rate successful updated"
 }
 JSON;
 
-        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'planId', 'routeId', 'appId', 'authenticated', 'parameters')
-            ->from('fusio_rate_allocation')
+            ->select('id', 'status', 'name', 'rateLimit', 'timespan')
+            ->from('fusio_rate')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -100,39 +115,43 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(2, $row['id']);
-        $this->assertEquals(1, $row['planId']);
-        $this->assertEquals(62, $row['routeId']);
-        $this->assertEquals(1, $row['appId']);
-        $this->assertEquals(1, $row['authenticated']);
-        $this->assertEquals('premium=1', $row['parameters']);
-    }
-
-    public function testPut()
-    {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
-
-        $body = (string) $response->getBody();
-
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals('Gold', $row['name']);
+        $this->assertEquals(20, $row['rateLimit']);
+        $this->assertEquals('P2M', $row['timespan']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/allocation', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'foo' => 'bar',
-        ]));
+        ));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Rate successful deleted"
+}
+JSON;
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status')
+            ->from('fusio_rate')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(0, $row['status']);
     }
 }
