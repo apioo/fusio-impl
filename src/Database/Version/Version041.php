@@ -213,15 +213,6 @@ class Version041 implements VersionInterface
         $metaTable->addColumn('installDate', 'datetime');
         $metaTable->setPrimaryKey(array('id'));
 
-        $rateAllocationTable = $schema->createTable('fusio_rate_allocation');
-        $rateAllocationTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $rateAllocationTable->addColumn('rateId', 'integer');
-        $rateAllocationTable->addColumn('routeId', 'integer', array('notnull' => false, 'default' => null));
-        $rateAllocationTable->addColumn('appId', 'integer', array('notnull' => false, 'default' => null));
-        $rateAllocationTable->addColumn('authenticated', 'integer', array('notnull' => false, 'default' => null));
-        $rateAllocationTable->addColumn('parameters', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
-        $rateAllocationTable->setPrimaryKey(array('id'));
-
         $rateTable = $schema->createTable('fusio_rate');
         $rateTable->addColumn('id', 'integer', array('autoincrement' => true));
         $rateTable->addColumn('status', 'integer');
@@ -230,6 +221,15 @@ class Version041 implements VersionInterface
         $rateTable->addColumn('rateLimit', 'integer');
         $rateTable->addColumn('timespan', 'string');
         $rateTable->setPrimaryKey(array('id'));
+
+        $rateAllocationTable = $schema->createTable('fusio_rate_allocation');
+        $rateAllocationTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $rateAllocationTable->addColumn('rateId', 'integer');
+        $rateAllocationTable->addColumn('routeId', 'integer', array('notnull' => false, 'default' => null));
+        $rateAllocationTable->addColumn('appId', 'integer', array('notnull' => false, 'default' => null));
+        $rateAllocationTable->addColumn('authenticated', 'integer', array('notnull' => false, 'default' => null));
+        $rateAllocationTable->addColumn('parameters', 'string', array('length' => 255, 'notnull' => false, 'default' => null));
+        $rateAllocationTable->setPrimaryKey(array('id'));
 
         $userTable = $schema->createTable('fusio_user');
         $userTable->addColumn('id', 'integer', array('autoincrement' => true));
