@@ -49,15 +49,29 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 3,
     "startIndex": 0,
     "entry": [
         {
-            "id": 1,
-            "priority": 0,
+            "id": 3,
+            "priority": 5,
             "name": "silver",
             "rateLimit": 8,
             "timespan": "P1M"
+        },
+        {
+            "id": 2,
+            "priority": 4,
+            "name": "Default-Anonymous",
+            "rateLimit": 60,
+            "timespan": "PT1H"
+        },
+        {
+            "id": 1,
+            "priority": 0,
+            "name": "Default",
+            "rateLimit": 720,
+            "timespan": "PT1H"
         }
     ]
 }
@@ -106,7 +120,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
@@ -124,8 +138,8 @@ JSON;
 
         $result = Environment::getService('connection')->fetchAll($sql, ['rateId' => $row['id']]);
 
-        $this->assertEquals(2, $result[0]['id']);
-        $this->assertEquals(2, $result[0]['rateId']);
+        $this->assertEquals(4, $result[0]['id']);
+        $this->assertEquals(4, $result[0]['rateId']);
         $this->assertEquals(1, $result[0]['routeId']);
         $this->assertEquals(null, $result[0]['appId']);
         $this->assertEquals(1, $result[0]['authenticated']);

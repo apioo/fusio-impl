@@ -397,6 +397,14 @@ class Version041 implements VersionInterface
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache]
             ],
+            'fusio_rate' => [
+                ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rateLimit' => 720, 'timespan' => 'PT1H'],
+                ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rateLimit' => 60, 'timespan' => 'PT1H'],
+            ],
+            'fusio_rate_allocation' => [
+                ['rateId' => 1],
+                ['rateId' => 2, 'authenticated' => 0],
+            ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action',                         'controller' => 'Fusio\Impl\Backend\Api\Action\Collection'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/list',                    'controller' => 'Fusio\Impl\Backend\Api\Action\ListActions::doIndex'],

@@ -45,7 +45,7 @@ class Allocation extends TableAbstract
             'rateId' => self::TYPE_INT,
             'routeId' => self::TYPE_INT,
             'appId' => self::TYPE_INT,
-            'authenticated' => self::TYPE_INT,
+            'authenticated' => self::TYPE_BOOLEAN,
             'parameters' => self::TYPE_VARCHAR,
         );
     }

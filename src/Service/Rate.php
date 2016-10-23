@@ -106,6 +106,17 @@ class Rate
 
     public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
     {
+        // check whether rate exists
+        $condition  = new Condition();
+        $condition->notEquals('status', Table\App::STATUS_DELETED);
+        $condition->equals('name', $name);
+
+        $app = $this->rateTable->getOneBy($condition);
+
+        if (!empty($app)) {
+            throw new StatusCode\BadRequestException('Rate already exists');
+        }
+
         try {
             $this->rateTable->beginTransaction();
 
@@ -136,6 +147,10 @@ class Rate
         $rate = $this->rateTable->get($rateId);
 
         if (!empty($rate)) {
+            if ($rate['status'] == Table\App::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Rate was deleted');
+            }
+
             try {
                 $this->rateTable->beginTransaction();
 
