@@ -104,7 +104,7 @@ class Rate
         }
     }
 
-    public function create($priority, $name, $rateLimit, $timespan, array $allocations = null)
+    public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
     {
         try {
             $this->rateTable->beginTransaction();
@@ -131,7 +131,7 @@ class Rate
         }
     }
 
-    public function update($rateId, $priority, $name, $rateLimit, $timespan, array $allocations = null)
+    public function update($rateId, $priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
     {
         $rate = $this->rateTable->get($rateId);
 
