@@ -198,7 +198,7 @@ class Rate
      */
     public function hasExceeded($ip, $routeId, Model\App $app)
     {
-        $rate = $this->rateAllocationTable->getRate($routeId, $app);
+        $rate = $this->rateTable->getRateForRequest($routeId, $app);
 
         if (empty($rate)) {
             return false;
