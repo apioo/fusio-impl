@@ -92,7 +92,7 @@ class Rate
         $rate = $this->rateTable->get($rateId);
 
         if (!empty($rate)) {
-            if ($rate['status'] == Table\App::STATUS_DELETED) {
+            if ($rate['status'] == Table\Rate::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Rate was deleted');
             }
 
@@ -108,7 +108,7 @@ class Rate
     {
         // check whether rate exists
         $condition  = new Condition();
-        $condition->notEquals('status', Table\App::STATUS_DELETED);
+        $condition->notEquals('status', Table\Rate::STATUS_DELETED);
         $condition->equals('name', $name);
 
         $app = $this->rateTable->getOneBy($condition);
@@ -147,7 +147,7 @@ class Rate
         $rate = $this->rateTable->get($rateId);
 
         if (!empty($rate)) {
-            if ($rate['status'] == Table\App::STATUS_DELETED) {
+            if ($rate['status'] == Table\Rate::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Rate was deleted');
             }
 
