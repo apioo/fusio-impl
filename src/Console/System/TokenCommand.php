@@ -40,9 +40,24 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TokenCommand extends Command
 {
+    /**
+     * @var \Fusio\Impl\Service\App
+     */
     protected $appService;
+
+    /**
+     * @var \Fusio\Impl\Service\Scope
+     */
     protected $scopeService;
+
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
     protected $appTable;
+
+    /***
+     * @var \Fusio\Impl\Table\User
+     */
     protected $userTable;
 
     public function __construct(Service\App $appService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)

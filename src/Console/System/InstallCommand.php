@@ -39,6 +39,9 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class InstallCommand extends Command
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
     public function __construct(Connection $connection)

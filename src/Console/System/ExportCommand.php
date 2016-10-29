@@ -37,6 +37,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ExportCommand extends Command
 {
+    /**
+     * @var \Fusio\Impl\Service\System\Export
+     */
     protected $exportService;
 
     public function __construct(Service\System\Export $exportService)
@@ -50,23 +53,11 @@ class ExportCommand extends Command
     {
         $this
             ->setName('system:export')
-            ->setDescription('Output all system data to a JSON structure')
-            ->addArgument('file', InputArgument::OPTIONAL, 'Path of the JSON export file');
+            ->setDescription('Output all system data to a JSON structure');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $file = $input->getArgument('file');
-        if (!empty($file)) {
-            if (is_file($file)) {
-                throw new RuntimeException('File already exists');
-            }
-
-            $bytes = file_put_contents($file, $this->exportService->export());
-
-            $output->writeln('Export successful (' . $bytes . ' bytes written)');
-        } else {
-            $output->writeln($this->exportService->export());
-        }
+        $output->writeln($this->exportService->export());
     }
 }
