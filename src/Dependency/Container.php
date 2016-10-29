@@ -94,14 +94,6 @@ class Container extends DefaultContainer
     }
 
     /**
-     * @return \PSX\Schema\SchemaManagerInterface
-     */
-    public function getApiSchemaManager()
-    {
-        return new SchemaManager($this->get('connection'));
-    }
-
-    /**
      * @return \PSX\Api\ListingInterface
      */
     public function getResourceListing()
