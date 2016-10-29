@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\AdapterInterface;
@@ -37,13 +37,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * SystemRegisterCommand
+ * RegisterCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemRegisterCommand extends Command
+class RegisterCommand extends Command
 {
     /**
      * @var \Doctrine\DBAL\Connection

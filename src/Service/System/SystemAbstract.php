@@ -49,18 +49,41 @@ abstract class SystemAbstract
 {
     const COLLECTION_SIZE = 16;
 
-    protected $dispatch;
+    /**
+     * @var \Fusio\Impl\Service\System\ApiExecutor
+     */
+    protected $apiExecutor;
+
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
+
+    /**
+     * @var \Fusio\Engine\Parser\ParserInterface
+     */
     protected $actionParser;
+
+    /**
+     * @var \Fusio\Engine\Parser\ParserInterface
+     */
     protected $connectionParser;
-    protected $logger;
 
+    /**
+     * @var array
+     */
     protected $types = ['connection', 'database', 'schema', 'action', 'routes'];
-    protected $accessToken;
 
-    public function __construct(Dispatch $dispatch, Connection $connection, ParserInterface $actionParser, ParserInterface $connectionParser, LoggerInterface $logger)
+    /**
+     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param \Fusio\Engine\Parser\ParserInterface $actionParser
+     * @param \Fusio\Engine\Parser\ParserInterface $connectionParser
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(ApiExecutor $apiExecutor, Connection $connection, ParserInterface $actionParser, ParserInterface $connectionParser, LoggerInterface $logger)
     {
-        $this->dispatch         = $dispatch;
+        $this->apiExecutor      = $apiExecutor;
         $this->connection       = $connection;
         $this->actionParser     = $actionParser;
         $this->connectionParser = $connectionParser;
@@ -69,47 +92,7 @@ abstract class SystemAbstract
 
     protected function doRequest($method, $endpoint, $body = null)
     {
-        $header   = ['User-Agent' => 'Fusio-System v' . Base::getVersion(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
-        $body     = $body !== null ? Parser::encode($body) : null;
-        $request  = new Request(new Url('http://127.0.0.1/backend/' . $endpoint), $method, $header, $body);
-        $response = new Response();
-        $response->setBody(new TempStream(fopen('php://memory', 'r+')));
-
-        $this->logger->pushHandler(new NullHandler());
-
-        $this->dispatch->route($request, $response, null, false);
-
-        $this->logger->popHandler();
-
-        $body = (string) $response->getBody();
-        $data = Parser::decode($body, false);
-
-        return $data;
-    }
-
-    protected function getAccessToken()
-    {
-        if (empty($this->accessToken)) {
-            // insert access token
-            $token  = TokenGenerator::generateToken();
-            $expire = new DateTime('+30 minute');
-            $now    = new DateTime();
-
-            $this->connection->insert('fusio_app_token', [
-                'appId'  => 1,
-                'userId' => 1,
-                'status' => 1,
-                'token'  => $token,
-                'scope'  => 'backend',
-                'ip'     => '127.0.0.1',
-                'expire' => $expire->format('Y-m-d H:i:s'),
-                'date'   => $now->format('Y-m-d H:i:s'),
-            ]);
-
-            return $this->accessToken = $token;
-        } else {
-            return $this->accessToken;
-        }
+        return $this->apiExecutor->request($method, $endpoint, $body);
     }
 
     protected function transform($type, stdClass $entity)

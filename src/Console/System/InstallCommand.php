@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -51,7 +51,8 @@ class InstallCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('install')
+            ->setName('system:install')
+            ->setAliases(['install'])
             ->setDescription('Installs the schema to the database defined in the coniguration file');
     }
 

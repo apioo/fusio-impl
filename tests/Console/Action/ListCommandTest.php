@@ -19,24 +19,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Tests\Console\Action;
 
-use Symfony\Component\Console\Input\InputArgument;
+use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * DetailConnectionCommand
+ * ListCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DetailConnectionCommand extends DetailCommandAbstract
+class ListCommandTest extends ControllerDbTestCase
 {
-    protected function configure()
+    public function getDataSet()
     {
-        $this
-            ->setName('connection:detail')
-            ->setDescription('Lists details of a given connection class')
-            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the connection class (Acme\Fusio\Connection)');
+        return Fixture::getDataSet();
+    }
+
+    public function testCommand()
+    {
+        $command = Environment::getService('console')->find('action:list');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
+
+        $actual = $commandTester->getDisplay();
+        $expect = <<<TEXT
++----+---------------+
+| ID | Name          |
++----+---------------+
+| 3  | Sql-Fetch-Row |
+| 2  | Sql-Fetch-All |
+| 1  | Welcome       |
++----+---------------+
+
+TEXT;
+
+        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
     }
 }

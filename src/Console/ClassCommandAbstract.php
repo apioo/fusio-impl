@@ -21,19 +21,43 @@
 
 namespace Fusio\Impl\Console;
 
+use Fusio\Engine\Parser\ParserInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
- * ListActionCommand
+ * ClassCommandAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListActionCommand extends ListCommandAbstract
+abstract class ClassCommandAbstract extends Command
 {
-    protected function configure()
+    protected $parser;
+
+    public function __construct(ParserInterface $parser)
     {
-        $this
-            ->setName('action:list')
-            ->setDescription('Lists available actions');
+        parent::__construct();
+
+        $this->parser = $parser;
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $classes = $this->parser->getClasses();
+        $rows    = [];
+
+        foreach ($classes as $row) {
+            $rows[] = $row;
+        }
+
+        $table = $this->getHelper('table');
+        $table
+            ->setHeaders(['Name', 'Class'])
+            ->setRows($rows);
+
+        $table->render($output);
     }
 }

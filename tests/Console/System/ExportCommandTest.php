@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console;
+namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * SystemExportCommandTest
+ * ExportCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemExportCommandTest extends ControllerDbTestCase
+class ExportCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\System;
 
 use DateInterval;
 use Fusio\Impl\Service;
@@ -32,13 +32,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * GenerateAccessTokenCommand
+ * TokenCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class GenerateAccessTokenCommand extends Command
+class TokenCommand extends Command
 {
     protected $appService;
     protected $scopeService;
@@ -58,7 +58,7 @@ class GenerateAccessTokenCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('generate:accesstoken')
+            ->setName('system:token')
             ->setDescription('Generates a new access token')
             ->addArgument('appId', InputArgument::REQUIRED, 'Name or ID of the app')
             ->addArgument('userId', InputArgument::REQUIRED, 'Name or ID of the user')

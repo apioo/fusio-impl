@@ -19,48 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Console\Connection;
 
-use Fusio\Impl\Adapter\Transform;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
-use PSX\Json\Parser;
+use Fusio\Impl\Console\ClassCommandAbstract;
 
 /**
- * Process
+ * ClassCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Process extends ApiAbstract
+class ClassCommand extends ClassCommandAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\System\Import
-     */
-    protected $systemImportService;
-
-    public function onPost()
+    protected function configure()
     {
-        try {
-            $this->connection->beginTransaction();
-
-            $result = $this->systemImportService->import(Parser::encode($this->getBody()));
-
-            $this->connection->commit();
-
-            $this->setBody([
-                'success' => true,
-                'message' => 'Import successful',
-                'result'  => $result,
-            ]);
-        } catch (\Exception $e) {
-            $this->connection->rollback();
-
-            throw $e;
-        }
+        $this
+            ->setName('connection:class')
+            ->setDescription('Lists available connection classes');
     }
 }

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\User;
 
 use Fusio\Impl\Service\User as ServiceUser;
 use Fusio\Impl\Service\User\ValidatorTrait;
@@ -30,13 +30,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * AddUserCommand
+ * AddCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class AddUserCommand extends Command
+class AddCommand extends Command
 {
     use ValidatorTrait;
 
@@ -52,7 +52,8 @@ class AddUserCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('adduser')
+            ->setName('user:add')
+            ->setAliases(['adduser'])
             ->setDescription('Adds a new user account');
     }
 

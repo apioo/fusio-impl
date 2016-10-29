@@ -19,24 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\Action;
 
-use Symfony\Component\Console\Input\InputArgument;
+use Fusio\Impl\Console\ClassCommandAbstract;
 
 /**
- * DetailActionCommand
+ * ClassCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DetailActionCommand extends DetailCommandAbstract
+class ClassCommand extends ClassCommandAbstract
 {
     protected function configure()
     {
         $this
-            ->setName('action:detail')
-            ->setDescription('Lists details of a given action class')
-            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the action class (Acme\Fusio\Action)');
+            ->setName('action:class')
+            ->setDescription('Lists available action classes');
     }
 }

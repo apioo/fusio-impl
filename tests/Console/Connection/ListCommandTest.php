@@ -19,48 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Tests\Console\Connection;
 
-use Fusio\Impl\Adapter\Transform;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
-use PSX\Json\Parser;
+use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Process
+ * ListCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Process extends ApiAbstract
+class ListCommandTest extends ControllerDbTestCase
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\System\Import
-     */
-    protected $systemImportService;
-
-    public function onPost()
+    public function getDataSet()
     {
-        try {
-            $this->connection->beginTransaction();
+        return Fixture::getDataSet();
+    }
 
-            $result = $this->systemImportService->import(Parser::encode($this->getBody()));
+    public function testCommand()
+    {
+        $command = Environment::getService('console')->find('connection:list');
 
-            $this->connection->commit();
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
 
-            $this->setBody([
-                'success' => true,
-                'message' => 'Import successful',
-                'result'  => $result,
-            ]);
-        } catch (\Exception $e) {
-            $this->connection->rollback();
+        $actual = $commandTester->getDisplay();
+        $expect = <<<TEXT
++----+-------------------+
+| ID | Name              |
++----+-------------------+
+| 2  | DBAL              |
+| 1  | Native-Connection |
++----+-------------------+
 
-            throw $e;
-        }
+TEXT;
+
+        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
     }
 }

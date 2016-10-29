@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
@@ -32,16 +32,28 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * SystemImportCommand
+ * ImportCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemImportCommand extends Command
+class ImportCommand extends Command
 {
+    /**
+     * @var \Fusio\Impl\Service\System\Import
+     */
     protected $importService;
+
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
 
     public function __construct(Service\System\Import $importService, Connection $connection, LoggerInterface $logger)
     {

@@ -19,64 +19,67 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\Action;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Form;
-use PSX\Schema\Generator;
-use PSX\Schema\SchemaInterface;
+use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
- * ExportSchemaCommand
+ * AddCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExportSchemaCommand extends Command
+class AddCommand extends Command
 {
-    protected $connection;
+    /**
+     * @var \Fusio\Impl\Service\System\ApiExecutor
+     */
+    protected $apiExecutor;
 
-    public function __construct(Connection $connection)
+    /**
+     * @param \Fusio\Impl\Service\System\ApiExecutor $executor
+     */
+    public function __construct(Service\System\ApiExecutor $apiExecutor)
     {
         parent::__construct();
 
-        $this->connection = $connection;
+        $this->apiExecutor = $apiExecutor;
     }
 
     protected function configure()
     {
         $this
-            ->setName('export:schema')
-            ->setDescription('Returns the complete json schema of a given schema name')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name of the json schema');
+            ->setName('action:add')
+            ->setDescription('Adds a new action')
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the action')
+            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the action class (Acme\Fusio\Action)')
+            ->addArgument('config', InputArgument::OPTIONAL, 'Config parameters i.e. foo=bar&bar=foo');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sql = 'SELECT schema.cache
-                  FROM fusio_schema `schema`
-                 WHERE schema.name = :name';
+        $response = $this->apiExecutor->request('POST', 'action', [
+            'name' => $input->getArgument('name'),
+            'class' => $input->getArgument('class'),
+            'config' => $this->parseConfig($input->getArgument('config')),
+        ]);
 
-        $row = $this->connection->fetchAssoc($sql, array('name' => $input->getArgument('name')));
+        $output->writeln("");
+        $output->writeln($response->message);
+        $output->writeln("");
+    }
 
-        if (!empty($row)) {
-            $generator = new Generator\JsonSchema();
-            $schema    = unserialize($row['cache']);
+    protected function parseConfig($config)
+    {
+        $data = [];
+        parse_str($config, $data);
 
-            if ($schema instanceof SchemaInterface) {
-                $output->writeln($generator->generate($schema));
-            } else {
-                $output->writeln('Invalid schema name');
-                return 1;
-            }
-        } else {
-            $output->writeln('Invalid schema name');
-            return 1;
-        }
+        return $data;
     }
 }

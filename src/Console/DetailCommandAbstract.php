@@ -21,10 +21,10 @@
 
 namespace Fusio\Impl\Console;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Factory\FactoryInterface;
-use Fusio\Impl\Form;
+use Fusio\Engine\Form;
+use Fusio\Engine\Repository;
 use PSX\Record\RecordInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,15 +39,28 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DetailCommandAbstract extends Command
 {
+    /**
+     * @var \Fusio\Engine\Factory\FactoryInterface
+     */
     protected $factory;
-    protected $connection;
 
-    public function __construct(FactoryInterface $factory, Connection $connection)
+    /**
+     * @var \Fusio\Engine\Repository\ActionInterface
+     */
+    protected $actionRepository;
+
+    /**
+     * @var \Fusio\Engine\Repository\ConnectionInterface
+     */
+    protected $connectionRepository;
+
+    public function __construct(FactoryInterface $factory, Repository\ActionInterface $actionRepository, Repository\ConnectionInterface $connectionRepository)
     {
         parent::__construct();
 
-        $this->factory    = $factory;
-        $this->connection = $connection;
+        $this->factory              = $factory;
+        $this->actionRepository     = $actionRepository;
+        $this->connectionRepository = $connectionRepository;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,7 +68,7 @@ class DetailCommandAbstract extends Command
         $object = $this->factory->factory($input->getArgument('class'));
 
         if ($object instanceof ConfigurableInterface) {
-            $elementFactory = new Form\ElementFactory($this->connection);
+            $elementFactory = new Form\ElementFactory($this->actionRepository, $this->connectionRepository);
             $builder        = new Form\Builder();
 
             $object->configure($builder, $elementFactory);

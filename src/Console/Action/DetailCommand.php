@@ -19,21 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\Action;
+
+use Fusio\Impl\Console\DetailCommandAbstract;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * ListConnectionCommand
+ * DetailCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListConnectionCommand extends ListCommandAbstract
+class DetailCommand extends DetailCommandAbstract
 {
     protected function configure()
     {
         $this
-            ->setName('connection:list')
-            ->setDescription('Lists available connections');
+            ->setName('action:detail')
+            ->setDescription('Lists details of a given action class')
+            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the action class (Acme\Fusio\Action)');
     }
 }

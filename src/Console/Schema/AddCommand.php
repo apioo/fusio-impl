@@ -19,45 +19,64 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\Schema;
 
-use Fusio\Engine\Parser\ParserInterface;
+use Fusio\Impl\Service;
+use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ListCommandAbstract
+ * AddCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class ListCommandAbstract extends Command
+class AddCommand extends Command
 {
-    protected $parser;
+    /**
+     * @var \Fusio\Impl\Service\System\ApiExecutor
+     */
+    protected $apiExecutor;
 
-    public function __construct(ParserInterface $parser)
+    /**
+     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     */
+    public function __construct(Service\System\ApiExecutor $apiExecutor)
     {
         parent::__construct();
 
-        $this->parser = $parser;
+        $this->apiExecutor = $apiExecutor;
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setName('schema:add')
+            ->setDescription('Imports a jsonschema into the system')
+            ->addArgument('name', InputArgument::REQUIRED, 'Name of the json schema')
+            ->addArgument('file', InputArgument::REQUIRED, 'Path to the json schema file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $classes = $this->parser->getClasses();
-        $rows    = [];
+        $file = $input->getArgument('file');
 
-        foreach ($classes as $row) {
-            $rows[] = $row;
+        if (!is_file($file)) {
+            $output->writeln('Invalid schema file');
+            return 1;
         }
 
-        $table = $this->getHelper('table');
-        $table
-            ->setHeaders(['Name', 'Class'])
-            ->setRows($rows);
+        $response = $this->apiExecutor->request('POST', 'schema', [
+            'name'   => $input->getArgument('name'),
+            'source' => Parser::decode(file_get_contents($file)),
+        ]);
 
-        $table->render($output);
+        $output->writeln("");
+        $output->writeln($response->message);
+        $output->writeln("");
     }
 }

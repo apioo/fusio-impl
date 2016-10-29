@@ -164,27 +164,31 @@ class Container extends DefaultContainer
         $application->add(new SchemaCommand($this->get('schema_manager'), $this->get('config')->get('psx_soap_namespace')));
 
         // fusio commands
-        $application->add(new Console\InstallCommand($this->get('connection')));
-        $application->add(new Console\AddUserCommand($this->get('user_service')));
-        $application->add(new Console\SystemRegisterCommand($this->get('import_service'), $this->get('connection_service'), $this->get('connection')));
-        $application->add(new Console\SystemExportCommand($this->get('export_service')));
-        $application->add(new Console\SystemImportCommand($this->get('import_service'), $this->get('connection'), $this->get('logger')));
+        $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
+        $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
+        $application->add(new Console\Action\ListCommand($this->get('action_service')));
 
-        $application->add(new Console\ListActionCommand($this->get('action_parser')));
-        $application->add(new Console\DetailActionCommand($this->get('action_factory'), $this->get('connection')));
+        $application->add(new Console\App\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\App\ListCommand($this->get('app_service')));
 
-        $application->add(new Console\ListConnectionCommand($this->get('connection_parser')));
-        $application->add(new Console\DetailConnectionCommand($this->get('connection_factory'), $this->get('connection')));
+        $application->add(new Console\Connection\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Connection\ClassCommand($this->get('connection_parser')));
+        $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
+        $application->add(new Console\Connection\ListCommand($this->get('connection_service')));
 
-        $application->add(new Console\ExportSchemaCommand($this->get('connection')));
-        $application->add(new Console\ImportSchemaCommand($this->get('schema_service')));
+        $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Schema\ExportCommand($this->get('connection')));
+        $application->add(new Console\Schema\ListCommand($this->get('schema_service')));
 
-        $application->add(new Console\GenerateAccessTokenCommand(
-            $this->get('app_service'),
-            $this->get('scope_service'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User')
-        ));
+        $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
+        $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
+        $application->add(new Console\System\InstallCommand($this->get('connection')));
+        $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('connection_service'), $this->get('connection')));
+        $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), $this->get('table_manager')->getTable('Fusio\Impl\Table\User')));
+
+        $application->add(new Console\User\AddCommand($this->get('user_service')));
+        $application->add(new Console\User\ListCommand($this->get('user_service')));
 
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());

@@ -19,48 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Console\Connection;
 
-use Fusio\Impl\Adapter\Transform;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
-use PSX\Json\Parser;
+use Fusio\Impl\Console\DetailCommandAbstract;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Process
+ * DetailCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Process extends ApiAbstract
+class DetailCommand extends DetailCommandAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\System\Import
-     */
-    protected $systemImportService;
-
-    public function onPost()
+    protected function configure()
     {
-        try {
-            $this->connection->beginTransaction();
-
-            $result = $this->systemImportService->import(Parser::encode($this->getBody()));
-
-            $this->connection->commit();
-
-            $this->setBody([
-                'success' => true,
-                'message' => 'Import successful',
-                'result'  => $result,
-            ]);
-        } catch (\Exception $e) {
-            $this->connection->rollback();
-
-            throw $e;
-        }
+        $this
+            ->setName('connection:detail')
+            ->setDescription('Lists details of a given connection class')
+            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the connection class (Acme\Fusio\Connection)');
     }
 }

@@ -19,54 +19,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Service;
-use PSX\Json\Parser;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ImportSchemaCommand
+ * ExportCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ImportSchemaCommand extends Command
+class ExportCommand extends Command
 {
-    protected $schemaService;
+    protected $exportService;
 
-    public function __construct(Service\Schema $schemaService)
+    public function __construct(Service\System\Export $exportService)
     {
         parent::__construct();
 
-        $this->schemaService = $schemaService;
+        $this->exportService = $exportService;
     }
 
     protected function configure()
     {
         $this
-            ->setName('import:schema')
-            ->setDescription('Imports a jsonschema into the system')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name of the json schema')
-            ->addArgument('file', InputArgument::REQUIRED, 'Path to the json schema file');
+            ->setName('system:export')
+            ->setDescription('Output all system data to a JSON structure')
+            ->addArgument('file', InputArgument::OPTIONAL, 'Path of the JSON export file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
         $file = $input->getArgument('file');
+        if (!empty($file)) {
+            if (is_file($file)) {
+                throw new RuntimeException('File already exists');
+            }
 
-        if (!is_file($file)) {
-            $output->writeln('Invalid schema file');
-            return 1;
+            $bytes = file_put_contents($file, $this->exportService->export());
+
+            $output->writeln('Export successful (' . $bytes . ' bytes written)');
+        } else {
+            $output->writeln($this->exportService->export());
         }
-
-        $this->schemaService->create($name, Parser::decode(file_get_contents($file)));
-
-        $output->writeln('Import successful!');
     }
 }

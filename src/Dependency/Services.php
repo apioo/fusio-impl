@@ -212,10 +212,22 @@ trait Services
     /**
      * @return \Fusio\Impl\Service\System\Import
      */
-    public function getImportService()
+    public function getSystemApiExecutorService()
+    {
+        return new Service\System\ApiExecutor(
+            $this->get('dispatch'),
+            $this->get('connection'),
+            $this->get('logger')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\System\Import
+     */
+    public function getSystemImportService()
     {
         return new Service\System\Import(
-            $this->get('dispatch'),
+            $this->get('system_api_executor_service'),
             $this->get('connection'),
             $this->get('action_parser'),
             $this->get('connection_parser'),
@@ -226,10 +238,10 @@ trait Services
     /**
      * @return \Fusio\Impl\Service\System\Export
      */
-    public function getExportService()
+    public function getSystemExportService()
     {
         return new Service\System\Export(
-            $this->get('dispatch'),
+            $this->get('system_api_executor_service'),
             $this->get('connection'),
             $this->get('action_parser'),
             $this->get('connection_parser'),

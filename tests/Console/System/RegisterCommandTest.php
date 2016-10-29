@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console;
+namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
@@ -28,13 +28,13 @@ use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * SystemRegisterCommandTest
+ * RegisterCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemRegisterCommandTest extends ControllerDbTestCase
+class RegisterCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -45,8 +45,9 @@ class SystemRegisterCommandTest extends ControllerDbTestCase
     {
         $command = Environment::getService('console')->find('system:register');
 
-        $helper = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream('y' . "\n" . '/import' . "\n" . "1"));
+        $answers = ['y', '/import', '1'];
+        $helper  = $command->getHelper('question');
+        $helper->setInputStream($this->getInputStream(implode("\n", $answers) . "\n"));
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([

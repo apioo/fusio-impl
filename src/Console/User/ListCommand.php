@@ -19,54 +19,62 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console;
+namespace Fusio\Impl\Console\User;
 
 use Fusio\Impl\Service;
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * SystemExportCommand
+ * ListCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemExportCommand extends Command
+class ListCommand extends Command
 {
-    protected $exportService;
+    /**
+     * @var \Fusio\Impl\Service\User
+     */
+    protected $userService;
 
-    public function __construct(Service\System\Export $exportService)
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     */
+    public function __construct(Service\User $userService)
     {
         parent::__construct();
 
-        $this->exportService = $exportService;
+        $this->userService = $userService;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:export')
-            ->setDescription('Output all system data to a JSON structure')
-            ->addArgument('file', InputArgument::OPTIONAL, 'Path of the JSON export file');
+            ->setName('user:list')
+            ->setDescription('Lists available user')
+            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list', 0)
+            ->addArgument('search', InputArgument::OPTIONAL, 'Search value');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $file = $input->getArgument('file');
-        if (!empty($file)) {
-            if (is_file($file)) {
-                throw new RuntimeException('File already exists');
-            }
+        $result = $this->userService->getAll($input->getOption('startIndex'), $input->getArgument('search'));
+        $rows   = [];
 
-            $bytes = file_put_contents($file, $this->exportService->export());
-
-            $output->writeln('Export successful (' . $bytes . ' bytes written)');
-        } else {
-            $output->writeln($this->exportService->export());
+        foreach ($result->entry as $row) {
+            $rows[] = [$row->id, $row->name];
         }
+
+        $table = $this->getHelper('table');
+        $table
+            ->setHeaders(['ID', 'Name'])
+            ->setRows($rows);
+
+        $table->render($output);
     }
 }
