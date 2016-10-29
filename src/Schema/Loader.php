@@ -44,7 +44,7 @@ class Loader implements LoaderInterface
 
     public function getSchema($schemaId)
     {
-        $row  = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE id = :id', array('id' => $schemaId));
+        $row = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE id = :id', array('id' => $schemaId));
 
         if (!empty($row)) {
             $cache = isset($row['cache']) ? $row['cache'] : null;
