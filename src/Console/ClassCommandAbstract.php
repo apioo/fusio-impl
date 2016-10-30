@@ -23,6 +23,7 @@ namespace Fusio\Impl\Console;
 
 use Fusio\Engine\Parser\ParserInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -53,7 +54,7 @@ abstract class ClassCommandAbstract extends Command
             $rows[] = $row;
         }
 
-        $table = $this->getHelper('table');
+        $table = new Table($output);
         $table
             ->setHeaders(['Name', 'Class'])
             ->setRows($rows);

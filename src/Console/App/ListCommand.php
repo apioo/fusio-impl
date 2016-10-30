@@ -23,6 +23,7 @@ namespace Fusio\Impl\Console\App;
 
 use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -70,7 +71,7 @@ class ListCommand extends Command
             $rows[] = [$row->id, $row->name];
         }
 
-        $table = $this->getHelper('table');
+        $table = new Table($output);
         $table
             ->setHeaders(['ID', 'Name'])
             ->setRows($rows);

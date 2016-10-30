@@ -27,6 +27,7 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Repository;
 use PSX\Record\RecordInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -87,7 +88,7 @@ class DetailCommandAbstract extends Command
                 $rows[] = [$element->name, $type, $details];
             }
 
-            $table = $this->getHelper('table');
+            $table = new Table($output);
             $table
                 ->setHeaders(['Name', 'Type', 'Details'])
                 ->setRows($rows);
