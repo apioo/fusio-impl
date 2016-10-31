@@ -105,8 +105,9 @@ class Method
 
         $condition = new Condition();
         $condition->equals('routeId', $routeId);
-        $condition->equals('version', $version);
         $condition->equals('method', $method);
+        $condition->equals('version', $version);
+        $condition->equals('active', Resource::STATUS_ACTIVE);
 
         return $this->methodTable->getOneBy($condition);
     }
