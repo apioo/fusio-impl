@@ -41,8 +41,13 @@ class SqlFetchRowTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testGet()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testGet($debug)
     {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
         $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
@@ -137,16 +142,13 @@ JSON;
         }
     }
 
-    public function providerDebugStatus()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testPost($debug)
     {
-        return [
-            [false],
-            [true],
-        ];
-    }
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-    public function testPost()
-    {
         $body = <<<'JSON'
 {
     "title": "foo",
@@ -177,10 +179,11 @@ JSON;
     /**
      * @depends testGet
      * @depends testPost
+     * @dataProvider providerDebugStatus
      */
-    public function testRateLimit()
+    public function testRateLimit($debug)
     {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
         $response = null;
         for ($i = 0; $i < 8; $i++) {
@@ -190,21 +193,21 @@ JSON;
             ));
         }
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Rate limit exceeded"
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body);
 
         $this->assertEquals(429, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(false, $data->success, $body);
+        $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
     }
 
-    public function testPut()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testPut($debug)
     {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
         $body = <<<'JSON'
 {
     "title": "foo",
@@ -225,5 +228,13 @@ JSON;
         $this->assertEquals('GET, POST', $response->getHeader('Allow'), $body);
         $this->assertEquals(false, $data->success, $body);
         $this->assertEquals('Given request method is not supported', substr($data->message, 0, 37), $body);
+    }
+
+    public function providerDebugStatus()
+    {
+        return [
+            [false],
+            [true],
+        ];
     }
 }
