@@ -322,6 +322,19 @@ class Version041 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        // insert rate routes
+        $routes = [
+            ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate',          'controller' => 'Fusio\Impl\Backend\Api\Rate\Collection'],
+            ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/rate/:rate_id', 'controller' => 'Fusio\Impl\Backend\Api\Rate\Entity'],
+        ];
+
+        foreach ($routes as $route) {
+            $connection->insert('fusio_routes', $route);
+            $routeId = $connection->lastInsertId();
+
+            $scope = ['scopeId' => 1, 'routeId' => $routeId, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+            $connection->insert('fusio_scope_routes', $scope);
+        }
     }
 
     public function getInstallInserts()
