@@ -24,8 +24,10 @@ namespace Fusio\Impl\Service;
 use Fusio\Impl\Service\Routes\Deploy;
 use Fusio\Impl\Service\Routes\Relation;
 use Fusio\Impl\Table;
+use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
 use PSX\DateTime;
+use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -63,13 +65,19 @@ class Routes
      */
     protected $relation;
 
-    public function __construct(Table\Routes $routesTable, Table\Routes\Method $routesMethodTable, Table\Scope\Route $scopeRoutesTable, Deploy $deploy, Relation $relation)
+    /**
+     * @var \PSX\Api\ListingInterface
+     */
+    protected $listing;
+
+    public function __construct(Table\Routes $routesTable, Table\Routes\Method $routesMethodTable, Table\Scope\Route $scopeRoutesTable, Deploy $deploy, Relation $relation, ListingInterface $listing)
     {
         $this->routesTable       = $routesTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->scopeRoutesTable  = $scopeRoutesTable;
         $this->deploy            = $deploy;
         $this->relation          = $relation;
+        $this->listing           = $listing;
     }
 
     public function getAll($startIndex = 0, $search = null)
@@ -119,7 +127,7 @@ class Routes
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
 
-            $this->handleConfig($routeId, $config);
+            $this->handleConfig($routeId, $path, $config);
 
             $this->routesTable->commit();
         } catch (\Exception $e) {
@@ -141,7 +149,7 @@ class Routes
             try {
                 $this->routesTable->beginTransaction();
 
-                $this->handleConfig($route->id, $config);
+                $this->handleConfig($route->id, $route->path, $config);
 
                 $this->routesTable->commit();
             } catch (\Exception $e) {
@@ -184,9 +192,10 @@ class Routes
      * case we can only change the status
      * 
      * @param integer $routeId
+     * @param string $path
      * @param \PSX\Record\RecordInterface $result
      */
-    protected function handleConfig($routeId, $result)
+    protected function handleConfig($routeId, $path, $result)
     {
         // get existing methods
         $existingMethods = $this->routesMethodTable->getMethods($routeId, null, false, null);
@@ -209,6 +218,11 @@ class Routes
 
             // delete all existing development versions
             $this->routesMethodTable->deleteAllFromRoute($routeId, $ver, Resource::STATUS_DEVELOPMENT);
+
+            // invalid resource cache
+            if ($this->listing instanceof CachedListing) {
+                $this->listing->invalidateResource($path, $ver);
+            }
 
             // parse methods
             $methods = isset($version['methods']) ? $version['methods'] : [];
@@ -281,6 +295,11 @@ class Routes
                     }
                 }
             }
+        }
+
+        // invalid resource cache
+        if ($this->listing instanceof CachedListing) {
+            $this->listing->invalidateResource($path);
         }
 
         // update relations

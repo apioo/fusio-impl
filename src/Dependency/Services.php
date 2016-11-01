@@ -55,7 +55,8 @@ trait Services
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
             $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope\Route'),
             $this->get('routes_deploy_service'),
-            $this->get('routes_relation_service')
+            $this->get('routes_relation_service'),
+            $this->get('resource_listing')
         );
     }
 
