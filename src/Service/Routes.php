@@ -219,7 +219,7 @@ class Routes
             // delete all existing development versions
             $this->routesMethodTable->deleteAllFromRoute($routeId, $ver, Resource::STATUS_DEVELOPMENT);
 
-            // invalid resource cache
+            // invalidate resource cache
             if ($this->listing instanceof CachedListing) {
                 $this->listing->invalidateResource($path, $ver);
             }
@@ -297,7 +297,7 @@ class Routes
             }
         }
 
-        // invalid resource cache
+        // invalidate resource cache
         if ($this->listing instanceof CachedListing) {
             $this->listing->invalidateResource($path);
         }
