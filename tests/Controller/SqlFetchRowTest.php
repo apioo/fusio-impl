@@ -202,4 +202,28 @@ JSON;
         $this->assertEquals(429, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
+
+    public function testPut()
+    {
+        $body = <<<'JSON'
+{
+    "title": "foo",
+    "content": "bar",
+    "date": "2015-07-04T13:03:00Z"
+}
+JSON;
+
+        $response = $this->sendRequest('http://127.0.0.1/foo', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ), $body);
+
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body);
+
+        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals('GET, POST', $response->getHeader('Allow'), $body);
+        $this->assertEquals(false, $data->success, $body);
+        $this->assertEquals('Given request method is not supported', substr($data->message, 0, 37), $body);
+    }
 }
