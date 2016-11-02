@@ -132,7 +132,7 @@ class Installer
             $now = new DateTime();
 
             $this->connection->insert('fusio_meta', [
-                'version'     => Base::getVersion(),
+                'version'     => $schemaVersion,
                 'installDate' => $now->format('Y-m-d H:i:s'),
             ]);
 
