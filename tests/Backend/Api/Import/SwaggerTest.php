@@ -61,8 +61,8 @@ class SwaggerTest extends ControllerDbTestCase
     public function providerSpecs()
     {
         return [
-            #[$this->getCase01(), $this->getCase01Expect()],
-            #[$this->getCase02(), $this->getCase02Expect()],
+            [$this->getCase01(), $this->getCase01Expect()],
+            [$this->getCase02(), $this->getCase02Expect()],
             [$this->getCase03(), $this->getCase03Expect()],
         ];
     }
