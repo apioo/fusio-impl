@@ -347,7 +347,7 @@ class Swagger extends TransformAbstract
             if (strpos($data['$ref'], '#/definitions/') === 0) {
                 $ref = substr($data['$ref'], 14);
                 if (isset($this->definitions[$ref])) {
-                    return $this->definitions[$ref];
+                    return $this->resolveRefs($this->definitions[$ref]);
                 } else {
                     throw new InvalidArgumentException('Could not resolve reference ' . $data['$ref']);
                 }
