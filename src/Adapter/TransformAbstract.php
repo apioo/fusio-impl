@@ -19,28 +19,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
-
-use Fusio\Impl\Adapter\Transform\Raml as RamlTransformer;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
+namespace Fusio\Impl\Adapter;
 
 /**
- * Raml
+ * TransformAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Raml extends ApiAbstract
+abstract class TransformAbstract implements TransformInterface
 {
-    use ProtectionTrait;
+    /**
+     * @var array
+     */
+    private $routes;
 
-    public function onPost()
+    /**
+     * @var array
+     */
+    private $action;
+
+    /**
+     * @var array
+     */
+    private $schema;
+
+    public function transform($data)
     {
-        $schema      = $this->getAccessor()->get('/schema');
-        $transformer = new RamlTransformer();
+        $this->doParse($data);
 
-        $this->setBody($transformer->transform($schema));
+        return [
+            'routes' => $this->routes,
+            'action' => $this->action,
+            'schema' => $this->schema,
+        ];
     }
+    
+    protected function addRoute(array $route)
+    {
+        $this->routes[] = $route;
+    }
+    
+    protected function addAction(array $action)
+    {
+        $this->action[] = $action;
+    }
+    
+    protected function addSchema(array $schema)
+    {
+        $this->schema[] = $schema;
+    }
+
+    abstract protected function doParse($data);
 }

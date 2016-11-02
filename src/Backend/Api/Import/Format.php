@@ -24,44 +24,31 @@ namespace Fusio\Impl\Backend\Api\Import;
 use Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Framework\Controller\ApiAbstract;
-use PSX\Json\Parser;
 
 /**
- * Process
+ * Format
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Process extends ApiAbstract
+class Format extends ApiAbstract
 {
     use ProtectionTrait;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\System\Import
-     */
-    protected $systemImportService;
-
     public function onPost()
     {
-        try {
-            $this->connection->beginTransaction();
+        $format = $this->getUriFragment('format');
+        $schema = $this->getAccessor()->get('/schema');
 
-            $data   = Parser::encode($this->getBody());
-            $result = $this->systemImportService->import($data);
-
-            $this->connection->commit();
-
-            $this->setBody([
-                'success' => true,
-                'message' => 'Import successful',
-                'result'  => $result,
-            ]);
-        } catch (\Exception $e) {
-            $this->connection->rollback();
-
-            throw $e;
+        if ($format == 'raml') {
+            $transformer = new Transform\Raml();
+        } elseif ($format == 'swagger') {
+            $transformer = new Transform\Swagger();
+        } else {
+            throw new \RuntimeException('Invalid format');
         }
+
+        $this->setBody($transformer->transform($schema));
     }
 }

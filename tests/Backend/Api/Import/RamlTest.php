@@ -39,25 +39,173 @@ class RamlTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testPost()
+    /**
+     * @dataProvider providerSpecs
+     */
+    public function testPost($spec, $expect)
     {
-        $raml = $this->getRaml();
-        $body = new StringStream(json_encode(['schema' => $raml]));
-
+        $body     = json_encode(['schema' => $spec]);
         $response = $this->sendRequest('http://127.0.0.1/backend/import/raml', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
             'Content-Type'  => 'application/json',
         ), $body);
 
-
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $this->assertEquals(null, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function providerSpecs()
+    {
+        return [
+            [$this->getCase01(), $this->getCase01Expect()],
+            [$this->getCase02(), $this->getCase02Expect()],
+            [$this->getCase03(), $this->getCase03Expect()],
+        ];
+    }
+
+    protected function getCase01()
+    {
+        return <<<'RAML'
+#%RAML 1.0
+title: Hello world
+/helloworld:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: |
+              {
+                "title": "Hello world Response",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            example: |
+              {
+                "message": "Hello world"
+              }
+RAML;
+    }
+
+    protected function getCase01Expect()
+    {
+        return <<<'JSON'
 {
     "routes": [
         {
-            "path": "\/api\/pet\/:petId",
+            "path": "\/helloworld",
+            "config": [
+                {
+                    "version": 1,
+                    "status": 4,
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "action": "helloworld-GET-example",
+                            "request": "Passthru",
+                            "response": "helloworld-GET-response"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "action": [
+        {
+            "name": "helloworld-GET-example",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "config": {
+                "statusCode": 200,
+                "response": "{\n  \"message\": \"Hello world\"\n}"
+            }
+        }
+    ],
+    "schema": [
+        {
+            "name": "helloworld-GET-response",
+            "source": {
+                "title": "Hello world Response",
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    ]
+}
+JSON;
+    }
+
+    protected function getCase02()
+    {
+        return <<<'RAML'
+#%RAML 1.0
+title: Using XML and JSON Schema
+
+schemas:
+  PersonInline: |
+    {
+      "title": "Person Schema",
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "age": {
+          "description": "Age in years",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": ["firstName", "lastName"]
+    }
+
+/person:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: PersonInline
+  post:
+    body:
+      application/json:
+        schema: |
+          {
+            "title": "Body Declaration Schema",
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              }
+            }
+          }
+RAML;
+    }
+
+    protected function getCase02Expect()
+    {
+        return <<<'JSON'
+{
+    "routes": [
+        {
+            "path": "\/person",
             "config": [
                 {
                     "version": 1,
@@ -68,31 +216,13 @@ class RamlTest extends ControllerDbTestCase
                             "public": true,
                             "action": "Welcome",
                             "request": "Passthru",
-                            "response": "api-pet-petId-GET-response"
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "path": "\/api\/pet",
-            "config": [
-                {
-                    "version": 1,
-                    "status": 4,
-                    "methods": {
+                            "response": "person-GET-response"
+                        },
                         "POST": {
                             "active": true,
                             "public": true,
                             "action": "Welcome",
-                            "request": "api-pet-POST-request",
-                            "response": "Passthru"
-                        },
-                        "PUT": {
-                            "active": true,
-                            "public": true,
-                            "action": "Welcome",
-                            "request": "api-pet-PUT-request",
+                            "request": "person-POST-request",
                             "response": "Passthru"
                         }
                     }
@@ -102,151 +232,40 @@ class RamlTest extends ControllerDbTestCase
     ],
     "schema": [
         {
-            "name": "api-pet-petId-GET-response",
+            "name": "person-GET-response",
             "source": {
+                "title": "Person Schema",
                 "type": "object",
-                "title": "Pet",
                 "properties": {
-                    "id": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "age": {
+                        "description": "Age in years",
                         "type": "integer",
-                        "required": true,
-                        "title": "id"
-                    },
-                    "category": {
-                        "type": "object",
-                        "$ref": "#\/schemas\/Category",
-                        "required": false,
-                        "title": "category"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    },
-                    "photoUrls": {
-                        "type": "array",
-                        "required": false,
-                        "title": "photoUrls",
-                        "items": {
-                            "type": "string",
-                            "title": "photoUrls"
-                        },
-                        "uniqueItems": false
-                    },
-                    "tags": {
-                        "type": "array",
-                        "required": false,
-                        "title": "tags",
-                        "items": {
-                            "type": "object",
-                            "$ref": "#\/schemas\/Tag"
-                        },
-                        "uniqueItems": false
-                    },
-                    "status": {
-                        "type": "string",
-                        "required": false,
-                        "title": "status"
+                        "minimum": 0
                     }
-                }
+                },
+                "required": [
+                    "firstName",
+                    "lastName"
+                ]
             }
         },
         {
-            "name": "api-pet-POST-request",
+            "name": "person-POST-request",
             "source": {
+                "title": "Body Declaration Schema",
                 "type": "object",
-                "title": "Pet",
                 "properties": {
-                    "id": {
-                        "type": "integer",
-                        "required": true,
-                        "title": "id"
+                    "firstName": {
+                        "type": "string"
                     },
-                    "category": {
-                        "type": "object",
-                        "$ref": "#\/schemas\/Category",
-                        "required": false,
-                        "title": "category"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    },
-                    "photoUrls": {
-                        "type": "array",
-                        "required": false,
-                        "title": "photoUrls",
-                        "items": {
-                            "type": "string",
-                            "title": "photoUrls"
-                        },
-                        "uniqueItems": false
-                    },
-                    "tags": {
-                        "type": "array",
-                        "required": false,
-                        "title": "tags",
-                        "items": {
-                            "type": "object",
-                            "$ref": "#\/schemas\/Tag"
-                        },
-                        "uniqueItems": false
-                    },
-                    "status": {
-                        "type": "string",
-                        "required": false,
-                        "title": "status"
-                    }
-                }
-            }
-        },
-        {
-            "name": "api-pet-PUT-request",
-            "source": {
-                "type": "object",
-                "title": "Pet",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "required": true,
-                        "title": "id"
-                    },
-                    "category": {
-                        "type": "object",
-                        "$ref": "#\/schemas\/Category",
-                        "required": false,
-                        "title": "category"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    },
-                    "photoUrls": {
-                        "type": "array",
-                        "required": false,
-                        "title": "photoUrls",
-                        "items": {
-                            "type": "string",
-                            "title": "photoUrls"
-                        },
-                        "uniqueItems": false
-                    },
-                    "tags": {
-                        "type": "array",
-                        "required": false,
-                        "title": "tags",
-                        "items": {
-                            "type": "object",
-                            "$ref": "#\/schemas\/Tag"
-                        },
-                        "uniqueItems": false
-                    },
-                    "status": {
-                        "type": "string",
-                        "required": false,
-                        "title": "status"
+                    "lastName": {
+                        "type": "string"
                     }
                 }
             }
@@ -254,90 +273,117 @@ class RamlTest extends ControllerDbTestCase
     ]
 }
 JSON;
-
-        $this->assertEquals(null, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    protected function getRaml()
+    protected function getCase03()
     {
         return <<<'RAML'
 #%RAML 0.8
-title: Swagger Sample App
-version: "1.0.0"
-baseUri: "https://petstore.swagger.wordnik.com:443/api"
-schemas:
-    -
-        Pet: |
-            {
-                "type":"object",
-                "title":"Pet",
-                "properties":{
-                    "id":{
-                        "type":"integer",
-                        "required":true,
-                        "title":"id"
-                    },
-                    "category":{
-                        "type":"object",
-                        "$ref":"#/schemas/Category",
-                        "required":false,
-                        "title":"category"
-                    },
-                    "name":{
-                        "type":"string",
-                        "required":true,
-                        "title":"name"
-                    },
-                    "photoUrls":{
-                        "type":"array",
-                        "required":false,
-                        "title":"photoUrls",
-                        "items":{
-                            "type":"string",
-                            "title":"photoUrls"
-                        },
-                        "uniqueItems":false
-                    },
-                    "tags":{
-                        "type":"array",
-                        "required":false,
-                        "title":"tags",
-                        "items":{
-                            "type":"object",
-                            "$ref":"#/schemas/Tag"
-                        },
-                        "uniqueItems":false
-                    },
-                    "status":{
-                        "type":"string",
-                        "required":false,
-                        "title":"status"
+---
+title: GitHub API
+version: v3
+baseUri: https://api.github.com/
+# Rate limit
+/rate_limit:
+  type: collection
+  get:
+    description: |
+      Get your current rate limit status
+      Note: Accessing this endpoint does not count against your rate limit.
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              {
+                  "$schema": "http://json-schema.org/draft-03/schema",
+                  "type": "object",
+                  "properties": {
+                      "rate": {
+                          "properties": {
+                              "limit": {
+                                  "type": "integer"
+                              },
+                              "remaining": {
+                                  "type": "integer"
+                              },
+                              "reset": {
+                                  "type": "integer"
+                              }
+                          }
+                      }
+                  }
+              }
+            example: |
+              {
+                "rate": {
+                  "limit": 5000,
+                  "remaining": 4999,
+                  "reset": 1372700873
+                }
+              }
+RAML;
+    }
+
+    protected function getCase03Expect()
+    {
+        return <<<'JSON'
+{
+    "routes": [
+        {
+            "path": "\/rate_limit",
+            "config": [
+                {
+                    "version": 3,
+                    "status": 4,
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "action": "rate_limit-GET-example",
+                            "request": "Passthru",
+                            "response": "rate_limit-GET-response"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "action": [
+        {
+            "name": "rate_limit-GET-example",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "config": {
+                "statusCode": 200,
+                "response": "{\n  \"rate\": {\n    \"limit\": 5000,\n    \"remaining\": 4999,\n    \"reset\": 1372700873\n  }\n}"
+            }
+        }
+    ],
+    "schema": [
+        {
+            "name": "rate_limit-GET-response",
+            "source": {
+                "$schema": "http:\/\/json-schema.org\/draft-03\/schema",
+                "type": "object",
+                "properties": {
+                    "rate": {
+                        "properties": {
+                            "limit": {
+                                "type": "integer"
+                            },
+                            "remaining": {
+                                "type": "integer"
+                            },
+                            "reset": {
+                                "type": "integer"
+                            }
+                        }
                     }
                 }
             }
-/pet/{petId}:
-    displayName: Pet
-    get:
-        description: Find pet by ID
-        responses:
-            "200":
-                description: Success
-                body:
-                    application/json:
-                        schema: Pet
-/pet:
-    displayName: PetList
-    post:
-        description: Add a new pet to the store
-        body:
-            application/json:
-                schema: Pet
-    put:
-        description: Update an existing pet
-        body:
-            application/json:
-                schema: Pet
-RAML;
+        }
+    ]
+}
+JSON;
     }
 }

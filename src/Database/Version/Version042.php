@@ -453,8 +453,8 @@ class Version042 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_apps',       'controller' => 'Fusio\Impl\Backend\Api\Statistic\MostUsedApps'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/errors_per_route',     'controller' => 'Fusio\Impl\Backend\Api\Statistic\ErrorsPerRoute'],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/account/change_password',        'controller' => 'Fusio\Impl\Backend\Api\Account\ChangePassword'],
-                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/:format',                 'controller' => 'Fusio\Impl\Backend\Api\Import\Format'],
                 ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/process',                 'controller' => 'Fusio\Impl\Backend\Api\Import\Process'],
+                ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/:format',                 'controller' => 'Fusio\Impl\Backend\Api\Import\Format'],
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/backend/token',                          'controller' => 'Fusio\Impl\Backend\Authorization\Token'],
 
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/developer',                 'controller' => 'Fusio\Impl\Consumer\Api\App\Developer\Collection'],

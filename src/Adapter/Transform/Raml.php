@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Adapter\Transform;
 
-use Fusio\Impl\Adapter\TransformInterface;
+use Fusio\Impl\Adapter\TransformAbstract;
 use InvalidArgumentException;
 use PSX\Data\Util\CurveArray;
 use PSX\Json;
@@ -35,21 +35,29 @@ use Symfony\Component\Yaml\Parser;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Raml implements TransformInterface
+class Raml extends TransformAbstract
 {
+    /**
+     * @var \Symfony\Component\Yaml\Parser
+     */
     protected $parser;
-    protected $version;
-    protected $schemas;
 
-    protected $routes;
-    protected $schema;
+    /**
+     * @var integer
+     */
+    protected $version;
+
+    /**
+     * @var array
+     */
+    protected $schemas;
 
     public function __construct(Parser $parser = null)
     {
         $this->parser = $parser ?: new Parser();
     }
 
-    public function transform($data)
+    public function doParse($data)
     {
         $data = $this->parser->parse($data);
 
@@ -66,16 +74,13 @@ class Raml implements TransformInterface
             $basePath = '/';
         }
 
-        if (isset($data['schemas']) && is_array($data['schemas'])) {
+        if (isset($data['schemas']) && is_array($data['schemas'])) { // 0.8
             $this->schemas = $this->parseSchemas($data['schemas']);
+        } elseif (isset($data['types']) && is_array($data['types'])) { // 1.0
+            $this->schemas = $this->parseSchemas($data['types']);
         }
 
         $this->parsePaths($basePath, $data);
-
-        return [
-            'routes' => $this->routes,
-            'schema' => $this->schema,
-        ];
     }
 
     protected function parsePaths($basePath, array $data)
@@ -105,18 +110,19 @@ class Raml implements TransformInterface
 
         $this->parsePaths($path, $data);
 
-        $this->routes[] = [
+        $this->addRoute([
             'path'   => $path,
             'config' => [[
                 'version' => (integer) $this->version,
                 'status'  => 4,
                 'methods' => $config
             ]],
-        ];
+        ]);
     }
 
     protected function parseMethod($methodName, array $data, $path)
     {
+        $request = 'Passthru';
         if (isset($data['body'])) {
             $name    = $this->normalizeName($path . '-' . $methodName . '-request');
             $request = $this->parseSchema($data['body'], $name);
@@ -124,10 +130,10 @@ class Raml implements TransformInterface
             if (empty($request)) {
                 throw new InvalidArgumentException('Found no JSONSchema for ' . $methodName . ' ' . $path . ' request');
             }
-        } else {
-            $request = 'Passthru';
         }
 
+        $response = 'Passthru';
+        $example  = null;
         if (isset($data['responses']) && is_array($data['responses'])) {
             $codes = [200, 201];
             $body  = null;
@@ -141,19 +147,30 @@ class Raml implements TransformInterface
 
             if (!empty($body)) {
                 $name     = $this->normalizeName($path . '-' . $methodName . '-response');
-                $response = $this->parseSchema($body, $name);
+                $response = $this->parseSchema($body, $name, $example);
 
                 if (empty($response)) {
                     throw new InvalidArgumentException('Found no JSONSchema for ' . $methodName . ' ' . $path . ' response');
                 }
-            } else {
-                $response = 'Passthru';
             }
-        } else {
-            $response = 'Passthru';
         }
 
-        $action = 'Welcome';
+        if (!empty($example)) {
+            $name = $this->normalizeName($path . '-' . $methodName . '-example');
+
+            $this->addAction([
+                'name'   => $name,
+                'class'  => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+                'config' => [
+                    'statusCode' => '200',
+                    'response'   => $example,
+                ],
+            ]);
+
+            $action = $name;
+        } else {
+            $action = 'Welcome';
+        }
 
         return [
             'active'   => true,
@@ -164,35 +181,70 @@ class Raml implements TransformInterface
         ];
     }
 
-    protected function parseSchema($data, $name)
+    protected function parseSchema($data, $name, &$example = null)
     {
         foreach ($data as $mediaType => $row) {
             if ($mediaType == 'application/json' && is_array($row)) {
-                $schema = isset($row['schema']) ? $row['schema'] : null;
-                if (!empty($schema) && is_string($schema)) {
-                    if (strpos($schema, '{') === false) {
-                        // check whether we have a reference to a schema
-                        if (isset($this->schemas[$schema])) {
-                            $schema = $this->schemas[$schema];
-                        }
+                $schema = $this->extractSchema($row);
+                if (!empty($schema)) {
+                    // add example if available
+                    $example = $this->extractExample($row);
 
-                        // at the moment we cant resolve external files
-                        if (substr($schema, 0, 8) == '!include') {
-                            throw new InvalidArgumentException('It is not possible to include external files');
-                        }
-                    }
-
-                    // check whether we have a json format and prettify
-                    $schema = Json\Parser::decode($schema, false);
-
-                    $this->schema[] = [
+                    $this->addSchema([
                         'name'   => $name,
                         'source' => $schema,
-                    ];
+                    ]);
 
                     return $name;
                 }
             }
+        }
+
+        return null;
+    }
+
+    protected function extractSchema(array $row)
+    {
+        $schema = null;
+        if (isset($row['schema'])) { // 0.8
+            $schema = $row['schema'];
+        } elseif (isset($row['type'])) { // 1.0
+            $schema = $row['type'];
+        }
+
+        if (!empty($schema)) {
+            if (is_string($schema)) {
+                if (strpos($schema, '{') === false) {
+                    // check whether we have a reference to a schema
+                    if (isset($this->schemas[$schema])) {
+                        $schema = $this->schemas[$schema];
+                    }
+
+                    // at the moment we cant resolve external files
+                    if (substr($schema, 0, 8) == '!include') {
+                        throw new InvalidArgumentException('It is not possible to include external files');
+                    }
+                }
+
+                // check whether we have a json format and prettify
+                return Json\Parser::decode($schema, false);
+            } elseif (is_array($schema)) {
+                return $schema;
+            }
+        }
+
+        return null;
+    }
+
+    protected function extractExample(array $row)
+    {
+        $example = null;
+        if (isset($row['example'])) { // 1.0
+            $example = $row['example'];
+        }
+
+        if (!empty($example) && is_string($example)) {
+            return $example;
         }
 
         return null;
@@ -241,5 +293,7 @@ class Raml implements TransformInterface
                 }
             }
         }
+
+        return [];
     }
 }
