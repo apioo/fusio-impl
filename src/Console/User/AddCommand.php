@@ -26,6 +26,7 @@ use Fusio\Impl\Service\User\ValidatorTrait;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
@@ -54,7 +55,11 @@ class AddCommand extends Command
         $this
             ->setName('user:add')
             ->setAliases(['adduser'])
-            ->setDescription('Adds a new user account');
+            ->setDescription('Adds a new user account')
+            ->addOption('status', 's', InputOption::VALUE_OPTIONAL, 'Status of the account [0=Consumer, 1=Administrator]')
+            ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
+            ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
+            ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -62,57 +67,73 @@ class AddCommand extends Command
         $helper = $this->getHelper('question');
 
         // status
-        $question = new Question('Choose the status for the account [0=Consumer, 1=Administrator]: ');
-        $question->setValidator(function ($value) {
-            if (preg_match('/^0|1$/', $value)) {
-                return (int) $value;
-            } else {
-                throw new \Exception('Status must be either 0 or 1');
-            }
-        });
+        $status = $input->getOption('status');
+        if ($status === null) {
+            $question = new Question('Choose the status of the account [0=Consumer, 1=Administrator]: ');
+            $question->setValidator(function ($value) {
+                return $this->assertStatus($value);
+            });
 
-        $status = $helper->ask($input, $output, $question);
+            $status = $helper->ask($input, $output, $question);
+        } else {
+            $status = $this->assertStatus($status);
+        }
 
         // username
-        $question = new Question('Enter the username: ');
-        $question->setValidator(function ($value) {
-            $this->assertName($value);
-            return $value;
-        });
+        $name = $input->getOption('username');
+        if ($name === null) {
+            $question = new Question('Enter the username: ');
+            $question->setValidator(function ($value) {
+                $this->assertName($value);
+                return $value;
+            });
 
-        $name = $helper->ask($input, $output, $question);
+            $name = $helper->ask($input, $output, $question);
+        } else {
+            $this->assertName($name);
+        }
 
         // email
-        $question = new Question('Enter the email: ');
-        $question->setValidator(function ($value) {
-            $this->assertEmail($value);
-            return $value;
-        });
+        $email = $input->getOption('email');
+        if ($email === null) {
+            $question = new Question('Enter the email: ');
+            $question->setValidator(function ($value) {
+                $this->assertEmail($value);
+                return $value;
+            });
 
-        $email = $helper->ask($input, $output, $question);
+            $email = $helper->ask($input, $output, $question);
+        } else {
+            $this->assertEmail($email);
+        }
 
         // password
-        $question = new Question('Enter the password: ');
-        $question->setHidden(true);
-        $question->setValidator(function ($value) {
-            $this->assertPassword($value);
-            return $value;
-        });
+        $password = $input->getOption('password');
+        if ($password === null) {
+            $question = new Question('Enter the password: ');
+            $question->setHidden(true);
+            $question->setValidator(function ($value) {
+                $this->assertPassword($value);
+                return $value;
+            });
 
-        $password = $helper->ask($input, $output, $question);
+            $password = $helper->ask($input, $output, $question);
 
-        // repeat password
-        $question = new Question('Repeat the password: ');
-        $question->setHidden(true);
-        $question->setValidator(function ($value) use ($password) {
-            if ($value != $password) {
-                throw new RuntimeException('The password does not match');
-            } else {
-                return true;
-            }
-        });
+            // repeat password
+            $question = new Question('Repeat the password: ');
+            $question->setHidden(true);
+            $question->setValidator(function ($value) use ($password) {
+                if ($value != $password) {
+                    throw new RuntimeException('The password does not match');
+                } else {
+                    return true;
+                }
+            });
 
-        $helper->ask($input, $output, $question);
+            $helper->ask($input, $output, $question);
+        } else {
+            $this->assertPassword($password);
+        }
 
         // scopes
         if ($status === 0) {
@@ -123,7 +144,7 @@ class AddCommand extends Command
             $scopes = [];
         }
 
-        // password
+        // create user
         $this->userService->create(
             $status,
             $name,

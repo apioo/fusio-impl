@@ -38,11 +38,6 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class AddCommandTest extends ControllerDbTestCase
 {
-    protected function setUp()
-    {
-        $this->markTestSkipped('This test is not supported on Windows');
-    }
-
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -59,20 +54,15 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
+            '--status' => '1',
+            '--username' => 'bar',
+            '--email' => 'bar@bar.com',
+            '--password' => 'test1234!',
         ]);
 
         $actual = $commandTester->getDisplay();
-        $expect = <<<TEXT
-Choose the status for the account [0=Consumer, 1=Administrator]: 
-Enter the username: 
-Enter the email: 
-Enter the password: 
-Repeat the password: 
-Created user bar successful
 
-TEXT;
-
-        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
+        $this->assertContains('Created user bar successful', $actual);
 
         // check user
         $schema = $this->connection->fetchAssoc('SELECT id, provider, status, remoteId, name, email, password FROM fusio_user ORDER BY id DESC');

@@ -32,6 +32,15 @@ use PSX\Http\Exception as StatusCode;
  */
 trait ValidatorTrait
 {
+    protected function assertStatus($status)
+    {
+        if (preg_match('/^0|1$/', $status)) {
+            return (int) $status;
+        } else {
+            throw new StatusCode\BadRequestException('Status must be either 0 or 1');
+        }
+    }
+
     protected function assertName($name)
     {
         if (empty($name)) {
