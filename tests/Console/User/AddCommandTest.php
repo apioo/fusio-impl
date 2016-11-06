@@ -47,10 +47,6 @@ class AddCommandTest extends ControllerDbTestCase
     {
         $command = Environment::getService('console')->find('user:add');
 
-        $answers = ['1', 'bar', 'bar@bar.com', 'test1234!', 'test1234!'];
-        $helper  = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream($answers));
-
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
@@ -74,16 +70,5 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals('bar', $schema['name']);
         $this->assertEquals('bar@bar.com', $schema['email']);
         $this->assertNotEmpty($schema['password']);
-    }
-
-    protected function getInputStream(array $input)
-    {
-        $stream = fopen('php://memory', 'r+', false);
-        foreach ($input as $line) {
-            fwrite($stream, $line . "\n");
-        }
-        rewind($stream);
-
-        return $stream;
     }
 }
