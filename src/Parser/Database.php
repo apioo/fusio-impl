@@ -61,7 +61,7 @@ class Database extends ParserAbstract
 
     public function getClasses()
     {
-        $classes = $this->connection->fetchAll('SELECT class FROM ' . $this->tableName);
+        $classes = $this->connection->fetchAll('SELECT class FROM ' . $this->tableName . ' ORDER BY class ASC');
         $result  = array();
 
         foreach ($classes as $row) {

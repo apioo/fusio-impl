@@ -55,9 +55,9 @@ class ClassCommandTest extends ControllerDbTestCase
 +----------------------+----------------------------------------------+
 | Name                 | Class                                        |
 +----------------------+----------------------------------------------+
-| V8-Processor         | Fusio\Adapter\V8\Action\V8Processor          |
-| Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse |
 | SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |
+| Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse |
+| V8-Processor         | Fusio\Adapter\V8\Action\V8Processor          |
 +----------------------+----------------------------------------------+
 
 TEXT;

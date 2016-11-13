@@ -50,16 +50,16 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
-            "name": "V8-Processor",
-            "class": "Fusio\\Adapter\\V8\\Action\\V8Processor"
+            "name": "SQL-Table",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         },
         {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
         },
         {
-            "name": "SQL-Table",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
+            "name": "V8-Processor",
+            "class": "Fusio\\Adapter\\V8\\Action\\V8Processor"
         }
     ]
 }
