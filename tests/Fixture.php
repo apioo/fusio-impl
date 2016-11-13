@@ -21,9 +21,12 @@
 
 namespace Fusio\Impl\Tests;
 
+use Fusio\Engine\Model\Connection;
+use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Impl\Database\Version;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Framework\Test\Environment;
 use PSX\Schema\Parser\JsonSchema;
 
 /**
@@ -57,15 +60,35 @@ class Fixture
     "title": "test",
     "type": "object",
     "properties": {
-        "title": {
-            "type": "string"
+        "totalResults": {
+            "type": "integer"
         },
-        "content": {
-            "type": "string"
+        "itemsPerPage": {
+            "type": "integer"
         },
-        "date": {
-            "type": "string",
-            "format": "date-time"
+        "startIndex": {
+            "type": "integer"
+        },
+        "entry": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
         }
     }
 }
@@ -82,8 +105,8 @@ JSON;
                 ['status' => 3, 'name' => 'Deleted', 'email' => 'deleted@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_action' => [
-                ['status' => 1, 'name' => 'Sql-Fetch-All', 'class' => 'Fusio\Adapter\Sql\Action\SqlFetchAll', 'config' => serialize(['connection' => 1, 'sql' => 'SELECT * FROM app_news']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Sql-Fetch-Row', 'class' => 'Fusio\Adapter\Sql\Action\SqlFetchRow', 'config' => serialize(['connection' => 1, 'sql' => 'SELECT * FROM app_news']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Util-Static-Response', 'class' => 'Fusio\Adapter\Util\Action\UtilStaticResponse', 'config' => serialize(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Sql-Table', 'class' => 'Fusio\Adapter\Sql\Action\SqlTable', 'config' => serialize(['connection' => 1, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_app' => [
                 ['userId' => 2, 'status' => 1, 'name' => 'Foo-App', 'url' => 'http://google.com', 'parameters' => '', 'appKey' => '5347307d-d801-4075-9aaa-a21a29a448c5', 'appSecret' => '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', 'date' => '2015-02-22 22:19:07'],
@@ -94,7 +117,7 @@ JSON;
                 ['appId' => 3, 'userId' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirectUri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
             'fusio_connection' => [
-                ['name' => 'DBAL', 'class' => 'Fusio\Adapter\Sql\Connection\DBAL', 'config' => 'gC8gwLG0bNnqXNnRKw8AaQ==.09NMz2hC+99vY6WK9xi1os8VWHTtfkjzX65Cy6uZ8sMgdMbYxkrC04PH9VYYFHWfMBq41/lTSRQjk1YvJUhzMCqWeg6BDDKpQ4PKXhSJKf8lVel3PGXDe0OH9kaAm2bmRoL5213TLkeailqqzbmuUHewWa9CRo3UAKOtKdL7anTAVW+3PASMXKtRxFJ+sT6R'],
+                ['name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => ''],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
@@ -103,20 +126,20 @@ JSON;
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
             ],
             'fusio_rate_allocation' => [
-                ['rateId' => 3, 'routeId' => 63],
+                ['rateId' => 3, 'routeId' => 61],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 63, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
-                ['routeId' => 63, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 2, 'response' => 1, 'action' => 3],
-                ['routeId' => 63, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
-                ['routeId' => 63, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
+                ['routeId' => 61, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
+                ['routeId' => 61, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 1, 'response' => 1, 'action' => 3],
+                ['routeId' => 61, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
+                ['routeId' => 61, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
             ],
             'fusio_routes_action' => [
-                ['routeId' => 63, 'actionId' => 3],
+                ['routeId' => 61, 'actionId' => 3],
             ],
             'fusio_routes_schema' => [
-                ['routeId' => 63, 'schemaId' => 2],
-                ['routeId' => 63, 'schemaId' => 1],
+                ['routeId' => 61, 'schemaId' => 2],
+                ['routeId' => 61, 'schemaId' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => date('Y-m-d 00:00:00')],
@@ -145,8 +168,8 @@ JSON;
                 ['appId' => 2, 'userId' => 2, 'status' => 1, 'token' => '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'scope' => 'consumer', 'ip' => '127.0.0.1', 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_scope_routes' => [
-                ['scopeId' => 5, 'routeId' => 62, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 5, 'routeId' => 63, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 5, 'routeId' => 60, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 5, 'routeId' => 61, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 4],

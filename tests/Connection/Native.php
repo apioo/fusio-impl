@@ -19,30 +19,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Database;
+namespace Fusio\Impl\Tests\Connection;
 
-use PSX\Schema\Property;
-use PSX\Schema\SchemaAbstract;
+use Fusio\Engine\ConnectionInterface;
+use Fusio\Engine\Form\BuilderInterface;
+use Fusio\Engine\Form\ElementFactoryInterface;
+use Fusio\Engine\ParametersInterface;
+use PSX\Framework\Test\Environment;
 
 /**
- * ForeignKey
+ * Native
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ForeignKey extends SchemaAbstract
+class Native implements ConnectionInterface
 {
-    public function getDefinition()
+    public function getName()
     {
-        $sb = $this->getSchemaBuilder('foreignKey');
-        $sb->string('name');
-        $sb->arrayType('columns')
-            ->setPrototype(new Property\StringType());
-        $sb->string('foreignTable');
-        $sb->arrayType('foreignColumns')
-            ->setPrototype(new Property\StringType());
+        return 'Native';
+    }
 
-        return $sb->getProperty();
+    /**
+     * @param \Fusio\Engine\ParametersInterface $config
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getConnection(ParametersInterface $config)
+    {
+        return Environment::getService('connection');
+    }
+
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    {
     }
 }

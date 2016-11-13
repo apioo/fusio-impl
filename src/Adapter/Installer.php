@@ -42,15 +42,13 @@ class Installer
         $this->importService = $importService;
     }
 
-    public function install(array $instructions, $basePath = null, $connectionId = null)
+    public function install(array $instructions, $basePath = null)
     {
         $data = new stdClass();
 
         foreach ($instructions as $instruction) {
             if ($instruction instanceof Instruction\Route && $basePath !== null) {
                 $instruction->setBasePath($basePath);
-            } elseif ($instruction instanceof Instruction\Database && $connectionId !== null) {
-                $instruction->setConnectionId($connectionId);
             }
 
             $key   = $instruction->getKey();

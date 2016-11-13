@@ -52,12 +52,11 @@ class ListCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
         $expect = <<<TEXT
-+----+-------------------+
-| ID | Name              |
-+----+-------------------+
-| 2  | DBAL              |
-| 1  | Native-Connection |
-+----+-------------------+
++----+--------+
+| ID | Name   |
++----+--------+
+| 1  | Native |
++----+--------+
 
 TEXT;
 

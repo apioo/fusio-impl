@@ -57,13 +57,6 @@ class InstructionParser
             }
         }
 
-        // get database
-        if (isset($definition->database) && is_array($definition->database)) {
-            foreach ($definition->database as $database) {
-                $instructions[] = new Instruction\Database($database);
-            }
-        }
-
         // get schema
         if (isset($definition->schema) && is_array($definition->schema)) {
             foreach ($definition->schema as $schema) {

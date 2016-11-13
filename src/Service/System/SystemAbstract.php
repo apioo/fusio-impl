@@ -72,7 +72,7 @@ abstract class SystemAbstract
     /**
      * @var array
      */
-    protected $types = ['connection', 'database', 'schema', 'action', 'routes'];
+    protected $types = ['connection', 'schema', 'action', 'routes'];
 
     /**
      * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
@@ -102,10 +102,6 @@ abstract class SystemAbstract
                 return $this->transformConnection($entity);
                 break;
 
-            case 'database':
-                return $this->transformDatabase($entity);
-                break;
-
             case 'schema':
                 return $this->transformSchema($entity);
                 break;
@@ -130,11 +126,6 @@ abstract class SystemAbstract
         $form   = $this->connectionParser->getForm($entity->class);
         $entity = $this->handleFormReferences($entity, $form);
 
-        return $entity;
-    }
-
-    protected function transformDatabase(stdClass $entity)
-    {
         return $entity;
     }
 

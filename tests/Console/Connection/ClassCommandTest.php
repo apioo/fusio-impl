@@ -57,7 +57,6 @@ class ClassCommandTest extends ControllerDbTestCase
 +---------------------------+-------------------------------------------+
 | SQL-Connection            | Fusio\Adapter\Sql\Connection\DBAL         |
 | SQL-Connection (advanced) | Fusio\Adapter\Sql\Connection\DBALAdvanced |
-| Native                    | Fusio\Adapter\Util\Connection\Native      |
 +---------------------------+-------------------------------------------+
 
 TEXT;

@@ -69,12 +69,6 @@ class Export extends SystemAbstract
 
     protected function exportType($type, $index, array &$result)
     {
-        if ($type == 'database') {
-            // @TODO at the moment we dont export any database schema because
-            // we would need to get the tables from all available connections
-            return;
-        }
-
         $collection = $this->doRequest('GET', $type . '?startIndex=' . $index);
         $count      = isset($collection->totalResults) ? $collection->totalResults : 0;
         $startIndex = isset($collection->startIndex)   ? $collection->startIndex   : 0;

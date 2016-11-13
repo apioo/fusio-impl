@@ -41,7 +41,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/connection/2', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/connection/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -49,14 +49,10 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": 2,
-    "name": "DBAL",
-    "class": "Fusio\\Adapter\\Sql\\Connection\\DBAL",
+    "id": 1,
+    "name": "Native",
+    "class": "Fusio\\Impl\\Tests\\Connection\\Native",
     "config": {
-        "type": "pdo_mysql",
-        "host": "127.0.0.1",
-        "username": "root",
-        "database": "bar"
     }
 }
 JSON;
@@ -67,7 +63,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/connection/2', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/connection/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -81,7 +77,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/connection/2', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/connection/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -111,14 +107,14 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'name', 'class', 'config')
             ->from('fusio_connection')
-            ->where('id = 2')
+            ->where('id = 1')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(1, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $row['class']);
         $this->assertEquals(217, strlen($row['config']));
@@ -126,7 +122,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/connection/2', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/connection/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -146,13 +142,13 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id')
             ->from('fusio_connection')
-            ->orderBy('id', 'DESC')
+            ->where('id = :id')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
 
-        $this->assertEquals(1, $row['id']);
+        $this->assertEmpty($row);
     }
 }

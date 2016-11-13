@@ -55,22 +55,9 @@ class ClassCommandTest extends ControllerDbTestCase
 +----------------------+----------------------------------------------+
 | Name                 | Class                                        |
 +----------------------+----------------------------------------------+
-| HTTP-Proxy           | Fusio\Adapter\Http\Action\HttpProxy          |
-| HTTP-Request         | Fusio\Adapter\Http\Action\HttpRequest        |
-| SQL-Builder          | Fusio\Adapter\Sql\Action\SqlBuilder          |
-| SQL-Execute          | Fusio\Adapter\Sql\Action\SqlExecute          |
-| SQL-Fetch-All        | Fusio\Adapter\Sql\Action\SqlFetchAll         |
-| SQL-Fetch-Row        | Fusio\Adapter\Sql\Action\SqlFetchRow         |
-| SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |
-| Util-Cache           | Fusio\Adapter\Util\Action\UtilCache          |
-| Util-Composite       | Fusio\Adapter\Util\Action\UtilComposite      |
-| Util-Condition       | Fusio\Adapter\Util\Action\UtilCondition      |
-| Util-Pipe            | Fusio\Adapter\Util\Action\UtilPipe           |
-| Util-Processor       | Fusio\Adapter\Util\Action\UtilProcessor      |
+| V8-Processor         | Fusio\Adapter\V8\Action\V8Processor          |
 | Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse |
-| Util-Transform       | Fusio\Adapter\Util\Action\UtilTransform      |
-| Util-Try-Catch       | Fusio\Adapter\Util\Action\UtilTryCatch       |
-| Util-Validator       | Fusio\Adapter\Util\Action\UtilValidator      |
+| SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |
 +----------------------+----------------------------------------------+
 
 TEXT;

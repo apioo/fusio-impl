@@ -55,10 +55,12 @@ class DetailTest extends ControllerDbTestCase
         "id": "urn:schema.phpsx.org#",
         "type": "object",
         "definitions": {
-            "ref60fecdc9cdbb564bbf31377e11525059": {
-                "title": "test",
+            "ref11328c18443d238942720184135b4d00": {
                 "type": "object",
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
                     "title": {
                         "type": "string"
                     },
@@ -72,11 +74,30 @@ class DetailTest extends ControllerDbTestCase
                 },
                 "additionalProperties": false
             },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/ref60fecdc9cdbb564bbf31377e11525059"
+            "ref2405b468c6e816ee0ae842864922b079": {
+                "title": "test",
+                "type": "object",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "itemsPerPage": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/ref11328c18443d238942720184135b4d00"
+                        }
+                    }
+                },
+                "additionalProperties": false
             },
-            "POST-request": {
-                "$ref": "#\/definitions\/ref60fecdc9cdbb564bbf31377e11525059"
+            "GET-200-response": {
+                "$ref": "#\/definitions\/ref2405b468c6e816ee0ae842864922b079"
             }
         }
     },

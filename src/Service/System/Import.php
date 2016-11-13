@@ -72,17 +72,7 @@ class Import extends SystemAbstract
 
     protected function importType($type, stdClass $data)
     {
-        if ($type == 'database') {
-            if (isset($data->connectionId)) {
-                $path = $type . '/' . $data->connectionId;
-                unset($data->connectionId);
-            } else {
-                throw new RuntimeException('No connection provided for the database');
-            }
-        } else {
-            $path = $type;
-        }
-
+        $path     = $type;
         $response = $this->doRequest('POST', $path, $this->transform($type, $data));
 
         if ($type == 'routes') {

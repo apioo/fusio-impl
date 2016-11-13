@@ -64,35 +64,23 @@ class RegisterCommandTest extends ControllerDbTestCase
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidAction',
         ]);
 
-        $this->assertEquals(17, $actionId);
+        $this->assertEquals(4, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
         ]);
 
-        $this->assertEquals(4, $connectionId);
+        $this->assertEquals(3, $connectionId);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
             'name' => 'Adapter-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(2, $connection['id']);
         $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidConnection', $connection['class']);
         $this->assertEquals(69, strlen($connection['config']));
-
-        // check database
-        $this->assertContains('app_todo', $this->connection->getSchemaManager()->listTableNames());
-
-        $table   = $this->connection->getSchemaManager()->listTableDetails('app_todo');
-        $columns = $table->getColumns();
-
-        $this->assertTrue($table->hasPrimaryKey());
-        $this->assertEquals(3, count($columns));
-        $this->assertArrayHasKey('id', $columns);
-        $this->assertArrayHasKey('title', $columns);
-        $this->assertArrayHasKey('insertdate', $columns);
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
@@ -129,14 +117,14 @@ JSON;
 
         $this->assertEquals(4, $action['id']);
         $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => '3'], unserialize($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => '2'], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/import/void',
         ]);
 
-        $this->assertEquals(64, $route['id']);
+        $this->assertEquals(62, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -147,7 +135,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => 64, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => 62, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
     }
 
     protected function getInputStream($input)

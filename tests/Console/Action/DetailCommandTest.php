@@ -48,17 +48,17 @@ class DetailCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Adapter\Sql\Action\SqlBuilder',
+            'class'   => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
         ]);
 
         $actual = $commandTester->getDisplay();
         $expect = <<<TEXT
-+------------+------------+---------+
-| Name       | Type       | Details |
-+------------+------------+---------+
-| connection | Connection |         |
-| definition | TextArea   | json    |
-+------------+------------+---------+
++------------+----------+----------------------------------------+
+| Name       | Type     | Details                                |
++------------+----------+----------------------------------------+
+| statusCode | Select   | 100: Continue, 101: Switching Pr [...] |
+| response   | TextArea | json                                   |
++------------+----------+----------------------------------------+
 
 TEXT;
 

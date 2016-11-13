@@ -48,8 +48,8 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'name'    => 'foobar',
-            'class'   => 'Fusio\Adapter\Util\Connection\Native',
-            'config'  => 'foo=bar',
+            'class'   => 'Fusio\Adapter\Sql\Connection\DBALAdvanced',
+            'config'  => 'url=sqlite:///:memory:',
         ]);
 
         $actual = $commandTester->getDisplay();
@@ -59,9 +59,9 @@ class AddCommandTest extends ControllerDbTestCase
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, name, class, config FROM fusio_connection ORDER BY id DESC');
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(2, $connection['id']);
         $this->assertEquals('foobar', $connection['name']);
-        $this->assertEquals('Fusio\Adapter\Util\Connection\Native', $connection['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBALAdvanced', $connection['class']);
         $this->assertNotEmpty($connection['config']);
     }
 }

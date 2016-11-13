@@ -56,18 +56,44 @@ class ExportCommandTest extends ControllerDbTestCase
 {
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
     "id": "urn:schema.phpsx.org#",
+    "definitions": {
+        "ref11328c18443d238942720184135b4d00": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
     "title": "test",
     "type": "object",
     "properties": {
-        "title": {
-            "type": "string"
+        "totalResults": {
+            "type": "integer"
         },
-        "content": {
-            "type": "string"
+        "itemsPerPage": {
+            "type": "integer"
         },
-        "date": {
-            "type": "string",
-            "format": "date-time"
+        "startIndex": {
+            "type": "integer"
+        },
+        "entry": {
+            "type": "array",
+            "items": {
+                "$ref": "#\/definitions\/ref11328c18443d238942720184135b4d00"
+            }
         }
     },
     "additionalProperties": false

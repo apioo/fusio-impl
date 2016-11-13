@@ -1,26 +1,12 @@
 {
     "actionClass": [
-        "Fusio\\Adapter\\Http\\Action\\HttpProxy",
-        "Fusio\\Adapter\\Http\\Action\\HttpRequest",
-        "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
-        "Fusio\\Adapter\\Sql\\Action\\SqlExecute",
-        "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
-        "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
-        "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-        "Fusio\\Adapter\\Util\\Action\\UtilCache",
-        "Fusio\\Adapter\\Util\\Action\\UtilComposite",
-        "Fusio\\Adapter\\Util\\Action\\UtilCondition",
-        "Fusio\\Adapter\\Util\\Action\\UtilPipe",
-        "Fusio\\Adapter\\Util\\Action\\UtilProcessor",
+        "Fusio\\Adapter\\V8\\Action\\V8Processor",
         "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-        "Fusio\\Adapter\\Util\\Action\\UtilTransform",
-        "Fusio\\Adapter\\Util\\Action\\UtilTryCatch",
-        "Fusio\\Adapter\\Util\\Action\\UtilValidator"
+        "Fusio\\Adapter\\Sql\\Action\\SqlTable"
     ],
     "connectionClass": [
         "Fusio\\Adapter\\Sql\\Connection\\DBAL",
-        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced",
-        "Fusio\\Adapter\\Util\\Connection\\Native"
+        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced"
     ],
     "connection": [
         {
@@ -58,12 +44,10 @@
     ],
     "action": [
         {
-            "name": "Conditional-Action",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilCondition",
+            "name": "Test-Action",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
-                "condition": "uriFragments.get(\"news_id\") == 1",
-                "true": "Sql-Fetch-Row",
-                "false": "Welcome"
+                "response": "{\"foo\": \"bar\"}"
             }
         }
     ],
@@ -75,10 +59,10 @@
                 "status": 4,
                 "methods": {
                     "GET": {
-                        "active": true,
-                        "public": true,
-                        "action": "Conditional-Action",
-                        "response": "New-Schema"
+                      "active": true,
+                      "public": true,
+                      "action": "Test-Action",
+                      "response": "New-Schema"
                     }
                 }
             }]

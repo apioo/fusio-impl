@@ -55,12 +55,12 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 3,
             "status": 1,
-            "name": "Sql-Fetch-Row"
+            "name": "Sql-Table"
         },
         {
             "id": 2,
             "status": 1,
-            "name": "Sql-Fetch-All"
+            "name": "Util-Static-Response"
         },
         {
             "id": 1,
@@ -82,10 +82,10 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
-            'class'  => 'Fusio\Impl\Action\SqlFetchRow',
+            'class'  => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
             'config' => [
-                'connection' => '1',
-                'sql'        => 'SELECT * FROM foo'
+                'statusCode' => '200',
+                'response'   => '{"foo": "bar"}'
             ],
         ]));
 
@@ -113,8 +113,8 @@ JSON;
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Impl\Action\SqlFetchRow', $row['class']);
-        $this->assertEquals('a:2:{s:10:"connection";s:1:"1";s:3:"sql";s:17:"SELECT * FROM foo";}', $row['config']);
+        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $row['class']);
+        $this->assertEquals('a:2:{s:10:"statusCode";s:3:"200";s:8:"response";s:14:"{"foo": "bar"}";}', $row['config']);
     }
 
     public function testPut()

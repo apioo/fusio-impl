@@ -28,13 +28,13 @@ use PSX\Framework\Test\Environment;
 use PSX\Json\Parser;
 
 /**
- * SqlFetchRowTest
+ * SqlTable
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SqlFetchRowTest extends ControllerDbTestCase
+class SqlTable extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -56,9 +56,23 @@ class SqlFetchRowTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "title": "foo",
-    "content": "bar",
-    "date": "2015-02-27T19:59:15Z"
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27T19:59:15Z"
+        },
+        {
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27T19:59:15Z"
+        }
+    ]
 }
 JSON;
 
@@ -82,7 +96,7 @@ JSON;
 
         foreach ($statuuus as $status) {
             // update the route status
-            $response = $this->sendRequest('http://127.0.0.1/backend/routes/63', 'PUT', array(
+            $response = $this->sendRequest('http://127.0.0.1/backend/routes/61', 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([
@@ -130,9 +144,23 @@ JSON;
             } else {
                 $expect = <<<'JSON'
 {
-    "title": "foo",
-    "content": "bar",
-    "date": "2015-02-27T19:59:15Z"
+    "totalResults": 2,
+    "itemsPerPage": 16,
+    "startIndex": 0,
+    "entry": [
+        {
+            "id": 2,
+            "title": "bar",
+            "content": "foo",
+            "date": "2015-02-27T19:59:15Z"
+        },
+        {
+            "id": 1,
+            "title": "foo",
+            "content": "bar",
+            "date": "2015-02-27T19:59:15Z"
+        }
+    ]
 }
 JSON;
 
@@ -165,10 +193,9 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": "1",
-    "title": "foo",
-    "content": "bar",
-    "date": "2015-02-27 19:59:15"
+    "success": true,
+    "message": "Entry successful created",
+    "id": "3"
 }
 JSON;
 

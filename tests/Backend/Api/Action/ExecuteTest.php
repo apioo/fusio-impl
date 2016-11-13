@@ -69,10 +69,23 @@ class ExecuteTest extends ControllerDbTestCase
     "statusCode": 200,
     "headers": {},
     "body": {
-        "id": "1",
-        "title": "foo",
-        "content": "bar",
-        "date": "2015-02-27 19:59:15"
+        "totalResults": 2,
+        "itemsPerPage": 16,
+        "startIndex": 0,
+        "entry": [
+            {
+                "id": "2",
+                "title": "bar",
+                "content": "foo",
+                "date": "2015-02-27 19:59:15"
+            },
+            {
+                "id": "1",
+                "title": "foo",
+                "content": "bar",
+                "date": "2015-02-27 19:59:15"
+            }
+        ]
     }
 }
 JSON;

@@ -48,8 +48,8 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'name'    => 'foobar',
-            'class'   => 'Fusio\Adapter\Sql\Action\SqlBuilder',
-            'config'  => 'foo=bar',
+            'class'   => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+            'config'  => 'response={"foo":"bar"}',
         ]);
 
         $actual = $commandTester->getDisplay();
@@ -62,7 +62,7 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals(4, $action['id']);
         $this->assertEquals(1, $action['status']);
         $this->assertEquals('foobar', $action['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Action\SqlBuilder', $action['class']);
-        $this->assertEquals('a:1:{s:3:"foo";s:3:"bar";}', $action['config']);
+        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
+        $this->assertEquals('a:1:{s:8:"response";s:13:"{"foo":"bar"}";}', $action['config']);
     }
 }

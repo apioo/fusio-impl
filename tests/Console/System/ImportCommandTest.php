@@ -60,7 +60,7 @@ class ImportCommandTest extends ControllerDbTestCase
             'name' => 'New-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(2, $connection['id']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $connection['class']);
         $this->assertEquals(177, strlen($connection['config']));
 
@@ -95,19 +95,19 @@ JSON;
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
-            'name' => 'Conditional-Action',
+            'name' => 'Test-Action',
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Adapter\Util\Action\UtilCondition', $action['class']);
-        $this->assertEquals(['condition' => 'uriFragments.get("news_id") == 1', 'true' => '3', 'false' => '1'], unserialize($action['config']));
+        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
+        $this->assertEquals(['response' => '{"foo": "bar"}'], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/bar',
         ]);
 
-        $this->assertEquals(64, $route['id']);
+        $this->assertEquals(62, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -118,7 +118,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => 64, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => 62, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
     }
 }
 

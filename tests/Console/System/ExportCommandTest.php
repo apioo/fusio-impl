@@ -53,42 +53,18 @@ class ExportCommandTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "actionClass": [
-        "Fusio\\Adapter\\Http\\Action\\HttpProxy",
-        "Fusio\\Adapter\\Http\\Action\\HttpRequest",
-        "Fusio\\Adapter\\Sql\\Action\\SqlBuilder",
-        "Fusio\\Adapter\\Sql\\Action\\SqlExecute",
-        "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
-        "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
-        "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-        "Fusio\\Adapter\\Util\\Action\\UtilCache",
-        "Fusio\\Adapter\\Util\\Action\\UtilComposite",
-        "Fusio\\Adapter\\Util\\Action\\UtilCondition",
-        "Fusio\\Adapter\\Util\\Action\\UtilPipe",
-        "Fusio\\Adapter\\Util\\Action\\UtilProcessor",
+        "Fusio\\Adapter\\V8\\Action\\V8Processor",
         "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-        "Fusio\\Adapter\\Util\\Action\\UtilTransform",
-        "Fusio\\Adapter\\Util\\Action\\UtilTryCatch",
-        "Fusio\\Adapter\\Util\\Action\\UtilValidator"
+        "Fusio\\Adapter\\Sql\\Action\\SqlTable"
     ],
     "connectionClass": [
         "Fusio\\Adapter\\Sql\\Connection\\DBAL",
-        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced",
-        "Fusio\\Adapter\\Util\\Connection\\Native"
+        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced"
     ],
     "connection": [
         {
-            "name": "DBAL",
-            "class": "Fusio\\Adapter\\Sql\\Connection\\DBAL",
-            "config": {
-                "type": "pdo_mysql",
-                "host": "127.0.0.1",
-                "username": "root",
-                "database": "bar"
-            }
-        },
-        {
-            "name": "Native-Connection",
-            "class": "Fusio\\Adapter\\Util\\Connection\\Native",
+            "name": "Native",
+            "class": "Fusio\\Impl\\Tests\\Connection\\Native",
             "config": {}
         }
     ],
@@ -100,15 +76,35 @@ class ExportCommandTest extends ControllerDbTestCase
                 "title": "test",
                 "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string"
+                    "totalResults": {
+                        "type": "integer"
                     },
-                    "content": {
-                        "type": "string"
+                    "itemsPerPage": {
+                        "type": "integer"
                     },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -126,19 +122,18 @@ class ExportCommandTest extends ControllerDbTestCase
     ],
     "action": [
         {
-            "name": "Sql-Fetch-Row",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow",
+            "name": "Sql-Table",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
             "config": {
-                "connection": "Native-Connection",
-                "sql": "SELECT * FROM app_news"
+                "connection": "Native",
+                "table": "app_news"
             }
         },
         {
-            "name": "Sql-Fetch-All",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll",
+            "name": "Util-Static-Response",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
-                "connection": "Native-Connection",
-                "sql": "SELECT * FROM app_news"
+                "response": "{\"foo\": \"bar\"}"
             }
         },
         {
@@ -161,14 +156,14 @@ class ExportCommandTest extends ControllerDbTestCase
                             "active": true,
                             "public": true,
                             "response": "Foo-Schema",
-                            "action": "Sql-Fetch-Row"
+                            "action": "Sql-Table"
                         },
                         "POST": {
                             "active": true,
                             "public": false,
-                            "request": "Foo-Schema",
+                            "request": "Passthru",
                             "response": "Passthru",
-                            "action": "Sql-Fetch-Row"
+                            "action": "Sql-Table"
                         }
                     }
                 }

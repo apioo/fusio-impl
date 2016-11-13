@@ -49,16 +49,12 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "entry": [
         {
-            "id": 2,
-            "name": "DBAL"
-        },
-        {
             "id": 1,
-            "name": "Native-Connection"
+            "name": "Native"
         }
     ]
 }
@@ -107,7 +103,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(2, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $row['class']);
         $this->assertEquals(217, strlen($row['config']));

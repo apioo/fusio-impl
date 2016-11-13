@@ -50,68 +50,16 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
-            "name": "HTTP-Proxy",
-            "class": "Fusio\\Adapter\\Http\\Action\\HttpProxy"
-        },
-        {
-            "name": "HTTP-Request",
-            "class": "Fusio\\Adapter\\Http\\Action\\HttpRequest"
-        },
-        {
-            "name": "SQL-Builder",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlBuilder"
-        },
-        {
-            "name": "SQL-Execute",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlExecute"
-        },
-        {
-            "name": "SQL-Fetch-All",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchAll"
-        },
-        {
-            "name": "SQL-Fetch-Row",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlFetchRow"
-        },
-        {
-            "name": "SQL-Table",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
-        },
-        {
-            "name": "Util-Cache",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilCache"
-        },
-        {
-            "name": "Util-Composite",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilComposite"
-        },
-        {
-            "name": "Util-Condition",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilCondition"
-        },
-        {
-            "name": "Util-Pipe",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilPipe"
-        },
-        {
-            "name": "Util-Processor",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilProcessor"
+            "name": "V8-Processor",
+            "class": "Fusio\\Adapter\\V8\\Action\\V8Processor"
         },
         {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
         },
         {
-            "name": "Util-Transform",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilTransform"
-        },
-        {
-            "name": "Util-Try-Catch",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilTryCatch"
-        },
-        {
-            "name": "Util-Validator",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilValidator"
+            "name": "SQL-Table",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         }
     ]
 }

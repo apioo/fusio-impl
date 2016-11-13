@@ -98,15 +98,12 @@ class RegisterCommand extends Command
                 $instructions = $this->parser->parse($definition);
                 $rows         = array();
                 $hasRoutes    = false;
-                $hasDatabase  = false;
 
                 foreach ($instructions as $instruction) {
                     $rows[] = [$instruction->getName(), $instruction->getDescription()];
 
                     if ($instruction instanceof Instruction\Route) {
                         $hasRoutes = true;
-                    } elseif ($instruction instanceof Instruction\Database) {
-                        $hasDatabase = true;
                     }
                 }
 
@@ -149,38 +146,10 @@ class RegisterCommand extends Command
                         $basePath = null;
                     }
 
-                    // if the adapter installs new tables ask for the connection
-                    if ($hasDatabase) {
-                        $output->writeLn('');
-                        $output->writeLn('The adapter creates a new table into the system.');
-                        $output->writeLn('Please select the connection id which should be used.');
-
-                        $connections = $this->connectionService->getAll();
-                        foreach ($connections->entry as $connection) {
-                            $output->writeLn($connection->id . ': ' . $connection->name);
-                        }
-
-                        $question = new Question('Connection id (i.e. 1): ', 1);
-                        $question->setValidator(function ($answer) {
-
-                            $connection = $this->connectionService->get($answer);
-                            if (empty($connection)) {
-                                throw new \RuntimeException('Invalid connection id');
-                            }
-
-                            return $connection->id;
-
-                        });
-
-                        $connectionId = $helper->ask($input, $output, $question);
-                    } else {
-                        $connectionId = null;
-                    }
-
                     try {
                         $this->connection->beginTransaction();
 
-                        $this->installer->install($instructions, $basePath, $connectionId);
+                        $this->installer->install($instructions, $basePath);
 
                         $this->connection->commit();
 
