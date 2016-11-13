@@ -89,7 +89,7 @@ class Export extends SystemAbstract
     protected function getClasses($tableName)
     {
         $classes = [];
-        $result  = $this->connection->fetchAll('SELECT class FROM ' . $tableName);
+        $result  = $this->connection->fetchAll('SELECT class FROM ' . $tableName . ' ORDER BY class ASC');
 
         foreach ($result as $row) {
             $classes[] = $row['class'];
