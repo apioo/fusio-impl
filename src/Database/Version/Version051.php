@@ -47,13 +47,12 @@ class Version051 implements VersionInterface
 
         $actionTable = $schema->createTable('fusio_action');
         $actionTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $actionTable->addColumn('status', 'integer');
+        $actionTable->addColumn('status', 'integer', array('default' => Table\Action::STATUS_ACTIVE));
         $actionTable->addColumn('name', 'string', array('length' => 64));
         $actionTable->addColumn('class', 'string', array('length' => 255));
         $actionTable->addColumn('config', 'blob', array('notnull' => false));
         $actionTable->addColumn('date', 'datetime');
         $actionTable->setPrimaryKey(array('id'));
-        $actionTable->addUniqueIndex(array('name'));
 
         $actionClassTable = $schema->createTable('fusio_action_class');
         $actionClassTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -116,6 +115,7 @@ class Version051 implements VersionInterface
 
         $connectionTable = $schema->createTable('fusio_connection');
         $connectionTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $connectionTable->addColumn('status', 'integer', array('default' => Table\Connection::STATUS_ACTIVE));
         $connectionTable->addColumn('name', 'string', array('length' => 64));
         $connectionTable->addColumn('class', 'string', array('length' => 255));
         $connectionTable->addColumn('config', 'blob', array('notnull' => false));
@@ -153,7 +153,7 @@ class Version051 implements VersionInterface
 
         $routesTable = $schema->createTable('fusio_routes');
         $routesTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $routesTable->addColumn('status', 'integer', array('default' => 1));
+        $routesTable->addColumn('status', 'integer', array('default' => Table\Routes::STATUS_ACTIVE));
         $routesTable->addColumn('methods', 'string', array('length' => 64));
         $routesTable->addColumn('path', 'string', array('length' => 255));
         $routesTable->addColumn('controller', 'string', array('length' => 255));
@@ -193,7 +193,7 @@ class Version051 implements VersionInterface
 
         $schemaTable = $schema->createTable('fusio_schema');
         $schemaTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $schemaTable->addColumn('status', 'integer');
+        $schemaTable->addColumn('status', 'integer', array('default' => Table\Schema::STATUS_ACTIVE));
         $schemaTable->addColumn('name', 'string', array('length' => 64));
         $schemaTable->addColumn('source', 'text');
         $schemaTable->addColumn('cache', 'blob');

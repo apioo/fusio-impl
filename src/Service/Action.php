@@ -64,6 +64,7 @@ class Action
     public function getAll($startIndex = 0, $search = null, $routeId = null)
     {
         $condition = new Condition();
+        $condition->equals('status', Table\Action::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -97,6 +98,10 @@ class Action
         $action = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
+            if ($action['status'] == Table\Action::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Action was deleted');
+            }
+
             return $action;
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
@@ -107,6 +112,7 @@ class Action
     {
         // check whether action exists
         $condition  = new Condition();
+        $condition->equals('status', Table\Action::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
         $action = $this->actionTable->getOneBy($condition);
@@ -116,13 +122,13 @@ class Action
         }
 
         // create action
-        $this->actionTable->create(array(
+        $this->actionTable->create([
             'status' => Table\Action::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
             'config' => $config,
             'date'   => new \DateTime(),
-        ));
+        ]);
     }
 
     public function update($actionId, $name, $class, $config)
@@ -130,13 +136,17 @@ class Action
         $action = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
-            $this->actionTable->update(array(
+            if ($action['status'] == Table\Action::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Action was deleted');
+            }
+
+            $this->actionTable->update([
                 'id'     => $action->id,
                 'name'   => $name,
                 'class'  => $class,
                 'config' => $config,
                 'date'   => new \DateTime(),
-            ));
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -147,17 +157,19 @@ class Action
         $action = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
+            if ($action['status'] == Table\Action::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Action was deleted');
+            }
+
             // check depending
             if ($this->routesMethodTable->hasAction($actionId)) {
                 throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
             }
 
-            // delete route dependencies
-            $this->routesActionTable->deleteByAction($action['id']);
-
-            $this->actionTable->delete(array(
-                'id' => $action['id']
-            ));
+            $this->actionTable->update([
+                'id'     => $action->id,
+                'status' => Table\Action::STATUS_DELETED,
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
         }

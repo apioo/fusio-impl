@@ -140,15 +140,16 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id')
+            ->select('id', 'status')
             ->from('fusio_connection')
-            ->where('id = :id')
+            ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
+        $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEmpty($row);
+        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(0, $row['status']);
     }
 }

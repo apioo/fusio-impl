@@ -72,6 +72,7 @@ class Schema
     public function getAll($startIndex = 0, $search = null, $routeId = null)
     {
         $condition = new Condition();
+        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -105,6 +106,10 @@ class Schema
         $schema = $this->schemaTable->get($schemaId);
 
         if (!empty($schema)) {
+            if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Schema was deleted');
+            }
+
             return $schema;
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');
@@ -119,6 +124,7 @@ class Schema
 
         // check whether schema exists
         $condition  = new Condition();
+        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
         $connection = $this->schemaTable->getOneBy($condition);
@@ -128,12 +134,12 @@ class Schema
         }
 
         // create schema
-        $this->schemaTable->create(array(
+        $this->schemaTable->create([
             'status' => Table\Schema::STATUS_ACTIVE,
             'name'   => $name,
             'source' => $source,
             'cache'  => $this->schemaParser->parse(json_encode($source)),
-        ));
+        ]);
     }
 
     public function update($schemaId, $name, $source)
@@ -141,12 +147,16 @@ class Schema
         $schema = $this->schemaTable->get($schemaId);
 
         if (!empty($schema)) {
-            $this->schemaTable->update(array(
-                'id'     => $schema['id'],
+            if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Schema was deleted');
+            }
+
+            $this->schemaTable->update([
+                'id'     => $schema->id,
                 'name'   => $name,
                 'source' => $source,
                 'cache'  => $this->schemaParser->parse(json_encode($source)),
-            ));
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -157,17 +167,19 @@ class Schema
         $schema = $this->schemaTable->get($schemaId);
 
         if (!empty($schema)) {
+            if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Schema was deleted');
+            }
+
             // check whether we have routes which depend on this schema
             if ($this->routesMethodTable->hasSchema($schemaId)) {
                 throw new StatusCode\BadRequestException('Cannot delete schema because a route depends on it');
             }
 
-            // delete route dependencies
-            $this->routesSchemaTable->deleteBySchema($schema['id']);
-
-            $this->schemaTable->delete(array(
-                'id' => $schema['id']
-            ));
+            $this->schemaTable->update([
+                'id'     => $schema->id,
+                'status' => Table\Schema::STATUS_DELETED,
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');
         }

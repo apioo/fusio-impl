@@ -60,7 +60,12 @@ class Connection
 
     public function getAll($startIndex = 0, $search = null)
     {
-        $condition = !empty($search) ? new Condition(['name', 'LIKE', '%' . $search . '%']) : null;
+        $condition = new Condition();
+        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
+
+        if (!empty($search)) {
+            $condition->like('name', '%' . $search . '%');
+        }
 
         return new ResultSet(
             $this->connectionTable->getCount($condition),
@@ -82,6 +87,10 @@ class Connection
         $connection = $this->connectionTable->get($connectionId);
 
         if (!empty($connection)) {
+            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Connection was deleted');
+            }
+
             $config = self::decryptConfig($connection['config'], $this->secretKey);
 
             // remove all password fields from the config
@@ -113,6 +122,7 @@ class Connection
     {
         // check whether connection exists
         $condition  = new Condition();
+        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
         $connection = $this->connectionTable->getOneBy($condition);
@@ -124,11 +134,12 @@ class Connection
         $this->testConnection($class, $config);
 
         // create connection
-        $this->connectionTable->create(array(
+        $this->connectionTable->create([
+            'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
             'config' => self::encryptConfig($config, $this->secretKey),
-        ));
+        ]);
     }
 
     public function update($connectionId, $name, $class, $config)
@@ -136,14 +147,18 @@ class Connection
         $connection = $this->connectionTable->get($connectionId);
 
         if (!empty($connection)) {
+            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Connection was deleted');
+            }
+
             $this->testConnection($class, $config);
 
-            $this->connectionTable->update(array(
+            $this->connectionTable->update([
                 'id'     => $connection->id,
                 'name'   => $name,
                 'class'  => $class,
                 'config' => self::encryptConfig($config, $this->secretKey),
-            ));
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -154,9 +169,14 @@ class Connection
         $connection = $this->connectionTable->get($connectionId);
 
         if (!empty($connection)) {
-            $this->connectionTable->delete(array(
-                'id' => $connection->id
-            ));
+            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Connection was deleted');
+            }
+
+            $this->connectionTable->update([
+                'id'     => $connection->id,
+                'status' => Table\Connection::STATUS_DELETED,
+            ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find connection');
         }

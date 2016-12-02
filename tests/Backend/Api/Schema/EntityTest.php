@@ -163,7 +163,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id')
+            ->select('id', 'status')
             ->from('fusio_schema')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -172,6 +172,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(0, $row['status']);
     }
 }

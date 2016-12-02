@@ -117,7 +117,7 @@ JSON;
                 ['appId' => 3, 'userId' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirectUri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
             'fusio_connection' => [
-                ['name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => ''],
+                ['status' => 1, 'name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => ''],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],

@@ -33,7 +33,6 @@ use PSX\Sql\TableAbstract;
 class Schema extends TableAbstract
 {
     const STATUS_ACTIVE  = 1;
-    const STATUS_LOCKED  = 2;
     const STATUS_DELETED = 0;
 
     public function getName()
