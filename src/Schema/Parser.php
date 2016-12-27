@@ -25,10 +25,6 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Schema\ParserInterface;
 use PSX\Schema\Parser\JsonSchema;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
-use PSX\Schema\Property\ComplexType;
-use PSX\Schema\PropertyInterface;
-use PSX\Validate;
-use RuntimeException;
 
 /**
  * Parser
