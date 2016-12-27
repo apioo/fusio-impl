@@ -54,9 +54,11 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 4,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 4,
+            "provider": 1,
             "status": 1,
             "name": "Developer",
             "email": "developer@localhost.com",
@@ -64,6 +66,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 3,
+            "provider": 1,
             "status": 2,
             "name": "Disabled",
             "email": "disabled@localhost.com",
@@ -71,6 +74,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "provider": 1,
             "status": 0,
             "name": "Consumer",
             "email": "consumer@localhost.com",
@@ -78,6 +82,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 1,
+            "provider": 1,
             "status": 1,
             "name": "Administrator",
             "email": "admin@localhost.com",

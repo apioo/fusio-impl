@@ -52,13 +52,15 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 3,
+    "status": 1,
     "priority": 5,
     "name": "silver",
     "rateLimit": 8,
     "timespan": "P1M",
     "allocation": [
         {
-            "id": 3
+            "id": 3,
+            "rateId": 3
         }
     ]
 }

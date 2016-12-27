@@ -53,9 +53,11 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 2,
+    "provider": 1,
     "status": 0,
     "name": "Consumer",
     "email": "consumer@localhost.com",
+    "date": "[datetime]",
     "scopes": [
         "consumer",
         "authorization",
@@ -87,8 +89,7 @@ class EntityTest extends ControllerDbTestCase
             "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
             "date": "[datetime]"
         }
-    ],
-    "date": "[datetime]"
+    ]
 }
 JSON;
 

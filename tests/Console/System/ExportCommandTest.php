@@ -50,6 +50,8 @@ class ExportCommandTest extends ControllerDbTestCase
         ]);
 
         $actual = $commandTester->getDisplay();
+        $actual = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $actual);
+
         $expect = <<<'JSON'
 {
     "actionClass": [
@@ -63,6 +65,7 @@ class ExportCommandTest extends ControllerDbTestCase
     ],
     "connection": [
         {
+            "status": 1,
             "name": "Native",
             "class": "Fusio\\Impl\\Tests\\Connection\\Native",
             "config": {}
@@ -127,26 +130,31 @@ class ExportCommandTest extends ControllerDbTestCase
             "config": {
                 "connection": "Native",
                 "table": "app_news"
-            }
+            },
+            "date": "[datetime]"
         },
         {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
                 "response": "{\"foo\": \"bar\"}"
-            }
+            },
+            "date": "[datetime]"
         },
         {
             "name": "Welcome",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
                 "response": "{\n    \"message\": \"Congratulations the installation of Fusio was successful\",\n    \"links\": [\n        {\n            \"rel\": \"about\",\n            \"name\": \"http:\\\/\\\/fusio-project.org\"\n        }\n    ]\n}"
-            }
+            },
+            "date": "[datetime]"
         }
     ],
     "routes": [
         {
+            "status": 1,
             "path": "\/foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
             "config": [
                 {
                     "version": 1,
@@ -170,7 +178,9 @@ class ExportCommandTest extends ControllerDbTestCase
             ]
         },
         {
+            "status": 1,
             "path": "\/",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
             "config": [
                 {
                     "version": 1,

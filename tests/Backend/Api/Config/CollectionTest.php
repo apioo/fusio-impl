@@ -51,82 +51,83 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 11,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 1,
-            "type": 2,
             "name": "app_approval",
             "description": "If true the status of a new app is PENDING so that an administrator has to manually activate the app",
+            "type": 2,
             "value": "0"
         },
         {
             "id": 2,
-            "type": 3,
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
+            "type": 3,
             "value": "16"
         },
         {
             "id": 11,
-            "type": 1,
             "name": "cors_allow_origin",
             "description": "If set each API response contains a Access-Control-Allow-Origin header with the provided value",
+            "type": 1,
             "value": ""
         },
         {
             "id": 5,
-            "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
+            "type": 6,
             "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
         },
         {
             "id": 4,
-            "type": 1,
             "name": "mail_register_subject",
             "description": "Subject of the activation mail",
+            "type": 1,
             "value": "Fusio registration"
         },
         {
             "id": 6,
-            "type": 1,
             "name": "mail_sender",
             "description": "Email address which is used in the \"From\" header",
+            "type": 1,
             "value": ""
         },
         {
             "id": 7,
-            "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
+            "type": 1,
             "value": ""
         },
         {
             "id": 9,
-            "type": 1,
             "name": "provider_github_secret",
             "description": "GitHub app secret",
+            "type": 1,
             "value": ""
         },
         {
             "id": 8,
-            "type": 1,
             "name": "provider_google_secret",
             "description": "Google app secret",
+            "type": 1,
             "value": ""
         },
         {
             "id": 10,
-            "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
+            "type": 1,
             "value": ""
         },
         {
             "id": 3,
-            "type": 1,
             "name": "scopes_default",
             "description": "If a user registers through the consumer API the following scopes are assigned",
+            "type": 1,
             "value": "authorization,consumer"
         }
     ]

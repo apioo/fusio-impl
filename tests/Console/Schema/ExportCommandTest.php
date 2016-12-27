@@ -52,12 +52,14 @@ class ExportCommandTest extends ControllerDbTestCase
         ]);
 
         $actual = $commandTester->getDisplay();
+        $actual = preg_replace('/Object([0-9A-Fa-f]{8})/', 'ObjectId', $actual);
+
         $expect = <<<'JSON'
 {
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
     "id": "urn:schema.phpsx.org#",
     "definitions": {
-        "ref11328c18443d238942720184135b4d00": {
+        "ObjectId": {
             "type": "object",
             "properties": {
                 "id": {
@@ -73,12 +75,11 @@ class ExportCommandTest extends ControllerDbTestCase
                     "type": "string",
                     "format": "date-time"
                 }
-            },
-            "additionalProperties": false
+            }
         }
     },
-    "title": "test",
     "type": "object",
+    "title": "test",
     "properties": {
         "totalResults": {
             "type": "integer"
@@ -92,11 +93,10 @@ class ExportCommandTest extends ControllerDbTestCase
         "entry": {
             "type": "array",
             "items": {
-                "$ref": "#\/definitions\/ref11328c18443d238942720184135b4d00"
+                "$ref": "#\/definitions\/ObjectId"
             }
         }
-    },
-    "additionalProperties": false
+    }
 }
 JSON;
 

@@ -54,9 +54,10 @@ class EntityTest extends ControllerDbTestCase
     "name": "Sql-Table",
     "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
     "config": {
-        "connection": "1",
+        "connection": 1,
         "table": "app_news"
-    }
+    },
+    "date": "2015-02-27T19:59:15Z"
 }
 JSON;
 

@@ -52,13 +52,13 @@ class CollectionTest extends ControllerDbTestCase
 {
     "entry": [
         {
-            "id": 1,
+            "id": "1",
+            "createDate": "2015-02-27 19:59:15",
             "app": {
-                "id": 1,
+                "id": "1",
                 "name": "Backend",
                 "url": "http:\/\/fusio-project.org"
-            },
-            "createDate": "2015-02-27T19:59:15Z"
+            }
         }
     ]
 }

@@ -55,9 +55,11 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 2,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 2,
+            "userId": 1,
             "status": 1,
             "name": "Consumer",
             "appKey": "[app_key]",
@@ -65,6 +67,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 1,
+            "userId": 1,
             "status": 1,
             "name": "Backend",
             "appKey": "[app_key]",

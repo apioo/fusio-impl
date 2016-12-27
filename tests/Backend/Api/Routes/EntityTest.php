@@ -52,7 +52,9 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 61,
+    "status": 1,
     "path": "\/foo",
+    "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
     "config": [
         {
             "version": 1,

@@ -46,26 +46,32 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        
         $expect = <<<'JSON'
 {
     "totalResults": 3,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 3,
             "status": 1,
-            "name": "Sql-Table"
+            "name": "Sql-Table",
+            "date": "[datetime]"
         },
         {
             "id": 2,
             "status": 1,
-            "name": "Util-Static-Response"
+            "name": "Util-Static-Response",
+            "date": "[datetime]"
         },
         {
             "id": 1,
             "status": 1,
-            "name": "Welcome"
+            "name": "Welcome",
+            "date": "[datetime]"
         }
     ]
 }

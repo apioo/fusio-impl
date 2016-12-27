@@ -51,9 +51,11 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 3,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 3,
+            "status": 1,
             "priority": 5,
             "name": "silver",
             "rateLimit": 8,
@@ -61,6 +63,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "status": 1,
             "priority": 4,
             "name": "Default-Anonymous",
             "rateLimit": 60,
@@ -68,6 +71,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 1,
+            "status": 1,
             "priority": 0,
             "name": "Default",
             "rateLimit": 720,

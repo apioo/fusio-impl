@@ -44,18 +44,20 @@ class DetailTest extends ControllerDbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/Object([0-9A-Fa-f]{8})/', 'ObjectId', $body);
+        
         $expect = <<<'JSON'
 {
     "path": "\/foo",
     "version": "*",
     "status": 4,
+    "description": "",
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
-        "type": "object",
         "definitions": {
-            "ref11328c18443d238942720184135b4d00": {
+            "ObjectId": {
                 "type": "object",
                 "properties": {
                     "id": {
@@ -71,12 +73,11 @@ class DetailTest extends ControllerDbTestCase
                         "type": "string",
                         "format": "date-time"
                     }
-                },
-                "additionalProperties": false
+                }
             },
-            "ref2405b468c6e816ee0ae842864922b079": {
-                "title": "test",
+            "Test": {
                 "type": "object",
+                "title": "test",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -90,14 +91,24 @@ class DetailTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/ref11328c18443d238942720184135b4d00"
+                            "$ref": "#\/definitions\/ObjectId"
                         }
                     }
-                },
-                "additionalProperties": false
+                }
+            },
+            "Passthru": {
+                "type": "object",
+                "title": "passthru",
+                "description": "No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format."
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/ref2405b468c6e816ee0ae842864922b079"
+                "$ref": "#\/definitions\/Test"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Passthru"
+            },
+            "POST-200-response": {
+                "$ref": "#\/definitions\/Passthru"
             }
         }
     },
@@ -115,10 +126,6 @@ class DetailTest extends ControllerDbTestCase
         }
     },
     "links": [
-        {
-            "rel": "wsdl",
-            "href": "\/export\/wsdl\/*\/foo"
-        },
         {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/foo"

@@ -51,14 +51,19 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 2,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 61,
-            "path": "\/foo"
+            "status": 1,
+            "path": "\/foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
             "id": 60,
-            "path": "\/"
+            "status": 1,
+            "path": "\/",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
 }

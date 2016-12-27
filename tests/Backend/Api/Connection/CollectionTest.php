@@ -51,9 +51,11 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 1,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Native"
         }
     ]

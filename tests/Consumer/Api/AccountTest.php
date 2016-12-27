@@ -47,11 +47,17 @@ class AccountTest extends ControllerDbTestCase
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        
         $expect = <<<JSON
 {
+    "id": 1,
+    "provider": 1,
+    "status": 1,
     "name": "Administrator",
-    "email": "admin@localhost.com"
+    "email": "admin@localhost.com",
+    "date": "[datetime]"
 }
 JSON;
 

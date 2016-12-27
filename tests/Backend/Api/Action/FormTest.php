@@ -303,7 +303,7 @@ class FormTest extends ControllerDbTestCase
             "mode": "json",
             "name": "response",
             "title": "Response",
-            "help": "The response in JSON format. Inside the response it is possible to use a template syntax to add dynamic data. Click <a ng-click=\"help.showDialog('help\/template.md')\">here<\/a> for more informations about the template syntax."
+            "help": "The response in JSON format"
         }
     ]
 }

@@ -50,10 +50,10 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 1,
+    "status": 1,
     "name": "Native",
     "class": "Fusio\\Impl\\Tests\\Connection\\Native",
-    "config": {
-    }
+    "config": {}
 }
 JSON;
 

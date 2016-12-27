@@ -64,7 +64,7 @@ class AuthorizeTest extends ControllerDbTestCase
         $data = json_decode($body, true);
 
         $this->assertEquals(500, $response->getStatusCode(), $body);
-        $this->assertEquals('/responseType is required', substr($data['message'], 0, 25), $body);
+        $this->assertEquals('/ the following properties are required: responseType, clientId, scope, allow', substr($data['message'], 0, 77), $body);
     }
 
     public function testPostCode()

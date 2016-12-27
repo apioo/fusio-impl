@@ -51,6 +51,7 @@ class CollectionTest extends ControllerDbTestCase
 {
     "totalResults": 5,
     "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
             "id": 5,
@@ -95,11 +96,11 @@ JSON;
             'description' => 'Test description',
             'routes' => [[
                 'routeId' => 1,
-                'allow'   => 1,
+                'allow'   => true,
                 'methods' => 'GET|POST|PUT|DELETE',
             ], [
                 'routeId' => 2,
-                'allow'   => 1,
+                'allow'   => true,
                 'methods' => 'GET|POST|PUT|DELETE',
             ]]
         ]));
