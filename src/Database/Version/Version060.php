@@ -451,7 +451,7 @@ class Version060 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/doc',                                    'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doIndex'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/doc/:version/*path',                     'controller' => 'PSX\Framework\Controller\Tool\DocumentationController::doDetail'],
 
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',             'controller' => 'PSX\Framework\Controller\Generator\WsdlController'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',             'controller' => 'Fusio\Impl\Backend\Api\Gone'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',             'controller' => 'PSX\Framework\Controller\Generator\RamlController'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\SwaggerController'],
 
