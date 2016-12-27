@@ -41,6 +41,159 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/routes/61', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/routes\/:route_id",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Version": {
+                "type": "object",
+                "title": "version",
+                "properties": {
+                    "version": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "methods": {
+                        "$ref": "#\/definitions\/Methods"
+                    }
+                }
+            },
+            "Methods": {
+                "type": "object",
+                "title": "methods",
+                "patternProperties": {
+                    "^(GET|POST|PUT|DELETE)$": {
+                        "$ref": "#\/definitions\/Method"
+                    }
+                }
+            },
+            "Method": {
+                "type": "object",
+                "title": "method",
+                "properties": {
+                    "method": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "active": {
+                        "type": "boolean"
+                    },
+                    "public": {
+                        "type": "boolean"
+                    },
+                    "request": {
+                        "type": "integer"
+                    },
+                    "response": {
+                        "type": "integer"
+                    },
+                    "action": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Routes": {
+                "type": "object",
+                "title": "routes",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "config": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Version"
+                        }
+                    }
+                },
+                "required": [
+                    "config"
+                ]
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Routes"
+            },
+            "PUT-request": {
+                "$ref": "#\/definitions\/Routes"
+            },
+            "PUT-200-response": {
+                "$ref": "#\/definitions\/Message"
+            },
+            "DELETE-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "PUT": {
+            "request": "#\/definitions\/PUT-request",
+            "responses": {
+                "200": "#\/definitions\/PUT-200-response"
+            }
+        },
+        "DELETE": {
+            "responses": {
+                "200": "#\/definitions\/DELETE-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/routes\/:route_id"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/routes\/:route_id"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/routes/61', 'GET', array(

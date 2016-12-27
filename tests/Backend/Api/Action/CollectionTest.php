@@ -21,7 +21,9 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -37,6 +39,127 @@ class CollectionTest extends ControllerDbTestCase
     public function getDataSet()
     {
         return Fixture::getDataSet();
+    }
+
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/action', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/action",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Action": {
+                "type": "object",
+                "title": "action",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "class": {
+                        "type": "string"
+                    },
+                    "config": {
+                        "$ref": "#\/definitions\/Config"
+                    }
+                },
+                "required": [
+                    "name",
+                    "config"
+                ]
+            },
+            "Config": {
+                "type": "object",
+                "title": "config",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Action"
+                        }
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Action"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "201": "#\/definitions\/POST-201-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/action"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/action"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()

@@ -39,6 +39,135 @@ class CollectionTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/scope', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/scope",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Scope": {
+                "type": "object",
+                "title": "scope",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "routes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Route"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "routes"
+                ]
+            },
+            "Route": {
+                "type": "object",
+                "title": "route",
+                "properties": {
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "allow": {
+                        "type": "boolean"
+                    },
+                    "methods": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Scope"
+                        }
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Scope"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "201": "#\/definitions\/POST-201-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/scope"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/scope"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/scope', 'GET', array(

@@ -39,6 +39,170 @@ class CollectionTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/routes', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/routes",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Routes": {
+                "type": "object",
+                "title": "routes",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "config": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Version"
+                        }
+                    }
+                },
+                "required": [
+                    "path",
+                    "config"
+                ]
+            },
+            "Version": {
+                "type": "object",
+                "title": "version",
+                "properties": {
+                    "version": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "methods": {
+                        "$ref": "#\/definitions\/Methods"
+                    }
+                }
+            },
+            "Methods": {
+                "type": "object",
+                "title": "methods",
+                "patternProperties": {
+                    "^(GET|POST|PUT|DELETE)$": {
+                        "$ref": "#\/definitions\/Method"
+                    }
+                }
+            },
+            "Method": {
+                "type": "object",
+                "title": "method",
+                "properties": {
+                    "method": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "active": {
+                        "type": "boolean"
+                    },
+                    "public": {
+                        "type": "boolean"
+                    },
+                    "request": {
+                        "type": "integer"
+                    },
+                    "response": {
+                        "type": "integer"
+                    },
+                    "action": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Routes"
+                        }
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Routes"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "201": "#\/definitions\/POST-201-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/routes"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/routes"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/routes', 'GET', array(

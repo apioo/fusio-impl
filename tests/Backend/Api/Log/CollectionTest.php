@@ -38,6 +38,125 @@ class CollectionTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/log', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/log",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Log": {
+                "type": "object",
+                "title": "log",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "userAgent": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "header": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Error"
+                        }
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "title": "error",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "trace": {
+                        "type": "string"
+                    },
+                    "file": {
+                        "type": "string"
+                    },
+                    "line": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Log"
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/log"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/log"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/log', 'GET', array(

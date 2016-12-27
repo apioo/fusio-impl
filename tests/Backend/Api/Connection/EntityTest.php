@@ -39,6 +39,110 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/connection/1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/connection\/:connection_id",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Config": {
+                "type": "object",
+                "title": "config",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
+            "Connection": {
+                "type": "object",
+                "title": "connection",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "class": {
+                        "type": "string"
+                    },
+                    "config": {
+                        "$ref": "#\/definitions\/Config"
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Connection"
+            },
+            "PUT-request": {
+                "$ref": "#\/definitions\/Connection"
+            },
+            "PUT-200-response": {
+                "$ref": "#\/definitions\/Message"
+            },
+            "DELETE-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "PUT": {
+            "request": "#\/definitions\/PUT-request",
+            "responses": {
+                "200": "#\/definitions\/PUT-200-response"
+            }
+        },
+        "DELETE": {
+            "responses": {
+                "200": "#\/definitions\/DELETE-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/connection\/:connection_id"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/connection\/:connection_id"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/connection/1', 'GET', array(

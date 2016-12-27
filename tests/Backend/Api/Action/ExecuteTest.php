@@ -39,6 +39,108 @@ class ExecuteTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/action/execute/3', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/action\/execute\/:action_id",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Body": {
+                "type": "object",
+                "title": "body",
+                "additionalProperties": true
+            },
+            "Request": {
+                "type": "object",
+                "title": "request",
+                "properties": {
+                    "method": {
+                        "type": "string",
+                        "pattern": "GET|POST|PUT|DELETE"
+                    },
+                    "uriFragments": {
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    },
+                    "headers": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "$ref": "#\/definitions\/Body"
+                    }
+                },
+                "required": [
+                    "method"
+                ]
+            },
+            "Headers": {
+                "type": "object",
+                "title": "headers",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
+            "Response": {
+                "type": "object",
+                "title": "response",
+                "properties": {
+                    "statusCode": {
+                        "type": "integer"
+                    },
+                    "headers": {
+                        "$ref": "#\/definitions\/Headers"
+                    },
+                    "body": {
+                        "$ref": "#\/definitions\/Body"
+                    }
+                }
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Request"
+            },
+            "POST-200-response": {
+                "$ref": "#\/definitions\/Response"
+            }
+        }
+    },
+    "methods": {
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "200": "#\/definitions\/POST-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/action\/execute\/:action_id"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/action\/execute\/:action_id"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/action/execute/3', 'GET', array(

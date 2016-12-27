@@ -39,6 +39,151 @@ class CollectionTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/rate', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/rate",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Rate": {
+                "type": "object",
+                "title": "rate",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "rateLimit": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "timespan": {
+                        "type": "string",
+                        "format": "duration"
+                    },
+                    "allocation": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Allocation"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "rateLimit",
+                    "timespan"
+                ]
+            },
+            "Allocation": {
+                "type": "object",
+                "title": "allocation",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "authenticated": {
+                        "type": "boolean"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Rate"
+                        }
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Rate"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "201": "#\/definitions\/POST-201-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/rate"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/rate"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/rate', 'GET', array(

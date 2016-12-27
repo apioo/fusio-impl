@@ -41,6 +41,136 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/rate/3', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/rate\/:rate_id",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Allocation": {
+                "type": "object",
+                "title": "allocation",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "authenticated": {
+                        "type": "boolean"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Rate": {
+                "type": "object",
+                "title": "rate",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "rateLimit": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "timespan": {
+                        "type": "string",
+                        "format": "duration"
+                    },
+                    "allocation": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Allocation"
+                        }
+                    }
+                }
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Rate"
+            },
+            "PUT-request": {
+                "$ref": "#\/definitions\/Rate"
+            },
+            "PUT-200-response": {
+                "$ref": "#\/definitions\/Message"
+            },
+            "DELETE-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "PUT": {
+            "request": "#\/definitions\/PUT-request",
+            "responses": {
+                "200": "#\/definitions\/PUT-200-response"
+            }
+        },
+        "DELETE": {
+            "responses": {
+                "200": "#\/definitions\/DELETE-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/rate\/:rate_id"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/rate\/:rate_id"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/rate/3', 'GET', array(
