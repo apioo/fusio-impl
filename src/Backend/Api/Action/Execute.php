@@ -96,7 +96,7 @@ class Execute extends SchemaApiAbstract
             if ($response instanceof ResponseInterface) {
                 return array(
                     'statusCode' => $response->getStatusCode(),
-                    'headers'    => $response->getHeaders(),
+                    'headers'    => $response->getHeaders() ?: new \stdClass(),
                     'body'       => $response->getBody(),
                 );
             } else {

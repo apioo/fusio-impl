@@ -35,12 +35,10 @@ class Register extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('user');
-        $sb->string('name')
-            ->setRequired(true);
-        $sb->string('email')
-            ->setRequired(true);
-        $sb->string('password')
-            ->setRequired(true);
+        $sb->setRequired(['name', 'email', 'password']);
+        $sb->string('name');
+        $sb->string('email');
+        $sb->string('password');
         $sb->string('captcha');
 
         return $sb->getProperty();

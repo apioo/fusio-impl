@@ -104,19 +104,29 @@ class Routes extends TableAbstract
                 foreach ($result as $row) {
                     if (!isset($data[$row['version']])) {
                         $data[$row['version']] = [
-                            'version' => $row['version'],
-                            'status'  => $row['status'],
-                            'methods' => [],
+                            'version' => (int) $row['version'],
+                            'status'  => (int) $row['status'],
+                            'methods' => new \stdClass(),
                         ];
                     }
 
-                    $data[$row['version']]['methods'][$row['method']] = [
-                        'active'   => $row['active'],
-                        'public'   => $row['public'],
-                        'request'  => $row['request'],
-                        'response' => $row['response'],
-                        'action'   => $row['action'],
-                    ];
+                    $method = new \stdClass();
+                    $method->active = (bool) $row['active'];
+                    $method->public = (bool) $row['public'];
+                    
+                    if (!empty($row['request'])) {
+                        $method->request = (int) $row['request'];
+                    }
+
+                    if (!empty($row['response'])) {
+                        $method->response = (int) $row['response'];
+                    }
+
+                    if (!empty($row['action'])) {
+                        $method->action = (int) $row['action'];
+                    }
+
+                    $data[$row['version']]['methods']->{$row['method']} = $method;
                 }
 
                 return array_values($data);

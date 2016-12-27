@@ -36,18 +36,16 @@ class ChangePassword extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('credentials');
+        $sb->setRequired(['oldPassword', 'newPassword', 'verifyPassword']);
         $sb->string('oldPassword')
-            ->setMinLength('8')
-            ->setMaxLength('128')
-            ->setRequired(true);
+            ->setMinLength(8)
+            ->setMaxLength(128);
         $sb->string('newPassword')
-            ->setMinLength('8')
-            ->setMaxLength('128')
-            ->setRequired(true);
+            ->setMinLength(8)
+            ->setMaxLength(128);
         $sb->string('verifyPassword')
-            ->setMinLength('8')
-            ->setMaxLength('128')
-            ->setRequired(true);
+            ->setMinLength(8)
+            ->setMaxLength(128);
 
         return $sb->getProperty();
     }

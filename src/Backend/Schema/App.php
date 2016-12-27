@@ -47,9 +47,9 @@ class App extends SchemaAbstract
         $sb->string('appSecret');
         $sb->dateTime('date');
         $sb->arrayType('scopes')
-            ->setPrototype(Property::getString('name'));
+            ->setItems(Property::getString());
         $sb->arrayType('tokens')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\App\Token'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\App\Token'));
 
         return $sb->getProperty();
     }

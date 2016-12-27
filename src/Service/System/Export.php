@@ -98,7 +98,7 @@ class Export extends SystemAbstract
         return $classes;
     }
 
-    protected function getReference($tableName, $id)
+    protected function getReference($tableName, $id, $type)
     {
         return $this->connection->fetchColumn('SELECT name FROM ' . $tableName . ' WHERE id = :id', ['id' => $id]);
     }

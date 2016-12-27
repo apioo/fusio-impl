@@ -110,6 +110,8 @@ class Schema
                 throw new StatusCode\GoneException('Schema was deleted');
             }
 
+            unset($schema['cache']);
+
             return $schema;
         } else {
             throw new StatusCode\NotFoundException('Could not find schema');

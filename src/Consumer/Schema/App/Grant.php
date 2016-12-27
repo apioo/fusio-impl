@@ -36,7 +36,7 @@ class Grant extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('grant');
         $sb->integer('id');
-        $sb->complexType('app', $this->getSchema('Fusio\Impl\Backend\Schema\App'));
+        $sb->objectType('app', $this->getSchema('Fusio\Impl\Backend\Schema\App'));
         $sb->dateTime('createDate');
 
         return $sb->getProperty();

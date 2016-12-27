@@ -49,6 +49,11 @@ abstract class SystemAbstract
 {
     const COLLECTION_SIZE = 16;
 
+    const TYPE_CONNECTION = 'connection';
+    const TYPE_SCHEMA = 'schema';
+    const TYPE_ACTION = 'action';
+    const TYPE_ROUTES = 'routes';
+
     /**
      * @var \Fusio\Impl\Service\System\ApiExecutor
      */
@@ -72,7 +77,7 @@ abstract class SystemAbstract
     /**
      * @var array
      */
-    protected $types = ['connection', 'schema', 'action', 'routes'];
+    protected $types = [self::TYPE_CONNECTION, self::TYPE_SCHEMA, self::TYPE_ACTION, self::TYPE_ROUTES];
 
     /**
      * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
@@ -124,7 +129,7 @@ abstract class SystemAbstract
         unset($entity->id);
 
         $form   = $this->connectionParser->getForm($entity->class);
-        $entity = $this->handleFormReferences($entity, $form);
+        $entity = $this->handleFormReferences($entity, $form, self::TYPE_CONNECTION);
 
         return $entity;
     }
@@ -143,7 +148,7 @@ abstract class SystemAbstract
         unset($entity->status);
 
         $form   = $this->actionParser->getForm($entity->class);
-        $entity = $this->handleFormReferences($entity, $form);
+        $entity = $this->handleFormReferences($entity, $form, self::TYPE_ACTION);
 
         return $entity;
     }
@@ -162,24 +167,24 @@ abstract class SystemAbstract
             $methods = isset($version->methods) ? $version->methods : [];
 
             foreach ($methods as $method => $row) {
-                if (isset($row->action)) {
-                    $name = $this->getReference('fusio_action', $row->action);
+                if (!empty($row->action)) {
+                    $name = $this->getReference('fusio_action', $row->action, self::TYPE_ROUTES);
                     if (empty($name)) {
                         throw new RuntimeException('Could not resolve action ' . $row->action);
                     }
                     $entity->config[$index]->methods->{$method}->action = $name;
                 }
 
-                if (isset($row->request)) {
-                    $name = $this->getReference('fusio_schema', $row->request);
+                if (!empty($row->request)) {
+                    $name = $this->getReference('fusio_schema', $row->request, self::TYPE_ROUTES);
                     if (empty($name)) {
                         throw new RuntimeException('Could not resolve schema ' . $row->request);
                     }
                     $entity->config[$index]->methods->{$method}->request = $name;
                 }
 
-                if (isset($row->response)) {
-                    $name = $this->getReference('fusio_schema', $row->response);
+                if (!empty($row->response)) {
+                    $name = $this->getReference('fusio_schema', $row->response, self::TYPE_ROUTES);
                     if (empty($name)) {
                         throw new RuntimeException('Could not resolve schema ' . $row->response);
                     }
@@ -191,7 +196,7 @@ abstract class SystemAbstract
         return $entity;
     }
 
-    protected function handleFormReferences(stdClass $entity, $form)
+    protected function handleFormReferences(stdClass $entity, $form, $type)
     {
         $config = new stdClass();
 
@@ -205,13 +210,13 @@ abstract class SystemAbstract
                 }
 
                 if ($element instanceof Form\Element\Action) {
-                    $name = $this->getReference('fusio_action', $entity->config->{$data['name']});
+                    $name = $this->getReference('fusio_action', $entity->config->{$data['name']}, $type);
                     if (empty($name)) {
                         throw new RuntimeException('Could not resolve action ' . $entity->config->{$data['name']});
                     }
                     $config->{$data['name']} = $name;
                 } elseif ($element instanceof Form\Element\Connection) {
-                    $name = $this->getReference('fusio_connection', $entity->config->{$data['name']});
+                    $name = $this->getReference('fusio_connection', $entity->config->{$data['name']}, $type);
                     if (empty($name)) {
                         throw new RuntimeException('Could not resolve connection ' . $entity->config->{$data['name']});
                     }
@@ -239,7 +244,8 @@ abstract class SystemAbstract
      *
      * @param string $table
      * @param string $id
+     * @param string $type
      * @return mixed
      */
-    abstract protected function getReference($table, $id);
+    abstract protected function getReference($table, $id, $type);
 }

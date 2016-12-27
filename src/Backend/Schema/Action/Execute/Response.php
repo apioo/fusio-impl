@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Action\Execute;
 
+use PSX\Schema\Property;
 use PSX\Schema\Property\StringType;
 use PSX\Schema\SchemaAbstract;
 
@@ -36,7 +37,7 @@ class Response extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('headers');
-        $sb->setAdditionalProperties(new StringType());
+        $sb->setAdditionalProperties(Property::getString());
         $headers = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('body');
@@ -45,8 +46,8 @@ class Response extends SchemaAbstract
 
         $sb = $this->getSchemaBuilder('response');
         $sb->integer('statusCode');
-        $sb->complexType('headers', $headers);
-        $sb->complexType('body', $body);
+        $sb->objectType('headers', $headers);
+        $sb->objectType('body', $body);
 
         return $sb->getProperty();
     }

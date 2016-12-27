@@ -35,9 +35,7 @@ class Create extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Rate');
-        $schema->get('name')->setRequired(true);
-        $schema->get('rateLimit')->setRequired(true);
-        $schema->get('timespan')->setRequired(true);
+        $schema->setRequired(['name', 'rateLimit', 'timespan']);
 
         return $schema;
     }

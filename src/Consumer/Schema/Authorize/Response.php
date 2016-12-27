@@ -43,7 +43,7 @@ class Response extends SchemaAbstract
 
         $sb = $this->getSchemaBuilder('response');
         $sb->string('type');
-        $sb->complexType('token', $token);
+        $sb->objectType('token', $token);
         $sb->string('code');
         $sb->string('redirectUri');
 

@@ -44,7 +44,7 @@ class Log extends SchemaAbstract
         $sb->string('body');
         $sb->dateTime('date');
         $sb->arrayType('errors')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Log\Error'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Log\Error'));
 
         return $sb->getProperty();
     }

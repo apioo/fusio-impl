@@ -35,8 +35,7 @@ class Activate extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('activate');
-        $sb->string('token')
-            ->setRequired(true);
+        $sb->setRequired(['token']);
 
         return $sb->getProperty();
     }

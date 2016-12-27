@@ -35,8 +35,7 @@ class Update extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema('Fusio\Impl\Consumer\Schema\App\Developer');
-        $schema->get('name')->setRequired(true);
-        $schema->get('url')->setRequired(true);
+        $schema->setRequired(['name', 'url']);
 
         return $schema;
     }

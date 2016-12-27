@@ -86,7 +86,6 @@ trait Engine
             ConnectorInterface::class => 'connector',
             ProcessorInterface::class => 'processor',
             Response\FactoryInterface::class => 'engine_response',
-            Template\FactoryInterface::class => 'engine_template_factory',
             Http\ClientInterface::class => 'engine_http_client',
             Json\ProcessorInterface::class => 'engine_json_processor',
             Cache\ProviderInterface::class => 'engine_cache_provider',
@@ -220,17 +219,6 @@ trait Engine
     }
 
     /**
-     * @return \Fusio\Engine\Template\FactoryInterface
-     */
-    public function getEngineTemplateFactory()
-    {
-        return new Template\Factory(
-            $this->get('config')->get('psx_debug'),
-            PSX_PATH_CACHE
-        );
-    }
-
-    /**
      * @return \Fusio\Engine\Json\ProcessorInterface
      */
     public function getEngineJsonProcessor()
@@ -256,7 +244,7 @@ trait Engine
      */
     public function getEngineCacheProvider()
     {
-        $tempDir  = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Fusio';
+        $tempDir  = $this->get('config')->get('psx_path_cache');
         $provider = new DoctrineCache\FilesystemCache($tempDir);
 
         return new Cache\Provider($provider);

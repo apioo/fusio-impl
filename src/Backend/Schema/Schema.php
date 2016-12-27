@@ -43,7 +43,7 @@ class Schema extends SchemaAbstract
         $sb->integer('status');
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_]{3,64}');
-        $sb->complexType('source', $source);
+        $sb->objectType('source', $source);
 
         return $sb->getProperty();
     }

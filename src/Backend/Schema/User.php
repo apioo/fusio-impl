@@ -42,9 +42,9 @@ class User extends SchemaAbstract
             ->setPattern('[A-z0-9\-\_\.]{3,32}');
         $sb->string('email');
         $sb->arrayType('scopes')
-            ->setPrototype(Property::getString('name'));
+            ->setItems(Property::getString());
         $sb->arrayType('apps')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\App'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\App'));
         $sb->dateTime('date');
 
         return $sb->getProperty();

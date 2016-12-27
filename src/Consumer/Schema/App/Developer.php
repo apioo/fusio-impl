@@ -35,7 +35,7 @@ class Developer extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\App');
-        $schema->remove('userId');
+        $schema->removeProperty('userId');
 
         return $schema;
     }

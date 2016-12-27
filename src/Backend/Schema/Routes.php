@@ -41,14 +41,14 @@ class Routes extends SchemaAbstract
         $sb = $this->getSchemaBuilder('version');
         $sb->integer('version');
         $sb->integer('status');
-        $sb->complexType('methods', $methods);
+        $sb->objectType('methods', $methods);
         $version = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('routes');
         $sb->integer('id');
         $sb->string('path');
         $sb->arrayType('config')
-            ->setPrototype($version);
+            ->setItems($version);
 
         return $sb->getProperty();
     }

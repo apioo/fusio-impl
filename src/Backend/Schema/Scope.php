@@ -40,7 +40,7 @@ class Scope extends SchemaAbstract
             ->setPattern('[A-z0-9\-\_]{3,64}');
         $sb->string('description');
         $sb->arrayType('routes')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Scope\Route'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Scope\Route'));
 
         return $sb->getProperty();
     }

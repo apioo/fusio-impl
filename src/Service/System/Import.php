@@ -113,8 +113,13 @@ class Import extends SystemAbstract
         }
     }
 
-    protected function getReference($tableName, $name)
+    protected function getReference($tableName, $name, $type)
     {
-        return $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
+        if ($type === self::TYPE_ROUTES) {
+            // for routes we need to cast the column to an int 
+            return (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
+        } else {
+            return $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
+        }
     }
 }

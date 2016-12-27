@@ -26,6 +26,7 @@ use Fusio\Engine\Schema\ParserInterface;
 use PSX\Schema\Parser\JsonSchema;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
 use PSX\Schema\Property\ComplexType;
+use PSX\Schema\PropertyInterface;
 use PSX\Validate;
 use RuntimeException;
 
@@ -62,10 +63,6 @@ class Parser implements ParserInterface
 
         $parser = new JsonSchema(null, $resolver);
         $schema = $parser->parse($source);
-
-        if (!$schema->getDefinition() instanceof ComplexType) {
-            throw new RuntimeException('Schema must be an object');
-        }
 
         return serialize($schema);
     }

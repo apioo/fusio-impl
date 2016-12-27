@@ -36,7 +36,7 @@ class Collection extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('collection');
         $sb->arrayType('entry')
-            ->setPrototype($this->getSchema('Fusio\Impl\Consumer\Schema\App\Grant'));
+            ->setItems($this->getSchema('Fusio\Impl\Consumer\Schema\App\Grant'));
 
         return $sb->getProperty();
     }

@@ -47,13 +47,27 @@ abstract class TransformAbstract implements TransformInterface
 
     public function transform($data)
     {
+        $this->routes = [];
+        $this->action = [];
+        $this->schema = [];
+
         $this->doParse($data);
 
-        return [
-            'routes' => $this->routes,
-            'action' => $this->action,
-            'schema' => $this->schema,
-        ];
+        $data = [];
+
+        if (!empty($this->routes)) {
+            $data['routes'] = $this->routes;
+        }
+
+        if (!empty($this->action)) {
+            $data['action'] = $this->action;
+        }
+
+        if (!empty($this->schema)) {
+            $data['schema'] = $this->schema;
+        }
+
+        return $data;
     }
     
     protected function addRoute(array $route)

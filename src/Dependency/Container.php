@@ -43,6 +43,7 @@ use Fusio\Impl\Schema;
 use Fusio\Impl\User;
 use Fusio\Impl\Validate;
 use Monolog\Handler as LogHandler;
+use PSX\Api\Console\ApiCommand;
 use PSX\Data\Exporter\Popo;
 use PSX\Framework\Api\CachedListing;
 use PSX\Framework\Console as PSXCommand;
@@ -149,11 +150,11 @@ class Container extends DefaultContainer
     {
         // psx commands
         $application->add(new PSXCommand\ContainerCommand($this));
-        $application->add(new PSXCommand\ResourceCommand($this->get('config'), $this->get('resource_listing'), new Popo($this->get('annotation_reader'))));
         $application->add(new PSXCommand\RouteCommand($this->get('routing_parser')));
         $application->add(new PSXCommand\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
-        $application->add(new PSXCommand\GenerateCommand());
-        $application->add(new SchemaCommand($this->get('schema_manager'), $this->get('config')->get('psx_soap_namespace')));
+
+        $application->add(new ApiCommand($this->get('api_manager'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
+        $application->add(new SchemaCommand($this->get('schema_manager')));
 
         // fusio commands
         $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));

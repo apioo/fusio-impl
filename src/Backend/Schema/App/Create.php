@@ -35,10 +35,7 @@ class Create extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema('Fusio\Impl\Backend\Schema\App');
-        $schema->get('userId')->setRequired(true);
-        $schema->get('name')->setRequired(true);
-        $schema->get('url')->setRequired(true);
-        $schema->get('scopes')->setRequired(true);
+        $schema->setRequired(['userId', 'name', 'url', 'scopes']);
 
         return $schema;
     }

@@ -38,7 +38,7 @@ class Meta extends SchemaAbstract
         $sb->string('name');
         $sb->string('url');
         $sb->arrayType('scopes')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Scope'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Scope'));
 
         return $sb->getProperty();
     }

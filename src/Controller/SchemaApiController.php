@@ -228,29 +228,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
     }
 
-    protected function sendResponse(MethodAbstract $method, $response)
-    {
-        $statusCode = $this->response->getStatusCode();
-        if (!empty($statusCode) && $method->hasResponse($statusCode)) {
-            $schema = $method->getResponse($statusCode);
-        } else {
-            $schema = $this->getSuccessfulResponse($method, $statusCode);
-        }
-
-        if ($schema instanceof SchemaInterface) {
-            $this->setResponseCode($statusCode);
-
-            if ($schema->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
-                $this->setBody($response);
-            } else {
-                $this->setBodyAs($response, $schema);
-            }
-        } else {
-            $this->setResponseCode(204);
-            $this->setBody('');
-        }
-    }
-
     private function executeAction($record)
     {
         $method   = $this->getActiveMethod();

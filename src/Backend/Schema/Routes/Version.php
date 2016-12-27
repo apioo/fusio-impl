@@ -39,7 +39,7 @@ class Version extends SchemaAbstract
         $sb->integer('status');
         $sb->string('name');
         $sb->arrayType('methods')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
 
         return $sb->getProperty();
     }

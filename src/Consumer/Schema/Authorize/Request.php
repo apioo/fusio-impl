@@ -35,16 +35,13 @@ class Request extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('request');
-        $sb->string('responseType')
-            ->setRequired(true);
-        $sb->string('clientId')
-            ->setRequired(true);
+        $sb->setRequired(['responseType', 'clientId', 'scope', 'allow']);
+        $sb->string('responseType');
+        $sb->string('clientId');
         $sb->string('redirectUri');
-        $sb->string('scope')
-            ->setRequired(true);
+        $sb->string('scope');
         $sb->string('state');
-        $sb->boolean('allow')
-            ->setRequired(true);
+        $sb->boolean('allow');
 
         return $sb->getProperty();
     }

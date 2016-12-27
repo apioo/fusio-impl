@@ -33,13 +33,13 @@ use PSX\Api\Resource;
 use PSX\Schema\Property;
 
 /**
- * Version051
+ * Version060
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Version051 implements VersionInterface
+class Version060 implements VersionInterface
 {
     public function getSchema()
     {
@@ -453,7 +453,7 @@ class Version051 implements VersionInterface
 
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',             'controller' => 'PSX\Framework\Controller\Generator\WsdlController'],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',             'controller' => 'PSX\Framework\Controller\Generator\RamlController'],
-                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\SwaggerController::doDetail'],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',          'controller' => 'PSX\Framework\Controller\Generator\SwaggerController'],
 
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                       'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
             ],

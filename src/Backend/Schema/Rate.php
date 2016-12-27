@@ -38,14 +38,14 @@ class Rate extends SchemaAbstract
         $sb = $this->getSchemaBuilder('rate');
         $sb->integer('id');
         $sb->integer('priority')
-            ->setMin(0);
+            ->setMinimum(0);
         $sb->string('name')
             ->setPattern('[A-z0-9\-\_]{3,64}');
         $sb->integer('rateLimit')
-            ->setMin(0);
+            ->setMinimum(0);
         $sb->duration('timespan');
         $sb->arrayType('allocation')
-            ->setPrototype($this->getSchema(Rate\Allocation::class));
+            ->setItems($this->getSchema(Rate\Allocation::class));
 
         return $sb->getProperty();
     }

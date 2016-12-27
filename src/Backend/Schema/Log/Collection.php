@@ -38,7 +38,7 @@ class Collection extends SchemaAbstract
         $sb->integer('totalResults');
         $sb->integer('startIndex');
         $sb->arrayType('entry')
-            ->setPrototype($this->getSchema('Fusio\Impl\Backend\Schema\Log'));
+            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Log'));
 
         return $sb->getProperty();
     }

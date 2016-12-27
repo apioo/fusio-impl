@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Authorization\ProtectionTrait;
+use PSX\Data\Accessor;
 use PSX\Framework\Controller\ApiAbstract;
 
 /**
@@ -39,7 +40,7 @@ class Format extends ApiAbstract
     public function onPost()
     {
         $format = $this->getUriFragment('format');
-        $schema = $this->getAccessor()->get('/schema');
+        $schema = Accessor::get($this->getBody(), '/schema');
 
         if ($format == 'raml') {
             $transformer = new Transform\Raml();
