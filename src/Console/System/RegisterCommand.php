@@ -94,7 +94,29 @@ class RegisterCommand extends Command
 
             if ($adapter instanceof AdapterInterface) {
                 // parse definition
-                $definition   = Parser::decode(file_get_contents($adapter->getDefinition()), false);
+                $definition = file_get_contents($adapter->getDefinition());
+
+                // replace dynamic connection
+                if (strpos($definition, '${connection}') !== false) {
+                    $output->writeLn('The adapter requires a connection.');
+
+                    $result = $this->connectionService->getAll();
+                    foreach ($result->entry as $connection) {
+                        $output->writeln($connection->id . ') ' . $connection->name);
+                    }
+
+                    $question = new Question('Please specify the connection (i.e. 1): ', '1');
+                    $question->setValidator(function ($answer) {
+                        $connection = $this->connectionService->get($answer);
+
+                        return $connection->name;
+                    });
+
+                    $name       = $helper->ask($input, $output, $question);
+                    $definition = str_replace('${connection}', $name, $definition);
+                }
+
+                $definition   = Parser::decode($definition, false);
                 $instructions = $this->parser->parse($definition);
                 $rows         = array();
                 $hasRoutes    = false;
