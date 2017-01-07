@@ -179,6 +179,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\InstallCommand($this->get('connection')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('connection_service'), $this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), $this->get('table_manager')->getTable('Fusio\Impl\Table\User')));
+        $application->add(new Console\System\CheckCommand($this->get('connection')));
 
         $application->add(new Console\User\AddCommand($this->get('user_service')));
         $application->add(new Console\User\ListCommand($this->get('user_service')));
