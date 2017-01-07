@@ -103,11 +103,14 @@ class CheckCommand extends Command
      */
     protected function checkInstall()
     {
-        $fromSchema = $this->connection->getSchemaManager()->createSchema();
-        $toSchema   = Installer::getLatestVersion()->getSchema();
-        $diffTables = array_diff($toSchema->getTableNames(), $fromSchema->getTableNames());
+        $existing = $this->connection->getSchemaManager()->listTableNames();
+        $tables   = Installer::getLatestVersion()->getSchema()->getTables();
+        $names    = [];
+        foreach ($tables as $table) {
+            $names[] = $table->getName();
+        }
 
-        return count($diffTables) === 0;
+        return count(array_diff($names, $existing)) === 0;
     }
 
     /**
