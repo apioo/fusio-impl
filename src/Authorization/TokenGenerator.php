@@ -22,8 +22,6 @@
 namespace Fusio\Impl\Authorization;
 
 use PSX\Framework\Util\Uuid;
-use RandomLib\Factory;
-use RandomLib\Generator;
 
 /**
  * TokenGenerator
@@ -41,13 +39,10 @@ class TokenGenerator
      */
     public static function generateToken()
     {
-        $factory   = new Factory();
-        $generator = $factory->getMediumStrengthGenerator();
-
         return implode('-', [
-            $generator->generateString(20, Generator::CHAR_ALNUM),
-            $generator->generateString(48, Generator::CHAR_ALNUM),
-            $generator->generateString(10, Generator::CHAR_ALNUM)
+            self::generateString(20),
+            self::generateString(48),
+            self::generateString(10)
         ]);
     }
 
@@ -58,10 +53,7 @@ class TokenGenerator
      */
     public static function generateCode()
     {
-        $factory   = new Factory();
-        $generator = $factory->getMediumStrengthGenerator();
-
-        return $generator->generateString(16, Generator::CHAR_ALNUM);
+        return self::generateString(16);
     }
 
     /**
@@ -81,10 +73,7 @@ class TokenGenerator
      */
     public static function generateAppSecret()
     {
-        $factory   = new Factory();
-        $generator = $factory->getMediumStrengthGenerator();
-
-        return $generator->generateString(64, Generator::CHAR_ALNUM);
+        return self::generateString(64);
     }
 
     /**
@@ -94,9 +83,11 @@ class TokenGenerator
      */
     public static function generateUserPassword()
     {
-        $factory   = new Factory();
-        $generator = $factory->getMediumStrengthGenerator();
+        return self::generateString(20);
+    }
 
-        return $generator->generateString(20, Generator::CHAR_ALNUM);
+    private static function generateString($length)
+    {
+        return substr(bin2hex(random_bytes($length)), 0, $length);
     }
 }

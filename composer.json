@@ -18,8 +18,7 @@
     "fusio/adapter-sql": "^0.3@dev",
     "fusio/adapter-v8": "^0.3@dev",
     "fusio/adapter-util": "^0.3@dev",
-    "ircmaxell/password-compat": "^1.0",
-    "ircmaxell/random-lib": "^1.1",
+    "paragonie/random_compat": "^2.0",
     "firebase/php-jwt": "^3.0",
     "swiftmailer/swiftmailer": "^5.4"
   },
