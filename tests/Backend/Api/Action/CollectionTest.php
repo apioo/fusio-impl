@@ -104,20 +104,22 @@ class CollectionTest extends ControllerDbTestCase
                         },
                         {
                             "type": "array",
-                            "items": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "number"
-                                },
-                                {
-                                    "type": "boolean"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ],
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    },
+                                    {
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
                             "maxItems": 16
                         }
                     ]
@@ -245,8 +247,12 @@ JSON;
             'name'   => 'Foo',
             'class'  => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
             'config' => [
-                'statusCode' => '200',
-                'response'   => '{"foo": "bar"}'
+                'string' => 'foo',
+                'integer' => 12,
+                'number' => 12.34,
+                'boolean' => true,
+                'null' => null,
+                'array' => ['foo', 12, 12.34, true, null],
             ],
         ]));
 
@@ -270,12 +276,13 @@ JSON;
             ->setMaxResults(1)
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row    = Environment::getService('connection')->fetchAssoc($sql);
+        $config = json_encode(unserialize($row['config']));
 
         $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $row['class']);
-        $this->assertEquals('a:2:{s:10:"statusCode";s:3:"200";s:8:"response";s:14:"{"foo": "bar"}";}', $row['config']);
+        $this->assertJsonStringEqualsJsonString('{"string":"foo","integer":12,"number":12.34,"boolean":true,"array":["foo",12,12.34,true,null]}', $config, $config);
     }
 
     public function testPut()
