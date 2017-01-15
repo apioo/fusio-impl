@@ -33,13 +33,13 @@ use PSX\Api\Resource;
 use PSX\Schema\Property;
 
 /**
- * Version061
+ * Version062
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Version061 implements VersionInterface
+class Version062 implements VersionInterface
 {
     public function getSchema()
     {
@@ -363,8 +363,8 @@ class Version061 implements VersionInterface
             'fusio_connection' => [
             ],
             'fusio_connection_class' => [
-                ['class' => 'Fusio\Adapter\Sql\Connection\DBAL'],
-                ['class' => 'Fusio\Adapter\Sql\Connection\DBALAdvanced'],
+                ['class' => 'Fusio\Adapter\Sql\Connection\Sql'],
+                ['class' => 'Fusio\Adapter\Sql\Connection\SqlAdvanced'],
             ],
             'fusio_scope' => [
                 ['name' => 'backend', 'description' => 'Access to the backend API'],
