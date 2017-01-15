@@ -363,8 +363,8 @@ class Version061 implements VersionInterface
             'fusio_connection' => [
             ],
             'fusio_connection_class' => [
-                ['class' => 'Fusio\Adapter\Sql\Connection\DBAL'],
-                ['class' => 'Fusio\Adapter\Sql\Connection\DBALAdvanced'],
+                ['class' => 'Fusio\Adapter\Sql\Connection\Sql'],
+                ['class' => 'Fusio\Adapter\Sql\Connection\SqlAdvanced'],
             ],
             'fusio_scope' => [
                 ['name' => 'backend', 'description' => 'Access to the backend API'],

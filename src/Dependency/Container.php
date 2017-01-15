@@ -66,19 +66,6 @@ class Container extends DefaultContainer
     use Services;
 
     /**
-     * @return \Psr\Log\LoggerInterface
-     */
-    /*
-    public function getLogger()
-    {
-        $logger = new SystemLogger('psx');
-        $logger->pushHandler(new LogHandler\NullHandler());
-
-        return $logger;
-    }
-    */
-
-    /**
      * @return \PSX\Framework\Loader\RoutingParserInterface
      */
     public function getRoutingParser()

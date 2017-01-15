@@ -60,8 +60,8 @@ class ExportCommandTest extends ControllerDbTestCase
         "Fusio\\Adapter\\V8\\Action\\V8Processor"
     ],
     "connectionClass": [
-        "Fusio\\Adapter\\Sql\\Connection\\DBAL",
-        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced"
+        "Fusio\\Adapter\\Sql\\Connection\\Sql",
+        "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
     ],
     "connection": [
         {

@@ -5,13 +5,13 @@
         "Fusio\\Adapter\\Sql\\Action\\SqlTable"
     ],
     "connectionClass": [
-        "Fusio\\Adapter\\Sql\\Connection\\DBAL",
-        "Fusio\\Adapter\\Sql\\Connection\\DBALAdvanced"
+        "Fusio\\Adapter\\Sql\\Connection\\Sql",
+        "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
     ],
     "connection": [
         {
             "name": "New-Connection",
-            "class": "Fusio\\Adapter\\Sql\\Connection\\DBAL",
+            "class": "Fusio\\Adapter\\Sql\\Connection\\Sql",
             "config": {
                 "type": "pdo_mysql",
                 "host": "127.0.0.1",

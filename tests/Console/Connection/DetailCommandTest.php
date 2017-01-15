@@ -48,7 +48,7 @@ class DetailCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Adapter\Sql\Connection\DBAL',
+            'class'   => 'Fusio\Adapter\Sql\Connection\Sql',
         ]);
 
         $actual = $commandTester->getDisplay();

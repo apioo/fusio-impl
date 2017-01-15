@@ -61,7 +61,7 @@ class ImportCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(2, $connection['id']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $connection['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $connection['class']);
         $this->assertEquals(177, strlen($connection['config']));
 
         // check schema

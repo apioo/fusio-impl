@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Dependency;
 
 use Doctrine\Common\Cache as DoctrineCache;
-use Fusio\Engine\Cache;
+use Fusio\Engine\Cache\SimpleCache;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Factory;
@@ -30,15 +30,14 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
-use Fusio\Engine\Schema;
-use Fusio\Engine\Template;
-use Fusio\Engine\Json;
-use Fusio\Engine\Http;
 use Fusio\Impl\Parser as ImplParser;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
+use Monolog\Handler\NullHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Engine
@@ -86,10 +85,28 @@ trait Engine
             ConnectorInterface::class => 'connector',
             ProcessorInterface::class => 'processor',
             Response\FactoryInterface::class => 'engine_response',
-            Http\ClientInterface::class => 'engine_http_client',
-            Json\ProcessorInterface::class => 'engine_json_processor',
-            Cache\ProviderInterface::class => 'engine_cache_provider',
+            LoggerInterface::class => 'engine_logger',
+            CacheInterface::class => 'engine_cache',
         ]);
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getEngineLogger()
+    {
+        $logger = new Logger('action');
+        $logger->pushHandler(new NullHandler());
+
+        return $logger;
+    }
+
+    /**
+     * @return \Psr\SimpleCache\CacheInterface
+     */
+    public function getEngineCache()
+    {
+        return new SimpleCache($this->newDoctrineCacheImpl('action'));
     }
 
     /**
@@ -216,37 +233,5 @@ trait Engine
     public function getEngineResponse()
     {
         return new Response\Factory();
-    }
-
-    /**
-     * @return \Fusio\Engine\Json\ProcessorInterface
-     */
-    public function getEngineJsonProcessor()
-    {
-        return new Json\Processor(
-            new \PSX\Data\Reader\Json(),
-            new \PSX\Data\Writer\Json()
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Http\ClientInterface
-     */
-    public function getEngineHttpClient()
-    {
-        return new Http\Client(
-            new \PSX\Http\Client()
-        );
-    }
-
-    /**
-     * @return \Fusio\Engine\Cache\ProviderInterface
-     */
-    public function getEngineCacheProvider()
-    {
-        $tempDir  = $this->get('config')->get('psx_path_cache');
-        $provider = new DoctrineCache\FilesystemCache($tempDir);
-
-        return new Cache\Provider($provider);
     }
 }

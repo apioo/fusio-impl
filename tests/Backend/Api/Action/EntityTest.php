@@ -61,8 +61,40 @@ class EntityTest extends ControllerDbTestCase
                 "type": "object",
                 "title": "config",
                 "additionalProperties": {
-                    "type": "string"
-                }
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "maxItems": 16
+                        }
+                    ]
+                },
+                "maxProperties": 16
             },
             "Action": {
                 "type": "object",

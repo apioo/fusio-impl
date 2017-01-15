@@ -84,8 +84,40 @@ class CollectionTest extends ControllerDbTestCase
                 "type": "object",
                 "title": "config",
                 "additionalProperties": {
-                    "type": "string"
-                }
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "maxItems": 16
+                        }
+                    ]
+                },
+                "maxProperties": 16
             },
             "Collection": {
                 "type": "object",
@@ -191,7 +223,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
-            'class'  => 'Fusio\Adapter\Sql\Connection\DBAL',
+            'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
             'config' => [
                 'type'     => 'pdo_mysql',
                 'host'     => '127.0.0.1',
@@ -225,7 +257,7 @@ JSON;
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBAL', $row['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
         $this->assertEquals(217, strlen($row['config']));
     }
 

@@ -48,7 +48,7 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'name'    => 'foobar',
-            'class'   => 'Fusio\Adapter\Sql\Connection\DBALAdvanced',
+            'class'   => 'Fusio\Adapter\Sql\Connection\SqlAdvanced',
             'config'  => 'url=sqlite:///:memory:',
         ]);
 
@@ -61,7 +61,7 @@ class AddCommandTest extends ControllerDbTestCase
 
         $this->assertEquals(2, $connection['id']);
         $this->assertEquals('foobar', $connection['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\DBALAdvanced', $connection['class']);
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\SqlAdvanced', $connection['class']);
         $this->assertNotEmpty($connection['config']);
     }
 }

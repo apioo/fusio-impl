@@ -35,8 +35,12 @@ class Action extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
+        $value  = array_merge($scalar, [Property::getArray()->setItems($scalar)->setMaxItems(16)]);
+
         $sb = $this->getSchemaBuilder('config');
-        $sb->setAdditionalProperties(Property::getString());
+        $sb->setAdditionalProperties(Property::get()->setOneOf($value));
+        $sb->setMaxProperties(16);
         $config = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('action');
