@@ -120,6 +120,6 @@ class CheckCommand extends Command
      */
     protected function checkUser()
     {
-        return $this->connection->fetchColumn('SELECT COUNT(*) FROM fusio_user') > 0;
+        return $this->connection->fetchColumn('SELECT COUNT(*) FROM fusio_user') > 1;
     }
 }
