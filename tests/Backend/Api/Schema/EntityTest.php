@@ -158,7 +158,7 @@ JSON;
         "id": "http:\/\/fusio-project.org",
         "title": "passthru",
         "type": "object",
-        "description": "No schema was specified all data will pass thru. Please contact the API provider for more informations about the data format.",
+        "description": "No schema was specified all data will pass through. Please contact the API provider for more informations about the data format.",
         "properties": []
     }
 }
