@@ -114,7 +114,8 @@ class CheckCommand extends Command
     }
 
     /**
-     * Check whether we have a row in the user table
+     * Check whether we have a row in the user table. The installation inserts
+     * already a system user so we must have at least more then one user
      * 
      * @return bool
      */
