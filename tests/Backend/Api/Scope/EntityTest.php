@@ -169,16 +169,16 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
-            "id": 54,
+            "id": 56,
             "scopeId": 5,
-            "routeId": 61,
+            "routeId": 63,
             "allow": 1,
             "methods": "GET|POST|PUT|DELETE"
         },
         {
-            "id": 53,
+            "id": 55,
             "scopeId": 5,
-            "routeId": 60,
+            "routeId": 62,
             "allow": 1,
             "methods": "GET|POST|PUT|DELETE"
         }
