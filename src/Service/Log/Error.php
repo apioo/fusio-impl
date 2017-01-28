@@ -19,65 +19,63 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service;
+namespace Fusio\Impl\Service\Log;
 
 use Fusio\Impl\Table;
-use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Http\Exception as StatusCode;
 use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
 use PSX\Sql\Sql;
 
 /**
- * Log
+ * Error
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Log
+class Error
 {
     /**
-     * @var \Fusio\Impl\Table\Log
+     * @var \Fusio\Impl\Table\Log\Error
      */
-    protected $logTable;
+    protected $errorTable;
 
-    public function __construct(Table\Log $logTable)
+    public function __construct(Table\Log\Error $errorTable)
     {
-        $this->logTable = $logTable;
+        $this->errorTable = $errorTable;
     }
 
-    public function getAll($startIndex = 0, QueryFilter $filter)
+    public function getAll($startIndex = 0, $search = null)
     {
-        $condition = $filter->getCondition();
+        $condition = new Condition();
+
+        if (!empty($search)) {
+            $condition->like('message', '%' . $search . '%');
+        }
 
         return new ResultSet(
-            $this->logTable->getCount($condition),
+            $this->errorTable->getCount($condition),
             $startIndex,
             16,
-            $this->logTable->getAll(
+            $this->errorTable->getAll(
                 $startIndex,
                 16,
                 'id',
                 Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['header', 'body'])
+                $condition
             )
         );
     }
 
-    public function get($logId)
+    public function get($errorId)
     {
-        $log = $this->logTable->get($logId);
+        $error = $this->errorTable->get($errorId);
 
-        if (!empty($log)) {
-            // append errors
-            $log['errors'] = $this->logTable->getErrors($log['id']);
-
-            return $log;
+        if (!empty($error)) {
+            return $error;
         } else {
-            throw new StatusCode\NotFoundException('Could not find log');
+            throw new StatusCode\NotFoundException('Could not find error');
         }
     }
 }

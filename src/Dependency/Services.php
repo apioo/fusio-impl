@@ -201,6 +201,16 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Log\Error
+     */
+    public function getLogErrorService()
+    {
+        return new Service\Log\Error(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\Log\Error')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Statistic
      */
     public function getStatisticService()
