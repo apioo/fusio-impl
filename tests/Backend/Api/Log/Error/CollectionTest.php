@@ -128,7 +128,7 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}/m', '[datetime]', $body);
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00/m', '[datetime]', $body);
 
         $expect = <<<'JSON'
 {
@@ -136,12 +136,10 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 1,
-            "logId": 1,
+            "id": "1",
             "message": "Syntax error, malformed JSON",
-            "trace": "[trace]",
-            "file": "[file]",
-            "line": 74
+            "path": "\/bar",
+            "date": "[datetime]"
         }
     ]
 }

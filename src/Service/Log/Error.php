@@ -48,23 +48,9 @@ class Error
 
     public function getAll($startIndex = 0, $search = null)
     {
-        $condition = new Condition();
-
-        if (!empty($search)) {
-            $condition->like('message', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->errorTable->getCount($condition),
+        return $this->errorTable->getErrors(
             $startIndex,
-            16,
-            $this->errorTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition
-            )
+            $search
         );
     }
 

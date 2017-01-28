@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Table\Log;
 
+use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -48,4 +49,41 @@ class Error extends TableAbstract
             'line' => self::TYPE_INT,
         );
     }
+
+    public function getErrors($startIndex = 0, $search = null)
+    {
+        $condition  = new Condition();
+
+        if (!empty($search)) {
+            $condition->like('message', '%' . $search . '%');
+        }
+
+        $builder = $this->connection->createQueryBuilder()
+            ->select(['error.id', 'error.message', 'log.path', 'log.date'])
+            ->from('fusio_log_error', 'error')
+            ->innerJoin('error', 'fusio_log', 'log', 'error.logId = log.id')
+            ->orderBy('error.id', 'DESC')
+            ->setFirstResult($startIndex)
+            ->setMaxResults(16);
+
+        if ($condition->hasCondition()) {
+            $builder->where($condition->getExpression($this->connection->getDatabasePlatform()));
+            $builder->setParameters($condition->getValues());
+        }
+
+        $definition = [
+            'totalResults' => $this->getCount($condition),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => 16,
+            'entry' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
+                'id' => 'id',
+                'message' => 'message',
+                'path' => 'path',
+                'date' => $this->dateTime('date'),
+            ]),
+        ];
+
+        return $this->build($definition);
+    }
+
 }
