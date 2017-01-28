@@ -50,7 +50,7 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/backend\/user\/:user_id",
+    "path": "\/backend\/user\/$user_id<[0-9]+>",
     "version": "*",
     "status": 1,
     "description": "",
@@ -213,11 +213,11 @@ class EntityTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/user\/:user_id"
+            "href": "\/export\/swagger\/*\/backend\/user\/$user_id<[0-9]+>"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/user\/:user_id"
+            "href": "\/export\/raml\/*\/backend\/user\/$user_id<[0-9]+>"
         }
     ]
 }

@@ -45,7 +45,7 @@ class IndexTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
     "routings": [
         {
@@ -59,7 +59,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/action\/:action_id",
+            "path": "\/backend\/action\/$action_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -69,7 +69,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/action\/execute\/:action_id",
+            "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -89,7 +89,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/app\/:app_id",
+            "path": "\/backend\/app\/$app_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -99,7 +99,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/app\/:app_id\/token\/:token_id",
+            "path": "\/backend\/app\/$app_id<[0-9]+>\/token\/:token_id",
             "methods": [
                 "GET",
                 "POST",
@@ -119,7 +119,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/config\/:config_id",
+            "path": "\/backend\/config\/$config_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -139,7 +139,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/connection\/:connection_id",
+            "path": "\/backend\/connection\/$connection_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -159,7 +159,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/log\/error\/:error_id",
+            "path": "\/backend\/log\/error\/$error_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -179,7 +179,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/log\/:log_id",
+            "path": "\/backend\/log\/$log_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -199,7 +199,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/rate\/:rate_id",
+            "path": "\/backend\/rate\/$rate_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -219,7 +219,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/routes\/:route_id",
+            "path": "\/backend\/routes\/$route_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -239,7 +239,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/schema\/:schema_id",
+            "path": "\/backend\/schema\/$schema_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -249,7 +249,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/schema\/preview\/:schema_id",
+            "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -269,7 +269,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/scope\/:scope_id",
+            "path": "\/backend\/scope\/$scope_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -289,7 +289,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/user\/:user_id",
+            "path": "\/backend\/user\/$user_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -319,7 +319,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/consumer\/app\/developer\/:app_id",
+            "path": "\/consumer\/app\/developer\/$app_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -339,7 +339,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/consumer\/app\/grant\/:grant_id",
+            "path": "\/consumer\/app\/grant\/$grant_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",

@@ -48,7 +48,7 @@ class PreviewTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/backend\/schema\/preview\/:schema_id",
+    "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
     "version": "*",
     "status": 1,
     "description": "",
@@ -80,11 +80,11 @@ class PreviewTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/schema\/preview\/:schema_id"
+            "href": "\/export\/swagger\/*\/backend\/schema\/preview\/$schema_id<[0-9]+>"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/schema\/preview\/:schema_id"
+            "href": "\/export\/raml\/*\/backend\/schema\/preview\/$schema_id<[0-9]+>"
         }
     ]
 }
