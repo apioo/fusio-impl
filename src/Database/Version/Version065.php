@@ -330,8 +330,9 @@ class Version065 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
-        $inserts = $this->getInstallInserts();
-        $routes  = $inserts['fusio_routes'];
+        $inserts  = $this->getInstallInserts();
+        $routes   = $inserts['fusio_routes'];
+        $routeIds = [];
 
         foreach ($routes as $data) {
             $id = $connection->fetchColumn('SELECT id FROM fusio_routes WHERE controller = :controller', [
@@ -345,6 +346,20 @@ class Version065 implements VersionInterface
                 ]);
             } else {
                 $connection->insert('fusio_routes', $data);
+
+                $routeIds[] = $connection->lastInsertId();
+            }
+        }
+
+        // insert new routes to the backend scope
+        if (!empty($routeIds)) {
+            foreach ($routeIds as $routeId) {
+                $connection->insert('fusio_scope_routes', [
+                    'scopeId' => 1,
+                    'routeId' => $routeId,
+                    'allow'   => 1,
+                    'methods' => 'GET|POST|PUT|DELETE',
+                ]);
             }
         }
     }
