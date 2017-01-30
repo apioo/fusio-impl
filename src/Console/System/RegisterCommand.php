@@ -33,6 +33,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -81,12 +82,16 @@ class RegisterCommand extends Command
         $this
             ->setName('system:register')
             ->setDescription('Register an adapter to the system')
-            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the adapter class (Acme\Fusio\Adapter)');
+            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the adapter class (Acme\Fusio\Adapter)')
+            ->addArgument('path', InputArgument::OPTIONAL, 'The base path under which new routes are inserted')
+            ->addOption('yes', 'y', InputOption::VALUE_NONE, 'Confirm automatically all questions with yes')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $class = $input->getArgument('class');
+        $path  = $input->getArgument('path');
 
         if (class_exists($class)) {
             $adapter = new $class();
@@ -129,43 +134,53 @@ class RegisterCommand extends Command
                     }
                 }
 
-                // show instructions
                 $output->writeLn('Loaded definition ' . $adapter->getDefinition());
-                $output->writeLn('');
-                $output->writeLn('The adapter will install the following entries into the system.');
-
-                $table = new Table($output);
-                $table
-                    ->setHeaders(['Type', 'Description'])
-                    ->setRows($rows);
-
-                $table->render($output);
 
                 // confirm
-                $question = new ConfirmationQuestion('Do you want to continue (y/n)? ', false);
+                $autoConfirm = $input->getOption('yes');
+                $confirmed   = $autoConfirm;
+                if (!$confirmed) {
+                    // show instructions
+                    $output->writeLn('');
+                    $output->writeLn('The adapter will install the following entries into the system.');
 
-                if ($helper->ask($input, $output, $question)) {
-                    // if the adapter installs new routes ask for a base path
-                    if ($hasRoutes) {
-                        $output->writeLn('');
-                        $output->writeLn('The adapter inserts new routes into the system.');
-                        $output->writeLn('Please specify a base path under which the new routes are inserted.');
+                    $table = new Table($output);
+                    $table
+                        ->setHeaders(['Type', 'Description'])
+                        ->setRows($rows);
 
-                        $filter   = new PathFilter();
-                        $question = new Question('Base path (i.e. /acme/service): ', '/');
-                        $question->setValidator(function ($answer) use ($filter) {
+                    $table->render($output);
 
-                            if (!$filter->apply($answer)) {
-                                throw new \RuntimeException(sprintf($filter->getErrorMessage(), 'Base path'));
-                            }
+                    $question  = new ConfirmationQuestion('Do you want to continue (y/n)? ', false);
+                    $confirmed = $helper->ask($input, $output, $question);
+                }
 
-                            return $answer;
+                if ($confirmed) {
+                    if (empty($path)) {
+                        // if the adapter installs new routes ask for a base path
+                        if ($hasRoutes && !$autoConfirm) {
+                            $output->writeLn('');
+                            $output->writeLn('The adapter inserts new routes into the system.');
+                            $output->writeLn('Please specify a base path under which the new routes are inserted.');
 
-                        });
+                            $filter   = new PathFilter();
+                            $question = new Question('Base path (i.e. /acme/service): ', '/');
+                            $question->setValidator(function ($answer) use ($filter) {
 
-                        $basePath = $helper->ask($input, $output, $question);
+                                if (!$filter->apply($answer)) {
+                                    throw new \RuntimeException(sprintf($filter->getErrorMessage(), 'Base path'));
+                                }
+
+                                return $answer;
+
+                            });
+
+                            $basePath = $helper->ask($input, $output, $question);
+                        } else {
+                            $basePath = null;
+                        }
                     } else {
-                        $basePath = null;
+                        $basePath = $path;
                     }
 
                     try {
