@@ -25,6 +25,7 @@ use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Exception\Converter;
 use PSX\Framework\Loader\Context;
 use PSX\Sql;
 use PSX\Sql\Condition;
@@ -52,12 +53,6 @@ class Execute extends SchemaApiAbstract
      * @var \Fusio\Impl\Service\Action\Executor
      */
     protected $actionExecutorService;
-
-    /**
-     * @Inject
-     * @var \PSX\Framework\Exception\ConverterInterface
-     */
-    protected $exceptionConverter;
 
     /**
      * @param integer $version
@@ -102,15 +97,17 @@ class Execute extends SchemaApiAbstract
             } else {
                 return array(
                     'statusCode' => 204,
-                    'headers'    => [],
-                    'body'       => [],
+                    'headers'    => new \stdClass(),
+                    'body'       => new \stdClass(),
                 );
             }
         } catch (\Exception $e) {
+            $exceptionConverter = new Converter(true);
+
             return array(
                 'statusCode' => 500,
-                'headers'    => [],
-                'body'       => $this->exceptionConverter->convert($e),
+                'headers'    => new \stdClass(),
+                'body'       => $exceptionConverter->convert($e),
             );
         }
     }
