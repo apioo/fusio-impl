@@ -184,7 +184,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * from the cache else resolve it
      *
      * @param integer $version
-     * @return null|Resource
+     * @return \PSX\Api\Resource|null
      */
     public function getDocumentation($version = null)
     {
