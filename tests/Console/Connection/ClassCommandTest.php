@@ -55,6 +55,7 @@ class ClassCommandTest extends ControllerDbTestCase
 +----------------+------------------------------------------+
 | Name           | Class                                    |
 +----------------+------------------------------------------+
+| HTTP           | Fusio\Adapter\Http\Connection\Http       |
 | SQL            | Fusio\Adapter\Sql\Connection\Sql         |
 | SQL (advanced) | Fusio\Adapter\Sql\Connection\SqlAdvanced |
 +----------------+------------------------------------------+
