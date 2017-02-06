@@ -71,7 +71,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
         ]);
 
-        $this->assertEquals(3, $connectionId);
+        $this->assertEquals(4, $connectionId);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -166,7 +166,7 @@ JSON;
             'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
         ]);
 
-        $this->assertEquals(3, $connectionId);
+        $this->assertEquals(4, $connectionId);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
