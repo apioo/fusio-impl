@@ -146,7 +146,7 @@ class Consumer
 
                 return $this->createToken($userId, $scopes);
             } else {
-                throw new StatusCode\BadRequestException('Could not request user informations');
+                throw new StatusCode\BadRequestException('Could not request user information');
             }
         } else {
             throw new StatusCode\BadRequestException('Not supported provider');
@@ -234,7 +234,7 @@ class Consumer
         );
 
         foreach ($values as $key => $value) {
-            $body = str_replace($key, $value, $body);
+            $body = str_replace('{' . $key . '}', $value, $body);
         }
 
         $this->mailer->send($subject, [$email], $body);
