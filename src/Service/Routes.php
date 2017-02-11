@@ -287,6 +287,11 @@ class Routes
                         // deploy method to active
                         $this->deploy->deploy($existingMethod);
                     } elseif ($existingMethod['status'] != $status) {
+                        // we can not transition directly from development to deprecated or closed
+                        if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && in_array($status, [Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
+                            throw new StatusCode\BadRequestException('A route can only transition from development to production');
+                        }
+
                         // change only the status if not in development
                         $this->routesMethodTable->update([
                             'id'     => $existingMethod['id'],
