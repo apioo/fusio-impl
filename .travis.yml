@@ -14,7 +14,7 @@ before_install:
 install:
   - composer install
 before_script:
-  - if [ $DB = 'mysql' ]; then mysql -e 'create database fusio;'; fi;
+  - then mysql -e 'create database fusio;';
 script:
   - vendor/bin/phpunit
 env:
