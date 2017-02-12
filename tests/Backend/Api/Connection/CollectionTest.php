@@ -230,8 +230,8 @@ JSON;
                 'type'     => 'pdo_mysql',
                 'host'     => '127.0.0.1',
                 'username' => 'root',
-                'password' => 'foo',
-                'database' => 'bar',
+                'password' => '',
+                'database' => 'fusio',
             ],
         ]));
 
