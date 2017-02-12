@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Form\Element;
@@ -184,12 +185,17 @@ class Connection
 
     protected function testConnection($class, array $config)
     {
-        // the connection should throw an exception if it is not possible to
-        // connect to the remote connection
-        $connection = $this->connectionFactory->factory($class)->getConnection(new Parameters($config));
+        $factory    = $this->connectionFactory->factory($class);
+        $connection = $factory->getConnection(new Parameters($config));
 
         if (!is_object($connection)) {
             throw new StatusCode\BadRequestException('Invalid connection');
+        }
+
+        if ($factory instanceof PingableInterface) {
+            if (!$factory->ping($connection)) {
+                throw new StatusCode\BadRequestException('Could not connect to remote service');
+            }
         }
     }
 
