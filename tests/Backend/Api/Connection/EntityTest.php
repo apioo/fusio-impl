@@ -222,11 +222,11 @@ JSON;
             'name'   => 'Foo',
             'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
             'config' => [
-                'type'     => 'pdo_sqlite',
-                'host'     => '192.168.2.1',
-                'username' => 'foo',
-                'password' => 'foo',
-                'database' => 'foo',
+                'type'     => 'pdo_mysql',
+                'host'     => '127.0.0.1',
+                'username' => 'root',
+                'password' => '',
+                'database' => 'fusio',
             ],
         ]));
 
