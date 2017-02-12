@@ -193,7 +193,13 @@ class Connection
         }
 
         if ($factory instanceof PingableInterface) {
-            if (!$factory->ping($connection)) {
+            try {
+                $ping = $factory->ping($connection);
+            } catch (\Exception $e) {
+                throw new StatusCode\BadRequestException($e->getMessage());
+            }
+
+            if (!$ping) {
                 throw new StatusCode\BadRequestException('Could not connect to remote service');
             }
         }
