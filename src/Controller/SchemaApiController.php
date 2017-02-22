@@ -219,7 +219,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     {
         if ($method->hasRequest()) {
             if ($method->getRequest()->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
-                return Transformer::toRecord($this->getBody());
+                return Transformer::toRecord($this->getBody() ?: new \stdClass());
             } else {
                 return $this->getBodyAs($method->getRequest());
             }
