@@ -40,6 +40,83 @@ class LoginTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/login', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/login",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "User": {
+                "type": "object",
+                "title": "user",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "Jwt": {
+                "type": "object",
+                "title": "jwt",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/User"
+            },
+            "POST-200-response": {
+                "$ref": "#\/definitions\/Jwt"
+            }
+        }
+    },
+    "methods": {
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "200": "#\/definitions\/POST-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/login"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/login"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'GET', array(

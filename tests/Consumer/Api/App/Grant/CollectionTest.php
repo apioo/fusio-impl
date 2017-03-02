@@ -39,6 +39,153 @@ class CollectionTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/app/grant', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/app\/grant",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Grant": {
+                "type": "object",
+                "title": "grant",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "app": {
+                        "$ref": "#\/definitions\/App"
+                    },
+                    "createDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "App": {
+                "type": "object",
+                "title": "app",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    },
+                    "appKey": {
+                        "type": "string"
+                    },
+                    "appSecret": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tokens": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Token"
+                        }
+                    }
+                }
+            },
+            "Token": {
+                "type": "object",
+                "title": "token",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "token": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "expire": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Collection": {
+                "type": "object",
+                "title": "collection",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Grant"
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Collection"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/app\/grant"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/app\/grant"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/app/grant', 'GET', array(

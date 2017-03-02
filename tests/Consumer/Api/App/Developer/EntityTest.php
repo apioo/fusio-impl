@@ -40,6 +40,158 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/app/developer/2', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/app\/developer\/$app_id<[0-9]+>",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Token": {
+                "type": "object",
+                "title": "token",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "token": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "expire": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "App": {
+                "type": "object",
+                "title": "app",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    },
+                    "appKey": {
+                        "type": "string"
+                    },
+                    "appSecret": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tokens": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Token"
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "url"
+                ]
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/App"
+            },
+            "PUT-request": {
+                "$ref": "#\/definitions\/App"
+            },
+            "PUT-200-response": {
+                "$ref": "#\/definitions\/Message"
+            },
+            "DELETE-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "PUT": {
+            "request": "#\/definitions\/PUT-request",
+            "responses": {
+                "200": "#\/definitions\/PUT-200-response"
+            }
+        },
+        "DELETE": {
+            "responses": {
+                "200": "#\/definitions\/DELETE-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/app\/developer\/$app_id<[0-9]+>"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/app\/developer\/$app_id<[0-9]+>"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/app/developer/2', 'GET', array(

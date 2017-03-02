@@ -40,6 +40,91 @@ class RegisterTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/register', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/register",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "User": {
+                "type": "object",
+                "title": "user",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "captcha": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ]
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/User"
+            },
+            "POST-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "200": "#\/definitions\/POST-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/register"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/register"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'GET', array(

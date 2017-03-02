@@ -39,6 +39,122 @@ class AuthorizeTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/authorize', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/authorize",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Request": {
+                "type": "object",
+                "title": "request",
+                "properties": {
+                    "responseType": {
+                        "type": "string"
+                    },
+                    "clientId": {
+                        "type": "string"
+                    },
+                    "redirectUri": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "allow": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "responseType",
+                    "clientId",
+                    "scope",
+                    "allow"
+                ]
+            },
+            "Token": {
+                "type": "object",
+                "title": "token",
+                "properties": {
+                    "access_token": {
+                        "type": "string"
+                    },
+                    "token_type": {
+                        "type": "string"
+                    },
+                    "expires_in": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Response": {
+                "type": "object",
+                "title": "response",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "$ref": "#\/definitions\/Token"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "redirectUri": {
+                        "type": "string"
+                    }
+                }
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Request"
+            },
+            "POST-200-response": {
+                "$ref": "#\/definitions\/Response"
+            }
+        }
+    },
+    "methods": {
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "200": "#\/definitions\/POST-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/authorize"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/authorize"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'GET', array(

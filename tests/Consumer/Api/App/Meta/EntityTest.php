@@ -39,6 +39,107 @@ class EntityTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/app/meta', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/consumer\/app\/meta",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Scope": {
+                "type": "object",
+                "title": "scope",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[A-z0-9\\-\\_]{3,64}"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "routes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Route"
+                        }
+                    }
+                }
+            },
+            "Route": {
+                "type": "object",
+                "title": "route",
+                "properties": {
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "allow": {
+                        "type": "boolean"
+                    },
+                    "methods": {
+                        "type": "string"
+                    }
+                }
+            },
+            "App": {
+                "type": "object",
+                "title": "app",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Scope"
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/App"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/consumer\/app\/meta"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/consumer\/app\/meta"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/app/meta?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', array(
