@@ -67,7 +67,7 @@ class Login extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $token = $this->consumerService->login($record->username, $record->password);
+        $token = $this->consumerService->login($record->username, $record->password, $record->scopes);
 
         if (!empty($token)) {
             return [

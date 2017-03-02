@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -37,6 +38,7 @@ class Login extends SchemaAbstract
         $sb = $this->getSchemaBuilder('user');
         $sb->string('username');
         $sb->string('password');
+        $sb->arrayType('scopes')->setItems(Property::getString());
 
         return $sb->getProperty();
     }

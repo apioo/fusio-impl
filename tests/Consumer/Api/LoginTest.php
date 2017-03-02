@@ -91,6 +91,47 @@ class LoginTest extends ControllerDbTestCase
         $this->assertNotEmpty($row['expire']);
     }
 
+    public function testPostWithScopes()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+        ), json_encode([
+            'username' => 'Consumer',
+            'password' => 'qf2vX10Ec3wFZHx0K1eL',
+            'scopes'   => ['foo', 'bar', 'baz', 'backend']
+        ]));
+
+        $body  = (string) $response->getBody();
+        $data  = json_decode($body);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+
+        $this->assertNotEmpty($token->sub);
+        $this->assertNotEmpty($token->iat);
+        $this->assertNotEmpty($token->exp);
+        $this->assertEquals('Consumer', $token->name);
+
+        // check database access token
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
+            ->from('fusio_app_token')
+            ->where('token = :token')
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
+
+        $this->assertEquals(2, $row['appId']);
+        $this->assertEquals(2, $row['userId']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertNotEmpty($row['token']);
+        $this->assertEquals($row['token'], $token->sub);
+        $this->assertEquals('foo,bar', $row['scope']);
+        $this->assertEquals('127.0.0.1', $row['ip']);
+        $this->assertNotEmpty($row['expire']);
+    }
+
     public function testPostInvalidCredentials()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(

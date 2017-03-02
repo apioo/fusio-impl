@@ -82,11 +82,17 @@ class Consumer
         $this->psxConfig  = $psxConfig;
     }
 
-    public function login($name, $password)
+    public function login($name, $password, array $scopes = null)
     {
         $userId = $this->user->authenticateUser($name, $password, [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
         if ($userId > 0) {
-            return $this->createToken($userId, $this->user->getAvailableScopes($userId));
+            if (empty($scopes)) {
+                $scopes = $this->user->getAvailableScopes($userId);
+            } else {
+                $scopes = $this->user->getValidScopes($userId, $scopes);
+            }
+
+            return $this->createToken($userId, $scopes);
         }
 
         return null;
