@@ -39,6 +39,94 @@ class ChangePasswordTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/account/change_password', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/account\/change_password",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Credentials": {
+                "type": "object",
+                "title": "credentials",
+                "properties": {
+                    "oldPassword": {
+                        "type": "string",
+                        "minLength": 8,
+                        "maxLength": 128
+                    },
+                    "newPassword": {
+                        "type": "string",
+                        "minLength": 8,
+                        "maxLength": 128
+                    },
+                    "verifyPassword": {
+                        "type": "string",
+                        "minLength": 8,
+                        "maxLength": 128
+                    }
+                },
+                "required": [
+                    "oldPassword",
+                    "newPassword",
+                    "verifyPassword"
+                ]
+            },
+            "Message": {
+                "type": "object",
+                "title": "message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PUT-request": {
+                "$ref": "#\/definitions\/Credentials"
+            },
+            "PUT-200-response": {
+                "$ref": "#\/definitions\/Message"
+            }
+        }
+    },
+    "methods": {
+        "PUT": {
+            "request": "#\/definitions\/PUT-request",
+            "responses": {
+                "200": "#\/definitions\/PUT-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/account\/change_password"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/account\/change_password"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'GET', array(
