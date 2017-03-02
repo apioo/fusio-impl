@@ -23,6 +23,7 @@ namespace Fusio\Impl\Authorization;
 
 use Closure;
 use Doctrine\DBAL\Connection;
+use Firebase\JWT\JWT;
 use Fusio\Impl\Table\App\Token as AppToken;
 use PSX\Framework\Filter\Oauth2Authentication;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
@@ -54,14 +55,14 @@ class Oauth2Filter extends Oauth2Authentication
     /**
      * @var string
      */
-    protected $tokenSecret;
+    protected $projectKey;
 
     /**
      * @var Closure
      */
     protected $appCallback;
 
-    public function __construct(Connection $connection, $requestMethod, $routeId, Closure $appCallback)
+    public function __construct(Connection $connection, $requestMethod, $routeId, $projectKey, Closure $appCallback)
     {
         parent::__construct(function ($token) {
             return $this->isValidToken($token);
@@ -70,22 +71,30 @@ class Oauth2Filter extends Oauth2Authentication
         $this->connection    = $connection;
         $this->requestMethod = $requestMethod;
         $this->routeId       = $routeId;
+        $this->projectKey    = $projectKey;
         $this->appCallback   = $appCallback;
     }
 
     protected function isValidToken($token)
     {
+        // if a user sends a JWT which was obtained through the consumer login
+        // we extract the access token
+        if (strpos($token, '.') !== false) {
+            $jwt   = JWT::decode($token, $this->projectKey, ['HS256']);
+            $token = isset($jwt->sub) ? $jwt->sub : null;
+        }
+
         $now = new \DateTime();
         $sql = 'SELECT appToken.appId,
-				       appToken.userId,
-				       appToken.token,
-				       appToken.scope,
-				       appToken.expire,
-				       appToken.date
-				  FROM fusio_app_token appToken
-				 WHERE appToken.token = :token
-				   AND appToken.status = :status
-				   AND (appToken.expire IS NULL OR appToken.expire > :now)';
+                       appToken.userId,
+                       appToken.token,
+                       appToken.scope,
+                       appToken.expire,
+                       appToken.date
+                  FROM fusio_app_token appToken
+                 WHERE appToken.token = :token
+                   AND appToken.status = :status
+                   AND (appToken.expire IS NULL OR appToken.expire > :now)';
 
         $accessToken = $this->connection->fetchAssoc($sql, array(
             'token'  => $token,
@@ -99,12 +108,12 @@ class Oauth2Filter extends Oauth2Authentication
 
             // get all scopes which are assigned to this route
             $sql = '    SELECT scope.name,
-					           scopeRoutes.allow,
-					           scopeRoutes.methods
-					      FROM fusio_scope_routes scopeRoutes
-					INNER JOIN fusio_scope scope
-					        ON scope.id = scopeRoutes.scopeId
-					     WHERE scopeRoutes.routeId = :route';
+                               scopeRoutes.allow,
+                               scopeRoutes.methods
+                          FROM fusio_scope_routes scopeRoutes
+                    INNER JOIN fusio_scope scope
+                            ON scope.id = scopeRoutes.scopeId
+                         WHERE scopeRoutes.routeId = :route';
 
             $availableScopes = $this->connection->fetchAll($sql, array('route' => $this->routeId));
 

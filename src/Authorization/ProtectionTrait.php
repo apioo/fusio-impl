@@ -57,12 +57,16 @@ trait ProtectionTrait
         $filter = array();
 
         $filter[] = new UserAgentEnforcer();
-        $filter[] = new Oauth2Filter($this->connection, $this->request->getMethod(), $this->context->get('fusio.routeId'), function ($accessToken) {
-
-            $this->appId  = $accessToken['appId'];
-            $this->userId = $accessToken['userId'];
-
-        });
+        $filter[] = new Oauth2Filter(
+            $this->connection,
+            $this->request->getMethod(),
+            $this->context->get('fusio.routeId'),
+            $this->config->get('fusio_project_key'),
+            function ($accessToken) {
+                $this->appId  = $accessToken['appId'];
+                $this->userId = $accessToken['userId'];
+            }
+        );
 
         return $filter;
     }
