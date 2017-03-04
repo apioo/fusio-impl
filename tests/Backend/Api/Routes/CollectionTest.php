@@ -210,24 +210,26 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
+        $id1    = Fixture::getLastRouteId();
+        $id2    = Fixture::getLastRouteId() + 1;
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 65,
+            "id": {$id2},
             "status": 1,
             "path": "\/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController"
         },
         {
-            "id": 64,
+            "id": {$id1},
             "status": 1,
             "path": "\/",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+            "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController"
         }
     ]
 }
@@ -287,7 +289,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(66, $row['id']);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
         $this->assertEquals('/bar', $row['path']);

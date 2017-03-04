@@ -124,7 +124,7 @@ JSON;
             'path' => '/import/void',
         ]);
 
-        $this->assertEquals(66, $route['id']);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -135,7 +135,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => 66, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
     }
 
     public function testCommandAutoConfirm()
@@ -219,7 +219,7 @@ JSON;
             'path' => '/import/void',
         ]);
 
-        $this->assertEquals(66, $route['id']);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -230,7 +230,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => 66, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 1, 'action' => 4], $methods[0]);
     }
 
     protected function getInputStream($input)

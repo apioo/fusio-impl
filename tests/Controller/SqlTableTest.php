@@ -97,7 +97,7 @@ JSON;
 
         foreach ($statuuus as $status) {
             // update the route status
-            $response = $this->sendRequest('http://127.0.0.1/backend/routes/65', 'PUT', array(
+            $response = $this->sendRequest('http://127.0.0.1/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([
@@ -251,7 +251,7 @@ JSON;
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
         $response = null;
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
