@@ -438,6 +438,7 @@ class Version071 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_routes',          'controller' => Backend\Api\Statistic\MostUsedRoutes::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/most_used_apps',            'controller' => Backend\Api\Statistic\MostUsedApps::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/errors_per_route',          'controller' => Backend\Api\Statistic\ErrorsPerRoute::class],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/issued_tokens',             'controller' => Backend\Api\Statistic\IssuedTokens::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/account/change_password',             'controller' => Backend\Api\Account\ChangePassword::class],
                 ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/process',                      'controller' => Backend\Api\Import\Process::class],
                 ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/:format',                      'controller' => Backend\Api\Import\Format::class],
@@ -472,7 +473,7 @@ class Version071 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                            'controller' => SchemaApiController::class],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 64, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+                ['routeId' => 65, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -518,11 +519,11 @@ class Version071 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 37, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 40, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 41, 'allow' => 1, 'methods' => 'POST'],
 
-                ['scopeId' => 2, 'routeId' => 42, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 43, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 44, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 45, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -536,9 +537,10 @@ class Version071 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 53, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 54, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 55, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 56, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 56, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 58, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 57, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 59, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

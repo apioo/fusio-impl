@@ -28,13 +28,13 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * ErrorsPerRouteTest
+ * IssuedTokensTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ErrorsPerRouteTest extends ControllerDbTestCase
+class IssuedTokensTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -43,7 +43,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/statistic/errors_per_route?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/statistic/issued_tokens?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -110,7 +110,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
             0,
             0,
             0,
-            1,
+            5,
             0,
             0,
             0,
@@ -119,7 +119,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/backend\/action"
+        "Tokens"
     ]
 }
 JSON;

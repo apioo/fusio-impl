@@ -43,31 +43,88 @@ class MostUsedAppsTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/statistic/most_used_apps', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/statistic/most_used_apps?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $labels = [];
-        $data   = [];
-        $period = new DatePeriod(new DateTime('-1 month'), new DateInterval('P1D'), new DateTime('+1 day'));
-
-        foreach ($period as $key => $date) {
-            $labels[] = $date->format('Y-m-d');
-            $data[]   = 0;
-        }
-
-        $data[count($data) - 1] = 2;
-
-        $expect = [
-            'labels' => $labels,
-            'data'   => [$data],
-            'series' => ['Foo-App'],
-        ];
-
         $body = (string) $response->getBody();
 
+        $expect = <<<JSON
+{
+    "labels": [
+        "2015-06-01",
+        "2015-06-02",
+        "2015-06-03",
+        "2015-06-04",
+        "2015-06-05",
+        "2015-06-06",
+        "2015-06-07",
+        "2015-06-08",
+        "2015-06-09",
+        "2015-06-10",
+        "2015-06-11",
+        "2015-06-12",
+        "2015-06-13",
+        "2015-06-14",
+        "2015-06-15",
+        "2015-06-16",
+        "2015-06-17",
+        "2015-06-18",
+        "2015-06-19",
+        "2015-06-20",
+        "2015-06-21",
+        "2015-06-22",
+        "2015-06-23",
+        "2015-06-24",
+        "2015-06-25",
+        "2015-06-26",
+        "2015-06-27",
+        "2015-06-28",
+        "2015-06-29",
+        "2015-06-30"
+    ],
+    "data": [
+        [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    ],
+    "series": [
+        "Foo-App"
+    ]
+}
+JSON;
+
         $this->assertEquals(null, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString(json_encode($expect), $body, $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

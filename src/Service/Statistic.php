@@ -22,11 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Impl\Service\Log\QueryFilter;
-use PSX\DateTime;
+use Fusio\Impl\Service\App;
+use Fusio\Impl\Service\Log;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
-use PSX\Sql\Condition;
 
 /**
  * Statistic
@@ -44,7 +42,7 @@ class Statistic
         $this->connection = $connection;
     }
 
-    public function getErrorsPerRoute(QueryFilter $filter)
+    public function getErrorsPerRoute(Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -130,7 +128,7 @@ class Statistic
         );
     }
 
-    public function getIncomingRequests(QueryFilter $filter)
+    public function getIncomingRequests(Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -169,7 +167,7 @@ class Statistic
         );
     }
 
-    public function getMostUsedApps(QueryFilter $filter)
+    public function getMostUsedApps(Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -251,7 +249,7 @@ class Statistic
         );
     }
 
-    public function getMostUsedRoutes(QueryFilter $filter)
+    public function getMostUsedRoutes(Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -330,6 +328,45 @@ class Statistic
             'labels' => $labels,
             'data'   => array_values($values),
             'series' => array_values($series),
+        );
+    }
+
+    public function getIssuedTokens(App\Token\QueryFilter $filter)
+    {
+        $condition  = $filter->getCondition('token');
+        $expression = $condition->getExpression($this->connection->getDatabasePlatform());
+
+        // build data structure
+        $fromDate = $filter->getFrom();
+        $toDate   = $filter->getTo();
+        $diff     = $toDate->getTimestamp() - $fromDate->getTimestamp();
+        $data     = [];
+        $labels   = [];
+
+        while ($fromDate <= $toDate) {
+            $data[$fromDate->format('Y-m-d')] = 0;
+            $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
+
+            $fromDate->add(new \DateInterval('P1D'));
+        }
+
+        // fill values
+        $sql = '  SELECT COUNT(token.id) AS count,
+                         DATE(token.date) AS date
+                    FROM fusio_app_token token
+                   WHERE ' . $expression . '
+                GROUP BY DATE(token.date)';
+
+        $result = $this->connection->fetchAll($sql, $condition->getValues());
+
+        foreach ($result as $row) {
+            $data[$row['date']] = (int) $row['count'];
+        }
+
+        return array(
+            'labels' => $labels,
+            'data'   => [array_values($data)],
+            'series' => ['Tokens'],
         );
     }
 }
