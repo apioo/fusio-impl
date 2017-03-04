@@ -147,7 +147,6 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}/m', '[datetime]', $body);
 
         $expect = <<<JSON
 {
@@ -160,7 +159,7 @@ JSON;
     "path": "\/bar",
     "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
     "body": "foobar",
-    "date": "[datetime]T00:00:00Z",
+    "date": "2015-06-25T22:49:09Z",
     "errors": [
         {
             "message": "Syntax error, malformed JSON",
