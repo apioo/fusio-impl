@@ -121,6 +121,16 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\App\Code
+     */
+    public function getAppTokenService()
+    {
+        return new Service\App\Token(
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\App\Developer
      */
     public function getAppDeveloperService()

@@ -218,13 +218,13 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 63,
+            "id": 65,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 62,
+            "id": 64,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -287,7 +287,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(64, $row['id']);
+        $this->assertEquals(66, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
         $this->assertEquals('/bar', $row['path']);

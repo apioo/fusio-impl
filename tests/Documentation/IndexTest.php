@@ -59,6 +59,16 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/action\/$action_id<[0-9]+>",
             "methods": [
                 "GET",
@@ -69,7 +79,17 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
+            "path": "\/backend\/app\/token",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -239,7 +259,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/schema\/$schema_id<[0-9]+>",
+            "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
@@ -249,7 +269,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+            "path": "\/backend\/schema\/$schema_id<[0-9]+>",
             "methods": [
                 "GET",
                 "POST",
