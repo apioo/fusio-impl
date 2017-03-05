@@ -359,6 +359,9 @@ class User
             throw new StatusCode\BadRequestException('New password does not match the verify password');
         }
 
+        // assert password complexity
+        $this->assertPassword($newPassword);
+
         // change password
         $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
