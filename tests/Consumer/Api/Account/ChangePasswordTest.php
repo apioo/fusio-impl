@@ -150,8 +150,8 @@ JSON;
             'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
-            'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL',
-            'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL',
+            'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL!',
+            'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL!',
         ]));
 
         $body   = (string) $response->getBody();
@@ -173,7 +173,7 @@ JSON;
             ->getSQL();
         $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 2]);
 
-        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL', $row['password']));
+        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL!', $row['password']));
     }
 
     public function testDelete()
