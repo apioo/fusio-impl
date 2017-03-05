@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Service\Log;
+namespace Fusio\Impl\Tests\Service\App\Token;
 
-use Fusio\Impl\Service\Log\QueryFilter;
+use Fusio\Impl\Service\App\Token\QueryFilter;
 
 /**
  * QueryFilterTest
@@ -37,44 +37,32 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
         $filter = QueryFilter::create([
             'from'      => '2015-08-20',
             'to'        => '2015-08-30',
-            'routeId'   => 1,
             'appId'     => 1,
             'userId'    => 1,
+            'status'    => 1,
+            'scope'     => 'foo',
             'ip'        => '127.0.0.1',
-            'userAgent' => 'Foo-App',
-            'method'    => 'POST',
-            'path'      => '/foo',
-            'header'    => 'text/xml',
-            'body'      => '<foo />',
         ]);
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getRouteId());
         $this->assertEquals(1, $filter->getAppId());
         $this->assertEquals(1, $filter->getUserId());
+        $this->assertEquals(1, $filter->getStatus());
+        $this->assertEquals('foo', $filter->getScope());
         $this->assertEquals('127.0.0.1', $filter->getIp());
-        $this->assertEquals('Foo-App', $filter->getUserAgent());
-        $this->assertEquals('POST', $filter->getMethod());
-        $this->assertEquals('/foo', $filter->getPath());
-        $this->assertEquals('text/xml', $filter->getHeader());
-        $this->assertEquals('<foo />', $filter->getBody());
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (date >= ? AND date <= ? AND routeId = ? AND appId = ? AND userId = ? AND ip LIKE ? AND userAgent LIKE ? AND method = ? AND path LIKE ? AND header LIKE ? AND body LIKE ?)', $condition->getStatment());
+        $this->assertEquals('WHERE (date >= ? AND date <= ? AND appId = ? AND userId = ? AND status = ? AND scope LIKE ? AND ip LIKE ?)', $condition->getStatment());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
             1,
             1,
             1,
+            '%foo%',
             '127.0.0.1',
-            '%Foo-App%',
-            'POST',
-            '/foo%',
-            '%text/xml%',
-            '%<foo />%',
         ], $condition->getValues());
     }
 
@@ -109,39 +97,12 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('93.223.172.206', $filter->getIp());
     }
 
-    public function testCreateSearchPath()
+    public function testCreateSearchScope()
     {
         $filter = QueryFilter::create([
-            'search' => '/foo/bar'
+            'search' => 'foo'
         ]);
 
-        $this->assertEquals('/foo/bar', $filter->getPath());
-    }
-
-    public function testCreateSearchMethod()
-    {
-        $filter = QueryFilter::create([
-            'search' => 'GET'
-        ]);
-
-        $this->assertEquals('GET', $filter->getMethod());
-    }
-
-    public function testCreateSearchHeader()
-    {
-        $filter = QueryFilter::create([
-            'search' => 'User-Agent: Foo'
-        ]);
-
-        $this->assertEquals('User-Agent: Foo', $filter->getHeader());
-    }
-
-    public function testCreateSearchBody()
-    {
-        $filter = QueryFilter::create([
-            'search' => '{"foo": "bar"}'
-        ]);
-
-        $this->assertEquals('{"foo": "bar"}', $filter->getBody());
+        $this->assertEquals('foo', $filter->getScope());
     }
 }
