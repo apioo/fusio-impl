@@ -45,12 +45,17 @@ class QueryFilter
     /**
      * @var integer
      */
+    protected $routeId;
+
+    /**
+     * @var integer
+     */
     protected $appId;
 
     /**
      * @var integer
      */
-    protected $routeId;
+    protected $userId;
 
     /**
      * @var string
@@ -92,14 +97,19 @@ class QueryFilter
         return $this->to;
     }
 
+    public function getRouteId()
+    {
+        return $this->routeId;
+    }
+
     public function getAppId()
     {
         return $this->appId;
     }
 
-    public function getRouteId()
+    public function getUserId()
     {
-        return $this->routeId;
+        return $this->userId;
     }
 
     public function getIp()
@@ -139,12 +149,16 @@ class QueryFilter
         $condition->greaterThen($alias . 'date', $this->from->format('Y-m-d 00:00:00'));
         $condition->lowerThen($alias . 'date', $this->to->format('Y-m-d 23:59:59'));
 
+        if (!empty($this->routeId)) {
+            $condition->equals($alias . 'routeId', $this->routeId);
+        }
+
         if (!empty($this->appId)) {
             $condition->equals($alias . 'appId', $this->appId);
         }
 
-        if (!empty($this->routeId)) {
-            $condition->equals($alias . 'routeId', $this->routeId);
+        if (!empty($this->userId)) {
+            $condition->equals($alias . 'userId', $this->userId);
         }
 
         if (!empty($this->ip)) {
@@ -178,8 +192,9 @@ class QueryFilter
     {
         $from      = isset($parameters['from']) ? $parameters['from'] : '-1 month';
         $to        = isset($parameters['to']) ? $parameters['to'] : 'now';
-        $appId     = isset($parameters['appId']) ? $parameters['appId'] : null;
         $routeId   = isset($parameters['routeId']) ? $parameters['routeId'] : null;
+        $appId     = isset($parameters['appId']) ? $parameters['appId'] : null;
+        $userId    = isset($parameters['userId']) ? $parameters['userId'] : null;
         $ip        = isset($parameters['ip']) ? $parameters['ip'] : null;
         $userAgent = isset($parameters['userAgent']) ? $parameters['userAgent'] : null;
         $method    = isset($parameters['method']) ? $parameters['method'] : null;
@@ -226,8 +241,9 @@ class QueryFilter
         $filter = new self();
         $filter->from      = $from;
         $filter->to        = $to;
-        $filter->appId     = $appId;
         $filter->routeId   = $routeId;
+        $filter->appId     = $appId;
+        $filter->userId    = $userId;
         $filter->ip        = $ip;
         $filter->userAgent = $userAgent;
         $filter->method    = $method;

@@ -60,12 +60,12 @@ class QueryFilter
     /**
      * @var string
      */
-    protected $ip;
+    protected $scope;
 
     /**
      * @var string
      */
-    protected $scope;
+    protected $ip;
 
     public function getFrom()
     {
@@ -92,14 +92,14 @@ class QueryFilter
         return $this->status;
     }
 
-    public function getIp()
-    {
-        return $this->ip;
-    }
-
     public function getScope()
     {
         return $this->scope;
+    }
+
+    public function getIp()
+    {
+        return $this->ip;
     }
 
     public function getCondition($alias = null)
@@ -121,12 +121,12 @@ class QueryFilter
             $condition->equals($alias . 'status', $this->status);
         }
 
-        if (!empty($this->ip)) {
-            $condition->like($alias . 'ip', $this->ip);
-        }
-
         if (!empty($this->scope)) {
             $condition->like($alias . 'scope', '%' . $this->scope . '%');
+        }
+
+        if (!empty($this->ip)) {
+            $condition->like($alias . 'ip', $this->ip);
         }
 
         return $condition;
@@ -139,8 +139,9 @@ class QueryFilter
         $appId  = isset($parameters['appId']) ? $parameters['appId'] : null;
         $userId = isset($parameters['userId']) ? $parameters['userId'] : null;
         $status = isset($parameters['status']) ? $parameters['status'] : null;
-        $ip     = isset($parameters['ip']) ? $parameters['ip'] : null;
         $scope  = isset($parameters['scope']) ? $parameters['scope'] : null;
+        $ip     = isset($parameters['ip']) ? $parameters['ip'] : null;
+        $search = isset($parameters['search']) ? $parameters['search'] : null;
 
         $from = new \DateTime($from);
         $to   = new \DateTime($to);
@@ -158,14 +159,27 @@ class QueryFilter
             $to->add(new \DateInterval('P2M'));
         }
 
+        // parse search if available
+        if (!empty($search)) {
+            $parts = explode(',', $search);
+            foreach ($parts as $part) {
+                $part = trim($part);
+                if (filter_var($part, FILTER_VALIDATE_IP) !== false) {
+                    $ip = $part;
+                } else {
+                    $scope = $part;
+                }
+            }
+        }
+
         $filter = new self();
         $filter->from   = $from;
         $filter->to     = $to;
         $filter->appId  = $appId;
         $filter->userId = $userId;
         $filter->status = $status;
-        $filter->ip     = $ip;
         $filter->scope  = $scope;
+        $filter->ip     = $ip;
 
         return $filter;
     }
