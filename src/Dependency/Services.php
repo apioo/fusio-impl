@@ -126,7 +126,9 @@ trait Services
     public function getAppTokenService()
     {
         return new Service\App\Token(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token')
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
+            $this->get('table_manager')->getTable('Fusio\Impl\Table\User')
         );
     }
 
@@ -231,7 +233,7 @@ trait Services
     }
 
     /**
-     * @return \Fusio\Impl\Service\System\Import
+     * @return \Fusio\Impl\Service\System\ApiExecutor
      */
     public function getSystemApiExecutorService()
     {
@@ -267,6 +269,16 @@ trait Services
             $this->get('action_parser'),
             $this->get('connection_parser'),
             $this->get('logger')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\System\Deploy
+     */
+    public function getSystemDeployService()
+    {
+        return new Service\System\Deploy(
+            $this->get('system_import_service')
         );
     }
 

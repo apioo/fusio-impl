@@ -161,6 +161,7 @@ class Container extends DefaultContainer
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
         $application->add(new Console\Schema\ListCommand($this->get('schema_service')));
 
+        $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\InstallCommand($this->get('connection')));

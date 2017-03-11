@@ -1,0 +1,43 @@
+connection:
+  New-Connection:
+    class: Fusio\Adapter\Sql\Connection\Sql
+    config:
+      type: pdo_mysql
+      host: 127.0.0.1
+      username: root
+      database: fusio
+schema:
+  Request-Schema: >
+    {
+      "id": "http:\/\/phpsx.org#",
+      "title": "test",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  Response-Schema: !include schema.json
+action:
+  Test-Action:
+    class: Fusio\Adapter\Util\Action\UtilStaticResponse
+    config:
+      response: '{"foo": "bar"}'
+routes:
+  /bar:
+    version: 1
+    status: 4
+    methods:
+      GET:
+        public: true
+        request: Request-Schema
+        response: Response-Schema
+        action: Test-Action

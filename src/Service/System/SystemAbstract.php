@@ -103,19 +103,19 @@ abstract class SystemAbstract
     protected function transform($type, stdClass $entity)
     {
         switch ($type) {
-            case 'connection':
+            case self::TYPE_CONNECTION:
                 return $this->transformConnection($entity);
                 break;
 
-            case 'schema':
+            case self::TYPE_SCHEMA:
                 return $this->transformSchema($entity);
                 break;
 
-            case 'action':
+            case self::TYPE_ACTION:
                 return $this->transformAction($entity);
                 break;
 
-            case 'routes':
+            case self::TYPE_ROUTES:
                 return $this->transformRoutes($entity);
                 break;
 

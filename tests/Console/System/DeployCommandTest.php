@@ -28,13 +28,13 @@ use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * ImportCommandTest
+ * DeployCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ImportCommandTest extends ControllerDbTestCase
+class DeployCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -43,17 +43,17 @@ class ImportCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('system:import');
+        $command = Environment::getService('console')->find('system:deploy');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'file'    => __DIR__ . '/resource/import.json',
+            'file'    => __DIR__ . '/resource/deploy.yaml',
         ]);
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Import successful!/', $display, $display);
+        $this->assertRegExp('/Deploy successful!/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -66,7 +66,7 @@ class ImportCommandTest extends ControllerDbTestCase
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
-            'name' => 'New-Schema',
+            'name' => 'Request-Schema',
         ]);
 
         $source = <<<JSON
@@ -90,6 +90,34 @@ class ImportCommandTest extends ControllerDbTestCase
 JSON;
 
         $this->assertEquals(3, $schema['id']);
+        $this->assertJsonStringEqualsJsonString($source, $schema['source']);
+        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+            'name' => 'Response-Schema',
+        ]);
+
+        $source = <<<JSON
+{
+    "id": "http://phpsx.org#",
+    "title": "test",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "content": {
+            "type": "string"
+        },
+        "date": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}
+JSON;
+
+        $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 
@@ -118,7 +146,7 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
+        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 4, 'action' => 4], $methods[0]);
     }
 }
 

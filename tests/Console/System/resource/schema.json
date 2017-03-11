@@ -1,0 +1,17 @@
+{
+  "id": "http:\/\/phpsx.org#",
+  "title": "test",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
