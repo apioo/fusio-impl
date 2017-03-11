@@ -48,11 +48,11 @@ class Mailer implements MailerInterface
      */
     protected $mailer;
 
-    public function __construct(Config $config, LoggerInterface $logger, \Swift_Transport $transport = null)
+    public function __construct(Config $config, LoggerInterface $logger, \Swift_Transport $transport)
     {
         $this->config = $config;
         $this->logger = $logger;
-        $this->mailer = \Swift_Mailer::newInstance($transport !== null ? $transport : \Swift_MailTransport::newInstance());
+        $this->mailer = $transport;
     }
 
     public function send($subject, array $to, $body)

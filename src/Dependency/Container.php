@@ -21,30 +21,16 @@
 
 namespace Fusio\Impl\Dependency;
 
-use Fusio\Engine\Connector;
-use Fusio\Engine\Processor;
-use Fusio\Engine\Response;
-use Fusio\Engine\Template;
-use Fusio\Impl\App;
 use Fusio\Impl\Base;
-use Fusio\Impl\Connector\DatabaseRepository as ConnectorDatabaseRepository;
 use Fusio\Impl\Console;
-use Fusio\Impl\Data\SchemaManager;
-use Fusio\Impl\Factory;
-use Fusio\Impl\Form;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
 use Fusio\Impl\Mail\Mailer;
-use Fusio\Impl\Parser;
-use Fusio\Impl\Processor\DatabaseRepository as ProcessorDatabaseRepository;
-use Fusio\Impl\Schema;
-use Fusio\Impl\User;
-use Fusio\Impl\Validate;
+use Fusio\Impl\Mail\TransportFactory;
 use Monolog\Handler as LogHandler;
 use PSX\Api\Console\ApiCommand;
-use PSX\Data\Exporter\Popo;
 use PSX\Framework\Api\CachedListing;
 use PSX\Framework\Console as PSXCommand;
 use PSX\Framework\Dependency\DefaultContainer;
@@ -112,16 +98,10 @@ class Container extends DefaultContainer
      */
     public function getMailer()
     {
-        if ($this->get('config')->get('psx_debug') === false) {
-            $transport = \Swift_MailTransport::newInstance();
-        } else {
-            $transport = \Swift_NullTransport::newInstance();
-        }
-
         return new Mailer(
             $this->get('config_service'),
             $this->get('logger'),
-            $transport
+            TransportFactory::createTransport($this->get('config'))
         );
     }
 
