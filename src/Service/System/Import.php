@@ -72,21 +72,27 @@ class Import extends SystemAbstract
 
     protected function importType($type, stdClass $data)
     {
-        $path     = $type;
-        $response = $this->doRequest('POST', $path, $this->transform($type, $data));
+        $path = $type;
+        $key  = $type == self::TYPE_ROUTES ? 'path' : 'name';
+        $name = $data->{$key};
+        $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE ' . $key . ' = :' . $key, [
+            $key => $name
+        ]);
 
-        if ($type == 'routes') {
-            $title = $data->path;
+        if (!empty($id)) {
+            $response = $this->doRequest('PUT', $path . '/' . $id, $this->transform($type, $data));
         } else {
-            $title = $data->name;
+            $response = $this->doRequest('POST', $path, $this->transform($type, $data));
         }
 
         if (isset($response->success) && $response->success === false) {
             $this->logger->error($response->message);
 
-            return '[SKIPPED] ' . $type . ' ' . $title;
+            return '[SKIPPED] ' . $type . ' ' . $name;
+        } elseif (!empty($id)) {
+            return '[UPDATED] ' . $type . ' ' . $name;
         } else {
-            return '[CREATED] ' . $type . ' ' . $title;
+            return '[CREATED] ' . $type . ' ' . $name;
         }
     }
 
