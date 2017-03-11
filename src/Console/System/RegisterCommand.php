@@ -191,22 +191,27 @@ class RegisterCommand extends Command
                         $this->connection->commit();
 
                         $output->writeln('Registration successful');
+                        return 0;
                     } catch (\Exception $e) {
                         $this->connection->rollback();
 
-                        $output->writeln('An exception occured during installation of the adapter. No changes are applied to the database.');
+                        $output->writeln('An exception occurred during installation of the adapter. No changes are applied to the database.');
                         $output->writeln('');
                         $output->writeln('Message: ' . $e->getMessage());
                         $output->writeln('Trace: ' . $e->getTraceAsString());
+                        return 1;
                     }
                 } else {
                     $output->writeln('Abort');
+                    return 1;
                 }
             } else {
                 $output->writeln('Class does not implement the AdapterInterface');
+                return 1;
             }
         } else {
             $output->writeln('Provided adapter class does not exist');
+            return 1;
         }
     }
 }

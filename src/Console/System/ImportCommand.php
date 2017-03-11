@@ -98,17 +98,23 @@ class ImportCommand extends Command
             foreach ($result as $message) {
                 $output->writeln('- ' . $message);
             }
+
+            $return = 0;
         } catch (\Exception $e) {
             $this->connection->rollback();
 
-            $output->writeln('An exception occured during import. No changes are applied to the database.');
+            $output->writeln('An exception occurred during import. No changes are applied to the database.');
             $output->writeln('');
             $output->writeln('Message: ' . $e->getMessage());
             $output->writeln('Trace: ' . $e->getTraceAsString());
+
+            $return = 1;
         }
 
         if (!$verbose) {
             $this->logger->popHandler();
         }
+
+        return $return;
     }
 }
