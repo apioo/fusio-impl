@@ -35,13 +35,24 @@ use stdClass;
  */
 class Installer
 {
+    /**
+     * @var \Fusio\Impl\Service\System\Import
+     */
     protected $importService;
 
+    /**
+     * @param \Fusio\Impl\Service\System\Import $importService
+     */
     public function __construct(Service\System\Import $importService)
     {
         $this->importService = $importService;
     }
 
+    /**
+     * @param array $instructions
+     * @param string|null $basePath
+     * @return array
+     */
     public function install(array $instructions, $basePath = null)
     {
         $data = new stdClass();
