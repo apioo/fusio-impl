@@ -42,7 +42,7 @@ class AddCommand extends Command
     protected $apiExecutor;
 
     /**
-     * @param \Fusio\Impl\Service\System\ApiExecutor $executor
+     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
      */
     public function __construct(Service\System\ApiExecutor $apiExecutor)
     {

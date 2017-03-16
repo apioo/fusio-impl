@@ -80,6 +80,7 @@ class ApiExecutor
      * @param string $method
      * @param string $path
      * @param array|null $body
+     * @param boolean $verbose
      * @return mixed
      */
     public function request($method, $path, $body = null, $verbose = false)

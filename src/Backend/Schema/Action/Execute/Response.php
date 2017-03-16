@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Backend\Schema\Action\Execute;
 
 use PSX\Schema\Property;
-use PSX\Schema\Property\StringType;
 use PSX\Schema\SchemaAbstract;
 
 /**

@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Table\App;
 
 use DateTime;
-use Fusio\Impl\Service\App\Token\QueryFilter;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;

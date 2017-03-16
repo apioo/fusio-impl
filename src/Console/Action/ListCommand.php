@@ -44,7 +44,7 @@ class ListCommand extends Command
     protected $actionView;
 
     /**
-     * @param \Fusio\Impl\Service\Action $actionView
+     * @param \Fusio\Impl\Backend\View\Action $actionView
      */
     public function __construct(View\Action $actionView)
     {

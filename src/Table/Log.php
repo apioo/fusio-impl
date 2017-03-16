@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Service\Log\QueryFilter;
 use PSX\Sql\TableAbstract;
 
 /**
