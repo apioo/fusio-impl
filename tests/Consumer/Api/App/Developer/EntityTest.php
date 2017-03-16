@@ -58,32 +58,6 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Token": {
-                "type": "object",
-                "title": "token",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "token": {
-                        "type": "string"
-                    },
-                    "scope": {
-                        "type": "string"
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "expire": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
             "App": {
                 "type": "object",
                 "title": "app",
@@ -101,9 +75,6 @@ class EntityTest extends ControllerDbTestCase
                     "url": {
                         "type": "string"
                     },
-                    "parameters": {
-                        "type": "string"
-                    },
                     "appKey": {
                         "type": "string"
                     },
@@ -118,12 +89,6 @@ class EntityTest extends ControllerDbTestCase
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
-                    },
-                    "tokens": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Token"
                         }
                     }
                 },

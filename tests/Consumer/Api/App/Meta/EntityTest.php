@@ -69,27 +69,6 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "description": {
                         "type": "string"
-                    },
-                    "routes": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Route"
-                        }
-                    }
-                }
-            },
-            "Route": {
-                "type": "object",
-                "title": "route",
-                "properties": {
-                    "routeId": {
-                        "type": "integer"
-                    },
-                    "allow": {
-                        "type": "boolean"
-                    },
-                    "methods": {
-                        "type": "string"
                     }
                 }
             },
