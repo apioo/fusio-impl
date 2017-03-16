@@ -69,55 +69,6 @@ class Schema
         $this->schemaParser      = $schemaParser;
     }
 
-    public function getAll($startIndex = 0, $search = null, $routeId = null)
-    {
-        $condition = new Condition();
-        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        if (!empty($routeId)) {
-            $sql = 'SELECT schemaId
-                      FROM fusio_routes_schema
-                     WHERE routeId = ?';
-
-            $condition->raw('id IN (' . $sql . ')', [$routeId]);
-        }
-
-        return new ResultSet(
-            $this->schemaTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->schemaTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['propertyName', 'source', 'cache'])
-            )
-        );
-    }
-
-    public function get($schemaId)
-    {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (!empty($schema)) {
-            if ($schema['status'] == Table\Schema::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Schema was deleted');
-            }
-
-            unset($schema['cache']);
-
-            return $schema;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find schema');
-        }
-    }
-
     public function create($name, $source)
     {
         if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $name)) {

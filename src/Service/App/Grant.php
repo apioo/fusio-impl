@@ -57,11 +57,6 @@ class Grant
         $this->appTokenTable  = $appTokenTable;
     }
 
-    public function getAll($userId)
-    {
-        return $this->appTable->getAuthorizedApps($userId);
-    }
-
     public function delete($userId, $grantId)
     {
         $grant = $this->userGrantTable->get($grantId);

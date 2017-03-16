@@ -80,26 +80,6 @@ class Routes
         $this->listing           = $listing;
     }
 
-    public function getAll($startIndex = 0, $search = null)
-    {
-        return $this->routesTable->getRoutes($startIndex, $search);
-    }
-
-    public function get($routeId)
-    {
-        $route = $this->routesTable->getRoute($routeId);
-
-        if (!empty($route)) {
-            if ($route['status'] == Table\Routes::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Route was deleted');
-            }
-
-            return $route;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find route');
-        }
-    }
-
     public function create($path, $config)
     {
         // check whether route exists

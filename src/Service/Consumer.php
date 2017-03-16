@@ -24,8 +24,8 @@ namespace Fusio\Impl\Service;
 use DateInterval;
 use Firebase\JWT\JWT;
 use Fusio\Impl\Mail\MailerInterface;
-use Fusio\Impl\Service\Consumer\Model\User as ModelUser;
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\Model\User as ModelUser;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config as PSXConfig;
 use PSX\Http;
@@ -45,12 +45,12 @@ class Consumer
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $user;
+    protected $userService;
 
     /**
      * @var \Fusio\Impl\Service\App
      */
-    protected $app;
+    protected $appService;
 
     /**
      * @var \Fusio\Impl\Service\Config
@@ -72,24 +72,24 @@ class Consumer
      */
     protected $psxConfig;
 
-    public function __construct(User $user, App $app, Config $config, Http\Client $httpClient, MailerInterface $mailer, PSXConfig $psxConfig)
+    public function __construct(User $userService, App $appService, Config $config, Http\Client $httpClient, MailerInterface $mailer, PSXConfig $psxConfig)
     {
-        $this->user       = $user;
-        $this->app        = $app;
-        $this->config     = $config;
-        $this->httpClient = $httpClient;
-        $this->mailer     = $mailer;
-        $this->psxConfig  = $psxConfig;
+        $this->userService = $userService;
+        $this->appService  = $appService;
+        $this->config      = $config;
+        $this->httpClient  = $httpClient;
+        $this->mailer      = $mailer;
+        $this->psxConfig   = $psxConfig;
     }
 
     public function login($name, $password, array $scopes = null)
     {
-        $userId = $this->user->authenticateUser($name, $password, [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
+        $userId = $this->userService->authenticateUser($name, $password, [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
         if ($userId > 0) {
             if (empty($scopes)) {
-                $scopes = $this->user->getAvailableScopes($userId);
+                $scopes = $this->userService->getAvailableScopes($userId);
             } else {
-                $scopes = $this->user->getValidScopes($userId, $scopes);
+                $scopes = $this->userService->getValidScopes($userId, $scopes);
             }
 
             return $this->createToken($userId, $scopes);
@@ -107,7 +107,7 @@ class Consumer
         }
 
         $scopes = $this->getDefaultScopes();
-        $userId = $this->user->create(
+        $userId = $this->userService->create(
             Table\User::STATUS_DISABLED,
             $name,
             $email,
@@ -126,7 +126,7 @@ class Consumer
         $expires = isset($payload->exp) ? $payload->exp : null;
 
         if (time() < $expires) {
-            $this->user->changeStatus($userId, Table\User::STATUS_CONSUMER);
+            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER);
         } else {
             throw new StatusCode\BadRequestException('Token is expired');
         }
@@ -142,7 +142,7 @@ class Consumer
 
             if ($user instanceof ModelUser) {
                 $scopes = $this->getDefaultScopes();
-                $userId = $this->user->createRemote(
+                $userId = $this->userService->createRemote(
                     $provider->getId(),
                     $user->getId(),
                     $user->getName(),
@@ -165,7 +165,7 @@ class Consumer
         // define this id
         $appId = 2;
 
-        $token = $this->app->generateAccessToken(
+        $token = $this->appService->generateAccessToken(
             $appId,
             $userId,
             $scopes,
@@ -173,7 +173,7 @@ class Consumer
             new DateInterval($this->psxConfig->get('fusio_expire_consumer'))
         );
 
-        $user = $this->user->get($userId);
+        $user = $this->userService->get($userId);
 
         $payload = [
             'sub'  => $token->getAccessToken(),

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
@@ -68,50 +68,6 @@ class User
         $this->scopeTable     = $scopeTable;
         $this->appTable       = $appTable;
         $this->userScopeTable = $userScopeTable;
-    }
-
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-        $condition->notEquals('status', Table\User::STATUS_DELETED);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->userTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->userTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['password'])
-            )
-        );
-    }
-
-    public function getDetail($userId)
-    {
-        $user = $this->get($userId);
-        $user['scopes'] = $this->userTable->getScopeNames($user['id']);
-        $user['apps']   = $this->appTable->getByUserId($user['id'], Fields::blacklist(['userId', 'parameters', 'appSecret']));
-
-        return $user;
-    }
-
-    public function get($userId)
-    {
-        $user = $this->userTable->get($userId, Fields::blacklist(['password']));
-
-        if (!empty($user)) {
-            return $user;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find user');
-        }
     }
 
     /**
@@ -374,18 +330,18 @@ class User
 
     public function getValidScopes($userId, array $scopes, array $exclude = array())
     {
-        return $this->userScopeTable->getValidScopes($userId, $scopes, $exclude);
+        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes, $exclude));
     }
 
     public function getAvailableScopes($userId)
     {
-        return $this->userScopeTable->getAvailableScopes($userId);
+        return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
     }
 
     protected function insertScopes($userId, $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
-            $scopes = $this->scopeTable->getByNames($scopes);
+            $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
                 $this->userScopeTable->create(array(

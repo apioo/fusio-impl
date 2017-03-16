@@ -73,44 +73,6 @@ class Developer
         $this->appApproval    = $appApproval;
     }
 
-    public function getAll($userId, $startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-        $condition->equals('userId', $userId);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->appTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->appTable->getAll($startIndex, 16, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret']))
-        );
-    }
-
-    public function get($userId, $appId)
-    {
-        $app = $this->appTable->get($appId);
-
-        if (!empty($app)) {
-            if ($app['userId'] != $userId) {
-                throw new StatusCode\BadRequestException('App does not belong to the user');
-            }
-
-            $app = $this->appService->get($appId);
-
-            // remove parameters
-            $app['parameters'] = null;
-
-            return $app;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find app');
-        }
-    }
-
     public function create($userId, $name, $url, array $scopes = null)
     {
         // validate data
@@ -193,35 +155,32 @@ class Developer
             return [];
         }
 
-        $userScopes = $this->userScopeTable->getByUserId($userId);
-        $scopes     = $this->scopeTable->getByNames($scopes);
+        $userScopes = $this->userScopeTable->getAvailableScopes($userId);
+        $scopes     = $this->scopeTable->getValidScopes($scopes);
 
         // check that the user can assign only the scopes which are also
         // assigned to the user account
         $scopes = array_filter($scopes, function ($scope) use ($userScopes) {
-
             foreach ($userScopes as $userScope) {
-                if ($userScope['scopeId'] == $scope['id']) {
+                if ($userScope['id'] == $scope['id']) {
                     return true;
                 }
             }
-
             return false;
-
         });
 
         return array_map(function ($scope) {
             return $scope['name'];
         }, $scopes);
     }
-    
+
     protected function assertName($name)
     {
         if (empty($name)) {
             throw new StatusCode\BadRequestException('Invalid name');
         }
     }
-    
+
     protected function assertUrl($url)
     {
         if (!empty($url)) {

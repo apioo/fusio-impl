@@ -61,53 +61,6 @@ class Action
         $this->routesMethodTable = $routesMethodTable;
     }
 
-    public function getAll($startIndex = 0, $search = null, $routeId = null)
-    {
-        $condition = new Condition();
-        $condition->equals('status', Table\Action::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        if (!empty($routeId)) {
-            $sql = 'SELECT actionId
-                      FROM fusio_routes_action
-                     WHERE routeId = ?';
-
-            $condition->raw('id IN (' . $sql . ')', [$routeId]);
-        }
-
-        return new ResultSet(
-            $this->actionTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->actionTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['class', 'config'])
-            )
-        );
-    }
-
-    public function get($actionId)
-    {
-        $action = $this->actionTable->get($actionId);
-
-        if (!empty($action)) {
-            if ($action['status'] == Table\Action::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Action was deleted');
-            }
-
-            return $action;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find action');
-        }
-    }
-
     public function create($name, $class, $config)
     {
         // check whether action exists

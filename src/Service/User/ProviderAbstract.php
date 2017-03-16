@@ -19,36 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Consumer;
+namespace Fusio\Impl\Service\User;
+
+use PSX\Http\Client;
 
 /**
- * ProviderInterface
+ * ProviderAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface ProviderInterface
+abstract class ProviderAbstract implements ProviderInterface
 {
-    const PROVIDER_SYSTEM   = 0x1;
-    const PROVIDER_FACEBOOK = 0x2;
-    const PROVIDER_GOOGLE   = 0x3;
-    const PROVIDER_GITHUB   = 0x4;
+    /**
+     * @var \PSX\Http\Client
+     */
+    protected $httpClient;
 
     /**
-     * Returns an id to identify the provider
-     *
-     * @return integer
+     * @var string
      */
-    public function getId();
+    protected $secret;
 
     /**
-     * Requests user informations of an remote provider
-     *
-     * @param string $code
-     * @param string $clientId
-     * @param string $redirectUri
-     * @return \Fusio\Impl\Service\Consumer\Model\User
+     * @var string
      */
-    public function requestUser($code, $clientId, $redirectUri);
+    protected $ua = 'Fusio-Consumer (http://www.fusio-project.org/)';
+
+    public function __construct(Client $httpClient, $secret)
+    {
+        $this->httpClient = $httpClient;
+        $this->secret     = $secret;
+    }
+
+    abstract public function requestUser($code, $clientId, $redirectUri);
 }

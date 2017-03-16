@@ -64,47 +64,6 @@ class Scope
         $this->userScopeTable  = $userScopeTable;
     }
 
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = !empty($search) ? new Condition(['name', 'LIKE', '%' . $search . '%']) : null;
-
-        return new ResultSet(
-            $this->scopeTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->scopeTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition
-            )
-        );
-    }
-
-    public function getByUser($userId, $startIndex = 0)
-    {
-        return new ResultSet(
-            null,
-            null,
-            null,
-            $this->userScopeTable->getByUser($userId)
-        );
-    }
-
-    public function get($scopeId)
-    {
-        $scope = $this->scopeTable->get($scopeId);
-
-        if (!empty($scope)) {
-            $scope['routes'] = $this->scopeRouteTable->getByScopeId($scope['id']);
-
-            return $scope;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find scope');
-        }
-    }
-
     public function create($name, $description, array $routes = null)
     {
         // check whether scope exists
@@ -217,7 +176,7 @@ class Scope
 
     /**
      * Returns all scope names which are valid for the app and the user. The
-     * scopes are a comma seperated list. All scopes which are listed in the
+     * scopes are a comma separated list. All scopes which are listed in the
      * $exclude array are excluded
      *
      * @param integer $appId
@@ -229,8 +188,8 @@ class Scope
     public function getValidScopes($appId, $userId, $scopes, array $exclude = array())
     {
         $scopes = explode(',', $scopes);
-        $scopes = $this->appScopeTable->getValidScopes($appId, $scopes, $exclude);
-        $scopes = $this->userScopeTable->getValidScopes($userId, $scopes, $exclude);
+        $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes, $exclude));
+        $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes, $exclude));
 
         return $scopes;
     }

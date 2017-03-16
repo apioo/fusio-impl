@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Consumer\Model;
+namespace Fusio\Impl\Service\User\Model;
 
 /**
  * User model which contains all informations from the remote user

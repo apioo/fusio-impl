@@ -46,39 +46,6 @@ class Config
         $this->configTable = $configTable;
     }
 
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->configTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->configTable->getAll(
-                $startIndex,
-                16,
-                'name',
-                Sql::SORT_ASC,
-                $condition
-            )
-        );
-    }
-
-    public function get($configId)
-    {
-        $config = $this->configTable->get($configId);
-
-        if (!empty($config)) {
-            return $config;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find config');
-        }
-    }
-
     public function update($configId, $value)
     {
         $config = $this->configTable->get($configId);

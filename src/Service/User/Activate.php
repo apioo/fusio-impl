@@ -19,39 +19,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Consumer;
+namespace Fusio\Impl\Service\User;
 
-use PSX\Http\Client;
+use Firebase\JWT\JWT;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
+use PSX\Framework\Config\Config;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * ProviderAbstract
+ * Activate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class ProviderAbstract implements ProviderInterface
+class Activate
 {
     /**
-     * @var \PSX\Http\Client
+     * @var \Fusio\Impl\Service\User
      */
-    protected $httpClient;
+    protected $userService;
 
     /**
-     * @var string
+     * @var \PSX\Framework\Config\Config
      */
-    protected $secret;
+    protected $config;
 
-    /**
-     * @var string
-     */
-    protected $ua = 'Fusio-Consumer (http://www.fusio-project.org/)';
-
-    public function __construct(Client $httpClient, $secret)
+    public function __construct(Service\User $userService, Config $config)
     {
-        $this->httpClient = $httpClient;
-        $this->secret     = $secret;
+        $this->userService = $userService;
+        $this->config      = $config;
     }
 
-    abstract public function requestUser($code, $clientId, $redirectUri);
+    public function activate($token)
+    {
+        $payload = JWT::decode($token, $this->config->get('fusio_project_key'), ['HS256']);
+        $userId  = isset($payload->sub) ? $payload->sub : null;
+        $expires = isset($payload->exp) ? $payload->exp : null;
+
+        if (time() < $expires) {
+            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER);
+        } else {
+            throw new StatusCode\BadRequestException('Token is expired');
+        }
+    }
 }

@@ -75,65 +75,6 @@ class App
         $this->tokenSecret    = $tokenSecret;
     }
 
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->appTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->appTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['url', 'parameters', 'appSecret'])
-            )
-        );
-    }
-
-    public function get($appId)
-    {
-        $app = $this->appTable->get($appId);
-
-        if (!empty($app)) {
-            if ($app['status'] == Table\App::STATUS_DELETED) {
-                throw new StatusCode\GoneException('App was deleted');
-            }
-
-            $app['scopes'] = $this->scopeTable->getByApp($app['id']);
-            $app['tokens'] = $this->appTokenTable->getTokensByApp($app['id']);
-
-            return $app;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find app');
-        }
-    }
-
-    public function getPublic($appKey, $scope)
-    {
-        $condition = new Condition();
-        $condition->equals('appKey', $appKey);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->getOneBy($condition, Fields::blacklist(['userId', 'status', 'parameters', 'appKey', 'appSecret', 'date']));
-
-        if (!empty($app)) {
-            $app['scopes'] = $this->appScopeTable->getByApp($app['id'], $scope, ['backend']);
-
-            return $app;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find app');
-        }
-    }
-
     public function getByAppKey($appKey)
     {
         $condition = new Condition();
@@ -316,7 +257,7 @@ class App
     public function insertScopes($appId, $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
-            $scopes = $this->scopeTable->getByNames($scopes);
+            $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
                 $this->appScopeTable->create(array(

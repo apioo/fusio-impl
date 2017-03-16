@@ -47,76 +47,14 @@ class Connection
     const CIPHER_METHOD = 'AES-128-CBC';
 
     protected $connectionTable;
-    protected $connectionParser;
     protected $connectionFactory;
     protected $secretKey;
 
-    public function __construct(Table\Connection $connectionTable, ParserInterface $connectionParser, Factory\Connection $connectionFactory, $secretKey)
+    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey)
     {
         $this->connectionTable   = $connectionTable;
-        $this->connectionParser  = $connectionParser;
         $this->connectionFactory = $connectionFactory;
         $this->secretKey         = $secretKey;
-    }
-
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->connectionTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->connectionTable->getAll(
-                $startIndex,
-                16,
-                'id',
-                Sql::SORT_DESC,
-                $condition,
-                Fields::blacklist(['class', 'config'])
-            )
-        );
-    }
-
-    public function get($connectionId)
-    {
-        $connection = $this->connectionTable->get($connectionId);
-
-        if (!empty($connection)) {
-            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Connection was deleted');
-            }
-
-            $config = self::decryptConfig($connection['config'], $this->secretKey);
-
-            // remove all password fields from the config
-            if (!empty($config) && is_array($config)) {
-                $form = $this->connectionParser->getForm($connection['class']);
-                if ($form instanceof Container) {
-                    $elements = $form->getElements();
-                    foreach ($elements as $element) {
-                        if ($element instanceof Element\Input && $element['type'] == 'password') {
-                            if (isset($config[$element['name']])) {
-                                unset($config[$element['name']]);
-                            }
-                        }
-                    }
-                }
-            } else {
-                $config = new \stdClass();
-            }
-
-            $connection['config'] = $config;
-
-            return $connection;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find connection');
-        }
     }
 
     public function create($name, $class, $config)

@@ -64,46 +64,6 @@ class Rate
         $this->logTable = $logTable;
     }
 
-    public function getAll($startIndex = 0, $search = null)
-    {
-        $condition = new Condition();
-        $condition->in('status', [Table\Rate::STATUS_ACTIVE]);
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
-        return new ResultSet(
-            $this->rateTable->getCount($condition),
-            $startIndex,
-            16,
-            $this->rateTable->getAll(
-                $startIndex,
-                16,
-                'priority',
-                Sql::SORT_DESC,
-                $condition
-            )
-        );
-    }
-
-    public function get($rateId)
-    {
-        $rate = $this->rateTable->get($rateId);
-
-        if (!empty($rate)) {
-            if ($rate['status'] == Table\Rate::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Rate was deleted');
-            }
-
-            $rate['allocation'] = $this->rateAllocationTable->getByRateId($rate['id']);
-
-            return $rate;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find rate');
-        }
-    }
-
     public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
     {
         // check whether rate exists
@@ -198,7 +158,7 @@ class Rate
      */
     public function hasExceeded($ip, $routeId, Model\App $app)
     {
-        $rate = $this->rateTable->getRateForRequest($routeId, $app);
+        $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
 
         if (empty($rate)) {
             return false;

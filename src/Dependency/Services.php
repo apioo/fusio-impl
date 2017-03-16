@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Dependency;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 
 /**
  * Service
@@ -38,10 +39,10 @@ trait Services
     public function getUserService()
     {
         return new Service\User(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User\Scope')
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\User\Scope::class)
         );
     }
 
@@ -51,9 +52,9 @@ trait Services
     public function getRoutesService()
     {
         return new Service\Routes(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope\Route'),
+            $this->get('table_manager')->getTable(Table\Routes::class),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Scope\Route::class),
             $this->get('routes_deploy_service'),
             $this->get('routes_relation_service'),
             $this->get('resource_listing')
@@ -66,7 +67,7 @@ trait Services
     public function getRoutesMethodService()
     {
         return new Service\Routes\Method(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('schema_loader')
         );
     }
@@ -77,9 +78,9 @@ trait Services
     public function getActionService()
     {
         return new Service\Action(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method')
+            $this->get('table_manager')->getTable(Table\Action::class),
+            $this->get('table_manager')->getTable(Table\Routes\Action::class),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class)
         );
     }
 
@@ -89,7 +90,7 @@ trait Services
     public function getActionExecutorService()
     {
         return new Service\Action\Executor(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
+            $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('processor'),
             $this->get('app_repository'),
             $this->get('user_repository')
@@ -102,10 +103,10 @@ trait Services
     public function getAppService()
     {
         return new Service\App(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token'),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\App\Scope::class),
+            $this->get('table_manager')->getTable(Table\App\Token::class),
             $this->get('config')->get('fusio_project_key')
         );
     }
@@ -116,19 +117,7 @@ trait Services
     public function getAppCodeService()
     {
         return new Service\App\Code(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Code')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\App\Code
-     */
-    public function getAppTokenService()
-    {
-        return new Service\App\Token(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User')
+            $this->get('table_manager')->getTable(Table\App\Code::class)
         );
     }
 
@@ -139,9 +128,9 @@ trait Services
     {
         return new Service\App\Developer(
             $this->get('app_service'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User\Scope'),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('config')->get('fusio_app_per_consumer'),
             $this->get('config')->get('fusio_app_approval')
         );
@@ -153,9 +142,9 @@ trait Services
     public function getAppGrantService()
     {
         return new Service\App\Grant(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User\Grant'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Token')
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\User\Grant::class),
+            $this->get('table_manager')->getTable(Table\App\Token::class)
         );
     }
 
@@ -165,7 +154,7 @@ trait Services
     public function getConfigService()
     {
         return new Service\Config(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Config')
+            $this->get('table_manager')->getTable(Table\Config::class)
         );
     }
 
@@ -175,60 +164,9 @@ trait Services
     public function getConnectionService()
     {
         return new Service\Connection(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Connection'),
-            $this->get('connection_parser'),
+            $this->get('table_manager')->getTable(Table\Connection::class),
             $this->get('connection_factory'),
             $this->get('config')->get('fusio_project_key')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Database
-     */
-    public function getDatabaseService()
-    {
-        return new Service\Database(
-            $this->get('connector')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Dashboard
-     */
-    public function getDashboardService()
-    {
-        return new Service\Dashboard(
-            $this->get('connection')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Log
-     */
-    public function getLogService()
-    {
-        return new Service\Log(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Log')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Log\Error
-     */
-    public function getLogErrorService()
-    {
-        return new Service\Log\Error(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Log\Error')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Statistic
-     */
-    public function getStatisticService()
-    {
-        return new Service\Statistic(
-            $this->get('connection')
         );
     }
 
@@ -288,9 +226,9 @@ trait Services
     public function getSchemaService()
     {
         return new Service\Schema(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Schema'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Schema'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
+            $this->get('table_manager')->getTable(Table\Schema::class),
+            $this->get('table_manager')->getTable(Table\Routes\Schema::class),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('schema_parser')
         );
     }
@@ -301,10 +239,10 @@ trait Services
     public function getScopeService()
     {
         return new Service\Scope(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Scope\Route'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\App\Scope'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\User\Scope')
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\Scope\Route::class),
+            $this->get('table_manager')->getTable(Table\App\Scope::class),
+            $this->get('table_manager')->getTable(Table\User\Scope::class)
         );
     }
 
@@ -314,10 +252,10 @@ trait Services
     public function getRoutesRelationService()
     {
         return new Service\Routes\Relation(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Schema'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Action'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Routes\Schema::class),
+            $this->get('table_manager')->getTable(Table\Routes\Action::class),
+            $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('action_parser')
         );
     }
@@ -328,25 +266,10 @@ trait Services
     public function getRoutesDeployService()
     {
         return new Service\Routes\Deploy(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Routes\Method'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Schema'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Action'),
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Schema::class),
+            $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('action_parser')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Consumer
-     */
-    public function getConsumerService()
-    {
-        return new Service\Consumer(
-            $this->get('user_service'),
-            $this->get('app_service'),
-            $this->get('config_service'),
-            $this->get('http_client'),
-            $this->get('mailer'),
-            $this->get('config')
         );
     }
 
@@ -356,9 +279,85 @@ trait Services
     public function getRateService()
     {
         return new Service\Rate(
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Rate\Allocation'),
-            $this->get('table_manager')->getTable('Fusio\Impl\Table\Log')
+            $this->get('table_manager')->getTable(Table\Rate::class),
+            $this->get('table_manager')->getTable(Table\Rate\Allocation::class),
+            $this->get('table_manager')->getTable(Table\Log::class)
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\Activate
+     */
+    public function getUserActivateService()
+    {
+        return new Service\User\Activate(
+            $this->get('user_service'),
+            $this->get('config')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\TokenIssuer
+     */
+    public function getUserTokenIssuerService()
+    {
+        return new Service\User\TokenIssuer(
+            $this->get('app_service'),
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('config')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\Login
+     */
+    public function getUserLoginService()
+    {
+        return new Service\User\Login(
+            $this->get('user_service'),
+            $this->get('user_token_issuer_service')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\Provider
+     */
+    public function getUserProviderService()
+    {
+        return new Service\User\Provider(
+            $this->get('user_service'),
+            $this->get('config_service'),
+            $this->get('user_token_issuer_service'),
+            $this->get('http_client'),
+            $this->get('config')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\Register
+     */
+    public function getUserRegisterService()
+    {
+        return new Service\User\Register(
+            $this->get('user_service'),
+            $this->get('config_service'),
+            $this->get('http_client'),
+            $this->get('mailer'),
+            $this->get('config')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\Authorize
+     */
+    public function getUserAuthorizeService()
+    {
+        return new Service\User\Authorize(
+            $this->get('app_service'),
+            $this->get('scope_service'),
+            $this->get('app_code_service'),
+            $this->get('table_manager')->getTable(Table\User\Grant::class),
+            $this->get('config')
         );
     }
 }

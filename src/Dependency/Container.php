@@ -26,6 +26,7 @@ use Fusio\Impl\Console;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
+use Fusio\Impl\Backend\View;
 use Fusio\Impl\Logger;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
@@ -127,30 +128,30 @@ class Container extends DefaultContainer
         $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
         $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
-        $application->add(new Console\Action\ListCommand($this->get('action_service')));
+        $application->add(new Console\Action\ListCommand($this->get('table_manager')->getTable(View\Action::class)));
 
         $application->add(new Console\App\AddCommand($this->get('system_api_executor_service')));
-        $application->add(new Console\App\ListCommand($this->get('app_service')));
+        $application->add(new Console\App\ListCommand($this->get('table_manager')->getTable(View\App::class)));
 
         $application->add(new Console\Connection\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Connection\ClassCommand($this->get('connection_parser')));
         $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
-        $application->add(new Console\Connection\ListCommand($this->get('connection_service')));
+        $application->add(new Console\Connection\ListCommand($this->get('table_manager')->getTable(View\Connection::class)));
 
         $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
-        $application->add(new Console\Schema\ListCommand($this->get('schema_service')));
+        $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
 
         $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\InstallCommand($this->get('connection')));
-        $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('connection_service'), $this->get('connection')));
+        $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), $this->get('table_manager')->getTable('Fusio\Impl\Table\User')));
         $application->add(new Console\System\CheckCommand($this->get('connection')));
 
         $application->add(new Console\User\AddCommand($this->get('user_service')));
-        $application->add(new Console\User\ListCommand($this->get('user_service')));
+        $application->add(new Console\User\ListCommand($this->get('table_manager')->getTable(View\User::class)));
 
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
