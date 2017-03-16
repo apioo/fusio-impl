@@ -534,7 +534,7 @@ JSON;
         $timeRange  = [$expireTime - 1, $expireTime];
 
         if (!$timestamps) {
-            $timeRange = array_map(function($value) {
+            $timeRange = array_map(function ($value) {
                 return date('Y-m-d H:i:s', $value);
             }, $timeRange);
         }

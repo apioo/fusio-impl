@@ -121,4 +121,3 @@ JSON;
         $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
     }
 }
-

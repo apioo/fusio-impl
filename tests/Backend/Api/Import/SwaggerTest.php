@@ -538,7 +538,6 @@ JSON;
   ]
 }
 JSON;
-
     }
 
     protected function getCase02Expect()
@@ -1315,7 +1314,6 @@ JSON;
     }
 }
 JSON;
-
     }
 
     protected function getCase03Expect()

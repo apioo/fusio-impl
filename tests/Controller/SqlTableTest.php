@@ -89,9 +89,9 @@ JSON;
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
         $statuuus = [
-            Resource::STATUS_DEVELOPMENT, 
-            Resource::STATUS_ACTIVE, 
-            Resource::STATUS_DEPRECATED, 
+            Resource::STATUS_DEVELOPMENT,
+            Resource::STATUS_ACTIVE,
+            Resource::STATUS_DEPRECATED,
             Resource::STATUS_CLOSED,
         ];
 

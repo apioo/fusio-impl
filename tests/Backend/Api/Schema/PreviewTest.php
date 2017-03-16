@@ -148,5 +148,4 @@ JSON;
 
         $this->assertEquals(405, $response->getStatusCode(), $body);
     }
-
 }

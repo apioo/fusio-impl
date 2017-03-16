@@ -54,13 +54,13 @@ class TransportFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateTransportSmtp()
     {
         $config = new Config([
-            'psx_debug'    => false, 
+            'psx_debug'    => false,
             'fusio_mailer' => [
-                'transport'  => 'smtp', 
-                'host'       => 'email-smtp.us-east-1.amazonaws.com', 
-                'port'       => 587, 
-                'encryption' => 'tls', 
-                'username'   => 'my-username', 
+                'transport'  => 'smtp',
+                'host'       => 'email-smtp.us-east-1.amazonaws.com',
+                'port'       => 587,
+                'encryption' => 'tls',
+                'username'   => 'my-username',
                 'password'   => 'my-password'
             ]
         ]);

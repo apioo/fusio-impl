@@ -73,7 +73,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($expect, $args);
 
                 return true;
-
             }));
 
         $connection->expects($this->once())
