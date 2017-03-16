@@ -19,13 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service;
+namespace Fusio\Impl\Backend\View;
 
-use Doctrine\DBAL\Connection as DBALConnection;
-use PSX\DateTime;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
-use PSX\Sql\Condition;
+use PSX\Sql\ViewAbstract;
 
 /**
  * Dashboard
@@ -34,35 +30,43 @@ use PSX\Sql\Condition;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Dashboard
+class Dashboard extends ViewAbstract
 {
-    protected $connection;
-
-    public function __construct(DBALConnection $connection)
-    {
-        $this->connection = $connection;
-    }
-
     public function getLatestApps()
     {
-        $sql = '  SELECT name,
-                         date
-                    FROM fusio_app
-                ORDER BY date DESC
+        $sql = '  SELECT app.name,
+                         app.date
+                    FROM fusio_app app
+                ORDER BY app.date DESC
                    LIMIT 6';
 
-        return $this->connection->fetchAll($sql);
+        $definition = [
+            'entry' => $this->doCollection($sql, [], [
+                'name' => 'name',
+                'date' => $this->fieldDateTime('date'),
+            ]),
+        ];
+
+        return $this->build($definition);
     }
 
     public function getLatestRequests()
     {
-        $sql = '  SELECT path,
-                         ip,
-                         date
-                    FROM fusio_log
-                ORDER BY date DESC
+        $sql = '  SELECT log.path,
+                         log.ip,
+                         log.date
+                    FROM fusio_log log
+                ORDER BY log.date DESC
                    LIMIT 6';
 
-        return $this->connection->fetchAll($sql);
+        $definition = [
+            'entry' => $this->doCollection($sql, [], [
+                'path' => 'path',
+                'ip'   => 'ip',
+                'date' => $this->fieldDateTime('date'),
+            ]),
+        ];
+
+        return $this->build($definition);
     }
 }

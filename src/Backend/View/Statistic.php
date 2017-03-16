@@ -19,12 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service;
+namespace Fusio\Impl\Backend\View;
 
-use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Impl\Service\App;
-use Fusio\Impl\Service\Log;
-use PSX\Http\Exception as StatusCode;
+use PSX\Sql\ViewAbstract;
 
 /**
  * Statistic
@@ -33,15 +30,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Statistic
+class Statistic extends ViewAbstract
 {
-    protected $connection;
-
-    public function __construct(DBALConnection $connection)
-    {
-        $this->connection = $connection;
-    }
-
     public function getErrorsPerRoute(Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');

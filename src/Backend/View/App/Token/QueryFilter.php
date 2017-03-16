@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\App\Token;
+namespace Fusio\Impl\Backend\View\App\Token;
 
 use PSX\Sql\Condition;
 
