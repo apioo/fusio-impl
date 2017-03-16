@@ -19,49 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Log;
+namespace Fusio\Impl\Backend\Api;
 
-use Fusio\Impl\Table;
+use Fusio\Impl\Authorization\ProtectionTrait;
+use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
-use PSX\Sql\Condition;
-use PSX\Sql\Sql;
 
 /**
- * Error
+ * BackendApiAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Error
+abstract class BackendApiAbstract extends SchemaApiAbstract
 {
+    use ProtectionTrait;
+
     /**
-     * @var \Fusio\Impl\Table\Log\Error
+     * @Inject
+     * @var \PSX\Schema\SchemaManagerInterface
      */
-    protected $errorTable;
+    protected $schemaManager;
 
-    public function __construct(Table\Log\Error $errorTable)
-    {
-        $this->errorTable = $errorTable;
-    }
-
-    public function getAll($startIndex = 0, $search = null)
-    {
-        return $this->errorTable->getErrors(
-            $startIndex,
-            $search
-        );
-    }
-
-    public function get($errorId)
-    {
-        $error = $this->errorTable->get($errorId);
-
-        if (!empty($error)) {
-            return $error;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find error');
-        }
-    }
+    /**
+     * @Inject
+     * @var \PSX\Sql\TableManager
+     */
+    protected $tableManager;
 }

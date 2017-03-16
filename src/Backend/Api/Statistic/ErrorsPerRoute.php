@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Statistic;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Service\Log\QueryFilter;
+use Fusio\Impl\Backend\View;
 use PSX\Framework\Controller\ApiAbstract;
 
 /**
@@ -38,14 +38,16 @@ class ErrorsPerRoute extends ApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Statistic
+     * @var \PSX\Sql\TableManager
      */
-    protected $statisticService;
+    protected $tableManager;
 
     public function onGet()
     {
-        $this->setBody($this->statisticService->getErrorsPerRoute(
-            QueryFilter::create($this->getParameters())
-        ));
+        $this->setBody(
+            $this->tableManager->getTable(View\Statistic::class)->getErrorsPerRoute(
+                View\Log\QueryFilter::create($this->getParameters())
+            )
+        );
     }
 }

@@ -22,13 +22,11 @@
 namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Engine\ResponseInterface;
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Exception\Converter;
 use PSX\Framework\Loader\Context;
-use PSX\Sql;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -38,16 +36,8 @@ use PSX\Validate\Filter as PSXFilter;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Execute extends SchemaApiAbstract
+class Execute extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\Action\Executor
@@ -63,8 +53,8 @@ class Execute extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Execute\Request'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Action\Execute\Response'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Action\Execute\Request::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Execute\Response::class))
         );
 
         return $resource;

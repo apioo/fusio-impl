@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Schema;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,22 +36,9 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Schema\ParserInterface
-     */
-    protected $schemaParser;
 
     /**
      * @Inject
@@ -66,16 +55,16 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Schema'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Schema::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Schema\Update'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Schema\Update::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -88,9 +77,19 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->schemaService->get(
+        $schema = $this->tableManager->getTable(View\Schema::class)->getEntity(
             (int) $this->getUriFragment('schema_id')
         );
+
+        if (!empty($schema)) {
+            if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Schema was deleted');
+            }
+
+            return $schema;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find schema');
+        }
     }
 
     /**

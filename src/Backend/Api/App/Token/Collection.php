@@ -21,11 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\App\Token;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
-use Fusio\Impl\Service\App\Token\QueryFilter;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Backend\View\App\Token\QueryFilter;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Validate\Validate;
 
@@ -36,22 +36,8 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    protected $appTokenService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -74,7 +60,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->appTokenService->getAll(
+        return $this->tableManager->getTable(View\App\Token::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
             QueryFilter::create($this->getParameters())
         );

@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Backend\Api\Account;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,16 +34,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangePassword extends SchemaApiAbstract
+class ChangePassword extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\User
@@ -59,8 +51,8 @@ class ChangePassword extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Account\ChangePassword'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Account\ChangePassword::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;

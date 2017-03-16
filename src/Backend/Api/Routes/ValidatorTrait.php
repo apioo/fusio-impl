@@ -23,10 +23,10 @@ namespace Fusio\Impl\Backend\Api\Routes;
 
 use Fusio\Impl\Backend\Filter\PrimaryKey;
 use Fusio\Impl\Backend\Filter\Routes\Path;
+use Fusio\Impl\Table;
 use PSX\Api\Resource\MethodAbstract;
-use PSX\Data\Validator\Property;
-use PSX\Data\Validator\Validator;
-use PSX\Validate\Validate;
+use PSX\Schema\Validation\Field;
+use PSX\Schema\Validation\Validator;
 
 /**
  * ValidatorTrait
@@ -37,20 +37,14 @@ use PSX\Validate\Validate;
  */
 trait ValidatorTrait
 {
-    /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
-     */
-    protected $tableManager;
-
     protected function getValidator(MethodAbstract $method)
     {
         return new Validator(array(
-            new Property('/id', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Routes')))),
-            new Property('/path', Validate::TYPE_STRING, array(new Path())),
-            new Property('/config/(\d+)/methods/([A-Z]+)/request', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
-            new Property('/config/(\d+)/methods/([A-Z]+)/response', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Schema')))),
-            new Property('/config/(\d+)/methods/([A-Z]+)/action', Validate::TYPE_INTEGER, array(new PrimaryKey($this->tableManager->getTable('Fusio\Impl\Table\Action')))),
+            new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Routes::class))]),
+            new Field('/path', [new Path()]),
+            new Field('/config/(\d+)/methods/([A-Z]+)/request', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
+            new Field('/config/(\d+)/methods/([A-Z]+)/response', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
+            new Field('/config/(\d+)/methods/([A-Z]+)/action', [new PrimaryKey($this->tableManager->getTable(Table\Action::class))]),
         ));
     }
 }

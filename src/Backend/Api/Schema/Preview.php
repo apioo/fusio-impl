@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Backend\Api\Schema;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,16 +34,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Preview extends SchemaApiAbstract
+class Preview extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\Schema
@@ -59,7 +51,7 @@ class Preview extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Schema\Preview\Response'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Schema\Preview\Response::class))
         );
 
         return $resource;

@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Backend\Api\Schema;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
@@ -37,16 +37,9 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends BackendApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject
@@ -69,12 +62,12 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Schema\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Schema\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Schema\Create'))
-            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Schema\Create::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -87,7 +80,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->schemaService->getAll(
+        return $this->tableManager->getTable(View\Schema::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
             $this->getParameter('search', Validate::TYPE_STRING) ?: null,
             $this->getParameter('routeId', Validate::TYPE_INTEGER) ?: null

@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Connection;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
@@ -35,22 +37,21 @@ use PSX\Record\RecordInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject
      * @var \Fusio\Impl\Service\Connection
      */
     protected $connectionService;
+
+    /**
+     * @Inject
+     * @var \Fusio\Engine\Parser\ParserInterface
+     */
+    protected $connectionParser;
 
     /**
      * @param integer $version
@@ -61,16 +62,16 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Connection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Connection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Connection\Update'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Connection\Update::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -83,9 +84,21 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->connectionService->get(
-            (int) $this->getUriFragment('connection_id')
+        $connection = $this->tableManager->getTable(View\Connection::class)->getEntityWithConfig(
+            (int) $this->getUriFragment('connection_id'),
+            $this->config->get('fusio_key'),
+            $this->connectionParser
         );
+
+        if (!empty($connection)) {
+            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+                throw new StatusCode\GoneException('Connection was deleted');
+            }
+
+            return $connection;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find connection');
+        }
     }
 
     /**

@@ -21,11 +21,12 @@
 
 namespace Fusio\Impl\Backend\Api\App\Token;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Entity
@@ -34,22 +35,8 @@ use PSX\Framework\Loader\Context;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    protected $appTokenService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -72,8 +59,14 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->appTokenService->get(
+        $token = $this->tableManager->getTable(View\App\Token::class)->getEntity(
             (int) $this->getUriFragment('token_id')
         );
+
+        if (!empty($token)) {
+            return $token;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find token');
+        }
     }
 }

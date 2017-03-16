@@ -21,12 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Rate;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
-use PSX\Sql;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
@@ -37,16 +36,9 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends BackendApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject
@@ -63,12 +55,12 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Rate\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Rate\Create'))
-            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Rate\Create::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -81,7 +73,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->rateService->getAll(
+        return $this->tableManager->getTable(View\Rate::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
             $this->getParameter('search', Validate::TYPE_STRING) ?: null
         );

@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Backend\Api\Log\Error;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,22 +35,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Log\Error
-     */
-    protected $logErrorService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -59,7 +46,7 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Log\Error'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Log\Error::class))
         );
 
         return $resource;
@@ -72,8 +59,14 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->logErrorService->get(
+        $error = $this->tableManager->getTable(View\Log\Error::class)->getEntity(
             (int) $this->getUriFragment('error_id')
         );
+
+        if (!empty($error)) {
+            return $error;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find error');
+        }
     }
 }

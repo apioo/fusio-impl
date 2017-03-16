@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Backend\Api\Config;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,16 +35,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\Config
@@ -59,12 +52,12 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Config'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Config::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Config\Update'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\Config\Update::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -77,9 +70,15 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->configService->get(
+        $config = $this->tableManager->getTable(View\Config::class)->getEntity(
             (int) $this->getUriFragment('config_id')
         );
+
+        if (!empty($config)) {
+            return $config;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find config');
+        }
     }
 
     /**

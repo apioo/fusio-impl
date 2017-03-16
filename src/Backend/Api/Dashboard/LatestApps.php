@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Dashboard;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\View;
 use PSX\Framework\Controller\ApiAbstract;
 
 /**
@@ -37,14 +38,14 @@ class LatestApps extends ApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Dashboard
+     * @var \PSX\Sql\TableManager
      */
-    protected $dashboardService;
+    protected $tableManager;
 
     public function onGet()
     {
-        $this->setBody(array(
-            'entry' => $this->dashboardService->getLatestApps(),
-        ));
+        $this->setBody(
+            $this->tableManager->getTable(View\Dashboard::class)->getLatestApps()
+        );
     }
 }

@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Backend\Api\Log;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,22 +35,8 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Log
-     */
-    protected $logService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -59,7 +46,7 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Log'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Log::class))
         );
 
         return $resource;
@@ -72,8 +59,14 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->logService->get(
+        $log = $this->tableManager->getTable(View\Log::class)->getEntity(
             (int) $this->getUriFragment('log_id')
         );
+
+        if (!empty($log)) {
+            return $log;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find log');
+        }
     }
 }

@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Backend\Api\Log\Error;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
@@ -35,22 +36,8 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Log\Error
-     */
-    protected $logErrorService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -60,7 +47,7 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Log\Error\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Log\Error\Collection::class))
         );
 
         return $resource;
@@ -73,7 +60,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->logErrorService->getAll(
+        return $this->tableManager->getTable(View\Log\Error::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: null,
             $this->getParameter('search', Validate::TYPE_STRING) ?: null
         );

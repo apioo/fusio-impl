@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Backend\Api\Log;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Service\Log\QueryFilter;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Backend\View\Log\QueryFilter;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
@@ -37,22 +37,8 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Log
-     */
-    protected $logService;
-
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -62,7 +48,7 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Log\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Log\Collection::class))
         );
 
         return $resource;
@@ -75,7 +61,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->logService->getAll(
+        return $this->tableManager->getTable(View\Log::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: null,
             QueryFilter::create($this->getParameters())
         );
