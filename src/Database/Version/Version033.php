@@ -27,7 +27,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\Property;

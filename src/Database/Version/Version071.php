@@ -35,7 +35,7 @@ use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\Generator;
@@ -449,15 +449,15 @@ class Version071 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant',                          'controller' => Consumer\Api\App\Grant\Collection::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/grant/$grant_id<[0-9]+>',        'controller' => Consumer\Api\App\Grant\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/app/meta',                           'controller' => Consumer\Api\App\Meta\Entity::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/authorize',                          'controller' => Consumer\Api\Authorize::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/scope',                              'controller' => Consumer\Api\Scope\Collection::class],
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/consumer/token',                              'controller' => Consumer\Authorization\Token::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/login',                              'controller' => Consumer\Api\Login::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/register',                           'controller' => Consumer\Api\Register::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/provider/:provider',                 'controller' => Consumer\Api\Provider::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/activate',                           'controller' => Consumer\Api\Activate::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account',                            'controller' => Consumer\Api\Account::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account/change_password',            'controller' => Consumer\Api\Account\ChangePassword::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/authorize',                          'controller' => Consumer\Api\User\Authorize::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/login',                              'controller' => Consumer\Api\User\Login::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/register',                           'controller' => Consumer\Api\User\Register::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/provider/:provider',                 'controller' => Consumer\Api\User\Provider::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/activate',                           'controller' => Consumer\Api\User\Activate::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account',                            'controller' => Consumer\Api\User\Account::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/consumer/account/change_password',            'controller' => Consumer\Api\User\ChangePassword::class],
 
                 ['status' => 1, 'methods' => 'POST',                'path' => '/authorization/revoke',                        'controller' => Authorization\Revoke::class],
                 ['status' => 1, 'methods' => 'GET|POST',            'path' => '/authorization/token',                         'controller' => Authorization\Token::class],

@@ -34,7 +34,7 @@ use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\Generator;
