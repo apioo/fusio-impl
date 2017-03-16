@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Console\User;
 
-use Fusio\Impl\Service;
+use Fusio\Impl\Backend\View;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,18 +39,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\User
+     * @var \Fusio\Impl\Backend\View\User
      */
-    protected $userService;
+    protected $userView;
 
     /**
-     * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Backend\View\User $userView
      */
-    public function __construct(Service\User $userService)
+    public function __construct(View\User $userView)
     {
         parent::__construct();
 
-        $this->userService = $userService;
+        $this->userView = $userView;
     }
 
     protected function configure()
@@ -64,7 +64,7 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->userService->getAll($input->getOption('startIndex'), $input->getArgument('search'));
+        $result = $this->userView->getCollection($input->getOption('startIndex'), $input->getArgument('search'));
         $rows   = [];
 
         foreach ($result->entry as $row) {

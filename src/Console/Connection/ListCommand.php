@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Console\Connection;
 
-use Fusio\Impl\Service;
+use Fusio\Impl\Backend\View;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,18 +39,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\Connection
+     * @var \Fusio\Impl\Backend\View\Connection
      */
-    protected $connectionService;
+    protected $connectionView;
 
     /**
-     * @param \Fusio\Impl\Service\Connection $connectionService
+     * @param \Fusio\Impl\Backend\View\Connection $connectionView
      */
-    public function __construct(Service\Connection $connectionService)
+    public function __construct(View\Connection $connectionView)
     {
         parent::__construct();
 
-        $this->connectionService = $connectionService;
+        $this->connectionView = $connectionView;
     }
 
     protected function configure()
@@ -64,7 +64,7 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->connectionService->getAll($input->getOption('startIndex'), $input->getArgument('search'));
+        $result = $this->connectionView->getCollection($input->getOption('startIndex'), $input->getArgument('search'));
         $rows   = [];
 
         foreach ($result->entry as $row) {

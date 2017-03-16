@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Console\Schema;
 
-use Fusio\Impl\Service;
+use Fusio\Impl\Backend\View;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,18 +39,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\Schema
+     * @var \Fusio\Impl\Backend\View\Schema
      */
-    protected $schemaService;
+    protected $schemaView;
 
     /**
-     * @param \Fusio\Impl\Service\Schema $schemaService
+     * @param \Fusio\Impl\Backend\View\Schema $schemaView
      */
-    public function __construct(Service\Schema $schemaService)
+    public function __construct(View\Schema $schemaView)
     {
         parent::__construct();
 
-        $this->schemaService = $schemaService;
+        $this->schemaView = $schemaView;
     }
 
     protected function configure()
@@ -64,7 +64,7 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->schemaService->getAll($input->getOption('startIndex'), $input->getArgument('search'));
+        $result = $this->schemaView->getCollection($input->getOption('startIndex'), $input->getArgument('search'));
         $rows   = [];
 
         foreach ($result->entry as $row) {
