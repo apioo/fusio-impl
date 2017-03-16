@@ -27,6 +27,7 @@ use Fusio\Impl\Adapter\Installer;
 use Fusio\Impl\Adapter\Instruction;
 use Fusio\Impl\Adapter\InstructionParser;
 use Fusio\Impl\Backend\Filter\Routes\Path as PathFilter;
+use Fusio\Impl\Backend\View;
 use Fusio\Impl\Service;
 use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
@@ -53,9 +54,9 @@ class RegisterCommand extends Command
     protected $connection;
 
     /**
-     * @var \Fusio\Impl\Service\Connection
+     * @var \Fusio\Impl\Backend\View\Connection
      */
-    protected $connectionService;
+    protected $connectionView;
 
     /**
      * @var \Fusio\Impl\Adapter\Installer
@@ -67,14 +68,14 @@ class RegisterCommand extends Command
      */
     protected $parser;
 
-    public function __construct(Service\System\Import $importService, Service\Connection $connectionService, Connection $connection)
+    public function __construct(Service\System\Import $importService, View\Connection $connectionView, Connection $connection)
     {
         parent::__construct();
 
-        $this->connection        = $connection;
-        $this->connectionService = $connectionService;
-        $this->installer         = new Installer($importService);
-        $this->parser            = new InstructionParser();
+        $this->connection     = $connection;
+        $this->connectionView = $connectionView;
+        $this->installer      = new Installer($importService);
+        $this->parser         = new InstructionParser();
     }
 
     protected function configure()
@@ -105,14 +106,14 @@ class RegisterCommand extends Command
                 if (strpos($definition, '${connection}') !== false) {
                     $output->writeLn('The adapter requires a connection.');
 
-                    $result = $this->connectionService->getAll();
+                    $result = $this->connectionView->getCollection();
                     foreach ($result->entry as $connection) {
                         $output->writeln($connection->id . ') ' . $connection->name);
                     }
 
                     $question = new Question('Please specify the connection (i.e. 1): ', '1');
                     $question->setValidator(function ($answer) {
-                        $connection = $this->connectionService->get($answer);
+                        $connection = $this->connectionView->getEntity($answer);
 
                         return $connection->name;
                     });

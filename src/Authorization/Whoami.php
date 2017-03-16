@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Fusio\Impl\Consumer\View;
 use PSX\Framework\Controller\ApiAbstract;
 use PSX\Http\Exception as StatusCode;
 
@@ -37,12 +38,12 @@ class Whoami extends ApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\User
+     * @var \PSX\Sql\TableManager
      */
-    protected $userService;
+    protected $tableManager;
 
     public function onGet()
     {
-        $this->setBody($this->userService->get($this->userId));
+        $this->setBody($this->tableManager->getTable(View\User::class)->getEntity($this->userId));
     }
 }
