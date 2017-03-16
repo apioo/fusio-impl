@@ -21,9 +21,6 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
-use DateInterval;
-use DatePeriod;
-use DateTime;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 

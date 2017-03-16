@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\User;
 
-use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

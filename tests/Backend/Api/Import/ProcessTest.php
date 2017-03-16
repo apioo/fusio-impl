@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Tests\Backend\Api\Import;
 
 use Fusio\Impl\Tests\Fixture;
-use PSX\Http\Stream\StringStream;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Http\Stream\StringStream;
 
 /**
  * ProcessTest

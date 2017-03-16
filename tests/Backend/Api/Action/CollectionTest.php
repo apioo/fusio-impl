@@ -23,7 +23,6 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 
 use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 

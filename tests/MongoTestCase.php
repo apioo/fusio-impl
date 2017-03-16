@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Tests;
 
 use MongoConnectionException;
-use MongoDB;
 use PSX\Framework\Test\Environment;
 
 /**

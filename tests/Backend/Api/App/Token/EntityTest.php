@@ -24,7 +24,6 @@ namespace Fusio\Impl\Tests\Backend\Api\App\Token;
 use Fusio\Impl\Table\App as TableApp;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * EntityTest

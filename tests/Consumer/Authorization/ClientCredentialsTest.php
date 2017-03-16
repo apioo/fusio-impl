@@ -23,8 +23,8 @@ namespace Fusio\Impl\Tests\Consumer\Authorization;
 
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Json\Parser;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Json\Parser;
 
 /**
  * ClientCredentialsTest

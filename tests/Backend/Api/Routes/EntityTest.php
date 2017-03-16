@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
-use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

@@ -21,12 +21,7 @@
 
 namespace Fusio\Impl\Tests;
 
-use Fusio\Engine\Model\Connection;
-use Fusio\Engine\Test\CallbackConnection;
-use Fusio\Impl\Database\Version;
-use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Framework\Test\Environment;
 use PSX\Schema\Parser\JsonSchema;
 
 /**
