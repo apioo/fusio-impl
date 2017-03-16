@@ -19,29 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\Authorize;
+namespace Fusio\Impl\Consumer\Schema\User;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Request
+ * ChangePassword
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends SchemaAbstract
+class ChangePassword extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('request');
-        $sb->setRequired(['responseType', 'clientId', 'scope', 'allow']);
-        $sb->string('responseType');
-        $sb->string('clientId');
-        $sb->string('redirectUri');
-        $sb->string('scope');
-        $sb->string('state');
-        $sb->boolean('allow');
+        $sb = $this->getSchemaBuilder('password');
+        $sb->string('oldPassword');
+        $sb->string('newPassword');
+        $sb->string('verifyPassword');
 
         return $sb->getProperty();
     }

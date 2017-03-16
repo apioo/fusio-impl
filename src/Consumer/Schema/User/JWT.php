@@ -19,33 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\Authorize;
+namespace Fusio\Impl\Consumer\Schema\User;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Response
+ * JWT
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Response extends SchemaAbstract
+class JWT extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('token');
-        $sb->string('access_token');
-        $sb->string('token_type');
-        $sb->string('expires_in');
-        $sb->string('scope');
-        $token = $sb->getProperty();
-
-        $sb = $this->getSchemaBuilder('response');
-        $sb->string('type');
-        $sb->objectType('token', $token);
-        $sb->string('code');
-        $sb->string('redirectUri');
+        $sb = $this->getSchemaBuilder('jwt');
+        $sb->string('token');
 
         return $sb->getProperty();
     }

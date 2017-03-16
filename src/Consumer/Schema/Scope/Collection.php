@@ -19,23 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema;
+namespace Fusio\Impl\Consumer\Schema\Scope;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Activate
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Activate extends SchemaAbstract
+class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('activate');
-        $sb->setRequired(['token']);
+        $sb = $this->getSchemaBuilder('collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Scope::class));
 
         return $sb->getProperty();
     }

@@ -24,20 +24,23 @@ namespace Fusio\Impl\Consumer\Schema\App;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Grant
+ * Token
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Grant extends SchemaAbstract
+class Token extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('grant');
+        $sb = $this->getSchemaBuilder('token');
         $sb->integer('id');
-        $sb->objectType('app', $this->getSchema('Fusio\Impl\Consumer\Schema\App'));
-        $sb->dateTime('createDate');
+        $sb->string('token');
+        $sb->string('scope');
+        $sb->string('ip');
+        $sb->dateTime('expire');
+        $sb->dateTime('date');
 
         return $sb->getProperty();
     }

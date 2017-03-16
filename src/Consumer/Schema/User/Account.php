@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema;
+namespace Fusio\Impl\Consumer\Schema\User;
 
 use PSX\Schema\SchemaAbstract;
 

@@ -19,26 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema;
+namespace Fusio\Impl\Consumer\Schema\User;
 
-use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Login
+ * Register
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Login extends SchemaAbstract
+class Register extends SchemaAbstract
 {
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('user');
-        $sb->string('username');
+        $sb->setRequired(['name', 'email', 'password']);
+        $sb->string('name');
+        $sb->string('email');
         $sb->string('password');
-        $sb->arrayType('scopes')->setItems(Property::getString());
+        $sb->string('captcha');
 
         return $sb->getProperty();
     }

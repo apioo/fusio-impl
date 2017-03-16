@@ -19,25 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App;
+namespace Fusio\Impl\Consumer\Schema;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Grant
+ * Scope
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Grant extends SchemaAbstract
+class Scope extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('grant');
+        $sb = $this->getSchemaBuilder('scope');
         $sb->integer('id');
-        $sb->objectType('app', $this->getSchema('Fusio\Impl\Consumer\Schema\App'));
-        $sb->dateTime('createDate');
+        $sb->string('name')
+            ->setPattern('[A-z0-9\-\_]{3,64}');
+        $sb->string('description');
 
         return $sb->getProperty();
     }

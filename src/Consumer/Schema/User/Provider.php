@@ -19,25 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App;
+namespace Fusio\Impl\Consumer\Schema\User;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Grant
+ * Provider
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Grant extends SchemaAbstract
+class Provider extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('grant');
-        $sb->integer('id');
-        $sb->objectType('app', $this->getSchema('Fusio\Impl\Consumer\Schema\App'));
-        $sb->dateTime('createDate');
+        $sb = $this->getSchemaBuilder('provider');
+        $sb->setAdditionalProperties(true);
+        $sb->string('code');
+        $sb->string('clientId');
+        $sb->string('redirectUri');
 
         return $sb->getProperty();
     }

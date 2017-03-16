@@ -24,21 +24,19 @@ namespace Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Provider
+ * Message
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Provider extends SchemaAbstract
+class Message extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('provider');
-        $sb->setAdditionalProperties(true);
-        $sb->string('code');
-        $sb->string('clientId');
-        $sb->string('redirectUri');
+        $sb = $this->getSchemaBuilder('message');
+        $sb->boolean('success');
+        $sb->string('message');
 
         return $sb->getProperty();
     }

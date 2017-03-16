@@ -19,25 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\Account;
+namespace Fusio\Impl\Consumer\Schema\User;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * ChangePassword
+ * Activate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangePassword extends SchemaAbstract
+class Activate extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('password');
-        $sb->string('oldPassword');
-        $sb->string('newPassword');
-        $sb->string('verifyPassword');
+        $sb = $this->getSchemaBuilder('activate');
+        $sb->setRequired(['token']);
 
         return $sb->getProperty();
     }
