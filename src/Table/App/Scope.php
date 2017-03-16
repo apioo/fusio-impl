@@ -49,14 +49,34 @@ class Scope extends TableAbstract
     public function deleteAllFromApp($appId)
     {
         $sql = 'DELETE FROM fusio_app_scope
-				      WHERE appId = :appId';
+                      WHERE appId = :appId';
 
         $this->connection->executeQuery($sql, array('appId' => $appId));
     }
 
-    public function getByApp($appId, $scope, array $exclude = array())
+    public function getValidScopes($appId, array $scopes, array $exclude = array())
     {
-        $sql = '    SELECT scope.name,
+        $result = $this->getAvailableScopes($appId);
+        $data   = array();
+
+        foreach ($result as $scope) {
+            if (in_array($scope['name'], $scopes)) {
+                // is the scope excluded
+                if (in_array($scope['name'], $exclude)) {
+                    continue;
+                }
+
+                $data[] = $scope;
+            }
+        }
+
+        return $data;
+    }
+
+    public function getAvailableScopes($appId)
+    {
+        $sql = '    SELECT scope.id,
+                           scope.name,
                            scope.description
                       FROM fusio_app_scope appScope
                 INNER JOIN fusio_scope scope
@@ -64,47 +84,6 @@ class Scope extends TableAbstract
                      WHERE appScope.appId = :appId
                   ORDER BY scope.id ASC';
 
-        $result = $this->connection->fetchAll($sql, array('appId' => $appId)) ?: array();
-        $data   = array();
-        $scopes = explode(',', $scope);
-
-        foreach ($result as $availableScope) {
-            if (in_array($availableScope['name'], $scopes)) {
-                // is the scope excluded
-                if (in_array($availableScope['name'], $exclude)) {
-                    continue;
-                }
-
-                $data[] = $availableScope;
-            }
-        }
-
-        return $data;
-    }
-
-    public function getValidScopes($appId, array $scopes, array $exclude = array())
-    {
-        $sql = '    SELECT scope.name
-                      FROM fusio_app_scope appScope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = appScope.scopeId
-                     WHERE appScope.appId = :appId
-                  ORDER BY scope.id ASC';
-
-        $result = $this->connection->fetchAll($sql, array('appId' => $appId));
-        $data   = array();
-
-        foreach ($result as $availableScope) {
-            if (in_array($availableScope['name'], $scopes)) {
-                // is the scope excluded
-                if (in_array($availableScope['name'], $exclude)) {
-                    continue;
-                }
-
-                $data[] = $availableScope['name'];
-            }
-        }
-
-        return $data;
+        return $this->connection->fetchAll($sql, array('appId' => $appId)) ?: [];
     }
 }

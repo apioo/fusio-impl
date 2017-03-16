@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Table;
 
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -47,45 +49,7 @@ class Scope extends TableAbstract
         );
     }
 
-    public function getByUser($userId)
-    {
-        $sql = '    SELECT scope.name
-                      FROM fusio_user_scope userScope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = userScope.scopeId
-                     WHERE userScope.userId = :userId
-                  ORDER BY scope.id ASC';
-
-        $result = $this->connection->fetchAll($sql, array('userId' => $userId)) ?: array();
-        $names  = array();
-
-        foreach ($result as $row) {
-            $names[] = $row['name'];
-        }
-
-        return $names;
-    }
-
-    public function getByApp($appId)
-    {
-        $sql = '    SELECT scope.name
-                      FROM fusio_app_scope appScope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = appScope.scopeId
-                     WHERE appScope.appId = :appId
-                  ORDER BY scope.id ASC';
-
-        $result = $this->connection->fetchAll($sql, array('appId' => $appId)) ?: array();
-        $names  = array();
-
-        foreach ($result as $row) {
-            $names[] = $row['name'];
-        }
-
-        return $names;
-    }
-
-    public function getByNames(array $names)
+    public function getValidScopes(array $names)
     {
         $names = array_filter($names);
 
@@ -94,5 +58,12 @@ class Scope extends TableAbstract
         } else {
             return [];
         }
+    }
+
+    public static function getNames(array $result)
+    {
+        return array_map(function($row){
+            return $row['name'];
+        }, $result);
     }
 }

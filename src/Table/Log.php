@@ -21,6 +21,11 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Service\Log\QueryFilter;
+use PSX\Sql\Condition;
+use PSX\Sql\Fields;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -51,17 +56,5 @@ class Log extends TableAbstract
             'body' => self::TYPE_TEXT,
             'date' => self::TYPE_DATETIME,
         );
-    }
-
-    public function getErrors($logId)
-    {
-        $sql = 'SELECT message,
-                       trace,
-                       file,
-                       line
-                  FROM fusio_log_error
-                 WHERE logId = :logId';
-
-        return $this->connection->fetchAll($sql, array('logId' => $logId)) ?: array();
     }
 }

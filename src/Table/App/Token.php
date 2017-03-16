@@ -22,7 +22,12 @@
 namespace Fusio\Impl\Table\App;
 
 use DateTime;
+use Fusio\Impl\Service\App\Token\QueryFilter;
+use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 use PSX\Http\Exception as StatusCode;
 
@@ -72,9 +77,9 @@ class Token extends TableAbstract
     public function removeTokenFromApp($appId, $tokenId)
     {
         $sql = 'UPDATE fusio_app_token
-				   SET status = :status
-				 WHERE appId = :appId
-				   AND id = :id';
+                   SET status = :status
+                 WHERE appId = :appId
+                   AND id = :id';
 
         $affectedRows = $this->connection->executeUpdate($sql, array(
             'status' => self::STATUS_DELETED,

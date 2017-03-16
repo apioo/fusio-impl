@@ -21,6 +21,10 @@
 
 namespace Fusio\Impl\Table;
 
+use PSX\Sql\Condition;
+use PSX\Sql\Fields;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -54,24 +58,6 @@ class User extends TableAbstract
             'password' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
         );
-    }
-
-    public function getScopeNames($userId)
-    {
-        $sql = '    SELECT scope.name
-				      FROM fusio_user_scope userScope
-				INNER JOIN fusio_scope scope
-				        ON scope.id = userScope.scopeId
-				     WHERE userScope.userId = :userId';
-
-        $scopes = $this->connection->fetchAll($sql, array('userId' => $userId));
-        $names  = array();
-
-        foreach ($scopes as $scope) {
-            $names[] = $scope['name'];
-        }
-
-        return $names;
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)

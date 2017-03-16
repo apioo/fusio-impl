@@ -21,7 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Engine\Model;
+use PSX\Sql\Condition;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -51,38 +53,5 @@ class Rate extends TableAbstract
             'rateLimit' => self::TYPE_INT,
             'timespan' => self::TYPE_VARCHAR,
         );
-    }
-
-    public function getRateForRequest($routeId, Model\App $app)
-    {
-        $sql = '    SELECT rate.rateLimit,
-                           rate.timespan
-                      FROM fusio_rate_allocation rateAllocation
-                INNER JOIN fusio_rate rate
-                        ON rateAllocation.rateId = rate.id 
-                     WHERE rate.status = :status
-                       AND (rateAllocation.routeId IS NULL OR rateAllocation.routeId = :routeId)
-                       AND (rateAllocation.appId IS NULL OR rateAllocation.appId = :appId)
-                       AND (rateAllocation.authenticated IS NULL OR rateAllocation.authenticated = :authenticated)';
-
-        $params = [
-            'status' => self::STATUS_ACTIVE,
-            'routeId' => $routeId,
-            'appId' => $app->getId(),
-            'authenticated' => $app->isAnonymous() ? 0 : 1,
-        ];
-
-        $parameters = $app->getParameters();
-        if (!empty($parameters)) {
-            $sql.= ' AND (rateAllocation.parameters IS NULL OR ';
-            $sql.= $this->connection->getDatabasePlatform()->getLocateExpression(':parameters', 'rateAllocation.parameters');
-            $sql.= ' > 0)';
-
-            $params['parameters'] = http_build_query($parameters, '', '&');
-        }
-
-        $sql.= ' ORDER BY rate.priority DESC';
-
-        return $this->connection->fetchAssoc($sql, $params);
     }
 }

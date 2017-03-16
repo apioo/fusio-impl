@@ -21,6 +21,10 @@
 
 namespace Fusio\Impl\Table;
 
+use PSX\Sql\Condition;
+use PSX\Sql\Fields;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -58,50 +62,5 @@ class App extends TableAbstract
             'appSecret' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
         );
-    }
-
-    public function getAuthorizedApps($userId)
-    {
-        $sql = '    SELECT userGrant.id,
-                           userGrant.date,
-                           userGrant.appId AS appId,
-                           app.name AS appName,
-                           app.url AS appUrl
-                      FROM fusio_user_grant userGrant
-                INNER JOIN fusio_app app
-                        ON userGrant.appId = app.id
-                     WHERE userGrant.allow = 1
-                       AND userGrant.userId = :userId
-                       AND app.status = :status';
-
-        $definition = [
-            'entry' => $this->doCollection($sql, ['userId' => $userId, 'status' => self::STATUS_ACTIVE], [
-                'id' => 'id',
-                'createDate' => 'date',
-                'app' => [
-                    'id' => 'appId',
-                    'name' => 'appName',
-                    'url' => 'appUrl',
-                ],
-            ]),
-        ];
-
-        return $this->build($definition);
-    }
-
-    public function getByAppKeyAndSecret($appKey, $appSecret)
-    {
-        $sql = 'SELECT id,
-                       userId
-                  FROM fusio_app
-                 WHERE appKey = :app_key
-                   AND appSecret = :app_secret
-                   AND status = :status';
-
-        return $this->connection->fetchAssoc($sql, array(
-            'app_key'    => $appKey,
-            'app_secret' => $appSecret,
-            'status'     => self::STATUS_ACTIVE,
-        ));
     }
 }

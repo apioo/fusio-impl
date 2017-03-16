@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use PSX\Sql\Condition;
+use PSX\Sql\Fields;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**

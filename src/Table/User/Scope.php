@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Table\User;
 
+use PSX\Sql\Condition;
+use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -49,22 +52,9 @@ class Scope extends TableAbstract
     public function deleteAllFromUser($userId)
     {
         $sql = 'DELETE FROM fusio_user_scope
-				      WHERE userId = :id';
+                      WHERE userId = :id';
 
         $this->connection->executeQuery($sql, array('id' => $userId));
-    }
-
-    public function getByUser($userId)
-    {
-        $sql = '    SELECT scope.name,
-                           scope.description
-                      FROM fusio_user_scope userScope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = userScope.scopeId
-                     WHERE userScope.userId = :userId
-                  ORDER BY scope.id ASC';
-
-        return $this->connection->fetchAll($sql, array('userId' => $userId)) ?: array();
     }
 
     public function getValidScopes($userId, array $scopes, array $exclude = array())
@@ -72,14 +62,14 @@ class Scope extends TableAbstract
         $result = $this->getAvailableScopes($userId);
         $data   = array();
 
-        foreach ($result as $scopeName) {
-            if (in_array($scopeName, $scopes)) {
+        foreach ($result as $scope) {
+            if (in_array($scope['name'], $scopes)) {
                 // is the scope excluded
-                if (in_array($scopeName, $exclude)) {
+                if (in_array($scope['name'], $exclude)) {
                     continue;
                 }
 
-                $data[] = $scopeName;
+                $data[] = $scope;
             }
         }
 
@@ -88,20 +78,15 @@ class Scope extends TableAbstract
 
     public function getAvailableScopes($userId)
     {
-        $sql = '    SELECT scope.name
+        $sql = '    SELECT scope.id,
+                           scope.name,
+                           scope.description
                       FROM fusio_user_scope userScope
                 INNER JOIN fusio_scope scope
                         ON scope.id = userScope.scopeId
                      WHERE userScope.userId = :userId
                   ORDER BY scope.id ASC';
 
-        $result = $this->connection->fetchAll($sql, array('userId' => $userId));
-        $data   = array();
-
-        foreach ($result as $availableScope) {
-            $data[] = $availableScope['name'];
-        }
-
-        return $data;
+        return $this->connection->fetchAll($sql, array('userId' => $userId)) ?: [];
     }
 }
