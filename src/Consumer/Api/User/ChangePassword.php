@@ -19,14 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Account;
+namespace Fusio\Impl\Consumer\Api\User;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
+use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -36,10 +35,8 @@ use PSX\Validate\Filter as PSXFilter;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangePassword extends SchemaApiAbstract
+class ChangePassword extends ConsumerApiAbstract
 {
-    use ProtectionTrait;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\User
@@ -55,8 +52,8 @@ class ChangePassword extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Account\ChangePassword'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\User\ChangePassword::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;

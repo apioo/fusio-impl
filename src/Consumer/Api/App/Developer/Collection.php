@@ -21,14 +21,13 @@
 
 namespace Fusio\Impl\Consumer\Api\App\Developer;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
+use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
+use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
@@ -39,16 +38,9 @@ use PSX\Validate\Validate;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaApiAbstract
+class Collection extends ConsumerApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject
@@ -65,12 +57,12 @@ class Collection extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Collection'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Developer\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Create'))
-            ->addResponse(201, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\App\Developer\Create::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -83,7 +75,7 @@ class Collection extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->appDeveloperService->getAll(
+        return $this->tableManager->getTable(View\App\Developer::class)->getCollection(
             $this->userId,
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
             $this->getParameter('search', Validate::TYPE_STRING) ?: null

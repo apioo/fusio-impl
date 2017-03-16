@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Consumer\Api\App\Developer;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
+use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
+use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 
@@ -35,16 +36,9 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends ConsumerApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject
@@ -61,16 +55,16 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\App'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\App::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Developer\Update'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\App\Developer\Update::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -83,7 +77,7 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->appDeveloperService->get(
+        return $this->tableManager->getTable(View\App\Developer::class)->getEntity(
             $this->userId,
             (int) $this->getUriFragment('app_id')
         );

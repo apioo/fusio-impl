@@ -19,32 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api;
+namespace Fusio\Impl\Consumer\Api\User;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
- * Account
+ * Login
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Account extends SchemaApiAbstract
+class Login extends SchemaApiAbstract
 {
-    use ProtectionTrait;
-
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\User
+     * @var \Fusio\Impl\Service\User\Login
      */
-    protected $userService;
+    protected $userLoginService;
 
     /**
      * @param integer $version
@@ -54,41 +51,30 @@ class Account extends SchemaApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Account'))
-        );
-
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Account'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+        $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Login::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\JWT::class))
         );
 
         return $resource;
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doGet()
-    {
-        return $this->userService->get($this->userId);
-    }
-
-    /**
-     * Returns the PUT response
+     * Returns the POST response
      *
      * @param \PSX\Record\RecordInterface $record
      * @return array|\PSX\Record\RecordInterface
      */
-    protected function doPut($record)
+    protected function doPost($record)
     {
-        $this->userService->updateMeta($this->userId, $record->email);
+        $token = $this->userLoginService->login($record->username, $record->password, $record->scopes);
 
-        return [
-            'success' => true,
-            'message' => 'Account update successful',
-        ];
+        if (!empty($token)) {
+            return [
+                'token' => $token,
+            ];
+        } else {
+            throw new StatusCode\BadRequestException('Invalid name or password');
+        }
     }
 }

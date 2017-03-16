@@ -21,15 +21,11 @@
 
 namespace Fusio\Impl\Consumer\Api\App\Grant;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
+use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
-use PSX\Sql\Condition;
-use PSX\Validate;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -39,16 +35,9 @@ use PSX\Validate\Filter as PSXFilter;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends ConsumerApiAbstract
 {
-    use ProtectionTrait;
     use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
 
     /**
      * @Inject

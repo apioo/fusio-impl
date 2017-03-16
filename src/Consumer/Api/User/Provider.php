@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api;
+namespace Fusio\Impl\Consumer\Api\User;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -39,9 +39,9 @@ class Provider extends SchemaApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Consumer
+     * @var \Fusio\Impl\Service\User\Provider
      */
-    protected $consumerService;
+    protected $userProviderService;
 
     /**
      * @param integer $version
@@ -52,8 +52,8 @@ class Provider extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Provider'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\JWT'))
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Provider::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\JWT::class))
         );
 
         return $resource;
@@ -72,7 +72,7 @@ class Provider extends SchemaApiAbstract
         $clientId    = $record->clientId;
         $redirectUri = $record->redirectUri;
 
-        $token = $this->consumerService->provider($provider, $code, $clientId, $redirectUri);
+        $token = $this->userProviderService->provider($provider, $code, $clientId, $redirectUri);
 
         if (!empty($token)) {
             return [

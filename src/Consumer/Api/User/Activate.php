@@ -19,29 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api;
+namespace Fusio\Impl\Consumer\Api\User;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
- * Login
+ * Activate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Login extends SchemaApiAbstract
+class Activate extends SchemaApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Consumer
+     * @var \Fusio\Impl\Service\User\Activate
      */
-    protected $consumerService;
+    protected $userActivateService;
 
     /**
      * @param integer $version
@@ -52,8 +52,8 @@ class Login extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Login'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\JWT'))
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Activate::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -67,14 +67,13 @@ class Login extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $token = $this->consumerService->login($record->username, $record->password, $record->scopes);
+        $this->userActivateService->activate(
+            $record->token
+        );
 
-        if (!empty($token)) {
-            return [
-                'token' => $token,
-            ];
-        } else {
-            throw new StatusCode\BadRequestException('Invalid name or password');
-        }
+        return array(
+            'success' => true,
+            'message' => 'Activation successful',
+        );
     }
 }

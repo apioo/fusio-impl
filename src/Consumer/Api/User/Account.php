@@ -19,24 +19,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Grant;
+namespace Fusio\Impl\Consumer\Api\User;
 
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception as StatusCode;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
- * Collection
+ * Account
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends ConsumerApiAbstract
+class Account extends ConsumerApiAbstract
 {
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\User
+     */
+    protected $userService;
+
     /**
      * @param integer $version
      * @return \PSX\Api\Resource
@@ -46,7 +53,12 @@ class Collection extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Grant\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\Account::class))
+        );
+
+        $resource->addMethod(Resource\Factory::getMethod('PUT')
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Account::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -59,8 +71,22 @@ class Collection extends ConsumerApiAbstract
      */
     protected function doGet()
     {
-        return $this->tableManager->getTable(View\App\Grant::class)->getCollection(
-            $this->userId
-        );
+        return $this->tableManager->getTable(View\User::class)->getEntity($this->userId);
+    }
+
+    /**
+     * Returns the PUT response
+     *
+     * @param \PSX\Record\RecordInterface $record
+     * @return array|\PSX\Record\RecordInterface
+     */
+    protected function doPut($record)
+    {
+        $this->userService->updateMeta($this->userId, $record->email);
+
+        return [
+            'success' => true,
+            'message' => 'Account update successful',
+        ];
     }
 }

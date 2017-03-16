@@ -21,15 +21,13 @@
 
 namespace Fusio\Impl\Consumer\Api\App\Meta;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
-use Fusio\Impl\Backend\Api\App\ValidatorTrait;
+use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
+use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql;
-use PSX\Sql\Condition;
-use PSX\Validate;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -39,17 +37,8 @@ use PSX\Validate\Filter as PSXFilter;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends SchemaApiAbstract
+class Entity extends ConsumerApiAbstract
 {
-    use ProtectionTrait;
-    use ValidatorTrait;
-
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
-
     /**
      * @Inject
      * @var \Fusio\Impl\Service\App
@@ -65,7 +54,7 @@ class Entity extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\App\Meta'))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Meta::class))
         );
 
         return $resource;
@@ -78,9 +67,19 @@ class Entity extends SchemaApiAbstract
      */
     protected function doGet()
     {
-        return $this->appService->getPublic(
+        $app = $this->tableManager->getTable(View\App::class)->getEntityByAppKey(
             $this->getParameter('client_id'),
             $this->getParameter('scope')
         );
+
+        if (!empty($app)) {
+            if ($app['status'] == Table\App::STATUS_DELETED) {
+                throw new StatusCode\GoneException('App was deleted');
+            }
+
+            return $app;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find app');
+        }
     }
 }

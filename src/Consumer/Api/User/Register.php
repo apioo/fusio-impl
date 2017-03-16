@@ -19,13 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api;
+namespace Fusio\Impl\Consumer\Api\User;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use PSX\Validate\Filter as PSXFilter;
 
 /**
@@ -39,9 +39,9 @@ class Register extends SchemaApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Consumer
+     * @var \Fusio\Impl\Service\User\Register
      */
-    protected $consumerService;
+    protected $userRegisterService;
 
     /**
      * @param integer $version
@@ -52,8 +52,8 @@ class Register extends SchemaApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema('Fusio\Impl\Consumer\Schema\Register'))
-            ->addResponse(200, $this->schemaManager->getSchema('Fusio\Impl\Backend\Schema\Message'))
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Register::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -67,7 +67,7 @@ class Register extends SchemaApiAbstract
      */
     protected function doPost($record)
     {
-        $this->consumerService->register(
+        $this->userRegisterService->register(
             $record->name,
             $record->email,
             $record->password,
