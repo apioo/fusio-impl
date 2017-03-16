@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Routes;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -39,7 +40,7 @@ class Version extends SchemaAbstract
         $sb->integer('status');
         $sb->string('name');
         $sb->arrayType('methods')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
+            ->setItems($this->getSchema(Schema\Routes\Method::class));
 
         return $sb->getProperty();
     }

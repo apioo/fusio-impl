@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Connection;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,6 +35,6 @@ class Update extends SchemaAbstract
 {
     public function getDefinition()
     {
-        return $this->getSchema('Fusio\Impl\Backend\Schema\Connection');
+        return $this->getSchema(Schema\Connection::class);
     }
 }

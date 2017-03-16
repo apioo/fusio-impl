@@ -49,7 +49,7 @@ class App extends SchemaAbstract
         $sb->arrayType('scopes')
             ->setItems(Property::getString());
         $sb->arrayType('tokens')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\App\Token'));
+            ->setItems($this->getSchema(App\Token::class));
 
         return $sb->getProperty();
     }

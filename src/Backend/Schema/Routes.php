@@ -35,7 +35,7 @@ class Routes extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('methods');
-        $sb->addPatternProperty('^(GET|POST|PUT|DELETE)$', $this->getSchema('Fusio\Impl\Backend\Schema\Routes\Method'));
+        $sb->addPatternProperty('^(GET|POST|PUT|DELETE)$', $this->getSchema(Routes\Method::class));
         $methods = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('version');

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Rate;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -38,7 +39,7 @@ class Collection extends SchemaAbstract
         $sb->integer('totalResults');
         $sb->integer('startIndex');
         $sb->arrayType('entry')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Rate'));
+            ->setItems($this->getSchema(Schema\Rate::class));
 
         return $sb->getProperty();
     }

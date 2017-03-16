@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Scope;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,7 +35,7 @@ class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Scope');
+        $schema = $this->getSchema(Schema\Scope::class);
         $schema->setRequired(['name', 'routes']);
 
         return $schema;

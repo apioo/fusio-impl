@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\App;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,6 +35,6 @@ class Delete extends SchemaAbstract
 {
     public function getDefinition()
     {
-        return $this->getSchema('Fusio\Impl\Backend\Schema\App');
+        return $this->getSchema(Schema\App::class);
     }
 }

@@ -44,7 +44,7 @@ class User extends SchemaAbstract
         $sb->arrayType('scopes')
             ->setItems(Property::getString());
         $sb->arrayType('apps')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\App'));
+            ->setItems($this->getSchema(App::class));
         $sb->dateTime('date');
 
         return $sb->getProperty();

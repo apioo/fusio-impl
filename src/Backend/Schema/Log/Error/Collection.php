@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Log\Error;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -38,7 +39,7 @@ class Collection extends SchemaAbstract
         $sb->integer('totalResults');
         $sb->integer('startIndex');
         $sb->arrayType('entry')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Log\Error'));
+            ->setItems($this->getSchema(Schema\Log\Error::class));
 
         return $sb->getProperty();
     }

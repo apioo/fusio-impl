@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Routes;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,7 +35,7 @@ class Update extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\Routes');
+        $schema = $this->getSchema(Schema\Routes::class);
         $schema->setRequired(['config']);
 
         return $schema;

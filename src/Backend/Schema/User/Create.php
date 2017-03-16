@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\User;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
@@ -35,7 +36,7 @@ class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\User');
+        $schema = $this->getSchema(Schema\User::class);
         $schema->addProperty('password', Property::getString());
         $schema->setRequired(['status', 'name', 'email', 'password']);
 

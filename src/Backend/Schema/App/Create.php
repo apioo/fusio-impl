@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\App;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,7 +35,7 @@ class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\App');
+        $schema = $this->getSchema(Schema\App::class);
         $schema->setRequired(['userId', 'name', 'url', 'scopes']);
 
         return $schema;
