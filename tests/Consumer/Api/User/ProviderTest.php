@@ -19,10 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer;
+namespace Fusio\Impl\Tests\Consumer\User;
 
 use Firebase\JWT\JWT;
-use Fusio\Impl\Service\Consumer\ProviderInterface;
+use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;

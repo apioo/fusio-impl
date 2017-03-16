@@ -156,10 +156,12 @@ JSON;
     "url": "http:\/\/google.com",
     "scopes": [
         {
+            "id": "4",
             "name": "foo",
             "description": "Foo access"
         },
         {
+            "id": "5",
             "name": "bar",
             "description": "Bar access"
         }

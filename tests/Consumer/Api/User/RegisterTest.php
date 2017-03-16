@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer;
+namespace Fusio\Impl\Tests\Consumer\User;
 
 use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;

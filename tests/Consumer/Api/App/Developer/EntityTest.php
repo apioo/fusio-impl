@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\App\Developer;
 
-use Fusio\Impl\Table\App;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -221,7 +221,33 @@ JSON;
         "consumer",
         "authorization"
     ],
-    "tokens": []
+    "tokens": [
+        {
+            "id": 5,
+            "userId": 2,
+            "status": 1,
+            "token": "1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b",
+            "scope": [
+                "consumer"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 2,
+            "userId": 1,
+            "status": 1,
+            "token": "b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2",
+            "scope": [
+                "consumer",
+                "authorization"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        }
+    ]
 }
 JSON;
 
@@ -281,7 +307,8 @@ JSON;
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
 
-        $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(2);
+        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(2);
+        $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
     }
@@ -314,6 +341,6 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(2, $row['id']);
-        $this->assertEquals(App::STATUS_DELETED, $row['status']);
+        $this->assertEquals(Table\App::STATUS_DELETED, $row['status']);
     }
 }

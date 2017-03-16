@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer;
+namespace Fusio\Impl\Tests\Consumer\User;
 
 use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * AccountTest
+ * ChangePasswordTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class AccountTest extends ControllerDbTestCase
+class ChangePasswordTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class AccountTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/account', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/consumer/account/change_password', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +50,7 @@ class AccountTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/account",
+    "path": "\/consumer\/account\/change_password",
     "version": "*",
     "status": 1,
     "description": "",
@@ -58,14 +58,17 @@ class AccountTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Profile": {
+            "Password": {
                 "type": "object",
-                "title": "profile",
+                "title": "password",
                 "properties": {
-                    "name": {
+                    "oldPassword": {
                         "type": "string"
                     },
-                    "email": {
+                    "newPassword": {
+                        "type": "string"
+                    },
+                    "verifyPassword": {
                         "type": "string"
                     }
                 }
@@ -82,11 +85,8 @@ class AccountTest extends ControllerDbTestCase
                     }
                 }
             },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Profile"
-            },
             "PUT-request": {
-                "$ref": "#\/definitions\/Profile"
+                "$ref": "#\/definitions\/Password"
             },
             "PUT-200-response": {
                 "$ref": "#\/definitions\/Message"
@@ -94,11 +94,6 @@ class AccountTest extends ControllerDbTestCase
         }
     },
     "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
         "PUT": {
             "request": "#\/definitions\/PUT-request",
             "responses": {
@@ -109,11 +104,11 @@ class AccountTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/account"
+            "href": "\/export\/swagger\/*\/consumer\/account\/change_password"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/account"
+            "href": "\/export\/raml\/*\/consumer\/account\/change_password"
         }
     ]
 }
@@ -124,34 +119,21 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        
-        $expect = <<<JSON
-{
-    "id": 1,
-    "provider": 1,
-    "status": 1,
-    "name": "Administrator",
-    "email": "admin@localhost.com",
-    "date": "[datetime]"
-}
-JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -163,46 +145,42 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
-            'name'  => 'fooo', // the name is ignore
-            'email' => 'foo@bar.com',
+            'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
+            'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL!',
+            'verifyPassword' => 'qf2vX10Ec4wFZHx0K1eL!',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
     "success": true,
-    "message": "Account update successful"
+    "message": "Password successful changed"
 }
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
-        // check database user
+        // check database password
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('provider', 'status', 'remoteId', 'name', 'email')
+            ->select('password')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 2]);
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
-
-        $this->assertEquals(1, $row['provider']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('', $row['remoteId']);
-        $this->assertEquals('Administrator', $row['name']);
-        $this->assertEquals('foo@bar.com', $row['email']);
+        $this->assertTrue(password_verify('qf2vX10Ec4wFZHx0K1eL!', $row['password']));
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/account', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/consumer/account/change_password', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+            'Authorization' => 'Bearer 1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b'
         ), json_encode([
             'foo' => 'bar',
         ]));

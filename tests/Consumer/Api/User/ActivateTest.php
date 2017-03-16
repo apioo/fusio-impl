@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer;
+namespace Fusio\Impl\Tests\Consumer\User;
 
 use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
@@ -122,7 +122,7 @@ JSON;
 
     public function testPost()
     {
-        Environment::getService('consumer_service')->register('baz', 'baz@localhost.com', 'test1234!', null);
+        Environment::getService('user_register_service')->register('baz', 'baz@localhost.com', 'test1234!', null);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'provider', 'status', 'remoteId', 'name', 'email')

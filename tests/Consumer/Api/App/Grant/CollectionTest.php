@@ -93,9 +93,6 @@ class CollectionTest extends ControllerDbTestCase
                     "url": {
                         "type": "string"
                     },
-                    "parameters": {
-                        "type": "string"
-                    },
                     "appKey": {
                         "type": "string"
                     },
@@ -111,38 +108,6 @@ class CollectionTest extends ControllerDbTestCase
                         "items": {
                             "type": "string"
                         }
-                    },
-                    "tokens": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Token"
-                        }
-                    }
-                }
-            },
-            "Token": {
-                "type": "object",
-                "title": "token",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "token": {
-                        "type": "string"
-                    },
-                    "scope": {
-                        "type": "string"
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "expire": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 }
             },
@@ -200,7 +165,7 @@ JSON;
     "entry": [
         {
             "id": "1",
-            "createDate": "2015-02-27 19:59:15",
+            "createDate": "2015-02-27T19:59:15Z",
             "app": {
                 "id": "1",
                 "name": "Backend",
