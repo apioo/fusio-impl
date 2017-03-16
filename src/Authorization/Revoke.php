@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Fusio\Impl\Table;
 use PSX\Framework\Controller\ApiAbstract;
 use PSX\Http\Exception as StatusCode;
 
@@ -50,17 +51,17 @@ class Revoke extends ApiAbstract
 
         if ($type == 'Bearer') {
             $sql = 'SELECT id,
-					       appId,
-					       userId,
-					       scope
-					  FROM fusio_app_token
-					 WHERE token = :token';
+                           appId,
+                           userId,
+                           scope
+                      FROM fusio_app_token
+                     WHERE token = :token';
 
             $row = $this->connection->fetchAssoc($sql, array('token' => $token));
 
             // the token must be assigned to the user
             if (!empty($row) && $row['appId'] == $this->appId && $row['userId'] == $this->userId) {
-                $this->tableManager->getTable('Fusio\Impl\Table\App\Token')->removeTokenFromApp($this->appId, $row['id']);
+                $this->tableManager->getTable(Table\App\Token::class)->removeTokenFromApp($this->appId, $row['id']);
 
                 $this->setBody(array(
                     'success' => true

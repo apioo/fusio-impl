@@ -59,7 +59,7 @@ class Collection extends BackendApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setRequest($this->schemaManager->getSchema(Schema\User\Create::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\User\Message::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;

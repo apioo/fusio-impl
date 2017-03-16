@@ -28,6 +28,7 @@ use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
+use Fusio\Impl\Table;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
 use Monolog\Handler as LogHandler;
@@ -147,7 +148,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\InstallCommand($this->get('connection')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
-        $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable('Fusio\Impl\Table\App'), $this->get('table_manager')->getTable('Fusio\Impl\Table\User')));
+        $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
         $application->add(new Console\System\CheckCommand($this->get('connection')));
 
         $application->add(new Console\User\AddCommand($this->get('user_service')));
