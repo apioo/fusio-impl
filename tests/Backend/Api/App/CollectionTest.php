@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\App;
 
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Table;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -308,7 +309,8 @@ JSON;
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('', $row['parameters']);
 
-        $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(6);
+        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
     }
@@ -356,7 +358,8 @@ JSON;
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('foo=bar&bar=1', $row['parameters']);
 
-        $scopes = Environment::getService('table_manager')->getTable('Fusio\Impl\Table\Scope')->getByApp(6);
+        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(6);
+        $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
     }

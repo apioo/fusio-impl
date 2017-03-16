@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Service\Log;
+namespace Fusio\Impl\Tests\Backend\View\Log;
 
-use Fusio\Impl\Service\Log\QueryFilter;
+use Fusio\Impl\Backend\View\Log\QueryFilter;
 
 /**
  * QueryFilterTest

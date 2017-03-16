@@ -51,10 +51,16 @@ class WhoamiTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 1,
-    "provider": 1,
     "status": 1,
     "name": "Administrator",
     "email": "admin@localhost.com",
+    "scopes": [
+        "backend",
+        "consumer",
+        "authorization",
+        "foo",
+        "bar"
+    ],
     "date": "[datetime]"
 }
 JSON;

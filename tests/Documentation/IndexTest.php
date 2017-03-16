@@ -379,7 +379,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/consumer\/authorize",
+            "path": "\/consumer\/scope",
             "methods": [
                 "GET",
                 "POST",
@@ -389,7 +389,7 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
-            "path": "\/consumer\/scope",
+            "path": "\/consumer\/authorize",
             "methods": [
                 "GET",
                 "POST",

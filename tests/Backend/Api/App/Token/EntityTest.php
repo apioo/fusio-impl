@@ -120,17 +120,31 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
         $expect = <<<'JSON'
 {
     "id": 1,
-    "appId": 1,
-    "userId": 1,
+    "app": {
+        "id": 1,
+        "userId": 1,
+        "status": 1,
+        "name": "Backend"
+    },
+    "user": {
+        "id": 1,
+        "status": 1,
+        "name": "Administrator"
+    },
     "status": 1,
     "token": "da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf",
-    "scope": "backend,authorization",
+    "scope": [
+        "backend",
+        "authorization"
+    ],
     "ip": "127.0.0.1",
-    "date": "2015-06-25T22:49:09Z"
+    "expire": "[datetime]",
+    "date": "[datetime]"
 }
 JSON;
 

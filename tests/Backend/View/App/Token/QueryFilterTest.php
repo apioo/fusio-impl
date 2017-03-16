@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Service\App\Token;
+namespace Fusio\Impl\Tests\Backend\View\App\Token;
 
-use Fusio\Impl\Service\App\Token\QueryFilter;
+use Fusio\Impl\Backend\View\App\Token\QueryFilter;
 
 /**
  * QueryFilterTest

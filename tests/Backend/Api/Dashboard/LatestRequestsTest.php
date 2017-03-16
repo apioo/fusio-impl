@@ -46,7 +46,7 @@ class LatestRequestsTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/m', '[datetime]', $body);
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
         $expect = <<<JSON
 {

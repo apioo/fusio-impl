@@ -149,7 +149,9 @@ JSON;
             "appId": 2,
             "userId": 2,
             "status": 1,
-            "scope": "consumer",
+            "scope": [
+                "consumer"
+            ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
         },
@@ -158,7 +160,9 @@ JSON;
             "appId": 1,
             "userId": 4,
             "status": 1,
-            "scope": "backend",
+            "scope": [
+                "backend"
+            ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
         },
@@ -167,7 +171,9 @@ JSON;
             "appId": 3,
             "userId": 2,
             "status": 1,
-            "scope": "bar",
+            "scope": [
+                "bar"
+            ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
         },
@@ -176,7 +182,10 @@ JSON;
             "appId": 2,
             "userId": 1,
             "status": 1,
-            "scope": "consumer,authorization",
+            "scope": [
+                "consumer",
+                "authorization"
+            ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
         },
@@ -185,7 +194,10 @@ JSON;
             "appId": 1,
             "userId": 1,
             "status": 1,
-            "scope": "backend,authorization",
+            "scope": [
+                "backend",
+                "authorization"
+            ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
         }
