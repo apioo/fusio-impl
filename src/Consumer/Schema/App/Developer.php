@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,7 +35,7 @@ class Developer extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema('Fusio\Impl\Backend\Schema\App');
+        $schema = $this->getSchema(Schema\App::class);
         $schema->removeProperty('userId');
 
         return $schema;

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App\Grant;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -36,7 +37,7 @@ class Collection extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('collection');
         $sb->arrayType('entry')
-            ->setItems($this->getSchema('Fusio\Impl\Consumer\Schema\App\Grant'));
+            ->setItems($this->getSchema(Schema\App\Grant::class));
 
         return $sb->getProperty();
     }

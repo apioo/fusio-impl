@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -36,7 +37,7 @@ class Grant extends SchemaAbstract
     {
         $sb = $this->getSchemaBuilder('grant');
         $sb->integer('id');
-        $sb->objectType('app', $this->getSchema('Fusio\Impl\Consumer\Schema\App'));
+        $sb->objectType('app', $this->getSchema(Schema\App::class));
         $sb->dateTime('createDate');
 
         return $sb->getProperty();

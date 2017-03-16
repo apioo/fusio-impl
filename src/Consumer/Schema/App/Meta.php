@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -38,7 +39,7 @@ class Meta extends SchemaAbstract
         $sb->string('name');
         $sb->string('url');
         $sb->arrayType('scopes')
-            ->setItems($this->getSchema('Fusio\Impl\Backend\Schema\Scope'));
+            ->setItems($this->getSchema(Schema\Scope::class));
 
         return $sb->getProperty();
     }

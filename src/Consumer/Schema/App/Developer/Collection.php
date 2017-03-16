@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\App\Developer;
 
+use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -38,7 +39,7 @@ class Collection extends SchemaAbstract
         $sb->integer('totalResults');
         $sb->integer('startIndex');
         $sb->arrayType('entry')
-            ->setItems($this->getSchema('Fusio\Impl\Consumer\Schema\App\Developer'));
+            ->setItems($this->getSchema(Schema\App\Developer::class));
 
         return $sb->getProperty();
     }
