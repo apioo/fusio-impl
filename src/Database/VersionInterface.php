@@ -56,9 +56,9 @@ interface VersionInterface
     public function executeUpgrade(Connection $connection);
 
     /**
-     * Returns an associative array where the key is the table name and the 
+     * Returns an associative array where the key is the table name and the
      * value is an array of SQL queries
-     * 
+     *
      * @return array
      */
     public function getInstallInserts();

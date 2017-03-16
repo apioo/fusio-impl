@@ -177,7 +177,7 @@ class Installer
 
     /**
      * Returns the version object by the provided version string
-     * 
+     *
      * @param string $version
      * @return \Fusio\Impl\Database\VersionInterface
      */
@@ -195,7 +195,7 @@ class Installer
 
     /**
      * Returns the latest version
-     * 
+     *
      * @return \Fusio\Impl\Database\VersionInterface
      */
     public static function getLatestVersion()

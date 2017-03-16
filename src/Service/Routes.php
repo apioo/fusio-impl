@@ -166,10 +166,10 @@ class Routes
     }
 
     /**
-     * Method which handles data change of each API method. Basically an API 
-     * method can only change if it is in development mode. In every other 
+     * Method which handles data change of each API method. Basically an API
+     * method can only change if it is in development mode. In every other
      * case we can only change the status
-     * 
+     *
      * @param integer $routeId
      * @param string $path
      * @param \PSX\Record\RecordInterface $result

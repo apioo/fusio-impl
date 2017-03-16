@@ -113,7 +113,7 @@ class Method extends TableAbstract
 
     /**
      * Returns only active methods for the route
-     * 
+     *
      * @param integer $routeId
      * @param integer $version
      * @param boolean $includeCache

@@ -97,7 +97,7 @@ class CheckCommand extends Command
 
     /**
      * Check whether all tables from the schema are available
-     * 
+     *
      * @return bool
      */
     protected function checkInstall()
@@ -115,7 +115,7 @@ class CheckCommand extends Command
     /**
      * Check whether we have a row in the user table. The installation inserts
      * already a system user so we must have at least more then one user
-     * 
+     *
      * @return bool
      */
     protected function checkUser()

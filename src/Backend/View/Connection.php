@@ -81,7 +81,7 @@ class Connection extends ViewAbstract
             'status' => 'status',
             'name' => 'name',
             'class' => 'class',
-            'config' => $this->fieldCallback('config', function($config, $row) use ($secretKey, $connectionParser){
+            'config' => $this->fieldCallback('config', function ($config, $row) use ($secretKey, $connectionParser) {
                 $config = Service\Connection::decryptConfig($config, $secretKey);
 
                 // remove all password fields from the config

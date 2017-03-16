@@ -168,10 +168,10 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // oauth2 filter if not public
         if (!$isPublic) {
             $filter[] = new Oauth2Filter(
-                $this->connection, 
-                $this->request->getMethod(), 
-                $this->context->get('fusio.routeId'), 
-                $this->config->get('fusio_project_key'), 
+                $this->connection,
+                $this->request->getMethod(),
+                $this->context->get('fusio.routeId'),
+                $this->config->get('fusio_project_key'),
                 function ($accessToken) {
                     $this->appId  = $accessToken['appId'];
                     $this->userId = $accessToken['userId'];

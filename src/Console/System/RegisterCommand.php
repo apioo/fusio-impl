@@ -167,13 +167,11 @@ class RegisterCommand extends Command
                             $filter   = new PathFilter();
                             $question = new Question('Base path (i.e. /acme/service): ', '/');
                             $question->setValidator(function ($answer) use ($filter) {
-
                                 if (!$filter->apply($answer)) {
                                     throw new \RuntimeException(sprintf($filter->getErrorMessage(), 'Base path'));
                                 }
 
                                 return $answer;
-
                             });
 
                             $basePath = $helper->ask($input, $output, $question);

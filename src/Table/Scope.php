@@ -60,7 +60,7 @@ class Scope extends TableAbstract
 
     public static function getNames(array $result)
     {
-        return array_map(function($row){
+        return array_map(function ($row) {
             return $row['name'];
         }, $result);
     }
