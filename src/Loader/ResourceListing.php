@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Loader;
 
-use PSX\Api\Resource;
 use PSX\Framework\Api\ControllerDocumentation;
 
 /**

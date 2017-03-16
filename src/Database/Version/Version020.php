@@ -28,7 +28,6 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use PSX\Record\Record;
-use PSX\Schema\Property;
 
 /**
  * Version020

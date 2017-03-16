@@ -21,10 +21,6 @@
 
 namespace Fusio\Impl\Consumer\View;
 
-use Fusio\Impl\Table;
-use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Reference;
 use PSX\Sql\ViewAbstract;
 
 /**

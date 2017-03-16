@@ -26,11 +26,8 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
 use PSX\Oauth2\AccessToken;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Sql;
 
 /**
  * App

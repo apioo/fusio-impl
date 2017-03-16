@@ -24,10 +24,7 @@ namespace Fusio\Impl\Service\App;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Sql;
 
 /**
  * Developer

@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Engine\Request;
+use Fusio\Engine\Context as EngineContext;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
+use Fusio\Engine\Request;
 use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\Oauth2Filter;
-use Fusio\Engine\Context as EngineContext;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
@@ -37,7 +37,6 @@ use PSX\Framework\Filter\UserAgentEnforcer;
 use PSX\Framework\Loader\Context;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\Record;
-use PSX\Schema\SchemaInterface;
 
 /**
  * SchemaApiController

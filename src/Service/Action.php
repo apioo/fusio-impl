@@ -21,14 +21,9 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
-use PSX\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Sql;
 
 /**
  * Action

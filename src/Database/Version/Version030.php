@@ -31,7 +31,6 @@ use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Record\Record;
-use PSX\Schema\Property;
 
 /**
  * Version030

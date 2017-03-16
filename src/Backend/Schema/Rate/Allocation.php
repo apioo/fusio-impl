@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Schema\Rate;
 
-use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**

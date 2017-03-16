@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Table\Log;
 
-use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;
 
 /**

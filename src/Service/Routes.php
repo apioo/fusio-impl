@@ -26,7 +26,6 @@ use Fusio\Impl\Service\Routes\Relation;
 use Fusio\Impl\Table;
 use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
-use PSX\DateTime;
 use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;

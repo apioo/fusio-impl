@@ -25,7 +25,6 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Base;
-use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Psr\Log\LoggerInterface;

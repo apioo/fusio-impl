@@ -24,9 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Model;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
 use PSX\Sql\Condition;
-use PSX\Sql\Sql;
 
 /**
  * Rate

@@ -23,8 +23,8 @@ namespace Fusio\Impl\Parser;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Factory\FactoryInterface;
-use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Form;
+use Fusio\Engine\Parser\ParserAbstract;
 
 /**
  * Database

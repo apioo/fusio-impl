@@ -24,8 +24,6 @@ namespace Fusio\Impl\Service\Routes;
 use Fusio\Engine\Form;
 use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Impl\Table;
-use PSX\Api\Resource;
-use PSX\Sql\Condition;
 
 /**
  * The relation service determines all schema and action ids which are used by a

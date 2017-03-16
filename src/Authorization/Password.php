@@ -24,7 +24,6 @@ namespace Fusio\Impl\Authorization;
 use Fusio\Impl\Service\App as AppService;
 use Fusio\Impl\Service\Scope as ScopeService;
 use Fusio\Impl\Service\User as UserService;
-use Fusio\Impl\Table\App;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;

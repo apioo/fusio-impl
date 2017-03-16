@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Impl\Table;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Model\Action;
+use Fusio\Engine\Repository;
+use Fusio\Impl\Table;
 
 /**
  * ActionDatabase

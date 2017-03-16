@@ -23,9 +23,7 @@ namespace Fusio\Impl\Adapter\Transform;
 
 use Fusio\Impl\Adapter\TransformAbstract;
 use InvalidArgumentException;
-use PSX\Json;
 use PSX\Uri\Uri;
-use Symfony\Component\Yaml\Parser;
 
 /**
  * Swagger

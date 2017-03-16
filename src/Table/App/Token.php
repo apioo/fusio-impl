@@ -23,13 +23,9 @@ namespace Fusio\Impl\Table\App;
 
 use DateTime;
 use Fusio\Impl\Service\App\Token\QueryFilter;
-use Fusio\Impl\Table;
-use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
-use PSX\Sql\TableAbstract;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
+use PSX\Sql\TableAbstract;
 
 /**
  * Token

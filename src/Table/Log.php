@@ -22,10 +22,6 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Impl\Service\Log\QueryFilter;
-use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Reference;
-use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**

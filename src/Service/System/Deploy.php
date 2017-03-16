@@ -21,9 +21,8 @@
 
 namespace Fusio\Impl\Service\System;
 
-use InvalidArgumentException;
-use RuntimeException;
 use PSX\Json;
+use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
 /**

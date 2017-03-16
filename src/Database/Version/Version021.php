@@ -29,7 +29,6 @@ use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\Connection as ConnectionService;
 use PSX\Record\Record;
-use PSX\Schema\Property;
 
 /**
  * Version021

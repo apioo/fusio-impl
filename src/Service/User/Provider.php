@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
 use Fusio\Impl\Service\User\Model\User as UserModel;
 use PSX\Framework\Config\Config;
 use PSX\Http;

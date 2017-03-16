@@ -22,17 +22,13 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Database\Installer;
-use Fusio\Impl\Service;
 use Fusio\Impl\Service\System\Deploy;
 use Monolog\Handler\NullHandler;
 use Psr\Log\LoggerInterface;
-use PSX\Sql\Condition;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * DeployCommand

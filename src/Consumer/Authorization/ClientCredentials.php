@@ -25,7 +25,6 @@ use Fusio\Impl\Service\App as AppService;
 use Fusio\Impl\Service\User as UserService;
 use Fusio\Impl\Table\App;
 use Fusio\Impl\Table\User;
-use PSX\DateTime;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\ClientCredentialsAbstract;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;

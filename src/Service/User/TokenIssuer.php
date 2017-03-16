@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Table;
-use Fusio\Impl\Service;
 use Firebase\JWT\JWT;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 

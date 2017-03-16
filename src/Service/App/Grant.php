@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Service\App;
 
-use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 
 /**
  * Grant

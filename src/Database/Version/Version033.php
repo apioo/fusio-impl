@@ -30,7 +30,6 @@ use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Schema\Property;
 
 /**
  * Version033

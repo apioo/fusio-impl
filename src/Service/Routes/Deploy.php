@@ -23,11 +23,10 @@ namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Engine\Form;
 use Fusio\Engine\Model;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Parser\ParserAbstract;
+use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Sql\Condition;
 
 /**
  * Deploys a route method from development to production. That means that we

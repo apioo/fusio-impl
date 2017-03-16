@@ -21,20 +21,10 @@
 
 namespace Fusio\Impl\Service\System;
 
-use DateTime;
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\Parser\ParserInterface;
-use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Base;
 use Fusio\Engine\Form;
-use Monolog\Handler\NullHandler;
+use Fusio\Engine\Parser\ParserInterface;
 use Psr\Log\LoggerInterface;
-use PSX\Framework\Dispatch\Dispatch;
-use PSX\Http\Request;
-use PSX\Http\Response;
-use PSX\Http\Stream\TempStream;
-use PSX\Json\Parser;
-use PSX\Uri\Url;
 use RuntimeException;
 use stdClass;
 

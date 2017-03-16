@@ -23,7 +23,6 @@ namespace Fusio\Impl\Database;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Base;
 
 /**
  * Installer

@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
-use Fusio\Impl\Backend\View;
 use Fusio\Impl\Logger;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;

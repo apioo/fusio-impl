@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Table;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Model\User;
+use Fusio\Engine\Repository;
+use Fusio\Impl\Table;
 
 /**
  * UserDatabase

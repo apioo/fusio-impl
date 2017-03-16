@@ -22,18 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Connection\PingableInterface;
-use Fusio\Engine\Parser\ParserInterface;
-use Fusio\Engine\Form\Container;
-use Fusio\Engine\Form\Element;
-use Fusio\Engine\Parameters;
 use Fusio\Engine\Factory;
+use Fusio\Engine\Parameters;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Model\Common\ResultSet;
 use PSX\OpenSsl\OpenSsl;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
-use PSX\Sql\Sql;
 
 /**
  * Connection

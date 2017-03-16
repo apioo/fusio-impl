@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Engine\Repository;
 use Fusio\Engine\Model\Connection;
+use Fusio\Engine\Repository;
 use Fusio\Impl\Service\Connection as ConnectionService;
 
 /**

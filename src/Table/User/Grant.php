@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Table\User;
 
-use Fusio\Impl\Table\App;
 use PSX\Sql\TableAbstract;
 
 /**

@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Table\Routes;
 
 use PSX\Api\Resource;
-use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;
 
 /**

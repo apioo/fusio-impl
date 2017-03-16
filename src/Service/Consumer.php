@@ -31,7 +31,6 @@ use PSX\Framework\Config\Config as PSXConfig;
 use PSX\Http;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
-use PSX\Sql\Condition;
 
 /**
  * Consumer
