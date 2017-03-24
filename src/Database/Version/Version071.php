@@ -331,6 +331,23 @@ class Version071 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        // change endpoint class names
+        $classes = [
+            'Fusio\Impl\Consumer\Api\Authorize' => 'Fusio\Impl\Consumer\Api\User\Authorize',
+            'Fusio\Impl\Consumer\Api\Login' => 'Fusio\Impl\Consumer\Api\User\Login',
+            'Fusio\Impl\Consumer\Api\Register' => 'Fusio\Impl\Consumer\Api\User\Register',
+            'Fusio\Impl\Consumer\Api\Provider' => 'Fusio\Impl\Consumer\Api\User\Provider',
+            'Fusio\Impl\Consumer\Api\Activate' => 'Fusio\Impl\Consumer\Api\User\Activate',
+            'Fusio\Impl\Consumer\Api\Account' => 'Fusio\Impl\Consumer\Api\User\Account',
+            'Fusio\Impl\Consumer\Api\Account\ChangePassword' => 'Fusio\Impl\Consumer\Api\User\ChangePassword',
+        ];
+
+        foreach ($classes as $oldClass => $newClass) {
+            $connection->executeUpdate('UPDATE fusio_routes SET controller = :newClass WHERE controller = :oldClass', [
+                'newClass' => $newClass,
+                'oldClass' => $oldClass,
+            ]);
+        }
     }
 
     public function getInstallInserts()
