@@ -27,7 +27,7 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * The deploy service uses the import service to insert the data into the 
- * system. In general it simply converts the yaml format to fitting format
+ * system. In general it simply converts the yaml format
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -113,7 +113,7 @@ class Deploy
 
     protected function transformAction($name, $data, $basePath)
     {
-        $data = $this->resolveResource($data, $basePath, SystemAbstract::TYPE_CONNECTION);
+        $data = $this->resolveResource($data, $basePath, SystemAbstract::TYPE_ACTION);
         $data['name'] = $name;
 
         return $data;
@@ -121,7 +121,7 @@ class Deploy
 
     protected function transformRoutes($path, $data, $basePath)
     {
-        $data = $this->resolveResource($data, $basePath, SystemAbstract::TYPE_CONNECTION);
+        $data = $this->resolveResource($data, $basePath, SystemAbstract::TYPE_ROUTES);
 
         // if we have an indexed array we have a list of configs else we
         // only have a single config
