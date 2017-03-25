@@ -96,7 +96,7 @@ JSON;
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
 
-        $secretKey = Environment::getConfig()->get('fusio_project_key');
+        $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
         return [
             'fusio_user' => [
