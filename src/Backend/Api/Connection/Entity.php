@@ -86,7 +86,7 @@ class Entity extends BackendApiAbstract
     {
         $connection = $this->tableManager->getTable(View\Connection::class)->getEntityWithConfig(
             (int) $this->getUriFragment('connection_id'),
-            $this->config->get('fusio_key'),
+            $this->config->get('fusio_project_key'),
             $this->connectionParser
         );
 

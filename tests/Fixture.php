@@ -21,7 +21,9 @@
 
 namespace Fusio\Impl\Tests;
 
+use Fusio\Impl\Service;
 use PSX\Api\Resource;
+use PSX\Framework\Test\Environment;
 use PSX\Schema\Parser\JsonSchema;
 
 /**
@@ -94,6 +96,8 @@ JSON;
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
 
+        $secretKey = Environment::getConfig()->get('fusio_project_key');
+
         return [
             'fusio_user' => [
                 ['status' => 0, 'name' => 'Consumer', 'email' => 'consumer@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
@@ -114,7 +118,7 @@ JSON;
                 ['appId' => 3, 'userId' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirectUri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
             'fusio_connection' => [
-                ['status' => 1, 'name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => ''],
+                ['status' => 1, 'name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => 'Fusio\Impl\Controller\SchemaApiController'],
