@@ -79,6 +79,7 @@ class DeployCommand extends Command
     {
         $this
             ->setName('system:deploy')
+            ->setAliases(['deploy'])
             ->setDescription('Deploys a Fusio YAML definition')
             ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file');
     }
