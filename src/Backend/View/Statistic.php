@@ -90,8 +90,10 @@ class Statistic extends ViewAbstract
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            $series[$row['routeId']] = $row['path'];
-            $data[$row['routeId']][$row['date']] = (int) $row['count'];
+            if (isset($data[$row['routeId']][$row['date']])) {
+                $series[$row['routeId']] = $row['path'];
+                $data[$row['routeId']][$row['date']] = (int) $row['count'];
+            }
         }
 
         // build labels
@@ -147,7 +149,9 @@ class Statistic extends ViewAbstract
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            $data[$row['date']] = (int) $row['count'];
+            if (isset($data[$row['date']])) {
+                $data[$row['date']] = (int) $row['count'];
+            }
         }
 
         return array(
@@ -211,8 +215,10 @@ class Statistic extends ViewAbstract
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            $series[$row['appId']] = $row['name'];
-            $data[$row['appId']][$row['date']] = (int) $row['count'];
+            if (isset($data[$row['appId']][$row['date']])) {
+                $series[$row['appId']] = $row['name'];
+                $data[$row['appId']][$row['date']] = (int) $row['count'];
+            }
         }
 
         // build labels
@@ -293,8 +299,10 @@ class Statistic extends ViewAbstract
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            $series[$row['routeId']] = $row['path'];
-            $data[$row['routeId']][$row['date']] = (int) $row['count'];
+            if (isset($data[$row['routeId']][$row['date']])) {
+                $series[$row['routeId']] = $row['path'];
+                $data[$row['routeId']][$row['date']] = (int) $row['count'];
+            }
         }
 
         // build labels
@@ -350,7 +358,9 @@ class Statistic extends ViewAbstract
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
         foreach ($result as $row) {
-            $data[$row['date']] = (int) $row['count'];
+            if (isset($data[$row['date']])) {
+                $data[$row['date']] = (int) $row['count'];
+            }
         }
 
         return array(
