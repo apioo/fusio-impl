@@ -161,7 +161,7 @@ JSON;
         $this->assertEquals(1, $migrations[0]['id']);
         $this->assertEquals('Native', $migrations[0]['connection']);
         $this->assertEquals('v1_schema.sql', $migrations[0]['file']);
-        $this->assertEquals('6692667d14a7d93e4d22694b4853a2b4b78fcdc4', $migrations[0]['fileHash']);
+        $this->assertNotEmpty($migrations[0]['fileHash']);
         $this->assertNotEmpty($migrations[0]['executeDate']);
 
         // check whether the native connection has the migrated tables
