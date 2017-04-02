@@ -54,6 +54,12 @@ class DeployCommandTest extends ControllerDbTestCase
         $display = $commandTester->getDisplay();
 
         $this->assertRegExp('/Deploy successful!/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] connection New-Connection/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] schema Request-Schema/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] schema Response-Schema/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action Test-Action/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
+        $this->assertRegExp('/- \[EXECUTED\] Native v1_schema.sql/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -147,5 +153,23 @@ JSON;
 
         $this->assertEquals(1, count($methods));
         $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 4, 'action' => 4], $methods[0]);
+
+        // check migration entries
+        $migrations = $this->connection->fetchAll('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration');
+
+        $this->assertEquals(1, count($migrations));
+        $this->assertEquals(1, $migrations[0]['id']);
+        $this->assertEquals('Native', $migrations[0]['connection']);
+        $this->assertEquals('v1_schema.sql', $migrations[0]['file']);
+        $this->assertEquals('6692667d14a7d93e4d22694b4853a2b4b78fcdc4', $migrations[0]['fileHash']);
+        $this->assertNotEmpty($migrations[0]['executeDate']);
+
+        // check whether the native connection has the migrated tables
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = Environment::getService('connection');
+        $tables     = $connection->getSchemaManager()->listTableNames();
+
+        $this->assertContains('acme_foo', $tables);
+        $this->assertContains('acme_bar', $tables);
     }
 }

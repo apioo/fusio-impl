@@ -41,3 +41,6 @@ routes:
         request: Request-Schema
         response: Response-Schema
         action: Test-Action
+migration:
+  Native:
+    - v1_schema.sql

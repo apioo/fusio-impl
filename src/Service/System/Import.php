@@ -87,7 +87,7 @@ class Import extends SystemAbstract
         if (isset($response->success) && $response->success === false) {
             $this->logger->error($response->message);
 
-            return '[SKIPPED] ' . $type . ' ' . $name;
+            return '[ERROR] ' . $type . ' ' . $name . ': ' . $response->message;
         } elseif (!empty($id)) {
             return '[UPDATED] ' . $type . ' ' . $name;
         } else {

@@ -41,22 +41,33 @@ class Deploy
     protected $importService;
 
     /**
+     * @var \Fusio\Impl\Service\System\Migration
+     */
+    protected $migrationService;
+
+    /**
      * @var array
      */
     protected $types = [SystemAbstract::TYPE_CONNECTION, SystemAbstract::TYPE_SCHEMA, SystemAbstract::TYPE_ACTION, SystemAbstract::TYPE_ROUTES];
 
     /**
      * @param \Fusio\Impl\Service\System\Import $importService
+     * @param \Fusio\Impl\Service\System\Migration $migrationService
      */
-    public function __construct(Import $importService)
+    public function __construct(Import $importService, Migration $migrationService)
     {
-        $this->importService = $importService;
+        $this->importService    = $importService;
+        $this->migrationService = $migrationService;
     }
 
     public function deploy($data, $basePath = null)
     {
         $data   = Yaml::parse($data);
         $import = new \stdClass();
+
+        if (empty($basePath)) {
+            $basePath = getcwd();
+        }
 
         foreach ($this->types as $type) {
             if (isset($data[$type]) && is_array($data[$type])) {
@@ -68,7 +79,13 @@ class Deploy
             }
         }
 
-        return $this->importService->import(json_encode($import));
+        // import definition
+        $log = $this->importService->import(json_encode($import));
+
+        // handle migration
+        $log = array_merge($log, $this->migrationService->execute($data, $basePath));
+
+        return $log;
     }
 
     protected function transform($type, $name, $data, $basePath)
@@ -179,11 +196,7 @@ class Deploy
     {
         if (is_string($data)) {
             if (substr($data, 0, 8) == '!include') {
-                if (empty($basePath)) {
-                    $file = './' . substr($data, 9);
-                } else {
-                    $file = $basePath . '/' . substr($data, 9);
-                }
+                $file = $basePath . '/' . substr($data, 9);
 
                 if (is_file($file)) {
                     return Yaml::parse(file_get_contents($file));
@@ -204,11 +217,7 @@ class Deploy
     {
         if (is_string($data)) {
             if (substr($data, 0, 8) == '!include') {
-                if (empty($basePath)) {
-                    $file = './' . substr($data, 9);
-                } else {
-                    $file = $basePath . '/' . substr($data, 9);
-                }
+                $file = $basePath . '/' . substr($data, 9);
 
                 if (is_file($file)) {
                     return Json\Parser::decode(file_get_contents($file));
