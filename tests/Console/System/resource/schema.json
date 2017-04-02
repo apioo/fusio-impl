@@ -9,6 +9,9 @@
     "content": {
       "type": "string"
     },
+    "author": {
+      "$ref": "file:///author.json"
+    },
     "date": {
       "type": "string",
       "format": "date-time"

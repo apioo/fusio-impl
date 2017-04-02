@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\System;
 
 use PSX\Json;
+use PSX\Uri\Uri;
 use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -220,17 +221,59 @@ class Deploy
                 $file = $basePath . '/' . substr($data, 9);
 
                 if (is_file($file)) {
-                    return Json\Parser::decode(file_get_contents($file));
+                    return $this->resolveRefs($file);
                 } else {
                     throw new RuntimeException('Could not resolve file: ' . $file);
                 }
             } else {
-                return Json\Parser::decode($data);
+                $data = Json\Parser::decode($data);
+
+                if ($data instanceof \stdClass) {
+                    $this->traverseSchema($data, $basePath);
+                }
+
+                return $data;
             }
         } elseif (is_array($data)) {
             return $data;
         } else {
             throw new RuntimeException('Schema must be a string or array');
+        }
+    }
+
+    private function resolveRefs($file)
+    {
+        if (!is_file($file)) {
+            throw new RuntimeException('Could not resolve schema ' . $file);
+        }
+
+        $basePath = pathinfo($file, PATHINFO_DIRNAME);
+        $data     = Json\Parser::decode(file_get_contents($file));
+
+        if ($data instanceof \stdClass) {
+            $this->traverseSchema($data, $basePath);
+        }
+
+        return $data;
+    }
+
+    private function traverseSchema(\stdClass $data, $basePath)
+    {
+        $props = get_object_vars($data);
+        foreach ($props as $key => $value) {
+            if ($data->{$key} instanceof \stdClass) {
+                if (isset($data->{$key}->{'$ref'}) && is_string($data->{$key}->{'$ref'})) {
+                    $uri = new Uri($data->{$key}->{'$ref'});
+
+                    if ($uri->getScheme() == 'file') {
+                        $data->{$key} = $this->resolveRefs($basePath . '/' . $uri->getPath());
+                    } else {
+                        throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
+                    }
+                } else {
+                    $this->traverseSchema($data->{$key}, $basePath);
+                }
+            }
         }
     }
 }

@@ -115,6 +115,18 @@ JSON;
         "content": {
             "type": "string"
         },
+        "author": {
+            "title": "author",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "date": {
             "type": "string",
             "format": "date-time"
