@@ -144,24 +144,16 @@ class Migration
 
             if (substr($line, -1) == ';') {
                 // execute sql
-                $return = $connection->exec($sql);
-
-                if (!$return) {
-                    throw new RuntimeException('Error executing query: ' . $sql);
-                }
+                $connection->exec($sql);
 
                 $sql = '';
             }
         }
-        
+
         // in the case the sql had no last semicolon
         if (!empty($sql)) {
             // execute sql
-            $return = $connection->exec($sql);
-
-            if (!$return) {
-                throw new RuntimeException('Error executing query: ' . $sql);
-            }
+            $connection->exec($sql);
         }
     }
 }
