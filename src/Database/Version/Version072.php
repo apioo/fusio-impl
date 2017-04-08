@@ -158,6 +158,7 @@ class Version072 implements VersionInterface
         $logTable->addColumn('body', 'text', array('notnull' => false));
         $logTable->addColumn('date', 'datetime');
         $logTable->setPrimaryKey(array('id'));
+        $logTable->addOption('engine', 'MyISAM');
 
         $logErrorTable = $schema->createTable('fusio_log_error');
         $logErrorTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -167,6 +168,7 @@ class Version072 implements VersionInterface
         $logErrorTable->addColumn('file', 'string', array('length' => 255));
         $logErrorTable->addColumn('line', 'integer');
         $logErrorTable->setPrimaryKey(array('id'));
+        $logErrorTable->addOption('engine', 'MyISAM');
 
         $routesTable = $schema->createTable('fusio_routes');
         $routesTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -293,11 +295,6 @@ class Version072 implements VersionInterface
 
         $appTokenTable->addForeignKeyConstraint($appTable, array('appId'), array('id'), array(), 'appTokenAppId');
         $appTokenTable->addForeignKeyConstraint($userTable, array('userId'), array('id'), array(), 'appTokenUserId');
-
-        $logTable->addForeignKeyConstraint($appTable, array('appId'), array('id'), array(), 'logAppId');
-        $logTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'logRouteId');
-
-        $logErrorTable->addForeignKeyConstraint($logTable, array('logId'), array('id'), array(), 'logErrorLogId');
 
         $routesActionTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesActionRouteId');
         $routesActionTable->addForeignKeyConstraint($actionTable, array('actionId'), array('id'), array(), 'routesActionActionId');
