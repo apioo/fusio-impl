@@ -55,4 +55,11 @@ class Config extends TableAbstract
             'value' => self::TYPE_VARCHAR,
         );
     }
+
+    public function getValue($name)
+    {
+        return $this->connection->fetchAssoc('SELECT id, value, type FROM fusio_config WHERE name = :name', [
+            'name' => $name
+        ]);
+    }
 }

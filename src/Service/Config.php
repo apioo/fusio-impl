@@ -60,10 +60,7 @@ class Config
 
     public function getValue($name)
     {
-        $condition = new Condition();
-        $condition->like('name', $name);
-
-        $config = $this->configTable->getOneBy($condition);
+        $config = $this->configTable->getValue($name);
 
         if (!empty($config)) {
             return $this->convertValueToType($config['value'], $config['type']);
