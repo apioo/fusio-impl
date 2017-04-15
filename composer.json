@@ -19,6 +19,7 @@
     "fusio/adapter-v8": "^0.3@dev",
     "fusio/adapter-util": "^0.3@dev",
     "fusio/adapter-http": "^0.3@dev",
+    "fusio/adapter-php": "^0.1@dev",
     "paragonie/random_compat": "^2.0",
     "firebase/php-jwt": "^3.0",
     "swiftmailer/swiftmailer": "^5.4"
