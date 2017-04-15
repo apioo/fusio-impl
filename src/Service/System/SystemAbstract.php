@@ -211,13 +211,6 @@ abstract class SystemAbstract
                         throw new RuntimeException('Could not resolve connection ' . $entity->config->{$data['name']});
                     }
                     $config->{$data['name']} = $name;
-                } elseif ($element instanceof Form\Element\Input) {
-                    if ($data['type'] == 'password') {
-                        // dont export or import password fields
-                        $config->{$data['name']} = "";
-                    } else {
-                        $config->{$data['name']} = $entity->config->{$data['name']};
-                    }
                 } else {
                     $config->{$data['name']} = $entity->config->{$data['name']};
                 }
