@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Dependency;
 
-use Doctrine\Common\Cache as DoctrineCache;
-use Fusio\Engine\Cache\SimpleCache;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Factory;
@@ -38,6 +36,7 @@ use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
+use PSX\Cache\SimpleCache;
 
 /**
  * Engine
