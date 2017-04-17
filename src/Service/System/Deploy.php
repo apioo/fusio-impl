@@ -281,20 +281,37 @@ class Deploy
 
     private function replaceProperties($data)
     {
-        // replace dir properties
-        $vars = [
+        $vars = [];
+        
+        // dir properties
+        $vars['dir'] = [
             'cache' => PSX_PATH_CACHE,
             'src'   => PSX_PATH_LIBRARY,
             'temp'  => sys_get_temp_dir(),
         ];
-        foreach ($vars as $key => $value) {
-            $data = str_replace('${dir.' . $key . '}', $value, $data);
-        }
 
-        // replace env properties
+        // env properties
+        $vars['env'] = [];
         foreach ($_SERVER as $key => $value) {
             if (is_scalar($value)) {
-                $data = str_replace('${env.' . strtolower($key) . '}', $value, $data);
+                $vars['env'][strtolower($key)] = $value;
+            }
+        }
+
+        foreach ($vars as $type => $properties) {
+            $search  = [];
+            $replace = [];
+            foreach ($properties as $key => $value) {
+                $search[]  = '${' . $type . '.' . $key . '}';
+                $replace[] = is_string($value) ? trim(json_encode($value), '"') : $value;
+            }
+
+            $data = str_replace($search, $replace, $data);
+
+            // check whether we have variables which were not replaced
+            preg_match('/\$\{' . $type . '\.([0-9A-z_]+)\}/', $data, $matches);
+            if (isset($matches[0])) {
+                throw new \RuntimeException('Usage of unknown property ' . $matches[0]);
             }
         }
 
