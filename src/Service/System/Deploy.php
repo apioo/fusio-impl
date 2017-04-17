@@ -265,10 +265,12 @@ class Deploy
                 if (isset($data->{$key}->{'$ref'}) && is_string($data->{$key}->{'$ref'})) {
                     $uri = new Uri($data->{$key}->{'$ref'});
 
-                    if ($uri->getScheme() == 'file') {
-                        $data->{$key} = $this->resolveRefs($basePath . '/' . $uri->getPath());
-                    } else {
-                        throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
+                    if ($uri->isAbsolute()) {
+                        if ($uri->getScheme() == 'file') {
+                            $data->{$key} = $this->resolveRefs($basePath . '/' . $uri->getPath());
+                        } else {
+                            throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
+                        }
                     }
                 } else {
                     $this->traverseSchema($data->{$key}, $basePath);
