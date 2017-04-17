@@ -213,4 +213,19 @@ JSON;
 
         $this->assertEquals(['foo' => sys_get_temp_dir()], $response);
     }
+
+    public function testCommandPropertiesUnknown()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_properties_unknown.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Usage of unknown property \$\{dir\.foo}/', $display, $display);
+    }
 }
