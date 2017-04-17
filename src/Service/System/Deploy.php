@@ -63,7 +63,7 @@ class Deploy
 
     public function deploy($data, $basePath = null)
     {
-        $data   = Yaml::parse($data);
+        $data   = Yaml::parse($this->replaceProperties($data));
         $import = new \stdClass();
 
         if (empty($basePath)) {
@@ -277,5 +277,27 @@ class Deploy
                 }
             }
         }
+    }
+
+    private function replaceProperties($data)
+    {
+        // replace dir properties
+        $vars = [
+            'cache' => PSX_PATH_CACHE,
+            'src'   => PSX_PATH_LIBRARY,
+            'temp'  => sys_get_temp_dir(),
+        ];
+        foreach ($vars as $key => $value) {
+            $data = str_replace('${dir.' . $key . '}', $value, $data);
+        }
+
+        // replace env properties
+        foreach ($_SERVER as $key => $value) {
+            if (is_scalar($value)) {
+                $data = str_replace('${env.' . strtolower($key) . '}', $value, $data);
+            }
+        }
+
+        return $data;
     }
 }
