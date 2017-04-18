@@ -151,10 +151,10 @@ class Rate
     /**
      * @param string $ip
      * @param integer $routeId
-     * @param \Fusio\Engine\Model\App $app
+     * @param \Fusio\Engine\Model\AppInterface $app
      * @return boolean
      */
-    public function hasExceeded($ip, $routeId, Model\App $app)
+    public function hasExceeded($ip, $routeId, Model\AppInterface $app)
     {
         $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
 
@@ -171,10 +171,10 @@ class Rate
     /**
      * @param string $ip
      * @param string $timespan
-     * @param \Fusio\Engine\Model\App $app
+     * @param \Fusio\Engine\Model\AppInterface $app
      * @return integer
      */
-    protected function getRequestCount($ip, $timespan, Model\App $app)
+    protected function getRequestCount($ip, $timespan, Model\AppInterface $app)
     {
         if (empty($timespan)) {
             return 0;

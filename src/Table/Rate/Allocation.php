@@ -59,7 +59,7 @@ class Allocation extends TableAbstract
         $this->connection->executeUpdate($sql, ['rateId' => $rateId]);
     }
 
-    public function getRateForRequest($routeId, Model\App $app)
+    public function getRateForRequest($routeId, Model\AppInterface $app)
     {
         $sql = '    SELECT rate.rateLimit,
                            rate.timespan
