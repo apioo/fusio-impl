@@ -80,7 +80,7 @@ class Scope
             // create scope
             $this->scopeTable->create(array(
                 'name'        => $name,
-                'description' => $description,
+                'description' => $description ?: '',
             ));
 
             // insert routes
