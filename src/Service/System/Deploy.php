@@ -70,6 +70,8 @@ class Deploy
             $basePath = getcwd();
         }
 
+        $actions = $this->resolveActionsFromRoutes($data);
+
         foreach ($this->types as $type) {
             if (isset($data[$type]) && is_array($data[$type])) {
                 $result = [];
@@ -77,6 +79,17 @@ class Deploy
                     $result[] = $this->transform($type, $name, $entry, $basePath);
                 }
                 $import->{$type} = $result;
+            }
+        }
+
+        // append actions which we have automatically created
+        if (!empty($actions)) {
+            if (!isset($import->action)) {
+                $import->action = [];
+            }
+
+            foreach ($actions as $name => $entry) {
+                $import->action[] = $this->transform(SystemAbstract::TYPE_ACTION, $name, $entry, $basePath);
             }
         }
 
@@ -174,13 +187,23 @@ class Deploy
 
                 if (isset($config['request'])) {
                     $methods[$method]['request'] = $config['request'];
+                } elseif (!in_array($method, ['GET'])) {
+                    $methods[$method]['request'] = 'Passthru';
                 }
 
                 if (isset($config['response'])) {
                     $methods[$method]['response'] = $config['response'];
+                } else {
+                    $methods[$method]['response'] = 'Passthru';
                 }
 
                 if (isset($config['action'])) {
+                    // in case the action contains a class we have automatically
+                    // created an action
+                    if (strpos($config['action'], '\\') !== false && class_exists($config['action'])) {
+                        $config['action'] = $this->getActionNameFromClass($config['action']);
+                    }
+
                     $methods[$method]['action'] = $config['action'];
                 }
             }
@@ -191,6 +214,41 @@ class Deploy
             'status'  => isset($row['status']) ? $row['status'] : 4,
             'methods' => $methods,
         ];
+    }
+
+    /**
+     * In case the routes contains a class as action we automatically create a
+     * fitting action entry
+     * 
+     * @param array $data
+     * @return array
+     */
+    private function resolveActionsFromRoutes(array $data)
+    {
+        $actions = [];
+        $type    = SystemAbstract::TYPE_ROUTES;
+
+        if (isset($data[$type]) && is_array($data[$type])) {
+            foreach ($data[$type] as $name => $row) {
+                if (isset($row['methods']) && is_array($row['methods'])) {
+                    foreach ($row['methods'] as $method => $config) {
+                        if (isset($config['action']) && strpos($config['action'], '\\') !== false) {
+                            if (class_exists($config['action'])) {
+                                $name = $this->getActionNameFromClass($config['action']);
+
+                                $actions[$name] = [
+                                    'class' => $config['action']
+                                ];
+                            } else {
+                                throw new RuntimeException('Provided class ' . $config['action'] . ' does not exist');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $actions;
     }
 
     private function resolveResource($data, $basePath, $type)
@@ -316,5 +374,13 @@ class Deploy
         }
 
         return $data;
+    }
+
+    private function getActionNameFromClass($class)
+    {
+        $name = str_replace('\\', '', $class);
+        $name = str_replace('FusioCustomAction', '', $name);
+
+        return $name;
     }
 }

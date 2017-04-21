@@ -228,4 +228,35 @@ JSON;
 
         $this->assertRegExp('/Usage of unknown property \$\{dir\.foo}/', $display, $display);
     }
+
+    public function testCommandRoutesActionClass()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_routes_action_class.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] action FusioImplTestsAdapterTestVoidAction/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
+    }
+
+    public function testCommandRoutesActionClassInvalid()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_routes_action_class_invalid.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Provided class Foo\\\\Bar does not exist/', $display, $display);
+    }
 }

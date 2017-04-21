@@ -1,0 +1,6 @@
+routes:
+  /bar:
+    methods:
+      GET:
+        public: true
+        action: Fusio\Impl\Tests\Adapter\Test\VoidAction
