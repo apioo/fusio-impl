@@ -71,6 +71,7 @@ class Deploy
         }
 
         $actions = $this->resolveActionsFromRoutes($data);
+        $schemas = $this->resolveSchemasFromRoutes($data, $basePath);
 
         foreach ($this->types as $type) {
             if (isset($data[$type]) && is_array($data[$type])) {
@@ -79,6 +80,17 @@ class Deploy
                     $result[] = $this->transform($type, $name, $entry, $basePath);
                 }
                 $import->{$type} = $result;
+            }
+        }
+
+        // append schemas which we have automatically created
+        if (!empty($schemas)) {
+            if (!isset($import->schema)) {
+                $import->schema = [];
+            }
+
+            foreach ($schemas as $name => $entry) {
+                $import->schema[] = $this->transform(SystemAbstract::TYPE_SCHEMA, $name, $entry, $basePath);
             }
         }
 
@@ -186,13 +198,21 @@ class Deploy
                 ];
 
                 if (isset($config['request'])) {
-                    $methods[$method]['request'] = $config['request'];
+                    if (preg_match('/^[A-z0-9_]+$/', $config['request'])) {
+                        $methods[$method]['request'] = $config['request'];
+                    } else {
+                        $methods[$method]['request'] = $this->getSchemaNameFromSource($config['request']);
+                    }
                 } elseif (!in_array($method, ['GET'])) {
                     $methods[$method]['request'] = 'Passthru';
                 }
 
                 if (isset($config['response'])) {
-                    $methods[$method]['response'] = $config['response'];
+                    if (preg_match('/^[A-z0-9_]+$/', $config['response'])) {
+                        $methods[$method]['response'] = $config['response'];
+                    } else {
+                        $methods[$method]['response'] = $this->getSchemaNameFromSource($config['response']);
+                    }
                 } else {
                     $methods[$method]['response'] = 'Passthru';
                 }
@@ -251,6 +271,44 @@ class Deploy
         return $actions;
     }
 
+    /**
+     * In case the routes contains an include as request/response schemas we 
+     * automatically create a fitting schema entry
+     *
+     * @param array $data
+     * @param string $basePath
+     * @return array
+     */
+    private function resolveSchemasFromRoutes(array $data, $basePath)
+    {
+        $schemas = [];
+        $type    = SystemAbstract::TYPE_ROUTES;
+
+        if (isset($data[$type]) && is_array($data[$type])) {
+            foreach ($data[$type] as $name => $row) {
+                if (isset($row['methods']) && is_array($row['methods'])) {
+                    foreach ($row['methods'] as $method => $config) {
+                        if (isset($config['request']) && !preg_match('/^[A-z0-9_]+$/', $config['request'])) {
+                            $schema = $this->resolveSchema($config['request'], $basePath);
+                            $name   = $this->getSchemaNameFromSource($config['request']);
+
+                            $schemas[$name] = $schema;
+                        }
+
+                        if (isset($config['response']) && !preg_match('/^[A-z0-9_]+$/', $config['response'])) {
+                            $schema = $this->resolveSchema($config['response'], $basePath);
+                            $name   = $this->getSchemaNameFromSource($config['response']);
+
+                            $schemas[$name] = $schema;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $schemas;
+    }
+
     private function resolveResource($data, $basePath, $type)
     {
         if (is_string($data)) {
@@ -265,7 +323,7 @@ class Deploy
             }
 
             return $data;
-        } elseif (is_array($data)) {
+        } elseif (is_array($data) || $data instanceof \stdClass) {
             return $data;
         } else {
             throw new RuntimeException(ucfirst($type) . ' must be either a string containing an "!include" directive or array');
@@ -288,11 +346,13 @@ class Deploy
 
                 if ($data instanceof \stdClass) {
                     $this->traverseSchema($data, $basePath);
+                } else {
+                    throw new RuntimeException('JsonSchema must be an object');
                 }
 
                 return $data;
             }
-        } elseif (is_array($data)) {
+        } elseif (is_array($data) || $data instanceof \stdClass) {
             return $data;
         } else {
             throw new RuntimeException('Schema must be a string or array');
@@ -382,5 +442,26 @@ class Deploy
         $name = str_replace('FusioCustomAction', '', $name);
 
         return $name;
+    }
+
+    private function getSchemaNameFromSource($source)
+    {
+        if (is_string($source)) {
+            if (substr($source, 0, 8) == '!include') {
+                $name = trim(substr($source, 9));
+                $name = str_replace('\\', '/', $name);
+                $name = str_replace('resources/schema/', '', $name);
+                $name = str_replace('.json', '', $name);
+                $name = str_replace(' ', '', ucwords(str_replace('/', ' ', $name)));
+
+                return $name;
+            }
+
+            return 'Schema-' . substr(md5($source), 0, 8);
+        } elseif (is_array($source)) {
+            return 'Schema-' . substr(md5(json_encode($source)), 0, 8);
+        } else {
+            throw new RuntimeException('Schema should be a string containing an "!include" directive pointing to a JsonSchema file');
+        }
     }
 }

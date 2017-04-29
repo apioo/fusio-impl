@@ -243,6 +243,15 @@ JSON;
 
         $this->assertRegExp('/- \[CREATED\] action FusioImplTestsAdapterTestVoidAction/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
+
+        // check action
+        $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
+            'name' => 'FusioImplTestsAdapterTestVoidAction',
+        ]);
+
+        $this->assertEquals(4, $action['id']);
+        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
+        $this->assertEquals([], unserialize($action['config']));
     }
 
     public function testCommandRoutesActionClassInvalid()
@@ -258,5 +267,64 @@ JSON;
         $display = $commandTester->getDisplay();
 
         $this->assertRegExp('/Provided class Foo\\\\Bar does not exist/', $display, $display);
+    }
+
+    public function testCommandRoutesSchemaInclude()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_routes_schema_include.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] schema Schema/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action FusioImplTestsAdapterTestVoidAction/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
+
+        // check schema
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+            'name' => 'Schema',
+        ]);
+
+        $source = <<<'JSON'
+{
+  "id": "http:\/\/phpsx.org#",
+  "title": "test",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "author": {
+      "title": "author",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+
+JSON;
+
+        $this->assertEquals(3, $schema['id']);
+        $this->assertJsonStringEqualsJsonString($source, $schema['source']);
+        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
     }
 }
