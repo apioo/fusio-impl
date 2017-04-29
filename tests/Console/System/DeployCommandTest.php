@@ -252,6 +252,24 @@ JSON;
         $this->assertEquals(4, $action['id']);
         $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
         $this->assertEquals([], unserialize($action['config']));
+
+        // check routes
+        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
+            'path' => '/bar',
+        ]);
+
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
+        $this->assertEquals(1, $route['status']);
+        $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
+        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+
+        // check methods
+        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
+
+        $this->assertEquals(1, count($methods));
+        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 4], $methods[0]);
     }
 
     public function testCommandRoutesActionClassInvalid()
@@ -326,5 +344,23 @@ JSON;
         $this->assertEquals(3, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+
+        // check routes
+        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
+            'path' => '/bar',
+        ]);
+
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
+        $this->assertEquals(1, $route['status']);
+        $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
+        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+
+        // check methods
+        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
+
+        $this->assertEquals(1, count($methods));
+        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 3, 'action' => 4], $methods[0]);
     }
 }

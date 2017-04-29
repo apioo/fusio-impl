@@ -52,6 +52,11 @@ class Deploy
     protected $types = [SystemAbstract::TYPE_CONNECTION, SystemAbstract::TYPE_SCHEMA, SystemAbstract::TYPE_ACTION, SystemAbstract::TYPE_ROUTES];
 
     /**
+     * @var string
+     */
+    private $nameRegexp = '^[A-z0-9\-\_]{3,64}$';
+
+    /**
      * @param \Fusio\Impl\Service\System\Import $importService
      * @param \Fusio\Impl\Service\System\Migration $migrationService
      */
@@ -198,7 +203,7 @@ class Deploy
                 ];
 
                 if (isset($config['request'])) {
-                    if (preg_match('/^[A-z0-9_]+$/', $config['request'])) {
+                    if (preg_match('/' . $this->nameRegexp . '/', $config['request'])) {
                         $methods[$method]['request'] = $config['request'];
                     } else {
                         $methods[$method]['request'] = $this->getSchemaNameFromSource($config['request']);
@@ -208,7 +213,7 @@ class Deploy
                 }
 
                 if (isset($config['response'])) {
-                    if (preg_match('/^[A-z0-9_]+$/', $config['response'])) {
+                    if (preg_match('/' . $this->nameRegexp . '/', $config['response'])) {
                         $methods[$method]['response'] = $config['response'];
                     } else {
                         $methods[$method]['response'] = $this->getSchemaNameFromSource($config['response']);
@@ -288,14 +293,14 @@ class Deploy
             foreach ($data[$type] as $name => $row) {
                 if (isset($row['methods']) && is_array($row['methods'])) {
                     foreach ($row['methods'] as $method => $config) {
-                        if (isset($config['request']) && !preg_match('/^[A-z0-9_]+$/', $config['request'])) {
+                        if (isset($config['request']) && !preg_match('/' . $this->nameRegexp . '/', $config['request'])) {
                             $schema = $this->resolveSchema($config['request'], $basePath);
                             $name   = $this->getSchemaNameFromSource($config['request']);
 
                             $schemas[$name] = $schema;
                         }
 
-                        if (isset($config['response']) && !preg_match('/^[A-z0-9_]+$/', $config['response'])) {
+                        if (isset($config['response']) && !preg_match('/' . $this->nameRegexp . '/', $config['response'])) {
                             $schema = $this->resolveSchema($config['response'], $basePath);
                             $name   = $this->getSchemaNameFromSource($config['response']);
 
