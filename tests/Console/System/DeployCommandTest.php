@@ -167,14 +167,13 @@ JSON;
         $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 4, 'action' => 4], $methods[0]);
 
         // check migration entries
-        $migrations = $this->connection->fetchAll('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration');
+        $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
 
-        $this->assertEquals(1, count($migrations));
-        $this->assertEquals(1, $migrations[0]['id']);
-        $this->assertEquals('Native', $migrations[0]['connection']);
-        $this->assertEquals('v1_schema.sql', $migrations[0]['file']);
-        $this->assertNotEmpty($migrations[0]['fileHash']);
-        $this->assertNotEmpty($migrations[0]['executeDate']);
+        $this->assertEquals(2, $migration['id']);
+        $this->assertEquals('Native', $migration['connection']);
+        $this->assertEquals('v1_schema.sql', $migration['file']);
+        $this->assertNotEmpty($migration['fileHash']);
+        $this->assertNotEmpty($migration['executeDate']);
 
         // check whether the native connection has the migrated tables
         /** @var \Doctrine\DBAL\Connection $connection */
