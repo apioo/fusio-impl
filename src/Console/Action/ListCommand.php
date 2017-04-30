@@ -76,6 +76,6 @@ class ListCommand extends Command
             ->setHeaders(['ID', 'Name'])
             ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 }

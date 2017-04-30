@@ -150,7 +150,7 @@ class RegisterCommand extends Command
                         ->setHeaders(['Type', 'Description'])
                         ->setRows($rows);
 
-                    $table->render($output);
+                    $table->render();
 
                     $question  = new ConfirmationQuestion('Do you want to continue (y/n)? ', false);
                     $confirmed = $helper->ask($input, $output, $question);

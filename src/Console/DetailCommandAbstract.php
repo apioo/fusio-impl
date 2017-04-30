@@ -93,7 +93,7 @@ class DetailCommandAbstract extends Command
                 ->setHeaders(['Name', 'Type', 'Details'])
                 ->setRows($rows);
 
-            $table->render($output);
+            $table->render();
         } else {
             $output->writeln('The object is not configurable');
         }

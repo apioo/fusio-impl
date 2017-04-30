@@ -59,6 +59,6 @@ abstract class ClassCommandAbstract extends Command
             ->setHeaders(['Name', 'Class'])
             ->setRows($rows);
 
-        $table->render($output);
+        $table->render();
     }
 }
