@@ -60,8 +60,6 @@ class MigrationCommandTest extends ControllerDbTestCase
 
 TEXT;
 
-        var_dump($actual);
-        
         Assert::assertEqualsIgnoreWhitespace($expect, $actual);
     }
 }
