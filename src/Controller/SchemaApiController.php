@@ -152,8 +152,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     public function getPreFilter()
     {
-        $isPublic = $this->getActiveMethod()->public;
-        $filter   = array();
+        $method = $this->getActiveMethod();
+        $filter = array();
 
         // it is required for every request to have an user agent which
         // identifies the client
@@ -166,7 +166,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
 
         // oauth2 filter if not public
-        if (!$isPublic) {
+        if (!$method['public']) {
             $filter[] = new Oauth2Filter(
                 $this->connection,
                 $this->request->getMethod(),

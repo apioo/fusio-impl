@@ -124,7 +124,7 @@ class Method extends TableAbstract
     {
         $cache = '';
         if ($includeCache) {
-            $cache.= 'method.requestCache,method.responseCache,method.actionCache,';
+            $cache.= 'method.requestCache,method.responseCache,';
         }
 
         $sql = '  SELECT method.id,
@@ -169,16 +169,49 @@ class Method extends TableAbstract
         return $names;
     }
 
+    public function getMethod($routeId, $version, $method)
+    {
+        $sql = 'SELECT method.public,
+                       method.action,
+                       method.status,
+                       method.actionCache
+                  FROM fusio_routes_method method
+                 WHERE routeId = :routeId
+                   AND version = :version
+                   AND method = :method
+                   AND active = :active';
+
+        return $this->connection->fetchAssoc($sql, [
+            'routeId' => $routeId,
+            'version' => $version,
+            'method'  => $method,
+            'active'  => Resource::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function getVersion($routeId, $version)
+    {
+        $sql = 'SELECT version
+                  FROM fusio_routes_method
+                 WHERE routeId = :routeId
+                   AND version = :version';
+
+        return $this->connection->fetchColumn($sql, [
+            'routeId' => $routeId,
+            'version' => $version,
+        ]);
+    }
+
     public function getLatestVersion($routeId)
     {
         $sql = 'SELECT MAX(version)
                   FROM fusio_routes_method
-                 WHERE routeId = :id
+                 WHERE routeId = :routeId
                    AND status = :status';
 
         $version = $this->connection->fetchColumn($sql, [
-            'id'     => $routeId,
-            'status' => Resource::STATUS_ACTIVE,
+            'routeId' => $routeId,
+            'status'  => Resource::STATUS_ACTIVE,
         ]);
 
         if (empty($version)) {
@@ -186,10 +219,10 @@ class Method extends TableAbstract
             // version
             $sql = 'SELECT MAX(version)
                       FROM fusio_routes_method
-                     WHERE routeId = :id';
+                     WHERE routeId = :routeId';
 
             return $this->connection->fetchColumn($sql, [
-                'id' => $routeId,
+                'routeId' => $routeId,
             ]);
         } else {
             return $version;

@@ -26,7 +26,7 @@ use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\SchemaInterface;
-use PSX\Sql\Condition;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Method
@@ -53,10 +53,24 @@ class Method
         $this->schemaLoader = $schemaLoader;
     }
 
+    /**
+     * Returns an api resource documentation for the provided route and version
+     * 
+     * @param integer $routeId
+     * @param string $version
+     * @param string $path
+     * @return \PSX\Api\Resource
+     */
     public function getDocumentation($routeId, $version, $path)
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
+        } else {
+            $version = $this->methodTable->getVersion($routeId, $version);
+        }
+
+        if (empty($version)) {
+            throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
         }
 
         $methods  = $this->methodTable->getMethods($routeId, $version, true);
@@ -69,6 +83,10 @@ class Method
                 if (!empty($method['request'])) {
                     $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method['request']));
                 }
+
+                if (!empty($method['response'])) {
+                    $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method['response']));
+                }
             } else {
                 if (!empty($method['requestCache'])) {
                     $request = unserialize($method['requestCache']);
@@ -76,13 +94,7 @@ class Method
                         $resourceMethod->setRequest($request);
                     }
                 }
-            }
 
-            if ($method['status'] == Resource::STATUS_DEVELOPMENT) {
-                if (!empty($method['response'])) {
-                    $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method['response']));
-                }
-            } else {
                 if (!empty($method['responseCache'])) {
                     $response = unserialize($method['responseCache']);
                     if ($response instanceof SchemaInterface) {
@@ -97,19 +109,28 @@ class Method
         return $resource;
     }
 
+    /**
+     * Returns the method configuration for the provide route, version and 
+     * request method
+     * 
+     * @param integer $routeId
+     * @param string $version
+     * @param string $method
+     * @return array
+     */
     public function getMethod($routeId, $version, $method)
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
+        } else {
+            $version = $this->methodTable->getVersion($routeId, $version);
         }
 
-        $condition = new Condition();
-        $condition->equals('routeId', $routeId);
-        $condition->equals('method', $method);
-        $condition->equals('version', $version);
-        $condition->equals('active', Resource::STATUS_ACTIVE);
+        if (empty($version)) {
+            throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
+        }
 
-        return $this->methodTable->getOneBy($condition);
+        return $this->methodTable->getMethod($routeId, $version, $method);
     }
 
     public function getAllowedMethods($routeId, $version)
