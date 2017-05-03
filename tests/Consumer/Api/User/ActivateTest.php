@@ -61,6 +61,11 @@ class ActivateTest extends ControllerDbTestCase
             "Activate": {
                 "type": "object",
                 "title": "activate",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                },
                 "required": [
                     "token"
                 ]
