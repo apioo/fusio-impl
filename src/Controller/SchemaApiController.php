@@ -165,8 +165,10 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $filter[] = new CORS($allowOrigin);
         }
 
-        // oauth2 filter if not public
-        if (!$method['public']) {
+        // authorization is required if the method is not public. In case we get
+        // a header from the client we also add the oauth2 filter so that the
+        // client gets maybe another rate limit
+        if (!$method['public'] || $this->request->hasHeader('Authorization')) {
             $filter[] = new Oauth2Filter(
                 $this->connection,
                 $this->request->getMethod(),
