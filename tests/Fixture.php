@@ -128,9 +128,11 @@ JSON;
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
+                ['status' => 1, 'priority' => 10, 'name' => 'gold', 'rateLimit' => 16, 'timespan' => 'P1M'],
             ],
             'fusio_rate_allocation' => [
-                ['rateId' => 3, 'routeId' => self::getLastRouteId() + 1],
+                ['rateId' => 3, 'routeId' => self::getLastRouteId() + 1, 'appId' => null, 'authenticated' => null, 'parameters' => null],
+                ['rateId' => 4, 'routeId' => self::getLastRouteId() + 1, 'appId' => null, 'authenticated' => 1, 'parameters' => null],
             ],
             'fusio_routes_method' => [
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],

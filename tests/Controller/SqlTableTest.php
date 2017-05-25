@@ -242,8 +242,6 @@ JSON;
     }
 
     /**
-     * @depends testGet
-     * @depends testPost
      * @dataProvider providerDebugStatus
      */
     public function testRateLimit($debug)
@@ -253,17 +251,47 @@ JSON;
         $response = null;
         for ($i = 0; $i < 10; $i++) {
             $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+                'User-Agent' => 'Fusio TestCase'
+            ));
+
+            $body = (string) $response->getBody();
+            $data = Parser::decode($body);
+
+            if ($i < 9) {
+                $this->assertEquals(200, $response->getStatusCode(), $body);
+            } else {
+                $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals(false, $data->success, $body);
+                $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
+            }
+        }
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testRateLimitAuthenticated($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        $response = null;
+        for ($i = 0; $i < 18; $i++) {
+            $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
             ));
+
+            $body = (string) $response->getBody();
+            $data = Parser::decode($body);
+
+            if ($i < 17) {
+                $this->assertEquals(200, $response->getStatusCode(), $body);
+            } else {
+                $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals(false, $data->success, $body);
+                $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
+            }
         }
-
-        $body = (string) $response->getBody();
-        $data = Parser::decode($body);
-
-        $this->assertEquals(429, $response->getStatusCode(), $body);
-        $this->assertEquals(false, $data->success, $body);
-        $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
     }
 
     /**

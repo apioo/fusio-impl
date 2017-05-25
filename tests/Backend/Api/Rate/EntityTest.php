@@ -172,7 +172,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/3', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/4', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -180,16 +180,18 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": 3,
+    "id": 4,
     "status": 1,
-    "priority": 5,
-    "name": "silver",
-    "rateLimit": 8,
+    "priority": 10,
+    "name": "gold",
+    "rateLimit": 16,
     "timespan": "P1M",
     "allocation": [
         {
-            "id": 3,
-            "rateId": 3
+            "id": 4,
+            "rateId": 4,
+            "routeId": 66,
+            "authenticated": true
         }
     ]
 }
@@ -201,7 +203,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/3', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/4', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -215,7 +217,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/3', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/4', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -246,7 +248,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('Gold', $row['name']);
         $this->assertEquals(20, $row['rateLimit']);
@@ -255,7 +257,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/rate/3', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/rate/4', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -282,7 +284,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals(0, $row['status']);
     }
 }

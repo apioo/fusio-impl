@@ -194,10 +194,18 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 4,
+            "status": 1,
+            "priority": 10,
+            "name": "gold",
+            "rateLimit": 16,
+            "timespan": "P1M"
+        },
         {
             "id": 3,
             "status": 1,
@@ -269,7 +277,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(5, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals(2, $row['priority']);
         $this->assertEquals('Premium', $row['name']);
@@ -287,8 +295,8 @@ JSON;
 
         $result = Environment::getService('connection')->fetchAll($sql, ['rateId' => $row['id']]);
 
-        $this->assertEquals(4, $result[0]['id']);
-        $this->assertEquals(4, $result[0]['rateId']);
+        $this->assertEquals(5, $result[0]['id']);
+        $this->assertEquals(5, $result[0]['rateId']);
         $this->assertEquals(1, $result[0]['routeId']);
         $this->assertEquals(null, $result[0]['appId']);
         $this->assertEquals(1, $result[0]['authenticated']);
