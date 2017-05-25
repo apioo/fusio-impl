@@ -136,9 +136,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $this->user = $this->getUser($this->userId);
 
         // check rate limit
-        if ($this->rateService->hasExceeded($remoteIp, $this->context->get('fusio.routeId'), $this->app)) {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
-        }
+        $this->rateService->assertLimit(
+            $remoteIp,
+            $this->context->get('fusio.routeId'),
+            $this->app,
+            $this->response
+        );
 
         // log request
         $this->logId = $this->apiLogger->log(
@@ -168,7 +171,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // authorization is required if the method is not public. In case we get
         // a header from the client we also add the oauth2 filter so that the
         // client gets maybe another rate limit
-        if (!$method['public'] || $this->request->hasHeader('Authorization')) {
+        $authorization = $this->request->getHeader('Authorization');
+        if (!$method['public'] || !empty($authorization)) {
             $filter[] = new Oauth2Filter(
                 $this->connection,
                 $this->request->getMethod(),

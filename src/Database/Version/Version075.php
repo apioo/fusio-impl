@@ -402,8 +402,8 @@ class Version075 implements VersionInterface
                 ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rateLimit' => 60, 'timespan' => 'PT1H'],
             ],
             'fusio_rate_allocation' => [
-                ['rateId' => 1],
-                ['rateId' => 2, 'authenticated' => 0],
+                ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
+                ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action',                              'controller' => Backend\Api\Action\Collection::class],

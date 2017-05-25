@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Model;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -152,9 +153,10 @@ class Rate
      * @param string $ip
      * @param integer $routeId
      * @param \Fusio\Engine\Model\AppInterface $app
+     * @param \PSX\Http\RequestInterface $response
      * @return boolean
      */
-    public function hasExceeded($ip, $routeId, Model\AppInterface $app)
+    public function assertLimit($ip, $routeId, Model\AppInterface $app, ResponseInterface $response)
     {
         $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
 
@@ -165,7 +167,14 @@ class Rate
         $count     = (int) $this->getRequestCount($ip, $rate['timespan'], $app);
         $rateLimit = (int) $rate['rateLimit'];
 
-        return $count > $rateLimit;
+        $response->setHeader('X-RateLimit-Limit', $rateLimit);
+        $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
+
+        if ($count > $rateLimit) {
+            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
+        }
+
+        return true;
     }
 
     /**
