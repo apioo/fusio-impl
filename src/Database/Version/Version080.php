@@ -42,13 +42,13 @@ use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
 
 /**
- * Version075
+ * Version080
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Version075 implements VersionInterface
+class Version080 implements VersionInterface
 {
     public function getSchema()
     {
