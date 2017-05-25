@@ -401,10 +401,6 @@ class Version080 implements VersionInterface
                 ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rateLimit' => 720, 'timespan' => 'PT1H'],
                 ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rateLimit' => 60, 'timespan' => 'PT1H'],
             ],
-            'fusio_rate_allocation' => [
-                ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
-                ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
-            ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/action',                              'controller' => Backend\Api\Action\Collection::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/action/list',                         'controller' => Backend\Api\Action\ListActions::class . '::doIndex'],
@@ -476,6 +472,10 @@ class Version080 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',               'controller' => Generator\SwaggerController::class],
 
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                            'controller' => SchemaApiController::class],
+            ],
+            'fusio_rate_allocation' => [
+                ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
+                ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
             ],
             'fusio_routes_method' => [
                 ['routeId' => 65, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
