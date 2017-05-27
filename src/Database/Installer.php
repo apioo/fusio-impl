@@ -151,6 +151,7 @@ class Installer
     public static function getUpgradePath()
     {
         return [
+            '0.8.1',
             '0.8.0',
             '0.7.4',
             '0.7.3',
