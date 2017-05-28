@@ -156,6 +156,10 @@ class Connection
             return [];
         }
 
+        if (is_resource($data)) {
+            $data = stream_get_contents($data, -1, 0);
+        }
+
         $parts = explode('.', $data, 2);
         if (count($parts) == 2) {
             list($iv, $data) = $parts;
