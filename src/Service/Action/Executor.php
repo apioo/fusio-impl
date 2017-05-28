@@ -85,7 +85,7 @@ class Executor
             $parameters   = $this->parseQueryString($parameters);
             $headers      = $this->parseQueryString($headers);
 
-            $context = new Context($actionId, $app, $user);
+            $context = new Context($actionId, '/', $app, $user);
             $request = new Request(
                 new HttpRequest(new Uri('/'), $method, $headers),
                 $uriFragments,
