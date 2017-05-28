@@ -240,8 +240,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     private function executeAction($record)
     {
+        $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $method   = $this->getActiveMethod();
-        $context  = new EngineContext($this->context->get('fusio.routeId'), $this->app, $this->user);
+        $context  = new EngineContext($this->context->get('fusio.routeId'), $baseUrl, $this->app, $this->user);
         $request  = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
         $response = null;
         $actionId = $method['action'];
