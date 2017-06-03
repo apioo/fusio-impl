@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Service\System;
 
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ConnectionInterface;
 use PSX\Json\Parser;
 use ReflectionClass;
 use RuntimeException;
@@ -47,41 +49,60 @@ class Import extends SystemAbstract
         $classes = isset($data->actionClass) ? $data->actionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $this->insertClass('fusio_action_class', $class, 'Fusio\Engine\ActionInterface');
+                $this->importClass('fusio_action_class', $class, ActionInterface::class);
             }
         }
 
         $classes = isset($data->connectionClass) ? $data->connectionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $this->insertClass('fusio_connection_class', $class, 'Fusio\Engine\ConnectionInterface');
+                $this->importClass('fusio_connection_class', $class, ConnectionInterface::class);
             }
         }
 
-        foreach ($this->types as $type) {
-            if (isset($data->$type) && is_array($data->$type)) {
-                foreach ($data->$type as $entry) {
-                    $result[] = $this->importType($type, $entry);
-                }
+        $config = isset($data->config) ? $data->config : null;
+        if (!empty($config) && $config instanceof stdClass) {
+            $this->importConfig($config);
+        }
+
+        if (isset($data->connection) && is_array($data->connection)) {
+            foreach ($data->connection as $entry) {
+                $result[] = $this->importGeneral(self::TYPE_CONNECTION, $entry);
+            }
+        }
+
+        if (isset($data->schema) && is_array($data->schema)) {
+            foreach ($data->schema as $entry) {
+                $result[] = $this->importGeneral(self::TYPE_SCHEMA, $entry);
+            }
+        }
+
+        if (isset($data->action) && is_array($data->action)) {
+            foreach ($data->action as $entry) {
+                $result[] = $this->importGeneral(self::TYPE_ACTION, $entry);
+            }
+        }
+
+        if (isset($data->routes) && is_array($data->routes)) {
+            foreach ($data->routes as $entry) {
+                $result[] = $this->importRoutes($entry);
             }
         }
 
         return $result;
     }
 
-    protected function importType($type, stdClass $data)
+    protected function importGeneral($type, stdClass $data)
     {
-        $path = $type;
-        $key  = $type == self::TYPE_ROUTES ? 'path' : 'name';
-        $name = $data->{$key};
-        $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE ' . $key . ' = :' . $key, [
-            $key => $name
+        $name = $data->name;
+        $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE name = :name', [
+            'name' => $name
         ]);
 
         if (!empty($id)) {
-            $response = $this->doRequest('PUT', $path . '/' . $id, $this->transform($type, $data));
+            $response = $this->doRequest('PUT', $type . '/' . $id, $this->transform($type, $data));
         } else {
-            $response = $this->doRequest('POST', $path, $this->transform($type, $data));
+            $response = $this->doRequest('POST', $type, $this->transform($type, $data));
         }
 
         if (isset($response->success) && $response->success === false) {
@@ -95,7 +116,54 @@ class Import extends SystemAbstract
         }
     }
 
-    protected function insertClass($tableName, $className, $interface)
+    protected function importRoutes(stdClass $data)
+    {
+        $path = $data->path;
+        $id   = $this->connection->fetchColumn('SELECT id FROM fusio_routes WHERE path = :path', [
+            'path' => $path
+        ]);
+
+        if (!empty($id)) {
+            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform('routes', $data));
+        } else {
+            $response = $this->doRequest('POST', 'routes', $this->transform('routes', $data));
+        }
+
+        if (isset($response->success) && $response->success === false) {
+            $this->logger->error($response->message);
+
+            return '[ERROR] routes ' . $path . ': ' . $response->message;
+        } elseif (!empty($id)) {
+            return '[UPDATED] routes ' . $path;
+        } else {
+            return '[CREATED] routes ' . $path;
+        }
+    }
+
+    protected function importConfig(stdClass $config)
+    {
+        foreach ($config as $name => $value) {
+            if (!is_scalar($value)) {
+                throw new RuntimeException('Config value must be scalar');
+            }
+
+            $id = $this->connection->fetchColumn('SELECT id FROM fusio_config WHERE name = :name', [
+                'name' => $name,
+            ]);
+
+            if (!empty($id)) {
+                $this->connection->update('fusio_config', [
+                    'value' => $value,
+                ], [
+                    'id' => $id
+                ]);
+            } else {
+                throw new RuntimeException('Unknown config parameter ' . $name);
+            }
+        }
+    }
+
+    protected function importClass($tableName, $className, $interface)
     {
         if (!is_string($className)) {
             throw new RuntimeException('Class name must be a string ' . gettype($className) . ' given');
@@ -120,11 +188,6 @@ class Import extends SystemAbstract
 
     protected function getReference($tableName, $name, $type)
     {
-        if ($type === self::TYPE_ROUTES) {
-            // for routes we need to cast the column to an int
-            return (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
-        } else {
-            return $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
-        }
+        return (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
     }
 }
