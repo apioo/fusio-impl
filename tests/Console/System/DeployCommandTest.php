@@ -283,7 +283,7 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Could not resolve action Foo\\\\Bar/', $display, $display);
+        $this->assertRegExp('/Invalid action source Foo\\\\Bar/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()
