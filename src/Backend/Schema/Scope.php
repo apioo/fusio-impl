@@ -37,7 +37,7 @@ class Scope extends SchemaAbstract
         $sb = $this->getSchemaBuilder('scope');
         $sb->integer('id');
         $sb->string('name')
-            ->setPattern('[A-z0-9\-\_]{3,64}');
+            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
         $sb->string('description');
         $sb->arrayType('routes')
             ->setItems($this->getSchema(Scope\Route::class));

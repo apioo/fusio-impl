@@ -46,7 +46,7 @@ class Connection extends SchemaAbstract
         $sb = $this->getSchemaBuilder('connection');
         $sb->integer('id');
         $sb->string('name')
-            ->setPattern('[A-z0-9\-\_]{3,64}');
+            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
         $sb->string('class');
         $sb->objectType('config', $config);
 

@@ -49,7 +49,7 @@ class Deploy
     /**
      * @var string
      */
-    private $nameRegexp = '^[A-z0-9\-\_]{3,64}$';
+    private $nameRegexp = '^[a-zA-Z0-9\-\_]{3,64}$';
 
     /**
      * @param \Fusio\Impl\Service\System\Import $importService
@@ -429,7 +429,6 @@ class Deploy
                 return $source;
             } elseif (class_exists($source)) {
                 $source = str_replace('\\', '', $source);
-                $source = str_replace('FusioCustomAction', '', $source);
 
                 return $source;
             } elseif (preg_match('/' . $this->nameRegexp . '/', $source)) {

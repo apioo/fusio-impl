@@ -39,7 +39,7 @@ class Rate extends SchemaAbstract
         $sb->integer('priority')
             ->setMinimum(0);
         $sb->string('name')
-            ->setPattern('[A-z0-9\-\_]{3,64}');
+            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
         $sb->integer('rateLimit')
             ->setMinimum(0);
         $sb->duration('timespan');
