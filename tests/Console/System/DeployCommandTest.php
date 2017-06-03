@@ -184,6 +184,44 @@ JSON;
         $this->assertContains('acme_bar', $tables);
     }
 
+    public function testCommandConfig()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_config.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Deploy successful!/', $display, $display);
+
+        // check config
+        $config = $this->connection->fetchAssoc('SELECT id, value FROM fusio_config WHERE name = :name', [
+            'name' => 'mail_register_subject',
+        ]);
+
+        $this->assertEquals(4, $config['id']);
+        $this->assertEquals('foo bar', $config['value']);
+    }
+
+    public function testCommandConfigInvalid()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_config_invalid.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Unknown config parameter foo/', $display, $display);
+    }
+
     public function testCommandProperties()
     {
         $command = Environment::getService('console')->find('system:deploy');

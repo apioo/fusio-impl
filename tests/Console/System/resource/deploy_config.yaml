@@ -1,0 +1,2 @@
+config:
+  mail_register_subject: "foo bar"
