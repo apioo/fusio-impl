@@ -75,7 +75,20 @@ class EntityTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "value": {
-                        "type": "string"
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
                     }
                 }
             },
