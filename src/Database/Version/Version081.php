@@ -373,6 +373,7 @@ class Version081 implements VersionInterface
                 ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'GitHub app secret', 'value' => ''],
                 ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
                 ['name' => 'cors_allow_origin', 'type' => Table\Config::FORM_STRING, 'description' => 'If set each API response contains a Access-Control-Allow-Origin header with the provided value', 'value' => ''],
+                ['name' => 'action_engine', 'type' => Table\Config::FORM_STRING, 'description' => 'Engine which executes the action source. Possible values are: php, v8', 'value' => ''],
             ],
             'fusio_connection' => [
             ],
