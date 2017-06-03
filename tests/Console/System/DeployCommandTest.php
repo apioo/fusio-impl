@@ -283,7 +283,7 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Provided class Foo\\\\Bar does not exist/', $display, $display);
+        $this->assertRegExp('/Could not resolve action Foo\\\\Bar/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()

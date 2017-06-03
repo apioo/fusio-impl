@@ -27,8 +27,8 @@ use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The deploy service uses the import service to insert the data into the 
- * system. In general it simply converts the yaml format
+ * The deploy service basically transforms a deploy yaml config into a json 
+ * format which is then used by the import service
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -45,11 +45,6 @@ class Deploy
      * @var \Fusio\Impl\Service\System\Migration
      */
     protected $migrationService;
-
-    /**
-     * @var array
-     */
-    protected $types = [SystemAbstract::TYPE_CONNECTION, SystemAbstract::TYPE_SCHEMA, SystemAbstract::TYPE_ACTION, SystemAbstract::TYPE_ROUTES];
 
     /**
      * @var string
@@ -75,72 +70,71 @@ class Deploy
             $basePath = getcwd();
         }
 
-        $actions = $this->resolveActionsFromRoutes($data);
-        $schemas = $this->resolveSchemasFromRoutes($data, $basePath);
-
-        foreach ($this->types as $type) {
-            if (isset($data[$type]) && is_array($data[$type])) {
-                $result = [];
-                foreach ($data[$type] as $name => $entry) {
-                    $result[] = $this->transform($type, $name, $entry, $basePath);
-                }
-                $import->{$type} = $result;
-            }
+        // config
+        if (isset($data['config']) && is_array($data['config'])) {
+            $import->config = $data['config'];
         }
 
-        // append schemas which we have automatically created
-        if (!empty($schemas)) {
-            if (!isset($import->schema)) {
-                $import->schema = [];
+        // connection
+        $connection = isset($data[SystemAbstract::TYPE_CONNECTION]) ? $data[SystemAbstract::TYPE_CONNECTION] : [];
+        if (!empty($connection) && is_array($connection)) {
+            $result = [];
+            foreach ($connection as $name => $entry) {
+                $result[] = $this->transformConnection($name, $entry, $basePath);
             }
-
-            foreach ($schemas as $name => $entry) {
-                $import->schema[] = $this->transform(SystemAbstract::TYPE_SCHEMA, $name, $entry, $basePath);
-            }
+            $import->connection = $result;
         }
 
-        // append actions which we have automatically created
-        if (!empty($actions)) {
-            if (!isset($import->action)) {
-                $import->action = [];
-            }
+        // schemas
+        $resolvedSchemas = $this->resolveSchemasFromRoutes($data, $basePath);
+        $schema = isset($data[SystemAbstract::TYPE_SCHEMA]) ? $data[SystemAbstract::TYPE_SCHEMA] : [];
 
-            foreach ($actions as $name => $entry) {
-                $import->action[] = $this->transform(SystemAbstract::TYPE_ACTION, $name, $entry, $basePath);
+        if (!empty($resolvedSchemas)) {
+            $schema = array_merge($schema, $resolvedSchemas);
+        }
+
+        if (!empty($schema) && is_array($schema)) {
+            $result = [];
+            foreach ($schema as $name => $entry) {
+                $result[] = $this->transformSchema($name, $entry, $basePath);
             }
+            $import->schema = $result;
+        }
+
+        // actions
+        $resolvedActions = $this->resolveActionsFromRoutes($data);
+        $action = isset($data[SystemAbstract::TYPE_ACTION]) ? $data[SystemAbstract::TYPE_ACTION] : [];
+
+        if (!empty($resolvedActions)) {
+            $action = array_merge($action, $resolvedActions);
+        }
+        
+        if (!empty($action) && is_array($action)) {
+            $result = [];
+            foreach ($action as $name => $entry) {
+                $result[] = $this->transformAction($name, $entry, $basePath);
+            }
+            $import->action = $result;
+        }
+
+        // routes
+        $routes = isset($data[SystemAbstract::TYPE_ROUTES]) ? $data[SystemAbstract::TYPE_ROUTES] : [];
+        if (!empty($routes) && is_array($routes)) {
+            $result = [];
+            foreach ($routes as $path => $entry) {
+                $result[] = $this->transformRoutes($path, $entry, $basePath);
+            }
+            $import->routes = $result;
         }
 
         // import definition
-        $log = $this->importService->import(json_encode($import));
+        $json = json_encode($import);
+        $log  = $this->importService->import($json);
 
         // handle migration
         $log = array_merge($log, $this->migrationService->execute($data, $basePath));
 
         return $log;
-    }
-
-    protected function transform($type, $name, $data, $basePath)
-    {
-        switch ($type) {
-            case SystemAbstract::TYPE_CONNECTION:
-                return $this->transformConnection($name, $data, $basePath);
-                break;
-
-            case SystemAbstract::TYPE_SCHEMA:
-                return $this->transformSchema($name, $data, $basePath);
-                break;
-
-            case SystemAbstract::TYPE_ACTION:
-                return $this->transformAction($name, $data, $basePath);
-                break;
-
-            case SystemAbstract::TYPE_ROUTES:
-                return $this->transformRoutes($name, $data, $basePath);
-                break;
-
-            default:
-                throw new RuntimeException('Invalid type');
-        }
     }
 
     protected function transformConnection($name, $data, $basePath)
@@ -151,11 +145,11 @@ class Deploy
         return $data;
     }
 
-    protected function transformSchema($name, $data, $basePath)
+    protected function transformSchema($name, $schema, $basePath)
     {
         return [
             'name'   => $name,
-            'source' => $this->resolveSchema($data, $basePath),
+            'source' => $this->resolveSchema($schema, $basePath),
         ];
     }
 
@@ -203,33 +197,19 @@ class Deploy
                 ];
 
                 if (isset($config['request'])) {
-                    if (preg_match('/' . $this->nameRegexp . '/', $config['request'])) {
-                        $methods[$method]['request'] = $config['request'];
-                    } else {
-                        $methods[$method]['request'] = $this->getSchemaNameFromSource($config['request']);
-                    }
+                    $methods[$method]['request'] = $this->getSchemaNameFromSource($config['request']);
                 } elseif (!in_array($method, ['GET'])) {
                     $methods[$method]['request'] = 'Passthru';
                 }
 
                 if (isset($config['response'])) {
-                    if (preg_match('/' . $this->nameRegexp . '/', $config['response'])) {
-                        $methods[$method]['response'] = $config['response'];
-                    } else {
-                        $methods[$method]['response'] = $this->getSchemaNameFromSource($config['response']);
-                    }
+                    $methods[$method]['response'] = $this->getSchemaNameFromSource($config['response']);
                 } else {
                     $methods[$method]['response'] = 'Passthru';
                 }
 
                 if (isset($config['action'])) {
-                    // in case the action contains a class we have automatically
-                    // created an action
-                    if (strpos($config['action'], '\\') !== false && class_exists($config['action'])) {
-                        $config['action'] = $this->getActionNameFromClass($config['action']);
-                    }
-
-                    $methods[$method]['action'] = $config['action'];
+                    $methods[$method]['action'] = $this->getActionNameFromSource($config['action']);
                 }
             }
         }
@@ -257,16 +237,12 @@ class Deploy
             foreach ($data[$type] as $name => $row) {
                 if (isset($row['methods']) && is_array($row['methods'])) {
                     foreach ($row['methods'] as $method => $config) {
-                        if (isset($config['action']) && strpos($config['action'], '\\') !== false) {
-                            if (class_exists($config['action'])) {
-                                $name = $this->getActionNameFromClass($config['action']);
+                        if (isset($config['action']) && !preg_match('/' . $this->nameRegexp . '/', $config['action'])) {
+                            $name = $this->getActionNameFromSource($config['action']);
 
-                                $actions[$name] = [
-                                    'class' => $config['action']
-                                ];
-                            } else {
-                                throw new RuntimeException('Provided class ' . $config['action'] . ' does not exist');
-                            }
+                            $actions[$name] = [
+                                'class' => $config['action']
+                            ];
                         }
                     }
                 }
@@ -434,39 +410,74 @@ class Deploy
             // check whether we have variables which were not replaced
             preg_match('/\$\{' . $type . '\.([0-9A-z_]+)\}/', $data, $matches);
             if (isset($matches[0])) {
-                throw new \RuntimeException('Usage of unknown property ' . $matches[0]);
+                throw new RuntimeException('Usage of unknown property ' . $matches[0]);
             }
         }
 
         return $data;
     }
 
-    private function getActionNameFromClass($class)
+    private function getActionNameFromSource($source)
     {
-        $name = str_replace('\\', '', $class);
-        $name = str_replace('FusioCustomAction', '', $name);
+        if (is_string($source)) {
+            if (is_file($source)) {
+                $source = realpath($source);
+                $source = substr($source, strlen(PSX_PATH_LIBRARY));
+                $source = str_replace(['/', '\\'], ' ', $source);
+                $source = str_replace(' ', '', ucwords($source));
 
-        return $name;
+                return $source;
+            } elseif (class_exists($source)) {
+                $source = str_replace('\\', '', $source);
+                $source = str_replace('FusioCustomAction', '', $source);
+
+                return $source;
+            } elseif (preg_match('/' . $this->nameRegexp . '/', $source)) {
+                return $source;
+            } else {
+                throw new RuntimeException('Invalid action source ' . $source);
+            }
+        } else {
+            throw new RuntimeException('Invalid action source ' . $source);
+        }
     }
 
     private function getSchemaNameFromSource($source)
     {
         if (is_string($source)) {
             if (substr($source, 0, 8) == '!include') {
-                $name = trim(substr($source, 9));
-                $name = str_replace('\\', '/', $name);
-                $name = str_replace('resources/schema/', '', $name);
-                $name = str_replace('.json', '', $name);
-                $name = str_replace(' ', '', ucwords(str_replace('/', ' ', $name)));
+                $source = trim(substr($source, 9));
+                $source = str_replace('\\', '/', $source);
+                $source = str_replace('resources/schema/', '', $source);
+                $source = str_replace('.json', '', $source);
+                $source = str_replace(' ', '', ucwords(str_replace('/', ' ', $source)));
 
-                return $name;
+                return $source;
+            } elseif (preg_match('/' . $this->nameRegexp . '/', $source)) {
+                return $source;
+            } else {
+                return $this->getNameFromJsonSchema($source);
             }
-
-            return 'Schema-' . substr(md5($source), 0, 8);
         } elseif (is_array($source)) {
-            return 'Schema-' . substr(md5(json_encode($source)), 0, 8);
+            return $this->getNameFromJsonSchema(json_encode($source));
         } else {
             throw new RuntimeException('Schema should be a string containing an "!include" directive pointing to a JsonSchema file');
         }
+    }
+
+    private function getNameFromJsonSchema($schema)
+    {
+        $data = json_decode($schema);
+
+        if (!$data instanceof \stdClass) {
+            throw new RuntimeException('Schema must be a valid json schema');
+        }
+
+        if (isset($data->title) && is_string($data->title)) {
+            return preg_replace('/[^A-z0-9\-\_]/', '_', $data->title);
+        }
+
+        // at last fallback we can only use the md5 of the schema as name
+        return 'Schema-' . substr(md5($schema), 0, 8);
     }
 }
