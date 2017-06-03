@@ -95,6 +95,11 @@ class Action
                 throw new StatusCode\GoneException('Action was deleted');
             }
 
+            // in case the class is empty use the existing class
+            if (empty($class)) {
+                $class = $action->class;
+            }
+
             // check source
             $this->assertSource($class);
 
