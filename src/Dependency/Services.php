@@ -89,7 +89,8 @@ trait Services
         return new Service\Action(
             $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('table_manager')->getTable(Table\Routes\Action::class),
-            $this->get('table_manager')->getTable(Table\Routes\Method::class)
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('action_factory')
         );
     }
 

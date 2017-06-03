@@ -21,7 +21,10 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Impl\Table;
+use Fusio\Engine\Factory;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -49,11 +52,12 @@ class Action
      */
     protected $routesMethodTable;
 
-    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable)
+    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory)
     {
         $this->actionTable       = $actionTable;
         $this->routesActionTable = $routesActionTable;
         $this->routesMethodTable = $routesMethodTable;
+        $this->actionFactory     = $actionFactory;
     }
 
     public function create($name, $class, $config)
@@ -68,6 +72,9 @@ class Action
         if (!empty($action)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
+
+        // check source
+        $this->assertSource($class);
 
         // create action
         $this->actionTable->create([
@@ -88,6 +95,10 @@ class Action
                 throw new StatusCode\GoneException('Action was deleted');
             }
 
+            // check source
+            $this->assertSource($class);
+
+            // update action
             $this->actionTable->update([
                 'id'     => $action->id,
                 'name'   => $name,
@@ -120,6 +131,19 @@ class Action
             ]);
         } else {
             throw new StatusCode\NotFoundException('Could not find action');
+        }
+    }
+
+    private function assertSource($class)
+    {
+        try {
+            $action = $this->actionFactory->factory($class);
+        } catch (FactoryResolveException $e) {
+            throw new StatusCode\BadRequestException($e->getMessage());
+        }
+
+        if (!$action instanceof ActionInterface) {
+            throw new StatusCode\BadRequestException('Could not resolve action');
         }
     }
 }

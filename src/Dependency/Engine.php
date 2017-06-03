@@ -29,6 +29,7 @@ use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Response;
+use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Parser as ImplParser;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
@@ -80,13 +81,17 @@ trait Engine
      */
     public function getActionFactory()
     {
-        return new Factory\Action($this, [
+        $engine   = $this->get('config_service')->getValue('action_engine');
+        $resolver = Resolver::createResolver($engine);
+        $services = [
             ConnectorInterface::class => 'connector',
             ProcessorInterface::class => 'processor',
             Response\FactoryInterface::class => 'engine_response',
             LoggerInterface::class => 'engine_logger',
             CacheInterface::class => 'engine_cache',
-        ]);
+        ];
+
+        return new Factory\Action($this, $services, $resolver);
     }
 
     /**
