@@ -146,17 +146,10 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 12,
+    "totalResults": 11,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
-        {
-            "id": 12,
-            "type": 1,
-            "name": "action_engine",
-            "description": "Engine which executes the action source. Possible values are: php, v8",
-            "value": ""
-        },
         {
             "id": 1,
             "type": 2,
