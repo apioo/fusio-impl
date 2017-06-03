@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,12 +35,15 @@ class Config extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
+
         $sb = $this->getSchemaBuilder('config');
         $sb->integer('id');
         $sb->integer('type');
         $sb->string('name');
         $sb->string('description');
-        $sb->string('value');
+        $sb->property('value')
+            ->setOneOf($scalar);
 
         return $sb->getProperty();
     }
