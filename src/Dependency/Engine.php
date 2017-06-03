@@ -81,7 +81,7 @@ trait Engine
      */
     public function getActionFactory()
     {
-        $engine   = $this->get('config_service')->getValue('action_engine');
+        $engine   = $this->get('config')->get('fusio_engine');
         $resolver = Resolver::createResolver($engine);
         $services = [
             ConnectorInterface::class => 'connector',

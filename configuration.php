@@ -19,6 +19,11 @@ return array(
     // CHANGE THE KEY ONLY BEFORE THE INSTALLATION
     'fusio_project_key'       => '42eec18ffdbffc9fda6110dcc705d6ce',
 
+    // Optional the engine which is used to execute an action. Possible values
+    // are 'php' or 'v8'. If no engine is provided the default engine is used
+    // which assumes that the action is a php class 
+    //'fusio_engine'            => null,
+
     // Settings of the internal mailer. By default we use the internal PHP mail
     // function
     /*
