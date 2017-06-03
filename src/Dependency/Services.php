@@ -54,10 +54,7 @@ trait Services
         return new Service\Routes(
             $this->get('table_manager')->getTable(Table\Routes::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('table_manager')->getTable(Table\Scope\Route::class),
-            $this->get('routes_deploy_service'),
-            $this->get('routes_relation_service'),
-            $this->get('resource_listing')
+            $this->get('routes_config_service')
         );
     }
 
@@ -69,6 +66,18 @@ trait Services
         return new Service\Routes\Method(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('schema_loader')
+        );
+    }
+    /**
+     * @return \Fusio\Impl\Service\Routes\Config
+     */
+    public function getRoutesConfigService()
+    {
+        return new Service\Routes\Config(
+            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('routes_deploy_service'),
+            $this->get('routes_relation_service'),
+            $this->get('resource_listing')
         );
     }
 

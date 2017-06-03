@@ -21,12 +21,8 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Service\Routes\Deploy;
-use Fusio\Impl\Service\Routes\Relation;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Api\ListingInterface;
-use PSX\Api\Resource;
-use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -50,33 +46,15 @@ class Routes
     protected $methodTable;
 
     /**
-     * @var \Fusio\Impl\Table\Scope\Route
+     * @var \Fusio\Impl\Service\Routes\Config
      */
-    protected $scopeRoutesTable;
+    protected $configService;
 
-    /**
-     * @var \Fusio\Impl\Service\Routes\Deploy
-     */
-    protected $deploy;
-
-    /**
-     * @var \Fusio\Impl\Service\Routes\Relation
-     */
-    protected $relation;
-
-    /**
-     * @var \PSX\Api\ListingInterface
-     */
-    protected $listing;
-
-    public function __construct(Table\Routes $routesTable, Table\Routes\Method $routesMethodTable, Table\Scope\Route $scopeRoutesTable, Deploy $deploy, Relation $relation, ListingInterface $listing)
+    public function __construct(Table\Routes $routesTable, Table\Routes\Method $methodTable, Service\Routes\Config $configService)
     {
-        $this->routesTable       = $routesTable;
-        $this->routesMethodTable = $routesMethodTable;
-        $this->scopeRoutesTable  = $scopeRoutesTable;
-        $this->deploy            = $deploy;
-        $this->relation          = $relation;
-        $this->listing           = $listing;
+        $this->routesTable   = $routesTable;
+        $this->methodTable   = $methodTable;
+        $this->configService = $configService;
     }
 
     public function create($path, $config)
@@ -106,7 +84,7 @@ class Routes
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
 
-            $this->handleConfig($routeId, $path, $config);
+            $this->configService->handleConfig($routeId, $path, $config);
 
             $this->routesTable->commit();
         } catch (\Exception $e) {
@@ -128,7 +106,7 @@ class Routes
             try {
                 $this->routesTable->beginTransaction();
 
-                $this->handleConfig($route->id, $route->path, $config);
+                $this->configService->handleConfig($route->id, $route->path, $config);
 
                 $this->routesTable->commit();
             } catch (\Exception $e) {
@@ -151,7 +129,7 @@ class Routes
             }
 
             // check whether route has a production version
-            if ($this->routesMethodTable->hasProductionVersion($route->id)) {
+            if ($this->methodTable->hasProductionVersion($route->id)) {
                 throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
             }
 
@@ -163,130 +141,5 @@ class Routes
         } else {
             throw new StatusCode\NotFoundException('Could not find route');
         }
-    }
-
-    /**
-     * Method which handles data change of each API method. Basically an API
-     * method can only change if it is in development mode. In every other
-     * case we can only change the status
-     *
-     * @param integer $routeId
-     * @param string $path
-     * @param \PSX\Record\RecordInterface $result
-     */
-    protected function handleConfig($routeId, $path, $result)
-    {
-        // get existing methods
-        $existingMethods = $this->routesMethodTable->getMethods($routeId, null, false, null);
-
-        // insert methods
-        $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
-
-        foreach ($result as $version) {
-            // check version
-            $ver = isset($version['version']) ? intval($version['version']) : 0;
-            if ($ver <= 0) {
-                throw new StatusCode\BadRequestException('Version must be a positive integer');
-            }
-
-            // check status
-            $status = isset($version['status']) ? $version['status'] : 0;
-            if (!in_array($status, [Resource::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
-                throw new StatusCode\BadRequestException('Invalid status value');
-            }
-
-            // delete all existing development versions
-            $this->routesMethodTable->deleteAllFromRoute($routeId, $ver, Resource::STATUS_DEVELOPMENT);
-
-            // invalidate resource cache
-            if ($this->listing instanceof CachedListing) {
-                $this->listing->invalidateResource($path, $ver);
-            }
-
-            // parse methods
-            $methods = isset($version['methods']) ? $version['methods'] : [];
-
-            foreach ($methods as $method => $config) {
-                // check method
-                if (!in_array($method, $availableMethods)) {
-                    throw new StatusCode\BadRequestException('Invalid request method');
-                }
-
-                $active = isset($config['active']) ? $config['active'] : false;
-                $public = isset($config['public']) ? $config['public'] : false;
-
-                // find existing method
-                $existingMethod = null;
-                foreach ($existingMethods as $index => $row) {
-                    if ($row['version'] == $ver && $row['method'] == $method) {
-                        $existingMethod = $row;
-                    }
-                }
-
-                if ($status == Resource::STATUS_DEVELOPMENT) {
-                    // we can change the API only if we are in development mode
-                    if ($existingMethod === null || $existingMethod['status'] == Resource::STATUS_DEVELOPMENT) {
-                        $data = [
-                            'routeId'  => $routeId,
-                            'method'   => $method,
-                            'version'  => $ver,
-                            'status'   => $status,
-                            'active'   => $active ? 1 : 0,
-                            'public'   => $public ? 1 : 0,
-                            'request'  => isset($config['request'])  ? $config['request']  : null,
-                            'response' => isset($config['response']) ? $config['response'] : null,
-                            'action'   => isset($config['action'])   ? $config['action']   : null,
-                        ];
-
-                        $this->routesMethodTable->create($data);
-                    } else {
-                        $this->routesMethodTable->update([
-                            'id'       => $existingMethod['id'],
-                            'routeId'  => $routeId,
-                            'method'   => $method,
-                            'version'  => $ver,
-                            'status'   => $status,
-                            'active'   => $active ? 1 : 0,
-                            'public'   => $public ? 1 : 0,
-                            'request'  => isset($config['request'])  ? $config['request']  : null,
-                            'response' => isset($config['response']) ? $config['response'] : null,
-                            'action'   => isset($config['action'])   ? $config['action']   : null,
-                        ]);
-                    }
-                } elseif ($active === true) {
-                    // if the method is not in development mode we create only
-                    // the schema/action cache on the transition from dev to
-                    // prod in every other case we dont change any values except
-                    // for the status
-                    if ($existingMethod === null) {
-                        throw new StatusCode\BadRequestException('A new resource can only start in development mode');
-                    }
-
-                    if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && $status == Resource::STATUS_ACTIVE) {
-                        // deploy method to active
-                        $this->deploy->deploy($existingMethod);
-                    } elseif ($existingMethod['status'] != $status) {
-                        // we can not transition directly from development to deprecated or closed
-                        if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && in_array($status, [Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
-                            throw new StatusCode\BadRequestException('A route can only transition from development to production');
-                        }
-
-                        // change only the status if not in development
-                        $this->routesMethodTable->update([
-                            'id'     => $existingMethod['id'],
-                            'status' => $status,
-                        ]);
-                    }
-                }
-            }
-        }
-
-        // invalidate resource cache
-        if ($this->listing instanceof CachedListing) {
-            $this->listing->invalidateResource($path);
-        }
-
-        // update relations
-        $this->relation->updateRelations($routeId);
     }
 }
