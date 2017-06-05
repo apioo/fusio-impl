@@ -41,7 +41,7 @@ class PassthruRecord extends Record
 
     public function __construct($payload)
     {
-        parent::__construct();
+        parent::__construct('record', $this->extractProperties($payload));
 
         $this->payload = $payload;
     }
@@ -49,5 +49,22 @@ class PassthruRecord extends Record
     public function getPayload()
     {
         return $this->payload;
+    }
+
+    /**
+     * If the payload has a known format extract the properties
+     * 
+     * @param mixed $payload
+     * @return array
+     */
+    private function extractProperties($payload)
+    {
+        if (is_array($payload)) {
+            return $payload;
+        } elseif ($payload instanceof \stdClass) {
+            return (array) $payload;
+        } else {
+            return [];
+        }
     }
 }
