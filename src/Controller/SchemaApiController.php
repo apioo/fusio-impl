@@ -27,10 +27,10 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\Oauth2Filter;
+use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
-use PSX\Data\Record\Transformer;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Filter\CORS;
 use PSX\Framework\Filter\UserAgentEnforcer;
@@ -228,8 +228,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     protected function parseRequest(MethodAbstract $method)
     {
         if ($method->hasRequest()) {
-            if ($method->getRequest()->getDefinition()->getName() == self::SCHEMA_PASSTHRU) {
-                return Transformer::toRecord($this->getBody() ?: new \stdClass());
+            if ($method->getRequest()->getDefinition()->getTitle() == self::SCHEMA_PASSTHRU) {
+                return new PassthruRecord($this->getBody());
             } else {
                 return $this->getBodyAs($method->getRequest());
             }
