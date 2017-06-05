@@ -53,26 +53,12 @@ trait Engine
      */
     public function getActionParser()
     {
-        $parsers = [];
-        $parsers[] = new ImplParser\Database(
+        return new ImplParser\Database(
             $this->get('action_factory'),
             $this->get('form_element_factory'),
             $this->get('connection'),
             'fusio_action_class',
             'Fusio\Engine\ActionInterface'
-        );
-        $parsers[] = new Parser\Directory(
-            $this->get('action_factory'),
-            $this->get('form_element_factory'),
-            PSX_PATH_LIBRARY . '/Action',
-            'Fusio\Custom\Action',
-            'Fusio\Engine\ActionInterface'
-        );
-
-        return new Parser\Composite(
-            $this->get('action_factory'),
-            $this->get('form_element_factory'),
-            $parsers
         );
     }
 
@@ -137,27 +123,12 @@ trait Engine
      */
     public function getConnectionParser()
     {
-        $parsers = [];
-        $parsers[] = new ImplParser\Database(
+        return new ImplParser\Database(
             $this->get('connection_factory'),
             $this->get('form_element_factory'),
             $this->get('connection'),
             'fusio_connection_class',
             'Fusio\Engine\ConnectionInterface'
-        );
-
-        $parsers[] = new Parser\Directory(
-            $this->get('connection_factory'),
-            $this->get('form_element_factory'),
-            PSX_PATH_LIBRARY . '/Connection',
-            'Fusio\Custom\Connection',
-            'Fusio\Engine\ConnectionInterface'
-        );
-
-        return new Parser\Composite(
-            $this->get('connection_factory'),
-            $this->get('form_element_factory'),
-            $parsers
         );
     }
 
