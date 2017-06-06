@@ -92,7 +92,7 @@ class Collection extends BackendApiAbstract
             $record->name,
             $record->class,
             $record->engine,
-            $record->config->getProperties()
+            $record->config ? $record->config->getProperties() : null
         );
 
         return array(
