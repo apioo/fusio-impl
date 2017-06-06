@@ -281,12 +281,12 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/- \[CREATED\] action Ts-Console-System-Resource-Test-action/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action S-Console-System-Resource-Test-action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
-            'name' => 'Ts-Console-System-Resource-Test-action',
+            'name' => 'S-Console-System-Resource-Test-action',
         ]);
 
         $this->assertEquals(4, $action['id']);
@@ -341,7 +341,7 @@ JSON;
         $display = $commandTester->getDisplay();
 
         $this->assertRegExp('/- \[CREATED\] schema Schema/', $display, $display);
-        $this->assertRegExp('/- \[CREATED\] action Ts-Console-System-Resource-Test-action/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action S-Console-System-Resource-Test-action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check schema
