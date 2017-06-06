@@ -422,7 +422,7 @@ class Deploy
         if (is_string($source)) {
             if (is_file($source)) {
                 $source = realpath($source);
-                $source = substr($source, strlen(realpath(PSX_PATH_LIBRARY)));
+                $source = substr($source, strlen(realpath(PSX_PATH_LIBRARY)) + 1);
                 $source = str_replace(['/', '\\'], ' ', $source);
                 $source = str_replace(['.php', '.js'], '', $source);
                 $source = str_replace(' ', '-', ucwords($source));
@@ -430,7 +430,7 @@ class Deploy
                 return $source;
             } elseif (class_exists($source)) {
                 $source = str_replace('\\', '-', $source);
-                $source = str_replace('Fusio-Impl', '', $source);
+                $source = str_replace('Fusio-Impl-', '', $source);
 
                 return $source;
             } elseif (preg_match('/' . $this->nameRegexp . '/', $source)) {
