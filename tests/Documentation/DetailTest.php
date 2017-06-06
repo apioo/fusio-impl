@@ -99,7 +99,7 @@ class DetailTest extends ControllerDbTestCase
             "Passthru": {
                 "type": "object",
                 "title": "passthru",
-                "description": "No schema was specified all data will pass through. Please contact the API provider for more informations about the data format."
+                "description": "No schema was specified."
             },
             "GET-200-response": {
                 "$ref": "#\/definitions\/Test"

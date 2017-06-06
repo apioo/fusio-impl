@@ -47,6 +47,7 @@ class Action extends TableAbstract
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'class' => self::TYPE_VARCHAR,
+            'engine' => self::TYPE_VARCHAR,
             'config' => self::TYPE_ARRAY,
             'date' => self::TYPE_DATETIME,
         );

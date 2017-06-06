@@ -20,6 +20,7 @@
     "action": [{
         "name": "Void-Action",
         "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction",
+        "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
         "config": {
             "foo": "bar",
             "connection": "Adapter-Connection"

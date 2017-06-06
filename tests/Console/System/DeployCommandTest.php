@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Factory\Resolver\PhpFile;
+use Fusio\Impl\Tests\Adapter\Test\VoidAction;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -278,16 +281,17 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/- \[CREATED\] action FusioImplTestsAdapterTestVoidAction/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action Ts-Console-System-Resource-Test-action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check action
-        $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
-            'name' => 'FusioImplTestsAdapterTestVoidAction',
+        $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
+            'name' => 'Ts-Console-System-Resource-Test-action',
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
+        $this->assertContains('Console/System/resource/test-action.php', $action['class']);
+        $this->assertEquals(PhpFile::class, $action['engine']);
         $this->assertEquals([], unserialize($action['config']));
 
         // check routes
@@ -298,7 +302,7 @@ JSON;
         $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+        $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
         $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
@@ -321,7 +325,7 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Invalid action source Foo\\\\Bar/', $display, $display);
+        $this->assertRegExp('/Invalid action source/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()
@@ -337,7 +341,7 @@ JSON;
         $display = $commandTester->getDisplay();
 
         $this->assertRegExp('/- \[CREATED\] schema Schema/', $display, $display);
-        $this->assertRegExp('/- \[CREATED\] action FusioImplTestsAdapterTestVoidAction/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action Ts-Console-System-Resource-Test-action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check schema

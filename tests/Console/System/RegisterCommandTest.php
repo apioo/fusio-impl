@@ -21,6 +21,11 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Engine\Factory\Resolver\PhpClass;
+use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Tests\Adapter\Test\VoidAction;
+use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
+use Fusio\Impl\Tests\Adapter\TestAdapter;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -52,7 +57,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Impl\Tests\Adapter\TestAdapter',
+            'class'   => TestAdapter::class,
         ]);
 
         $display = $commandTester->getDisplay();
@@ -61,14 +66,14 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         // check action class
         $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidAction',
+            'class' => VoidAction::class,
         ]);
 
         $this->assertEquals(4, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
+            'class' => VoidConnection::class,
         ]);
 
         $this->assertEquals(4, $connectionId);
@@ -79,7 +84,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(2, $connection['id']);
-        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidConnection', $connection['class']);
+        $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertEquals(69, strlen($connection['config']));
 
         // check schema
@@ -111,12 +116,13 @@ JSON;
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 
         // check action
-        $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
+        $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
             'name' => 'Void-Action',
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
+        $this->assertEquals(VoidAction::class, $action['class']);
+        $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals(['foo' => 'bar', 'connection' => '2'], unserialize($action['config']));
 
         // check routes
@@ -127,7 +133,7 @@ JSON;
         $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+        $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
         $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
@@ -145,7 +151,7 @@ JSON;
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'class'   => 'Fusio\Impl\Tests\Adapter\TestAdapter',
+            'class'   => TestAdapter::class,
             'path'    => '/import',
             '--yes'   => true,
         ]);
@@ -156,14 +162,14 @@ JSON;
 
         // check action class
         $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidAction',
+            'class' => VoidAction::class,
         ]);
 
         $this->assertEquals(4, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => 'Fusio\Impl\Tests\Adapter\Test\VoidConnection',
+            'class' => VoidConnection::class,
         ]);
 
         $this->assertEquals(4, $connectionId);
@@ -174,7 +180,7 @@ JSON;
         ]);
 
         $this->assertEquals(2, $connection['id']);
-        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidConnection', $connection['class']);
+        $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertEquals(69, strlen($connection['config']));
 
         // check schema
@@ -211,7 +217,7 @@ JSON;
         ]);
 
         $this->assertEquals(4, $action['id']);
-        $this->assertEquals('Fusio\Impl\Tests\Adapter\Test\VoidAction', $action['class']);
+        $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(['foo' => 'bar', 'connection' => '2'], unserialize($action['config']));
 
         // check routes
@@ -222,7 +228,7 @@ JSON;
         $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+        $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
         $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [

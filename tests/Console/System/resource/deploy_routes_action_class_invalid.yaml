@@ -3,4 +3,4 @@ routes:
     methods:
       GET:
         public: true
-        action: Foo\Bar
+        action: "${dir.src}/../tests/Console/System/resource/foo.php"

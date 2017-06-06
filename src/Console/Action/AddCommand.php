@@ -57,7 +57,8 @@ class AddCommand extends Command
             ->setName('action:add')
             ->setDescription('Adds a new action')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the action')
-            ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the action class (Acme\Fusio\Action)')
+            ->addArgument('class', InputArgument::REQUIRED, 'The action class i.e. (Acme\Fusio\Action)')
+            ->addArgument('engine', InputArgument::OPTIONAL, 'The action engine')
             ->addArgument('config', InputArgument::OPTIONAL, 'Config parameters i.e. foo=bar&bar=foo');
     }
 
@@ -66,6 +67,7 @@ class AddCommand extends Command
         $response = $this->apiExecutor->request('POST', 'action', [
             'name' => $input->getArgument('name'),
             'class' => $input->getArgument('class'),
+            'engine' => $input->getArgument('engine'),
             'config' => $this->parseConfig($input->getArgument('config')),
         ]);
 

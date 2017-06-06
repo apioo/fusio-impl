@@ -67,8 +67,6 @@ trait Engine
      */
     public function getActionFactory()
     {
-        $engine   = $this->get('config')->get('fusio_engine');
-        $resolver = Resolver::createResolver($engine);
         $services = [
             ConnectorInterface::class => 'connector',
             ProcessorInterface::class => 'processor',
@@ -77,7 +75,11 @@ trait Engine
             CacheInterface::class => 'engine_cache',
         ];
 
-        return new Factory\Action($this, $services, $resolver);
+        $factory = new Factory\Action($this, $services);
+        $factory->addResolver(new Resolver\PhpFile());
+        $factory->addResolver(new Resolver\JavascriptFile());
+
+        return $factory;
     }
 
     /**

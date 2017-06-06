@@ -29,6 +29,7 @@ schema:
 action:
   Test-Action:
     class: Fusio\Adapter\Util\Action\UtilStaticResponse
+    engine: Fusio\Engine\Factory\Resolver\PhpClass
     config:
       response: '{"foo": "bar"}'
 routes:

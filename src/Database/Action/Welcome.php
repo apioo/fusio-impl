@@ -19,34 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Factory;
+namespace Fusio\Impl\Database\Action;
+
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Base;
 
 /**
- * Resolver
+ * Welcome
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Resolver
+class Welcome extends ActionAbstract
 {
-    const ENGINE_V8  = 'v8';
-    const ENGINE_PHP = 'php';
-
-    /**
-     * @param string $engine
-     * @return \Fusio\Engine\Factory\ResolverInterface|null
-     */
-    public static function createResolver($engine)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        if ($engine == self::ENGINE_V8) {
-            return new Resolver\JavascriptFile();
-        } elseif ($engine == self::ENGINE_PHP) {
-            return new Resolver\PhpFile();
-        }
-
-        // in case we have no defined resolver we use the default resolver
-        // which simply uses a PHP class
-        return null;
+        return $this->response->build(200, [], [
+            'message' => 'Congratulations the installation of Fusio was successful',
+            'version' => Base::getVersion(),
+            'links' => [[
+                'rel' => 'about',
+                'name' => 'http://fusio-project.org',
+            ]]
+        ]);
     }
 }

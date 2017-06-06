@@ -91,6 +91,7 @@ class Collection extends BackendApiAbstract
         $this->actionService->create(
             $record->name,
             $record->class,
+            $record->engine,
             $record->config->getProperties()
         );
 

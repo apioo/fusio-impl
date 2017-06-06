@@ -115,6 +115,9 @@ class EntityTest extends ControllerDbTestCase
                     "class": {
                         "type": "string"
                     },
+                    "engine": {
+                        "type": "string"
+                    },
                     "config": {
                         "$ref": "#\/definitions\/Config"
                     }

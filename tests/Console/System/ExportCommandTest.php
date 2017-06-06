@@ -119,7 +119,7 @@ class ExportCommandTest extends ControllerDbTestCase
                 "id": "http:\/\/fusio-project.org",
                 "title": "passthru",
                 "type": "object",
-                "description": "No schema was specified all data will pass through. Please contact the API provider for more informations about the data format.",
+                "description": "No schema was specified.",
                 "properties": []
             }
         }
@@ -144,9 +144,8 @@ class ExportCommandTest extends ControllerDbTestCase
         },
         {
             "name": "Welcome",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "class": "Fusio\\Impl\\Database\\Action\\Welcome",
             "config": {
-                "response": "{\n    \"message\": \"Congratulations the installation of Fusio was successful\",\n    \"links\": [\n        {\n            \"rel\": \"about\",\n            \"name\": \"http:\\\/\\\/fusio-project.org\"\n        }\n    ]\n}"
             },
             "date": "[datetime]"
         }

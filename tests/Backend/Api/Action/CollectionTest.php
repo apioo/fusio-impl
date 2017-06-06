@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -73,6 +75,9 @@ class CollectionTest extends ControllerDbTestCase
                         "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
                     },
                     "class": {
+                        "type": "string"
+                    },
+                    "engine": {
                         "type": "string"
                     },
                     "config": {
@@ -244,7 +249,8 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
-            'class'  => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+            'class'  => UtilStaticResponse::class,
+            'engine' => PhpClass::class,
             'config' => [
                 'string' => 'foo',
                 'integer' => 12,

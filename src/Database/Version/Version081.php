@@ -28,11 +28,13 @@ use Fusio\Adapter\Http;
 use Fusio\Adapter\Sql;
 use Fusio\Adapter\Util;
 use Fusio\Adapter\V8;
+use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Database\Action\Welcome;
 use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\User\ProviderInterface;
@@ -59,6 +61,7 @@ class Version081 implements VersionInterface
         $actionTable->addColumn('status', 'integer', array('default' => Table\Action::STATUS_ACTIVE));
         $actionTable->addColumn('name', 'string', array('length' => 64));
         $actionTable->addColumn('class', 'string', array('length' => 255));
+        $actionTable->addColumn('engine', 'string', array('length' => 255, 'notnull' => false));
         $actionTable->addColumn('config', 'blob', array('notnull' => false));
         $actionTable->addColumn('date', 'datetime');
         $actionTable->setPrimaryKey(array('id'));
@@ -346,12 +349,10 @@ class Version081 implements VersionInterface
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $parser    = new Parser();
-        $now       = new DateTime();
-
-        $schema    = $this->getPassthruSchema();
-        $cache     = $parser->parse($schema);
-        $response  = $this->getWelcomeResponse();
+        $parser = new Parser();
+        $now    = new DateTime();
+        $schema = $this->getPassthruSchema();
+        $cache  = $parser->parse($schema);
 
         return [
             'fusio_user' => [
@@ -387,7 +388,7 @@ class Version081 implements VersionInterface
                 ['name' => 'authorization', 'description' => 'Authorization API endpoint'],
             ],
             'fusio_action' => [
-                ['status' => 1, 'name' => 'Welcome', 'class' => Util\Action\UtilStaticResponse::class, 'config' => serialize(['response' => $response]), 'date' => $now->format('Y-m-d H:i:s')],
+                ['status' => 1, 'name' => 'Welcome', 'class' => Welcome::class, 'engine' => PhpClass::class, 'config' => null, 'date' => $now->format('Y-m-d H:i:s')],
             ],
             'fusio_action_class' => [
                 ['class' => V8\Action\V8Processor::class],
@@ -555,25 +556,14 @@ class Version081 implements VersionInterface
         ];
     }
 
-    protected function getPassthruSchema()
+    private function getPassthruSchema()
     {
         return json_encode([
             'id' => 'http://fusio-project.org',
             'title' => 'passthru',
             'type' => 'object',
-            'description' => 'No schema was specified all data will pass through. Please contact the API provider for more informations about the data format.',
+            'description' => 'No schema was specified.',
             'properties' => new \stdClass(),
-        ], JSON_PRETTY_PRINT);
-    }
-
-    protected function getWelcomeResponse()
-    {
-        return json_encode([
-            'message' => 'Congratulations the installation of Fusio was successful',
-            'links' => [[
-                'rel' => 'about',
-                'name' => 'http://fusio-project.org',
-            ]]
         ], JSON_PRETTY_PRINT);
     }
 }

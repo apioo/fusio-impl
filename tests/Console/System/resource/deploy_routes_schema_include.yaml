@@ -3,6 +3,6 @@ routes:
     methods:
       GET:
         public: true
-        action: Fusio\Impl\Tests\Adapter\Test\VoidAction
+        action: "${dir.src}/../tests/Console/System/resource/test-action.php"
         request: !include schema.json
         response: !include schema.json

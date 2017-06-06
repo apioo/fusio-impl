@@ -104,6 +104,7 @@ class Entity extends BackendApiAbstract
             (int) $this->getUriFragment('action_id'),
             $record->name,
             $record->class,
+            $record->engine,
             $record->config->getProperties()
         );
 

@@ -90,7 +90,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('table_manager')->getTable(Table\Routes\Action::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('action_factory')
+            $this->get('action_factory'),
+            $this->get('config')->get('fusio_engine')
         );
     }
 

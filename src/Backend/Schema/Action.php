@@ -49,6 +49,7 @@ class Action extends SchemaAbstract
         $sb->string('name')
             ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
         $sb->string('class');
+        $sb->string('engine');
         $sb->objectType('config', $config);
 
         return $sb->getProperty();

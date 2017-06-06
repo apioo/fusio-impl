@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Console\Action;
 
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -48,7 +50,8 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'name'    => 'foobar',
-            'class'   => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+            'class'   => UtilStaticResponse::class,
+            'engine'  => PhpClass::class,
             'config'  => 'response={"foo":"bar"}',
         ]);
 
@@ -57,12 +60,13 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals('Action successful created', trim($actual));
 
         // check action
-        $action = $this->connection->fetchAssoc('SELECT id, status, name, class, config FROM fusio_action ORDER BY id DESC');
+        $action = $this->connection->fetchAssoc('SELECT id, status, name, class, engine, config FROM fusio_action ORDER BY id DESC');
 
         $this->assertEquals(4, $action['id']);
         $this->assertEquals(1, $action['status']);
         $this->assertEquals('foobar', $action['name']);
-        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
+        $this->assertEquals(UtilStaticResponse::class, $action['class']);
+        $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals('a:1:{s:8:"response";s:13:"{"foo":"bar"}";}', $action['config']);
     }
 }

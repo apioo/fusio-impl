@@ -52,15 +52,21 @@ class Action
      */
     protected $routesMethodTable;
 
-    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory)
+    /**
+     * @var string
+     */
+    protected $actionEngine;
+
+    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, $actionEngine)
     {
         $this->actionTable       = $actionTable;
         $this->routesActionTable = $routesActionTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->actionFactory     = $actionFactory;
+        $this->actionEngine      = $actionEngine;
     }
 
-    public function create($name, $class, $config)
+    public function create($name, $class, $engine, $config)
     {
         // check whether action exists
         $condition  = new Condition();
@@ -73,20 +79,25 @@ class Action
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
+        if (empty($engine)) {
+            $engine = $this->actionEngine;
+        }
+
         // check source
-        $this->assertSource($class);
+        $this->assertSource($class, $engine);
 
         // create action
         $this->actionTable->create([
             'status' => Table\Action::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
+            'engine' => $engine,
             'config' => $config,
             'date'   => new \DateTime(),
         ]);
     }
 
-    public function update($actionId, $name, $class, $config)
+    public function update($actionId, $name, $class, $engine, $config)
     {
         $action = $this->actionTable->get($actionId);
 
@@ -100,14 +111,19 @@ class Action
                 $class = $action->class;
             }
 
+            if (empty($engine)) {
+                $engine = $action->engine;
+            }
+
             // check source
-            $this->assertSource($class);
+            $this->assertSource($class, $engine);
 
             // update action
             $this->actionTable->update([
                 'id'     => $action->id,
                 'name'   => $name,
                 'class'  => $class,
+                'engine' => $engine,
                 'config' => $config,
                 'date'   => new \DateTime(),
             ]);
@@ -139,10 +155,21 @@ class Action
         }
     }
 
-    private function assertSource($class)
+    /**
+     * Checks whether the provided class is resolvable. Note the class can also
+     * be a file
+     * 
+     * @param string $class
+     * @param string $engine
+     */
+    private function assertSource($class, $engine)
     {
+        if (!class_exists($engine)) {
+            throw new StatusCode\BadRequestException('Could not resolve engine');
+        }
+
         try {
-            $action = $this->actionFactory->factory($class);
+            $action = $this->actionFactory->factory($class, $engine);
         } catch (FactoryResolveException $e) {
             throw new StatusCode\BadRequestException($e->getMessage());
         }
