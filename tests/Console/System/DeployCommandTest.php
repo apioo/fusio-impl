@@ -292,7 +292,7 @@ JSON;
         $this->assertEquals(4, $action['id']);
         $this->assertContains('Console/System/resource/test-action.php', $action['class']);
         $this->assertEquals(PhpFile::class, $action['engine']);
-        $this->assertEquals([], unserialize($action['config']));
+        $this->assertEquals(null, $action['config']);
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
