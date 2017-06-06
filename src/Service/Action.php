@@ -92,7 +92,7 @@ class Action
             'name'   => $name,
             'class'  => $class,
             'engine' => $engine,
-            'config' => $config,
+            'config' => $config ?: null,
             'date'   => new \DateTime(),
         ]);
     }
@@ -124,7 +124,7 @@ class Action
                 'name'   => $name,
                 'class'  => $class,
                 'engine' => $engine,
-                'config' => $config,
+                'config' => $config ?: null,
                 'date'   => new \DateTime(),
             ]);
         } else {
