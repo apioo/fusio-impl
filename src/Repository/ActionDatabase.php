@@ -53,6 +53,7 @@ class ActionDatabase implements Repository\ActionInterface
         $sql = 'SELECT id,
                        name,
                        class,
+                       engine,
                        config,
                        date
                   FROM fusio_action
@@ -86,6 +87,7 @@ class ActionDatabase implements Repository\ActionInterface
         $sql = 'SELECT id,
                        name,
                        class,
+                       engine,
                        config,
                        date
                   FROM fusio_action
@@ -108,6 +110,7 @@ class ActionDatabase implements Repository\ActionInterface
         $action->setId($row['id']);
         $action->setName($row['name']);
         $action->setClass($row['class']);
+        $action->setEngine($row['engine']);
         $action->setConfig($config);
         $action->setDate($row['date']);
 
