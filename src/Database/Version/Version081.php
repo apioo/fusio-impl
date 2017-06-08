@@ -156,7 +156,7 @@ class Version081 implements VersionInterface
         $logTable->addColumn('ip', 'string', array('length' => 40));
         $logTable->addColumn('userAgent', 'string', array('length' => 255));
         $logTable->addColumn('method', 'string', array('length' => 16));
-        $logTable->addColumn('path', 'string', array('length' => 255));
+        $logTable->addColumn('path', 'string', array('length' => 1023));
         $logTable->addColumn('header', 'text');
         $logTable->addColumn('body', 'text', array('notnull' => false));
         $logTable->addColumn('date', 'datetime');
