@@ -62,7 +62,7 @@ class DeployCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/- \[CREATED\] schema Response-Schema/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] action Test-Action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
-        $this->assertRegExp('/- \[EXECUTED\] Native v1_schema.sql/', $display, $display);
+        $this->assertRegExp('/- \[EXECUTED\] Native v1_schema.php/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -174,7 +174,7 @@ JSON;
 
         $this->assertEquals(2, $migration['id']);
         $this->assertEquals('Native', $migration['connection']);
-        $this->assertEquals('v1_schema.sql', $migration['file']);
+        $this->assertEquals('v1_schema.php', $migration['file']);
         $this->assertNotEmpty($migration['fileHash']);
         $this->assertNotEmpty($migration['executeDate']);
 

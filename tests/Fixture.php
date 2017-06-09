@@ -125,7 +125,7 @@ JSON;
                 ['status' => 1, 'name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_deploy_migration' => [
-                ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.sql', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
+                ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => SchemaApiController::class],

@@ -44,4 +44,4 @@ routes:
         action: Test-Action
 migration:
   Native:
-    - v1_schema.sql
+    - v1_schema.php

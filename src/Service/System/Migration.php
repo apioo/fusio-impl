@@ -94,7 +94,6 @@ class Migration
     {
         $connection = $this->connector->getConnection($connectionId);
         $hash       = sha1_file($path);
-        $definition = file_get_contents($path);
 
         // check whether the script was already executed
         $condition = new Condition();
@@ -106,7 +105,16 @@ class Migration
         if (empty($deploy)) {
             // execute if the file was not already executed
             if ($connection instanceof DBAL\Connection) {
-                $this->executeSql($connection, $definition);
+                $toSchema = $connection->getSchemaManager()->createSchema();
+                appendDatabaseSchema($toSchema, $path);
+
+                // run migration
+                $fromSchema = $connection->getSchemaManager()->createSchema();
+                $queries    = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+
+                foreach ($queries as $query) {
+                    $connection->query($query);
+                }
 
                 // insert migration
                 $this->deployTable->create([
@@ -128,32 +136,16 @@ class Migration
             }
         }
     }
+}
 
-    private function executeSql(DBAL\Connection $connection, $definition)
-    {
-        $lines = explode("\n", str_replace(["\r\n", "\n", "\r"], "\n", $definition));
-        $sql   = '';
-
-        foreach ($lines as $line) {
-            $line = trim($line);
-            if (empty($line) || substr($line, 0, 2) == '--') {
-                continue;
-            }
-
-            $sql.= $line;
-
-            if (substr($line, -1) == ';') {
-                // execute sql
-                $connection->exec($sql);
-
-                $sql = '';
-            }
-        }
-
-        // in the case the sql had no last semicolon
-        if (!empty($sql)) {
-            // execute sql
-            $connection->exec($sql);
-        }
-    }
+/**
+ * If we include the schema we only want to have the $schema variable in the
+ * scope. The required file uses the $schema and appends the needed tables
+ * 
+ * @param \Doctrine\DBAL\Schema\Schema $schema
+ * @param string $file
+ */
+function appendDatabaseSchema(DBAL\Schema\Schema $schema, $file)
+{
+    require $file;
 }

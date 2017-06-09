@@ -55,7 +55,7 @@ class MigrationCommandTest extends ControllerDbTestCase
 +--------------------+-----------------------------+-------------+
 | Connection         | File                        | Executed on |
 +--------------------+-----------------------------+-------------+
-| Default-Connection | resources/sql/v4_schema.sql | 2017-04-30  |
+| Default-Connection | resources/sql/v4_schema.php | 2017-04-30  |
 +--------------------+-----------------------------+-------------+
 
 TEXT;
