@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Service\System;
 
-use Fusio\Engine\Connector;
 use Doctrine\DBAL;
+use Fusio\Engine\Connector;
+use Fusio\Impl\Table;
 use Psr\Log\LoggerInterface;
 use PSX\Sql\Condition;
 use RuntimeException;
-use Fusio\Impl\Table;
 
 /**
  * Migration
@@ -64,23 +64,20 @@ class Migration
         $this->logger      = $logger;
     }
 
-    public function execute(array $data, $basePath = null)
+    public function execute(array $migration, $basePath = null)
     {
         $result = [];
+        foreach ($migration as $connectionId => $definitionFiles) {
+            if (is_array($definitionFiles)) {
+                foreach ($definitionFiles as $definitionFile) {
+                    $path = $basePath . '/' . $definitionFile;
+                    if (is_file($path)) {
+                        try {
+                            $this->executeDefinition($connectionId, $path, $definitionFile, $result);
+                        } catch (\Exception $e) {
+                            $this->logger->error($e->getMessage());
 
-        if (isset($data['migration']) && is_array($data['migration'])) {
-            foreach ($data['migration'] as $connectionId => $definitionFiles) {
-                if (is_array($definitionFiles)) {
-                    foreach ($definitionFiles as $definitionFile) {
-                        $path = $basePath . '/' . $definitionFile;
-                        if (is_file($path)) {
-                            try {
-                                $this->executeDefinition($connectionId, $path, $definitionFile, $result);
-                            } catch (\Exception $e) {
-                                $this->logger->error($e->getMessage());
-
-                                $result[] = '[ERROR] ' . $connectionId . ' ' . $definitionFile . ': ' . $e->getMessage();
-                            }
+                            $result[] = '[ERROR] ' . $connectionId . ' ' . $definitionFile . ': ' . $e->getMessage();
                         }
                     }
                 }

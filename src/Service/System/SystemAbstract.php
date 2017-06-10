@@ -39,6 +39,7 @@ abstract class SystemAbstract
 {
     const COLLECTION_SIZE = 16;
 
+    const TYPE_CONFIG = 'config';
     const TYPE_CONNECTION = 'connection';
     const TYPE_SCHEMA = 'schema';
     const TYPE_ACTION = 'action';
