@@ -27,7 +27,6 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Psr\Container\ContainerInterface;
-use PSX\Framework\Test\Environment;
 
 /**
  * System
