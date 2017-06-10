@@ -189,8 +189,8 @@ JSON;
 {
     "id": 1,
     "status": 1,
-    "name": "Native",
-    "class": "Fusio\\Impl\\Tests\\Connection\\Native",
+    "name": "System",
+    "class": "Fusio\\Impl\\Connection\\System",
     "config": {
         "foo": "bar"
     }

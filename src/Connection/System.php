@@ -19,26 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Connection;
+namespace Fusio\Impl\Connection;
 
 use Fusio\Engine\ConnectionInterface;
+use Fusio\Engine\Factory\ContainerAwareInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
+use Psr\Container\ContainerInterface;
 use PSX\Framework\Test\Environment;
 
 /**
- * Native
+ * System
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Native implements ConnectionInterface
+class System implements ConnectionInterface, ContainerAwareInterface
 {
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    protected $container;
+
     public function getName()
     {
-        return 'Native';
+        return 'System';
     }
 
     /**
@@ -47,10 +54,15 @@ class Native implements ConnectionInterface
      */
     public function getConnection(ParametersInterface $config)
     {
-        return Environment::getService('connection');
+        return $this->container->get('connection');
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
+    }
+
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 }

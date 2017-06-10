@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests;
 use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
+use Fusio\Impl\Connection\System;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Service;
 use PSX\Api\Resource;
@@ -122,7 +123,7 @@ JSON;
                 ['appId' => 3, 'userId' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirectUri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
             'fusio_connection' => [
-                ['status' => 1, 'name' => 'Native', 'class' => 'Fusio\Impl\Tests\Connection\Native', 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
+                ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_deploy_migration' => [
                 ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],

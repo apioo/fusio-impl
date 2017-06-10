@@ -67,8 +67,8 @@ class ExportCommandTest extends ControllerDbTestCase
     "connection": [
         {
             "status": 1,
-            "name": "Native",
-            "class": "Fusio\\Impl\\Tests\\Connection\\Native",
+            "name": "System",
+            "class": "Fusio\\Impl\\Connection\\System",
             "config": {}
         }
     ],
@@ -129,7 +129,7 @@ class ExportCommandTest extends ControllerDbTestCase
             "name": "Sql-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
             "config": {
-                "connection": "Native",
+                "connection": "System",
                 "table": "app_news"
             },
             "date": "[datetime]"
@@ -144,7 +144,7 @@ class ExportCommandTest extends ControllerDbTestCase
         },
         {
             "name": "Welcome",
-            "class": "Fusio\\Impl\\Database\\Action\\Welcome",
+            "class": "Fusio\\Impl\\Action\\Welcome",
             "config": {
             },
             "date": "[datetime]"

@@ -43,5 +43,5 @@ routes:
         response: Response-Schema
         action: Test-Action
 migration:
-  Native:
+  System:
     - v1_schema.php
