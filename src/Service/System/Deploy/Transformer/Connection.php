@@ -37,7 +37,6 @@ class Connection implements TransformerInterface
     public function transform(array $data, \stdClass $import, $basePath)
     {
         $connection = isset($data[SystemAbstract::TYPE_CONNECTION]) ? $data[SystemAbstract::TYPE_CONNECTION] : [];
-        $connection = IncludeDirective::resolve($connection, $basePath, SystemAbstract::TYPE_CONNECTION);
 
         if (!empty($connection) && is_array($connection)) {
             $result = [];

@@ -83,6 +83,10 @@ class Deploy
 
         foreach ($transformers as $type => $transformer) {
             /** @var TransformerInterface $transformer */
+            if (isset($data[$type]) && is_string($data[$type])) {
+                $data[$type] = IncludeDirective::resolve($data[$type], $basePath, $type);
+            }
+
             $transformer->transform($data, $import, $basePath);
         }
 

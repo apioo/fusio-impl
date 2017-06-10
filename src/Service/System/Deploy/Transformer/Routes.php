@@ -39,7 +39,6 @@ class Routes implements TransformerInterface
     public function transform(array $data, \stdClass $import, $basePath)
     {
         $routes = isset($data[SystemAbstract::TYPE_ROUTES]) ? $data[SystemAbstract::TYPE_ROUTES] : [];
-        $routes = IncludeDirective::resolve($routes, $basePath, SystemAbstract::TYPE_ROUTES);
 
         if (!empty($routes) && is_array($routes)) {
             $result = [];

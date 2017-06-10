@@ -43,7 +43,6 @@ class Schema implements TransformerInterface
         $resolvedSchemas = $this->resolveSchemasFromRoutes($data, $basePath);
 
         $schema = isset($data[SystemAbstract::TYPE_SCHEMA]) ? $data[SystemAbstract::TYPE_SCHEMA] : [];
-        $schema = IncludeDirective::resolve($schema, $basePath, SystemAbstract::TYPE_SCHEMA);
 
         if (!empty($resolvedSchemas)) {
             if (is_array($schema)) {

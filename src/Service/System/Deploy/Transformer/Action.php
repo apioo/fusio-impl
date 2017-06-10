@@ -40,7 +40,6 @@ class Action implements TransformerInterface
         $resolvedActions = $this->resolveActionsFromRoutes($data);
 
         $action = isset($data[SystemAbstract::TYPE_ACTION]) ? $data[SystemAbstract::TYPE_ACTION] : [];
-        $action = IncludeDirective::resolve($action, $basePath, SystemAbstract::TYPE_ACTION);
 
         if (!empty($resolvedActions)) {
             if (is_array($action)) {

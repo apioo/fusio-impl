@@ -37,7 +37,6 @@ class Config implements TransformerInterface
     public function transform(array $data, \stdClass $import, $basePath)
     {
         $config = isset($data[SystemAbstract::TYPE_CONFIG]) ? $data[SystemAbstract::TYPE_CONFIG] : [];
-        $config = IncludeDirective::resolve($config, $basePath, SystemAbstract::TYPE_CONFIG);
 
         if (!empty($config) && is_array($config)) {
             $import->config = $config;
