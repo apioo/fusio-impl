@@ -81,12 +81,16 @@ class Deploy
             SystemAbstract::TYPE_ROUTES     => new Deploy\Transformer\Routes(),
         ];
 
+        // resolve includes
         foreach ($transformers as $type => $transformer) {
-            /** @var TransformerInterface $transformer */
             if (isset($data[$type]) && is_string($data[$type])) {
                 $data[$type] = IncludeDirective::resolve($data[$type], $basePath, $type);
             }
+        }
 
+        // run transformer
+        foreach ($transformers as $type => $transformer) {
+            /** @var TransformerInterface $transformer */
             $transformer->transform($data, $import, $basePath);
         }
 
