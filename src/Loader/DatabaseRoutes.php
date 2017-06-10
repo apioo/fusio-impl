@@ -34,18 +34,30 @@ use PSX\Framework\Loader\RoutingParserInterface;
  */
 class DatabaseRoutes implements RoutingParserInterface
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
-    protected $_collection;
+    /**
+     * @var array
+     */
+    private $collection;
 
+    /**
+     * @param \Doctrine\DBAL\Connection $connection
+     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
+    /**
+     * @return \PSX\Framework\Loader\RoutingCollection
+     */
     public function getCollection()
     {
-        if ($this->_collection === null) {
+        if ($this->collection === null) {
             $sql = 'SELECT id,
                            methods,
                            path,
@@ -60,9 +72,14 @@ class DatabaseRoutes implements RoutingParserInterface
                 $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id']);
             }
 
-            $this->_collection = $collection;
+            $this->collection = $collection;
         }
 
-        return $this->_collection;
+        return $this->collection;
+    }
+
+    public function clear()
+    {
+        $this->collection = null;
     }
 }
