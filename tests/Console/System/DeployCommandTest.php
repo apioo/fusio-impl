@@ -187,6 +187,35 @@ JSON;
         $this->assertContains('acme_bar', $tables);
     }
 
+    public function testCommandActionInclude()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_action_include.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Deploy successful!/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action Test-Action/', $display, $display);
+
+        // check action
+        $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
+            'name' => 'Test-Action',
+        ]);
+
+        $this->assertEquals(4, $action['id']);
+        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
+
+        $config   = unserialize($action['config']);
+        $response = json_decode($config['response'], true);
+
+        $this->assertEquals(['foo' => sys_get_temp_dir()], $response);
+    }
+
     public function testCommandConfig()
     {
         $command = Environment::getService('console')->find('system:deploy');

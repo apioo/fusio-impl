@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Service\System;
 
+use Fusio\Impl\Service\System\Deploy\EnvProperties;
 use Fusio\Impl\Service\System\Deploy\IncludeDirective;
 use Fusio\Impl\Service\System\Deploy\TransformerInterface;
-use RuntimeException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -60,13 +60,13 @@ class Deploy
     }
 
     /**
-     * @param array $data
+     * @param string $data
      * @param string|null $basePath
      * @return array
      */
     public function deploy($data, $basePath = null)
     {
-        $data   = Yaml::parse($this->replaceProperties($data));
+        $data   = Yaml::parse(EnvProperties::replace($data));
         $import = new \stdClass();
 
         if (empty($basePath)) {
@@ -97,44 +97,5 @@ class Deploy
         $log = array_merge($log, $this->migrationService->execute($migration, $basePath));
 
         return $log;
-    }
-
-    private function replaceProperties($data)
-    {
-        $vars = [];
-        
-        // dir properties
-        $vars['dir'] = [
-            'cache' => PSX_PATH_CACHE,
-            'src'   => PSX_PATH_LIBRARY,
-            'temp'  => sys_get_temp_dir(),
-        ];
-
-        // env properties
-        $vars['env'] = [];
-        foreach ($_SERVER as $key => $value) {
-            if (is_scalar($value)) {
-                $vars['env'][strtolower($key)] = $value;
-            }
-        }
-
-        foreach ($vars as $type => $properties) {
-            $search  = [];
-            $replace = [];
-            foreach ($properties as $key => $value) {
-                $search[]  = '${' . $type . '.' . $key . '}';
-                $replace[] = is_string($value) ? trim(json_encode($value), '"') : $value;
-            }
-
-            $data = str_replace($search, $replace, $data);
-
-            // check whether we have variables which were not replaced
-            preg_match('/\$\{' . $type . '\.([0-9A-z_]+)\}/', $data, $matches);
-            if (isset($matches[0])) {
-                throw new RuntimeException('Usage of unknown property ' . $matches[0]);
-            }
-        }
-
-        return $data;
     }
 }
