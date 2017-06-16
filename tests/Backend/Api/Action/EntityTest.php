@@ -197,6 +197,7 @@ JSON;
     "status": 1,
     "name": "Sql-Table",
     "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+    "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
     "config": {
         "connection": 1,
         "table": "app_news"

@@ -128,6 +128,7 @@ class ExportCommandTest extends ControllerDbTestCase
         {
             "name": "Sql-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "connection": "System",
                 "table": "app_news"
@@ -137,6 +138,7 @@ class ExportCommandTest extends ControllerDbTestCase
         {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "response": "{\"foo\": \"bar\"}"
             },
@@ -145,6 +147,7 @@ class ExportCommandTest extends ControllerDbTestCase
         {
             "name": "Welcome",
             "class": "Fusio\\Impl\\Action\\Welcome",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
             },
             "date": "[datetime]"

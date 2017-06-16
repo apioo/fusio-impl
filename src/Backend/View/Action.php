@@ -75,6 +75,7 @@ class Action extends ViewAbstract
             'status' => 'status',
             'name' => 'name',
             'class' => 'class',
+            'engine' => 'engine',
             'config' => 'config',
             'date' => $this->fieldDateTime('date'),
         ]);
