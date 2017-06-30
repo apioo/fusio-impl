@@ -24,6 +24,7 @@ namespace Fusio\Impl\Dependency;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
+use Fusio\Impl\EventListener\SystemLogListener;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
@@ -31,7 +32,6 @@ use Fusio\Impl\Logger;
 use Fusio\Impl\Table;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
-use Monolog\Handler as LogHandler;
 use PSX\Api\Console\ApiCommand;
 use PSX\Framework\Api\CachedListing;
 use PSX\Framework\Console as PSXCommand;
@@ -39,6 +39,7 @@ use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Schema\Console\SchemaCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Container
@@ -158,6 +159,13 @@ class Container extends DefaultContainer
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
         $application->add(new SymfonyCommand\ListCommand());
+    }
+
+    protected function appendDefaultListener(EventDispatcherInterface $eventDispatcher)
+    {
+        parent::appendDefaultListener($eventDispatcher);
+
+        $eventDispatcher->addSubscriber(new SystemLogListener($this->get('connection')));
     }
 
     protected function appendDefaultConfig()

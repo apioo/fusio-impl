@@ -104,46 +104,46 @@ class Developer
     {
         $app = $this->appTable->get($appId);
 
-        if (!empty($app)) {
-            if ($app['userId'] != $userId) {
-                throw new StatusCode\BadRequestException('App does not belong to the user');
-            }
-
-            // validate data
-            $this->assertName($name);
-            $this->assertUrl($url);
-
-            $scopes = $this->getValidUserScopes($userId, $scopes);
-            if (empty($scopes)) {
-                throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
-            }
-
-            $this->appService->update(
-                $appId,
-                $app['status'],
-                $name,
-                $url,
-                null,
-                $scopes
-            );
-        } else {
+        if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
+
+        if ($app['userId'] != $userId) {
+            throw new StatusCode\BadRequestException('App does not belong to the user');
+        }
+
+        // validate data
+        $this->assertName($name);
+        $this->assertUrl($url);
+
+        $scopes = $this->getValidUserScopes($userId, $scopes);
+        if (empty($scopes)) {
+            throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
+        }
+
+        $this->appService->update(
+            $appId,
+            $app['status'],
+            $name,
+            $url,
+            null,
+            $scopes
+        );
     }
 
     public function delete($userId, $appId)
     {
         $app = $this->appTable->get($appId);
 
-        if (!empty($app)) {
-            if ($app['userId'] != $userId) {
-                throw new StatusCode\BadRequestException('App does not belong to the user');
-            }
-
-            $this->appService->delete($appId);
-        } else {
+        if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
+
+        if ($app['userId'] != $userId) {
+            throw new StatusCode\BadRequestException('App does not belong to the user');
+        }
+
+        $this->appService->delete($appId);
     }
 
     protected function getValidUserScopes($userId, $scopes)

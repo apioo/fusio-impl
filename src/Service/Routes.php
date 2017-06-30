@@ -21,10 +21,15 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Event\Routes\CreatedEvent;
+use Fusio\Impl\Event\Routes\DeletedEvent;
+use Fusio\Impl\Event\Routes\UpdatedEvent;
+use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Routes
@@ -50,11 +55,23 @@ class Routes
      */
     protected $configService;
 
-    public function __construct(Table\Routes $routesTable, Table\Routes\Method $methodTable, Service\Routes\Config $configService)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
+     * @param \Fusio\Impl\Table\Routes $routesTable
+     * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Service\Routes\Config $configService
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(Table\Routes $routesTable, Table\Routes\Method $methodTable, Service\Routes\Config $configService, EventDispatcherInterface $eventDispatcher)
     {
-        $this->routesTable   = $routesTable;
-        $this->methodTable   = $methodTable;
-        $this->configService = $configService;
+        $this->routesTable     = $routesTable;
+        $this->methodTable     = $methodTable;
+        $this->configService   = $configService;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function create($path, $config)
@@ -74,12 +91,14 @@ class Routes
             $this->routesTable->beginTransaction();
 
             // create route
-            $this->routesTable->create([
+            $record = [
                 'status'     => Table\Routes::STATUS_ACTIVE,
                 'methods'    => 'GET|POST|PUT|DELETE',
                 'path'       => $path,
                 'controller' => 'Fusio\Impl\Controller\SchemaApiController',
-            ]);
+            ];
+
+            $this->routesTable->create($record);
 
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
@@ -92,54 +111,62 @@ class Routes
 
             throw $e;
         }
+
+        $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config));
     }
 
     public function update($routeId, $config)
     {
         $route = $this->routesTable->get($routeId);
 
-        if (!empty($route)) {
-            if ($route['status'] == Table\Routes::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Route was deleted');
-            }
-
-            try {
-                $this->routesTable->beginTransaction();
-
-                $this->configService->handleConfig($route->id, $route->path, $config);
-
-                $this->routesTable->commit();
-            } catch (\Exception $e) {
-                $this->routesTable->rollBack();
-
-                throw $e;
-            }
-        } else {
+        if (empty($route)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
+
+        if ($route['status'] == Table\Routes::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Route was deleted');
+        }
+
+        try {
+            $this->routesTable->beginTransaction();
+
+            $this->configService->handleConfig($route->id, $route->path, $config);
+
+            $this->routesTable->commit();
+        } catch (\Exception $e) {
+            $this->routesTable->rollBack();
+
+            throw $e;
+        }
+
+        $this->eventDispatcher->dispatch(RoutesEvents::UPDATE, new UpdatedEvent($routeId, [], $config, $route));
     }
 
     public function delete($routeId)
     {
         $route = $this->routesTable->get($routeId);
 
-        if (!empty($route)) {
-            if ($route['status'] == Table\Routes::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Route was deleted');
-            }
-
-            // check whether route has a production version
-            if ($this->methodTable->hasProductionVersion($route->id)) {
-                throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
-            }
-
-            // delete route
-            $this->routesTable->update(array(
-                'id'     => $route->id,
-                'status' => Table\Routes::STATUS_DELETED
-            ));
-        } else {
+        if (empty($route)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
+
+        if ($route['status'] == Table\Routes::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Route was deleted');
+        }
+
+        // check whether route has a production version
+        if ($this->methodTable->hasProductionVersion($route->id)) {
+            throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
+        }
+
+        // delete route
+        $record = [
+            'id'     => $route->id,
+            'status' => Table\Routes::STATUS_DELETED
+        ];
+
+        $this->routesTable->update($record);
+
+        $this->eventDispatcher->dispatch(RoutesEvents::DELETE, new DeletedEvent($routeId, $route));
     }
 }

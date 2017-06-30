@@ -23,10 +23,15 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
+use Fusio\Impl\Event\Action\CreatedEvent;
+use Fusio\Impl\Event\Action\DeletedEvent;
+use Fusio\Impl\Event\Action\UpdatedEvent;
+use Fusio\Impl\Event\ActionEvents;
 use Fusio\Impl\Table;
 use Fusio\Engine\Factory;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Action
@@ -57,13 +62,19 @@ class Action
      */
     protected $actionEngine;
 
-    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, $actionEngine)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, $actionEngine, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable       = $actionTable;
         $this->routesActionTable = $routesActionTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->actionFactory     = $actionFactory;
         $this->actionEngine      = $actionEngine;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     public function create($name, $class, $engine, $config)
@@ -87,72 +98,84 @@ class Action
         $this->assertSource($class, $engine);
 
         // create action
-        $this->actionTable->create([
+        $record = [
             'status' => Table\Action::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
             'engine' => $engine,
             'config' => $config ?: null,
             'date'   => new \DateTime(),
-        ]);
+        ];
+
+        $this->actionTable->create($record);
+
+        $actionId = $this->actionTable->getLastInsertId();
+
+        $this->eventDispatcher->dispatch(ActionEvents::CREATE, new CreatedEvent($actionId, $record));
     }
 
     public function update($actionId, $name, $class, $engine, $config)
     {
         $action = $this->actionTable->get($actionId);
 
-        if (!empty($action)) {
-            if ($action['status'] == Table\Action::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Action was deleted');
-            }
-
-            // in case the class is empty use the existing class
-            if (empty($class)) {
-                $class = $action->class;
-            }
-
-            if (empty($engine)) {
-                $engine = $action->engine;
-            }
-
-            // check source
-            $this->assertSource($class, $engine);
-
-            // update action
-            $this->actionTable->update([
-                'id'     => $action->id,
-                'name'   => $name,
-                'class'  => $class,
-                'engine' => $engine,
-                'config' => $config ?: null,
-                'date'   => new \DateTime(),
-            ]);
-        } else {
+        if (empty($action)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
+
+        if ($action['status'] == Table\Action::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Action was deleted');
+        }
+
+        // in case the class is empty use the existing class
+        if (empty($class)) {
+            $class = $action->class;
+        }
+
+        if (empty($engine)) {
+            $engine = $action->engine;
+        }
+
+        // check source
+        $this->assertSource($class, $engine);
+
+        // update action
+        $record = [
+            'id'     => $action->id,
+            'name'   => $name,
+            'class'  => $class,
+            'engine' => $engine,
+            'config' => $config ?: null,
+            'date'   => new \DateTime(),
+        ];
+
+        $this->actionTable->update($record);
+
+        $this->eventDispatcher->dispatch(ActionEvents::UPDATE, new UpdatedEvent($actionId, $record, $action));
     }
 
     public function delete($actionId)
     {
         $action = $this->actionTable->get($actionId);
 
-        if (!empty($action)) {
-            if ($action['status'] == Table\Action::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Action was deleted');
-            }
-
-            // check depending
-            if ($this->routesMethodTable->hasAction($actionId)) {
-                throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
-            }
-
-            $this->actionTable->update([
-                'id'     => $action->id,
-                'status' => Table\Action::STATUS_DELETED,
-            ]);
-        } else {
+        if (empty($action)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
+
+        if ($action['status'] == Table\Action::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Action was deleted');
+        }
+
+        // check depending
+        if ($this->routesMethodTable->hasAction($actionId)) {
+            throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
+        }
+
+        $this->actionTable->update([
+            'id'     => $action->id,
+            'status' => Table\Action::STATUS_DELETED,
+        ]);
+
+        $this->eventDispatcher->dispatch(ActionEvents::DELETE, new DeletedEvent($actionId, $action));
     }
 
     /**

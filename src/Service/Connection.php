@@ -24,10 +24,15 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
+use Fusio\Impl\Event\Connection\CreatedEvent;
+use Fusio\Impl\Event\Connection\DeletedEvent;
+use Fusio\Impl\Event\Connection\UpdatedEvent;
+use Fusio\Impl\Event\ConnectionEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\OpenSsl\OpenSsl;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Connection
@@ -40,15 +45,32 @@ class Connection
 {
     const CIPHER_METHOD = 'AES-128-CBC';
 
+    /**
+     * @var \Fusio\Impl\Table\Connection
+     */
     protected $connectionTable;
+
+    /**
+     * @var \Fusio\Engine\Factory\Connection
+     */
     protected $connectionFactory;
+
+    /**
+     * @var string
+     */
     protected $secretKey;
 
-    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey, EventDispatcherInterface $eventDispatcher)
     {
         $this->connectionTable   = $connectionTable;
         $this->connectionFactory = $connectionFactory;
         $this->secretKey         = $secretKey;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     public function create($name, $class, $config)
@@ -67,52 +89,66 @@ class Connection
         $this->testConnection($class, $config);
 
         // create connection
-        $this->connectionTable->create([
+        $record = [
             'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
             'config' => self::encryptConfig($config, $this->secretKey),
-        ]);
+        ];
+
+        $this->connectionTable->create($record);
+
+        $connectionId = $this->connectionTable->getLastInsertId();
+
+        $this->eventDispatcher->dispatch(ConnectionEvents::CREATE, new CreatedEvent($connectionId, $record));
     }
 
     public function update($connectionId, $name, $class, $config)
     {
         $connection = $this->connectionTable->get($connectionId);
 
-        if (!empty($connection)) {
-            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Connection was deleted');
-            }
-
-            $this->testConnection($class, $config);
-
-            $this->connectionTable->update([
-                'id'     => $connection->id,
-                'name'   => $name,
-                'class'  => $class,
-                'config' => self::encryptConfig($config, $this->secretKey),
-            ]);
-        } else {
+        if (empty($connection)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
+
+        if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Connection was deleted');
+        }
+
+        $this->testConnection($class, $config);
+
+        $record = [
+            'id'     => $connection->id,
+            'name'   => $name,
+            'class'  => $class,
+            'config' => self::encryptConfig($config, $this->secretKey),
+        ];
+
+        $this->connectionTable->update($record);
+
+        $this->eventDispatcher->dispatch(ConnectionEvents::UPDATE, new UpdatedEvent($connectionId, $record, $connection));
     }
 
     public function delete($connectionId)
     {
         $connection = $this->connectionTable->get($connectionId);
 
-        if (!empty($connection)) {
-            if ($connection['status'] == Table\Connection::STATUS_DELETED) {
-                throw new StatusCode\GoneException('Connection was deleted');
-            }
-
-            $this->connectionTable->update([
-                'id'     => $connection->id,
-                'status' => Table\Connection::STATUS_DELETED,
-            ]);
-        } else {
+        if (empty($connection)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
+
+        if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Connection was deleted');
+        }
+
+        $record = [
+            'id'     => $connection->id,
+            'status' => Table\Connection::STATUS_DELETED,
+        ];
+
+        $this->connectionTable->update($record);
+
+        $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection));
     }
 
     protected function testConnection($class, array $config)

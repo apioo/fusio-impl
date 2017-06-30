@@ -25,8 +25,11 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Model;
 use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Repository;
+use Fusio\Impl\Event\Routes\DeployedEvent;
+use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Deploys a route method from development to production. That means that we
@@ -58,12 +61,18 @@ class Deploy
      */
     protected $actionParser;
 
-    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser, EventDispatcherInterface $eventDispatcher)
     {
         $this->routesMethodTable = $routesMethodTable;
         $this->schemaTable       = $schemaTable;
         $this->actionTable       = $actionTable;
         $this->actionParser      = $actionParser;
+        $this->eventDispatcher   = $eventDispatcher;
     }
 
     public function deploy($method)
@@ -85,8 +94,10 @@ class Deploy
         }
 
         $this->routesMethodTable->create($method);
+
+        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($method));
     }
-    
+
     protected function getSchemaCache($schemaId)
     {
         $schema = $this->schemaTable->get($schemaId);

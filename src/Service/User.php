@@ -21,12 +21,20 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Event\User\AuthenticatedEvent;
+use Fusio\Impl\Event\User\ChangedPasswordEvent;
+use Fusio\Impl\Event\User\ChangedStatusEvent;
+use Fusio\Impl\Event\User\CreatedEvent;
+use Fusio\Impl\Event\User\DeletedEvent;
+use Fusio\Impl\Event\User\UpdatedEvent;
+use Fusio\Impl\Event\UserEvents;
 use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * User
@@ -59,12 +67,18 @@ class User
      */
     protected $userScopeTable;
 
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
     {
-        $this->userTable      = $userTable;
-        $this->scopeTable     = $scopeTable;
-        $this->appTable       = $appTable;
-        $this->userScopeTable = $userScopeTable;
+        $this->userTable       = $userTable;
+        $this->scopeTable      = $scopeTable;
+        $this->appTable        = $appTable;
+        $this->userScopeTable  = $userScopeTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -104,6 +118,8 @@ class User
 
             // check password
             if (password_verify($password, $user['password'])) {
+                $this->eventDispatcher->dispatch(UserEvents::AUTHENTICATE, new AuthenticatedEvent($user['id']));
+
                 return $user['id'];
             }
         }
@@ -133,14 +149,16 @@ class User
             $this->userTable->beginTransaction();
 
             // create user
-            $this->userTable->create(array(
+            $record = [
                 'provider' => ProviderInterface::PROVIDER_SYSTEM,
                 'status'   => $status,
                 'name'     => $name,
                 'email'    => $email,
                 'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
                 'date'     => new DateTime(),
-            ));
+            ];
+
+            $this->userTable->create($record);
 
             $userId = $this->userTable->getLastInsertId();
 
@@ -153,6 +171,8 @@ class User
 
             throw $e;
         }
+
+        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes));
 
         return $userId;
     }
@@ -186,7 +206,7 @@ class User
             $this->userTable->beginTransaction();
 
             // create user
-            $this->userTable->create(array(
+            $record = [
                 'provider' => $provider,
                 'status'   => Table\User::STATUS_CONSUMER,
                 'remoteId' => $id,
@@ -194,7 +214,9 @@ class User
                 'email'    => $email,
                 'password' => null,
                 'date'     => new DateTime(),
-            ));
+            ];
+
+            $this->userTable->create($record);
 
             $userId = $this->userTable->getLastInsertId();
 
@@ -208,6 +230,8 @@ class User
             throw $e;
         }
 
+        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes));
+
         return $userId;
     }
 
@@ -215,81 +239,98 @@ class User
     {
         $user = $this->userTable->get($userId);
 
-        if (!empty($user)) {
-            // check values
-            $this->assertName($name);
-            $this->assertEmail($email);
-
-            try {
-                $this->userTable->beginTransaction();
-
-                $this->userTable->update(array(
-                    'id'     => $user['id'],
-                    'status' => $status,
-                    'name'   => $name,
-                    'email'  => $email,
-                ));
-
-                // delete existing scopes
-                $this->userScopeTable->deleteAllFromUser($user['id']);
-
-                // add scopes
-                $this->insertScopes($user['id'], $scopes);
-
-                $this->userTable->commit();
-            } catch (\Exception $e) {
-                $this->userTable->rollBack();
-
-                throw $e;
-            }
-        } else {
+        if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
+
+        // check values
+        $this->assertName($name);
+        $this->assertEmail($email);
+
+        try {
+            $this->userTable->beginTransaction();
+
+            // update user
+            $record = [
+                'id'     => $user['id'],
+                'status' => $status,
+                'name'   => $name,
+                'email'  => $email,
+            ];
+
+            $this->userTable->update($record);
+
+            // delete existing scopes
+            $this->userScopeTable->deleteAllFromUser($user['id']);
+
+            // add scopes
+            $this->insertScopes($user['id'], $scopes);
+
+            $this->userTable->commit();
+        } catch (\Exception $e) {
+            $this->userTable->rollBack();
+
+            throw $e;
+        }
+
+        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user));
     }
 
     public function updateMeta($userId, $email)
     {
         $user = $this->userTable->get($userId);
 
-        if (!empty($user)) {
-            // check values
-            $this->assertEmail($email);
-
-            $this->userTable->update(array(
-                'id'    => $user['id'],
-                'email' => $email,
-            ));
-        } else {
+        if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
+
+        // check values
+        $this->assertEmail($email);
+
+        $record = [
+            'id'    => $user['id'],
+            'email' => $email,
+        ];
+
+        $this->userTable->update($record);
+
+        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, [], $user));
     }
 
     public function delete($userId)
     {
         $user = $this->userTable->get($userId);
 
-        if (!empty($user)) {
-            $this->userTable->update(array(
-                'id'     => $user['id'],
-                'status' => Table\User::STATUS_DELETED,
-            ));
-        } else {
+        if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
+
+        $record = [
+            'id'     => $user['id'],
+            'status' => Table\User::STATUS_DELETED,
+        ];
+
+        $this->userTable->update($record);
+
+        $this->eventDispatcher->dispatch(UserEvents::DELETE, new DeletedEvent($userId, $user));
     }
 
     public function changeStatus($userId, $status)
     {
         $user = $this->userTable->get($userId);
 
-        if (!empty($user)) {
-            $this->userTable->update(array(
-                'id'     => $user['id'],
-                'status' => $status,
-            ));
-        } else {
+        if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
+
+        $record = [
+            'id'     => $user['id'],
+            'status' => $status,
+        ];
+
+        $this->userTable->update($record);
+
+        $this->eventDispatcher->dispatch(UserEvents::CHANGE_STATUS, new ChangedStatusEvent($userId, $user['status'], $status));
     }
 
     public function changePassword($userId, $appId, $oldPassword, $newPassword, $verifyPassword)
@@ -319,6 +360,8 @@ class User
         $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
         if ($result) {
+            $this->eventDispatcher->dispatch(UserEvents::CHANGE_PASSWORD, new ChangedPasswordEvent($userId, $oldPassword, $newPassword));
+
             return true;
         } else {
             throw new StatusCode\BadRequestException('Changing password failed');

@@ -42,7 +42,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('table_manager')->getTable(Table\App::class),
-            $this->get('table_manager')->getTable(Table\User\Scope::class)
+            $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -54,7 +55,8 @@ trait Services
         return new Service\Routes(
             $this->get('table_manager')->getTable(Table\Routes::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('routes_config_service')
+            $this->get('routes_config_service'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -91,7 +93,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Routes\Action::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('action_factory'),
-            $this->get('config')->get('fusio_engine')
+            $this->get('config')->get('fusio_engine'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -118,7 +121,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('table_manager')->getTable(Table\App\Scope::class),
             $this->get('table_manager')->getTable(Table\App\Token::class),
-            $this->get('config')->get('fusio_project_key')
+            $this->get('config')->get('fusio_project_key'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -165,7 +169,8 @@ trait Services
     public function getConfigService()
     {
         return new Service\Config(
-            $this->get('table_manager')->getTable(Table\Config::class)
+            $this->get('table_manager')->getTable(Table\Config::class),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -177,7 +182,8 @@ trait Services
         return new Service\Connection(
             $this->get('table_manager')->getTable(Table\Connection::class),
             $this->get('connection_factory'),
-            $this->get('config')->get('fusio_project_key')
+            $this->get('config')->get('fusio_project_key'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -253,7 +259,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Schema::class),
             $this->get('table_manager')->getTable(Table\Routes\Schema::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('schema_parser')
+            $this->get('schema_parser'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -266,7 +273,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('table_manager')->getTable(Table\Scope\Route::class),
             $this->get('table_manager')->getTable(Table\App\Scope::class),
-            $this->get('table_manager')->getTable(Table\User\Scope::class)
+            $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -293,7 +301,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('table_manager')->getTable(Table\Schema::class),
             $this->get('table_manager')->getTable(Table\Action::class),
-            $this->get('action_parser')
+            $this->get('action_parser'),
+            $this->get('event_dispatcher')
         );
     }
 
@@ -305,7 +314,8 @@ trait Services
         return new Service\Rate(
             $this->get('table_manager')->getTable(Table\Rate::class),
             $this->get('table_manager')->getTable(Table\Rate\Allocation::class),
-            $this->get('table_manager')->getTable(Table\Log::class)
+            $this->get('table_manager')->getTable(Table\Log::class),
+            $this->get('event_dispatcher')
         );
     }
 

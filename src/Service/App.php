@@ -23,11 +23,17 @@ namespace Fusio\Impl\Service;
 
 use DateInterval;
 use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Event\App\CreatedEvent;
+use Fusio\Impl\Event\App\DeletedEvent;
+use Fusio\Impl\Event\App\RemovedTokenEvent;
+use Fusio\Impl\Event\App\UpdatedEvent;
+use Fusio\Impl\Event\AppEvents;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * App
@@ -63,13 +69,19 @@ class App
      */
     protected $tokenSecret;
 
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, $tokenSecret)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, $tokenSecret, EventDispatcherInterface $eventDispatcher)
     {
-        $this->appTable       = $appTable;
-        $this->scopeTable     = $scopeTable;
-        $this->appScopeTable  = $appScopeTable;
-        $this->appTokenTable  = $appTokenTable;
-        $this->tokenSecret    = $tokenSecret;
+        $this->appTable        = $appTable;
+        $this->scopeTable      = $scopeTable;
+        $this->appScopeTable   = $appScopeTable;
+        $this->appTokenTable   = $appTokenTable;
+        $this->tokenSecret     = $tokenSecret;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function getByAppKey($appKey)
@@ -117,7 +129,7 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $this->appTable->create(array(
+            $record = [
                 'userId'     => $userId,
                 'status'     => $status,
                 'name'       => $name,
@@ -126,7 +138,9 @@ class App
                 'appKey'     => $appKey,
                 'appSecret'  => $appSecret,
                 'date'       => new DateTime(),
-            ));
+            ];
+
+            $this->appTable->create($record);
 
             $appId = $this->appTable->getLastInsertId();
 
@@ -141,81 +155,93 @@ class App
 
             throw $e;
         }
+
+        $this->eventDispatcher->dispatch(AppEvents::CREATE, new CreatedEvent($appId, $record, $scopes));
     }
 
     public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null)
     {
         $app = $this->appTable->get($appId);
 
-        if (!empty($app)) {
-            if ($app['status'] == Table\App::STATUS_DELETED) {
-                throw new StatusCode\GoneException('App was deleted');
-            }
-
-            // parse parameters
-            if ($parameters !== null) {
-                $parameters = $this->parseParameters($parameters);
-            } else {
-                $parameters = $app['parameters'];
-            }
-
-            try {
-                $this->appTable->beginTransaction();
-
-                $this->appTable->update(array(
-                    'id'         => $app['id'],
-                    'status'     => $status,
-                    'name'       => $name,
-                    'url'        => $url,
-                    'parameters' => $parameters,
-                ));
-
-                if ($scopes !== null) {
-                    // delete existing scopes
-                    $this->appScopeTable->deleteAllFromApp($app['id']);
-
-                    // insert scopes
-                    $this->insertScopes($app['id'], $scopes);
-                }
-
-                $this->appTable->commit();
-            } catch (\Exception $e) {
-                $this->appTable->rollBack();
-
-                throw $e;
-            }
-        } else {
+        if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
+
+        if ($app['status'] == Table\App::STATUS_DELETED) {
+            throw new StatusCode\GoneException('App was deleted');
+        }
+
+        // parse parameters
+        if ($parameters !== null) {
+            $parameters = $this->parseParameters($parameters);
+        } else {
+            $parameters = $app['parameters'];
+        }
+
+        try {
+            $this->appTable->beginTransaction();
+
+            $record = [
+                'id'         => $app['id'],
+                'status'     => $status,
+                'name'       => $name,
+                'url'        => $url,
+                'parameters' => $parameters,
+            ];
+
+            $this->appTable->update($record);
+
+            if ($scopes !== null) {
+                // delete existing scopes
+                $this->appScopeTable->deleteAllFromApp($app['id']);
+
+                // insert scopes
+                $this->insertScopes($app['id'], $scopes);
+            }
+
+            $this->appTable->commit();
+        } catch (\Exception $e) {
+            $this->appTable->rollBack();
+
+            throw $e;
+        }
+
+        $this->eventDispatcher->dispatch(AppEvents::UPDATE, new UpdatedEvent($appId, $record, $scopes, $app));
     }
 
     public function delete($appId)
     {
         $app = $this->appTable->get($appId);
 
-        if (!empty($app)) {
-            if ($app['status'] == Table\App::STATUS_DELETED) {
-                throw new StatusCode\GoneException('App was deleted');
-            }
-
-            $this->appTable->update(array(
-                'id'     => $app['id'],
-                'status' => Table\App::STATUS_DELETED,
-            ));
-        } else {
+        if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
+
+        if ($app['status'] == Table\App::STATUS_DELETED) {
+            throw new StatusCode\GoneException('App was deleted');
+        }
+
+        $record = [
+            'id'     => $app['id'],
+            'status' => Table\App::STATUS_DELETED,
+        ];
+
+        $this->appTable->update($record);
+
+        $this->eventDispatcher->dispatch(AppEvents::DELETE, new DeletedEvent($appId, $app));
     }
 
     public function removeToken($appId, $tokenId)
     {
         $app = $this->appTable->get($appId);
 
-        if (!empty($app)) {
-            $this->appTokenTable->removeTokenFromApp($appId, $tokenId);
-        } else {
+        if (empty($app)) {
             throw new StatusCode\NotFoundException('Invalid app');
         }
+
+        $this->appTokenTable->removeTokenFromApp($appId, $tokenId);
+
+        $this->eventDispatcher->dispatch(AppEvents::REMOVE_TOKEN, new RemovedTokenEvent($appId, $tokenId));
     }
 
     public function generateAccessToken($appId, $userId, array $scopes, $ip, DateInterval $expire)

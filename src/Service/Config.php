@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Event\Config\UpdatedEvent;
+use Fusio\Impl\Event\ConfigEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Config
@@ -39,23 +41,33 @@ class Config
      */
     protected $configTable;
 
-    public function __construct(Table\Config $configTable)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\Config $configTable, EventDispatcherInterface $eventDispatcher)
     {
-        $this->configTable = $configTable;
+        $this->configTable     = $configTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function update($configId, $value)
     {
         $config = $this->configTable->get($configId);
 
-        if (!empty($config)) {
-            $this->configTable->update(array(
-                'id'    => $config->id,
-                'value' => $value,
-            ));
-        } else {
+        if (empty($config)) {
             throw new StatusCode\NotFoundException('Could not find config');
         }
+
+        $record = [
+            'id'    => $config->id,
+            'value' => $value,
+        ];
+
+        $this->configTable->update($record);
+
+        $this->eventDispatcher->dispatch(ConfigEvents::UPDATE, new UpdatedEvent($configId, $record));
     }
 
     public function getValue($name)
