@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Log;
 
-use PSX\Sql\Condition;
+use Fusio\Impl\Backend\View\QueryFilterAbstract;
 
 /**
  * QueryFilter
@@ -30,18 +30,8 @@ use PSX\Sql\Condition;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilter
+class QueryFilter extends QueryFilterAbstract
 {
-    /**
-     * @var \DateTime
-     */
-    protected $from;
-
-    /**
-     * @var \DateTime
-     */
-    protected $to;
-
     /**
      * @var integer
      */
@@ -86,16 +76,6 @@ class QueryFilter
      * @var string
      */
     protected $body;
-
-    public function getFrom()
-    {
-        return $this->from;
-    }
-
-    public function getTo()
-    {
-        return $this->to;
-    }
 
     public function getRouteId()
     {
@@ -144,10 +124,8 @@ class QueryFilter
 
     public function getCondition($alias = null)
     {
+        $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
-        $condition = new Condition();
-        $condition->greaterThen($alias . 'date', $this->from->format('Y-m-d 00:00:00'));
-        $condition->lowerThen($alias . 'date', $this->to->format('Y-m-d 23:59:59'));
 
         if (!empty($this->routeId)) {
             $condition->equals($alias . 'routeId', $this->routeId);
@@ -190,8 +168,7 @@ class QueryFilter
 
     public static function create(array $parameters)
     {
-        $from      = isset($parameters['from']) ? $parameters['from'] : '-1 month';
-        $to        = isset($parameters['to']) ? $parameters['to'] : 'now';
+        $filter    = parent::create($parameters);
         $routeId   = isset($parameters['routeId']) ? $parameters['routeId'] : null;
         $appId     = isset($parameters['appId']) ? $parameters['appId'] : null;
         $userId    = isset($parameters['userId']) ? $parameters['userId'] : null;
@@ -202,22 +179,6 @@ class QueryFilter
         $header    = isset($parameters['header']) ? $parameters['header'] : null;
         $body      = isset($parameters['body']) ? $parameters['body'] : null;
         $search    = isset($parameters['search']) ? $parameters['search'] : null;
-
-        $from = new \DateTime($from);
-        $to   = new \DateTime($to);
-
-        // from date is large then to date
-        if ($from->getTimestamp() > $to->getTimestamp()) {
-            $tmp  = clone $from;
-            $from = $to;
-            $to   = $tmp;
-        }
-
-        // check if diff between from and to is larger then ca 2 months
-        if (($to->getTimestamp() - $from->getTimestamp()) > 4838400) {
-            $to = clone $from;
-            $to->add(new \DateInterval('P2M'));
-        }
 
         // parse search if available
         if (!empty($search)) {
@@ -238,9 +199,6 @@ class QueryFilter
             }
         }
 
-        $filter = new self();
-        $filter->from      = $from;
-        $filter->to        = $to;
         $filter->routeId   = $routeId;
         $filter->appId     = $appId;
         $filter->userId    = $userId;

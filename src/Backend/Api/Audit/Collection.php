@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\Api\Audit;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Backend\View\Audit\QueryFilter;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
 use PSX\Validate\Validate;
@@ -61,7 +62,7 @@ class Collection extends BackendApiAbstract
     {
         return $this->tableManager->getTable(View\Audit::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
-            $this->getParameter('search', Validate::TYPE_STRING) ?: null
+            QueryFilter::create($this->getParameters())
         );
     }
 }

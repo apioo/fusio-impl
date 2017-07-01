@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\View\App\Token;
+namespace Fusio\Impl\Backend\View\Audit;
 
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
 
@@ -43,14 +43,9 @@ class QueryFilter extends QueryFilterAbstract
     protected $userId;
 
     /**
-     * @var integer
-     */
-    protected $status;
-
-    /**
      * @var string
      */
-    protected $scope;
+    protected $event;
 
     /**
      * @var string
@@ -67,14 +62,9 @@ class QueryFilter extends QueryFilterAbstract
         return $this->userId;
     }
 
-    public function getStatus()
+    public function getEvent()
     {
-        return $this->status;
-    }
-
-    public function getScope()
-    {
-        return $this->scope;
+        return $this->event;
     }
 
     public function getIp()
@@ -95,12 +85,8 @@ class QueryFilter extends QueryFilterAbstract
             $condition->equals($alias . 'userId', $this->userId);
         }
 
-        if (!empty($this->status)) {
-            $condition->equals($alias . 'status', $this->status);
-        }
-
-        if (!empty($this->scope)) {
-            $condition->like($alias . 'scope', '%' . $this->scope . '%');
+        if (!empty($this->event)) {
+            $condition->like($alias . 'event', '%' . $this->event . '%');
         }
 
         if (!empty($this->ip)) {
@@ -115,8 +101,7 @@ class QueryFilter extends QueryFilterAbstract
         $filter = parent::create($parameters);
         $appId  = isset($parameters['appId']) ? $parameters['appId'] : null;
         $userId = isset($parameters['userId']) ? $parameters['userId'] : null;
-        $status = isset($parameters['status']) ? $parameters['status'] : null;
-        $scope  = isset($parameters['scope']) ? $parameters['scope'] : null;
+        $event  = isset($parameters['event']) ? $parameters['event'] : null;
         $ip     = isset($parameters['ip']) ? $parameters['ip'] : null;
         $search = isset($parameters['search']) ? $parameters['search'] : null;
 
@@ -128,15 +113,14 @@ class QueryFilter extends QueryFilterAbstract
                 if (filter_var($part, FILTER_VALIDATE_IP) !== false) {
                     $ip = $part;
                 } else {
-                    $scope = $part;
+                    $event = $search;
                 }
             }
         }
 
         $filter->appId  = $appId;
         $filter->userId = $userId;
-        $filter->status = $status;
-        $filter->scope  = $scope;
+        $filter->event  = $event;
         $filter->ip     = $ip;
 
         return $filter;

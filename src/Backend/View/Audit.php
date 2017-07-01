@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Impl\Backend\View\Audit\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Condition;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -35,13 +35,9 @@ use PSX\Sql\ViewAbstract;
  */
 class Audit extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null)
+    public function getCollection($startIndex = 0, QueryFilter $filter)
     {
-        $condition = new Condition();
-
-        if (!empty($search)) {
-            $condition->like('event', '%' . $search . '%');
-        }
+        $condition = $filter->getCondition('audit');
 
         $definition = [
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
