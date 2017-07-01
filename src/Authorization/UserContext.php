@@ -19,46 +19,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Scope;
+namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
-use Symfony\Component\EventDispatcher\Event;
+use Fusio\Impl\Consumer\View;
+use PSX\Framework\Controller\ApiAbstract;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * CreatedEvent
+ * UserContext
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class UserContext
 {
-    protected $scopeId;
-    protected $record;
-    protected $routes;
+    protected $userId;
+    protected $appId;
+    protected $ip;
 
-    public function __construct($scopeId, array $record, $routes, UserContext $context)
+    public function __construct($userId, $appId, $ip)
     {
-        parent::__construct($context);
-
-        $this->scopeId = $scopeId;
-        $this->record  = $record;
-        $this->routes  = $routes;
+        $this->userId = $userId;
+        $this->appId  = $appId;
+        $this->ip     = $ip;
     }
 
-    public function getScopeId()
+    public function getUserId()
     {
-        return $this->scopeId;
+        return $this->userId;
     }
 
-    public function getRecord()
+    public function getAppId()
     {
-        return $this->record;
+        return $this->appId;
     }
 
-    public function getRoutes()
+    public function getIp()
     {
-        return $this->routes;
+        return $this->ip;
+    }
+
+    public static function getAnonymousContext()
+    {
+        return new UserContext(1, 1, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+    }
+
+    public static function getCommandContext()
+    {
+        return new UserContext(1, 1, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
     }
 }

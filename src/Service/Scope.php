@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
@@ -73,7 +74,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($name, $description, array $routes = null)
+    public function create($name, $description, array $routes = null, UserContext $context)
     {
         // check whether scope exists
         $condition  = new Condition();
@@ -108,10 +109,10 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::CREATE, new CreatedEvent($scopeId, $record, $routes));
+        $this->eventDispatcher->dispatch(ScopeEvents::CREATE, new CreatedEvent($scopeId, $record, $routes, $context));
     }
 
-    public function update($scopeId, $name, $description, array $routes = null)
+    public function update($scopeId, $name, $description, array $routes = null, UserContext $context)
     {
         $scope = $this->scopeTable->get($scopeId);
 
@@ -146,10 +147,10 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::UPDATE, new UpdatedEvent($scopeId, $record, $routes, $scope));
+        $this->eventDispatcher->dispatch(ScopeEvents::UPDATE, new UpdatedEvent($scopeId, $record, $routes, $scope, $context));
     }
 
-    public function delete($scopeId)
+    public function delete($scopeId, UserContext $context)
     {
         $scope = $this->scopeTable->get($scopeId);
 
@@ -192,7 +193,7 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::DELETE, new DeletedEvent($scopeId, $scope));
+        $this->eventDispatcher->dispatch(ScopeEvents::DELETE, new DeletedEvent($scopeId, $scope, $context));
     }
 
     /**

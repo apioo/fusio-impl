@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Connection\CreatedEvent;
 use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
@@ -73,7 +74,7 @@ class Connection
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $class, $config)
+    public function create($name, $class, $config, UserContext $context)
     {
         // check whether connection exists
         $condition  = new Condition();
@@ -100,10 +101,10 @@ class Connection
 
         $connectionId = $this->connectionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::CREATE, new CreatedEvent($connectionId, $record));
+        $this->eventDispatcher->dispatch(ConnectionEvents::CREATE, new CreatedEvent($connectionId, $record, $context));
     }
 
-    public function update($connectionId, $name, $class, $config)
+    public function update($connectionId, $name, $class, $config, UserContext $context)
     {
         $connection = $this->connectionTable->get($connectionId);
 
@@ -126,10 +127,10 @@ class Connection
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::UPDATE, new UpdatedEvent($connectionId, $record, $connection));
+        $this->eventDispatcher->dispatch(ConnectionEvents::UPDATE, new UpdatedEvent($connectionId, $record, $connection, $context));
     }
 
-    public function delete($connectionId)
+    public function delete($connectionId, UserContext $context)
     {
         $connection = $this->connectionTable->get($connectionId);
 
@@ -148,7 +149,7 @@ class Connection
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection));
+        $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection, $context));
     }
 
     protected function testConnection($class, array $config)

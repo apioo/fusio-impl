@@ -106,7 +106,8 @@ class Entity extends BackendApiAbstract
             $record->name,
             $record->rateLimit,
             $record->timespan,
-            $record->allocation
+            $record->allocation,
+            $this->userContext
         );
 
         return array(
@@ -124,7 +125,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->rateService->delete(
-            (int) $this->getUriFragment('rate_id')
+            (int) $this->getUriFragment('rate_id'),
+            $this->userContext
         );
 
         return array(

@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\Routes;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,12 +32,14 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DeployedEvent extends Event
+class DeployedEvent extends EventAbstract
 {
     protected $method;
 
-    public function __construct($method)
+    public function __construct($method, UserContext $context)
     {
+        parent::__construct($context);
+
         $this->method = $method;
     }
 

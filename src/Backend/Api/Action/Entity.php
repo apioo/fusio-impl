@@ -105,7 +105,8 @@ class Entity extends BackendApiAbstract
             $record->name,
             $record->class,
             $record->engine,
-            $record->config ? $record->config->getProperties() : null
+            $record->config ? $record->config->getProperties() : null,
+            $this->userContext
         );
 
         return array(
@@ -123,7 +124,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->actionService->delete(
-            (int) $this->getUriFragment('action_id')
+            (int) $this->getUriFragment('action_id'),
+            $this->userContext
         );
 
         return array(

@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Schema\ParserInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
@@ -84,7 +85,7 @@ class Schema
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $source)
+    public function create($name, $source, UserContext $context)
     {
         if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $name)) {
             throw new StatusCode\BadRequestException('Invalid schema name');
@@ -113,10 +114,10 @@ class Schema
 
         $schemaId = $this->schemaTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(SchemaEvents::CREATE, new CreatedEvent($schemaId, $record));
+        $this->eventDispatcher->dispatch(SchemaEvents::CREATE, new CreatedEvent($schemaId, $record, $context));
     }
 
-    public function update($schemaId, $name, $source)
+    public function update($schemaId, $name, $source, UserContext $context)
     {
         $schema = $this->schemaTable->get($schemaId);
 
@@ -137,10 +138,10 @@ class Schema
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(SchemaEvents::UPDATE, new UpdatedEvent($schemaId, $record, $schema));
+        $this->eventDispatcher->dispatch(SchemaEvents::UPDATE, new UpdatedEvent($schemaId, $record, $schema, $context));
     }
 
-    public function delete($schemaId)
+    public function delete($schemaId, UserContext $context)
     {
         $schema = $this->schemaTable->get($schemaId);
 
@@ -164,7 +165,7 @@ class Schema
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(SchemaEvents::DELETE, new DeletedEvent($schemaId, $schema));
+        $this->eventDispatcher->dispatch(SchemaEvents::DELETE, new DeletedEvent($schemaId, $schema, $context));
     }
 
     public function getHtmlPreview($schemaId)

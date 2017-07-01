@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\App;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -70,8 +71,10 @@ class Developer
         $this->appApproval    = $appApproval;
     }
 
-    public function create($userId, $name, $url, array $scopes = null)
+    public function create($name, $url, array $scopes = null, UserContext $context)
     {
+        $userId = $context->getUserId();
+
         // validate data
         $this->assertName($name);
         $this->assertUrl($url);
@@ -96,13 +99,15 @@ class Developer
             $name,
             $url,
             null,
-            $scopes
+            $scopes,
+            $context
         );
     }
 
-    public function update($userId, $appId, $name, $url, array $scopes = null)
+    public function update($appId, $name, $url, array $scopes = null, UserContext $context)
     {
-        $app = $this->appTable->get($appId);
+        $userId = $context->getUserId();
+        $app    = $this->appTable->get($appId);
 
         if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
@@ -127,13 +132,15 @@ class Developer
             $name,
             $url,
             null,
-            $scopes
+            $scopes,
+            $context
         );
     }
 
-    public function delete($userId, $appId)
+    public function delete($appId, UserContext $context)
     {
-        $app = $this->appTable->get($appId);
+        $userId = $context->getUserId();
+        $app    = $this->appTable->get($appId);
 
         if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
@@ -143,7 +150,7 @@ class Developer
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
-        $this->appService->delete($appId);
+        $this->appService->delete($appId, $context);
     }
 
     protected function getValidUserScopes($userId, $scopes)

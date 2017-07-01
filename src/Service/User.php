@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\User\AuthenticatedEvent;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
@@ -118,8 +119,6 @@ class User
 
             // check password
             if (password_verify($password, $user['password'])) {
-                $this->eventDispatcher->dispatch(UserEvents::AUTHENTICATE, new AuthenticatedEvent($user['id']));
-
                 return $user['id'];
             }
         }
@@ -127,7 +126,7 @@ class User
         return null;
     }
 
-    public function create($status, $name, $email, $password, array $scopes = null)
+    public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)
     {
         // check whether user exists
         $condition  = new Condition();
@@ -172,12 +171,12 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes));
+        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes, $context));
 
         return $userId;
     }
 
-    public function createRemote($provider, $id, $name, $email, array $scopes = null)
+    public function createRemote($provider, $id, $name, $email, array $scopes = null, UserContext $context)
     {
         // check whether user exists
         $condition  = new Condition();
@@ -230,12 +229,12 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes));
+        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes, $context));
 
         return $userId;
     }
 
-    public function update($userId, $status, $name, $email, array $scopes = null)
+    public function update($userId, $status, $name, $email, array $scopes = null, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -273,10 +272,10 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user));
+        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user, $context));
     }
 
-    public function updateMeta($userId, $email)
+    public function updateMeta($userId, $email, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -294,10 +293,10 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, [], $user));
+        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, [], $user, $context));
     }
 
-    public function delete($userId)
+    public function delete($userId, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -312,10 +311,10 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(UserEvents::DELETE, new DeletedEvent($userId, $user));
+        $this->eventDispatcher->dispatch(UserEvents::DELETE, new DeletedEvent($userId, $user, $context));
     }
 
-    public function changeStatus($userId, $status)
+    public function changeStatus($userId, $status, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -330,11 +329,14 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(UserEvents::CHANGE_STATUS, new ChangedStatusEvent($userId, $user['status'], $status));
+        $this->eventDispatcher->dispatch(UserEvents::CHANGE_STATUS, new ChangedStatusEvent($user['status'], $status, $context));
     }
 
-    public function changePassword($userId, $appId, $oldPassword, $newPassword, $verifyPassword)
+    public function changePassword($oldPassword, $newPassword, $verifyPassword, UserContext $context)
     {
+        $appId  = $context->getAppId();
+        $userId = $context->getUserId();
+
         // we can only change the password through the backend app
         if (!in_array($appId, [1, 2])) {
             throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
@@ -360,7 +362,7 @@ class User
         $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
         if ($result) {
-            $this->eventDispatcher->dispatch(UserEvents::CHANGE_PASSWORD, new ChangedPasswordEvent($userId, $oldPassword, $newPassword));
+            $this->eventDispatcher->dispatch(UserEvents::CHANGE_PASSWORD, new ChangedPasswordEvent($oldPassword, $newPassword, $context));
 
             return true;
         } else {

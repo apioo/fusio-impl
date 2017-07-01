@@ -89,7 +89,8 @@ class Collection extends BackendApiAbstract
         $this->scopeService->create(
             $record->name,
             $record->description,
-            $record->routes
+            $record->routes,
+            $this->userContext
         );
 
         return array(

@@ -82,7 +82,7 @@ class Account extends ConsumerApiAbstract
      */
     protected function doPut($record)
     {
-        $this->userService->updateMeta($this->userId, $record->email);
+        $this->userService->updateMeta($this->userId, $record->email, $this->userContext);
 
         return [
             'success' => true,

@@ -98,7 +98,8 @@ class Collection extends BackendApiAbstract
         $this->connectionService->create(
             $record->name,
             $record->class,
-            $config
+            $config,
+            $this->userContext
         );
 
         return array(

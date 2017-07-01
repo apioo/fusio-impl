@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use DateInterval;
 use Fusio\Impl\Authorization\TokenGenerator;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
@@ -103,7 +104,7 @@ class App
         return $this->appTable->getOneBy($condition);
     }
 
-    public function create($userId, $status, $name, $url, $parameters = null, array $scopes = null)
+    public function create($userId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)
     {
         // check whether app exists
         $condition  = new Condition();
@@ -156,10 +157,10 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(AppEvents::CREATE, new CreatedEvent($appId, $record, $scopes));
+        $this->eventDispatcher->dispatch(AppEvents::CREATE, new CreatedEvent($appId, $record, $scopes, $context));
     }
 
-    public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null)
+    public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)
     {
         $app = $this->appTable->get($appId);
 
@@ -206,10 +207,10 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(AppEvents::UPDATE, new UpdatedEvent($appId, $record, $scopes, $app));
+        $this->eventDispatcher->dispatch(AppEvents::UPDATE, new UpdatedEvent($appId, $record, $scopes, $app, $context));
     }
 
-    public function delete($appId)
+    public function delete($appId, UserContext $context)
     {
         $app = $this->appTable->get($appId);
 
@@ -228,10 +229,10 @@ class App
 
         $this->appTable->update($record);
 
-        $this->eventDispatcher->dispatch(AppEvents::DELETE, new DeletedEvent($appId, $app));
+        $this->eventDispatcher->dispatch(AppEvents::DELETE, new DeletedEvent($appId, $app, $context));
     }
 
-    public function removeToken($appId, $tokenId)
+    public function removeToken($appId, $tokenId, UserContext $context)
     {
         $app = $this->appTable->get($appId);
 
@@ -241,7 +242,7 @@ class App
 
         $this->appTokenTable->removeTokenFromApp($appId, $tokenId);
 
-        $this->eventDispatcher->dispatch(AppEvents::REMOVE_TOKEN, new RemovedTokenEvent($appId, $tokenId));
+        $this->eventDispatcher->dispatch(AppEvents::REMOVE_TOKEN, new RemovedTokenEvent($appId, $tokenId, $context));
     }
 
     public function generateAccessToken($appId, $userId, array $scopes, $ip, DateInterval $expire)

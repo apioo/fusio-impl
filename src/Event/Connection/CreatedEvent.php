@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\Connection;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,15 +32,17 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends Event
+class CreatedEvent extends EventAbstract
 {
     protected $connectionId;
     protected $record;
 
-    public function __construct($connectionId, array $record)
+    public function __construct($connectionId, array $record, UserContext $context)
     {
+        parent::__construct($context);
+
         $this->connectionId = $connectionId;
-        $this->record = $record;
+        $this->record       = $record;
     }
 
     public function getConnectionId()

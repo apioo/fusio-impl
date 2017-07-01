@@ -102,7 +102,8 @@ class Entity extends BackendApiAbstract
     {
         $this->routesService->update(
             (int) $this->getUriFragment('route_id'),
-            $record->config
+            $record->config,
+            $this->userContext
         );
 
         return array(
@@ -120,7 +121,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->routesService->delete(
-            (int) $this->getUriFragment('route_id')
+            (int) $this->getUriFragment('route_id'),
+            $this->userContext
         );
 
         return array(

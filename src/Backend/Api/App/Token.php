@@ -66,7 +66,8 @@ class Token extends BackendApiAbstract
     {
         $this->appService->removeToken(
             $this->getUriFragment('app_id'),
-            $this->getUriFragment('token_id')
+            $this->getUriFragment('token_id'),
+            $this->userContext
         );
 
         $this->setBody(array(

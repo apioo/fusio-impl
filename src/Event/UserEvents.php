@@ -31,7 +31,6 @@ namespace Fusio\Impl\Event;
 class UserEvents
 {
     const ACTIVATE = 'user.activate';
-    const AUTHENTICATE = 'user.authenticate';
     const CHANGE_PASSWORD = 'user.change_password';
     const CHANGE_STATUS = 'user.change_status';
     const CREATE = 'user.create';

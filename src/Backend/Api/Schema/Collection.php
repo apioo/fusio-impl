@@ -97,7 +97,8 @@ class Collection extends BackendApiAbstract
     {
         $this->schemaService->create(
             $record->name,
-            $record->source
+            $record->source,
+            $this->userContext
         );
 
         return array(

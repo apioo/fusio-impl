@@ -25,6 +25,7 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Model;
 use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Repository;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Routes\DeployedEvent;
 use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Table;
@@ -75,7 +76,7 @@ class Deploy
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function deploy($method)
+    public function deploy($method, UserContext $context)
     {
         unset($method['id']);
 
@@ -95,7 +96,7 @@ class Deploy
 
         $this->routesMethodTable->create($method);
 
-        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($method));
+        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($method, $context));
     }
 
     protected function getSchemaCache($schemaId)

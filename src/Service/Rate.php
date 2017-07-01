@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Model;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;
@@ -75,7 +76,7 @@ class Rate
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
+    public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
     {
         // check whether rate exists
         $condition  = new Condition();
@@ -114,10 +115,10 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RateEvents::CREATE, new CreatedEvent($rateId, $record, $allocations));
+        $this->eventDispatcher->dispatch(RateEvents::CREATE, new CreatedEvent($rateId, $record, $allocations, $context));
     }
 
-    public function update($rateId, $priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null)
+    public function update($rateId, $priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
     {
         $rate = $this->rateTable->get($rateId);
 
@@ -152,10 +153,10 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RateEvents::UPDATE, new UpdatedEvent($rateId, $record, $allocations, $rate));
+        $this->eventDispatcher->dispatch(RateEvents::UPDATE, new UpdatedEvent($rateId, $record, $allocations, $rate, $context));
     }
 
-    public function delete($rateId)
+    public function delete($rateId, UserContext $context)
     {
         $rate = $this->rateTable->get($rateId);
 
@@ -170,7 +171,7 @@ class Rate
 
         $this->rateTable->update($record);
 
-        $this->eventDispatcher->dispatch(RateEvents::DELETE, new DeletedEvent($rateId, $rate));
+        $this->eventDispatcher->dispatch(RateEvents::DELETE, new DeletedEvent($rateId, $rate, $context));
     }
     
     /**

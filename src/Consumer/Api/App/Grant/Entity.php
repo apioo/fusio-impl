@@ -41,7 +41,7 @@ class Entity extends ConsumerApiAbstract
 
     /**
      * @Inject
-     * @var \PSX\Sql\TableManager
+     * @var \Fusio\Impl\Service\App\Grant
      */
     protected $appGrantService;
 
@@ -67,8 +67,8 @@ class Entity extends ConsumerApiAbstract
     protected function doDelete($record)
     {
         $this->appGrantService->delete(
-            $this->userId,
-            (int) $this->getUriFragment('grant_id')
+            (int) $this->getUriFragment('grant_id'),
+            $this->userContext
         );
     }
 }

@@ -120,7 +120,8 @@ class Entity extends BackendApiAbstract
             (int) $this->getUriFragment('connection_id'),
             $record->name,
             $record->class,
-            $config
+            $config,
+            $this->userContext
         );
 
         return array(
@@ -138,7 +139,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->connectionService->delete(
-            (int) $this->getUriFragment('connection_id')
+            (int) $this->getUriFragment('connection_id'),
+            $this->userContext
         );
 
         return array(

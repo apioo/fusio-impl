@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\Routes;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table;
 use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
@@ -73,7 +74,7 @@ class Config
      * @param string $path
      * @param \PSX\Record\RecordInterface $result
      */
-    public function handleConfig($routeId, $path, $result)
+    public function handleConfig($routeId, $path, $result, UserContext $context)
     {
         // get existing methods
         $existingMethods = $this->methodTable->getMethods($routeId, null, false, null);
@@ -165,7 +166,7 @@ class Config
 
                     if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && $status == Resource::STATUS_ACTIVE) {
                         // deploy method to active
-                        $this->deploy->deploy($existingMethod);
+                        $this->deploy->deploy($existingMethod, $context);
                     } elseif ($existingMethod['status'] != $status) {
                         // we can not transition directly from development to
                         // deprecated or closed

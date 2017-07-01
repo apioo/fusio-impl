@@ -68,11 +68,10 @@ class ChangePassword extends ConsumerApiAbstract
     protected function doPut($record)
     {
         $this->userService->changePassword(
-            $this->userId,
-            $this->appId,
             $record->oldPassword,
             $record->newPassword,
-            $record->verifyPassword
+            $record->verifyPassword,
+            $this->userContext
         );
 
         return [

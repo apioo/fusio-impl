@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\User;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,22 +32,17 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangedStatusEvent extends Event
+class ChangedStatusEvent extends EventAbstract
 {
-    protected $userId;
     protected $oldStatus;
     protected $newStatus;
 
-    public function __construct($userId, $oldStatus, $newStatus)
+    public function __construct($oldStatus, $newStatus, UserContext $context)
     {
-        $this->userId    = $userId;
+        parent::__construct($context);
+
         $this->oldStatus = $oldStatus;
         $this->newStatus = $newStatus;
-    }
-
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     public function getOldStatus()

@@ -19,28 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\User;
+namespace Fusio\Impl\Event;
 
+use Fusio\Impl\Authorization\UserContext;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * AuthenticatedEvent
+ * EventAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class AuthenticatedEvent extends Event
+abstract class EventAbstract extends Event
 {
-    protected $userId;
+    protected $context;
 
-    public function __construct($userId)
+    public function __construct(UserContext $context)
     {
-        $this->userId = $userId;
+        $this->context = $context;
     }
 
-    public function getUserId()
+    public function getContext()
     {
-        return $this->userId;
+        return $this->context;
     }
 }

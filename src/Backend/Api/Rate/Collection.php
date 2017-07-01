@@ -92,7 +92,8 @@ class Collection extends BackendApiAbstract
             $record->name,
             $record->rateLimit,
             $record->timespan,
-            $record->allocation
+            $record->allocation,
+            $this->userContext
         );
 
         return array(

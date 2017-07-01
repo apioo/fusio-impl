@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\Rate;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,15 +32,17 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UpdatedEvent extends Event
+class UpdatedEvent extends EventAbstract
 {
     protected $rateId;
     protected $record;
     protected $allocations;
     protected $rate;
 
-    public function __construct($rateId, array $record, $allocations, $rate)
+    public function __construct($rateId, array $record, $allocations, $rate, UserContext $context)
     {
+        parent::__construct($context);
+
         $this->rateId      = $rateId;
         $this->record      = $record;
         $this->allocations = $allocations;

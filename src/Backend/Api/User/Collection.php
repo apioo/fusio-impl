@@ -91,7 +91,8 @@ class Collection extends BackendApiAbstract
             $record->name,
             $record->email,
             $record->password,
-            $record->scopes
+            $record->scopes,
+            $this->userContext
         );
 
         return array(

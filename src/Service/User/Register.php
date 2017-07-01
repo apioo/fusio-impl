@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -87,7 +88,8 @@ class Register
             $name,
             $email,
             $password,
-            $scopes
+            $scopes,
+            UserContext::getAnonymousContext()
         );
 
         // send activation mail

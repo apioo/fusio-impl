@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\App;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 
@@ -55,31 +56,32 @@ class Grant
         $this->appTokenTable  = $appTokenTable;
     }
 
-    public function delete($userId, $grantId)
+    public function delete($grantId, UserContext $context)
     {
-        $grant = $this->userGrantTable->get($grantId);
+        $userId = $context->getUserId();
+        $grant  = $this->userGrantTable->get($grantId);
 
-        if (!empty($grant)) {
-            if ($grant['userId'] == $userId) {
-                try {
-                    $this->userGrantTable->beginTransaction();
-
-                    $this->userGrantTable->delete($grant);
-
-                    // delete tokens
-                    $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
-
-                    $this->userGrantTable->commit();
-                } catch (\Exception $e) {
-                    $this->userGrantTable->rollBack();
-
-                    throw $e;
-                }
-            } else {
-                throw new StatusCode\BadRequestException('Invalid grant id');
-            }
-        } else {
+        if (empty($grant)) {
             throw new StatusCode\NotFoundException('Could not find grant');
+        }
+
+        if ($grant['userId'] != $userId) {
+            throw new StatusCode\BadRequestException('Invalid grant id');
+        }
+
+        try {
+            $this->userGrantTable->beginTransaction();
+
+            $this->userGrantTable->delete($grant);
+
+            // delete tokens
+            $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
+
+            $this->userGrantTable->commit();
+        } catch (\Exception $e) {
+            $this->userGrantTable->rollBack();
+
+            throw $e;
         }
     }
 }

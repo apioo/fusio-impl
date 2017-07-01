@@ -137,10 +137,6 @@ class SystemLogListener implements EventSubscriberInterface
     {
     }
 
-    public function onUserAuthenticate(Event\User\AuthenticatedEvent $event)
-    {
-    }
-
     public function onUserChangePassword(Event\User\ChangedPasswordEvent $event)
     {
     }
@@ -200,7 +196,6 @@ class SystemLogListener implements EventSubscriberInterface
             Event\ScopeEvents::DELETE         => 'onScopeDelete',
             Event\ScopeEvents::UPDATE         => 'onScopeUpdate',
 
-            Event\UserEvents::AUTHENTICATE    => 'onUserAuthenticate',
             Event\UserEvents::CHANGE_PASSWORD => 'onUserChangePassword',
             Event\UserEvents::CHANGE_STATUS   => 'onUserChangeStatus',
             Event\UserEvents::CREATE          => 'onUserCreate',

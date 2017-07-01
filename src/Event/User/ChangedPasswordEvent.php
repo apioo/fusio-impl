@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\User;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,22 +32,17 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangedPasswordEvent extends Event
+class ChangedPasswordEvent extends EventAbstract
 {
-    protected $userId;
     protected $oldPassword;
     protected $newPassword;
 
-    public function __construct($userId, $oldPassword, $newPassword)
+    public function __construct($oldPassword, $newPassword, UserContext $context)
     {
-        $this->userId      = $userId;
+        parent::__construct($context);
+
         $this->oldPassword = $oldPassword;
         $this->newPassword = $newPassword;
-    }
-
-    public function getUserId()
-    {
-        return $this->userId;
     }
 
     public function getOldPassword()

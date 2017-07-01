@@ -92,11 +92,11 @@ class Entity extends ConsumerApiAbstract
     protected function doPut($record)
     {
         $this->appDeveloperService->update(
-            $this->userId,
             (int) $this->getUriFragment('app_id'),
             $record->name,
             $record->url,
-            $record->scopes
+            $record->scopes,
+            $this->userContext
         );
 
         return array(
@@ -114,8 +114,8 @@ class Entity extends ConsumerApiAbstract
     protected function doDelete($record)
     {
         $this->appDeveloperService->delete(
-            $this->userId,
-            (int) $this->getUriFragment('app_id')
+            (int) $this->getUriFragment('app_id'),
+            $this->userContext
         );
 
         return array(

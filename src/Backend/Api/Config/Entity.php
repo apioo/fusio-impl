@@ -91,7 +91,8 @@ class Entity extends BackendApiAbstract
     {
         $this->configService->update(
             (int) $this->getUriFragment('config_id'),
-            $record->value
+            $record->value,
+            $this->userContext
         );
 
         return array(

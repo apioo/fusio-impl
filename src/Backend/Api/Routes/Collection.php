@@ -89,7 +89,8 @@ class Collection extends BackendApiAbstract
     {
         $this->routesService->create(
             $record->path,
-            $record->config
+            $record->config,
+            $this->userContext
         );
 
         return array(

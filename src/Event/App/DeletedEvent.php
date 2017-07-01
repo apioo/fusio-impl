@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\App;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,13 +32,15 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DeletedEvent extends Event
+class DeletedEvent extends EventAbstract
 {
     protected $appId;
     protected $app;
 
-    public function __construct($appId, $app)
+    public function __construct($appId, $app, UserContext $context)
     {
+        parent::__construct($context);
+
         $this->appId = $appId;
         $this->app   = $app;
     }

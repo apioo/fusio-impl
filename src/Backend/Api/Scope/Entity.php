@@ -99,7 +99,8 @@ class Entity extends BackendApiAbstract
             (int) $this->getUriFragment('scope_id'),
             $record->name,
             $record->description,
-            $record->routes
+            $record->routes,
+            $this->userContext
         );
 
         return array(
@@ -117,7 +118,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->scopeService->delete(
-            (int) $this->getUriFragment('scope_id')
+            (int) $this->getUriFragment('scope_id'),
+            $this->userContext
         );
 
         return array(

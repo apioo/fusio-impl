@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\User\Model\User as UserModel;
 use PSX\Framework\Config\Config;
@@ -95,7 +96,8 @@ class Provider
                     $user->getId(),
                     $user->getName(),
                     $user->getEmail(),
-                    $scopes
+                    $scopes,
+                    UserContext::getAnonymousContext()
                 );
 
                 return $this->tokenIssuer->createToken($userId, $scopes);

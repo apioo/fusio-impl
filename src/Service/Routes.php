@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Routes\CreatedEvent;
 use Fusio\Impl\Event\Routes\DeletedEvent;
 use Fusio\Impl\Event\Routes\UpdatedEvent;
@@ -74,7 +75,7 @@ class Routes
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($path, $config)
+    public function create($path, $config, UserContext $context)
     {
         // check whether route exists
         $condition  = new Condition();
@@ -103,7 +104,7 @@ class Routes
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
 
-            $this->configService->handleConfig($routeId, $path, $config);
+            $this->configService->handleConfig($routeId, $path, $config, $context);
 
             $this->routesTable->commit();
         } catch (\Exception $e) {
@@ -112,10 +113,10 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config));
+        $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config, $context));
     }
 
-    public function update($routeId, $config)
+    public function update($routeId, $config, UserContext $context)
     {
         $route = $this->routesTable->get($routeId);
 
@@ -130,7 +131,7 @@ class Routes
         try {
             $this->routesTable->beginTransaction();
 
-            $this->configService->handleConfig($route->id, $route->path, $config);
+            $this->configService->handleConfig($route->id, $route->path, $config, $context);
 
             $this->routesTable->commit();
         } catch (\Exception $e) {
@@ -139,10 +140,10 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RoutesEvents::UPDATE, new UpdatedEvent($routeId, [], $config, $route));
+        $this->eventDispatcher->dispatch(RoutesEvents::UPDATE, new UpdatedEvent($routeId, [], $config, $route, $context));
     }
 
-    public function delete($routeId)
+    public function delete($routeId, UserContext $context)
     {
         $route = $this->routesTable->get($routeId);
 
@@ -167,6 +168,6 @@ class Routes
 
         $this->routesTable->update($record);
 
-        $this->eventDispatcher->dispatch(RoutesEvents::DELETE, new DeletedEvent($routeId, $route));
+        $this->eventDispatcher->dispatch(RoutesEvents::DELETE, new DeletedEvent($routeId, $route, $context));
     }
 }

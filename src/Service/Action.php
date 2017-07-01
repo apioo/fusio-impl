@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
@@ -77,7 +78,7 @@ class Action
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $class, $engine, $config)
+    public function create($name, $class, $engine, $config, UserContext $context)
     {
         // check whether action exists
         $condition  = new Condition();
@@ -111,10 +112,10 @@ class Action
 
         $actionId = $this->actionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(ActionEvents::CREATE, new CreatedEvent($actionId, $record));
+        $this->eventDispatcher->dispatch(ActionEvents::CREATE, new CreatedEvent($actionId, $record, $context));
     }
 
-    public function update($actionId, $name, $class, $engine, $config)
+    public function update($actionId, $name, $class, $engine, $config, UserContext $context)
     {
         $action = $this->actionTable->get($actionId);
 
@@ -150,10 +151,10 @@ class Action
 
         $this->actionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ActionEvents::UPDATE, new UpdatedEvent($actionId, $record, $action));
+        $this->eventDispatcher->dispatch(ActionEvents::UPDATE, new UpdatedEvent($actionId, $record, $action, $context));
     }
 
-    public function delete($actionId)
+    public function delete($actionId, UserContext $context)
     {
         $action = $this->actionTable->get($actionId);
 
@@ -175,7 +176,7 @@ class Action
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
-        $this->eventDispatcher->dispatch(ActionEvents::DELETE, new DeletedEvent($actionId, $action));
+        $this->eventDispatcher->dispatch(ActionEvents::DELETE, new DeletedEvent($actionId, $action, $context));
     }
 
     /**

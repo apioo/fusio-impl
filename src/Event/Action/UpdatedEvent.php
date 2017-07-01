@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Event\Action;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -30,14 +32,16 @@ use Symfony\Component\EventDispatcher\Event;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UpdatedEvent extends Event
+class UpdatedEvent extends EventAbstract
 {
     protected $actionId;
     protected $record;
     protected $action;
 
-    public function __construct($actionId, array $record, $action)
+    public function __construct($actionId, array $record, $action, UserContext $context)
     {
+        parent::__construct($context);
+
         $this->actionId = $actionId;
         $this->record   = $record;
         $this->action   = $action;

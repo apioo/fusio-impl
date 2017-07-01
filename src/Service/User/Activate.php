@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
@@ -59,7 +60,7 @@ class Activate
         $expires = isset($payload->exp) ? $payload->exp : null;
 
         if (time() < $expires) {
-            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER);
+            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::getAnonymousContext());
         } else {
             throw new StatusCode\BadRequestException('Token is expired');
         }

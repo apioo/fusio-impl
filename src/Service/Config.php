@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Config\UpdatedEvent;
 use Fusio\Impl\Event\ConfigEvents;
 use Fusio\Impl\Table;
@@ -52,7 +53,7 @@ class Config
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function update($configId, $value)
+    public function update($configId, $value, UserContext $context)
     {
         $config = $this->configTable->get($configId);
 
@@ -67,7 +68,7 @@ class Config
 
         $this->configTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConfigEvents::UPDATE, new UpdatedEvent($configId, $record));
+        $this->eventDispatcher->dispatch(ConfigEvents::UPDATE, new UpdatedEvent($configId, $record, $context));
     }
 
     public function getValue($name)

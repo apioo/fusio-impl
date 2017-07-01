@@ -91,10 +91,10 @@ class Collection extends ConsumerApiAbstract
     protected function doPost($record)
     {
         $this->appDeveloperService->create(
-            $this->userId,
             $record->name,
             $record->url,
-            $record->scopes
+            $record->scopes,
+            $this->userContext
         );
 
         return array(

@@ -103,7 +103,8 @@ class Entity extends BackendApiAbstract
         $this->schemaService->update(
             (int) $this->getUriFragment('schema_id'),
             $record->name,
-            $record->source
+            $record->source,
+            $this->userContext
         );
 
         return array(
@@ -121,7 +122,8 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record)
     {
         $this->schemaService->delete(
-            (int) $this->getUriFragment('schema_id')
+            (int) $this->getUriFragment('schema_id'),
+            $this->userContext
         );
 
         return array(
