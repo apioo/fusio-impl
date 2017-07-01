@@ -21,146 +21,183 @@
 
 namespace Fusio\Impl\EventListener;
 
-use Doctrine\DBAL\Connection;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event;
+use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * SystemLogListener
+ * AuditListener
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemLogListener implements EventSubscriberInterface
+class AuditListener implements EventSubscriberInterface
 {
-    protected $connection;
+    protected $auditTable;
 
-    public function __construct(Connection $connection)
+    public function __construct(Table\Audit $auditTable)
     {
-        $this->connection = $connection;
+        $this->auditTable = $auditTable;
     }
 
     public function onActionCreate(Event\Action\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'action.create');
     }
 
     public function onActionDelete(Event\Action\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'action.delete');
     }
 
     public function onActionUpdate(Event\Action\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'action.update');
     }
 
     public function onAppCreate(Event\App\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'app.create');
     }
 
     public function onAppDelete(Event\App\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'app.delete');
     }
 
     public function onAppRemoveToken(Event\App\RemovedTokenEvent $event)
     {
+        $this->log($event->getContext(), 'app.remove_token');
     }
 
     public function onAppUpdate(Event\App\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'app.update');
     }
 
     public function onConfigUpdate(Event\Config\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'config.update');
     }
 
     public function onConnectionCreate(Event\Connection\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'connection.create');
     }
 
     public function onConnectionDelete(Event\Connection\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'connection.delete');
     }
 
     public function onConnectionUpdate(Event\Connection\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'connection.update');
     }
 
     public function onRateCreate(Event\Rate\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'rate.create');
     }
 
     public function onRateDelete(Event\Rate\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'rate.delete');
     }
 
     public function onRateUpdate(Event\Rate\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'rate.update');
     }
 
     public function onRoutesCreate(Event\Routes\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'routes.create');
     }
 
     public function onRoutesDelete(Event\Routes\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'routes.delete');
     }
 
     public function onRoutesDeploy(Event\Routes\DeployedEvent $event)
     {
+        $this->log($event->getContext(), 'routes.deploy');
     }
 
     public function onRoutesUpdate(Event\Routes\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'routes.update');
     }
 
     public function onSchemaCreate(Event\Schema\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'schema.create');
     }
 
     public function onSchemaDelete(Event\Schema\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'schema.delete');
     }
 
     public function onSchemaUpdate(Event\Schema\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'schema.update');
     }
 
     public function onScopeCreate(Event\Scope\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'scope.create');
     }
 
     public function onScopeDelete(Event\Scope\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'scope.delete');
     }
 
     public function onScopeUpdate(Event\Scope\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'scope.update');
     }
 
     public function onUserChangePassword(Event\User\ChangedPasswordEvent $event)
     {
+        $this->log($event->getContext(), 'user.change_password');
     }
 
     public function onUserChangeStatus(Event\User\ChangedStatusEvent $event)
     {
+        $this->log($event->getContext(), 'user.change_status');
     }
 
     public function onUserCreate(Event\User\CreatedEvent $event)
     {
+        $this->log($event->getContext(), 'user.create');
     }
 
     public function onUserDelete(Event\User\DeletedEvent $event)
     {
+        $this->log($event->getContext(), 'user.delete');
     }
 
     public function onUserUpdate(Event\User\UpdatedEvent $event)
     {
+        $this->log($event->getContext(), 'user.update');
     }
 
-    private function log()
+    private function log(UserContext $context, $event)
     {
+        $this->auditTable->create([
+            'appId'  => $context->getAppId(),
+            'userId' => $context->getUserId(),
+            'event'  => $event,
+            'ip'     => $context->getIp(),
+            'date'   => new \DateTime(),
+        ]);
     }
-    
+
     public static function getSubscribedEvents()
     {
         return [

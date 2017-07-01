@@ -206,6 +206,6 @@ JSON;
 
     public static function getLastRouteId()
     {
-        return 65;
+        return 67;
     }
 }

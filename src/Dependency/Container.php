@@ -24,7 +24,7 @@ namespace Fusio\Impl\Dependency;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
-use Fusio\Impl\EventListener\SystemLogListener;
+use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
@@ -165,7 +165,7 @@ class Container extends DefaultContainer
     {
         parent::appendDefaultListener($eventDispatcher);
 
-        $eventDispatcher->addSubscriber(new SystemLogListener($this->get('connection')));
+        $eventDispatcher->addSubscriber(new AuditListener($this->get('table_manager')->getTable(Table\Audit::class)));
     }
 
     protected function appendDefaultConfig()

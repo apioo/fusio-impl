@@ -129,6 +129,26 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/audit",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/audit\/$audit_id<[0-9]+>",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/config",
             "methods": [
                 "GET",

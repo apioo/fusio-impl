@@ -116,6 +116,16 @@ class Version092 implements VersionInterface
         $appCodeTable->setPrimaryKey(array('id'));
         $appCodeTable->addUniqueIndex(array('code'));
 
+        $auditTable = $schema->createTable('fusio_audit');
+        $auditTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $auditTable->addColumn('appId', 'integer');
+        $auditTable->addColumn('userId', 'integer');
+        $auditTable->addColumn('event', 'string');
+        $auditTable->addColumn('ip', 'string', array('length' => 40));
+        $auditTable->addColumn('date', 'datetime');
+        $auditTable->setPrimaryKey(array('id'));
+        $auditTable->addOption('engine', 'MyISAM');
+
         $configTable = $schema->createTable('fusio_config');
         $configTable->addColumn('id', 'integer', array('autoincrement' => true));
         $configTable->addColumn('type', 'integer', array('default' => 1));
@@ -413,6 +423,8 @@ class Version092 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app',                                 'controller' => Backend\Api\App\Collection::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app/$app_id<[0-9]+>',                 'controller' => Backend\Api\App\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/app/$app_id<[0-9]+>/token/:token_id', 'controller' => Backend\Api\App\Token::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/audit',                               'controller' => Backend\Api\Audit\Collection::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/audit/$audit_id<[0-9]+>',             'controller' => Backend\Api\Audit\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/config',                              'controller' => Backend\Api\Config\Collection::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/config/$config_id<[0-9]+>',           'controller' => Backend\Api\Config\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection',                          'controller' => Backend\Api\Connection\Collection::class],
@@ -479,7 +491,7 @@ class Version092 implements VersionInterface
                 ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
             ],
             'fusio_routes_method' => [
-                ['routeId' => 65, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+                ['routeId' => 67, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
             ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
@@ -501,10 +513,10 @@ class Version092 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 11, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 12, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 13, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 14, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 15, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 16, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 17, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 14, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 15, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 16, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 17, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 18, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 19, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 20, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -519,19 +531,19 @@ class Version092 implements VersionInterface
                 ['scopeId' => 1, 'routeId' => 29, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 1, 'routeId' => 34, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 37, 'allow' => 1, 'methods' => 'GET'],
                 ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 40, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 1, 'routeId' => 41, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 40, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 1, 'routeId' => 41, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 1, 'routeId' => 42, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 1, 'routeId' => 43, 'allow' => 1, 'methods' => 'POST'],
 
-                ['scopeId' => 2, 'routeId' => 43, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 44, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 45, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 46, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 47, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
@@ -544,9 +556,11 @@ class Version092 implements VersionInterface
                 ['scopeId' => 2, 'routeId' => 54, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 55, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
                 ['scopeId' => 2, 'routeId' => 56, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 57, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 2, 'routeId' => 58, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
 
-                ['scopeId' => 3, 'routeId' => 57, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 59, 'allow' => 1, 'methods' => 'GET'],
+                ['scopeId' => 3, 'routeId' => 59, 'allow' => 1, 'methods' => 'POST'],
+                ['scopeId' => 3, 'routeId' => 61, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],

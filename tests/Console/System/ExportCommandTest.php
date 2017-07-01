@@ -120,7 +120,7 @@ class ExportCommandTest extends ControllerDbTestCase
                 "title": "passthru",
                 "type": "object",
                 "description": "No schema was specified.",
-                "properties": []
+                "properties": {}
             }
         }
     ],
