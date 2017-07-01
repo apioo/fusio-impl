@@ -34,10 +34,27 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class CreatedEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $routeId;
+
+    /**
+     * @var array
+     */
     protected $record;
+
+    /**
+     * @var array
+     */
     protected $config;
 
+    /**
+     * @param integer $routeId
+     * @param array $record
+     * @param array $config
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($routeId, array $record, $config, UserContext $context)
     {
         parent::__construct($context);

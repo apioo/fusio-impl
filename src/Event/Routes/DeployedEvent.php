@@ -34,8 +34,15 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class DeployedEvent extends EventAbstract
 {
+    /**
+     * @var array
+     */
     protected $method;
 
+    /**
+     * @param array $method
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($method, UserContext $context)
     {
         parent::__construct($context);

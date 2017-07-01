@@ -34,9 +34,21 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class CreatedEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $schemaId;
+
+    /**
+     * @var array
+     */
     protected $record;
 
+    /**
+     * @param integer $schemaId
+     * @param array $record
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($schemaId, array $record, UserContext $context)
     {
         parent::__construct($context);

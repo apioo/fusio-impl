@@ -34,9 +34,21 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class RemovedTokenEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $appId;
+
+    /**
+     * @var integer
+     */
     protected $tokenId;
 
+    /**
+     * @param integer $appId
+     * @param integer $tokenId
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($appId, $tokenId, UserContext $context)
     {
         parent::__construct($context);

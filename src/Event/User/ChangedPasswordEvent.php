@@ -34,9 +34,21 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ChangedPasswordEvent extends EventAbstract
 {
+    /**
+     * @var string
+     */
     protected $oldPassword;
+
+    /**
+     * @var string
+     */
     protected $newPassword;
 
+    /**
+     * @param string $oldPassword
+     * @param string $newPassword
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($oldPassword, $newPassword, UserContext $context)
     {
         parent::__construct($context);

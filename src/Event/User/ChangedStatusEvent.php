@@ -34,9 +34,21 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ChangedStatusEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $oldStatus;
+
+    /**
+     * @var integer
+     */
     protected $newStatus;
 
+    /**
+     * @param integer $oldStatus
+     * @param integer $newStatus
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($oldStatus, $newStatus, UserContext $context)
     {
         parent::__construct($context);

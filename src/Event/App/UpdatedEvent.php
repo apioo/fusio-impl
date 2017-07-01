@@ -34,11 +34,33 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class UpdatedEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $appId;
+
+    /**
+     * @var array
+     */
     protected $record;
+
+    /**
+     * @var array
+     */
     protected $scopes;
+
+    /**
+     * @var array
+     */
     protected $app;
 
+    /**
+     * @param integer $appId
+     * @param array $record
+     * @param array $scopes
+     * @param array $app
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($appId, array $record, $scopes, $app, UserContext $context)
     {
         parent::__construct($context);

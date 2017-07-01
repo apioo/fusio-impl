@@ -34,9 +34,21 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class DeletedEvent extends EventAbstract
 {
+    /**
+     * @var integer
+     */
     protected $schemaId;
+
+    /**
+     * @var array
+     */
     protected $schema;
 
+    /**
+     * @param integer $schemaId
+     * @param array $schema
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
     public function __construct($schemaId, $schema, UserContext $context)
     {
         parent::__construct($context);
