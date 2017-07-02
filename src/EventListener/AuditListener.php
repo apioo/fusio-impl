@@ -95,6 +95,17 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
+    public function onAppGenerateToken(Event\App\GeneratedTokenEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getAppId(),
+            'app.generate_token',
+            sprintf('Generated token for app'),
+            ['appId' => $event->getAppId(), 'tokenId' => $event->getTokenId(), 'access_token' => $event->getAccessToken(), 'scope' => $event->getScopes(), 'expires' => $event->getExpires()->format('Y-m-d H:i:s'), 'now' => $event->getNow()->format('Y-m-d H:i:s')]
+        );
+    }
+
     public function onAppRemoveToken(Event\App\RemovedTokenEvent $event)
     {
         $this->log(
@@ -373,6 +384,7 @@ class AuditListener implements EventSubscriberInterface
 
             Event\AppEvents::CREATE           => 'onAppCreate',
             Event\AppEvents::DELETE           => 'onAppDelete',
+            Event\AppEvents::GENERATE_TOKEN   => 'onAppGenerateToken',
             Event\AppEvents::REMOVE_TOKEN     => 'onAppRemoveToken',
             Event\AppEvents::UPDATE           => 'onAppUpdate',
 

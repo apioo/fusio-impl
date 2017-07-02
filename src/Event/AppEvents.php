@@ -32,6 +32,7 @@ class AppEvents
 {
     const CREATE = 'app.create';
     const DELETE = 'app.delete';
+    const GENERATE_TOKEN = 'app.generate_token';
     const REMOVE_TOKEN = 'app.remove_token';
     const UPDATE = 'app.update';
 }

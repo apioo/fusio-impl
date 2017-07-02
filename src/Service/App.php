@@ -26,6 +26,7 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
+use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Event\AppEvents;
@@ -276,6 +277,19 @@ class App
             'expire' => $expires,
             'date'   => $now,
         ]);
+
+        $tokenId = $this->appTokenTable->getLastInsertId();
+
+        // dispatch event
+        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
+            $appId, 
+            $tokenId, 
+            $accessToken, 
+            $scopes, 
+            $expires, 
+            $now, 
+            new UserContext($appId, $userId, $ip)
+        ));
 
         $token = new AccessToken();
         $token->setAccessToken($accessToken);
