@@ -384,7 +384,7 @@ class AuditListener implements EventSubscriberInterface
                     $result[$key] = $value->format('Y-m-d H:i:s');
                 } elseif ($key == 'password') {
                     $result[$key] = '******';
-                } elseif ($key == 'cache') {
+                } elseif (in_array($key, ['cache', 'config'])) {
                     $result[$key] = null;
                 } else {
                     $result[$key] = $value;
