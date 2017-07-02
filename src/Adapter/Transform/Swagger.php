@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Adapter\Transform;
 
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Impl\Adapter\TransformAbstract;
 use InvalidArgumentException;
 use PSX\Uri\Uri;
@@ -199,7 +200,7 @@ class Swagger extends TransformAbstract
 
             $this->addAction([
                 'name'   => $name,
-                'class'  => 'Fusio\Adapter\Util\Action\UtilStaticResponse',
+                'class'  => UtilStaticResponse::class,
                 'config' => [
                     'statusCode' => '200',
                     'response'   => $example,
