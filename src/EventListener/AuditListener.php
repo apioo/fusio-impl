@@ -378,16 +378,16 @@ class AuditListener implements EventSubscriberInterface
     private function normalize(array $content = null)
     {
         if ($content !== null) {
-            $result = [];
+            $result = new \stdClass();
             foreach ($content as $key => $value) {
                 if ($value instanceof \DateTime) {
-                    $result[$key] = $value->format('Y-m-d H:i:s');
+                    $result->{$key} = $value->format('Y-m-d H:i:s');
                 } elseif ($key == 'password') {
-                    $result[$key] = '******';
+                    $result->{$key} = '******';
                 } elseif (in_array($key, ['cache', 'config'])) {
-                    $result[$key] = null;
+                    $result->{$key} = null;
                 } else {
-                    $result[$key] = $value;
+                    $result->{$key} = $value;
                 }
             }
             return $result;
