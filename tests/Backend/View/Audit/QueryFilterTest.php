@@ -35,12 +35,13 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $filter = QueryFilter::create([
-            'from'   => '2015-08-20',
-            'to'     => '2015-08-30',
-            'appId'  => 1,
-            'userId' => 1,
-            'event'  => 'create',
-            'ip'     => '127.0.0.1',
+            'from'    => '2015-08-20',
+            'to'      => '2015-08-30',
+            'appId'   => 1,
+            'userId'  => 1,
+            'event'   => 'create',
+            'ip'      => '127.0.0.1',
+            'message' => 'foo',
         ]);
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
@@ -52,7 +53,7 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (date >= ? AND date <= ? AND appId = ? AND userId = ? AND event LIKE ? AND ip LIKE ?)', $condition->getStatment());
+        $this->assertEquals('WHERE (date >= ? AND date <= ? AND appId = ? AND userId = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatment());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
@@ -60,6 +61,7 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
             1,
             '%create%',
             '127.0.0.1',
+            '%foo%',
         ], $condition->getValues());
     }
 
@@ -78,6 +80,6 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
             'search' => 'create'
         ]);
 
-        $this->assertEquals('create', $filter->getEvent());
+        $this->assertEquals('create', $filter->getMessage());
     }
 }
