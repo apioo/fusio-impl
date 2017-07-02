@@ -361,7 +361,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    private function log(UserContext $context, $refId, $event, $message, $content = null)
+    private function log(UserContext $context, $refId, $event, $message, array $content = null)
     {
         $this->auditTable->create([
             'appId'   => $context->getAppId(),
@@ -370,9 +370,30 @@ class AuditListener implements EventSubscriberInterface
             'event'   => $event,
             'ip'      => $context->getIp(),
             'message' => $message,
-            'content' => $content,
+            'content' => $this->normalize($content),
             'date'    => new \DateTime(),
         ]);
+    }
+
+    private function normalize(array $content = null)
+    {
+        if ($content !== null) {
+            $result = [];
+            foreach ($content as $key => $value) {
+                if ($value instanceof \DateTime) {
+                    $result[$key] = $value->format('Y-m-d H:i:s');
+                } elseif ($key == 'password') {
+                    $result[$key] = '******';
+                } elseif ($key == 'cache') {
+                    $result[$key] = null;
+                } else {
+                    $result[$key] = $value;
+                }
+            }
+            return $result;
+        } else {
+            return null;
+        }
     }
 
     public static function getSubscribedEvents()
