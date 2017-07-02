@@ -19,22 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\User;
+
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * UserEvents
+ * FailedAuthenticationEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UserEvents
+class FailedAuthenticationEvent extends EventAbstract
 {
-    const ACTIVATE = 'user.activate';
-    const CHANGE_PASSWORD = 'user.change_password';
-    const CHANGE_STATUS = 'user.change_status';
-    const CREATE = 'user.create';
-    const DELETE = 'user.delete';
-    const FAIL_AUTHENTICATION = 'user.fail_authentication';
-    const UPDATE = 'user.update';
 }

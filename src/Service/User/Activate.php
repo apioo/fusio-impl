@@ -64,7 +64,7 @@ class Activate
         $expires = isset($payload->exp) ? $payload->exp : null;
 
         if (time() < $expires) {
-            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::getAnonymousContext());
+            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::newAnonymousContext());
         } else {
             throw new StatusCode\BadRequestException('Token is expired');
         }

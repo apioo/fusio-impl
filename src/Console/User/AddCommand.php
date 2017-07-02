@@ -152,7 +152,7 @@ class AddCommand extends Command
             $email,
             $password,
             $scopes,
-            UserContext::getCommandContext()
+            UserContext::newCommandContext()
         );
 
         $output->writeln('Created user ' . $name . ' successful');

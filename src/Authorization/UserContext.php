@@ -60,13 +60,18 @@ class UserContext
         return $this->ip;
     }
 
-    public static function getAnonymousContext()
+    public static function newContext($userId, $appId = null)
     {
-        return new UserContext(1, 1, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+        return new UserContext($userId, $appId, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
     }
 
-    public static function getCommandContext()
+    public static function newAnonymousContext()
     {
-        return new UserContext(1, 1, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+        return self::newContext(1, 1);
+    }
+
+    public static function newCommandContext()
+    {
+        return self::newContext(1, 1);
     }
 }

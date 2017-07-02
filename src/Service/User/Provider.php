@@ -104,7 +104,7 @@ class Provider
                     $user->getName(),
                     $user->getEmail(),
                     $scopes,
-                    UserContext::getAnonymousContext()
+                    UserContext::newAnonymousContext()
                 );
 
                 return $this->tokenIssuer->createToken($userId, $scopes);

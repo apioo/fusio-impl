@@ -68,14 +68,9 @@ trait ProtectionTrait
             $this->context->get('fusio.routeId'),
             $this->config->get('fusio_project_key'),
             function ($accessToken) {
-                $this->appId  = $accessToken['appId'];
-                $this->userId = $accessToken['userId'];
-
-                $this->userContext = new UserContext(
-                    $accessToken['userId'],
-                    $accessToken['appId'],
-                    isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1'
-                );
+                $this->appId       = $accessToken['appId'];
+                $this->userId      = $accessToken['userId'];
+                $this->userContext = UserContext::newContext($accessToken['userId'], $accessToken['appId']);
             }
         );
 

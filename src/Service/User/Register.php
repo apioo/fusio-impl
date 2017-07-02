@@ -96,7 +96,7 @@ class Register
             $email,
             $password,
             $scopes,
-            UserContext::getAnonymousContext()
+            UserContext::newAnonymousContext()
         );
 
         // send activation mail

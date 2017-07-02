@@ -22,11 +22,11 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\User\AuthenticatedEvent;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
 use Fusio\Impl\Event\User\DeletedEvent;
+use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Event\UserEvents;
 use Fusio\Impl\Service\User\ProviderInterface;
@@ -127,6 +127,8 @@ class User
             // check password
             if (password_verify($password, $user['password'])) {
                 return $user['id'];
+            } else {
+                $this->eventDispatcher->dispatch(UserEvents::FAIL_AUTHENTICATION, new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
             }
         }
 
