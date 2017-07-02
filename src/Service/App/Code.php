@@ -38,6 +38,9 @@ class Code
      */
     protected $appCodeTable;
 
+    /**
+     * @param \Fusio\Impl\Table\App\Code $appCodeTable
+     */
     public function __construct(Table\App\Code $appCodeTable)
     {
         $this->appCodeTable = $appCodeTable;

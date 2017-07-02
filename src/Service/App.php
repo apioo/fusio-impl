@@ -75,6 +75,14 @@ class App
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\App $appTable
+     * @param \Fusio\Impl\Table\Scope $scopeTable
+     * @param \Fusio\Impl\Table\App\Scope $appScopeTable
+     * @param \Fusio\Impl\Table\App\Token $appTokenTable
+     * @param string $tokenSecret
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, $tokenSecret, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;

@@ -43,6 +43,10 @@ class Login
      */
     protected $tokenIssuer;
 
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
+     */
     public function __construct(Service\User $userService, TokenIssuer $tokenIssuer)
     {
         $this->userService = $userService;

@@ -37,20 +37,25 @@ use PSX\Http\Exception as StatusCode;
 class TokenIssuer
 {
     /**
-     * @var \Fusio\Impl\Service\User
-     */
-    protected $userTable;
-
-    /**
      * @var \Fusio\Impl\Service\App
      */
     protected $appService;
+
+    /**
+     * @var \Fusio\Impl\Table\User
+     */
+    protected $userTable;
 
     /**
      * @var \PSX\Framework\Config\Config
      */
     protected $config;
 
+    /**
+     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Table\User $userTable
+     * @param \PSX\Framework\Config\Config $config
+     */
     public function __construct(Service\App $appService, Table\User $userTable, Config $config)
     {
         $this->appService = $appService;

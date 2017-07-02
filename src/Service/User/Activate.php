@@ -47,6 +47,10 @@ class Activate
      */
     protected $config;
 
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     * @param \PSX\Framework\Config\Config $config
+     */
     public function __construct(Service\User $userService, Config $config)
     {
         $this->userService = $userService;

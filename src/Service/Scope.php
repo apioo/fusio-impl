@@ -65,6 +65,13 @@ class Scope
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\Scope $scopeTable
+     * @param \Fusio\Impl\Table\Scope\Route $scopeRouteTable
+     * @param \Fusio\Impl\Table\App\Scope $appScopeTable
+     * @param \Fusio\Impl\Table\User\Scope $userScopeTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\Scope $scopeTable, Table\Scope\Route $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->scopeTable      = $scopeTable;

@@ -47,6 +47,10 @@ class Config
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\Config $configTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\Config $configTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->configTable     = $configTable;

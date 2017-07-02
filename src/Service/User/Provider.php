@@ -72,7 +72,14 @@ class Provider
      */
     protected $psxConfig;
 
-    public function __construct(Service\User $userService, Service\Config $configService, TokenIssuer $tokenIssuer, Http\Client $httpClient, Config $psxConfig)
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Service\Config $configService
+     * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
+     * @param \PSX\Http\ClientInterface $httpClient
+     * @param \PSX\Framework\Config\Config $psxConfig
+     */
+    public function __construct(Service\User $userService, Service\Config $configService, TokenIssuer $tokenIssuer, Http\ClientInterface $httpClient, Config $psxConfig)
     {
         $this->userService   = $userService;
         $this->configService = $configService;

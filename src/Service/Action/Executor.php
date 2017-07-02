@@ -61,6 +61,12 @@ class Executor
      */
     protected $userRepository;
 
+    /**
+     * @param \Fusio\Impl\Table\Action $actionTable
+     * @param \Fusio\Engine\ProcessorInterface $processor
+     * @param \Fusio\Engine\Repository\AppInterface $appRepository
+     * @param \Fusio\Engine\Repository\UserInterface $userRepository
+     */
     public function __construct(Table\Action $actionTable, ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->actionTable       = $actionTable;

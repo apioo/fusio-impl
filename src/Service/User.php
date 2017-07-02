@@ -73,6 +73,13 @@ class User
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\User $userTable
+     * @param \Fusio\Impl\Table\Scope $scopeTable
+     * @param \Fusio\Impl\Table\App $appTable
+     * @param \Fusio\Impl\Table\User\Scope $userScopeTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;

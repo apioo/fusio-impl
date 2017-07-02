@@ -51,7 +51,7 @@ class Register
     protected $configService;
 
     /**
-     * @var \PSX\Http\Client
+     * @var \PSX\Http\ClientInterface
      */
     protected $httpClient;
 
@@ -65,7 +65,14 @@ class Register
      */
     protected $psxConfig;
 
-    public function __construct(Service\User $userService, Service\Config $configService, Http\Client $httpClient, MailerInterface $mailer, Config $psxConfig)
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Service\Config $configService
+     * @param \PSX\Http\ClientInterface $httpClient
+     * @param \Fusio\Impl\Mail\MailerInterface $mailer
+     * @param \PSX\Framework\Config\Config $psxConfig
+     */
+    public function __construct(Service\User $userService, Service\Config $configService, Http\ClientInterface $httpClient, MailerInterface $mailer, Config $psxConfig)
     {
         $this->userService   = $userService;
         $this->configService = $configService;

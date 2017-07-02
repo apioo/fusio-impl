@@ -61,6 +61,14 @@ class Developer
      */
     protected $appApproval;
 
+    /**
+     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Table\App $appTable
+     * @param \Fusio\Impl\Table\Scope $scopeTable
+     * @param \Fusio\Impl\Table\User\Scope $userScopeTable
+     * @param integer $appCount
+     * @param boolean $appApproval
+     */
     public function __construct(Service\App $appService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, $appCount, $appApproval)
     {
         $this->appService     = $appService;

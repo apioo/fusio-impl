@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\User;
 
-use PSX\Http\Client;
+use PSX\Http\ClientInterface;
 
 /**
  * ProviderAbstract
@@ -33,7 +33,7 @@ use PSX\Http\Client;
 abstract class ProviderAbstract implements ProviderInterface
 {
     /**
-     * @var \PSX\Http\Client
+     * @var \PSX\Http\ClientInterface
      */
     protected $httpClient;
 
@@ -47,7 +47,7 @@ abstract class ProviderAbstract implements ProviderInterface
      */
     protected $ua = 'Fusio-Consumer (http://www.fusio-project.org/)';
 
-    public function __construct(Client $httpClient, $secret)
+    public function __construct(ClientInterface $httpClient, $secret)
     {
         $this->httpClient = $httpClient;
         $this->secret     = $secret;

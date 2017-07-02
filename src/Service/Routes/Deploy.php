@@ -62,6 +62,12 @@ class Deploy
      */
     protected $actionParser;
 
+    /**
+     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Schema $schemaTable
+     * @param \Fusio\Impl\Table\Action $actionTable
+     * @param \Fusio\Engine\Parser\ParserAbstract $actionParser
+     */
     public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser)
     {
         $this->routesMethodTable = $routesMethodTable;

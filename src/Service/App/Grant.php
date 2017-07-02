@@ -49,6 +49,11 @@ class Grant
      */
     protected $appTokenTable;
 
+    /**
+     * @param \Fusio\Impl\Table\App $appTable
+     * @param \Fusio\Impl\Table\User\Grant $userGrantTable
+     * @param \Fusio\Impl\Table\App\Token $appTokenTable
+     */
     public function __construct(Table\App $appTable, Table\User\Grant $userGrantTable, Table\App\Token $appTokenTable)
     {
         $this->appTable       = $appTable;

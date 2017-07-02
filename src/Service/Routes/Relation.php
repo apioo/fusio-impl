@@ -60,6 +60,13 @@ class Relation
      */
     protected $actionParser;
 
+    /**
+     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Routes\Schema $routesSchemaTable
+     * @param \Fusio\Impl\Table\Routes\Action $routesActionTable
+     * @param \Fusio\Impl\Table\Action $actionTable
+     * @param \Fusio\Engine\Parser\ParserAbstract $actionParser
+     */
     public function __construct(Table\Routes\Method $routesMethodTable, Table\Routes\Schema $routesSchemaTable, Table\Routes\Action $routesActionTable, Table\Action $actionTable, ParserAbstract $actionParser)
     {
         $this->routesMethodTable = $routesMethodTable;

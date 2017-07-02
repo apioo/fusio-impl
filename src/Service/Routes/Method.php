@@ -47,6 +47,10 @@ class Method
      */
     protected $schemaLoader;
 
+    /**
+     * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Engine\Schema\LoaderInterface $schemaLoader
+     */
     public function __construct(Table\Routes\Method $methodTable, LoaderInterface $schemaLoader)
     {
         $this->methodTable  = $methodTable;

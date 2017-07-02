@@ -65,6 +65,13 @@ class Config
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Service\Routes\Deploy $deploy
+     * @param \Fusio\Impl\Service\Routes\Relation $relation
+     * @param \PSX\Api\ListingInterface $listing
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\Routes\Method $methodTable, Deploy $deploy, Relation $relation, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;

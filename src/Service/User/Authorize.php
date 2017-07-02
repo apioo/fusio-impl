@@ -63,6 +63,13 @@ class Authorize
      */
     protected $config;
 
+    /**
+     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\Scope $scopeService
+     * @param \Fusio\Impl\Service\App\Code $appCodeService
+     * @param \Fusio\Impl\Table\User\Grant $userGrantTable
+     * @param \PSX\Framework\Config\Config $config
+     */
     public function __construct(Service\App $appService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\User\Grant $userGrantTable, Config $config)
     {
         $this->appService     = $appService;

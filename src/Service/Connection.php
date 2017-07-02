@@ -66,6 +66,12 @@ class Connection
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\Connection $connectionTable
+     * @param \Fusio\Engine\Factory\Connection $connectionFactory
+     * @param string $secretKey
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey, EventDispatcherInterface $eventDispatcher)
     {
         $this->connectionTable   = $connectionTable;

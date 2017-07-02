@@ -68,6 +68,14 @@ class Action
      */
     protected $eventDispatcher;
 
+    /**
+     * @param \Fusio\Impl\Table\Action $actionTable
+     * @param \Fusio\Impl\Table\Routes\Action $routesActionTable
+     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
+     * @param string $actionEngine
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(Table\Action $actionTable, Table\Routes\Action $routesActionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, $actionEngine, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable       = $actionTable;
