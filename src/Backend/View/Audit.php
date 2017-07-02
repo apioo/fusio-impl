@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Backend\View\Audit\QueryFilter;
 use Fusio\Impl\Table;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -37,7 +38,7 @@ class Audit extends ViewAbstract
 {
     public function getCollection($startIndex = 0, QueryFilter $filter)
     {
-        $condition = $filter->getCondition('audit');
+        $condition = $filter->getCondition();
 
         $definition = [
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
@@ -45,18 +46,9 @@ class Audit extends ViewAbstract
             'itemsPerPage' => 16,
             'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'getAll'], [$startIndex, 16, 'id', Sql::SORT_DESC, $condition], [
                 'id' => 'id',
-                'app' => [
-                    'id' => 'appId',
-                    'status' => 'appStatus',
-                    'name' => 'appName',
-                ],
-                'user' => [
-                    'id' => 'userId',
-                    'status' => 'userStatus',
-                    'name' => 'userName',
-                ],
                 'event' => 'event',
                 'ip' => 'ip',
+                'message' => 'message',
                 'date' => $this->fieldDateTime('date'),
             ]),
         ];
@@ -68,18 +60,21 @@ class Audit extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'get'], [$id], [
             'id' => 'id',
-            'app' => [
-                'id' => 'appId',
-                'status' => 'appStatus',
-                'name' => 'appName',
-            ],
-            'user' => [
-                'id' => 'userId',
-                'status' => 'userStatus',
-                'name' => 'userName',
-            ],
+            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('appId')], [
+                'id' => 'id',
+                'status' => 'status',
+                'name' => 'name',
+            ]),
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('userId')], [
+                'id' => 'id',
+                'status' => 'status',
+                'name' => 'name',
+            ]),
+            'refId' => 'refId',
             'event' => 'event',
             'ip' => 'ip',
+            'message' => 'message',
+            'content' => 'content',
             'date' => $this->fieldDateTime('date'),
         ]);
 

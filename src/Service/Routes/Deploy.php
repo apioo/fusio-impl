@@ -62,21 +62,15 @@ class Deploy
      */
     protected $actionParser;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser)
     {
         $this->routesMethodTable = $routesMethodTable;
         $this->schemaTable       = $schemaTable;
         $this->actionTable       = $actionTable;
         $this->actionParser      = $actionParser;
-        $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function deploy($method, UserContext $context)
+    public function deploy($method)
     {
         unset($method['id']);
 
@@ -95,8 +89,6 @@ class Deploy
         }
 
         $this->routesMethodTable->create($method);
-
-        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($method, $context));
     }
 
     protected function getSchemaCache($schemaId)

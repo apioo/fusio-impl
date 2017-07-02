@@ -120,8 +120,11 @@ class Version092 implements VersionInterface
         $auditTable->addColumn('id', 'integer', array('autoincrement' => true));
         $auditTable->addColumn('appId', 'integer');
         $auditTable->addColumn('userId', 'integer');
+        $auditTable->addColumn('refId', 'integer', array('notnull' => false));
         $auditTable->addColumn('event', 'string');
         $auditTable->addColumn('ip', 'string', array('length' => 40));
+        $auditTable->addColumn('message', 'string');
+        $auditTable->addColumn('content', 'text', array('notnull' => false));
         $auditTable->addColumn('date', 'datetime');
         $auditTable->setPrimaryKey(array('id'));
         $auditTable->addOption('engine', 'MyISAM');
@@ -349,6 +352,35 @@ class Version092 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        // add audit route
+        $routeIds = [];
+        $routes = [
+            ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/audit',                   'controller' => Backend\Api\Audit\Collection::class],
+            ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/audit/$audit_id<[0-9]+>', 'controller' => Backend\Api\Audit\Entity::class],
+        ];
+
+        foreach ($routes as $data) {
+            $id = $connection->fetchColumn('SELECT id FROM fusio_routes WHERE controller = :controller', [
+                'controller' => $data['controller']
+            ]);
+
+            if (empty($id)) {
+                $connection->insert('fusio_routes', $data);
+                $routeIds[] = $connection->lastInsertId();
+            }
+        }
+
+        // insert new routes to the backend scope
+        if (!empty($routeIds)) {
+            foreach ($routeIds as $routeId) {
+                $connection->insert('fusio_scope_routes', [
+                    'scopeId' => 1,
+                    'routeId' => $routeId,
+                    'allow'   => 1,
+                    'methods' => 'GET|POST|PUT|DELETE',
+                ]);
+            }
+        }
     }
 
     public function getInstallInserts()
@@ -386,6 +418,8 @@ class Version092 implements VersionInterface
                 ['name' => 'cors_allow_origin', 'type' => Table\Config::FORM_STRING, 'description' => 'If set each API response contains a Access-Control-Allow-Origin header with the provided value', 'value' => ''],
             ],
             'fusio_connection' => [
+            ],
+            'fusio_audit' => [
             ],
             'fusio_connection_class' => [
                 ['class' => Http\Connection\Http::class],

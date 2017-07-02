@@ -23,7 +23,6 @@ namespace Fusio\Impl\Event\Routes;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * DeployedEvent
@@ -35,19 +34,31 @@ use Symfony\Component\EventDispatcher\Event;
 class DeployedEvent extends EventAbstract
 {
     /**
+     * @var integer
+     */
+    protected $routeId;
+
+    /**
      * @var array
      */
     protected $method;
 
     /**
+     * @param integer $routeId
      * @param array $method
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($method, UserContext $context)
+    public function __construct($routeId, $method, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->method = $method;
+        $this->routeId = $routeId;
+        $this->method  = $method;
+    }
+
+    public function getRouteId()
+    {
+        return $this->routeId;
     }
 
     public function getMethod()

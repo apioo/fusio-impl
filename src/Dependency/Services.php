@@ -79,7 +79,8 @@ trait Services
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('routes_deploy_service'),
             $this->get('routes_relation_service'),
-            $this->get('resource_listing')
+            $this->get('resource_listing'),
+            $this->get('event_dispatcher')
         );
     }
 

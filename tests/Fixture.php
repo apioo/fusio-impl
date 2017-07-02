@@ -122,6 +122,9 @@ JSON;
             'fusio_app_code' => [
                 ['appId' => 3, 'userId' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirectUri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
+            'fusio_audit' => [
+                ['appId' => 1, 'userId' => 1, 'refId' => 1, 'event' => 'app.update', 'ip' => '127.0.0.1', 'message' => 'Created schema foo', 'content' => null, 'date' => '2015-06-25 22:49:09'],
+            ],
             'fusio_connection' => [
                 ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],

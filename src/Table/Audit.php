@@ -40,24 +40,15 @@ class Audit extends TableAbstract
     public function getColumns()
     {
         return array(
-            'audit.id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'audit.appId' => self::TYPE_INT,
-            'app.status AS appStatus' => self::TYPE_INT,
-            'app.name AS appName' => self::TYPE_VARCHAR,
-            'audit.userId' => self::TYPE_INT,
-            'userr.status AS userStatus' => self::TYPE_INT,
-            'userr.name AS userName' => self::TYPE_VARCHAR,
-            'audit.event' => self::TYPE_VARCHAR,
-            'audit.ip' => self::TYPE_VARCHAR,
-            'audit.date' => self::TYPE_DATETIME,
+            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'appId' => self::TYPE_INT,
+            'userId' => self::TYPE_INT,
+            'refId' => self::TYPE_INT,
+            'event' => self::TYPE_VARCHAR,
+            'ip' => self::TYPE_VARCHAR,
+            'message' => self::TYPE_VARCHAR,
+            'content' => self::TYPE_JSON,
+            'date' => self::TYPE_DATETIME,
         );
-    }
-
-    protected function newQueryBuilder($table)
-    {
-        return $this->connection->createQueryBuilder()
-            ->from($table, 'audit')
-            ->innerJoin('audit', 'fusio_user', 'userr', 'audit.userId = userr.id')
-            ->innerJoin('audit', 'fusio_app', 'app', 'audit.appId = app.id');
     }
 }

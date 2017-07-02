@@ -22,11 +22,14 @@
 namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\Routes\DeployedEvent;
+use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Table;
 use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
 use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Config
@@ -57,12 +60,18 @@ class Config
      */
     protected $listing;
 
-    public function __construct(Table\Routes\Method $methodTable, Deploy $deploy, Relation $relation, ListingInterface $listing)
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(Table\Routes\Method $methodTable, Deploy $deploy, Relation $relation, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
-        $this->methodTable = $methodTable;
-        $this->deploy      = $deploy;
-        $this->relation    = $relation;
-        $this->listing     = $listing;
+        $this->methodTable     = $methodTable;
+        $this->deploy          = $deploy;
+        $this->relation        = $relation;
+        $this->listing         = $listing;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -166,7 +175,10 @@ class Config
 
                     if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && $status == Resource::STATUS_ACTIVE) {
                         // deploy method to active
-                        $this->deploy->deploy($existingMethod, $context);
+                        $this->deploy->deploy($existingMethod);
+
+                        // dispatch event
+                        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($routeId, $existingMethod, $context));
                     } elseif ($existingMethod['status'] != $status) {
                         // we can not transition directly from development to
                         // deprecated or closed

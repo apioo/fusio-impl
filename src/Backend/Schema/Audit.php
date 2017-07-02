@@ -52,6 +52,10 @@ class Audit extends SchemaAbstract
         $sb->objectType('user', $user);
         $sb->string('event');
         $sb->string('ip');
+        $sb->string('message');
+        $sb->objectType('content')
+            ->setTitle('object')
+            ->setDescription('A key value object containing the changes');
         $sb->dateTime('date');
 
         return $sb->getProperty();

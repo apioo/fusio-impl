@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/audit/3', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/audit/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -88,6 +88,11 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
+            "Object": {
+                "type": "object",
+                "title": "object",
+                "description": "A key value object containing the changes"
+            },
             "Audit": {
                 "type": "object",
                 "title": "audit",
@@ -106,6 +111,12 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "ip": {
                         "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "$ref": "#\/definitions\/Object"
                     },
                     "date": {
                         "type": "string",
@@ -143,30 +154,31 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit/3', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/audit/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
         $expect = <<<'JSON'
 {
-    "id": "3",
+    "id": 1,
     "app": {
-        "id": "1",
-        "status": "1",
+        "id": 1,
+        "status": 1,
         "name": "Backend"
     },
     "user": {
-        "id": "1",
-        "status": "1",
+        "id": 1,
+        "status": 1,
         "name": "Administrator"
     },
-    "event": "action.update",
+    "refId": 1,
+    "event": "app.update",
     "ip": "127.0.0.1",
-    "date": "[datetime]"
+    "message": "Created schema foo",
+    "date": "2015-06-25T22:49:09Z"
 }
 JSON;
 
@@ -176,7 +188,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit/3', 'POST', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/audit/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -190,7 +202,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit/3', 'PUT', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/audit/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -204,7 +216,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit/3', 'DELETE', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/audit/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

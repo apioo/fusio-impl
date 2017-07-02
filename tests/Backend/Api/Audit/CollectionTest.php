@@ -77,6 +77,12 @@ class CollectionTest extends ControllerDbTestCase
                     "ip": {
                         "type": "string"
                     },
+                    "message": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "$ref": "#\/definitions\/Object"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date-time"
@@ -112,6 +118,11 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "string"
                     }
                 }
+            },
+            "Object": {
+                "type": "object",
+                "title": "object",
+                "description": "A key value object containing the changes"
             },
             "Collection": {
                 "type": "object",
@@ -161,179 +172,25 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit', 'GET', array(
+        $response = $this->sendRequest('http://127.0.0.1/backend/audit?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
         $expect = <<<JSON
 {
-    "totalResults": 10,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": "10",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "app.remove_token",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "9",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "app.delete",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "8",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
+            "id": 1,
             "event": "app.update",
             "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "7",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "app.update",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "6",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "app.create",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "5",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "app.create",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "4",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "action.delete",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "3",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "action.update",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "2",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "1",
-                "status": "1",
-                "name": "Administrator"
-            },
-            "event": "action.create",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
-        },
-        {
-            "id": "1",
-            "app": {
-                "id": "1",
-                "status": "1",
-                "name": "Backend"
-            },
-            "user": {
-                "id": "4",
-                "status": "1",
-                "name": "Developer"
-            },
-            "event": "user.change_password",
-            "ip": "127.0.0.1",
-            "date": "[datetime]"
+            "message": "Created schema foo",
+            "date": "2015-06-25T22:49:09Z"
         }
     ]
 }
