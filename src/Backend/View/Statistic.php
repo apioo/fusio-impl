@@ -113,11 +113,11 @@ class Statistic extends ViewAbstract
             $values[] = array_values($row);
         }
 
-        return array(
+        return [
             'labels' => $labels,
             'data'   => array_values($values),
             'series' => array_values($series),
-        );
+        ];
     }
 
     public function getIncomingRequests(Log\QueryFilter $filter)
@@ -154,11 +154,11 @@ class Statistic extends ViewAbstract
             }
         }
 
-        return array(
+        return [
             'labels' => $labels,
             'data'   => [array_values($data)],
             'series' => ['Requests'],
-        );
+        ];
     }
 
     public function getMostUsedApps(Log\QueryFilter $filter)
@@ -238,11 +238,11 @@ class Statistic extends ViewAbstract
             $values[] = array_values($row);
         }
 
-        return array(
+        return [
             'labels' => $labels,
             'data'   => array_values($values),
             'series' => array_values($series),
-        );
+        ];
     }
 
     public function getMostUsedRoutes(Log\QueryFilter $filter)
@@ -322,11 +322,11 @@ class Statistic extends ViewAbstract
             $values[] = array_values($row);
         }
 
-        return array(
+        return [
             'labels' => $labels,
             'data'   => array_values($values),
             'series' => array_values($series),
-        );
+        ];
     }
 
     public function getIssuedTokens(App\Token\QueryFilter $filter)
@@ -363,10 +363,28 @@ class Statistic extends ViewAbstract
             }
         }
 
-        return array(
+        return [
             'labels' => $labels,
             'data'   => [array_values($data)],
             'series' => ['Tokens'],
-        );
+        ];
+    }
+
+    public function getCountRequests(Log\QueryFilter $filter)
+    {
+        $condition  = $filter->getCondition('log');
+        $expression = $condition->getExpression($this->connection->getDatabasePlatform());
+
+        $sql = '  SELECT COUNT(log.id) AS cnt
+                    FROM fusio_log log
+                   WHERE ' . $expression;
+
+        $row = $this->connection->fetchAssoc($sql, $condition->getValues());
+
+        return [
+            'count' => (int) $row['cnt'],
+            'from'  => $filter->getFrom()->format(\DateTime::RFC3339),
+            'to'    => $filter->getTo()->format(\DateTime::RFC3339),
+        ];
     }
 }
