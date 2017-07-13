@@ -171,14 +171,14 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
-            "id": 61,
+            "id": 62,
             "scopeId": 5,
             "routeId": {$id2},
             "allow": 1,
             "methods": "GET|POST|PUT|DELETE"
         },
         {
-            "id": 60,
+            "id": 61,
             "scopeId": 5,
             "routeId": {$id1},
             "allow": 1,
