@@ -352,6 +352,31 @@ class Version093 implements VersionInterface
 
     public function executeUpgrade(Connection $connection)
     {
+        $inserts = $this->getInstallInserts();
+
+        foreach ($inserts['fusio_routes'] as $row) {
+            $routeId = $connection->fetchColumn('SELECT id FROM fusio_routes WHERE controller = :controller', [
+                'controller' => $row['controller']
+            ]);
+
+            if (empty($routeId)) {
+                // insert new route
+                $connection->insert('fusio_routes', $row);
+
+                $routeId = $connection->lastInsertId();
+
+                // insert scope
+                $scopeId = $this->getScopeIdFromPath($row['path']);
+                if ($scopeId !== null && !empty($routeId)) {
+                    $connection->insert('fusio_scope_routes', [
+                        'scopeId' => $scopeId,
+                        'routeId' => $routeId,
+                        'allow'   => 1,
+                        'methods' => 'GET|POST|PUT|DELETE',
+                    ]);
+                }
+            }
+        }
     }
 
     public function getInstallInserts()
@@ -518,12 +543,9 @@ class Version093 implements VersionInterface
         // scope routes
         $data['fusio_scope_routes'] = [];
         foreach ($data['fusio_routes'] as $index => $row) {
-            if (strpos($row['path'], '/backend') === 0) {
-                $data['fusio_scope_routes'][] = ['scopeId' => 1, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
-            } elseif (strpos($row['path'], '/consumer') === 0) {
-                $data['fusio_scope_routes'][] = ['scopeId' => 2, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
-            } elseif (strpos($row['path'], '/authorization') === 0) {
-                $data['fusio_scope_routes'][] = ['scopeId' => 3, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+            $scopeId = $this->getScopeIdFromPath($row['path']);
+            if ($scopeId !== null) {
+                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
             }
         }
 
@@ -539,5 +561,18 @@ class Version093 implements VersionInterface
             'description' => 'No schema was specified.',
             'properties' => new \stdClass(),
         ], JSON_PRETTY_PRINT);
+    }
+
+    private function getScopeIdFromPath($path)
+    {
+        if (strpos($path, '/backend') === 0) {
+            return 1;
+        } elseif (strpos($path, '/consumer') === 0) {
+            return 2;
+        } elseif (strpos($path, '/authorization') === 0) {
+            return 3;
+        }
+
+        return null;
     }
 }
