@@ -209,6 +209,16 @@ JSON;
 
     public static function getLastRouteId()
     {
-        return 68;
+        static $routeId;
+
+        if ($routeId) {
+            return $routeId;
+        }
+
+        $version = \Fusio\Impl\Database\Installer::getLatestVersion();
+        $data    = $version->getInstallInserts();
+        $routeId = count($data['fusio_routes']);
+
+        return $routeId;
     }
 }
