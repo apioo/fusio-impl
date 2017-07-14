@@ -367,7 +367,7 @@ class Version093 implements VersionInterface
         $schema = $this->getPassthruSchema();
         $cache  = $parser->parse($schema);
 
-        return [
+        $data = [
             'fusio_user' => [
                 ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'date' => $now->format('Y-m-d H:i:s')],
             ],
@@ -496,78 +496,11 @@ class Version093 implements VersionInterface
                 ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
                 ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
             ],
-            'fusio_routes_method' => [
-                ['routeId' => 68, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
-            ],
             'fusio_app_scope' => [
                 ['appId' => 1, 'scopeId' => 1],
                 ['appId' => 1, 'scopeId' => 3],
                 ['appId' => 2, 'scopeId' => 2],
                 ['appId' => 2, 'scopeId' => 3],
-            ],
-            'fusio_scope_routes' => [
-                ['scopeId' => 1, 'routeId' => 1,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 2,  'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 3,  'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 4,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 5,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 6,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 7,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 8,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 9,  'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 10, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 11, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 12, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 13, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 14, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 15, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 16, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 17, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 18, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 19, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 20, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 21, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 22, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 23, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 24, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 25, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 26, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 27, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 28, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 29, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 30, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 31, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 32, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 33, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 34, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 35, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 36, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 37, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 38, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 39, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 40, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 41, 'allow' => 1, 'methods' => 'GET'],
-                ['scopeId' => 1, 'routeId' => 42, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 1, 'routeId' => 43, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 1, 'routeId' => 44, 'allow' => 1, 'methods' => 'POST'],
-
-                ['scopeId' => 2, 'routeId' => 46, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 47, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 48, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 49, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 50, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 51, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 52, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 53, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 54, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 55, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 56, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 57, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 58, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 2, 'routeId' => 59, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-
-                ['scopeId' => 3, 'routeId' => 60, 'allow' => 1, 'methods' => 'POST'],
-                ['scopeId' => 3, 'routeId' => 62, 'allow' => 1, 'methods' => 'GET'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 1],
@@ -575,6 +508,26 @@ class Version093 implements VersionInterface
                 ['userId' => 1, 'scopeId' => 3],
             ],
         ];
+
+        // routes method
+        $lastRouteId = count($data['fusio_routes']);
+        $data['fusio_routes_method'] = [
+            ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+        ];
+
+        // scope routes
+        $data['fusio_scope_routes'] = [];
+        foreach ($data['fusio_routes'] as $index => $row) {
+            if (strpos($row['path'], '/backend') === 0) {
+                $data['fusio_scope_routes'][] = ['scopeId' => 1, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+            } elseif (strpos($row['path'], '/consumer') === 0) {
+                $data['fusio_scope_routes'][] = ['scopeId' => 2, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+            } elseif (strpos($row['path'], '/authorization') === 0) {
+                $data['fusio_scope_routes'][] = ['scopeId' => 3, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+            }
+        }
+
+        return $data;
     }
 
     private function getPassthruSchema()
