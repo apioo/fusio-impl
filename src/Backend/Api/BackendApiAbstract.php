@@ -23,7 +23,6 @@ namespace Fusio\Impl\Backend\Api;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Http\Exception as StatusCode;
 
 /**
  * BackendApiAbstract

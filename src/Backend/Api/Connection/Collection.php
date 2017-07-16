@@ -27,7 +27,6 @@ use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
 use PSX\Record\RecordInterface;
-use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
 /**

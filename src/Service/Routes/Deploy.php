@@ -25,12 +25,8 @@ use Fusio\Engine\Form;
 use Fusio\Engine\Model;
 use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Repository;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Routes\DeployedEvent;
-use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Deploys a route method from development to production. That means that we

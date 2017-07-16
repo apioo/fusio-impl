@@ -21,10 +21,6 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Consumer\View;
-use PSX\Framework\Controller\ApiAbstract;
-use PSX\Http\Exception as StatusCode;
-
 /**
  * UserContext
  *

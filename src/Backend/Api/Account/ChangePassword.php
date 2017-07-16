@@ -25,7 +25,6 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
-use PSX\Http\Exception as StatusCode;
 
 /**
  * ChangePassword

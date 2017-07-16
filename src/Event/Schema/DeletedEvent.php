@@ -23,7 +23,6 @@ namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * DeletedEvent

@@ -25,8 +25,8 @@ use Fusio\Engine\Schema\LoaderInterface;
 use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Schema\SchemaInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\SchemaInterface;
 
 /**
  * Method

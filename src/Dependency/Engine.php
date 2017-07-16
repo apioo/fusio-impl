@@ -25,7 +25,6 @@ use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
-use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Response;

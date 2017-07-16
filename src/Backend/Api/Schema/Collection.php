@@ -26,8 +26,6 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
-use PSX\Http\Exception as StatusCode;
-use PSX\Validate\Filter as PSXFilter;
 use PSX\Validate\Validate;
 
 /**

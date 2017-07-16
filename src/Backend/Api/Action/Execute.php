@@ -27,7 +27,6 @@ use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Exception\Converter;
 use PSX\Framework\Loader\Context;
-use PSX\Validate\Filter as PSXFilter;
 
 /**
  * Execute

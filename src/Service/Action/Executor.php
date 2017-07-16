@@ -26,7 +26,6 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
