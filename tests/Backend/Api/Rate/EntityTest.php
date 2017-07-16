@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Rate;
 
-use Fusio\Impl\Table\Routes as TableRoutes;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

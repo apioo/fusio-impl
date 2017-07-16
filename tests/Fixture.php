@@ -28,7 +28,6 @@ use Fusio\Impl\Connection\System;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Service;
 use PSX\Api\Resource;
-use PSX\Framework\Test\Environment;
 use PSX\Schema\Parser\JsonSchema;
 
 /**
