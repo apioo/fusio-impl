@@ -24,6 +24,7 @@ namespace Fusio\Impl\Console\System;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service\System\Deploy;
 use Monolog\Handler\NullHandler;
+use Monolog\Handler\StreamHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -96,7 +97,9 @@ class DeployCommand extends Command
         }
 
         $verbose = $output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL;
-        if (!$verbose) {
+        if ($verbose) {
+            $this->logger->pushHandler(new StreamHandler(STDOUT));
+        } else {
             $this->logger->pushHandler(new NullHandler());
         }
 
@@ -127,9 +130,7 @@ class DeployCommand extends Command
             $return = 1;
         }
 
-        if (!$verbose) {
-            $this->logger->popHandler();
-        }
+        $this->logger->popHandler();
 
         return $return;
     }
