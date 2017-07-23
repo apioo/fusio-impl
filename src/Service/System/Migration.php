@@ -102,7 +102,7 @@ class Migration
         if (empty($deploy)) {
             // execute if the file was not already executed
             if ($connection instanceof DBAL\Connection) {
-                $toSchema = $connection->getSchemaManager()->createSchema();
+                $toSchema = new DBAL\Schema\Schema();
                 appendDatabaseSchema($toSchema, $path);
 
                 // run migration
