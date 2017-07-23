@@ -61,7 +61,7 @@ class DeployCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/- \[CREATED\] schema Response-Schema/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] action Test-Action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
-        $this->assertRegExp('/- \[EXECUTED\] System v1_schema.php/', $display, $display);
+        $this->assertRegExp('/- \[EXECUTED\] New-Connection v1_schema.php/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -69,8 +69,8 @@ class DeployCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(2, $connection['id']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $connection['class']);
-        $this->assertEquals(197, strlen($connection['config']));
+        $this->assertEquals('Fusio\Adapter\Sql\Connection\SqlAdvanced', $connection['class']);
+        $this->assertEquals(89, strlen($connection['config']));
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
@@ -172,18 +172,10 @@ JSON;
         $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
 
         $this->assertEquals(2, $migration['id']);
-        $this->assertEquals('System', $migration['connection']);
+        $this->assertEquals('New-Connection', $migration['connection']);
         $this->assertEquals('v1_schema.php', $migration['file']);
         $this->assertNotEmpty($migration['fileHash']);
         $this->assertNotEmpty($migration['executeDate']);
-
-        // check whether the native connection has the migrated tables
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Environment::getService('connection');
-        $tables     = $connection->getSchemaManager()->listTableNames();
-
-        $this->assertContains('acme_foo', $tables);
-        $this->assertContains('acme_bar', $tables);
     }
 
     public function testCommandActionInclude()

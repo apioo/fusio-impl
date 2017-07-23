@@ -1,11 +1,8 @@
 connection:
   New-Connection:
-    class: Fusio\Adapter\Sql\Connection\Sql
+    class: Fusio\Adapter\Sql\Connection\SqlAdvanced
     config:
-      type: pdo_mysql
-      host: 127.0.0.1
-      username: root
-      database: fusio
+      url: "sqlite:///:memory:"
 schema:
   Request-Schema: >
     {
@@ -43,5 +40,5 @@ routes:
         response: Response-Schema
         action: Test-Action
 migration:
-  System:
+  New-Connection:
     - v1_schema.php
