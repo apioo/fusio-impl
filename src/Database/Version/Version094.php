@@ -514,6 +514,7 @@ class Version094 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/wsdl/:version/*path',                  'controller' => Backend\Api\Gone::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/raml/:version/*path',                  'controller' => Generator\RamlController::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/export/swagger/:version/*path',               'controller' => Generator\SwaggerController::class],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/export/openapi/:version/*path',               'controller' => Generator\OpenAPIController::class],
 
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/',                                            'controller' => SchemaApiController::class],
             ],
