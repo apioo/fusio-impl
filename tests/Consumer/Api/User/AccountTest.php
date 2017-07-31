@@ -107,6 +107,10 @@ class AccountTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/account"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/account"
         },

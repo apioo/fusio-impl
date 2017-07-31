@@ -127,6 +127,10 @@ class DetailTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/action"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/foo"
         },

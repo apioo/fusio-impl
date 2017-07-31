@@ -110,6 +110,10 @@ class RegisterTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/register"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/register"
         },

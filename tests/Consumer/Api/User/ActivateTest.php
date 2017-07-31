@@ -100,6 +100,10 @@ class ActivateTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/activate"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/activate"
         },

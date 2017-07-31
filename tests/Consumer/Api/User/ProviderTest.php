@@ -105,6 +105,10 @@ class ProviderTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/provider\/:provider"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/provider\/:provider"
         },

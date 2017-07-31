@@ -102,6 +102,10 @@ class ChangePasswordTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/account\/change_password"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/account\/change_password"
         },

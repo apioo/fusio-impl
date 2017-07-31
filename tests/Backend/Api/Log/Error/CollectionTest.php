@@ -106,6 +106,10 @@ class CollectionTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/log\/error"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/backend\/log\/error"
         },

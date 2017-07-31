@@ -104,6 +104,10 @@ class EntityTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/app\/meta"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/app\/meta"
         },

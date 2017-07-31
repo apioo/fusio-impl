@@ -141,6 +141,10 @@ class AuthorizeTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/authorize"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/authorize"
         },

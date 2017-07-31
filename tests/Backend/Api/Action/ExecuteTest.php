@@ -126,6 +126,10 @@ class ExecuteTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/action\/execute\/$action_id<[0-9]+>"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/backend\/action\/execute\/$action_id<[0-9]+>"
         },

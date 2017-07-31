@@ -103,6 +103,10 @@ class LoginTest extends ControllerDbTestCase
     },
     "links": [
         {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/consumer\/login"
+        },
+        {
             "rel": "swagger",
             "href": "\/export\/swagger\/*\/consumer\/login"
         },
