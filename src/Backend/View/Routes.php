@@ -73,14 +73,18 @@ class Routes extends ViewAbstract
             'path' => 'path',
             'controller' => 'controller',
             'config' => $this->doCollection([$this->getTable(Table\Routes\Method::class), 'getMethods'], [new Reference('id')], [
-                'version'  => 'version',
-                'status'   => 'status',
-                'method'   => 'method',
-                'active'   => 'active',
-                'public'   => 'public',
-                'request'  => 'request',
-                'response' => 'response',
-                'action'   => 'action',
+                'version' => 'version',
+                'status' => 'status',
+                'method' => 'method',
+                'active' => 'active',
+                'public' => 'public',
+                'parameters' => 'parameters',
+                'request' => 'request',
+                'responses' => $this->doCollection([$this->getTable(Table\Routes\Response::class), 'getResponses'], [new Reference('id')], [
+                    'code' => 'code',
+                    'response' => 'response',
+                ]),
+                'action'  => 'action',
             ], null, function (array $result) {
                 $data = [];
                 foreach ($result as $row) {
@@ -96,12 +100,20 @@ class Routes extends ViewAbstract
                     $method->active = (bool) $row['active'];
                     $method->public = (bool) $row['public'];
 
+                    if (!empty($row['parameters'])) {
+                        $method->parameter = (int) $row['parameters'];
+                    }
+
                     if (!empty($row['request'])) {
                         $method->request = (int) $row['request'];
                     }
 
-                    if (!empty($row['response'])) {
-                        $method->response = (int) $row['response'];
+                    if (!empty($row['responses'])) {
+                        $responses = [];
+                        foreach ($row['responses'] as $response) {
+                            $responses[$response['code']] = (int) $response['response'];
+                        }
+                        $method->responses = $responses;
                     }
 
                     if (!empty($row['action'])) {

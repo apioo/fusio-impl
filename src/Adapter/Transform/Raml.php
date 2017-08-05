@@ -123,7 +123,17 @@ class Raml extends TransformAbstract
 
     protected function parseMethod($methodName, array $data, $path)
     {
-        $request = 'Passthru';
+        $version = [
+            'active' => true,
+            'public' => true,
+        ];
+
+        // parameters
+        // @TODO handle query parameters
+        $version['parameters'] = 'Passthru';
+
+        // request
+        $request = null;
         if (isset($data['body'])) {
             $name    = $this->normalizeName($path . '-' . $methodName . '-request');
             $request = $this->parseSchema($data['body'], $name);
@@ -133,29 +143,40 @@ class Raml extends TransformAbstract
             }
         }
 
-        $response = 'Passthru';
-        $example  = null;
+        if (!empty($request)) {
+            $version['request'] = $request;
+        } else {
+            $version['request'] = 'Passthru';
+        }
+
+        // responses
+        $responses = [];
+        $example   = null;
         if (isset($data['responses']) && is_array($data['responses'])) {
-            $codes = [200, 201];
-            $body  = null;
+            foreach ($data['responses'] as $code => $response) {
+                if (isset($response['body'])) {
+                    $code = (int) $code;
+                    if ($code >= 200) {
+                        $name = $this->normalizeName($path . '-' . $methodName . '-' . $code . '-response');
+                        $resp = $this->parseSchema($response['body'], $name, $example);
 
-            foreach ($codes as $code) {
-                if (isset($data['responses'][$code]['body'])) {
-                    $body = $data['responses'][$code]['body'];
-                    break;
-                }
-            }
+                        if (empty($resp)) {
+                            throw new InvalidArgumentException('Found no JSONSchema for ' . $code . ' ' . $methodName . ' ' . $path . ' response');
+                        }
 
-            if (!empty($body)) {
-                $name     = $this->normalizeName($path . '-' . $methodName . '-response');
-                $response = $this->parseSchema($body, $name, $example);
-
-                if (empty($response)) {
-                    throw new InvalidArgumentException('Found no JSONSchema for ' . $methodName . ' ' . $path . ' response');
+                        $responses[$code] = $resp;
+                    }
                 }
             }
         }
 
+        if (!empty($responses)) {
+            $version['responses'] = $responses;
+        } else {
+            $version['responses'] = [200 => 'Passthru'];
+        }
+
+        // action
         if (!empty($example)) {
             $name = $this->normalizeName($path . '-' . $methodName . '-example');
 
@@ -168,18 +189,12 @@ class Raml extends TransformAbstract
                 ],
             ]);
 
-            $action = $name;
+            $version['action'] = $name;
         } else {
-            $action = 'Welcome';
+            $version['action'] = 'Welcome';
         }
 
-        return [
-            'active'   => true,
-            'public'   => true,
-            'action'   => $action,
-            'request'  => $request,
-            'response' => $response,
-        ];
+        return $version;
     }
 
     protected function parseSchema($data, $name, &$example = null)

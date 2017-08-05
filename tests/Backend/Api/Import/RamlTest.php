@@ -108,9 +108,12 @@ RAML;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "helloworld-GET-example",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "helloworld-GET-response"
+                            "responses": {
+                                "200": "helloworld-GET-200-response"
+                            },
+                            "action": "helloworld-GET-example"
                         }
                     }
                 }
@@ -122,14 +125,14 @@ RAML;
             "name": "helloworld-GET-example",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
-                "statusCode": 200,
+                "statusCode": "200",
                 "response": "{\n  \"message\": \"Hello world\"\n}"
             }
         }
     ],
     "schema": [
         {
-            "name": "helloworld-GET-response",
+            "name": "helloworld-GET-200-response",
             "source": {
                 "title": "Hello world Response",
                 "type": "object",
@@ -213,16 +216,22 @@ RAML;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "person-GET-response"
+                            "responses": {
+                                "200": "person-GET-200-response"
+                            },
+                            "action": "Welcome"
                         },
                         "POST": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "person-POST-request",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -231,7 +240,7 @@ RAML;
     ],
     "schema": [
         {
-            "name": "person-GET-response",
+            "name": "person-GET-200-response",
             "source": {
                 "title": "Person Schema",
                 "type": "object",
@@ -339,9 +348,12 @@ RAML;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "rate_limit-GET-example",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "rate_limit-GET-response"
+                            "responses": {
+                                "200": "rate_limit-GET-200-response"
+                            },
+                            "action": "rate_limit-GET-example"
                         }
                     }
                 }
@@ -353,14 +365,14 @@ RAML;
             "name": "rate_limit-GET-example",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
-                "statusCode": 200,
+                "statusCode": "200",
                 "response": "{\n  \"rate\": {\n    \"limit\": 5000,\n    \"remaining\": 4999,\n    \"reset\": 1372700873\n  }\n}"
             }
         }
     ],
     "schema": [
         {
-            "name": "rate_limit-GET-response",
+            "name": "rate_limit-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-03\/schema",
                 "type": "object",

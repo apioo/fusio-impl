@@ -73,9 +73,20 @@ class DeployCommandTest extends ControllerDbTestCase
         $this->assertEquals(89, strlen($connection['config']));
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
-            'name' => 'Request-Schema',
-        ]);
+        $source = <<<JSON
+{
+    "id": "http://phpsx.org#",
+    "title": "test",
+    "type": "object",
+    "properties": {
+        "count": {
+            "type": "integer"
+        }
+    }
+}
+JSON;
+
+        $this->assertJsonSchema('Parameters', $source);
 
         $source = <<<JSON
 {
@@ -97,13 +108,7 @@ class DeployCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(3, $schema['id']);
-        $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
-
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
-            'name' => 'Response-Schema',
-        ]);
+        $this->assertJsonSchema('Request-Schema', $source);
 
         $source = <<<JSON
 {
@@ -137,9 +142,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
-        $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertJsonSchema('Response-Schema', $source);
+        $this->assertJsonSchema('Error-Schema', $source);
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
@@ -161,12 +165,31 @@ JSON;
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
             'routeId' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 4, 'action' => 4], $methods[0]);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $methods[0]['routeId']);
+        $this->assertEquals('GET', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(3, $methods[0]['parameters']);
+        $this->assertEquals(4, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['action']);
+
+        // check responses
+        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
+            'methodId' => $methods[0]['id'],
+        ]);
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(5, $responses[0]['response']);
+        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(6, $responses[1]['response']);
 
         // check migration entries
         $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
@@ -325,12 +348,29 @@ JSON;
         $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
             'routeId' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 4], $methods[0]);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $methods[0]['routeId']);
+        $this->assertEquals('GET', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(null, $methods[0]['parameters']);
+        $this->assertEquals(null, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['action']);
+
+        // check responses
+        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
+            'methodId' => $methods[0]['id'],
+        ]);
+
+        $this->assertEquals(1, count($responses));
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['response']);
     }
 
     public function testCommandRoutesActionClassInvalid()
@@ -417,11 +457,38 @@ JSON;
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
             'routeId' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => 3, 'response' => 3, 'action' => 4], $methods[0]);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $methods[0]['routeId']);
+        $this->assertEquals('GET', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(null, $methods[0]['parameters']);
+        $this->assertEquals(3, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['action']);
+
+        // check responses
+        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
+            'methodId' => $methods[0]['id'],
+        ]);
+
+        $this->assertEquals(1, count($responses));
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(3, $responses[0]['response']);
+    }
+
+    private function assertJsonSchema($name, $source)
+    {
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+            'name' => $name,
+        ]);
+
+        $this->assertJsonStringEqualsJsonString($source, $schema['source']);
+        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
     }
 }

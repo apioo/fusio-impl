@@ -67,6 +67,7 @@ trait Services
     {
         return new Service\Routes\Method(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Routes\Response::class),
             $this->get('schema_loader')
         );
     }
@@ -77,8 +78,8 @@ trait Services
     {
         return new Service\Routes\Config(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Routes\Response::class),
             $this->get('routes_deploy_service'),
-            $this->get('routes_relation_service'),
             $this->get('resource_listing'),
             $this->get('event_dispatcher')
         );
@@ -300,10 +301,9 @@ trait Services
     {
         return new Service\Routes\Deploy(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Routes\Response::class),
             $this->get('table_manager')->getTable(Table\Schema::class),
-            $this->get('table_manager')->getTable(Table\Action::class),
-            $this->get('action_parser'),
-            $this->get('event_dispatcher')
+            $this->get('table_manager')->getTable(Table\Action::class)
         );
     }
 

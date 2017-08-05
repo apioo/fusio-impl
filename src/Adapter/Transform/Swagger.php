@@ -153,8 +153,17 @@ class Swagger extends TransformAbstract
             $prefix = $path;
         }
 
+        $version = [
+            'active' => true,
+            'public' => true,
+        ];
+
+        // parameters
+        // @TODO handle query parameters
+        $version['parameters'] = 'Passthru';
+
         // request
-        $request = 'Passthru';
+        $request = null;
         if (isset($data['parameters']) && is_array($data['parameters'])) {
             $name = $this->normalizeName($prefix . '-' . $methodName . '-request');
 
@@ -166,33 +175,45 @@ class Swagger extends TransformAbstract
             }
         }
 
-        // response
-        $response = 'Passthru';
-        $example  = null;
-        if (isset($data['responses']) && is_array($data['responses'])) {
-            $codes = [200, 201];
-            $body  = null;
+        if (!empty($request)) {
+            $version['request'] = $request;
+        } else {
+            $version['request'] = 'Passthru';
+        }
 
-            foreach ($codes as $code) {
-                if (isset($data['responses'][$code]['examples']) && isset($data['responses'][$code]['examples']['application/json'])) {
-                    $schema = $data['responses'][$code]['examples']['application/json'];
-                    if (is_array($schema)) {
-                        $example = json_encode($schema, JSON_PRETTY_PRINT);
-                    } elseif (is_string($schema)) {
-                        $example = $schema;
+        // response
+        $responses = [];
+        $example   = null;
+        if (isset($data['responses']) && is_array($data['responses'])) {
+            foreach ($data['responses'] as $code => $response) {
+                // get success json example
+                if ($code >= 200 && $code <= 299 && empty($example)) {
+                    if (isset($response['examples']) && isset($response['examples']['application/json'])) {
+                        $schema = $response['examples']['application/json'];
+                        if (is_array($schema)) {
+                            $example = json_encode($schema, JSON_PRETTY_PRINT);
+                        } elseif (is_string($schema)) {
+                            $example = $schema;
+                        }
                     }
                 }
 
-                if (isset($data['responses'][$code]['schema'])) {
-                    $body = $data['responses'][$code]['schema'];
-                    break;
+                if (isset($response['schema']) && is_array($response['schema'])) {
+                    $code = intval($code);
+                    if ($code >= 200) {
+                        $name = $this->normalizeName($prefix . '-' . $methodName . '-' . $code . '-response');
+                        $resp = $this->parseSchema($response['schema'], $name);
+
+                        $responses[$code] = $resp;
+                    }
                 }
             }
+        }
 
-            if (!empty($body)) {
-                $name     = $this->normalizeName($prefix . '-' . $methodName . '-response');
-                $response = $this->parseSchema($body, $name);
-            }
+        if (!empty($responses)) {
+            $version['responses'] = $responses;
+        } else {
+            $version['responses'] = [200 => 'Passthru'];
         }
 
         if (!empty($example)) {
@@ -207,18 +228,12 @@ class Swagger extends TransformAbstract
                 ],
             ]);
 
-            $action = $name;
+            $version['action'] = $name;
         } else {
-            $action = 'Welcome';
+            $version['action'] = 'Welcome';
         }
 
-        return [
-            'active'   => true,
-            'public'   => true,
-            'action'   => $action,
-            'request'  => $request,
-            'response' => $response,
-        ];
+        return $version;
     }
 
     protected function parseMethod12($methodName, array $data, $path)
@@ -229,8 +244,17 @@ class Swagger extends TransformAbstract
             $prefix = $path;
         }
 
+        $version = [
+            'active' => true,
+            'public' => true,
+        ];
+
+        // parameters
+        // @TODO handle query parameters
+        $version['parameters'] = 'Passthru';
+
         // request
-        $request = 'Passthru';
+        $request = null;
         if (isset($data['parameters']) && is_array($data['parameters'])) {
             $name = $this->normalizeName($prefix . '-' . $methodName . '-request');
             foreach ($data['parameters'] as $parameter) {
@@ -243,36 +267,43 @@ class Swagger extends TransformAbstract
             }
         }
         
-        // response
-        $response = 'Passthru';
-        if (isset($data['responseMessages']) && is_array($data['responseMessages'])) {
-            $codes = [200, 201];
-            $body  = null;
+        if (!empty($request)) {
+            $version['request'] = $request;
+        } else {
+            $version['request'] = 'Passthru';
+        }
 
+        // response
+        $responses = [];
+        if (isset($data['responseMessages']) && is_array($data['responseMessages'])) {
             foreach ($data['responseMessages'] as $responseMessage) {
                 if (isset($responseMessage['responseModel']) && isset($responseMessage['code'])) {
-                    if (isset($this->definitions[$responseMessage['responseModel']]) && in_array($responseMessage['code'], $codes)) {
-                        $body = $this->definitions[$responseMessage['responseModel']];
-                        break;
+                    
+                    if (isset($this->definitions[$responseMessage['responseModel']])) {
+                        $code = intval($responseMessage['code']);
+                        if ($code >= 200) {
+                            $name = $this->normalizeName($prefix . '-' . $methodName . '-' . $code . '-response');
+                            $this->parseSchema($this->definitions[$responseMessage['responseModel']], $name);
+
+                            $responses[$code] = $name;
+                        }
                     }
                 }
             }
-
-            if (!empty($body)) {
-                $name     = $this->normalizeName($prefix . '-' . $methodName . '-response');
-                $response = $this->parseSchema($body, $name);
-            }
         }
 
+        if (!empty($responses)) {
+            $version['responses'] = $responses;
+        } else {
+            $version['responses'] = [200 => 'Passthru'];
+        }
+
+        // action
         $action = 'Welcome';
 
-        return [
-            'active'   => true,
-            'public'   => true,
-            'action'   => $action,
-            'request'  => $request,
-            'response' => $response,
-        ];
+        $version['action'] = $action;
+
+        return $version;
     }
 
     protected function parseSchema($data, $name)

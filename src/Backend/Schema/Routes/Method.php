@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema\Routes;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -34,14 +35,20 @@ class Method extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('responses');
+        $sb->addPatternProperty('^([0-9]{3})$', Property::getInteger());
+        $responses = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('method');
         $sb->string('method');
         $sb->integer('version');
         $sb->integer('status');
         $sb->boolean('active');
         $sb->boolean('public');
+        $sb->integer('parameters');
         $sb->integer('request');
         $sb->integer('response');
+        $sb->objectType('responses', $responses);
         $sb->integer('action');
 
         return $sb->getProperty();

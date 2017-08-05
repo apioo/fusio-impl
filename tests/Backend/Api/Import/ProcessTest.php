@@ -88,9 +88,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "api-pet-petId-GET-response"
+                            "responses": {
+                                "200": "api-pet-petId-GET-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -106,16 +109,22 @@ JSON;
                         "POST": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "api-pet-POST-request",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Welcome"
                         },
                         "PUT": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "api-pet-PUT-request",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }

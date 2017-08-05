@@ -122,13 +122,28 @@ class CollectionTest extends ControllerDbTestCase
                     "public": {
                         "type": "boolean"
                     },
+                    "parameters": {
+                        "type": "integer"
+                    },
                     "request": {
                         "type": "integer"
                     },
                     "response": {
                         "type": "integer"
                     },
+                    "responses": {
+                        "$ref": "#\/definitions\/Responses"
+                    },
                     "action": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Responses": {
+                "type": "object",
+                "title": "responses",
+                "patternProperties": {
+                    "^([0-9]{3})$": {
                         "type": "integer"
                     }
                 }
@@ -255,17 +270,22 @@ JSON;
                 'status'  => 4,
                 'methods' => [
                     'GET' => [
-                        'active'   => true,
-                        'public'   => true,
-                        'response' => 1,
-                        'action'   => 3,
+                        'active'     => true,
+                        'public'     => true,
+                        'parameters' => 2,
+                        'responses'  => [
+                            '200'    => 1
+                        ],
+                        'action'     => 3,
                     ],
                     'POST' => [
-                        'active'   => true,
-                        'public'   => true,
-                        'request'  => 2,
-                        'response' => 1,
-                        'action'   => 3,
+                        'active'     => true,
+                        'public'     => true,
+                        'request'    => 2,
+                        'responses'  => [
+                            '201'    => 1
+                        ],
+                        'action'     => 3,
                     ]
                 ],
             ]],
@@ -301,32 +321,63 @@ JSON;
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'request', 'response', 'action')
+            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action')
             ->from('fusio_routes_method')
             ->where('routeId = :routeId')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $result = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+        $methods = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
 
-        $this->assertEquals(2, count($result));
+        $this->assertEquals(2, count($methods));
 
-        $this->assertEquals('GET', $result[0]['method']);
-        $this->assertEquals(1, $result[0]['version']);
-        $this->assertEquals(4, $result[0]['status']);
-        $this->assertEquals(1, $result[0]['active']);
-        $this->assertEquals(1, $result[0]['public']);
-        $this->assertEquals(null, $result[0]['request']);
-        $this->assertEquals(3, $result[0]['action']);
+        $this->assertEquals('GET', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(4, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(2, $methods[0]['parameters']);
+        $this->assertEquals(null, $methods[0]['request']);
+        $this->assertEquals(3, $methods[0]['action']);
 
-        $this->assertEquals('POST', $result[1]['method']);
-        $this->assertEquals(1, $result[1]['version']);
-        $this->assertEquals(4, $result[1]['status']);
-        $this->assertEquals(1, $result[1]['active']);
-        $this->assertEquals(1, $result[1]['public']);
-        $this->assertEquals(2, $result[1]['request']);
-        $this->assertEquals(3, $result[1]['action']);
+        // check responses
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'methodId', 'code', 'response')
+            ->from('fusio_routes_response')
+            ->where('methodId = :methodId')
+            ->orderBy('id', 'ASC')
+            ->setFirstResult(0)
+            ->getSQL();
+
+        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[0]['id']]);
+
+        $this->assertEquals(1, count($responses));
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['response']);
+
+        $this->assertEquals('POST', $methods[1]['method']);
+        $this->assertEquals(1, $methods[1]['version']);
+        $this->assertEquals(4, $methods[1]['status']);
+        $this->assertEquals(1, $methods[1]['active']);
+        $this->assertEquals(1, $methods[1]['public']);
+        $this->assertEquals(2, $methods[1]['request']);
+        $this->assertEquals(3, $methods[1]['action']);
+
+        // check responses
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'methodId', 'code', 'response')
+            ->from('fusio_routes_response')
+            ->where('methodId = :methodId')
+            ->orderBy('id', 'ASC')
+            ->setFirstResult(0)
+            ->getSQL();
+
+        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[1]['id']]);
+
+        $this->assertEquals(1, count($responses));
+        $this->assertEquals(201, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['response']);
     }
 
     public function testPut()

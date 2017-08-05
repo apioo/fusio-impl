@@ -26,6 +26,9 @@ use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Parser\JsonSchema\Document;
+use PSX\Schema\Parser\JsonSchema\RefResolver;
+use PSX\Schema\Schema;
 use PSX\Schema\SchemaInterface;
 
 /**
@@ -43,18 +46,31 @@ class Method
     protected $methodTable;
 
     /**
+     * @var \Fusio\Impl\Table\Routes\Response
+     */
+    protected $responseTable;
+
+    /**
      * @var \Fusio\Engine\Schema\LoaderInterface
      */
     protected $schemaLoader;
 
     /**
+     * @var \PSX\Schema\Parser\JsonSchema\RefResolver
+     */
+    protected $resolver;
+
+    /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Table\Routes\Response $responseTable
      * @param \Fusio\Engine\Schema\LoaderInterface $schemaLoader
      */
-    public function __construct(Table\Routes\Method $methodTable, LoaderInterface $schemaLoader)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, LoaderInterface $schemaLoader)
     {
-        $this->methodTable  = $methodTable;
-        $this->schemaLoader = $schemaLoader;
+        $this->methodTable   = $methodTable;
+        $this->responseTable = $responseTable;
+        $this->schemaLoader  = $schemaLoader;
+        $this->resolver      = RefResolver::createDefault();
     }
 
     /**
@@ -77,32 +93,58 @@ class Method
             throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
         }
 
-        $methods  = $this->methodTable->getMethods($routeId, $version, true);
+        $methods  = $this->methodTable->getMethods($routeId, $version, true, true);
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
 
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
+            $schemaCache    = $method['schemaCache'];
 
-            if ($method['status'] == Resource::STATUS_DEVELOPMENT) {
-                if (!empty($method['request'])) {
-                    $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method['request']));
-                }
+            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($schemaCache)) {
+                // if we are not in development mode and a cache is available
+                // use it
+                $spec = json_decode($schemaCache, true);
 
-                if (!empty($method['response'])) {
-                    $resourceMethod->addResponse(200, new LazySchema($this->schemaLoader, $method['response']));
-                }
-            } else {
-                if (!empty($method['requestCache'])) {
-                    $request = unserialize($method['requestCache']);
-                    if ($request instanceof SchemaInterface) {
-                        $resourceMethod->setRequest($request);
+                if (isset($spec['parameters'])) {
+                    $property   = $this->getProperty($spec['parameters']);
+                    $properties = $property->getProperties();
+
+                    if (!empty($properties)) {
+                        foreach ($properties as $name => $type) {
+                            $resourceMethod->addQueryParameter($name, $type);
+                        }
                     }
                 }
 
-                if (!empty($method['responseCache'])) {
-                    $response = unserialize($method['responseCache']);
-                    if ($response instanceof SchemaInterface) {
-                        $resourceMethod->addResponse(200, $response);
+                if (isset($spec['request'])) {
+                    $resourceMethod->setRequest(new Schema($this->getProperty($spec['request'])));
+                }
+
+                if (isset($spec['responses'])) {
+                    foreach ($spec['responses'] as $code => $schema) {
+                        $resourceMethod->addResponse($code, new Schema($this->getProperty($schema)));
+                    }
+                }
+            } else {
+                if ($method['parameters'] > 0) {
+                    $schema     = $this->schemaLoader->getSchema($method['parameters']);
+                    $properties = $schema->getDefinition()->getProperties();
+
+                    if (!empty($properties)) {
+                        foreach ($properties as $name => $type) {
+                            $resourceMethod->addQueryParameter($name, $type);
+                        }
+                    }
+                }
+
+                if ($method['request'] > 0) {
+                    $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method['request']));
+                }
+
+                $responses = $this->responseTable->getResponses($method['id']);
+                if (!empty($responses)) {
+                    foreach ($responses as $response) {
+                        $resourceMethod->addResponse($response['code'], new LazySchema($this->schemaLoader, $response['response']));
                     }
                 }
             }
@@ -147,5 +189,17 @@ class Method
         $method = reset($methods);
 
         return isset($method['status']) ? $method['status'] : Resource::STATUS_DEVELOPMENT;
+    }
+
+    /**
+     * @param array $schema
+     * @return \PSX\Schema\PropertyInterface
+     */
+    private function getProperty(array $schema)
+    {
+        $document = new Document($schema, $this->resolver);
+        $this->resolver->setRootDocument($document);
+
+        return $document->getProperty();
     }
 }

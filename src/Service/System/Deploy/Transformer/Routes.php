@@ -84,16 +84,29 @@ class Routes implements TransformerInterface
                     'public' => isset($config['public']) ? boolval($config['public']) : true,
                 ];
 
+                if (isset($config['parameters'])) {
+                    $methods[$method]['parameters'] = NameGenerator::getSchemaNameFromSource($config['parameters']);
+                }
+
                 if (isset($config['request'])) {
                     $methods[$method]['request'] = NameGenerator::getSchemaNameFromSource($config['request']);
                 } elseif (!in_array($method, ['GET'])) {
                     $methods[$method]['request'] = 'Passthru';
                 }
 
+                $responses = [];
                 if (isset($config['response'])) {
-                    $methods[$method]['response'] = NameGenerator::getSchemaNameFromSource($config['response']);
+                    $responses[200] = NameGenerator::getSchemaNameFromSource($config['response']);
+                } elseif (isset($config['responses']) && is_array($config['responses'])) {
+                    foreach ($config['responses'] as $code => $response) {
+                        $responses[intval($code)] = NameGenerator::getSchemaNameFromSource($response);
+                    }
                 } else {
-                    $methods[$method]['response'] = 'Passthru';
+                    $responses[200] = 'Passthru';
+                }
+
+                if (!empty($responses)) {
+                    $methods[$method]['responses'] = $responses;
                 }
 
                 if (isset($config['action'])) {

@@ -188,6 +188,13 @@ class Import extends SystemAbstract
 
     protected function getReference($tableName, $name, $type)
     {
-        return (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
+        $id = (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
+
+        if (empty($id)) {
+            $type = substr($tableName, 6);
+            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $id);
+        }
+
+        return $id;
     }
 }

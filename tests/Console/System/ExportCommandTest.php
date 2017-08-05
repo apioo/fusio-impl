@@ -148,9 +148,8 @@ class ExportCommandTest extends ControllerDbTestCase
             "name": "Welcome",
             "class": "Fusio\\Impl\\Action\\Welcome",
             "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-            "config": {
-            },
-            "date": "[datetime]"
+            "date": "[datetime]",
+            "config": {}
         }
     ],
     "routes": [
@@ -166,14 +165,18 @@ class ExportCommandTest extends ControllerDbTestCase
                         "GET": {
                             "active": true,
                             "public": true,
-                            "response": "Foo-Schema",
+                            "responses": {
+                                "200": "Foo-Schema"
+                            },
                             "action": "Sql-Table"
                         },
                         "POST": {
                             "active": true,
                             "public": false,
                             "request": "Passthru",
-                            "response": "Passthru",
+                            "responses": {
+                                "201": "Passthru"
+                            },
                             "action": "Sql-Table"
                         }
                     }
@@ -192,7 +195,9 @@ class ExportCommandTest extends ControllerDbTestCase
                         "GET": {
                             "active": true,
                             "public": true,
-                            "response": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
                             "action": "Welcome"
                         }
                     }

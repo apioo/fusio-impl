@@ -113,11 +113,65 @@ JSON;
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT routeId, method, version, status, active, public, request, response, action FROM fusio_routes_method WHERE routeId = :routeId', [
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
             'routeId' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(['routeId' => Fixture::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 3, 'action' => 4], $methods[0]);
+        $this->assertEquals(Fixture::getLastRouteId() + 2, $methods[0]['routeId']);
+        $this->assertEquals('GET', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(null, $methods[0]['parameters']);
+        $this->assertEquals(null, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['action']);
+
+        // check responses
+        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
+            'methodId' => $methods[0]['id'],
+        ]);
+
+        $this->assertEquals(1, count($responses));
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(3, $responses[0]['response']);
+
+        // check routes
+        $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
+            'path' => '/baz',
+        ]);
+
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
+        $this->assertEquals(1, $route['status']);
+        $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
+        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+
+        // check methods
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
+
+        $this->assertEquals(1, count($methods));
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['routeId']);
+        $this->assertEquals('POST', $methods[0]['method']);
+        $this->assertEquals(1, $methods[0]['version']);
+        $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
+        $this->assertEquals(1, $methods[0]['active']);
+        $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals(3, $methods[0]['parameters']);
+        $this->assertEquals(3, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['action']);
+
+        // check responses
+        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
+            'methodId' => $methods[0]['id'],
+        ]);
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(201, $responses[0]['code']);
+        $this->assertEquals(3, $responses[0]['response']);
+        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(4, $responses[1]['response']);
     }
 }

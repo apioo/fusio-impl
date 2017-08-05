@@ -48,11 +48,10 @@ class Method extends TableAbstract
             'status' => self::TYPE_INT,
             'active' => self::TYPE_INT,
             'public' => self::TYPE_INT,
+            'parameters' => self::TYPE_INT,
             'request' => self::TYPE_INT,
-            'requestCache' => self::TYPE_TEXT,
-            'response' => self::TYPE_INT,
-            'responseCache' => self::TYPE_TEXT,
             'action' => self::TYPE_INT,
+            'schemaCache' => self::TYPE_TEXT,
             'actionCache' => self::TYPE_TEXT,
         );
     }
@@ -84,12 +83,11 @@ class Method extends TableAbstract
                 INNER JOIN fusio_routes routes
                         ON routes.id = method.routeId
                      WHERE routes.status = 1
-                       AND (method.request = :requestId 
-                           OR method.response = :responseId)';
+                       AND (method.parameters = :parameters OR method.request = :request)';
 
         $count = $this->connection->fetchColumn($sql, [
-            'requestId'  => $schemaId,
-            'responseId' => $schemaId,
+            'parameters' => $schemaId,
+            'request'    => $schemaId,
         ]);
 
         return $count > 0;
@@ -116,28 +114,18 @@ class Method extends TableAbstract
      *
      * @param integer $routeId
      * @param integer $version
-     * @param boolean $includeCache
      * @param boolean $active
+     * @param boolean $cache
      * @return array
      */
-    public function getMethods($routeId, $version = null, $includeCache = false, $active = true)
+    public function getMethods($routeId, $version = null, $active = true, $cache = false)
     {
-        $cache = '';
-        if ($includeCache) {
-            $cache.= 'method.requestCache,method.responseCache,';
+        $fields = ['method.id', 'method.routeId', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.parameters', 'method.request', 'method.action'];
+        if ($cache) {
+            $fields[] = 'method.schemaCache';
         }
 
-        $sql = '  SELECT method.id,
-                         method.routeId,
-                         method.version,
-                         method.status,
-                         method.method,
-                         method.active,
-                         method.public,
-                         ' . $cache . '
-                         method.request,
-                         method.response,
-                         method.action
+        $sql = '  SELECT ' . implode(',', $fields) . '
                     FROM fusio_routes_method method
                    WHERE method.routeId = :routeId';
 

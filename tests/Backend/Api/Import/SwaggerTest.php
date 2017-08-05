@@ -310,16 +310,22 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "findPets-GET-response"
+                            "responses": {
+                                "200": "findPets-GET-200-response"
+                            },
+                            "action": "Welcome"
                         },
                         "POST": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "addPet-POST-request",
-                            "response": "addPet-POST-response"
+                            "responses": {
+                                "200": "addPet-POST-200-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -335,16 +341,22 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "findPetById-GET-response"
+                            "responses": {
+                                "200": "findPetById-GET-200-response"
+                            },
+                            "action": "Welcome"
                         },
                         "DELETE": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -353,7 +365,7 @@ JSON;
     ],
     "schema": [
         {
-            "name": "findPets-GET-response",
+            "name": "findPets-GET-200-response",
             "source": {
                 "type": "array",
                 "items": {
@@ -406,7 +418,7 @@ JSON;
             }
         },
         {
-            "name": "addPet-POST-response",
+            "name": "addPet-POST-200-response",
             "source": {
                 "type": "object",
                 "allOf": [
@@ -439,7 +451,7 @@ JSON;
             }
         },
         {
-            "name": "findPetById-GET-response",
+            "name": "findPetById-GET-200-response",
             "source": {
                 "type": "object",
                 "allOf": [
@@ -555,9 +567,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "listVersionsv2",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "listVersionsv2"
                         }
                     }
                 }
@@ -573,9 +588,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "getVersionDetailsv2",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "Passthru"
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "getVersionDetailsv2"
                         }
                     }
                 }
@@ -1331,9 +1349,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "bin-restexe-locationname-GET-response"
+                            "responses": {
+                                "200": "bin-restexe-locationname-GET-200-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -1349,9 +1370,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "bin-restexe-departureBoard-GET-response"
+                            "responses": {
+                                "200": "bin-restexe-departureBoard-GET-200-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -1367,9 +1391,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "bin-restexe-arrivalBoard-GET-response"
+                            "responses": {
+                                "200": "bin-restexe-arrivalBoard-GET-200-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -1385,9 +1412,12 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "action": "Welcome",
+                            "parameters": "Passthru",
                             "request": "Passthru",
-                            "response": "bin-restexe-journeyDetail-GET-response"
+                            "responses": {
+                                "200": "bin-restexe-journeyDetail-GET-200-response"
+                            },
+                            "action": "Welcome"
                         }
                     }
                 }
@@ -1396,7 +1426,7 @@ JSON;
     ],
     "schema": [
         {
-            "name": "bin-restexe-locationname-GET-response",
+            "name": "bin-restexe-locationname-GET-200-response",
             "source": {
                 "type": "object",
                 "required": [
@@ -1444,7 +1474,7 @@ JSON;
             }
         },
         {
-            "name": "bin-restexe-departureBoard-GET-response",
+            "name": "bin-restexe-departureBoard-GET-200-response",
             "source": {
                 "type": "object",
                 "required": [
@@ -1518,7 +1548,7 @@ JSON;
             }
         },
         {
-            "name": "bin-restexe-arrivalBoard-GET-response",
+            "name": "bin-restexe-arrivalBoard-GET-200-response",
             "source": {
                 "type": "object",
                 "required": [
@@ -1592,7 +1622,7 @@ JSON;
             }
         },
         {
-            "name": "bin-restexe-journeyDetail-GET-response",
+            "name": "bin-restexe-journeyDetail-GET-200-response",
             "source": {
                 "type": "object",
                 "required": [

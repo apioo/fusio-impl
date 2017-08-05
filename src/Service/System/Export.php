@@ -99,6 +99,13 @@ class Export extends SystemAbstract
 
     protected function getReference($tableName, $id, $type)
     {
-        return $this->connection->fetchColumn('SELECT name FROM ' . $tableName . ' WHERE id = :id', ['id' => $id]);
+        $name = $this->connection->fetchColumn('SELECT name FROM ' . $tableName . ' WHERE id = :id', ['id' => $id]);
+
+        if (empty($name)) {
+            $type = substr($tableName, 6);
+            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $id);
+        }
+
+        return $name;
     }
 }

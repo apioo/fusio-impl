@@ -40,6 +40,22 @@
                     }
                 }
             }
+        },
+        {
+            "name": "Error-Schema",
+            "source": {
+                "id": "http:\/\/phpsx.org#",
+                "title": "test",
+                "type": "object",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
         }
     ],
     "action": [
@@ -64,6 +80,26 @@
                       "public": true,
                       "action": "Test-Action",
                       "response": "New-Schema"
+                    }
+                }
+            }]
+        },
+        {
+            "path": "\/baz",
+            "config": [{
+                "version": 1,
+                "status": 4,
+                "methods": {
+                    "POST": {
+                      "active": true,
+                      "public": true,
+                      "parameters": "New-Schema",
+                      "request": "New-Schema",
+                      "responses": {
+                        "201": "New-Schema",
+                        "500": "Error-Schema"
+                      },
+                      "action": "Test-Action"
                     }
                 }
             }]

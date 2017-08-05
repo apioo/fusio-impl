@@ -4,6 +4,17 @@ connection:
     config:
       url: "sqlite:///:memory:"
 schema:
+  Parameters: >
+    {
+      "id": "http:\/\/phpsx.org#",
+      "title": "test",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        }
+      }
+    }
   Request-Schema: >
     {
       "id": "http:\/\/phpsx.org#",
@@ -23,6 +34,7 @@ schema:
       }
     }
   Response-Schema: !include schema.json
+  Error-Schema: !include schema.json
 action:
   Test-Action:
     class: Fusio\Adapter\Util\Action\UtilStaticResponse
@@ -37,7 +49,10 @@ routes:
       GET:
         public: true
         request: Request-Schema
-        response: Response-Schema
+        parameters: Parameters
+        responses:
+          200: Response-Schema
+          500: Error-Schema
         action: Test-Action
 migration:
   New-Connection:

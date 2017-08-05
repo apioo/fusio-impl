@@ -142,17 +142,14 @@ JSON;
                 ['rateId' => 4, 'routeId' => self::getLastRouteId() + 1, 'appId' => null, 'authenticated' => 1, 'parameters' => null],
             ],
             'fusio_routes_method' => [
-                ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 2, 'action' => 3],
-                ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'request' => 1, 'response' => 1, 'action' => 3],
-                ['routeId' => self::getLastRouteId() + 1, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
-                ['routeId' => self::getLastRouteId() + 1, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'request' => null, 'response' => null, 'action' => null],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 3],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'parameters' => null, 'request' => 1, 'action' => 3],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
             ],
-            'fusio_routes_action' => [
-                ['routeId' => self::getLastRouteId() + 1, 'actionId' => 3],
-            ],
-            'fusio_routes_schema' => [
-                ['routeId' => self::getLastRouteId() + 1, 'schemaId' => 2],
-                ['routeId' => self::getLastRouteId() + 1, 'schemaId' => 1],
+            'fusio_routes_response' => [
+                ['methodId' => 2, 'code' => 200, 'response' => 2],
+                ['methodId' => 3, 'code' => 201, 'response' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => '2015-06-25 22:49:09'],

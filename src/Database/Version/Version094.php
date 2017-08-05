@@ -195,13 +195,6 @@ class Version094 implements VersionInterface
         $routesTable->addColumn('config', 'blob', array('notnull' => false));
         $routesTable->setPrimaryKey(array('id'));
 
-        $routesActionTable = $schema->createTable('fusio_routes_action');
-        $routesActionTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $routesActionTable->addColumn('routeId', 'integer');
-        $routesActionTable->addColumn('actionId', 'integer');
-        $routesActionTable->setPrimaryKey(array('id'));
-        $routesActionTable->addUniqueIndex(array('routeId', 'actionId'));
-
         $routesMethodTable = $schema->createTable('fusio_routes_method');
         $routesMethodTable->addColumn('id', 'integer', array('autoincrement' => true));
         $routesMethodTable->addColumn('routeId', 'integer');
@@ -210,21 +203,20 @@ class Version094 implements VersionInterface
         $routesMethodTable->addColumn('status', 'integer');
         $routesMethodTable->addColumn('active', 'integer', array('default' => 0));
         $routesMethodTable->addColumn('public', 'integer', array('default' => 0));
+        $routesMethodTable->addColumn('parameters', 'integer', array('notnull' => false));
         $routesMethodTable->addColumn('request', 'integer', array('notnull' => false));
-        $routesMethodTable->addColumn('requestCache', 'text', array('notnull' => false));
-        $routesMethodTable->addColumn('response', 'integer', array('notnull' => false));
-        $routesMethodTable->addColumn('responseCache', 'text', array('notnull' => false));
         $routesMethodTable->addColumn('action', 'integer', array('notnull' => false));
+        $routesMethodTable->addColumn('schemaCache', 'text', array('notnull' => false));
         $routesMethodTable->addColumn('actionCache', 'text', array('notnull' => false));
         $routesMethodTable->setPrimaryKey(array('id'));
         $routesMethodTable->addUniqueIndex(array('routeId', 'method', 'version'));
 
-        $routesSchemaTable = $schema->createTable('fusio_routes_schema');
-        $routesSchemaTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $routesSchemaTable->addColumn('routeId', 'integer');
-        $routesSchemaTable->addColumn('schemaId', 'integer');
-        $routesSchemaTable->setPrimaryKey(array('id'));
-        $routesSchemaTable->addUniqueIndex(array('routeId', 'schemaId'));
+        $routesResponseTable = $schema->createTable('fusio_routes_response');
+        $routesResponseTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $routesResponseTable->addColumn('methodId', 'integer');
+        $routesResponseTable->addColumn('code', 'smallint');
+        $routesResponseTable->addColumn('response', 'integer');
+        $routesResponseTable->setPrimaryKey(array('id'));
 
         $schemaTable = $schema->createTable('fusio_schema');
         $schemaTable->addColumn('id', 'integer', array('autoincrement' => true));
@@ -312,16 +304,13 @@ class Version094 implements VersionInterface
         $appTokenTable->addForeignKeyConstraint($appTable, array('appId'), array('id'), array(), 'appTokenAppId');
         $appTokenTable->addForeignKeyConstraint($userTable, array('userId'), array('id'), array(), 'appTokenUserId');
 
-        $routesActionTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesActionRouteId');
-        $routesActionTable->addForeignKeyConstraint($actionTable, array('actionId'), array('id'), array(), 'routesActionActionId');
-
         $routesMethodTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesMethodRouteId');
+        $routesMethodTable->addForeignKeyConstraint($schemaTable, array('parameters'), array('id'), array(), 'routesMethodParameters');
         $routesMethodTable->addForeignKeyConstraint($schemaTable, array('request'), array('id'), array(), 'routesMethodRequest');
-        $routesMethodTable->addForeignKeyConstraint($schemaTable, array('response'), array('id'), array(), 'routesMethodResponse');
         $routesMethodTable->addForeignKeyConstraint($actionTable, array('action'), array('id'), array(), 'routesMethodAction');
 
-        $routesSchemaTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesSchemaRouteId');
-        $routesSchemaTable->addForeignKeyConstraint($schemaTable, array('schemaId'), array('id'), array(), 'routesSchemaSchemaId');
+        $routesResponseTable->addForeignKeyConstraint($routesMethodTable, array('methodId'), array('id'), array(), 'routesResponseMethodId');
+        $routesResponseTable->addForeignKeyConstraint($schemaTable, array('response'), array('id'), array(), 'routesResponseResponse');
 
         $rateAllocationTable->addForeignKeyConstraint($rateTable, array('rateId'), array('id'), array(), 'rateAllocationRateId');
         $rateAllocationTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'rateAllocationRouteId');
@@ -538,7 +527,11 @@ class Version094 implements VersionInterface
         // routes method
         $lastRouteId = count($data['fusio_routes']);
         $data['fusio_routes_method'] = [
-            ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'request' => null, 'response' => 1, 'action' => 1],
+            ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1],
+        ];
+
+        $data['fusio_routes_response'] = [
+            ['methodId' => 1, 'code' => 200, 'response' => 1],
         ];
 
         // scope routes

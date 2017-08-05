@@ -107,7 +107,7 @@ class DetailTest extends ControllerDbTestCase
             "POST-request": {
                 "$ref": "#\/definitions\/Passthru"
             },
-            "POST-200-response": {
+            "POST-201-response": {
                 "$ref": "#\/definitions\/Passthru"
             }
         }
@@ -121,14 +121,14 @@ class DetailTest extends ControllerDbTestCase
         "POST": {
             "request": "#\/definitions\/POST-request",
             "responses": {
-                "200": "#\/definitions\/POST-200-response"
+                "201": "#\/definitions\/POST-201-response"
             }
         }
     },
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/action"
+            "href": "\/export\/openapi\/*\/foo"
         },
         {
             "rel": "swagger",

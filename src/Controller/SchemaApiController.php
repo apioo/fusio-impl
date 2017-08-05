@@ -245,29 +245,27 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $context  = new EngineContext($this->context->get('fusio.routeId'), $baseUrl, $this->app, $this->user);
         $request  = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
         $response = null;
-        $actionId = $method['action'];
+
+        $actionId    = $method['action'];
+        $actionCache = $method['actionCache'];
 
         if ($actionId > 0) {
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT) {
+            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($actionCache)) {
                 // if the method is not in dev mode we load the action from the
                 // cache
-                $repository = unserialize($method['actionCache']);
+                $repository = Repository\ActionMemory::fromJson($actionCache);
 
-                if ($repository instanceof Repository\ActionInterface) {
-                    $this->processor->push($repository);
+                $this->processor->push($repository);
 
-                    try {
-                        $response = $this->processor->execute($actionId, $request, $context);
-                    } catch (\Exception $e) {
-                        $this->apiLogger->appendError($this->logId, $e);
+                try {
+                    $response = $this->processor->execute($actionId, $request, $context);
+                } catch (\Exception $e) {
+                    $this->apiLogger->appendError($this->logId, $e);
 
-                        throw $e;
-                    }
-
-                    $this->processor->pop();
-                } else {
-                    throw new StatusCode\ServiceUnavailableException('Invalid action cache');
+                    throw $e;
                 }
+
+                $this->processor->pop();
             } else {
                 // if the action is in dev mode we load the values direct from
                 // the table

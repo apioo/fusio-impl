@@ -158,28 +158,36 @@ abstract class SystemAbstract
             $methods = isset($version->methods) ? $version->methods : [];
 
             foreach ($methods as $method => $row) {
-                if (!empty($row->action)) {
-                    $name = $this->getReference('fusio_action', $row->action, self::TYPE_ROUTES);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve action ' . $row->action);
-                    }
-                    $entity->config[$index]->methods->{$method}->action = $name;
+                // parameters
+                if (!empty($row->parameters)) {
+                    $entity->config[$index]->methods->{$method}->parameters = $this->getReference('fusio_schema', $row->parameters, self::TYPE_ROUTES);
                 }
 
+                // request
                 if (!empty($row->request)) {
-                    $name = $this->getReference('fusio_schema', $row->request, self::TYPE_ROUTES);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve schema ' . $row->request);
-                    }
-                    $entity->config[$index]->methods->{$method}->request = $name;
+                    $entity->config[$index]->methods->{$method}->request = $this->getReference('fusio_schema', $row->request, self::TYPE_ROUTES);
                 }
 
+                // responses
+                $responses = [];
                 if (!empty($row->response)) {
-                    $name = $this->getReference('fusio_schema', $row->response, self::TYPE_ROUTES);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve schema ' . $row->response);
+                    $responses[200] = $this->getReference('fusio_schema', $row->response, self::TYPE_ROUTES);
+
+                    // remove deprecated response field
+                    unset($entity->config[$index]->methods->{$method}->response);
+                } elseif (!empty($row->responses) && $row->responses instanceof stdClass) {
+                    foreach ($row->responses as $code => $response) {
+                        $responses[intval($code)] = $this->getReference('fusio_schema', $response, self::TYPE_ROUTES);
                     }
-                    $entity->config[$index]->methods->{$method}->response = $name;
+                }
+
+                if (!empty($responses)) {
+                    $entity->config[$index]->methods->{$method}->responses = $responses;
+                }
+
+                // action
+                if (!empty($row->action)) {
+                    $entity->config[$index]->methods->{$method}->action = $this->getReference('fusio_action', $row->action, self::TYPE_ROUTES);
                 }
             }
         }
@@ -201,17 +209,9 @@ abstract class SystemAbstract
                 }
 
                 if ($element instanceof Form\Element\Action) {
-                    $name = $this->getReference('fusio_action', $entity->config->{$data['name']}, $type);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve action ' . $entity->config->{$data['name']});
-                    }
-                    $config->{$data['name']} = $name;
+                    $config->{$data['name']} = $this->getReference('fusio_action', $entity->config->{$data['name']}, $type);
                 } elseif ($element instanceof Form\Element\Connection) {
-                    $name = $this->getReference('fusio_connection', $entity->config->{$data['name']}, $type);
-                    if (empty($name)) {
-                        throw new RuntimeException('Could not resolve connection ' . $entity->config->{$data['name']});
-                    }
-                    $config->{$data['name']} = $name;
+                    $config->{$data['name']} = $this->getReference('fusio_connection', $entity->config->{$data['name']}, $type);
                 } else {
                     $config->{$data['name']} = $entity->config->{$data['name']};
                 }

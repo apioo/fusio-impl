@@ -29,6 +29,7 @@ use PSX\Api\ListingInterface;
 use PSX\Api\Resource;
 use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -46,14 +47,14 @@ class Config
     protected $methodTable;
 
     /**
+     * @var \Fusio\Impl\Table\Routes\Response
+     */
+    protected $responseTable;
+
+    /**
      * @var \Fusio\Impl\Service\Routes\Deploy
      */
     protected $deploy;
-
-    /**
-     * @var \Fusio\Impl\Service\Routes\Relation
-     */
-    protected $relation;
 
     /**
      * @var \PSX\Api\ListingInterface
@@ -68,15 +69,14 @@ class Config
     /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \Fusio\Impl\Service\Routes\Deploy $deploy
-     * @param \Fusio\Impl\Service\Routes\Relation $relation
      * @param \PSX\Api\ListingInterface $listing
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Routes\Method $methodTable, Deploy $deploy, Relation $relation, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Deploy $deploy, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;
+        $this->responseTable   = $responseTable;
         $this->deploy          = $deploy;
-        $this->relation        = $relation;
         $this->listing         = $listing;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -92,10 +92,6 @@ class Config
      */
     public function handleConfig($routeId, $path, $result, UserContext $context)
     {
-        // get existing methods
-        $existingMethods = $this->methodTable->getMethods($routeId, null, false, null);
-
-        // insert methods
         $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
 
         foreach ($result as $version) {
@@ -111,75 +107,40 @@ class Config
                 throw new StatusCode\BadRequestException('Invalid status value');
             }
 
-            // delete all existing development versions
-            $this->methodTable->deleteAllFromRoute($routeId, $ver, Resource::STATUS_DEVELOPMENT);
+            $existingMethods = $this->methodTable->getMethods($routeId, $ver, null);
 
-            // invalidate resource cache
-            if ($this->listing instanceof CachedListing) {
-                $this->listing->invalidateResource($path, $ver);
-            }
-
-            // parse methods
-            $methods = isset($version['methods']) ? $version['methods'] : [];
-
-            foreach ($methods as $method => $config) {
-                // check method
-                if (!in_array($method, $availableMethods)) {
-                    throw new StatusCode\BadRequestException('Invalid request method');
+            if ($status == Resource::STATUS_DEVELOPMENT) {
+                // invalidate resource cache
+                if ($this->listing instanceof CachedListing) {
+                    $this->listing->invalidateResource($path, $ver);
+                }
+                
+                // delete all responses from existing responses
+                foreach ($existingMethods as $existingMethod) {
+                    $this->responseTable->deleteAllFromMethod($existingMethod['id']);
                 }
 
-                $active = isset($config['active']) ? $config['active'] : false;
-                $public = isset($config['public']) ? $config['public'] : false;
+                // delete all methods from existing versions
+                $this->methodTable->deleteAllFromRoute($routeId, $ver);
 
-                // find existing method
-                $existingMethod = null;
-                foreach ($existingMethods as $index => $row) {
-                    if ($row['version'] == $ver && $row['method'] == $method) {
-                        $existingMethod = $row;
+                // parse methods
+                $methods = isset($version['methods']) ? $version['methods'] : [];
+
+                foreach ($methods as $method => $config) {
+                    // check method
+                    if (!in_array($method, $availableMethods)) {
+                        throw new StatusCode\BadRequestException('Invalid request method');
                     }
+
+                    // create method
+                    $methodId = $this->createMethod($routeId, $method, $ver, $status, $config);
+
+                    // create responses
+                    $this->createResponses($methodId, $config);
                 }
-
-                if ($status == Resource::STATUS_DEVELOPMENT) {
-                    // Change the API only if we are in development mode. We
-                    // create an entry also in development mode because we have
-                    // previously deleted the entry
-                    if ($existingMethod === null || $existingMethod['status'] == Resource::STATUS_DEVELOPMENT) {
-                        $data = [
-                            'routeId'  => $routeId,
-                            'method'   => $method,
-                            'version'  => $ver,
-                            'status'   => $status,
-                            'active'   => $active ? 1 : 0,
-                            'public'   => $public ? 1 : 0,
-                            'request'  => isset($config['request'])  ? $config['request']  : null,
-                            'response' => isset($config['response']) ? $config['response'] : null,
-                            'action'   => isset($config['action'])   ? $config['action']   : null,
-                        ];
-
-                        $this->methodTable->create($data);
-                    } else {
-                        $this->methodTable->update([
-                            'id'       => $existingMethod['id'],
-                            'routeId'  => $routeId,
-                            'method'   => $method,
-                            'version'  => $ver,
-                            'status'   => $status,
-                            'active'   => $active ? 1 : 0,
-                            'public'   => $public ? 1 : 0,
-                            'request'  => isset($config['request'])  ? $config['request']  : null,
-                            'response' => isset($config['response']) ? $config['response'] : null,
-                            'action'   => isset($config['action'])   ? $config['action']   : null,
-                        ]);
-                    }
-                } elseif ($active === true) {
-                    // if the method is not in development mode we create only
-                    // the schema/action cache on the transition from dev to
-                    // prod in every other case we dont change any values except
-                    // for the status
-                    if ($existingMethod === null) {
-                        throw new StatusCode\BadRequestException('A new resource can only start in development mode');
-                    }
-
+            } else {
+                // update only existing methods
+                foreach ($existingMethods as $existingMethod) {
                     if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && $status == Resource::STATUS_ACTIVE) {
                         // deploy method to active
                         $this->deploy->deploy($existingMethod);
@@ -207,8 +168,65 @@ class Config
         if ($this->listing instanceof CachedListing) {
             $this->listing->invalidateResource($path);
         }
+    }
 
-        // update relations
-        $this->relation->updateRelations($routeId);
+    /**
+     * @param integer $routeId
+     * @param string $method
+     * @param integer $ver
+     * @param integer $status
+     * @param array $config
+     * @return int
+     */
+    private function createMethod($routeId, $method, $ver, $status, $config)
+    {
+        $active     = isset($config['active'])     ? $config['active']     : false;
+        $public     = isset($config['public'])     ? $config['public']     : false;
+        $parameters = isset($config['parameters']) ? $config['parameters'] : null;
+        $request    = isset($config['request'])    ? $config['request']    : null;
+        $action     = isset($config['action'])     ? $config['action']     : null;
+
+        // create method
+        $data = [
+            'routeId'    => $routeId,
+            'method'     => $method,
+            'version'    => $ver,
+            'status'     => $status,
+            'active'     => $active ? 1 : 0,
+            'public'     => $public ? 1 : 0,
+            'parameters' => $parameters,
+            'request'    => $request,
+            'action'     => $action,
+        ];
+
+        $this->methodTable->create($data);
+
+        return $this->methodTable->getLastInsertId();
+    }
+
+    /**
+     * @param integer $methodId
+     * @param array $config
+     */
+    private function createResponses($methodId, $config)
+    {
+        $response   = isset($config['response'])  ? $config['response']   : null; // deprecated
+        $responses  = isset($config['responses']) ? $config['responses']  : null;
+
+        if (!empty($responses)) {
+            foreach ($responses as $statusCode => $response) {
+                $this->responseTable->create([
+                    'methodId' => $methodId,
+                    'code'     => $statusCode,
+                    'response' => $response,
+                ]);
+            }
+        } elseif (!empty($response)) {
+            $this->responseTable->create([
+                'methodId' => $methodId,
+                'code'     => 200,
+                'response' => $response,
+            ]);
+        }
     }
 }

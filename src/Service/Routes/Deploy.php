@@ -27,6 +27,10 @@ use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\PropertyInterface;
+use PSX\Schema\Schema;
+use PSX\Sql\Condition;
 
 /**
  * Deploys a route method from development to production. That means that we
@@ -41,7 +45,12 @@ class Deploy
     /**
      * @var \Fusio\Impl\Table\Routes\Method
      */
-    protected $routesMethodTable;
+    protected $methodTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Routes\Response
+     */
+    protected $responseTable;
 
     /**
      * @var \Fusio\Impl\Table\Schema
@@ -54,84 +63,88 @@ class Deploy
     protected $actionTable;
 
     /**
-     * @var \Fusio\Engine\Parser\ParserAbstract
-     */
-    protected $actionParser;
-
-    /**
-     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Table\Routes\Response $responseTable
      * @param \Fusio\Impl\Table\Schema $schemaTable
      * @param \Fusio\Impl\Table\Action $actionTable
-     * @param \Fusio\Engine\Parser\ParserAbstract $actionParser
      */
-    public function __construct(Table\Routes\Method $routesMethodTable, Table\Schema $schemaTable, Table\Action $actionTable, ParserAbstract $actionParser)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Schema $schemaTable, Table\Action $actionTable)
     {
-        $this->routesMethodTable = $routesMethodTable;
-        $this->schemaTable       = $schemaTable;
-        $this->actionTable       = $actionTable;
-        $this->actionParser      = $actionParser;
+        $this->methodTable   = $methodTable;
+        $this->responseTable = $responseTable;
+        $this->schemaTable   = $schemaTable;
+        $this->actionTable   = $actionTable;
     }
 
     public function deploy($method)
     {
-        unset($method['id']);
-
-        $method['status'] = Resource::STATUS_ACTIVE;
+        $schema = [];
+        if ($method['parameters'] > 0) {
+            $schema['parameters'] = $this->getSchemaCache($method['parameters']);
+        }
 
         if ($method['request'] > 0) {
-            $method['requestCache'] = $this->getSchemaCache($method['request']);
+            $schema['request'] = $this->getSchemaCache($method['request']);
         }
 
-        if ($method['response'] > 0) {
-            $method['responseCache'] = $this->getSchemaCache($method['response']);
-        }
+        // get existing responses
+        $condition = new Condition();
+        $condition->equals('methodId', $method['id']);
+        $responses = $this->responseTable->getBy($condition);
 
-        if ($method['action'] > 0) {
-            $method['actionCache'] = $this->getActionCache($method['action']);
-        }
-
-        $this->routesMethodTable->create($method);
-    }
-
-    protected function getSchemaCache($schemaId)
-    {
-        $schema = $this->schemaTable->get($schemaId);
-        return $schema['cache'];
-    }
-    
-    protected function getActionCache($actionId)
-    {
-        $repository = new Repository\ActionMemory();
-        $this->buildRepository($actionId, $repository);
-
-        return serialize($repository);
-    }
-
-    protected function buildRepository($actionId, Repository\ActionInterface $repository)
-    {
-        $action  = $this->actionTable->get($actionId);
-        $config  = $action->config;
-        $form    = $this->actionParser->getForm($action->class);
-
-        if ($form instanceof Form\Container) {
-            $elements = $form->getElements();
-            foreach ($elements as $element) {
-                if ($element instanceof Form\Element\Action) {
-                    $name = $element->getName();
-                    if (isset($config[$name]) && $config[$name] > 0) {
-                        $this->buildRepository($config[$name], $repository);
-                    }
+        if (!empty($responses)) {
+            $schema['responses'] = [];
+            foreach ($responses as $response) {
+                if ($response['response'] > 0) {
+                    $schema['responses'][$response['code']] = $this->getSchemaCache($response['response']);
                 }
             }
         }
 
-        $entry = new Model\Action();
-        $entry->setId($action['id']);
-        $entry->setName($action['name']);
-        $entry->setClass($action['class']);
-        $entry->setConfig($action['config']);
-        $entry->setDate($action['date']->format('Y-m-d H:i:s'));
+        $action = null;
+        if ($method['action'] > 0) {
+            $action = $this->getActionCache($method['action']);
+        }
 
-        $repository->add($entry);
+        // create cache and change status
+        $method['status']      = Resource::STATUS_ACTIVE;
+        $method['schemaCache'] = json_encode($schema);
+        $method['actionCache'] = json_encode($action);
+
+        $this->methodTable->update($method);
+    }
+
+    protected function getSchemaCache($schemaId)
+    {
+        $generator = new JsonSchema();
+        $result    = $this->schemaTable->get($schemaId);
+
+        if (!empty($result)) {
+            $schema = unserialize($result['cache']);
+            if ($schema instanceof Schema) {
+                return $generator->toArray($schema);
+            }
+        }
+
+        return null;
+    }
+
+    protected function getActionCache($actionId)
+    {
+        $repository = new Repository\ActionMemory();
+        $action     = $this->actionTable->get($actionId);
+
+        if (!empty($action)) {
+            $entry = new Model\Action();
+            $entry->setId($action['id']);
+            $entry->setName($action['name']);
+            $entry->setClass($action['class']);
+            $entry->setConfig($action['config']);
+            $entry->setDate($action['date']->format('Y-m-d H:i:s'));
+
+            $repository->add($entry);
+        }
+
+        return $repository->jsonSerialize();
     }
 }
