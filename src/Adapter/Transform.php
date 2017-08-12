@@ -30,7 +30,8 @@ use PSX\Schema\Schema;
 use PSX\Schema\Generator;
 
 /**
- * Transform
+ * Class which uses the psx api classes to parse and transform an API 
+ * specification to a Fusio adapter format
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
