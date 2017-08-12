@@ -101,7 +101,7 @@ class Routes extends ViewAbstract
                     $method->public = (bool) $row['public'];
 
                     if (!empty($row['parameters'])) {
-                        $method->parameter = (int) $row['parameters'];
+                        $method->parameters = (int) $row['parameters'];
                     }
 
                     if (!empty($row['request'])) {
