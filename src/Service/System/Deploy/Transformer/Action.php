@@ -37,7 +37,7 @@ class Action implements TransformerInterface
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
-        $resolvedActions = $this->resolveActionsFromRoutes($data);
+        $resolvedActions = $this->resolveActionsFromRoutes($data, $basePath);
 
         $action = isset($data[SystemAbstract::TYPE_ACTION]) ? $data[SystemAbstract::TYPE_ACTION] : [];
 
@@ -73,16 +73,20 @@ class Action implements TransformerInterface
      * @param array $data
      * @return array
      */
-    private function resolveActionsFromRoutes(array $data)
+    private function resolveActionsFromRoutes(array $data, $basePath)
     {
         $actions = [];
         $type    = SystemAbstract::TYPE_ROUTES;
 
         if (isset($data[$type]) && is_array($data[$type])) {
             foreach ($data[$type] as $name => $row) {
+                // resolve includes
+                $row = IncludeDirective::resolve($row, $basePath, $type);
+
                 if (isset($row['methods']) && is_array($row['methods'])) {
                     foreach ($row['methods'] as $method => $config) {
-                        if (isset($config['action']) && !preg_match('/' . NameGenerator::NAME_REGEXP . '/', $config['action'])) {
+                        // action
+                        if (isset($config['action']) && !$this->isName($config['action'])) {
                             $name = NameGenerator::getActionNameFromSource($config['action']);
 
                             $actions[$name] = [
@@ -95,5 +99,10 @@ class Action implements TransformerInterface
         }
 
         return $actions;
+    }
+
+    private function isName($schema)
+    {
+        return is_string($schema) && preg_match('/' . NameGenerator::NAME_REGEXP . '/', $schema);
     }
 }

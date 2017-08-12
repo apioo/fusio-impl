@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\System\Deploy\Transformer;
 
+use Fusio\Impl\Service\System\Deploy\IncludeDirective;
 use Fusio\Impl\Service\System\Deploy\NameGenerator;
 use Fusio\Impl\Service\System\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
@@ -150,20 +151,42 @@ class Schema implements TransformerInterface
 
         if (isset($data[$type]) && is_array($data[$type])) {
             foreach ($data[$type] as $name => $row) {
+                // resolve includes
+                $row = IncludeDirective::resolve($row, $basePath, $type);
+
                 if (isset($row['methods']) && is_array($row['methods'])) {
                     foreach ($row['methods'] as $method => $config) {
-                        if (isset($config['request']) && !preg_match('/' . NameGenerator::NAME_REGEXP . '/', $config['request'])) {
+                        // parameters
+                        if (isset($config['parameters']) && !$this->isName($config['parameters'])) {
+                            $schema = $this->resolveSchema($config['parameters'], $basePath);
+                            $name   = NameGenerator::getSchemaNameFromSource($config['parameters']);
+
+                            $schemas[$name] = $schema;
+                        }
+
+                        // request
+                        if (isset($config['request']) && !$this->isName($config['request'])) {
                             $schema = $this->resolveSchema($config['request'], $basePath);
                             $name   = NameGenerator::getSchemaNameFromSource($config['request']);
 
                             $schemas[$name] = $schema;
                         }
 
-                        if (isset($config['response']) && !preg_match('/' . NameGenerator::NAME_REGEXP . '/', $config['response'])) {
+                        // responses
+                        if (isset($config['response']) && !$this->isName($config['response'])) {
                             $schema = $this->resolveSchema($config['response'], $basePath);
                             $name   = NameGenerator::getSchemaNameFromSource($config['response']);
 
                             $schemas[$name] = $schema;
+                        } elseif (isset($config['responses']) && is_array($config['responses'])) {
+                            foreach ($config['responses'] as $code => $response) {
+                                if (!$this->isName($response)) {
+                                    $schema = $this->resolveSchema($response, $basePath);
+                                    $name   = NameGenerator::getSchemaNameFromSource($response);
+
+                                    $schemas[$name] = $schema;
+                                }
+                            }
                         }
                     }
                 }
@@ -171,5 +194,10 @@ class Schema implements TransformerInterface
         }
 
         return $schemas;
+    }
+
+    private function isName($schema)
+    {
+        return is_string($schema) && preg_match('/' . NameGenerator::NAME_REGEXP . '/', $schema);
     }
 }
