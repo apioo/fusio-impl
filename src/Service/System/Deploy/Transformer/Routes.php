@@ -53,8 +53,8 @@ class Routes implements TransformerInterface
     {
         $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
 
-        // if we have an indexed array we have a list of configs else we
-        // only have a single config
+        // if we have an indexed array we have a config with multiple versions
+        // else we only have a single config
         $config = [];
         if (isset($data[0])) {
             foreach ($data as $row) {
