@@ -41,15 +41,8 @@ class Format extends ApiAbstract
     {
         $format = $this->getUriFragment('format');
         $schema = Accessor::get($this->getBody(), '/schema');
+        $body   = Transform::fromSchema($format, $schema);
 
-        if ($format == 'raml') {
-            $transformer = new Transform\Raml();
-        } elseif ($format == 'swagger') {
-            $transformer = new Transform\Swagger();
-        } else {
-            throw new \RuntimeException('Invalid format');
-        }
-
-        $this->setBody($transformer->transform($schema));
+        $this->setBody($body);
     }
 }

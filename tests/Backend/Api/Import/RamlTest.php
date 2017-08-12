@@ -108,12 +108,10 @@ RAML;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "parameters": "Passthru",
-                            "request": "Passthru",
                             "responses": {
                                 "200": "helloworld-GET-200-response"
                             },
-                            "action": "helloworld-GET-example"
+                            "action": "helloworld-GET"
                         }
                     }
                 }
@@ -122,11 +120,11 @@ RAML;
     ],
     "action": [
         {
-            "name": "helloworld-GET-example",
+            "name": "helloworld-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
                 "statusCode": "200",
-                "response": "{\n  \"message\": \"Hello world\"\n}"
+                "response": "{\"message\":\"Test implementation\"}"
             }
         }
     ],
@@ -134,8 +132,10 @@ RAML;
         {
             "name": "helloworld-GET-200-response",
             "source": {
-                "title": "Hello world Response",
+                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+                "id": "urn:schema.phpsx.org#",
                 "type": "object",
+                "title": "Hello world Response",
                 "properties": {
                     "message": {
                         "type": "string"
@@ -216,34 +216,48 @@ RAML;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "parameters": "Passthru",
-                            "request": "Passthru",
                             "responses": {
                                 "200": "person-GET-200-response"
                             },
-                            "action": "Welcome"
+                            "action": "person-GET"
                         },
                         "POST": {
                             "active": true,
                             "public": true,
-                            "parameters": "Passthru",
                             "request": "person-POST-request",
-                            "responses": {
-                                "200": "Passthru"
-                            },
-                            "action": "Welcome"
+                            "action": "person-POST"
                         }
                     }
                 }
             ]
         }
     ],
+    "action": [
+        {
+            "name": "person-GET",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "config": {
+                "statusCode": "200",
+                "response": "{\"message\":\"Test implementation\"}"
+            }
+        },
+        {
+            "name": "person-POST",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "config": {
+                "statusCode": "",
+                "response": "{\"message\":\"Test implementation\"}"
+            }
+        }
+    ],
     "schema": [
         {
             "name": "person-GET-200-response",
             "source": {
-                "title": "Person Schema",
+                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+                "id": "urn:schema.phpsx.org#",
                 "type": "object",
+                "title": "Person Schema",
                 "properties": {
                     "firstName": {
                         "type": "string"
@@ -252,8 +266,8 @@ RAML;
                         "type": "string"
                     },
                     "age": {
-                        "description": "Age in years",
                         "type": "integer",
+                        "description": "Age in years",
                         "minimum": 0
                     }
                 },
@@ -266,8 +280,10 @@ RAML;
         {
             "name": "person-POST-request",
             "source": {
-                "title": "Body Declaration Schema",
+                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+                "id": "urn:schema.phpsx.org#",
                 "type": "object",
+                "title": "Body Declaration Schema",
                 "properties": {
                     "firstName": {
                         "type": "string"
@@ -308,6 +324,7 @@ baseUri: https://api.github.com/
                   "type": "object",
                   "properties": {
                       "rate": {
+                          "title": "rate",
                           "properties": {
                               "limit": {
                                   "type": "integer"
@@ -342,18 +359,16 @@ RAML;
             "path": "\/rate_limit",
             "config": [
                 {
-                    "version": 3,
+                    "version": 1,
                     "status": 4,
                     "methods": {
                         "GET": {
                             "active": true,
                             "public": true,
-                            "parameters": "Passthru",
-                            "request": "Passthru",
                             "responses": {
                                 "200": "rate_limit-GET-200-response"
                             },
-                            "action": "rate_limit-GET-example"
+                            "action": "rate_limit-GET"
                         }
                     }
                 }
@@ -362,11 +377,11 @@ RAML;
     ],
     "action": [
         {
-            "name": "rate_limit-GET-example",
+            "name": "rate_limit-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
             "config": {
                 "statusCode": "200",
-                "response": "{\n  \"rate\": {\n    \"limit\": 5000,\n    \"remaining\": 4999,\n    \"reset\": 1372700873\n  }\n}"
+                "response": "{\"message\":\"Test implementation\"}"
             }
         }
     ],
@@ -374,10 +389,11 @@ RAML;
         {
             "name": "rate_limit-GET-200-response",
             "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-03\/schema",
-                "type": "object",
-                "properties": {
-                    "rate": {
+                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+                "id": "urn:schema.phpsx.org#",
+                "definitions": {
+                    "Rate": {
+                        "title": "rate",
                         "properties": {
                             "limit": {
                                 "type": "integer"
@@ -389,6 +405,12 @@ RAML;
                                 "type": "integer"
                             }
                         }
+                    }
+                },
+                "type": "object",
+                "properties": {
+                    "rate": {
+                        "$ref": "#\/definitions\/Rate"
                     }
                 }
             }
