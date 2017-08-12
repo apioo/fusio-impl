@@ -36,21 +36,13 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null, $routeId = null)
+    public function getCollection($startIndex = 0, $search = null)
     {
         $condition = new Condition();
         $condition->equals('status', Table\Schema::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
-        }
-
-        if (!empty($routeId)) {
-            $sql = 'SELECT schemaId
-                      FROM fusio_routes_schema
-                     WHERE routeId = ?';
-
-            $condition->raw('id IN (' . $sql . ')', [$routeId]);
         }
 
         $definition = [

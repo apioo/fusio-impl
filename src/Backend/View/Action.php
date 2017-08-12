@@ -36,21 +36,13 @@ use PSX\Sql\ViewAbstract;
  */
 class Action extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null, $routeId = null)
+    public function getCollection($startIndex = 0, $search = null)
     {
         $condition = new Condition();
         $condition->equals('status', Table\Action::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
-        }
-
-        if (!empty($routeId)) {
-            $sql = 'SELECT actionId
-                      FROM fusio_routes_action
-                     WHERE routeId = ?';
-
-            $condition->raw('id IN (' . $sql . ')', [$routeId]);
         }
 
         $definition = [

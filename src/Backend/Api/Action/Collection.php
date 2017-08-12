@@ -74,8 +74,7 @@ class Collection extends BackendApiAbstract
     {
         return $this->tableManager->getTable(View\Action::class)->getCollection(
             $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
-            $this->getParameter('search', Validate::TYPE_STRING) ?: null,
-            $this->getParameter('routeId', Validate::TYPE_INTEGER) ?: null
+            $this->getParameter('search', Validate::TYPE_STRING) ?: null
         );
     }
 
