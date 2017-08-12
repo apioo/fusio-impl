@@ -139,7 +139,7 @@ class Deploy
             $entry->setId($action['id']);
             $entry->setName($action['name']);
             $entry->setClass($action['class']);
-            $entry->setConfig($action['config']);
+            $entry->setConfig($action['config'] ?: []);
             $entry->setDate($action['date']->format('Y-m-d H:i:s'));
 
             $repository->add($entry);
