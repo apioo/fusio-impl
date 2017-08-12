@@ -50,11 +50,6 @@ class Schema
     protected $schemaTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Schema
-     */
-    protected $routesSchemaTable;
-
-    /**
      * @var \Fusio\Impl\Table\Routes\Method
      */
     protected $routesMethodTable;
@@ -71,15 +66,13 @@ class Schema
 
     /**
      * @param \Fusio\Impl\Table\Schema $schemaTable
-     * @param \Fusio\Impl\Table\Routes\Schema $routesSchemaTable
      * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
      * @param \Fusio\Engine\Schema\ParserInterface $schemaParser
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Schema $schemaTable, Table\Routes\Schema $routesSchemaTable, Table\Routes\Method $routesMethodTable, ParserInterface $schemaParser, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Routes\Method $routesMethodTable, ParserInterface $schemaParser, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
-        $this->routesSchemaTable = $routesSchemaTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->schemaParser      = $schemaParser;
         $this->eventDispatcher   = $eventDispatcher;

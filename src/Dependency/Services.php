@@ -92,7 +92,6 @@ trait Services
     {
         return new Service\Action(
             $this->get('table_manager')->getTable(Table\Action::class),
-            $this->get('table_manager')->getTable(Table\Routes\Action::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('action_factory'),
             $this->get('config')->get('fusio_engine'),
@@ -259,7 +258,6 @@ trait Services
     {
         return new Service\Schema(
             $this->get('table_manager')->getTable(Table\Schema::class),
-            $this->get('table_manager')->getTable(Table\Routes\Schema::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('schema_parser'),
             $this->get('event_dispatcher')
@@ -277,20 +275,6 @@ trait Services
             $this->get('table_manager')->getTable(Table\App\Scope::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('event_dispatcher')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\Routes\Relation
-     */
-    public function getRoutesRelationService()
-    {
-        return new Service\Routes\Relation(
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('table_manager')->getTable(Table\Routes\Schema::class),
-            $this->get('table_manager')->getTable(Table\Routes\Action::class),
-            $this->get('table_manager')->getTable(Table\Action::class),
-            $this->get('action_parser')
         );
     }
 
