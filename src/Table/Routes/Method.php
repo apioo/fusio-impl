@@ -76,23 +76,40 @@ class Method extends TableAbstract
         $this->connection->executeQuery($sql, $params);
     }
 
+    /**
+     * Returns whether a schema id is in use by a route. In the worst case this
+     * gets reported by the database constraints but we use this method to 
+     * report a proper error message
+     * 
+     * @param integer $schemaId
+     * @return boolean
+     */
     public function hasSchema($schemaId)
     {
-        $sql = '    SELECT COUNT(method.id) AS cnt
-                      FROM fusio_routes_method method
+        $sql = '    SELECT COUNT(resp.id) AS cnt
+                      FROM fusio_routes_response resp
+                INNER JOIN fusio_routes_method method
+                        ON resp.methodId = method.id
                 INNER JOIN fusio_routes routes
                         ON routes.id = method.routeId
                      WHERE routes.status = 1
-                       AND (method.parameters = :parameters OR method.request = :request)';
+                       AND (method.parameters = :schemaId OR method.request = :schemaId OR resp.response = :schemaId)';
 
         $count = $this->connection->fetchColumn($sql, [
-            'parameters' => $schemaId,
-            'request'    => $schemaId,
+            'schemaId' => $schemaId,
         ]);
 
         return $count > 0;
     }
 
+    /**
+     * Returns whether a action id is in use by a route. In the worst case this
+     * gets reported by the database constraints but we use this method to
+     * report a proper error message
+     *
+     * @param integer $actionId
+     * @return boolean
+     */
     public function hasAction($actionId)
     {
         $sql = '    SELECT COUNT(method.id) AS cnt
