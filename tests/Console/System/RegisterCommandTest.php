@@ -85,7 +85,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $this->assertEquals(2, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
-        $this->assertEquals(69, strlen($connection['config']));
+        $this->assertNotEmpty($connection['config']);
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
@@ -198,7 +198,7 @@ JSON;
 
         $this->assertEquals(2, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
-        $this->assertEquals(69, strlen($connection['config']));
+        $this->assertNotEmpty($connection['config']);
 
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [

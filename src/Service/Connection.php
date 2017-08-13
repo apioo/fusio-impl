@@ -31,6 +31,7 @@ use Fusio\Impl\Event\Connection\UpdatedEvent;
 use Fusio\Impl\Event\ConnectionEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 use PSX\OpenSsl\OpenSsl;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -186,11 +187,11 @@ class Connection
             return null;
         }
 
-        $iv   = OpenSsl::randomPseudoBytes(16);
-        $data = serialize($config);
-        $data = OpenSsl::encrypt($data, self::CIPHER_METHOD, $secretKey, 0, $iv);
+        $iv   = OpenSsl::randomPseudoBytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
+        $data = Parser::encode($config);
+        $data = OpenSsl::encrypt($data, self::CIPHER_METHOD, $secretKey, OPENSSL_RAW_DATA, $iv);
 
-        return base64_encode($iv) . '.' . $data;
+        return base64_encode($iv) . '.' . base64_encode($data);
     }
 
     public static function decryptConfig($data, $secretKey)
@@ -207,8 +208,8 @@ class Connection
         if (count($parts) == 2) {
             list($iv, $data) = $parts;
 
-            $config = OpenSsl::decrypt($data, self::CIPHER_METHOD, $secretKey, 0, base64_decode($iv));
-            $config = unserialize($config);
+            $config = OpenSsl::decrypt(base64_decode($data), self::CIPHER_METHOD, $secretKey, OPENSSL_RAW_DATA, base64_decode($iv));
+            $config = Parser::decode($config, true);
 
             return $config;
         } else {

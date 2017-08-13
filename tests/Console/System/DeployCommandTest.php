@@ -70,7 +70,7 @@ class DeployCommandTest extends ControllerDbTestCase
 
         $this->assertEquals(2, $connection['id']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\SqlAdvanced', $connection['class']);
-        $this->assertEquals(89, strlen($connection['config']));
+        $this->assertNotEmpty($connection['config']);
 
         // check schema
         $source = <<<JSON

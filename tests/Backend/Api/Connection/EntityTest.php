@@ -261,7 +261,7 @@ JSON;
         $this->assertEquals(1, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
-        $this->assertEquals(217, strlen($row['config']));
+        $this->assertNotEmpty($row['config']);
     }
 
     public function testDelete()
