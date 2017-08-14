@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Adapter;
 
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Factory\Resolver\PhpClass;
 use PSX\Api\Parser;
 use PSX\Api\Resource;
 use PSX\Json;
@@ -194,6 +195,7 @@ class Transform
         $this->addAction($name, [
             'name'   => $name,
             'class'  => UtilStaticResponse::class,
+            'engine' => PhpClass::class,
             'config' => [
                 'statusCode' => strval($statusCode),
                 'response'   => json_encode(['message' => 'Test implementation']),
@@ -207,6 +209,10 @@ class Transform
 
     private function buildName(array $parts)
     {
+        $parts = array_map(function($value){
+            return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
+        }, $parts);
+
         return implode('-', array_filter($parts));
     }
 
