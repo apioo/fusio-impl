@@ -177,7 +177,10 @@ abstract class SystemAbstract
                     unset($entity->config[$index]->methods->{$method}->response);
                 } elseif (!empty($row->responses) && $row->responses instanceof stdClass) {
                     foreach ($row->responses as $code => $response) {
-                        $responses[intval($code)] = $this->getReference('fusio_schema', $response, self::TYPE_ROUTES);
+                        $code = (int) $code;
+                        if ($code >= 200) {
+                            $responses[$code] = $this->getReference('fusio_schema', $response, self::TYPE_ROUTES);
+                        }
                     }
                 }
 
