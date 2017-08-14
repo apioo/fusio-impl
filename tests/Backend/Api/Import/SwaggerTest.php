@@ -346,18 +346,18 @@ JSON;
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "pets-{id}-findPetById-GET-200-response",
-                                "500": "pets-{id}-findPetById-GET-500-response"
+                                "200": "pets-_id_-findPetById-GET-200-response",
+                                "500": "pets-_id_-findPetById-GET-500-response"
                             },
-                            "action": "pets-{id}-findPetById-GET"
+                            "action": "pets-_id_-findPetById-GET"
                         },
                         "DELETE": {
                             "active": true,
                             "public": true,
                             "responses": {
-                                "500": "pets-{id}-deletePet-DELETE-500-response"
+                                "500": "pets-_id_-deletePet-DELETE-500-response"
                             },
-                            "action": "pets-{id}-deletePet-DELETE"
+                            "action": "pets-_id_-deletePet-DELETE"
                         }
                     }
                 }
@@ -368,6 +368,7 @@ JSON;
         {
             "name": "pets-findPets-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -376,22 +377,25 @@ JSON;
         {
             "name": "pets-addPet-POST",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
             }
         },
         {
-            "name": "pets-{id}-findPetById-GET",
+            "name": "pets-_id_-findPetById-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
             }
         },
         {
-            "name": "pets-{id}-deletePet-DELETE",
+            "name": "pets-_id_-deletePet-DELETE",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -585,7 +589,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-findPetById-GET-200-response",
+            "name": "pets-_id_-findPetById-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -631,7 +635,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-findPetById-GET-500-response",
+            "name": "pets-_id_-findPetById-GET-500-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -653,7 +657,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-deletePet-DELETE-500-response",
+            "name": "pets-_id_-deletePet-DELETE-500-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -785,6 +789,7 @@ JSON;
         {
             "name": "listVersionsv2-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -793,6 +798,7 @@ JSON;
         {
             "name": "v2-getVersionDetailsv2-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1553,11 +1559,11 @@ JSON;
                         "GET": {
                             "active": true,
                             "public": true,
-                            "parameters": "location.name-GET-query",
+                            "parameters": "location_name-GET-query",
                             "responses": {
-                                "200": "location.name-GET-200-response"
+                                "200": "location_name-GET-200-response"
                             },
-                            "action": "location.name-GET"
+                            "action": "location_name-GET"
                         }
                     }
                 }
@@ -1626,8 +1632,9 @@ JSON;
     ],
     "action": [
         {
-            "name": "location.name-GET",
+            "name": "location_name-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1636,6 +1643,7 @@ JSON;
         {
             "name": "departureBoard-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1644,6 +1652,7 @@ JSON;
         {
             "name": "arrivalBoard-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1652,6 +1661,7 @@ JSON;
         {
             "name": "journeyDetail-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1660,7 +1670,7 @@ JSON;
     ],
     "schema": [
         {
-            "name": "location.name-GET-query",
+            "name": "location_name-GET-query",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -1701,7 +1711,7 @@ JSON;
             }
         },
         {
-            "name": "location.name-GET-200-response",
+            "name": "location_name-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",

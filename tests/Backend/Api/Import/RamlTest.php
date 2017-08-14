@@ -122,6 +122,7 @@ RAML;
         {
             "name": "helloworld-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -236,6 +237,7 @@ RAML;
         {
             "name": "person-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -244,6 +246,7 @@ RAML;
         {
             "name": "person-POST",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -379,6 +382,7 @@ RAML;
         {
             "name": "rate_limit-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"

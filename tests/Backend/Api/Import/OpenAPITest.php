@@ -295,10 +295,10 @@ JSON;
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "pets-{petId}-showPetById-GET-200-response",
-                                "default": "pets-{petId}-showPetById-GET-default-response"
+                                "200": "pets-_petId_-showPetById-GET-200-response",
+                                "default": "pets-_petId_-showPetById-GET-default-response"
                             },
-                            "action": "pets-{petId}-showPetById-GET"
+                            "action": "pets-_petId_-showPetById-GET"
                         }
                     }
                 }
@@ -309,6 +309,7 @@ JSON;
         {
             "name": "pets-listPets-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -317,14 +318,16 @@ JSON;
         {
             "name": "pets-createPets-POST",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
             }
         },
         {
-            "name": "pets-{petId}-showPetById-GET",
+            "name": "pets-_petId_-showPetById-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -423,7 +426,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{petId}-showPetById-GET-200-response",
+            "name": "pets-_petId_-showPetById-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -456,7 +459,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{petId}-showPetById-GET-default-response",
+            "name": "pets-_petId_-showPetById-GET-default-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -777,18 +780,18 @@ JSON;
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "pets-{id}-find pet by id-GET-200-response",
-                                "default": "pets-{id}-find pet by id-GET-default-response"
+                                "200": "pets-_id_-find_pet_by_id-GET-200-response",
+                                "default": "pets-_id_-find_pet_by_id-GET-default-response"
                             },
-                            "action": "pets-{id}-find pet by id-GET"
+                            "action": "pets-_id_-find_pet_by_id-GET"
                         },
                         "DELETE": {
                             "active": true,
                             "public": true,
                             "responses": {
-                                "default": "pets-{id}-deletePet-DELETE-default-response"
+                                "default": "pets-_id_-deletePet-DELETE-default-response"
                             },
-                            "action": "pets-{id}-deletePet-DELETE"
+                            "action": "pets-_id_-deletePet-DELETE"
                         }
                     }
                 }
@@ -799,6 +802,7 @@ JSON;
         {
             "name": "pets-findPets-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -807,22 +811,25 @@ JSON;
         {
             "name": "pets-addPet-POST",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
             }
         },
         {
-            "name": "pets-{id}-find pet by id-GET",
+            "name": "pets-_id_-find_pet_by_id-GET",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "200",
                 "response": "{\"message\":\"Test implementation\"}"
             }
         },
         {
-            "name": "pets-{id}-deletePet-DELETE",
+            "name": "pets-_id_-deletePet-DELETE",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "statusCode": "",
                 "response": "{\"message\":\"Test implementation\"}"
@@ -1004,7 +1011,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-find pet by id-GET-200-response",
+            "name": "pets-_id_-find_pet_by_id-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -1048,7 +1055,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-find pet by id-GET-default-response",
+            "name": "pets-_id_-find_pet_by_id-GET-default-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
@@ -1069,7 +1076,7 @@ JSON;
             }
         },
         {
-            "name": "pets-{id}-deletePet-DELETE-default-response",
+            "name": "pets-_id_-deletePet-DELETE-default-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
                 "id": "urn:schema.phpsx.org#",
