@@ -174,4 +174,173 @@ JSON;
         $this->assertEquals(500, $responses[1]['code']);
         $this->assertEquals(4, $responses[1]['response']);
     }
+
+    public function testCommandOpenAPI()
+    {
+        $command = Environment::getService('console')->find('system:import');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/openapi.json',
+            'format'  => 'openapi'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Import successful!/', $display, $display);
+
+        // check schema
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Foo-Schema',
+            'Passthru',
+            'pets-_petId_-showPetById-GET-200-response',
+            'pets-_petId_-showPetById-GET-default-response',
+            'pets-createPets-POST-default-response',
+            'pets-listPets-GET-200-response',
+            'pets-listPets-GET-default-response',
+            'pets-listPets-GET-query',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check action
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Welcome',
+            'Util-Static-Response',
+            'Sql-Table',
+            'pets-listPets-GET',
+            'pets-createPets-POST',
+            'pets-_petId_-showPetById-GET',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check routes
+        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path', ['path' => '/pets%']);
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            '/pets',
+            '/pets/:petId',
+        ];
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testCommandRaml()
+    {
+        $command = Environment::getService('console')->find('system:import');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/raml.yaml',
+            'format'  => 'raml'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Import successful!/', $display, $display);
+
+        // check schema
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Foo-Schema',
+            'Passthru',
+            'helloworld-GET-200-response',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check action
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Welcome',
+            'Util-Static-Response',
+            'Sql-Table',
+            'helloworld-GET',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check routes
+        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path', ['path' => '/helloworld%']);
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            '/helloworld',
+        ];
+
+        $this->assertEquals($expect, $actual);
+    }
+
+    public function testCommandSwagger()
+    {
+        $command = Environment::getService('console')->find('system:import');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/swagger.json',
+            'format'  => 'swagger'
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Import successful!/', $display, $display);
+
+        // check schema
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Foo-Schema',
+            'Passthru',
+            'pets-_petId_-showPetById-GET-200-response',
+            'pets-_petId_-showPetById-GET-default-response',
+            'pets-createPets-POST-default-response',
+            'pets-listPets-GET-200-response',
+            'pets-listPets-GET-default-response',
+            'pets-listPets-GET-query',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check action
+        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action');
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            'Welcome',
+            'Util-Static-Response',
+            'Sql-Table',
+            'pets-listPets-GET',
+            'pets-createPets-POST',
+            'pets-_petId_-showPetById-GET',
+        ];
+
+        $this->assertEquals($expect, $actual);
+
+        // check routes
+        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path', ['path' => '/pets%']);
+        $actual = array_map(function($value){ return reset($value); }, $actual);
+
+        $expect = [
+            '/pets',
+            '/pets/:petId',
+        ];
+
+        $this->assertEquals($expect, $actual);
+    }
 }
