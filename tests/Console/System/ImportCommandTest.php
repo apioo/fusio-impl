@@ -194,10 +194,10 @@ JSON;
         $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
         $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
-        $this->assertContains('pets-_petId_-showPetById-GET-default-response', $actual);
-        $this->assertContains('pets-createPets-POST-default-response', $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-500-response', $actual);
+        $this->assertContains('pets-createPets-POST-500-response', $actual);
         $this->assertContains('pets-listPets-GET-200-response', $actual);
-        $this->assertContains('pets-listPets-GET-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-500-response', $actual);
         $this->assertContains('pets-listPets-GET-query', $actual);
 
         // check action
@@ -264,10 +264,10 @@ JSON;
         $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
         $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
-        $this->assertContains('pets-_petId_-showPetById-GET-default-response', $actual);
-        $this->assertContains('pets-createPets-POST-default-response', $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-500-response', $actual);
+        $this->assertContains('pets-createPets-POST-500-response', $actual);
         $this->assertContains('pets-listPets-GET-200-response', $actual);
-        $this->assertContains('pets-listPets-GET-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-500-response', $actual);
         $this->assertContains('pets-listPets-GET-query', $actual);
 
         // check action

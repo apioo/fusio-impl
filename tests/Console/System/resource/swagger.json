@@ -49,7 +49,7 @@
               "$ref": "#/definitions/Pets"
             }
           },
-          "default": {
+          "500": {
             "description": "unexpected error",
             "schema": {
               "$ref": "#/definitions/Error"
@@ -67,7 +67,7 @@
           "201": {
             "description": "Null response"
           },
-          "default": {
+          "500": {
             "description": "unexpected error",
             "schema": {
               "$ref": "#/definitions/Error"
@@ -99,7 +99,7 @@
               "$ref": "#/definitions/Pets"
             }
           },
-          "default": {
+          "500": {
             "description": "unexpected error",
             "schema": {
               "$ref": "#/definitions/Error"
