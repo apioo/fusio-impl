@@ -267,17 +267,13 @@ JSON;
                             "public": true,
                             "parameters": "pets-listPets-GET-query",
                             "responses": {
-                                "200": "pets-listPets-GET-200-response",
-                                "default": "pets-listPets-GET-default-response"
+                                "200": "pets-listPets-GET-200-response"
                             },
                             "action": "pets-listPets-GET"
                         },
                         "POST": {
                             "active": true,
                             "public": true,
-                            "responses": {
-                                "default": "pets-createPets-POST-default-response"
-                            },
                             "action": "pets-createPets-POST"
                         }
                     }
@@ -295,8 +291,7 @@ JSON;
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "pets-_petId_-showPetById-GET-200-response",
-                                "default": "pets-_petId_-showPetById-GET-default-response"
+                                "200": "pets-_petId_-showPetById-GET-200-response"
                             },
                             "action": "pets-_petId_-showPetById-GET"
                         }
@@ -384,48 +379,6 @@ JSON;
             }
         },
         {
-            "name": "pets-listPets-GET-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
-            }
-        },
-        {
-            "name": "pets-createPets-POST-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
-            }
-        },
-        {
             "name": "pets-_petId_-showPetById-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
@@ -456,27 +409,6 @@ JSON;
                 "items": {
                     "$ref": "#\/definitions\/Pet"
                 }
-            }
-        },
-        {
-            "name": "pets-_petId_-showPetById-GET-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
             }
         }
     ]
@@ -750,8 +682,7 @@ JSON;
                             "public": true,
                             "parameters": "pets-findPets-GET-query",
                             "responses": {
-                                "200": "pets-findPets-GET-200-response",
-                                "default": "pets-findPets-GET-default-response"
+                                "200": "pets-findPets-GET-200-response"
                             },
                             "action": "pets-findPets-GET"
                         },
@@ -760,8 +691,7 @@ JSON;
                             "public": true,
                             "request": "pets-addPet-POST-request",
                             "responses": {
-                                "200": "pets-addPet-POST-200-response",
-                                "default": "pets-addPet-POST-default-response"
+                                "200": "pets-addPet-POST-200-response"
                             },
                             "action": "pets-addPet-POST"
                         }
@@ -780,17 +710,13 @@ JSON;
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "pets-_id_-find_pet_by_id-GET-200-response",
-                                "default": "pets-_id_-find_pet_by_id-GET-default-response"
+                                "200": "pets-_id_-find_pet_by_id-GET-200-response"
                             },
                             "action": "pets-_id_-find_pet_by_id-GET"
                         },
                         "DELETE": {
                             "active": true,
                             "public": true,
-                            "responses": {
-                                "default": "pets-_id_-deletePet-DELETE-default-response"
-                            },
                             "action": "pets-_id_-deletePet-DELETE"
                         }
                     }
@@ -906,27 +832,6 @@ JSON;
             }
         },
         {
-            "name": "pets-findPets-GET-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
-            }
-        },
-        {
             "name": "pets-addPet-POST-request",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
@@ -990,27 +895,6 @@ JSON;
             }
         },
         {
-            "name": "pets-addPet-POST-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
-            }
-        },
-        {
             "name": "pets-_id_-find_pet_by_id-GET-200-response",
             "source": {
                 "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
@@ -1051,48 +935,6 @@ JSON;
                     {
                         "$ref": "#\/definitions\/PetId"
                     }
-                ]
-            }
-        },
-        {
-            "name": "pets-_id_-find_pet_by_id-GET-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
-                ]
-            }
-        },
-        {
-            "name": "pets-_id_-deletePet-DELETE-default-response",
-            "source": {
-                "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-                "id": "urn:schema.phpsx.org#",
-                "title": "Error",
-                "properties": {
-                    "code": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "code",
-                    "message"
                 ]
             }
         }
