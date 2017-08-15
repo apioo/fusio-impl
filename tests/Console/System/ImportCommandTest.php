@@ -191,47 +191,27 @@ JSON;
         $this->assertRegExp('/Import successful!/', $display, $display);
 
         // check schema
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
-        $expect = [
-            'Foo-Schema',
-            'Passthru',
-            'pets-_petId_-showPetById-GET-200-response',
-            'pets-_petId_-showPetById-GET-default-response',
-            'pets-createPets-POST-default-response',
-            'pets-listPets-GET-200-response',
-            'pets-listPets-GET-default-response',
-            'pets-listPets-GET-query',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-default-response', $actual);
+        $this->assertContains('pets-createPets-POST-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-200-response', $actual);
+        $this->assertContains('pets-listPets-GET-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-query', $actual);
 
         // check action
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_action');
 
-        $expect = [
-            'Sql-Table',
-            'Util-Static-Response',
-            'Welcome',
-            'pets-_petId_-showPetById-GET',
-            'pets-createPets-POST',
-            'pets-listPets-GET',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET', $actual);
+        $this->assertContains('pets-createPets-POST', $actual);
+        $this->assertContains('pets-listPets-GET', $actual);
 
         // check routes
-        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path ORDER BY path ASC', ['path' => '/pets%']);
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT path FROM fusio_routes');
 
-        $expect = [
-            '/pets',
-            '/pets/:petId',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('/pets', $actual);
+        $this->assertContains('/pets/:petId', $actual);
     }
 
     public function testCommandRaml()
@@ -250,39 +230,19 @@ JSON;
         $this->assertRegExp('/Import successful!/', $display, $display);
 
         // check schema
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
-        $expect = [
-            'Foo-Schema',
-            'Passthru',
-            'helloworld-GET-200-response',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('helloworld-GET-200-response', $actual);
 
         // check action
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_action');
 
-        $expect = [
-            'Sql-Table',
-            'Util-Static-Response',
-            'Welcome',
-            'helloworld-GET',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('helloworld-GET', $actual);
 
         // check routes
-        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path ORDER BY path ASC', ['path' => '/helloworld%']);
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT path FROM fusio_routes');
 
-        $expect = [
-            '/helloworld',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('/helloworld', $actual);
     }
 
     public function testCommandSwagger()
@@ -301,46 +261,36 @@ JSON;
         $this->assertRegExp('/Import successful!/', $display, $display);
 
         // check schema
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_schema ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
-        $expect = [
-            'Foo-Schema',
-            'Passthru',
-            'pets-_petId_-showPetById-GET-200-response',
-            'pets-_petId_-showPetById-GET-default-response',
-            'pets-createPets-POST-default-response',
-            'pets-listPets-GET-200-response',
-            'pets-listPets-GET-default-response',
-            'pets-listPets-GET-query',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET-default-response', $actual);
+        $this->assertContains('pets-createPets-POST-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-200-response', $actual);
+        $this->assertContains('pets-listPets-GET-default-response', $actual);
+        $this->assertContains('pets-listPets-GET-query', $actual);
 
         // check action
-        $actual = $this->connection->fetchAll('SELECT name FROM fusio_action ORDER BY name ASC');
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT name FROM fusio_action');
 
-        $expect = [
-            'Sql-Table',
-            'Util-Static-Response',
-            'Welcome',
-            'pets-_petId_-showPetById-GET',
-            'pets-createPets-POST',
-            'pets-listPets-GET',
-        ];
-
-        $this->assertEquals($expect, $actual);
+        $this->assertContains('pets-_petId_-showPetById-GET', $actual);
+        $this->assertContains('pets-createPets-POST', $actual);
+        $this->assertContains('pets-listPets-GET', $actual);
 
         // check routes
-        $actual = $this->connection->fetchAll('SELECT path FROM fusio_routes WHERE path LIKE :path ORDER BY path ASC', ['path' => '/pets%']);
-        $actual = array_map(function($value){ return reset($value); }, $actual);
+        $actual = $this->fetchList('SELECT path FROM fusio_routes');
 
-        $expect = [
-            '/pets',
-            '/pets/:petId',
-        ];
+        $this->assertContains('/pets', $actual);
+        $this->assertContains('/pets/:petId', $actual);
+    }
 
-        $this->assertEquals($expect, $actual);
+    private function fetchList($sql)
+    {
+        $result = $this->connection->fetchAll($sql);
+        $result = array_map(function($value){ 
+            return reset($value); 
+        }, $result);
+        
+        return $result;
     }
 }
