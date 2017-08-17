@@ -69,7 +69,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             'class' => VoidAction::class,
         ]);
 
-        $this->assertEquals(4, $actionId);
+        $this->assertEquals(6, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
@@ -182,7 +182,7 @@ JSON;
             'class' => VoidAction::class,
         ]);
 
-        $this->assertEquals(4, $actionId);
+        $this->assertEquals(6, $actionId);
 
         // check connection class
         $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [

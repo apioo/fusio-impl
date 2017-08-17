@@ -55,6 +55,8 @@ class ExportCommandTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "actionClass": [
+        "Fusio\\Adapter\\Http\\Action\\HttpProcessor",
+        "Fusio\\Adapter\\Php\\Action\\PhpProcessor",
         "Fusio\\Adapter\\Sql\\Action\\SqlTable",
         "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
         "Fusio\\Adapter\\V8\\Action\\V8Processor"
