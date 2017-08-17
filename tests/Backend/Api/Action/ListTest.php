@@ -50,6 +50,14 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
+            "name": "HTTP-Processor",
+            "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
+        },
+        {
+            "name": "PHP-Processor",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor"
+        },
+        {
             "name": "SQL-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         },

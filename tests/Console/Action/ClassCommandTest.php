@@ -55,6 +55,8 @@ class ClassCommandTest extends ControllerDbTestCase
 +----------------------+----------------------------------------------+
 | Name                 | Class                                        |
 +----------------------+----------------------------------------------+
+| HTTP-Processor       | Fusio\Adapter\Http\Action\HttpProcessor      |
+| PHP-Processor        | Fusio\Adapter\Php\Action\PhpProcessor        |
 | SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |
 | Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse |
 | V8-Processor         | Fusio\Adapter\V8\Action\V8Processor          |
@@ -62,6 +64,9 @@ class ClassCommandTest extends ControllerDbTestCase
 
 TEXT;
 
-        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
+        $expect = str_replace(["\r\n", "\n", "\r"], "\n", $expect);
+        $actual = str_replace(["\r\n", "\n", "\r"], "\n", $actual);
+
+        $this->assertEquals($expect, $actual, $actual);
     }
 }
