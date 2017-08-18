@@ -49,6 +49,7 @@ class Log extends TableAbstract
             'path' => self::TYPE_VARCHAR,
             'header' => self::TYPE_TEXT,
             'body' => self::TYPE_TEXT,
+            'executionTime' => self::TYPE_INT,
             'date' => self::TYPE_DATETIME,
         );
     }

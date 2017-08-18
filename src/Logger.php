@@ -78,6 +78,20 @@ class Logger
 
     /**
      * @param integer $logId
+     * @param float $startTime
+     * @param float $endTime
+     */
+    public function setExecutionTime($logId, $startTime, $endTime)
+    {
+        $this->connection->update('fusio_log', [
+            'executionTime' => intval(($endTime - $startTime) * 1000),
+        ], [
+            'id' => $logId,
+        ]);
+    }
+
+    /**
+     * @param integer $logId
      * @param \Exception $exception
      */
     public function appendError($logId, \Exception $exception)
