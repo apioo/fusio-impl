@@ -26,13 +26,13 @@ use Fusio\Impl\Backend\View;
 use PSX\Framework\Controller\ApiAbstract;
 
 /**
- * LatestApps
+ * Dashboard
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class LatestApps extends ApiAbstract
+class Dashboard extends ApiAbstract
 {
     use ProtectionTrait;
 
@@ -44,8 +44,15 @@ class LatestApps extends ApiAbstract
 
     public function onGet()
     {
-        $this->setBody(
-            $this->tableManager->getTable(View\Dashboard::class)->getLatestApps()
-        );
+        $filter = View\Log\QueryFilter::create($this->getParameters());
+
+        $this->setBody([
+            'incomingRequests' => $this->tableManager->getTable(View\Statistic::class)->getIncomingRequests($filter),
+            'mostUsedRoutes' => $this->tableManager->getTable(View\Statistic::class)->getMostUsedRoutes($filter),
+            'timePerRoute' => $this->tableManager->getTable(View\Statistic::class)->getTimePerRoute($filter),
+            'latestApps' => $this->tableManager->getTable(View\Dashboard::class)->getLatestApps(),
+            'latestRequests' => $this->tableManager->getTable(View\Dashboard::class)->getLatestRequests(),
+            'errorsPerRoute' => $this->tableManager->getTable(View\Statistic::class)->getErrorsPerRoute($filter),
+        ]);
     }
 }
