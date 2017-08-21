@@ -116,7 +116,7 @@ class TimeAverageTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "Average execution time (ms)"
+        "Execution time (ms)"
     ]
 }
 JSON;
