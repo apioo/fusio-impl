@@ -152,8 +152,8 @@ JSON;
                 ['methodId' => 3, 'code' => 201, 'response' => 1],
             ],
             'fusio_log' => [
-                ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => '2015-06-25 22:49:09'],
-                ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'date' => '2015-06-25 22:49:09'],
+                ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'executionTime' => 500000, 'date' => '2015-06-25 22:49:09'],
+                ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'executionTime' => 500000, 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_log_error' => [
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],

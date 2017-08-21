@@ -473,6 +473,8 @@ class Version096 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/errors_per_route',          'controller' => Backend\Api\Statistic\ErrorsPerRoute::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/issued_tokens',             'controller' => Backend\Api\Statistic\IssuedTokens::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/count_requests',            'controller' => Backend\Api\Statistic\CountRequests::class],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/time_average',              'controller' => Backend\Api\Statistic\TimeAverage::class],
+                ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/statistic/time_per_route',            'controller' => Backend\Api\Statistic\TimePerRoute::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/account/change_password',             'controller' => Backend\Api\Account\ChangePassword::class],
                 ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/process',                      'controller' => Backend\Api\Import\Process::class],
                 ['status' => 1, 'methods' => 'POST',                'path' => '/backend/import/:format',                      'controller' => Backend\Api\Import\Format::class],

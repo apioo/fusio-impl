@@ -250,7 +250,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $actionCache = $method['actionCache'];
 
         if ($actionId > 0) {
-            $startTime = microtime(true);
+            $startTime = microtime();
 
             if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($actionCache)) {
                 // if the method is not in dev mode we load the action from the
@@ -280,7 +280,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
                 }
             }
 
-            $endTime = microtime(true);
+            $endTime = microtime();
 
             $this->apiLogger->setExecutionTime($this->logId, $startTime, $endTime);
         } else {

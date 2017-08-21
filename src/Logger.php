@@ -78,13 +78,20 @@ class Logger
 
     /**
      * @param integer $logId
-     * @param float $startTime
-     * @param float $endTime
+     * @param string $startTime
+     * @param string $endTime
      */
     public function setExecutionTime($logId, $startTime, $endTime)
     {
+        list($startUsec, $startSec) = explode(' ', $startTime);
+        list($endUsec, $endSec) = explode(' ', $endTime);
+
+        $diffSec = $startSec != $endSec ? $endSec - $startSec : 0;
+        $diffUsec = $endUsec - $startUsec;
+        $sec = intval(($diffSec + $diffUsec) * 1000000);
+
         $this->connection->update('fusio_log', [
-            'executionTime' => intval(($endTime - $startTime) * 1000),
+            'executionTime' => $sec,
         ], [
             'id' => $logId,
         ]);
