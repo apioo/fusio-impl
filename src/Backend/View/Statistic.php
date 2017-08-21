@@ -59,12 +59,12 @@ class Statistic extends ViewAbstract
             $data[$row['routeId']] = [];
             $series[$row['routeId']] = null;
 
-            $fromDate = clone $filter->getFrom();
-            $toDate   = clone $filter->getTo();
+            $fromDate = $filter->getFrom();
+            $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
                 $data[$row['routeId']][$fromDate->format('Y-m-d')] = 0;
 
-                $fromDate->add(new \DateInterval('P1D'));
+                $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
@@ -97,14 +97,14 @@ class Statistic extends ViewAbstract
         }
 
         // build labels
-        $fromDate = clone $filter->getFrom();
-        $toDate   = clone $filter->getTo();
+        $fromDate = $filter->getFrom();
+        $toDate   = $filter->getTo();
         $diff     = $toDate->getTimestamp() - $fromDate->getTimestamp();
         $labels   = [];
         while ($fromDate <= $toDate) {
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // clean data structure
@@ -136,7 +136,7 @@ class Statistic extends ViewAbstract
             $data[$fromDate->format('Y-m-d')] = 0;
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // fill values
@@ -186,12 +186,12 @@ class Statistic extends ViewAbstract
             $data[$row['appId']] = [];
             $series[$row['appId']] = null;
 
-            $fromDate = clone $filter->getFrom();
-            $toDate   = clone $filter->getTo();
+            $fromDate = $filter->getFrom();
+            $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
                 $data[$row['appId']][$fromDate->format('Y-m-d')] = 0;
 
-                $fromDate->add(new \DateInterval('P1D'));
+                $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
@@ -222,14 +222,14 @@ class Statistic extends ViewAbstract
         }
 
         // build labels
-        $fromDate = clone $filter->getFrom();
-        $toDate   = clone $filter->getTo();
+        $fromDate = $filter->getFrom();
+        $toDate   = $filter->getTo();
         $diff     = $toDate->getTimestamp() - $fromDate->getTimestamp();
         $labels   = [];
         while ($fromDate <= $toDate) {
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // clean data structure
@@ -270,12 +270,12 @@ class Statistic extends ViewAbstract
             $data[$row['routeId']] = [];
             $series[$row['routeId']] = null;
 
-            $fromDate = clone $filter->getFrom();
-            $toDate   = clone $filter->getTo();
+            $fromDate = $filter->getFrom();
+            $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
                 $data[$row['routeId']][$fromDate->format('Y-m-d')] = 0;
 
-                $fromDate->add(new \DateInterval('P1D'));
+                $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
@@ -306,14 +306,14 @@ class Statistic extends ViewAbstract
         }
 
         // build labels
-        $fromDate = clone $filter->getFrom();
-        $toDate   = clone $filter->getTo();
+        $fromDate = $filter->getFrom();
+        $toDate   = $filter->getTo();
         $diff     = $toDate->getTimestamp() - $fromDate->getTimestamp();
         $labels   = [];
         while ($fromDate <= $toDate) {
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // clean data structure
@@ -345,7 +345,7 @@ class Statistic extends ViewAbstract
             $data[$fromDate->format('Y-m-d')] = 0;
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // fill values
@@ -404,7 +404,7 @@ class Statistic extends ViewAbstract
             $data[$fromDate->format('Y-m-d')] = 0;
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // fill values
@@ -455,12 +455,12 @@ class Statistic extends ViewAbstract
             $data[$row['routeId']] = [];
             $series[$row['routeId']] = null;
 
-            $fromDate = clone $filter->getFrom();
-            $toDate   = clone $filter->getTo();
+            $fromDate = $filter->getFrom();
+            $toDate   = $filter->getTo();
             while ($fromDate <= $toDate) {
                 $data[$row['routeId']][$fromDate->format('Y-m-d')] = 0;
 
-                $fromDate->add(new \DateInterval('P1D'));
+                $fromDate = $fromDate->add(new \DateInterval('P1D'));
             }
         }
 
@@ -493,14 +493,14 @@ class Statistic extends ViewAbstract
         }
 
         // build labels
-        $fromDate = clone $filter->getFrom();
-        $toDate   = clone $filter->getTo();
+        $fromDate = $filter->getFrom();
+        $toDate   = $filter->getTo();
         $diff     = $toDate->getTimestamp() - $fromDate->getTimestamp();
         $labels   = [];
         while ($fromDate <= $toDate) {
             $labels[] = $fromDate->format($diff < 2419200 ? 'D' : 'Y-m-d');
 
-            $fromDate->add(new \DateInterval('P1D'));
+            $fromDate = $fromDate->add(new \DateInterval('P1D'));
         }
 
         // clean data structure

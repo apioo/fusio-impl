@@ -33,12 +33,12 @@ use PSX\Sql\Condition;
 abstract class QueryFilterAbstract
 {
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $from;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $to;
 
@@ -64,8 +64,8 @@ abstract class QueryFilterAbstract
 
     public static function create(array $parameters)
     {
-        $from = new \DateTime(isset($parameters['from']) ? $parameters['from'] : '-1 month');
-        $to   = new \DateTime(isset($parameters['to']) ? $parameters['to'] : 'now');
+        $from = new \DateTimeImmutable(isset($parameters['from']) ? $parameters['from'] : '-1 month');
+        $to   = new \DateTimeImmutable(isset($parameters['to']) ? $parameters['to'] : 'now');
 
         // from date is large then to date
         if ($from->getTimestamp() > $to->getTimestamp()) {
@@ -76,8 +76,7 @@ abstract class QueryFilterAbstract
 
         // check if diff between from and to is larger then ca 2 months
         if (($to->getTimestamp() - $from->getTimestamp()) > 4838400) {
-            $to = clone $from;
-            $to->add(new \DateInterval('P2M'));
+            $to = $from->add(new \DateInterval('P2M'));
         }
 
         $filter = new static();
