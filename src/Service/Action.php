@@ -55,9 +55,9 @@ class Action
     protected $routesMethodTable;
 
     /**
-     * @var string
+     * @var \Fusio\Engine\Factory\ActionInterface
      */
-    protected $actionEngine;
+    protected $actionFactory;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -68,15 +68,13 @@ class Action
      * @param \Fusio\Impl\Table\Action $actionTable
      * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
      * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
-     * @param string $actionEngine
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Action $actionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, $actionEngine, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable       = $actionTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->actionFactory     = $actionFactory;
-        $this->actionEngine      = $actionEngine;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
@@ -94,7 +92,7 @@ class Action
         }
 
         if (empty($engine)) {
-            $engine = $this->detectEngine($class, $this->actionEngine);
+            $engine = $this->detectEngine($class);
         }
 
         // check source
@@ -209,33 +207,65 @@ class Action
      * @param string $class
      * @return string
      */
-    private function detectEngine(&$class, $defaultEngine)
+    private function detectEngine(&$class)
     {
+        $engine = null;
+
         if (($pos = strpos($class, '://')) !== false) {
             $proto = substr($class, 0, $pos);
             $class = substr($class, $pos + 3);
 
             switch ($proto) {
-                case 'php':
-                    return Resolver\PhpFile::class;
+                case 'file':
+                    $engine = $this->getEngineByFile($class);
+                    break;
 
-                case 'js':
-                    return Resolver\JavascriptFile::class;
+                case 'file+php':
+                    $engine = Resolver\PhpFile::class;
+                    break;
+
+                case 'file+js':
+                    $engine = Resolver\JavascriptFile::class;
+                    break;
+
+                case 'php':
+                    $engine = Factory\Resolver\PhpClass::class;
+                    break;
 
                 case 'http':
                 case 'https':
-                    return Resolver\HttpUrl::class;
+                    $engine = Resolver\HttpUrl::class;
+                    break;
             }
         } elseif (is_file($class)) {
-            if (substr($class, 0, -4) == '.php') {
-                return Resolver\PhpFile::class;
-            } elseif (substr($class, 0, -3) == '.js') {
-                return Resolver\JavascriptFile::class;
-            }
+            $engine = $this->getEngineByFile($class);
         } elseif (class_exists($class)) {
-            return Factory\Resolver\PhpClass::class;
+            $engine = Factory\Resolver\PhpClass::class;
         }
 
-        return $defaultEngine;
+        if ($engine === null) {
+            $engine = Factory\Resolver\PhpClass::class;
+        }
+
+        return $engine;
+    }
+
+    /**
+     * @param string $file
+     * @return string|null
+     */
+    private function getEngineByFile($file)
+    {
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+
+        switch ($fileExtension) {
+            case 'php':
+                return Resolver\PhpFile::class;
+
+            case 'js':
+                return Resolver\JavascriptFile::class;
+        }
+
+        return null;
     }
 }
