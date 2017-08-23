@@ -36,10 +36,6 @@ class PhpFile implements ResolverInterface
 {
     public function resolve($className)
     {
-        if (!is_file($className)) {
-            throw new FactoryResolveException('Could not resolve file ' . $className);
-        }
-
         return new PhpEngine($className);
     }
 }

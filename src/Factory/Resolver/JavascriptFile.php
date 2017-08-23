@@ -36,10 +36,6 @@ class JavascriptFile implements ResolverInterface
 {
     public function resolve($className)
     {
-        if (!is_file($className)) {
-            throw new FactoryResolveException('Could not resolve file ' . $className);
-        }
-
         return new V8Engine(file_get_contents($className));
     }
 }
