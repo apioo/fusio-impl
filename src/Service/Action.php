@@ -29,7 +29,7 @@ use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Event\ActionEvents;
-use Fusio\Impl\Factory\Resolver;
+use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -92,7 +92,7 @@ class Action
         }
 
         if (empty($engine)) {
-            $engine = $this->detectEngine($class);
+            $engine = EngineDetector::getEngine($class);
         }
 
         // check source
@@ -201,71 +201,5 @@ class Action
         if (!$action instanceof ActionInterface) {
             throw new StatusCode\BadRequestException('Could not resolve action');
         }
-    }
-
-    /**
-     * @param string $class
-     * @return string
-     */
-    private function detectEngine(&$class)
-    {
-        $engine = null;
-
-        if (($pos = strpos($class, '://')) !== false) {
-            $proto = substr($class, 0, $pos);
-            $class = substr($class, $pos + 3);
-
-            switch ($proto) {
-                case 'file':
-                    $engine = $this->getEngineByFile($class);
-                    break;
-
-                case 'file+php':
-                    $engine = Resolver\PhpFile::class;
-                    break;
-
-                case 'file+js':
-                    $engine = Resolver\JavascriptFile::class;
-                    break;
-
-                case 'php':
-                    $engine = Factory\Resolver\PhpClass::class;
-                    break;
-
-                case 'http':
-                case 'https':
-                    $engine = Resolver\HttpUrl::class;
-                    break;
-            }
-        } elseif (is_file($class)) {
-            $engine = $this->getEngineByFile($class);
-        } elseif (class_exists($class)) {
-            $engine = Factory\Resolver\PhpClass::class;
-        }
-
-        if ($engine === null) {
-            $engine = Factory\Resolver\PhpClass::class;
-        }
-
-        return $engine;
-    }
-
-    /**
-     * @param string $file
-     * @return string|null
-     */
-    private function getEngineByFile($file)
-    {
-        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
-
-        switch ($fileExtension) {
-            case 'php':
-                return Resolver\PhpFile::class;
-
-            case 'js':
-                return Resolver\JavascriptFile::class;
-        }
-
-        return null;
     }
 }
