@@ -192,7 +192,7 @@ class Import extends SystemAbstract
 
         if (empty($id)) {
             $type = substr($tableName, 6);
-            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $id);
+            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $name);
         }
 
         return $id;
