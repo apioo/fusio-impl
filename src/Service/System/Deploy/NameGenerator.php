@@ -43,21 +43,9 @@ class NameGenerator
             if (is_file($source)) {
                 $source = realpath($source);
                 $source = substr($source, strlen(realpath(PSX_PATH_LIBRARY)) + 1);
-                $source = str_replace(['/', '\\'], ' ', $source);
-                $source = str_replace(['.php', '.js'], '', $source);
-                $source = str_replace(' ', '-', ucwords($source));
-
-                return $source;
-            } elseif (class_exists($source)) {
-                $source = str_replace('\\', '-', $source);
-                $source = str_replace('Fusio-Impl-', '', $source);
-
-                return $source;
-            } elseif (preg_match('/' . self::NAME_REGEXP . '/', $source)) {
-                return $source;
-            } else {
-                throw new RuntimeException('Invalid action source ' . $source);
             }
+
+            return preg_replace('/[^a-zA-Z0-9\-\_]/', '_', $source);
         } else {
             throw new RuntimeException('Invalid action source ' . $source);
         }

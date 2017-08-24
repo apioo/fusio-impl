@@ -324,12 +324,12 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/- \[CREATED\] action S-Console-System-Resource-Test-action/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action s_Console_System_resource_test-action_php/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
-            'name' => 'S-Console-System-Resource-Test-action',
+            'name' => 's_Console_System_resource_test-action_php',
         ]);
 
         $this->assertEquals(4, $action['id']);
@@ -385,7 +385,7 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Invalid action source/', $display, $display);
+        $this->assertRegExp('/Could not resolve action Foo_Bar/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()
@@ -401,7 +401,7 @@ JSON;
         $display = $commandTester->getDisplay();
 
         $this->assertRegExp('/- \[CREATED\] schema Schema/', $display, $display);
-        $this->assertRegExp('/- \[CREATED\] action S-Console-System-Resource-Test-action/', $display, $display);
+        $this->assertRegExp('/- \[CREATED\] action s_Console_System_resource_test-action_php/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check schema
