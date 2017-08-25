@@ -1,0 +1,6 @@
+routes:
+  /bar:
+    methods:
+      GET:
+        public: true
+        action: "http://httpbin.org/get"

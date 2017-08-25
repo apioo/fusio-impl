@@ -3,4 +3,4 @@ routes:
     methods:
       GET:
         public: true
-        action: "${dir.src}/../tests/Console/System/resource/test-action.php"
+        action: "Fusio\\Impl\\Tests\\Console\\System\\Action\\TestAction"
