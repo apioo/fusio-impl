@@ -40,6 +40,11 @@ class NameGenerator
     public static function getActionNameFromSource($source)
     {
         if (is_string($source)) {
+            // remove scheme if uri format
+            if (($pos = strpos($source, '://')) !== false) {
+                $source = substr($source, $pos + 3);
+            }
+
             if (is_file($source)) {
                 $source = realpath($source);
                 $source = substr($source, strlen(realpath(PSX_PATH_LIBRARY)) + 1);
