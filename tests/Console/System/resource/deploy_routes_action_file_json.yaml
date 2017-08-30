@@ -1,0 +1,6 @@
+routes:
+  /bar:
+    methods:
+      GET:
+        public: true
+        action: "${dir.src}/../tests/Console/System/resource/static.json"
