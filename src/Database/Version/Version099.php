@@ -423,6 +423,7 @@ class Version099 implements VersionInterface
                 ['class' => Adapter\Sql\Action\SqlTable::class],
                 ['class' => Adapter\Util\Action\UtilStaticResponse::class],
                 ['class' => Adapter\V8\Action\V8Processor::class],
+                ['class' => Adapter\File\Action\FileProcessor::class],
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache]

@@ -100,8 +100,9 @@ class EngineDetector
 
             case 'js':
                 return Resolver\JavascriptFile::class;
-        }
 
-        return null;
+            default:
+                return Resolver\StaticFile::class;
+        }
     }
 }
