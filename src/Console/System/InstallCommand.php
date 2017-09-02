@@ -56,7 +56,7 @@ class InstallCommand extends Command
         $this
             ->setName('system:install')
             ->setAliases(['install'])
-            ->setDescription('Installs the schema to the database defined in the coniguration file');
+            ->setDescription('Installs or upgrades the database to the latest schema');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -66,7 +66,7 @@ class InstallCommand extends Command
 
         if ($tableCount > 0) {
             $helper   = $this->getHelper('question');
-            $question = new ConfirmationQuestion('The provided database "' . $fromSchema->getName() . '" contains already ' . $tableCount . ' tables.' . "\n" . 'The installation script will DELETE all tables on the database which does not belong to the fusio schema.' . "\n" . 'Do you want to continue with this action (y|n)?', false);
+            $question = new ConfirmationQuestion('The provided database "' . $fromSchema->getName() . '" contains already ' . $tableCount . ' tables.' . "\n" . 'The installation script will DELETE all tables on the database which do not belong to the Fusio schema.' . "\n" . 'Do you want to continue with this action (y|n)?', false);
 
             if (!$helper->ask($input, $output, $question)) {
                 return;
