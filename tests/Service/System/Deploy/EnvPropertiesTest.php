@@ -44,7 +44,7 @@ class EnvPropertiesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $actual, $actual);
     }
 
-    public function testReplaceMultiline()
+    public function testReplaceMultiple()
     {
         $_SERVER['APIOO_DB_NAME'] = 'db_name';
         $_SERVER['APIOO_DB_USER'] = 'db_user';
