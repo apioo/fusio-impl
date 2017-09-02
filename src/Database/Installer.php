@@ -33,114 +33,110 @@ use Doctrine\DBAL\Connection;
  */
 class Installer
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
+    /**
+     * @param \Doctrine\DBAL\Connection $connection
+     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
+    /**
+     * @param string $schemaVersion
+     */
     public function install($schemaVersion)
     {
-        $version = $this->doInstall($schemaVersion);
+        $version = self::getVersion($schemaVersion);
 
         if ($version instanceof VersionInterface) {
-            $this->connection->beginTransaction();
-
-            $version->executeInstall($this->connection);
-
-            $this->connection->commit();
+            $this->executeQueries($version, $schemaVersion);
+            $this->executeInstall($version);
         }
     }
 
+    /**
+     * @param string $fromVersion
+     * @param string $toVersion
+     */
     public function upgrade($fromVersion, $toVersion)
     {
-        $indexFrom   = $this->getIndexOf($fromVersion);
-        $indexTo     = $this->getIndexOf($toVersion);
-        $upgradePath = $this->getPathBetweenVersions($fromVersion, $toVersion);
+        $indexFrom   = self::getIndexOf($fromVersion);
+        $indexTo     = self::getIndexOf($toVersion);
+        $upgradePath = self::getPathBetweenVersions($fromVersion, $toVersion);
 
         foreach ($upgradePath as $schemaVersion) {
             // install version
-            $version = $this->doInstall($schemaVersion);
+            $version = self::getVersion($schemaVersion);
 
             if ($version instanceof VersionInterface) {
+                $this->executeQueries($version, $schemaVersion);
+
                 // we execute the upgrade only if we are jumping to a new
                 // version
                 if ($indexTo > $indexFrom) {
-                    $this->connection->beginTransaction();
-
-                    $version->executeUpgrade($this->connection);
-
-                    $this->connection->commit();
+                    $this->executeUpgrade($version);
                 }
             }
         }
     }
 
     /**
-     * Returns the upgrade path between two versions
-     *
-     * @param string $fromVersion
-     * @param string $toVersion
-     * @return array
+     * @param \Fusio\Impl\Database\VersionInterface $version
      */
-    public function getPathBetweenVersions($fromVersion, $toVersion)
+    private function executeInstall(VersionInterface $version)
     {
-        $path      = array_reverse(self::getUpgradePath());
-        $indexFrom = $this->getIndexOf($fromVersion);
-        $indexTo   = $this->getIndexOf($toVersion);
+        $this->connection->beginTransaction();
 
-        // downgrade is not possible
-        if ($indexTo < $indexFrom) {
-            return [];
-        }
+        $version->executeInstall($this->connection);
 
-        if (isset($path[$indexTo]) && isset($path[$indexFrom])) {
-            return array_slice($path, $indexFrom + 1, $indexTo - $indexFrom);
-        }
-
-        return [];
+        $this->connection->commit();
     }
 
-    protected function getIndexOf($version)
+    /**
+     * @param \Fusio\Impl\Database\VersionInterface $version
+     */
+    private function executeUpgrade(VersionInterface $version)
     {
-        $upgradePath = array_reverse(self::getUpgradePath());
-        foreach ($upgradePath as $index => $schemaVersion) {
-            if (version_compare($schemaVersion, $version, '==')) {
-                return $index;
-            }
-        }
-        return null;
+        $this->connection->beginTransaction();
+
+        $version->executeUpgrade($this->connection);
+
+        $this->connection->commit();
     }
 
-    protected function doInstall($schemaVersion)
+    /**
+     * Executes all queries between the current database schema and the provided
+     * version
+     * 
+     * @param \Fusio\Impl\Database\VersionInterface $version
+     * @param string $schemaVersion
+     */
+    private function executeQueries(VersionInterface $version, $schemaVersion)
     {
-        $version = self::getVersion($schemaVersion);
-        if ($version instanceof VersionInterface) {
-            $fromSchema = $this->connection->getSchemaManager()->createSchema();
-            $toSchema   = $version->getSchema();
-            $queries    = $fromSchema->getMigrateToSql($toSchema, $this->connection->getDatabasePlatform());
+        $this->connection->beginTransaction();
 
-            $this->connection->beginTransaction();
+        $fromSchema = $this->connection->getSchemaManager()->createSchema();
+        $toSchema   = $version->getSchema();
+        $queries    = $fromSchema->getMigrateToSql($toSchema, $this->connection->getDatabasePlatform());
 
-            foreach ($queries as $query) {
-                $this->connection->query($query);
-            }
-
-            // insert installation entry
-            $now = new DateTime();
-
-            $this->connection->insert('fusio_meta', [
-                'version'     => $schemaVersion,
-                'installDate' => $now->format('Y-m-d H:i:s'),
-            ]);
-
-            $this->connection->commit();
-
-            return $version;
-        } else {
-            return null;
+        foreach ($queries as $query) {
+            $this->connection->query($query);
         }
+
+        // insert installation entry
+        $now = new DateTime();
+
+        $this->connection->insert('fusio_meta', [
+            'version'     => $schemaVersion,
+            'installDate' => $now->format('Y-m-d H:i:s'),
+        ]);
+
+        $this->connection->commit();
     }
 
     /**
@@ -193,5 +189,47 @@ class Installer
         $versions = self::getUpgradePath();
 
         return self::getVersion($versions[0]);
+    }
+
+    /**
+     * Returns the upgrade path between two versions
+     *
+     * @param string $fromVersion
+     * @param string $toVersion
+     * @return array
+     */
+    public static function getPathBetweenVersions($fromVersion, $toVersion)
+    {
+        $path      = array_reverse(self::getUpgradePath());
+        $indexFrom = self::getIndexOf($fromVersion);
+        $indexTo   = self::getIndexOf($toVersion);
+
+        // downgrade is not possible
+        if ($indexTo < $indexFrom) {
+            return [];
+        }
+
+        if (isset($path[$indexTo]) && isset($path[$indexFrom])) {
+            return array_slice($path, $indexFrom + 1, $indexTo - $indexFrom);
+        }
+
+        return [];
+    }
+
+    /**
+     * Returns an index of the provided version in the upgrade path
+     *
+     * @param string $version
+     * @return int|null|string
+     */
+    private static function getIndexOf($version)
+    {
+        $upgradePath = array_reverse(self::getUpgradePath());
+        foreach ($upgradePath as $index => $schemaVersion) {
+            if (version_compare($schemaVersion, $version, '==')) {
+                return $index;
+            }
+        }
+        return null;
     }
 }

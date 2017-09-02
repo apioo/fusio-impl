@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Database;
 
 use Fusio\Impl\Base;
 use Fusio\Impl\Database\Installer;
+use Fusio\Impl\Database\VersionInterface;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
@@ -39,7 +40,7 @@ class InstallerTest extends DbTestCase
      */
     public function testVersion()
     {
-        $this->assertInstanceOf('Fusio\Impl\Database\VersionInterface', Installer::getVersion(Base::getVersion()), 'No database version class was provided');
+        $this->assertInstanceOf(VersionInterface::class, Installer::getVersion(Base::getVersion()), 'No database version class was provided');
     }
 
     /**
@@ -48,6 +49,21 @@ class InstallerTest extends DbTestCase
     public function testUpgradePath()
     {
         $this->assertEquals(Base::getVersion(), current(Installer::getUpgradePath()), 'The current version must be in the upgrade path');
+    }
+
+    public function testGetLatestVersion()
+    {
+        $this->assertInstanceOf(VersionInterface::class, Installer::getLatestVersion());
+    }
+
+    public function testGetPathBetweenVersions()
+    {
+        $from   = 2;
+        $to     = 0;
+        $path   = Installer::getUpgradePath();
+        $result = Installer::getPathBetweenVersions($path[$from], $path[$to]);
+
+        $this->assertEquals(array_reverse(array_slice($path, $to, $from)), $result);
     }
 
     /**
