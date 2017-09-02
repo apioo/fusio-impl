@@ -55,22 +55,21 @@ class EnvProperties
             }
         }
 
-        foreach ($vars as $type => $properties) {
-            $search  = [];
-            $replace = [];
-            foreach ($properties as $key => $value) {
-                $search[]  = '${' . $type . '.' . $key . '}';
-                $replace[] = is_string($value) ? trim(json_encode($value), '"') : $value;
-            }
+        // replace
+        $data = preg_replace_callback('/\$\{([0-9A-Za-z_]+).([0-9A-Za-z_]+)\}/', function($matches) use ($vars){
+            $type = strtolower($matches[1]);
+            $key  = strtolower($matches[2]);
 
-            $data = str_replace($search, $replace, $data);
-
-            // check whether we have variables which were not replaced
-            preg_match('/\$\{' . $type . '\.([0-9A-z_]+)\}/', $data, $matches);
-            if (isset($matches[0])) {
-                throw new RuntimeException('Usage of unknown property ' . $matches[0]);
+            if (isset($vars[$type])) {
+                if (isset($vars[$type][$key])) {
+                    return $vars[$type][$key];
+                } else {
+                    throw new RuntimeException('Usage of unknown variable key, available are (' . implode(', ', array_keys($vars[$type])). ')');
+                }
+            } else {
+                throw new RuntimeException('Usage of unknown variable type, allowed is (dir, env)');
             }
-        }
+        }, $data);
 
         return $data;
     }
