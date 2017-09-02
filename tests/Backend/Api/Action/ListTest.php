@@ -50,6 +50,10 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
+            "name": "File-Processor",
+            "class": "Fusio\\Adapter\\File\\Action\\FileProcessor"
+        },
+        {
             "name": "HTTP-Processor",
             "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
         },

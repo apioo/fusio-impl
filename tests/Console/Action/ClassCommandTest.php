@@ -55,6 +55,7 @@ class ClassCommandTest extends ControllerDbTestCase
 +----------------------+----------------------------------------------+
 | Name                 | Class                                        |
 +----------------------+----------------------------------------------+
+| File-Processor       | Fusio\Adapter\File\Action\FileProcessor      |
 | HTTP-Processor       | Fusio\Adapter\Http\Action\HttpProcessor      |
 | PHP-Processor        | Fusio\Adapter\Php\Action\PhpProcessor        |
 | SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |

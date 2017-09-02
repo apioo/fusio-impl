@@ -52,18 +52,22 @@ class EngineDetectorTest extends \PHPUnit_Framework_TestCase
 
             [__DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
             [__DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
+            [__DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\StaticFile::class],
             [__DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', PhpClass::class],
 
             ['file://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
             ['file://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
-            ['file://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', PhpClass::class],
+            ['file://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\StaticFile::class],
+            ['file://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\StaticFile::class],
 
             ['file+php://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
             ['file+php://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\PhpFile::class],
+            ['file+php://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\PhpFile::class],
             ['file+php://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\PhpFile::class],
 
             ['file+js://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\JavascriptFile::class],
             ['file+js://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
+            ['file+js://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\JavascriptFile::class],
             ['file+js://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\JavascriptFile::class],
 
             ['php://' . self::class, self::class, PhpClass::class],
