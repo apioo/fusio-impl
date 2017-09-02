@@ -60,21 +60,14 @@ class EngineDetectorTest extends \PHPUnit_Framework_TestCase
             ['file://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\StaticFile::class],
             ['file://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\StaticFile::class],
 
-            ['file+php://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
-            ['file+php://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\PhpFile::class],
-            ['file+php://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\PhpFile::class],
-            ['file+php://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\PhpFile::class],
-
-            ['file+js://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\JavascriptFile::class],
-            ['file+js://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
-            ['file+js://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\JavascriptFile::class],
-            ['file+js://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\JavascriptFile::class],
-
-            ['php://' . self::class, self::class, PhpClass::class],
-            ['php://Foo\\Bar', 'Foo\\Bar', PhpClass::class],
-
             ['http://google.de', 'http://google.de', Resolver\HttpUrl::class],
             ['https://google.de', 'https://google.de', Resolver\HttpUrl::class],
+
+            ['PhpClass://foobar', 'foobar', PhpClass::class],
+            ['PhpFile://foobar', 'foobar', Resolver\PhpFile::class],
+            ['JavascriptFile://foobar', 'foobar', Resolver\JavascriptFile::class],
+            ['HttpUrl://foobar', 'foobar', Resolver\HttpUrl::class],
+            ['StaticFile://foobar', 'foobar', Resolver\StaticFile::class],
         ];
     }
 }

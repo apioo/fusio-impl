@@ -53,25 +53,14 @@ class EngineDetector
                     $engine = self::getEngineByFile($class);
                     break;
 
-                case 'file+php':
-                    $class  = substr($class, $pos + 3);
-                    $engine = Resolver\PhpFile::class;
-                    break;
-
-                case 'file+js':
-                    $class  = substr($class, $pos + 3);
-                    $engine = Resolver\JavascriptFile::class;
-                    break;
-
-                case 'php':
-                    $class  = substr($class, $pos + 3);
-                    $engine = PhpClass::class;
-                    break;
-
                 case 'http':
                 case 'https':
                     $engine = Resolver\HttpUrl::class;
                     break;
+
+                default:
+                    $class  = substr($class, $pos + 3);
+                    $engine = self::getEngineByProto($proto);
             }
         } elseif (is_file($class)) {
             $engine = self::getEngineByFile($class);
@@ -104,5 +93,31 @@ class EngineDetector
             default:
                 return Resolver\StaticFile::class;
         }
+    }
+
+    /**
+     * @param string $proto
+     * @return string|null
+     */
+    private static function getEngineByProto($proto)
+    {
+        switch ($proto) {
+            case 'PhpClass':
+                return PhpClass::class;
+
+            case 'PhpFile':
+                return Resolver\PhpFile::class;
+
+            case 'JavascriptFile':
+                return Resolver\JavascriptFile::class;
+
+            case 'HttpUrl':
+                return Resolver\HttpUrl::class;
+
+            case 'StaticFile':
+                return Resolver\StaticFile::class;
+        }
+
+        return null;
     }
 }
