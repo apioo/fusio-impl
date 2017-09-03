@@ -297,19 +297,34 @@ JSON;
         $this->assertEquals(['foo' => sys_get_temp_dir()], $response);
     }
 
-    public function testCommandPropertiesUnknown()
+    public function testCommandPropertiesUnknownType()
     {
         $command = Environment::getService('console')->find('system:deploy');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'file'    => __DIR__ . '/resource/deploy_properties_unknown.yaml',
+            'file'    => __DIR__ . '/resource/deploy_properties_unknown_type.yaml',
         ]);
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Usage of unknown property \$\{dir\.foo}/', $display, $display);
+        $this->assertRegExp('/Usage of unknown variable type \"foo\", allowed is \(dir, env\)/', $display, $display);
+    }
+
+    public function testCommandPropertiesUnknownKey()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_properties_unknown_key.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/Usage of unknown variable key \"foo\", allowed is \(cache, src, temp\)/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()
