@@ -51,6 +51,7 @@ class Token extends TableAbstract
             'userId' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'token' => self::TYPE_VARCHAR,
+            'refresh' => self::TYPE_VARCHAR,
             'scope' => self::TYPE_VARCHAR,
             'ip' => self::TYPE_VARCHAR,
             'expire' => self::TYPE_DATETIME,
@@ -67,6 +68,18 @@ class Token extends TableAbstract
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
 
         return $this->getBy($con);
+    }
+
+    public function getTokenByRefreshToken($appId, $refreshToken)
+    {
+        $now = new DateTime();
+        $con = new Condition();
+        $con->add('appId', '=', $appId);
+        $con->add('status', '=', self::STATUS_ACTIVE);
+        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
+        $con->add('refresh', '=', $refreshToken);
+
+        return $this->getOneBy($con);
     }
 
     public function removeTokenFromApp($appId, $tokenId)

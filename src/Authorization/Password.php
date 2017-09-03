@@ -21,16 +21,14 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Service\App as AppService;
-use Fusio\Impl\Service\Scope as ScopeService;
-use Fusio\Impl\Service\User as UserService;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
 
 /**
- * PasswordCredentials
+ * Password
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -38,12 +36,33 @@ use PSX\Oauth2\Authorization\Exception\ServerErrorException;
  */
 class Password extends PasswordAbstract
 {
+    /**
+     * @var \Fusio\Impl\Service\App
+     */
     protected $appService;
+
+    /**
+     * @var \Fusio\Impl\Service\Scope
+     */
     protected $scopeService;
+
+    /**
+     * @var \Fusio\Impl\Service\User
+     */
     protected $userService;
+
+    /**
+     * @var string
+     */
     protected $expireApp;
 
-    public function __construct(AppService $appService, ScopeService $scopeService, UserService $userService, $expireApp)
+    /**
+     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\Scope $scopeService
+     * @param \Fusio\Impl\Service\User $userService
+     * @param string $expireApp
+     */
+    public function __construct(Service\App $appService, Service\Scope $scopeService, Service\User $userService, $expireApp)
     {
         $this->appService   = $appService;
         $this->scopeService = $scopeService;
@@ -51,6 +70,13 @@ class Password extends PasswordAbstract
         $this->expireApp    = $expireApp;
     }
 
+    /**
+     * @param \PSX\Framework\Oauth2\Credentials $credentials
+     * @param string $username
+     * @param string $password
+     * @param string $scope
+     * @return \PSX\Oauth2\AccessToken
+     */
     protected function generate(Credentials $credentials, $username, $password, $scope)
     {
         $app = $this->appService->getByAppKeyAndSecret(

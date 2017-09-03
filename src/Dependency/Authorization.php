@@ -56,6 +56,11 @@ trait Authorization
             $this->get('config')->get('fusio_expire_app')
         ));
 
+        $factory->add(new ApiAuthorization\RefreshToken(
+            $this->get('app_service'),
+            $this->get('config')->get('fusio_expire_app')
+        ));
+
         return $factory;
     }
 
@@ -65,6 +70,7 @@ trait Authorization
     public function getBackendGrantTypeFactory()
     {
         $factory = new GrantTypeFactory();
+
         $factory->add(new BackendAuthorization\ClientCredentials(
             $this->get('user_service'),
             $this->get('app_service'),
@@ -80,6 +86,7 @@ trait Authorization
     public function getConsumerGrantTypeFactory()
     {
         $factory = new GrantTypeFactory();
+
         $factory->add(new ConsumerAuthorization\ClientCredentials(
             $this->get('user_service'),
             $this->get('app_service'),

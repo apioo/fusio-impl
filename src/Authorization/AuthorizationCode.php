@@ -21,9 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Service\App as AppService;
-use Fusio\Impl\Service\App\Code as AppCodeService;
-use Fusio\Impl\Service\Scope as ScopeService;
+use Fusio\Impl\Service;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
@@ -37,12 +35,33 @@ use PSX\Oauth2\Authorization\Exception\ServerErrorException;
  */
 class AuthorizationCode extends AuthorizationCodeAbstract
 {
+    /**
+     * @var \Fusio\Impl\Service\App\Code
+     */
     protected $appCodeService;
+
+    /**
+     * @var \Fusio\Impl\Service\Scope
+     */
     protected $scopeService;
+
+    /**
+     * @var \Fusio\Impl\Service\App
+     */
     protected $appService;
+
+    /**
+     * @var string
+     */
     protected $expireApp;
 
-    public function __construct(AppCodeService $appCodeService, ScopeService $scopeService, AppService $appService, $expireApp)
+    /**
+     * @param \Fusio\Impl\Service\App\Code $appCodeService
+     * @param \Fusio\Impl\Service\Scope $scopeService
+     * @param \Fusio\Impl\Service\App $appService
+     * @param string $expireApp
+     */
+    public function __construct(Service\App\Code $appCodeService, Service\Scope $scopeService, Service\App $appService, $expireApp)
     {
         $this->appCodeService = $appCodeService;
         $this->scopeService   = $scopeService;
@@ -50,6 +69,13 @@ class AuthorizationCode extends AuthorizationCodeAbstract
         $this->expireApp      = $expireApp;
     }
 
+    /**
+     * @param \PSX\Framework\Oauth2\Credentials $credentials
+     * @param string $code
+     * @param string $redirectUri
+     * @param string $clientId
+     * @return \PSX\Oauth2\AccessToken
+     */
     protected function generate(Credentials $credentials, $code, $redirectUri, $clientId)
     {
         $code = $this->appCodeService->getCode(

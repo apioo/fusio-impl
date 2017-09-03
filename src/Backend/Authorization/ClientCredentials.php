@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Backend\Authorization;
 
-use Fusio\Impl\Service\App as AppService;
-use Fusio\Impl\Service\User as UserService;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table\App;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
@@ -38,17 +37,38 @@ use PSX\Oauth2\Authorization\Exception\ServerErrorException;
  */
 class ClientCredentials extends ClientCredentialsAbstract
 {
+    /**
+     * @var \Fusio\Impl\Service\User
+     */
     protected $userService;
+
+    /**
+     * @var \Fusio\Impl\Service\App
+     */
     protected $appService;
+
+    /**
+     * @var string
+     */
     protected $expireBackend;
 
-    public function __construct(UserService $userService, AppService $appService, $expireBackend)
+    /**
+     * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Service\App $appService
+     * @param string $expireBackend
+     */
+    public function __construct(Service\User $userService, Service\App $appService, $expireBackend)
     {
         $this->userService   = $userService;
         $this->appService    = $appService;
         $this->expireBackend = $expireBackend;
     }
 
+    /**
+     * @param \PSX\Framework\Oauth2\Credentials $credentials
+     * @param string $scope
+     * @return \PSX\Oauth2\AccessToken
+     */
     protected function generate(Credentials $credentials, $scope)
     {
         $userId = $this->userService->authenticateUser(
