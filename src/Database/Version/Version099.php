@@ -95,7 +95,7 @@ class Version099 implements VersionInterface
         $appTokenTable->addColumn('userId', 'integer');
         $appTokenTable->addColumn('status', 'integer', array('default' => 1));
         $appTokenTable->addColumn('token', 'string', array('length' => 255));
-        $appTokenTable->addColumn('refresh', 'string', array('length' => 255));
+        $appTokenTable->addColumn('refresh', 'string', array('length' => 255, 'notnull' => false));
         $appTokenTable->addColumn('scope', 'string', array('length' => 255));
         $appTokenTable->addColumn('ip', 'string', array('length' => 40));
         $appTokenTable->addColumn('expire', 'datetime', array('notnull' => false));
