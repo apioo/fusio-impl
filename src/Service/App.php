@@ -265,17 +265,19 @@ class App
         $now     = new \DateTime();
 
         // generate access token
-        $accessToken = TokenGenerator::generateToken();
+        $accessToken  = TokenGenerator::generateToken();
+        $refreshToken = TokenGenerator::generateToken();
 
         $this->appTokenTable->create([
-            'appId'  => $appId,
-            'userId' => $userId,
-            'status' => Table\App\Token::STATUS_ACTIVE,
-            'token'  => $accessToken,
-            'scope'  => implode(',', $scopes),
-            'ip'     => $ip,
-            'expire' => $expires,
-            'date'   => $now,
+            'appId'   => $appId,
+            'userId'  => $userId,
+            'status'  => Table\App\Token::STATUS_ACTIVE,
+            'token'   => $accessToken,
+            'refresh' => $refreshToken,
+            'scope'   => implode(',', $scopes),
+            'ip'      => $ip,
+            'expire'  => $expires,
+            'date'    => $now,
         ]);
 
         $tokenId = $this->appTokenTable->getLastInsertId();
@@ -295,6 +297,60 @@ class App
         $token->setAccessToken($accessToken);
         $token->setTokenType('bearer');
         $token->setExpiresIn($expires->getTimestamp());
+        $token->setRefreshToken($refreshToken);
+        $token->setScope(implode(',', $scopes));
+
+        return $token;
+    }
+
+    public function refreshAccessToken($appId, $refreshToken, $ip, DateInterval $expire)
+    {
+        $token = $this->appTokenTable->getTokenByRefreshToken($appId, $refreshToken);
+
+        if (empty($token)) {
+            throw new StatusCode\BadRequestException('Invalid refresh token');
+        }
+
+        // check whether the refresh was requested from the same app
+        if ($token->appId != $appId) {
+            throw new StatusCode\BadRequestException('Token was requested from another app');
+        }
+
+        $scopes  = explode(',', $token->scope);
+        $expires = new \DateTime();
+        $expires->add($expire);
+        $now     = new \DateTime();
+
+        // generate access token
+        $accessToken  = TokenGenerator::generateToken();
+        $refreshToken = TokenGenerator::generateToken();
+
+        $this->appTokenTable->update([
+            'id'      => $token->id,
+            'status'  => Table\App\Token::STATUS_ACTIVE,
+            'token'   => $accessToken,
+            'refresh' => $refreshToken,
+            'ip'      => $ip,
+            'expire'  => $expires,
+            'date'    => $now,
+        ]);
+
+        // dispatch event
+        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
+            $appId,
+            $token->id,
+            $accessToken,
+            $scopes,
+            $expires,
+            $now,
+            new UserContext($appId, $token->userId, $ip)
+        ));
+
+        $token = new AccessToken();
+        $token->setAccessToken($accessToken);
+        $token->setTokenType('bearer');
+        $token->setExpiresIn($expires->getTimestamp());
+        $token->setRefreshToken($refreshToken);
         $token->setScope(implode(',', $scopes));
 
         return $token;
