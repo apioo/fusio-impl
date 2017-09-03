@@ -60,16 +60,18 @@ class PasswordTest extends ControllerDbTestCase
         $this->assertEquals('bearer', $data['token_type']);
         $this->arrayHasKey('expires_in', $data);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
+        $this->arrayHasKey('refresh_token', $data);
         $this->arrayHasKey('scope', $data);
         $this->assertEquals('authorization', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['appId']);
         $this->assertEquals(4, $row['userId']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
+        $this->assertEquals($data['refresh_token'], $row['refresh']);
         $this->assertEquals('authorization', $row['scope']);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
         $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
