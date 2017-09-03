@@ -27,7 +27,7 @@ use PSX\Framework\Oauth2\GrantType\RefreshTokenAbstract;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
 
 /**
- * AuthorizationCode
+ * RefreshToken
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
