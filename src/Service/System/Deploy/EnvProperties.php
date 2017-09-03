@@ -62,12 +62,18 @@ class EnvProperties
 
             if (isset($vars[$type])) {
                 if (isset($vars[$type][$key])) {
-                    return $vars[$type][$key];
+                    $value = $vars[$type][$key];
+
+                    if (is_string($value)) {
+                        $value = trim(json_encode($value), '"');
+                    }
+
+                    return $value;
                 } else {
-                    throw new RuntimeException('Usage of unknown variable key, available are (' . implode(', ', array_keys($vars[$type])). ')');
+                    throw new RuntimeException('Usage of unknown variable key "' . $key . '", allowed is (' . implode(', ', array_keys($vars[$type])) . ')');
                 }
             } else {
-                throw new RuntimeException('Usage of unknown variable type, allowed is (dir, env)');
+                throw new RuntimeException('Usage of unknown variable type "' . $type . '", allowed is (' . implode(', ', array_keys($vars)) . ')');
             }
         }, $data);
 

@@ -84,6 +84,17 @@ YAML;
         $this->assertEquals($expect, $actual, $actual);
     }
 
+    public function testReplaceEscape()
+    {
+        $_SERVER['foo'] = 'foo' . "\n" . 'bar"test';
+
+        $data   = 'dbname: "${env.FOO}"';
+        $actual = EnvProperties::replace($data);
+        $expect = 'dbname: "foo\nbar\"test"';
+
+        $this->assertEquals($expect, $actual, $actual);
+    }
+
     /**
      * @expectedException \RuntimeException
      */
