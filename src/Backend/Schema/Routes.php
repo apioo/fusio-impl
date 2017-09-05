@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Schema;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -41,6 +42,8 @@ class Routes extends SchemaAbstract
         $sb = $this->getSchemaBuilder('version');
         $sb->integer('version');
         $sb->integer('status');
+        $sb->arrayType('scopes')
+            ->setItems(Property::getString());
         $sb->objectType('methods', $methods);
         $version = $sb->getProperty();
 

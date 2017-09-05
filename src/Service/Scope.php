@@ -119,6 +119,36 @@ class Scope
         $this->eventDispatcher->dispatch(ScopeEvents::CREATE, new CreatedEvent($scopeId, $record, $routes, $context));
     }
 
+    public function createFromRoute($routeId, array $scopeNames, UserContext $context)
+    {
+        // remove all scopes from this route
+        $this->scopeRouteTable->deleteAllFromRoute($routeId);
+
+        // insert new scopes
+        foreach ($scopeNames as $scopeName) {
+            $scope = $this->scopeTable->getOneBy(new Condition(['name', '=', $scopeName]));
+
+            if (!empty($scope)) {
+                // assign route to scope
+                $this->scopeRouteTable->create([
+                    'scopeId' => $scope['id'],
+                    'routeId' => $routeId,
+                    'allow'   => 1,
+                    'methods' => 'GET|POST|PUT|DELETE',
+                ]);
+            } else {
+                // create new scope
+                $route = (object) [
+                    'routeId' => $routeId,
+                    'allow'   => 1,
+                    'methods' => 'GET|POST|PUT|DELETE',
+                ];
+
+                $this->create($scopeName, null, [$route], $context);
+            }
+        }
+    }
+
     public function update($scopeId, $name, $description, array $routes = null, UserContext $context)
     {
         $scope = $this->scopeTable->get($scopeId);

@@ -79,6 +79,7 @@ trait Services
         return new Service\Routes\Config(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('table_manager')->getTable(Table\Routes\Response::class),
+            $this->get('scope_service'),
             $this->get('routes_deploy_service'),
             $this->get('resource_listing'),
             $this->get('event_dispatcher')

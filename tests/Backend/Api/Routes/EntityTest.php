@@ -69,6 +69,12 @@ class EntityTest extends ControllerDbTestCase
                     "status": {
                         "type": "integer"
                     },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "methods": {
                         "$ref": "#\/definitions\/Methods"
                     }
@@ -306,6 +312,7 @@ JSON;
             'config' => [[
                 'version' => 1,
                 'status'  => 4,
+                'scopes'  => ['foo', 'baz'],
                 'methods' => [
                     'GET' => [
                         'active'     => true,
@@ -417,6 +424,22 @@ JSON;
         $this->assertEquals(1, count($responses));
         $this->assertEquals(201, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['response']);
+
+        // check scopes
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('s.name')
+            ->from('fusio_scope_routes', 'r')
+            ->innerJoin('r', 'fusio_scope', 's', 's.id = r.scopeId')
+            ->where('r.routeId = :routeId')
+            ->orderBy('s.id', 'ASC')
+            ->setFirstResult(0)
+            ->getSQL();
+
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+
+        $this->assertEquals(2, count($scopes));
+        $this->assertEquals('foo', $scopes[0]['name']);
+        $this->assertEquals('baz', $scopes[1]['name']);
     }
 
     public function testPutDeploy()

@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Event\Routes\CreatedEvent;
 use Fusio\Impl\Event\Routes\DeletedEvent;
 use Fusio\Impl\Event\Routes\UpdatedEvent;
@@ -96,7 +97,7 @@ class Routes
                 'status'     => Table\Routes::STATUS_ACTIVE,
                 'methods'    => 'GET|POST|PUT|DELETE',
                 'path'       => $path,
-                'controller' => 'Fusio\Impl\Controller\SchemaApiController',
+                'controller' => SchemaApiController::class,
             ];
 
             $this->routesTable->create($record);

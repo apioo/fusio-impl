@@ -118,6 +118,7 @@ class Routes implements TransformerInterface
         return [
             'version' => isset($row['version']) ? $row['version'] : 1,
             'status'  => isset($row['status']) ? $row['status'] : 4,
+            'scopes'  => isset($row['scopes']) ? $row['scopes'] : [],
             'methods' => $methods,
         ];
     }
