@@ -174,7 +174,7 @@ class User
             $this->insertScopes($userId, $scopes);
 
             $this->userTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->userTable->rollBack();
 
             throw $e;
@@ -232,7 +232,7 @@ class User
             $this->insertScopes($userId, $scopes);
 
             $this->userTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->userTable->rollBack();
 
             throw $e;
@@ -275,7 +275,7 @@ class User
             $this->insertScopes($user['id'], $scopes);
 
             $this->userTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->userTable->rollBack();
 
             throw $e;

@@ -74,7 +74,7 @@ class Migration
                     if (is_file($path)) {
                         try {
                             $this->executeDefinition($connectionId, $path, $definitionFile, $result);
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $this->logger->error($e->getMessage());
 
                             $result[] = '[ERROR] ' . $connectionId . ' ' . $definitionFile . ': ' . $e->getMessage();

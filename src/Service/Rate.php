@@ -109,7 +109,7 @@ class Rate
             $this->handleAllocation($rateId, $allocations);
 
             $this->rateTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rateTable->rollBack();
 
             throw $e;
@@ -147,7 +147,7 @@ class Rate
             $this->handleAllocation($rate['id'], $allocations);
 
             $this->rateTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rateTable->rollBack();
 
             throw $e;

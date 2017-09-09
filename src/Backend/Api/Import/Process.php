@@ -57,7 +57,7 @@ class Process extends ApiAbstract
                 'message' => 'Import successful',
                 'result'  => $result,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->connection->rollback();
 
             throw $e;

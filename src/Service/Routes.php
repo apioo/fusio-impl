@@ -108,7 +108,7 @@ class Routes
             $this->configService->handleConfig($routeId, $path, $config, $context);
 
             $this->routesTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->routesTable->rollBack();
 
             throw $e;
@@ -135,7 +135,7 @@ class Routes
             $this->configService->handleConfig($route->id, $route->path, $config, $context);
 
             $this->routesTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->routesTable->rollBack();
 
             throw $e;

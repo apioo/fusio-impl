@@ -99,16 +99,16 @@ class Logger
 
     /**
      * @param integer $logId
-     * @param \Exception $exception
+     * @param \Throwable $exception
      */
-    public function appendError($logId, \Exception $exception)
+    public function appendError($logId, \Throwable $exception)
     {
         if ($exception instanceof DisplayException) {
             return;
         }
 
         $previousException = $exception->getPrevious();
-        if ($previousException instanceof \Exception) {
+        if ($previousException instanceof \Throwable) {
             $this->appendError($logId, $previousException);
         }
 

@@ -261,7 +261,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
                 try {
                     $response = $this->processor->execute($actionId, $request, $context);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->apiLogger->appendError($this->logId, $e);
 
                     throw $e;
@@ -273,7 +273,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
                 // the table
                 try {
                     $response = $this->processor->execute($actionId, $request, $context);
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     $this->apiLogger->appendError($this->logId, $e);
 
                     throw $e;

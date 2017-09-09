@@ -90,7 +90,7 @@ class Execute extends BackendApiAbstract
                     'body'       => new \stdClass(),
                 );
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $exceptionConverter = new Converter(true);
 
             return array(

@@ -110,7 +110,7 @@ class Scope
             $this->insertRoutes($scopeId, $routes);
 
             $this->scopeTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->scopeTable->rollBack();
 
             throw $e;
@@ -178,7 +178,7 @@ class Scope
             $this->insertRoutes($scope['id'], $routes);
 
             $this->scopeTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->scopeTable->rollBack();
 
             throw $e;
@@ -224,7 +224,7 @@ class Scope
             $this->scopeTable->delete($record);
 
             $this->scopeTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->scopeTable->rollBack();
 
             throw $e;

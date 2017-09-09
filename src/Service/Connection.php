@@ -171,7 +171,7 @@ class Connection
         if ($factory instanceof PingableInterface) {
             try {
                 $ping = $factory->ping($connection);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new StatusCode\BadRequestException($e->getMessage());
             }
 

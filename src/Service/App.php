@@ -160,7 +160,7 @@ class App
             }
 
             $this->appTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->appTable->rollBack();
 
             throw $e;
@@ -210,7 +210,7 @@ class App
             }
 
             $this->appTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->appTable->rollBack();
 
             throw $e;

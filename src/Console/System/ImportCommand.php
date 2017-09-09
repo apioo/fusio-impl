@@ -111,7 +111,7 @@ class ImportCommand extends Command
             }
 
             $return = 0;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->connection->rollback();
 
             $output->writeln('An exception occurred during import. No changes are applied to the database.');

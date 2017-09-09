@@ -191,7 +191,7 @@ class RegisterCommand extends Command
 
                         $output->writeln('Registration successful');
                         return 0;
-                    } catch (\Exception $e) {
+                    } catch (\Throwable $e) {
                         $this->connection->rollback();
 
                         $output->writeln('An exception occurred during installation of the adapter. No changes are applied to the database.');

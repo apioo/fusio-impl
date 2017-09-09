@@ -83,7 +83,7 @@ class Grant
             $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
 
             $this->userGrantTable->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->userGrantTable->rollBack();
 
             throw $e;

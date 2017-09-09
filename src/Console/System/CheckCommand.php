@@ -64,7 +64,7 @@ class CheckCommand extends Command
 
         try {
             $result = $this->executeCheck($check);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $result = false;
         }
 
