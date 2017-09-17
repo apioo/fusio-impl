@@ -179,14 +179,14 @@ JSON;
             "scopeId": 5,
             "routeId": {$id2},
             "allow": 1,
-            "methods": "GET|POST|PUT|DELETE"
+            "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 64,
             "scopeId": 5,
             "routeId": {$id1},
             "allow": 1,
-            "methods": "GET|POST|PUT|DELETE"
+            "methods": "GET|POST|PUT|PATCH|DELETE"
         }
     ]
 }

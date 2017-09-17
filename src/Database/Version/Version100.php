@@ -360,7 +360,7 @@ class Version100 implements VersionInterface
                         'scopeId' => $scopeId,
                         'routeId' => $routeId,
                         'allow'   => 1,
-                        'methods' => 'GET|POST|PUT|DELETE',
+                        'methods' => 'GET|POST|PUT|PATCH|DELETE',
                     ]);
                 }
             }
@@ -542,7 +542,7 @@ class Version100 implements VersionInterface
         foreach ($data['fusio_routes'] as $index => $row) {
             $scopeId = $this->getScopeIdFromPath($row['path']);
             if ($scopeId !== null) {
-                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
             }
         }
 

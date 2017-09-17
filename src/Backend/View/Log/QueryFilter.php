@@ -189,7 +189,7 @@ class QueryFilter extends QueryFilterAbstract
                     $ip = $part;
                 } elseif (substr($part, 0, 1) == '/') {
                     $path = $part;
-                } elseif (in_array($part, ['GET', 'POST', 'PUT', 'DELETE'])) {
+                } elseif (in_array($part, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
                     $method = $part;
                 } elseif (preg_match('/^([A-z\-]+): (.*)$/', $part)) {
                     $header = $part;

@@ -132,7 +132,7 @@ JSON;
 
         $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
-        $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
@@ -244,7 +244,7 @@ JSON;
 
         $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
         $this->assertEquals(1, $route['status']);
-        $this->assertEquals('GET|POST|PUT|DELETE', $route['methods']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods

@@ -494,6 +494,7 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
+                "PATCH",
                 "DELETE"
             ],
             "version": "*"

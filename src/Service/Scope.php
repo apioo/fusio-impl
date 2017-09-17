@@ -134,14 +134,14 @@ class Scope
                     'scopeId' => $scope['id'],
                     'routeId' => $routeId,
                     'allow'   => 1,
-                    'methods' => 'GET|POST|PUT|DELETE',
+                    'methods' => 'GET|POST|PUT|PATCH|DELETE',
                 ]);
             } else {
                 // create new scope
                 $route = (object) [
                     'routeId' => $routeId,
                     'allow'   => 1,
-                    'methods' => 'GET|POST|PUT|DELETE',
+                    'methods' => 'GET|POST|PUT|PATCH|DELETE',
                 ];
 
                 $this->create($scopeName, null, [$route], $context);

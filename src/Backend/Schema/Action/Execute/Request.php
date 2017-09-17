@@ -40,7 +40,7 @@ class Request extends SchemaAbstract
 
         $sb = $this->getSchemaBuilder('request');
         $sb->string('method')
-            ->setPattern('GET|POST|PUT|DELETE');
+            ->setPattern('GET|POST|PUT|PATCH|DELETE');
         $sb->string('uriFragments');
         $sb->string('parameters');
         $sb->string('headers');

@@ -75,7 +75,7 @@ class Routes implements TransformerInterface
         $methods = [];
         if (isset($row['methods']) && is_array($row['methods'])) {
             foreach ($row['methods'] as $method => $config) {
-                if (!in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])) {
+                if (!in_array($method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
                     throw new RuntimeException('Invalid request method allowed is: GET, POST, PUT, DELETE');
                 }
 

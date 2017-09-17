@@ -84,7 +84,7 @@ class EntityTest extends ControllerDbTestCase
                 "type": "object",
                 "title": "methods",
                 "patternProperties": {
-                    "^(GET|POST|PUT|DELETE)$": {
+                    "^(GET|POST|PUT|PATCH|DELETE)$": {
                         "$ref": "#\/definitions\/Method"
                     }
                 }
@@ -360,7 +360,7 @@ JSON;
 
         $this->assertEquals(Fixture::getLastRouteId() + 1, $row['id']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $row['methods']);
         $this->assertEquals('/foo', $row['path']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
 
@@ -479,7 +479,7 @@ JSON;
 
         $this->assertEquals(Fixture::getLastRouteId() + 1, $row['id']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('GET|POST|PUT|DELETE', $row['methods']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $row['methods']);
         $this->assertEquals('/foo', $row['path']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
 

@@ -131,7 +131,7 @@ JSON;
                 ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/foo', 'controller' => SchemaApiController::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE', 'path' => '/foo', 'controller' => SchemaApiController::class],
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
@@ -178,8 +178,8 @@ JSON;
                 ['appId' => 2, 'userId' => 2, 'status' => 1, 'token' => '1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b', 'refresh' => 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873', 'scope' => 'consumer', 'ip' => '127.0.0.1', 'expire' => $expire->format('Y-m-d H:i:s'), 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_scope_routes' => [
-                ['scopeId' => 5, 'routeId' => self::getLastRouteId(), 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
-                ['scopeId' => 5, 'routeId' => self::getLastRouteId() + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'],
+                ['scopeId' => 5, 'routeId' => self::getLastRouteId(), 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'],
+                ['scopeId' => 5, 'routeId' => self::getLastRouteId() + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 4],
