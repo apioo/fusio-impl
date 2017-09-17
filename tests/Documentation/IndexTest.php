@@ -54,7 +54,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -65,7 +64,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -76,7 +74,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -87,7 +84,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -98,7 +94,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -109,7 +104,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -120,7 +114,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -131,7 +124,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -142,7 +134,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -153,7 +144,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -164,7 +154,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -175,7 +164,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -186,7 +174,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -197,7 +184,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -208,7 +194,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -219,7 +204,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -230,7 +214,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -241,7 +224,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -252,7 +234,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -263,7 +244,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -274,7 +254,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -285,7 +264,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -296,7 +274,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -307,7 +284,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -318,7 +294,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -329,7 +304,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -340,7 +314,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -351,7 +324,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -362,7 +334,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -373,7 +344,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -384,7 +354,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -395,7 +364,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -406,7 +374,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -417,7 +384,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -428,7 +394,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -439,7 +404,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -450,7 +414,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -461,7 +424,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -472,7 +434,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -483,7 +444,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -494,7 +454,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -505,7 +464,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -516,7 +474,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
@@ -527,7 +484,6 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
                 "DELETE"
             ],
             "version": "*"
