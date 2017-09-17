@@ -351,7 +351,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'methods', 'path', 'controller')
             ->from('fusio_routes')
-            ->orderBy('id', 'DESC')
+            ->where('id = ' . (Fixture::getLastRouteId() + 1))
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
@@ -470,7 +470,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'methods', 'path', 'controller')
             ->from('fusio_routes')
-            ->orderBy('id', 'DESC')
+            ->where('id = ' . (Fixture::getLastRouteId() + 1))
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
@@ -494,7 +494,7 @@ JSON;
 
         $methods = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
 
-        $this->assertEquals(4, count($methods));
+        $this->assertEquals(5, count($methods));
 
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
@@ -553,7 +553,7 @@ JSON;
         $this->assertEquals(null, $methods[2]['request']);
         $this->assertEquals(null, $methods[2]['action']);
 
-        $this->assertEquals('DELETE', $methods[3]['method']);
+        $this->assertEquals('PATCH', $methods[3]['method']);
         $this->assertEquals(1, $methods[3]['version']);
         $this->assertEquals(1, $methods[3]['status']);
         $this->assertEquals(0, $methods[3]['active']);
@@ -561,6 +561,15 @@ JSON;
         $this->assertEquals(null, $methods[3]['parameters']);
         $this->assertEquals(null, $methods[3]['request']);
         $this->assertEquals(null, $methods[3]['action']);
+
+        $this->assertEquals('DELETE', $methods[4]['method']);
+        $this->assertEquals(1, $methods[4]['version']);
+        $this->assertEquals(1, $methods[4]['status']);
+        $this->assertEquals(0, $methods[4]['active']);
+        $this->assertEquals(0, $methods[4]['public']);
+        $this->assertEquals(null, $methods[4]['parameters']);
+        $this->assertEquals(null, $methods[4]['request']);
+        $this->assertEquals(null, $methods[4]['action']);
     }
 
     public function testDelete()
@@ -585,7 +594,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_routes')
-            ->orderBy('id', 'DESC')
+            ->where('id = ' . (Fixture::getLastRouteId() + 1))
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();

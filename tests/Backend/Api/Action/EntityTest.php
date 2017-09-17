@@ -277,7 +277,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'name', 'class', 'config')
             ->from('fusio_action')
-            ->orderBy('id', 'DESC')
+            ->where('id = 3')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
@@ -326,7 +326,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_action')
-            ->orderBy('id', 'DESC')
+            ->where('id = 3')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();

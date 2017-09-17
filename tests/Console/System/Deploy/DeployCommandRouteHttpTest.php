@@ -64,7 +64,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
             'name' => 'httpbin_org_get',
         ]);
 
-        $this->assertEquals(4, $action['id']);
+        $this->assertEquals(5, $action['id']);
         $this->assertContains('http://httpbin.org/get', $action['class']);
         $this->assertEquals(HttpUrl::class, $action['engine']);
         $this->assertEquals(null, $action['config']);
@@ -74,7 +74,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
             'path' => '/bar',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 2, $route['id']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
@@ -85,7 +85,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 2, $methods[0]['routeId']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['routeId']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -93,7 +93,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(4, $methods[0]['action']);
+        $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [

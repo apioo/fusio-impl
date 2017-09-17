@@ -27,6 +27,7 @@ use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Connection\System;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Service;
+use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use PSX\Api\Resource;
 use PSX\Schema\Parser\JsonSchema;
 
@@ -112,6 +113,7 @@ JSON;
             'fusio_action' => [
                 ['status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => serialize(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
                 ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => serialize(['connection' => 1, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => serialize([]), 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_app' => [
                 ['userId' => 2, 'status' => 1, 'name' => 'Foo-App', 'url' => 'http://google.com', 'parameters' => '', 'appKey' => '5347307d-d801-4075-9aaa-a21a29a448c5', 'appSecret' => '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', 'date' => '2015-02-22 22:19:07'],
@@ -132,6 +134,7 @@ JSON;
             ],
             'fusio_routes' => [
                 ['status' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE', 'path' => '/foo', 'controller' => SchemaApiController::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE', 'path' => '/inspect/:foo', 'controller' => SchemaApiController::class],
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
@@ -145,11 +148,24 @@ JSON;
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 3],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'parameters' => null, 'request' => 1, 'action' => 3],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
+
+                ['routeId' => self::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
+                ['routeId' => self::getLastRouteId() + 2, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
+                ['routeId' => self::getLastRouteId() + 2, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
+                ['routeId' => self::getLastRouteId() + 2, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
+                ['routeId' => self::getLastRouteId() + 2, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
             ],
             'fusio_routes_response' => [
                 ['methodId' => 2, 'code' => 200, 'response' => 2],
                 ['methodId' => 3, 'code' => 201, 'response' => 1],
+
+                ['methodId' => 7, 'code' => 200, 'response' => 1],
+                ['methodId' => 8, 'code' => 200, 'response' => 1],
+                ['methodId' => 9, 'code' => 200, 'response' => 1],
+                ['methodId' => 10, 'code' => 200, 'response' => 1],
+                ['methodId' => 11, 'code' => 200, 'response' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'executionTime' => 500000, 'date' => '2015-06-25 22:49:09'],
@@ -180,6 +196,7 @@ JSON;
             'fusio_scope_routes' => [
                 ['scopeId' => 5, 'routeId' => self::getLastRouteId(), 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'],
                 ['scopeId' => 5, 'routeId' => self::getLastRouteId() + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'],
+                ['scopeId' => 5, 'routeId' => self::getLastRouteId() + 2, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'],
             ],
             'fusio_user_scope' => [
                 ['userId' => 1, 'scopeId' => 4],

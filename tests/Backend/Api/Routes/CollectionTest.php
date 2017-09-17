@@ -235,26 +235,30 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $id1    = Fixture::getLastRouteId();
-        $id2    = Fixture::getLastRouteId() + 1;
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": {$id2},
+            "id": 72,
             "status": 1,
-            "path": "\/foo",
-            "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController"
+            "path": "\/inspect\/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": {$id1},
+            "id": 71,
+            "status": 1,
+            "path": "\/foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
+            "id": 70,
             "status": 1,
             "path": "\/",
-            "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController"
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
 }
@@ -320,7 +324,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 2, $row['id']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $row['methods']);
         $this->assertEquals('/bar', $row['path']);

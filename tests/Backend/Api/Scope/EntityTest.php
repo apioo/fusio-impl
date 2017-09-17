@@ -165,8 +165,6 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $id1    = Fixture::getLastRouteId();
-        $id2    = Fixture::getLastRouteId() + 1;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
@@ -175,16 +173,23 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
+            "id": 66,
+            "scopeId": 5,
+            "routeId": 72,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
             "id": 65,
             "scopeId": 5,
-            "routeId": {$id2},
+            "routeId": 71,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 64,
             "scopeId": 5,
-            "routeId": {$id1},
+            "routeId": 70,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }

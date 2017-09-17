@@ -129,6 +129,13 @@ class ExportCommandTest extends ControllerDbTestCase
     ],
     "action": [
         {
+            "name": "Inspect-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+            "config": {},
+            "date": "[datetime]"
+        },
+        {
             "name": "Sql-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
             "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
@@ -156,6 +163,64 @@ class ExportCommandTest extends ControllerDbTestCase
         }
     ],
     "routes": [
+        {
+            "status": 1,
+            "path": "\/inspect\/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+            "config": [
+                {
+                    "version": 1,
+                    "status": 4,
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "request": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Inspect-Action"
+                        },
+                        "POST": {
+                            "active": true,
+                            "public": true,
+                            "request": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Inspect-Action"
+                        },
+                        "PUT": {
+                            "active": true,
+                            "public": true,
+                            "request": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Inspect-Action"
+                        },
+                        "PATCH": {
+                            "active": true,
+                            "public": true,
+                            "request": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Inspect-Action"
+                        },
+                        "DELETE": {
+                            "active": true,
+                            "public": true,
+                            "request": "Passthru",
+                            "responses": {
+                                "200": "Passthru"
+                            },
+                            "action": "Inspect-Action"
+                        }
+                    }
+                }
+            ]
+        },
         {
             "status": 1,
             "path": "\/foo",

@@ -19,50 +19,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Action;
+namespace Fusio\Impl\Tests\Adapter\Test;
 
-use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
-use Symfony\Component\Console\Tester\CommandTester;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
 
 /**
- * ListCommandTest
+ * InspectAction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListCommandTest extends ControllerDbTestCase
+class InspectAction extends ActionAbstract
 {
-    public function getDataSet()
+    public function getName()
     {
-        return Fixture::getDataSet();
+        return 'Inspect-Action';
     }
 
-    public function testCommand()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $command = Environment::getService('console')->find('action:list');
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
+        return $this->response->build(200, [], [
+            'method' => $request->getMethod(),
+            'headers' => $request->getHeaders(),
+            'uri_fragments' => $request->getUriFragments()->toArray(),
+            'parameters' => $request->getParameters()->toArray(),
         ]);
-
-        $actual = $commandTester->getDisplay();
-        $expect = <<<TEXT
-+----+----------------------+
-| ID | Name                 |
-+----+----------------------+
-| 4  | Inspect-Action       |
-| 3  | Sql-Table            |
-| 2  | Util-Static-Response |
-| 1  | Welcome              |
-+----+----------------------+
-
-TEXT;
-
-        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
     }
 }

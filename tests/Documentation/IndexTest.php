@@ -498,6 +498,17 @@ class IndexTest extends ControllerDbTestCase
                 "DELETE"
             ],
             "version": "*"
+        },
+        {
+            "path": "\/inspect\/:foo",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE"
+            ],
+            "version": "*"
         }
     ],
     "links": [

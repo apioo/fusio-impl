@@ -216,10 +216,16 @@ JSON;
         
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 4,
+            "status": 1,
+            "name": "Inspect-Action",
+            "date": "[datetime]"
+        },
         {
             "id": 3,
             "status": 1,
@@ -288,7 +294,7 @@ JSON;
         $row    = Environment::getService('connection')->fetchAssoc($sql);
         $config = json_encode(unserialize($row['config']));
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(5, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $row['class']);
         $this->assertJsonStringEqualsJsonString('{"string":"foo","integer":12,"number":12.34,"boolean":true,"array":["foo",12,12.34,true,null]}', $config, $config);
