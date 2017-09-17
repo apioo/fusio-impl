@@ -41,13 +41,13 @@ use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
 
 /**
- * Version100
+ * Version101
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Version100 implements VersionInterface
+class Version101 implements VersionInterface
 {
     public function getSchema()
     {
@@ -360,7 +360,7 @@ class Version100 implements VersionInterface
                         'scopeId' => $scopeId,
                         'routeId' => $routeId,
                         'allow'   => 1,
-                        'methods' => 'GET|POST|PUT|DELETE',
+                        'methods' => 'GET|POST|PUT|PATCH|DELETE',
                     ]);
                 }
             }
@@ -542,7 +542,7 @@ class Version100 implements VersionInterface
         foreach ($data['fusio_routes'] as $index => $row) {
             $scopeId = $this->getScopeIdFromPath($row['path']);
             if ($scopeId !== null) {
-                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|DELETE'];
+                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
             }
         }
 
