@@ -67,7 +67,7 @@ class ExecuteTest extends ControllerDbTestCase
                 "properties": {
                     "method": {
                         "type": "string",
-                        "pattern": "GET|POST|PUT|DELETE"
+                        "pattern": "GET|POST|PUT|PATCH|DELETE"
                     },
                     "uriFragments": {
                         "type": "string"

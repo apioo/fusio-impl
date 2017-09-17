@@ -230,11 +230,11 @@ JSON;
             'routes' => [[
                 'routeId' => 1,
                 'allow'   => true,
-                'methods' => 'GET|POST|PUT|DELETE',
+                'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ], [
                 'routeId' => 2,
                 'allow'   => true,
-                'methods' => 'GET|POST|PUT|DELETE',
+                'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ]]
         ]));
 
@@ -278,13 +278,13 @@ JSON;
             'scopeId' => 6,
             'routeId' => 2,
             'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'id'      => 66,
             'scopeId' => 6,
             'routeId' => 1,
             'allow'   => 1,
-            'methods' => 'GET|POST|PUT|DELETE',
+            'methods' => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);
     }
 
