@@ -101,7 +101,7 @@ class Config
      */
     public function handleConfig($routeId, $path, $result, UserContext $context)
     {
-        $availableMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+        $availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
         $availableScopes  = [];
 
         foreach ($result as $version) {

@@ -360,7 +360,7 @@ class Version100 implements VersionInterface
                         'scopeId' => $scopeId,
                         'routeId' => $routeId,
                         'allow'   => 1,
-                        'methods' => 'GET|POST|PUT|DELETE',
+                        'methods' => 'GET|POST|PUT|PATCH|DELETE',
                     ]);
                 }
             }

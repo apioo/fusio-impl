@@ -95,7 +95,7 @@ class Routes
             // create route
             $record = [
                 'status'     => Table\Routes::STATUS_ACTIVE,
-                'methods'    => 'GET|POST|PUT|DELETE',
+                'methods'    => 'GET|POST|PUT|PATCH|DELETE',
                 'path'       => $path,
                 'controller' => SchemaApiController::class,
             ];
