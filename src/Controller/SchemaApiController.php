@@ -220,6 +220,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return $this->executeAction($record);
     }
 
+    protected function doPatch($record)
+    {
+        return $this->executeAction($record);
+    }
+
     protected function doDelete($record)
     {
         return $this->executeAction($record);
