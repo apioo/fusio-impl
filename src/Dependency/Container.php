@@ -122,6 +122,7 @@ class Container extends DefaultContainer
         $application->add(new PSXCommand\ContainerCommand($this));
         $application->add(new PSXCommand\RouteCommand($this->get('routing_parser')));
         $application->add(new PSXCommand\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
+        $application->add(new PSXCommand\DocumentationCommand($this->get('routing_parser'), $this->get('resource_listing')));
 
         $application->add(new ApiCommand($this->get('api_manager'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
         $application->add(new SchemaCommand($this->get('schema_manager')));
