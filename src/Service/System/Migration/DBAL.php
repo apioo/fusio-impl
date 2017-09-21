@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Service\System\Migration;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
+use Fusio\Impl\Service\System\Migration\DBAL\QueryBucket;
 
 /**
  * DBAL
@@ -40,14 +42,27 @@ class DBAL implements StrategyInterface
         }
 
         $toSchema = new Schema();
-        self::executeMigration($toSchema, $path);
+        $bucket   = new QueryBucket();
+        $platform = $connection->getDatabasePlatform();
 
-        // run migration
-        $fromSchema = $connection->getSchemaManager()->createSchema();
-        $queries    = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+        self::executeMigration($toSchema, $bucket, $platform, $path);
 
-        foreach ($queries as $query) {
-            $connection->query($query);
+        if (count($toSchema->getTables()) > 0) {
+            // run migration
+            $fromSchema = $connection->getSchemaManager()->createSchema();
+            $queries    = $fromSchema->getMigrateToSql($toSchema, $platform);
+
+            foreach ($queries as $query) {
+                $connection->query($query);
+            }
+        }
+
+        if ($bucket->hasQueries()) {
+            $queries = $bucket->getQueries();
+            foreach ($queries as $sql) {
+                list($query, $params, $types) = $sql;
+                $connection->executeQuery($query, $params, $types);
+            }
         }
     }
 
@@ -56,9 +71,11 @@ class DBAL implements StrategyInterface
      * scope. The required file uses the $schema and defines the needed tables
      *
      * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @param \Fusio\Impl\Service\System\Migration\DBAL\QueryBucket $migration
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @param string $file
      */
-    private static function executeMigration(Schema $schema, $file)
+    private static function executeMigration(Schema $schema, QueryBucket $migration, AbstractPlatform $platform, $file)
     {
         require $file;
     }
