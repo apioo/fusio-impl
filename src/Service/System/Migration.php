@@ -21,12 +21,10 @@
 
 namespace Fusio\Impl\Service\System;
 
-use Doctrine\DBAL;
 use Fusio\Engine\Connector;
 use Fusio\Impl\Table;
 use Psr\Log\LoggerInterface;
 use PSX\Sql\Condition;
-use RuntimeException;
 
 /**
  * Migration
@@ -101,48 +99,22 @@ class Migration
 
         if (empty($deploy)) {
             // execute if the file was not already executed
-            if ($connection instanceof DBAL\Connection) {
-                $toSchema = new DBAL\Schema\Schema();
-                appendDatabaseSchema($toSchema, $path);
+            $strategy = Migration\Factory::getStrategy($connection);
+            $strategy->execute($connection, $path);
 
-                // run migration
-                $fromSchema = $connection->getSchemaManager()->createSchema();
-                $queries    = $fromSchema->getMigrateToSql($toSchema, $connection->getDatabasePlatform());
+            // insert migration
+            $this->deployTable->create([
+                'connection' => $connectionId,
+                'file' => $definitionFile,
+                'fileHash' => $hash,
+                'executeDate' => new \DateTime(),
+            ]);
 
-                foreach ($queries as $query) {
-                    $connection->query($query);
-                }
-
-                // insert migration
-                $this->deployTable->create([
-                    'connection' => $connectionId,
-                    'file' => $definitionFile,
-                    'fileHash' => $hash,
-                    'executeDate' => new \DateTime(),
-                ]);
-
-                $result[] = '[EXECUTED] ' . $connectionId . ' ' . $definitionFile;
-            } else {
-                // @TODO handle also other connection types i.e. mongodb
-
-                throw new RuntimeException('Connection type is not supported');
-            }
+            $result[] = '[EXECUTED] ' . $connectionId . ' ' . $definitionFile;
         } else {
             if ($deploy['fileHash'] != $hash) {
                 $result[] = '[SKIPPED] ' . $connectionId . ' ' . $definitionFile . ' (The file was already executed, but the content has changed)';
             }
         }
     }
-}
-
-/**
- * If we include the schema we only want to have the $schema variable in the
- * scope. The required file uses the $schema and appends the needed tables
- * 
- * @param \Doctrine\DBAL\Schema\Schema $schema
- * @param string $file
- */
-function appendDatabaseSchema(DBAL\Schema\Schema $schema, $file)
-{
-    require $file;
 }
