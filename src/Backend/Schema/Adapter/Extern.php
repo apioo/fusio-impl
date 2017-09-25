@@ -19,48 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Statistic;
+namespace Fusio\Impl\Backend\Schema\Adapter;
 
-use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
-use Fusio\Impl\Backend\View;
-use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * MostUsedRoutes
+ * Extern
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MostUsedRoutes extends BackendApiAbstract
+class Extern extends SchemaAbstract
 {
-    /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
-     */
-    protected $tableManager;
-
-    /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
-     */
-    public function getDocumentation($version = null)
+    public function getDefinition()
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $schema = $this->getSchema(Intern::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
-        );
+        $method = $schema->getProperty('routes')
+            ->getItems()
+            ->getProperty('config')
+            ->getItems()
+            ->getProperty('methods')
+            ->getPatternProperty('^(GET|POST|PUT|PATCH|DELETE)$');
 
-        return $resource;
-    }
+        $method->getProperty('parameters')
+            ->setType('string');
 
-    public function doGet()
-    {
-        return $this->tableManager->getTable(View\Statistic::class)->getMostUsedRoutes(
-            View\Log\QueryFilter::create($this->getParameters())
-        );
+        $method->getProperty('request')
+            ->setType('string');
+
+        $method->getProperty('response')
+            ->setType('string');
+
+        $method->getProperty('responses')
+            ->getPatternProperty('^([0-9]{3})$')
+            ->setType('string');
+
+        $method->getProperty('action')
+            ->setType('string');
+
+        return $schema;
     }
 }

@@ -19,48 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Statistic;
+namespace Fusio\Impl\Backend\Schema\Adapter;
 
-use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
-use Fusio\Impl\Backend\View;
-use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * MostUsedRoutes
+ * Intern
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MostUsedRoutes extends BackendApiAbstract
+class Intern extends SchemaAbstract
 {
-    /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
-     */
-    protected $tableManager;
-
-    /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
-     */
-    public function getDocumentation($version = null)
+    public function getDefinition()
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $sb = $this->getSchemaBuilder('adapter');
+        $sb->arrayType('actionClass')
+            ->setItems(Property::getString());
+        $sb->arrayType('connectionClass')
+            ->setItems(Property::getString());
+        $sb->arrayType('routes')
+            ->setItems($this->getSchema(Schema\Routes::class));
+        $sb->arrayType('action')
+            ->setItems($this->getSchema(Schema\Action::class));
+        $sb->arrayType('schema')
+            ->setItems($this->getSchema(Schema\Schema::class));
+        $sb->arrayType('connection')
+            ->setItems($this->getSchema(Schema\Connection::class));
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
-        );
-
-        return $resource;
-    }
-
-    public function doGet()
-    {
-        return $this->tableManager->getTable(View\Statistic::class)->getMostUsedRoutes(
-            View\Log\QueryFilter::create($this->getParameters())
-        );
+        return $sb->getProperty();
     }
 }

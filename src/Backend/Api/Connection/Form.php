@@ -19,28 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Backend\Api\Connection;
 
+use Fusio\Engine\Form\Container;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
-use PSX\Json\Parser;
+use PSX\Schema\Property;
 
 /**
- * Process
+ * Form
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Process extends BackendApiAbstract
+class Form extends BackendApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\System\Import
+     * @var \Fusio\Engine\Parser\ParserInterface
      */
-    protected $systemImportService;
+    protected $connectionParser;
 
     /**
      * @param integer $version
@@ -50,33 +51,23 @@ class Process extends BackendApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema(Schema\Adapter\Extern::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Import\Process\Result::class))
+        $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Form\Container::class))
+            ->addQueryParameter('class', Property::getString())
         );
 
         return $resource;
     }
 
-    public function doPost($record)
+    public function doGet()
     {
-        try {
-            $this->connection->beginTransaction();
+        $className = $this->getParameter('class');
+        $form      = $this->connectionParser->getForm($className);
 
-            $data   = Parser::encode($this->getBody());
-            $result = $this->systemImportService->import($data);
-
-            $this->connection->commit();
-
-            return [
-                'success' => true,
-                'message' => 'Import successful',
-                'result'  => $result,
-            ];
-        } catch (\Throwable $e) {
-            $this->connection->rollback();
-
-            throw $e;
+        if ($form instanceof Container) {
+            return $form;
+        } else {
+            throw new \RuntimeException('Invalid connection class');
         }
     }
 }

@@ -19,45 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Action;
+namespace Fusio\Impl\Backend\Schema\Statistic;
 
-use Fusio\Engine\Form;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
+use PSX\Schema\Property;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * ListActions
+ * Chart
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListActions extends ApiAbstract
+class Chart extends SchemaAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Parser\ParserInterface
-     */
-    protected $actionParser;
-
-    public function doIndex()
+    public function getDefinition()
     {
-        $this->setBody(array(
-            'actions' => $this->actionParser->getClasses()
-        ));
-    }
+        $data = Property::getArray()
+            ->setItems(Property::getNumber());
 
-    public function doDetail()
-    {
-        $className = $this->getParameter('class');
-        $form      = $this->actionParser->getForm($className);
+        $sb = $this->getSchemaBuilder('chart');
+        $sb->arrayType('labels')
+            ->setItems(Property::getString());
+        $sb->arrayType('data')
+            ->setItems($data);
+        $sb->arrayType('series')
+            ->setItems(Property::getString());
 
-        if ($form instanceof Form\Container) {
-            $this->setBody($form);
-        } else {
-            throw new \RuntimeException('Invalid action class');
-        }
+        return $sb->getProperty();
     }
 }

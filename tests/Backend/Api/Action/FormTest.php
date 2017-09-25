@@ -39,6 +39,187 @@ class FormTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/action/form', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/action\/form",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "GET-query": {
+                "type": "object",
+                "title": "query",
+                "properties": {
+                    "class": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Input": {
+                "type": "object",
+                "title": "input",
+                "properties": {
+                    "element": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "help": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Select": {
+                "type": "object",
+                "title": "select",
+                "properties": {
+                    "element": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "help": {
+                        "type": "string"
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Option"
+                        }
+                    }
+                }
+            },
+            "Option": {
+                "type": "object",
+                "title": "option",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Tag": {
+                "type": "object",
+                "title": "tag",
+                "properties": {
+                    "element": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "help": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Textarea": {
+                "type": "object",
+                "title": "textarea",
+                "properties": {
+                    "element": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "help": {
+                        "type": "string"
+                    },
+                    "mode": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Container": {
+                "type": "object",
+                "title": "container",
+                "properties": {
+                    "element": {
+                        "type": "array",
+                        "items": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#\/definitions\/Input"
+                                },
+                                {
+                                    "$ref": "#\/definitions\/Select"
+                                },
+                                {
+                                    "$ref": "#\/definitions\/Tag"
+                                },
+                                {
+                                    "$ref": "#\/definitions\/Textarea"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Container"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/action\/form"
+        },
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/action\/form"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/action\/form"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/action/form?class=' . urlencode(UtilStaticResponse::class), 'GET', array(
@@ -309,7 +490,7 @@ class FormTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

@@ -38,6 +38,160 @@ class DashboardTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/dashboard', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/dashboard",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Chart": {
+                "type": "object",
+                "title": "chart",
+                "properties": {
+                    "labels": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "series": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "Apps": {
+                "type": "object",
+                "title": "apps",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/App"
+                        }
+                    }
+                }
+            },
+            "App": {
+                "type": "object",
+                "title": "app",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Requests": {
+                "type": "object",
+                "title": "requests",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Request"
+                        }
+                    }
+                }
+            },
+            "Request": {
+                "type": "object",
+                "title": "request",
+                "properties": {
+                    "path": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Dashboard": {
+                "type": "object",
+                "title": "dashboard",
+                "properties": {
+                    "incomingRequests": {
+                        "$ref": "#\/definitions\/Chart"
+                    },
+                    "mostUsedRoutes": {
+                        "$ref": "#\/definitions\/Chart"
+                    },
+                    "timePerRoute": {
+                        "$ref": "#\/definitions\/Chart"
+                    },
+                    "latestApps": {
+                        "$ref": "#\/definitions\/Apps"
+                    },
+                    "latestRequests": {
+                        "$ref": "#\/definitions\/Requests"
+                    },
+                    "errorsPerRoute": {
+                        "$ref": "#\/definitions\/Chart"
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Dashboard"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/dashboard"
+        },
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/dashboard"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/dashboard"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
@@ -374,7 +528,7 @@ class DashboardTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $actual);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 }

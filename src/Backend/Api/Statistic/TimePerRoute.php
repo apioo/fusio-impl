@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Backend\Api\Statistic;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
+use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
-use PSX\Framework\Controller\ApiAbstract;
+use PSX\Api\Resource;
+use PSX\Framework\Loader\Context;
 
 /**
  * TimePerRoute
@@ -32,22 +34,33 @@ use PSX\Framework\Controller\ApiAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class TimePerRoute extends ApiAbstract
+class TimePerRoute extends BackendApiAbstract
 {
-    use ProtectionTrait;
-
     /**
      * @Inject
      * @var \PSX\Sql\TableManager
      */
     protected $tableManager;
 
-    public function onGet()
+    /**
+     * @param integer $version
+     * @return \PSX\Api\Resource
+     */
+    public function getDocumentation($version = null)
     {
-        $this->setBody(
-            $this->tableManager->getTable(View\Statistic::class)->getTimePerRoute(
-                View\Log\QueryFilter::create($this->getParameters())
-            )
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+
+        $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
+        );
+
+        return $resource;
+    }
+
+    public function doGet()
+    {
+        return $this->tableManager->getTable(View\Statistic::class)->getTimePerRoute(
+            View\Log\QueryFilter::create($this->getParameters())
         );
     }
 }

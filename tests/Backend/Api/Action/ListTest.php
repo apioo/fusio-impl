@@ -38,6 +38,80 @@ class ListTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/action/list', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/action\/list",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Action": {
+                "type": "object",
+                "title": "action",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "class": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Index": {
+                "type": "object",
+                "title": "index",
+                "properties": {
+                    "actions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Action"
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Index"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/action\/list"
+        },
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/action\/list"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/action\/list"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/action/list', 'GET', array(
@@ -77,7 +151,7 @@ class ListTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

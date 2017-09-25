@@ -19,45 +19,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Connection;
+namespace Fusio\Impl\Backend\Schema\Dashboard;
 
-use Fusio\Engine\Form;
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
+use Fusio\Impl\Backend\Schema;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * ListConnections
+ * Dashboard
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListConnections extends ApiAbstract
+class Dashboard extends SchemaAbstract
 {
-    use ProtectionTrait;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Parser\ParserInterface
-     */
-    protected $connectionParser;
-
-    public function doIndex()
+    public function getDefinition()
     {
-        $this->setBody(array(
-            'connections' => $this->connectionParser->getClasses()
-        ));
-    }
+        $sb = $this->getSchemaBuilder('dashboard');
+        $sb->objectType('incomingRequests', $this->getSchema(Schema\Statistic\Chart::class));
+        $sb->objectType('mostUsedRoutes', $this->getSchema(Schema\Statistic\Chart::class));
+        $sb->objectType('timePerRoute', $this->getSchema(Schema\Statistic\Chart::class));
+        $sb->objectType('latestApps', $this->getSchema(App::class));
+        $sb->objectType('latestRequests', $this->getSchema(Request::class));
+        $sb->objectType('errorsPerRoute', $this->getSchema(Schema\Statistic\Chart::class));
 
-    public function doDetail()
-    {
-        $className = $this->getParameter('class');
-        $form      = $this->connectionParser->getForm($className);
-
-        if ($form instanceof Form\Container) {
-            $this->setBody($form);
-        } else {
-            throw new \RuntimeException('Invalid connection class');
-        }
+        return $sb->getProperty();
     }
 }

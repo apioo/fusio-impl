@@ -19,44 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Import;
+namespace Fusio\Impl\Backend\Schema\Statistic;
 
-use Fusio\Impl\Adapter\Transform;
-use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
-use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
+use PSX\Schema\PropertyType;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * Format
+ * Count
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Format extends BackendApiAbstract
+class Count extends SchemaAbstract
 {
-    /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
-     */
-    public function getDocumentation($version = null)
+    public function getDefinition()
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $sb = $this->getSchemaBuilder('count');
+        $sb->integer('count');
+        $sb->string('from')
+            ->setFormat(PropertyType::FORMAT_DATETIME);
+        $sb->string('to')
+            ->setFormat(PropertyType::FORMAT_DATETIME);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema(Schema\Import\Format\Schema::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Adapter\Extern::class))
-        );
-
-        return $resource;
-    }
-
-    public function doPost($record)
-    {
-        $format = $this->getUriFragment('format');
-        $body   = Transform::fromSchema($format, $record->schema);
-
-        $this->setBody($body);
+        return $sb->getProperty();
     }
 }

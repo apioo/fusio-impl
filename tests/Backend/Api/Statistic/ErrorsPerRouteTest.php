@@ -38,6 +38,83 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('http://127.0.0.1/doc/*/backend/statistic/errors_per_route', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "path": "\/backend\/statistic\/errors_per_route",
+    "version": "*",
+    "status": 1,
+    "description": "",
+    "schema": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+            "Chart": {
+                "type": "object",
+                "title": "chart",
+                "properties": {
+                    "labels": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "array",
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "series": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Chart"
+            }
+        }
+    },
+    "methods": {
+        "GET": {
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "openapi",
+            "href": "\/export\/openapi\/*\/backend\/statistic\/errors_per_route"
+        },
+        {
+            "rel": "swagger",
+            "href": "\/export\/swagger\/*\/backend\/statistic\/errors_per_route"
+        },
+        {
+            "rel": "raml",
+            "href": "\/export\/raml\/*\/backend\/statistic\/errors_per_route"
+        }
+    ]
+}
+JSON;
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testGet()
     {
         $response = $this->sendRequest('http://127.0.0.1/backend/statistic/errors_per_route?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59', 'GET', array(
@@ -121,7 +198,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }
