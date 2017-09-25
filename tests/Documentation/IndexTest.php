@@ -59,6 +59,20 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/action\/list",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/action\/form",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
             "methods": [
                 "GET",
@@ -175,6 +189,20 @@ class IndexTest extends ControllerDbTestCase
                 "POST",
                 "PUT",
                 "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/connection\/list",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/connection\/form",
+            "methods": [
+                "GET"
             ],
             "version": "*"
         },
@@ -339,12 +367,89 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/dashboard",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/incoming_requests",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/most_used_routes",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/most_used_apps",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/errors_per_route",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/issued_tokens",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/count_requests",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/time_average",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/statistic\/time_per_route",
+            "methods": [
+                "GET"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/backend\/account\/change_password",
             "methods": [
                 "GET",
                 "POST",
                 "PUT",
                 "DELETE"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/import\/process",
+            "methods": [
+                "POST"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/backend\/import\/:format",
+            "methods": [
+                "POST"
             ],
             "version": "*"
         },
