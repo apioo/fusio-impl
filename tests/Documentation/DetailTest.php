@@ -40,7 +40,7 @@ class DetailTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/doc/*/foo', 'GET', array(
+        $response = $this->sendRequest('/doc/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
