@@ -62,7 +62,7 @@ class Path extends FilterAbstract
                     return false;
                 }
 
-                if (!preg_match('/^[A-z0-9\-\.\_\~\!\$\&\\\'\(\)\*\+\,\;\=\:\@]+$/', $part)) {
+                if (!preg_match('/^[!-~]+$/', $part)) {
                     $this->errorMessage = '%s contains invalid characters inside a path segment';
                     return false;
                 }
