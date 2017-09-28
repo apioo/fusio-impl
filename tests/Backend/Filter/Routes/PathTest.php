@@ -57,7 +57,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
             ['/foo/:bar', true, null],
             ['/foo/$bar<[0-9]+>', true, null],
             ['/foo/!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~', true, null],
-            ['/foo' . "\x20\x7F", false, '%s contains invalid characters inside a path segment'],
+            ['/foo' . "\x20\x7F", false, '%s contains invalid characters inside a path segment'],
             ['/foo' . "\x80", false, '%s contains invalid characters inside a path segment'],
             ['/backend', false, '%s uses a path segment which is reserved for the system'],
             ['/consumer', false, '%s uses a path segment which is reserved for the system'],
