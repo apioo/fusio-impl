@@ -63,7 +63,7 @@ class Process extends BackendApiAbstract
         try {
             $this->connection->beginTransaction();
 
-            $data   = Parser::encode($this->getBody());
+            $data   = Parser::encode($record);
             $result = $this->systemImportService->import($data);
 
             $this->connection->commit();
