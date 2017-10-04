@@ -32,11 +32,11 @@ use Fusio\Impl\Logger;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
 use Fusio\Impl\Table;
-use PSX\Api\Console\ApiCommand;
+use PSX\Api\Console as ApiConsole;
 use PSX\Framework\Api\CachedListing;
-use PSX\Framework\Console as PSXCommand;
+use PSX\Framework\Console as FrameworkConsole;
 use PSX\Framework\Dependency\DefaultContainer;
-use PSX\Schema\Console\SchemaCommand;
+use PSX\Schema\Console as SchemaConsole;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -119,13 +119,15 @@ class Container extends DefaultContainer
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
-        $application->add(new PSXCommand\ContainerCommand($this));
-        $application->add(new PSXCommand\RouteCommand($this->get('routing_parser')));
-        $application->add(new PSXCommand\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
-        $application->add(new PSXCommand\DocumentationCommand($this->get('routing_parser'), $this->get('resource_listing')));
+        $application->add(new FrameworkConsole\ContainerCommand($this));
+        $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
+        $application->add(new FrameworkConsole\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
 
-        $application->add(new ApiCommand($this->get('api_manager'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
-        $application->add(new SchemaCommand($this->get('schema_manager')));
+        $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
+        $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
+        $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
+
+        $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
         // fusio commands
         $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
