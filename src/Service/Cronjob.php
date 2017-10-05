@@ -197,7 +197,7 @@ class Cronjob
         if (empty($this->cronFile)) {
             return false;
         }
-        
+
         if (!is_file($this->cronFile)) {
             return false;
         }
