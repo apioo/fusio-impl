@@ -276,7 +276,7 @@ class ExportCommandTest extends ControllerDbTestCase
     "cronjob": [
         {
             "name": "Test-Cron",
-            "cron": "*\/80 * * * *",
+            "cron": "*\/30 * * * *",
             "action": "Sql-Table"
         }
     ]

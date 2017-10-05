@@ -154,7 +154,7 @@ JSON;
 {
     "id": 1,
     "name": "Test-Cron",
-    "cron": "*\/80 * * * *",
+    "cron": "*\/30 * * * *",
     "action": "3"
 }
 JSON;

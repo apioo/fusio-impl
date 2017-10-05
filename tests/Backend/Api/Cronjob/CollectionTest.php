@@ -173,7 +173,7 @@ JSON;
         {
             "id": 1,
             "name": "Test-Cron",
-            "cron": "*\/80 * * * *"
+            "cron": "*\/30 * * * *"
         }
     ]
 }
@@ -233,7 +233,7 @@ JSON;
 # entries on generation.
 
 5 * * * * /usr/bin/php I:\www\projects\fusio-impl/bin/fusio cronjob:execute 2
-*/80 * * * * /usr/bin/php I:\www\projects\fusio-impl/bin/fusio cronjob:execute 1
+*/30 * * * * /usr/bin/php I:\www\projects\fusio-impl/bin/fusio cronjob:execute 1
 
 
 CRON;
