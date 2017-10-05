@@ -53,6 +53,10 @@ routes:
           200: Response-Schema
           500: Error-Schema
         action: Test-Action
+cronjob:
+  New-Cron:
+    cron: "15 * * * *"
+    action: Test-Action
 migration:
   New-Connection:
     - v1_schema.php

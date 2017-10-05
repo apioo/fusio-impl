@@ -44,6 +44,7 @@ abstract class SystemAbstract
     const TYPE_SCHEMA = 'schema';
     const TYPE_ACTION = 'action';
     const TYPE_ROUTES = 'routes';
+    const TYPE_CRONJOB = 'cronjob';
 
     /**
      * @var \Fusio\Impl\Service\System\ApiExecutor
@@ -68,7 +69,7 @@ abstract class SystemAbstract
     /**
      * @var array
      */
-    protected $types = [self::TYPE_CONNECTION, self::TYPE_SCHEMA, self::TYPE_ACTION, self::TYPE_ROUTES];
+    protected $types = [self::TYPE_CONNECTION, self::TYPE_SCHEMA, self::TYPE_ACTION, self::TYPE_ROUTES, self::TYPE_CRONJOB];
 
     /**
      * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
@@ -108,6 +109,10 @@ abstract class SystemAbstract
 
             case self::TYPE_ROUTES:
                 return $this->transformRoutes($entity);
+                break;
+
+            case self::TYPE_CRONJOB:
+                return $this->transformCronjob($entity);
                 break;
 
             default:
@@ -193,6 +198,18 @@ abstract class SystemAbstract
                     $entity->config[$index]->methods->{$method}->action = $this->getReference('fusio_action', $row->action, self::TYPE_ROUTES);
                 }
             }
+        }
+
+        return $entity;
+    }
+
+    protected function transformCronjob(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
+
+        if (!empty($entity->action)) {
+            $entity->action = $this->getReference('fusio_action', $entity->action, self::TYPE_CRONJOB);
         }
 
         return $entity;

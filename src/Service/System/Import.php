@@ -89,6 +89,12 @@ class Import extends SystemAbstract
             }
         }
 
+        if (isset($data->cronjob) && is_array($data->cronjob)) {
+            foreach ($data->cronjob as $entry) {
+                $result[] = $this->importGeneral(self::TYPE_CRONJOB, $entry);
+            }
+        }
+
         return $result;
     }
 
@@ -124,9 +130,9 @@ class Import extends SystemAbstract
         ]);
 
         if (!empty($id)) {
-            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform('routes', $data));
+            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform(self::TYPE_ROUTES, $data));
         } else {
-            $response = $this->doRequest('POST', 'routes', $this->transform('routes', $data));
+            $response = $this->doRequest('POST', 'routes', $this->transform(self::TYPE_ROUTES, $data));
         }
 
         if (isset($response->success) && $response->success === false) {

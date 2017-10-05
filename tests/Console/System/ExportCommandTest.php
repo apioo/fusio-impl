@@ -272,6 +272,13 @@ class ExportCommandTest extends ControllerDbTestCase
                 }
             ]
         }
+    ],
+    "cronjob": [
+        {
+            "name": "Test-Cron",
+            "cron": "*\/80 * * * *",
+            "action": "Sql-Table"
+        }
     ]
 }
 JSON;

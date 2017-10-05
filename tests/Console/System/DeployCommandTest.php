@@ -191,6 +191,14 @@ JSON;
         $this->assertEquals(500, $responses[1]['code']);
         $this->assertEquals(6, $responses[1]['response']);
 
+        // check cronjobs
+        $cronjob = $this->connection->fetchAssoc('SELECT id, name, cron, action FROM fusio_cronjob ORDER BY id DESC');
+
+        $this->assertEquals(2, $cronjob['id']);
+        $this->assertEquals('New-Cron', $cronjob['name']);
+        $this->assertEquals('15 * * * *', $cronjob['cron']);
+        $this->assertEquals(5, $cronjob['action']);
+
         // check migration entries
         $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
 

@@ -79,6 +79,7 @@ class Deploy
             SystemAbstract::TYPE_SCHEMA     => new Deploy\Transformer\Schema(),
             SystemAbstract::TYPE_ACTION     => new Deploy\Transformer\Action(),
             SystemAbstract::TYPE_ROUTES     => new Deploy\Transformer\Routes(),
+            SystemAbstract::TYPE_CRONJOB    => new Deploy\Transformer\Cronjob(),
         ];
 
         // resolve includes
