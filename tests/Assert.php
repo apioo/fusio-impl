@@ -34,8 +34,8 @@ class Assert
 {
     public static function assertEqualsIgnoreWhitespace($expect, $actual)
     {
-        $expectString = preg_replace('/\s+/', ' ', $expect);
-        $actualString = preg_replace('/\s+/', ' ', $actual);
+        $expectString = str_replace(["\r\n", "\n", "\r"], "\n", $expect);
+        $actualString = str_replace(["\r\n", "\n", "\r"], "\n", $actual);
 
         if ($expectString != $actualString) {
             throw new \PHPUnit_Framework_ExpectationFailedException('Failed asserting that', new ComparisonFailure($expect, $actual, $expectString, $actualString, false, $actualString));
