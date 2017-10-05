@@ -34,7 +34,7 @@ class CronFile
 {
     public static function reset()
     {
-        $config = Environment::getContainer()->get('config');
+        $config = Environment::getService('config');
         $cronFile = $config->get('psx_path_cache') . '/cron';
         $config->set('fusio_cron_file', $cronFile);
         file_put_contents($cronFile, '');
@@ -42,7 +42,7 @@ class CronFile
 
     public static function get()
     {
-        $config = Environment::getContainer()->get('config');
+        $config = Environment::getService('config');
         $cronFile = $config->get('psx_path_cache') . '/cron';
         return file_get_contents($cronFile);
     }
