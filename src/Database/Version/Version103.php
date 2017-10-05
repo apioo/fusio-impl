@@ -151,6 +151,16 @@ class Version103 implements VersionInterface
         $connectionClassTable->setPrimaryKey(array('id'));
         $connectionClassTable->addUniqueIndex(array('class'));
 
+        $cronjobTable = $schema->createTable('fusio_cronjob');
+        $cronjobTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $cronjobTable->addColumn('status', 'integer', array('default' => Table\Cronjob::STATUS_ACTIVE));
+        $cronjobTable->addColumn('name', 'string', array('length' => 64));
+        $cronjobTable->addColumn('cron', 'string');
+        $cronjobTable->addColumn('action', 'integer', array('notnull' => false));
+        $cronjobTable->addColumn('executeDate', 'datetime', array('notnull' => false));
+        $cronjobTable->setPrimaryKey(array('id'));
+        $cronjobTable->addUniqueIndex(array('name'));
+
         $deployMigrationTable = $schema->createTable('fusio_deploy_migration');
         $deployMigrationTable->addColumn('id', 'integer', array('autoincrement' => true));
         $deployMigrationTable->addColumn('connection', 'string', array('length' => 32));
@@ -452,6 +462,8 @@ class Version103 implements VersionInterface
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/list',                     'controller' => Backend\Api\Connection\Index::class],
                 ['status' => 1, 'methods' => 'GET',                 'path' => '/backend/connection/form',                     'controller' => Backend\Api\Connection\Form::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/connection/$connection_id<[0-9]+>',   'controller' => Backend\Api\Connection\Entity::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/cronjob',                             'controller' => Backend\Api\Cronjob\Collection::class],
+                ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/cronjob/$cronjob_id<[0-9]+>',         'controller' => Backend\Api\Cronjob\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/log/error',                           'controller' => Backend\Api\Log\Error\Collection::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/log/error/$error_id<[0-9]+>',         'controller' => Backend\Api\Log\Error\Entity::class],
                 ['status' => 1, 'methods' => 'GET|POST|PUT|DELETE', 'path' => '/backend/log',                                 'controller' => Backend\Api\Log\Collection::class],

@@ -143,6 +143,9 @@ class Container extends DefaultContainer
         $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
         $application->add(new Console\Connection\ListCommand($this->get('table_manager')->getTable(View\Connection::class)));
 
+        $application->add(new Console\Cronjob\ExecuteCommand($this->get('cronjob_service')));
+        $application->add(new Console\Cronjob\ListCommand($this->get('table_manager')->getTable(View\Cronjob::class)));
+
         $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));

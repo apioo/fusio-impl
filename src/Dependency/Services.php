@@ -189,6 +189,20 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Cronjob
+     */
+    public function getCronjobService()
+    {
+        return new Service\Cronjob(
+            $this->get('table_manager')->getTable(Table\Cronjob::class),
+            $this->get('action_executor_service'),
+            $this->get('config')->get('fusio_cron_file'),
+            $this->get('config')->get('fusio_cron_exec'),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\System\ApiExecutor
      */
     public function getSystemApiExecutorService()
