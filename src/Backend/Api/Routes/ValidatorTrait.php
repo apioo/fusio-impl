@@ -42,8 +42,10 @@ trait ValidatorTrait
         return new Validator(array(
             new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Routes::class))]),
             new Field('/path', [new Path()]),
+            new Field('/config/(\d+)/methods/([A-Z]+)/parameters', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
             new Field('/config/(\d+)/methods/([A-Z]+)/request', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
             new Field('/config/(\d+)/methods/([A-Z]+)/response', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
+            new Field('/config/(\d+)/methods/([A-Z]+)/responses/([0-9]+)', [new PrimaryKey($this->tableManager->getTable(Table\Schema::class))]),
             new Field('/config/(\d+)/methods/([A-Z]+)/action', [new PrimaryKey($this->tableManager->getTable(Table\Action::class))]),
         ));
     }
