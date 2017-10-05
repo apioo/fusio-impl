@@ -32,6 +32,9 @@ use PSX\Validate\FilterAbstract;
  */
 class Cron extends FilterAbstract
 {
+    /**
+     * @var array
+     */
     protected $special = [
         '@reboot',
         '@yearly',
@@ -43,6 +46,9 @@ class Cron extends FilterAbstract
         '@hourly',
     ];
 
+    /**
+     * @var array
+     */
     protected $rules = [
         [0, 59],
         [0, 23],
@@ -51,6 +57,9 @@ class Cron extends FilterAbstract
         [0, 7],
     ];
 
+    /**
+     * @var array
+     */
     protected $convert = [
         null,
         null,
@@ -59,6 +68,9 @@ class Cron extends FilterAbstract
         [1 => 'mon', 2 => 'tue', 3 => 'wed', 4 => 'thu', 5 => 'fri', 6 => 'sat', 7 => 'sun'],
     ];
 
+    /**
+     * @var array
+     */
     protected $fields = [
         'minute',
         'hour',
@@ -67,8 +79,15 @@ class Cron extends FilterAbstract
         'weekday',
     ];
 
+    /**
+     * @var string
+     */
     protected $errorMessage = '%s is not a valid cron expression';
 
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function apply($value)
     {
         if (!empty($value)) {
@@ -102,6 +121,9 @@ class Cron extends FilterAbstract
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->errorMessage;

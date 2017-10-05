@@ -32,8 +32,26 @@ use PSX\Validate\FilterAbstract;
  */
 class Path extends FilterAbstract
 {
+    /**
+     * @var array
+     */
+    protected $reserved = [
+        'backend',
+        'consumer',
+        'doc',
+        'authorization',
+        'export'
+    ];
+
+    /**
+     * @var string
+     */
     protected $errorMessage = '%s is not a valid path';
 
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function apply($value)
     {
         if (!empty($value)) {
@@ -51,7 +69,7 @@ class Path extends FilterAbstract
             }
 
             // check reserved segments
-            if (in_array($parts[0], $this->getReservedSegments())) {
+            if (in_array(strtolower($parts[0]), $this->reserved)) {
                 $this->errorMessage = '%s uses a path segment which is reserved for the system';
                 return false;
             }
@@ -74,13 +92,11 @@ class Path extends FilterAbstract
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function getErrorMessage()
     {
         return $this->errorMessage;
-    }
-
-    protected function getReservedSegments()
-    {
-        return ['backend', 'consumer', 'doc', 'authorization', 'export'];
     }
 }

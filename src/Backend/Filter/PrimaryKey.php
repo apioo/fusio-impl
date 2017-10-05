@@ -38,12 +38,19 @@ class PrimaryKey extends FilterAbstract
      * @var \PSX\Sql\TableInterface
      */
     protected $table;
-    
+
+    /**
+     * @param \PSX\Sql\TableInterface $table
+     */
     public function __construct(TableInterface $table)
     {
         $this->table = $table;
     }
 
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
     public function apply($value)
     {
         $id = (int) $value;
@@ -59,7 +66,10 @@ class PrimaryKey extends FilterAbstract
             return false;
         }
     }
-    
+
+    /**
+     * @return string
+     */
     public function getErrorMessage()
     {
         return '%s must be a valid primary key';
