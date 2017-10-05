@@ -32,7 +32,9 @@ return array(
     ],
     */
 
-    // Location of the automatically generated cron file
+    // Location of the automatically generated cron file. Note Fusio writes only
+    // to this file if it exists. In order to use the cronjob service you need
+    // to create this file with i.e. "touch /etc/cronjob.d/fusio"
     'fusio_cron_file'         => '/etc/cronjob.d/fusio',
 
     // Command to execute the Fusio console which is used in the generated cron
