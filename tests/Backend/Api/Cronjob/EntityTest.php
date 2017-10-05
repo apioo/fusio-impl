@@ -302,8 +302,6 @@ JSON;
 
 CRON;
 
-        $expect = str_replace(["\r\n", "\n", "\r"], "\n", $expect);
-
-        $this->assertEquals($expect, $actual, $actual);
+        Assert::assertEqualsIgnoreWhitespace($expect, $actual);
     }
 }
