@@ -243,19 +243,19 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 72,
+            "id": 74,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 71,
+            "id": 73,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 70,
+            "id": 72,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
