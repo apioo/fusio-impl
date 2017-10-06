@@ -38,7 +38,7 @@ class Error extends SchemaAbstract
         $sb->string('message');
         $sb->string('trace');
         $sb->string('file');
-        $sb->string('line');
+        $sb->integer('line');
 
         return $sb->getProperty();
     }

@@ -109,7 +109,7 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "line": {
-                        "type": "string"
+                        "type": "integer"
                     }
                 }
             },

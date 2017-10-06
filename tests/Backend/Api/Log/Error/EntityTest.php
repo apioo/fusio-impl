@@ -70,7 +70,7 @@ class EntityTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "line": {
-                        "type": "string"
+                        "type": "integer"
                     }
                 }
             },
