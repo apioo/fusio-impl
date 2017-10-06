@@ -37,7 +37,12 @@ class Cronjob extends ViewAbstract
 {
     public function getCollection($startIndex = 0, $search = null)
     {
-        $condition = !empty($search) ? new Condition(['name', 'LIKE', '%' . $search . '%']) : null;
+        $condition = new Condition();
+        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
+
+        if (!empty($search)) {
+            $condition->like('name', '%' . $search . '%');
+        }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Cronjob::class)->getCount($condition),
