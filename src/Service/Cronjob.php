@@ -53,14 +53,16 @@ class Cronjob
 
     /**
      * @param \Fusio\Impl\Table\Cronjob $cronjobTable
+     * @param \Fusio\Impl\Table\Cronjob\Error $errorTable
      * @param \Fusio\Impl\Service\Action\Executor $executorService
      * @param string $cronFile
      * @param string $cronExec
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Cronjob $cronjobTable, Executor $executorService, $cronFile, $cronExec, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Cronjob $cronjobTable, Table\Cronjob\Error $errorTable, Executor $executorService, $cronFile, $cronExec, EventDispatcherInterface $eventDispatcher)
     {
         $this->cronjobTable    = $cronjobTable;
+        $this->errorTable      = $errorTable;
         $this->executorService = $executorService;
         $this->cronFile        = $cronFile;
         $this->cronExec        = $cronExec;
@@ -164,6 +166,7 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
+        $exitCode = null;
         try {
             $this->executorService->execute(
                 $cronjob['action'],
@@ -174,14 +177,24 @@ class Cronjob
                 null
             );
 
+            $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
+            $this->errorTable->create([
+                'cronjobId' => $cronjob->id,
+                'message'   => $e->getMessage(),
+                'trace'     => $e->getTraceAsString(),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+            ]);
 
+            $exitCode = Table\Cronjob::CODE_ERROR;
         }
 
         // set execute date
         $record = [
             'id' => $cronjob->id,
             'executeDate' => new \DateTime(),
+            'exitCode' => $exitCode,
         ];
 
         $this->cronjobTable->update($record);

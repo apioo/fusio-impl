@@ -155,7 +155,17 @@ JSON;
     "id": 1,
     "name": "Test-Cron",
     "cron": "*\/30 * * * *",
-    "action": 3
+    "action": 3,
+    "executeDate": "2015-02-27T19:59:15Z",
+    "exitCode": 0,
+    "errors": [
+        {
+            "message": "Syntax error, malformed JSON",
+            "trace": "[trace]",
+            "file": "[file]",
+            "line": 74
+        }
+    ]
 }
 JSON;
 

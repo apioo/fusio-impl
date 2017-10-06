@@ -19,40 +19,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Table\Cronjob;
 
 use PSX\Sql\TableAbstract;
 
 /**
- * Cronjob
+ * Error
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Cronjob extends TableAbstract
+class Error extends TableAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    const CODE_SUCCESS = 0;
-    const CODE_ERROR = 1;
-
     public function getName()
     {
-        return 'fusio_cronjob';
+        return 'fusio_cronjob_error';
     }
 
     public function getColumns()
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'cron' => self::TYPE_VARCHAR,
-            'action' => self::TYPE_VARCHAR,
-            'executeDate' => self::TYPE_DATETIME,
-            'exitCode' => self::TYPE_INT,
+            'cronjobId' => self::TYPE_INT,
+            'message' => self::TYPE_VARCHAR,
+            'trace' => self::TYPE_TEXT,
+            'file' => self::TYPE_VARCHAR,
+            'line' => self::TYPE_INT,
         );
     }
 }

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -52,6 +53,8 @@ class Cronjob extends ViewAbstract
                 'id' => 'id',
                 'name' => 'name',
                 'cron' => 'cron',
+                'executeDate' => $this->fieldDateTime('executeDate'),
+                'exitCode' => $this->fieldInteger('exitCode'),
             ]),
         ];
 
@@ -65,6 +68,14 @@ class Cronjob extends ViewAbstract
             'name' => 'name',
             'cron' => 'cron',
             'action' => $this->fieldInteger('action'),
+            'executeDate' => $this->fieldDateTime('executeDate'),
+            'exitCode' => $this->fieldInteger('exitCode'),
+            'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'getByCronjobId'], [new Reference('id')], [
+                'message' => 'message',
+                'trace' => 'trace',
+                'file' => 'file',
+                'line' => 'line',
+            ]),
         ]);
 
         return $this->build($definition);

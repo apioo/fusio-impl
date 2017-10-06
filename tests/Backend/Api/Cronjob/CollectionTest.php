@@ -173,7 +173,9 @@ JSON;
         {
             "id": 1,
             "name": "Test-Cron",
-            "cron": "*\/30 * * * *"
+            "cron": "*\/30 * * * *",
+            "executeDate": "2015-02-27T19:59:15Z",
+            "exitCode": 0
         }
     ]
 }

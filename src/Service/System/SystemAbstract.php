@@ -207,6 +207,9 @@ abstract class SystemAbstract
     {
         unset($entity->id);
         unset($entity->status);
+        unset($entity->executeDate);
+        unset($entity->exitCode);
+        unset($entity->errors);
 
         if (!empty($entity->action)) {
             $entity->action = $this->getReference('fusio_action', $entity->action, self::TYPE_CRONJOB);

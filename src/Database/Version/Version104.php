@@ -158,8 +158,19 @@ class Version104 implements VersionInterface
         $cronjobTable->addColumn('cron', 'string');
         $cronjobTable->addColumn('action', 'integer', array('notnull' => false));
         $cronjobTable->addColumn('executeDate', 'datetime', array('notnull' => false));
+        $cronjobTable->addColumn('exitCode', 'integer', array('notnull' => false));
         $cronjobTable->setPrimaryKey(array('id'));
         $cronjobTable->addUniqueIndex(array('name'));
+
+        $cronjobErrorTable = $schema->createTable('fusio_cronjob_error');
+        $cronjobErrorTable->addColumn('id', 'integer', array('autoincrement' => true));
+        $cronjobErrorTable->addColumn('cronjobId', 'integer');
+        $cronjobErrorTable->addColumn('message', 'string', array('length' => 500));
+        $cronjobErrorTable->addColumn('trace', 'text');
+        $cronjobErrorTable->addColumn('file', 'string', array('length' => 255));
+        $cronjobErrorTable->addColumn('line', 'integer');
+        $cronjobErrorTable->setPrimaryKey(array('id'));
+        $cronjobErrorTable->addOption('engine', 'MyISAM');
 
         $deployMigrationTable = $schema->createTable('fusio_deploy_migration');
         $deployMigrationTable->addColumn('id', 'integer', array('autoincrement' => true));
