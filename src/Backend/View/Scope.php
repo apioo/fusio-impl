@@ -38,7 +38,11 @@ class Scope extends ViewAbstract
 {
     public function getCollection($startIndex = 0, $search = null)
     {
-        $condition = !empty($search) ? new Condition(['name', 'LIKE', '%' . $search . '%']) : null;
+        $condition = new Condition();
+
+        if (!empty($search)) {
+            $condition->like('name', '%' . $search . '%');
+        }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Scope::class)->getCount($condition),
