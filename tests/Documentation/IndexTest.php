@@ -725,8 +725,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -736,8 +736,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "PATCH",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         }

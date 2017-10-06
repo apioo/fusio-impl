@@ -139,8 +139,8 @@ JSON;
                 ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE', 'path' => '/foo', 'controller' => SchemaApiController::class],
-                ['status' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE', 'path' => '/inspect/:foo', 'controller' => SchemaApiController::class],
+                ['status' => 1, 'methods' => 'ANY', 'path' => '/foo', 'controller' => SchemaApiController::class],
+                ['status' => 1, 'methods' => 'ANY', 'path' => '/inspect/:foo', 'controller' => SchemaApiController::class],
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rateLimit' => 8, 'timespan' => 'P1M'],
