@@ -67,7 +67,7 @@ class Form extends BackendApiAbstract
         if ($form instanceof Container) {
             return $form;
         } else {
-            throw new \RuntimeException('Invalid action class');
+            return new Container();
         }
     }
 }
