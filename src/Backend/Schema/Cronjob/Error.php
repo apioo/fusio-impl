@@ -19,31 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema;
+namespace Fusio\Impl\Backend\Schema\Cronjob;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Cronjob
+ * Error
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Cronjob extends SchemaAbstract
+class Error extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('cronjob');
-        $sb->integer('id');
-        $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
-        $sb->string('cron');
-        $sb->integer('action');
-        $sb->dateTime('executeDate');
-        $sb->integer('exitCode');
-        $sb->arrayType('errors')
-            ->setItems($this->getSchema(Cronjob\Error::class));
+        $sb = $this->getSchemaBuilder('error');
+        $sb->string('message');
+        $sb->string('trace');
+        $sb->string('file');
+        $sb->string('line');
 
         return $sb->getProperty();
     }

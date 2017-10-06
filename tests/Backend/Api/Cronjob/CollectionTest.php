@@ -74,6 +74,19 @@ class CollectionTest extends ControllerDbTestCase
                     },
                     "action": {
                         "type": "integer"
+                    },
+                    "executeDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "exitCode": {
+                        "type": "integer"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Error"
+                        }
                     }
                 },
                 "required": [
@@ -81,6 +94,24 @@ class CollectionTest extends ControllerDbTestCase
                     "cron",
                     "action"
                 ]
+            },
+            "Error": {
+                "type": "object",
+                "title": "error",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "trace": {
+                        "type": "string"
+                    },
+                    "file": {
+                        "type": "string"
+                    },
+                    "line": {
+                        "type": "string"
+                    }
+                }
             },
             "Collection": {
                 "type": "object",
