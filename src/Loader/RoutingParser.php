@@ -87,7 +87,7 @@ class RoutingParser implements LocationFinderInterface
         foreach ($result as $row) {
             $parameters = array();
 
-            if (in_array($method, explode('|', $row['methods'])) &&
+            if (($row['methods'] == 'ANY' || in_array($method, explode('|', $row['methods']))) &&
                 $pathMatcher->match($row['path'], $parameters)) {
                 $context->set(Context::KEY_FRAGMENT, $parameters);
                 $context->set(Context::KEY_PATH, $row['path']);

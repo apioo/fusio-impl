@@ -54,21 +54,30 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/action\/list",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/action\/form",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -78,7 +87,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -88,7 +98,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -98,7 +109,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -108,7 +120,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -118,7 +131,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -128,7 +142,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -138,7 +153,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -148,7 +164,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -158,7 +175,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -168,7 +186,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -178,7 +197,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -188,21 +208,30 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/connection\/list",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/connection\/form",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -212,7 +241,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -222,7 +252,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -232,7 +263,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -242,7 +274,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -252,7 +285,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -262,7 +296,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -272,7 +307,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -282,7 +318,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -292,7 +329,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -302,7 +340,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -312,7 +351,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -322,7 +362,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -332,7 +373,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -342,7 +384,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -352,7 +395,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -362,7 +406,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -372,7 +417,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -382,70 +428,107 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/dashboard",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/incoming_requests",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/most_used_routes",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/most_used_apps",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/errors_per_route",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/issued_tokens",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/count_requests",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/time_average",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/statistic\/time_per_route",
             "methods": [
-                "GET"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -455,21 +538,30 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/import\/process",
             "methods": [
-                "POST"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
         {
             "path": "\/backend\/import\/:format",
             "methods": [
-                "POST"
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -479,7 +571,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -489,7 +582,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -499,7 +593,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -509,7 +604,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -519,7 +615,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -529,7 +626,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -539,7 +637,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -549,7 +648,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -559,7 +659,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -569,7 +670,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -579,7 +681,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -589,7 +692,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -599,7 +703,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
@@ -609,7 +714,8 @@ class IndexTest extends ControllerDbTestCase
                 "GET",
                 "POST",
                 "PUT",
-                "DELETE"
+                "DELETE",
+                "PATCH"
             ],
             "version": "*"
         },
