@@ -59,7 +59,7 @@ class Cronjob extends ViewAbstract
             'id' => 'id',
             'name' => 'name',
             'cron' => 'cron',
-            'action' => 'action',
+            'action' => $this->fieldInteger('action'),
         ]);
 
         return $this->build($definition);
