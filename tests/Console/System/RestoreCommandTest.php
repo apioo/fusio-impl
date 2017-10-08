@@ -46,6 +46,11 @@ class RestoreCommandTest extends ControllerDbTestCase
      */
     public function testCommandRestore($type, $id, $status)
     {
+        $column = is_numeric($id) ? 'id' : ($type == 'routes' ? 'path' : 'name');
+
+        // delete record
+        $this->connection->update('fusio_' . $type, ['status' => 0], [$column => $id]);
+
         $command = Environment::getService('console')->find('system:restore');
 
         $commandTester = new CommandTester($command);
@@ -60,8 +65,7 @@ class RestoreCommandTest extends ControllerDbTestCase
         $this->assertSame(0, $commandTester->getStatusCode());
         $this->assertRegExp('/Restored 1 record/', $display, $display);
 
-        $column = is_numeric($id) ? 'id' : ($type == 'routes' ? 'path' : 'name');
-        $row    = $this->connection->fetchAssoc('SELECT status FROM fusio_' . $type . ' WHERE ' . $column . ' = :id', ['id' => $id]);
+        $row = $this->connection->fetchAssoc('SELECT status FROM fusio_' . $type . ' WHERE ' . $column . ' = :id', ['id' => $id]);
         $this->assertEquals($status, $row['status']);
     }
 
