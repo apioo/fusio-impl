@@ -95,6 +95,8 @@ class Import extends SystemAbstract
             }
         }
 
+        $result = array_filter($result);
+
         return $result;
     }
 
@@ -188,12 +190,14 @@ class Import extends SystemAbstract
                 $this->connection->insert($tableName, [
                     'class' => $class->getName(),
                 ]);
+
+                return '[REGISTERED] ' . $className;
             }
         } else {
             throw new RuntimeException('Class ' . $class->getName() . ' must implement the interface ' . $interface);
         }
 
-        return '[REGISTERED] ' . $className;
+        return null;
     }
 
     protected function getReference($tableName, $name, $type)
