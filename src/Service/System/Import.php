@@ -49,20 +49,20 @@ class Import extends SystemAbstract
         $classes = isset($data->actionClass) ? $data->actionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $this->importClass('fusio_action_class', $class, ActionInterface::class);
+                $result[] = $this->importClass('fusio_action_class', $class, ActionInterface::class);
             }
         }
 
         $classes = isset($data->connectionClass) ? $data->connectionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $this->importClass('fusio_connection_class', $class, ConnectionInterface::class);
+                $result[] = $this->importClass('fusio_connection_class', $class, ConnectionInterface::class);
             }
         }
 
         $config = isset($data->config) ? $data->config : null;
         if (!empty($config) && $config instanceof stdClass) {
-            $this->importConfig($config);
+            $result[] = $this->importConfig($config);
         }
 
         if (isset($data->connection) && is_array($data->connection)) {
@@ -167,6 +167,8 @@ class Import extends SystemAbstract
                 throw new RuntimeException('Unknown config parameter ' . $name);
             }
         }
+
+        return '[UPDATED] config';
     }
 
     protected function importClass($tableName, $className, $interface)
@@ -190,6 +192,8 @@ class Import extends SystemAbstract
         } else {
             throw new RuntimeException('Class ' . $class->getName() . ' must implement the interface ' . $interface);
         }
+
+        return '[REGISTERED] ' . $className;
     }
 
     protected function getReference($tableName, $name, $type)
