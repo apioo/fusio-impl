@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\System\Deploy\Transformer;
 
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend;
 use Fusio\Impl\Service\System\Deploy\IncludeDirective;
 use Fusio\Impl\Service\System\Deploy\NameGenerator;
 use Fusio\Impl\Service\System\Deploy\TransformerInterface;
@@ -104,6 +104,6 @@ class Action implements TransformerInterface
 
     private function isName($schema)
     {
-        return is_string($schema) && preg_match('/^' . Schema\Action::NAME_PATTERN . '$/', $schema);
+        return is_string($schema) && preg_match('/^' . Backend\Schema\Action::NAME_PATTERN . '$/', $schema);
     }
 }
