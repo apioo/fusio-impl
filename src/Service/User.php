@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -104,8 +105,15 @@ class User
             return null;
         }
 
+        // allow login either through username or email
+        if (preg_match('/^' . Schema\User::NAME_PATTERN . '$/', $username)) {
+            $column = 'name';
+        } else {
+            $column = 'email';
+        }
+
         $condition = new Condition();
-        $condition->equals('name', $username);
+        $condition->equals($column, $username);
         $condition->in('status', $status);
 
         $user = $this->userTable->getOneBy($condition);

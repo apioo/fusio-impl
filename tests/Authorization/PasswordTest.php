@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Authorization;
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Http\ResponseInterface;
 use PSX\Json\Parser;
 
 /**
@@ -48,33 +49,18 @@ class PasswordTest extends ControllerDbTestCase
             'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d')
         ], $body);
 
-        $body = (string) $response->getBody();
-        $data = Parser::decode($body, true);
+        $this->assertAccessToken($response);
+    }
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
+    public function testPostEmail()
+    {
+        $body     = 'grant_type=password&username=developer@localhost.com&password=qf2vX10Ec3wFZHx0K1eL&scope=authorization,backend';
+        $response = $this->sendRequest('http://127.0.0.1/authorization/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d')
+        ], $body);
 
-        $expireDate = strtotime('+2 day');
-
-        $this->arrayHasKey('access_token', $data);
-        $this->arrayHasKey('token_type', $data);
-        $this->assertEquals('bearer', $data['token_type']);
-        $this->arrayHasKey('expires_in', $data);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
-        $this->arrayHasKey('refresh_token', $data);
-        $this->arrayHasKey('scope', $data);
-        $this->assertEquals('authorization', $data['scope']);
-
-        // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
-
-        $this->assertEquals(3, $row['appId']);
-        $this->assertEquals(4, $row['userId']);
-        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals($data['access_token'], $row['token']);
-        $this->assertEquals($data['refresh_token'], $row['refresh']);
-        $this->assertEquals('authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertAccessToken($response);
     }
 
     /**
@@ -123,5 +109,36 @@ JSON;
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    private function assertAccessToken(ResponseInterface $response)
+    {
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $expireDate = strtotime('+2 day');
+
+        $this->arrayHasKey('access_token', $data);
+        $this->arrayHasKey('token_type', $data);
+        $this->assertEquals('bearer', $data['token_type']);
+        $this->arrayHasKey('expires_in', $data);
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
+        $this->arrayHasKey('refresh_token', $data);
+        $this->arrayHasKey('scope', $data);
+        $this->assertEquals('authorization', $data['scope']);
+
+        // check whether the token was created
+        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+
+        $this->assertEquals(3, $row['appId']);
+        $this->assertEquals(4, $row['userId']);
+        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals($data['access_token'], $row['token']);
+        $this->assertEquals($data['refresh_token'], $row['refresh']);
+        $this->assertEquals('authorization', $row['scope']);
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
+        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
     }
 }

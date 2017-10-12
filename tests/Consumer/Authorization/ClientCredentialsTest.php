@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Consumer\Authorization;
 use Fusio\Impl\Table\App\Token;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Http\ResponseInterface;
 use PSX\Json\Parser;
 
 /**
@@ -48,31 +49,19 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL')
         ], $body);
 
-        $body = (string) $response->getBody();
-        $data = Parser::decode($body, true);
+        $this->assertAccessToken($response, 4);
+    }
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
 
-        $expireDate = strtotime('+1 hour');
+    public function testPostEmail()
+    {
+        $body     = 'grant_type=client_credentials&scope=authorization';
+        $response = $this->sendRequest('http://127.0.0.1/consumer/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('developer@localhost.com:qf2vX10Ec3wFZHx0K1eL')
+        ], $body);
 
-        $this->arrayHasKey('access_token', $data);
-        $this->arrayHasKey('token_type', $data);
-        $this->assertEquals('bearer', $data['token_type']);
-        $this->arrayHasKey('expires_in', $data);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
-        $this->arrayHasKey('scope', $data);
-        $this->assertEquals('consumer,authorization', $data['scope']);
-
-        // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
-
-        $this->assertEquals(2, $row['appId']);
-        $this->assertEquals(4, $row['userId']);
-        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals($data['access_token'], $row['token']);
-        $this->assertEquals('consumer,authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertAccessToken($response, 4);
     }
 
     public function testPostConsumer()
@@ -83,31 +72,18 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Authorization' => 'Basic ' . base64_encode('Consumer:qf2vX10Ec3wFZHx0K1eL')
         ], $body);
 
-        $body = (string) $response->getBody();
-        $data = Parser::decode($body, true);
+        $this->assertAccessToken($response, 2);
+    }
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
+    public function testPostConsumerEmail()
+    {
+        $body     = 'grant_type=client_credentials&scope=authorization';
+        $response = $this->sendRequest('http://127.0.0.1/consumer/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('consumer@localhost.com:qf2vX10Ec3wFZHx0K1eL')
+        ], $body);
 
-        $expireDate = strtotime('+1 hour');
-
-        $this->arrayHasKey('access_token', $data);
-        $this->arrayHasKey('token_type', $data);
-        $this->assertEquals('bearer', $data['token_type']);
-        $this->arrayHasKey('expires_in', $data);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
-        $this->arrayHasKey('scope', $data);
-        $this->assertEquals('consumer,authorization', $data['scope']);
-
-        // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
-
-        $this->assertEquals(2, $row['appId']);
-        $this->assertEquals(2, $row['userId']);
-        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals($data['access_token'], $row['token']);
-        $this->assertEquals('consumer,authorization', $row['scope']);
-        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
-        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+        $this->assertAccessToken($response, 2);
     }
 
     /**
@@ -132,5 +108,34 @@ JSON;
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    private function assertAccessToken(ResponseInterface $response, $userId)
+    {
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $expireDate = strtotime('+1 hour');
+
+        $this->arrayHasKey('access_token', $data);
+        $this->arrayHasKey('token_type', $data);
+        $this->assertEquals('bearer', $data['token_type']);
+        $this->arrayHasKey('expires_in', $data);
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
+        $this->arrayHasKey('scope', $data);
+        $this->assertEquals('consumer,authorization', $data['scope']);
+
+        // check whether the token was created
+        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+
+        $this->assertEquals(2, $row['appId']);
+        $this->assertEquals($userId, $row['userId']);
+        $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals($data['access_token'], $row['token']);
+        $this->assertEquals('consumer,authorization', $row['scope']);
+        $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
+        $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
     }
 }
