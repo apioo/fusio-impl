@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\System\Deploy;
 
+use Fusio\Impl\Backend\Schema;
 use RuntimeException;
 
 /**
@@ -32,11 +33,6 @@ use RuntimeException;
  */
 class NameGenerator
 {
-    /**
-     * @var string
-     */
-    const NAME_REGEXP = '^[a-zA-Z0-9\-\_]{3,64}$';
-
     public static function getActionNameFromSource($source)
     {
         if (is_string($source)) {
@@ -67,7 +63,7 @@ class NameGenerator
                 $source = str_replace(' ', '-', ucwords(str_replace('/', ' ', $source)));
 
                 return $source;
-            } elseif (preg_match('/' . self::NAME_REGEXP . '/', $source)) {
+            } elseif (preg_match('/^' . Schema\Schema::NAME_PATTERN . '$/', $source)) {
                 return $source;
             } else {
                 return self::getNameFromJsonSchema($source);

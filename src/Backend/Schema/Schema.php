@@ -32,6 +32,8 @@ use PSX\Schema\SchemaAbstract;
  */
 class Schema extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('source');
@@ -42,7 +44,7 @@ class Schema extends SchemaAbstract
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->objectType('source', $source);
 
         return $sb->getProperty();

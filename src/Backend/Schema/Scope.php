@@ -32,12 +32,14 @@ use PSX\Schema\SchemaAbstract;
  */
 class Scope extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('scope');
         $sb->integer('id');
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->string('description');
         $sb->arrayType('routes')
             ->setItems($this->getSchema(Scope\Route::class));

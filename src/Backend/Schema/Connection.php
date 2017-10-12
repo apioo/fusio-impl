@@ -33,6 +33,8 @@ use PSX\Schema\SchemaAbstract;
  */
 class Connection extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+
     public function getDefinition()
     {
         $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
@@ -46,7 +48,7 @@ class Connection extends SchemaAbstract
         $sb = $this->getSchemaBuilder('connection');
         $sb->integer('id');
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->string('class');
         $sb->objectType('config', $config);
 

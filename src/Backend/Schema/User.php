@@ -33,13 +33,15 @@ use PSX\Schema\SchemaAbstract;
  */
 class User extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_\.]{3,32}';
+
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('user');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_\.]{3,32}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->string('email');
         $sb->arrayType('scopes')
             ->setItems(Property::getString());

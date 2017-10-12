@@ -33,6 +33,8 @@ use PSX\Schema\SchemaAbstract;
  */
 class Action extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+
     public function getDefinition()
     {
         $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
@@ -47,7 +49,7 @@ class Action extends SchemaAbstract
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->string('class');
         $sb->string('engine');
         $sb->objectType('config', $config);

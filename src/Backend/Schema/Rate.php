@@ -32,6 +32,8 @@ use PSX\Schema\SchemaAbstract;
  */
 class Rate extends SchemaAbstract
 {
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('rate');
@@ -39,7 +41,7 @@ class Rate extends SchemaAbstract
         $sb->integer('priority')
             ->setMinimum(0);
         $sb->string('name')
-            ->setPattern('[a-zA-Z0-9\-\_]{3,64}');
+            ->setPattern(self::NAME_PATTERN);
         $sb->integer('rateLimit')
             ->setMinimum(0);
         $sb->duration('timespan');
