@@ -43,6 +43,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('config_service'),
             $this->get('event_dispatcher')
         );
     }

@@ -114,7 +114,7 @@ class AddCommand extends Command
             $question = new Question('Enter the password: ');
             $question->setHidden(true);
             $question->setValidator(function ($value) {
-                $this->assertPassword($value);
+                $this->userService->assertPasswordComplexity($value);
                 return $value;
             });
 
@@ -133,7 +133,7 @@ class AddCommand extends Command
 
             $helper->ask($input, $output, $question);
         } else {
-            $this->assertPassword($password);
+            $this->userService->assertPasswordComplexity($password);
         }
 
         // scopes

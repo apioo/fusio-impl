@@ -30,6 +30,8 @@ use Fusio\Impl\Event\User\DeletedEvent;
 use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Event\UserEvents;
+use Fusio\Impl\Service;
+use Fusio\Impl\Service\User\PasswordComplexity;
 use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table;
@@ -70,6 +72,11 @@ class User
     protected $userScopeTable;
 
     /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
@@ -79,14 +86,16 @@ class User
      * @param \Fusio\Impl\Table\Scope $scopeTable
      * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
+     * @param \Fusio\Impl\Service\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
         $this->appTable        = $appTable;
         $this->userScopeTable  = $userScopeTable;
+        $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -143,6 +152,19 @@ class User
         return null;
     }
 
+    public function assertPasswordComplexity($password)
+    {
+        $complexity = explode(',', $this->configService->getValue('user_pw_complexity'));
+
+        PasswordComplexity::assert(
+            $password,
+            $this->configService->getValue('user_pw_length'),
+            $complexity[0] ?? null,
+            $complexity[1] ?? null,
+            $complexity[2] ?? null
+        );
+    }
+
     public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)
     {
         // check whether user exists
@@ -159,7 +181,7 @@ class User
         // check values
         $this->assertName($name);
         $this->assertEmail($email);
-        $this->assertPassword($password);
+        $this->assertPasswordComplexity($password);
 
         try {
             $this->userTable->beginTransaction();
@@ -373,7 +395,7 @@ class User
         }
 
         // assert password complexity
-        $this->assertPassword($newPassword);
+        $this->assertPasswordComplexity($newPassword);
 
         // change password
         $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);

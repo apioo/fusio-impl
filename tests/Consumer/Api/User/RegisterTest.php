@@ -222,7 +222,7 @@ JSON;
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must have at least one numeric character (0-9)', substr($data['message'], 0, 55), $body);
+        $this->assertEquals('Password must have at least 1 numeric character (0-9)', substr($data['message'], 0, 53), $body);
     }
 
     public function testPut()
