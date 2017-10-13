@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 13,
+    "totalResults": 12,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -246,13 +246,6 @@ JSON;
             "name": "scopes_default",
             "description": "If a user registers through the consumer API the following scopes are assigned",
             "value": "authorization,consumer"
-        },
-        {
-            "id": 13,
-            "type": 1,
-            "name": "user_pw_complexity",
-            "description": "Comma separated list of required character types [alpha],[numeric],[special]",
-            "value": "1,1,1"
         },
         {
             "id": 12,

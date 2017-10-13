@@ -54,9 +54,9 @@ class PasswordComplexityTest extends \PHPUnit_Framework_TestCase
         return [
             ['', null, null, null, null, 'Password must not be empty'],
             ['a', null, null, null, null, 'Password must have at least 8 characters'],
-            ['aaaaaaaa', null, null, null, null, 'Password must have at least 1 numeric character (0-9)'],
-            ['aaaaaaa1', null, null, null, null, 'Password must have at least 1 special character i.e. (!#$%&*@_~)'],
-            ['00000000', null, null, null, null, 'Password must have at least 1 alphabetic character (a-z, A-Z)'],
+            ['aaaaaaaa', null, null, null, null, true],
+            ['aaaaaaa1', null, null, null, null, true],
+            ['00000000', null, null, null, null, true],
             ["\0" . 'aaaaa!1', null, null, null, null, 'Password must contain only printable ascii characters (0x21-0x7E)'],
             ['aaaaaa!1', null, null, null, null, true],
 

@@ -422,7 +422,6 @@ class Version106 implements VersionInterface
                 ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
                 ['name' => 'cors_allow_origin', 'type' => Table\Config::FORM_STRING, 'description' => 'If set each API response contains a Access-Control-Allow-Origin header with the provided value', 'value' => ''],
                 ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
-                ['name' => 'user_pw_complexity', 'type' => Table\Config::FORM_STRING, 'description' => 'Comma separated list of required character types [alpha],[numeric],[special]', 'value' => '1,1,1'],
             ],
             'fusio_connection' => [
             ],

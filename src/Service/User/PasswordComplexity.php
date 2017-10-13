@@ -39,9 +39,9 @@ class PasswordComplexity
         }
 
         $minLength  = $minLength ?? 8;
-        $minAlpha   = $minAlpha ?? 1;
-        $minNumeric = $minNumeric ?? 1;
-        $minSpecial = $minSpecial ?? 1;
+        $minAlpha   = $minAlpha ?? 0;
+        $minNumeric = $minNumeric ?? 0;
+        $minSpecial = $minSpecial ?? 0;
 
         // it is not possible to user passwords which have less then 8 chars
         if ($minLength < 8) {

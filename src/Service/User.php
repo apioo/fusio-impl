@@ -154,15 +154,7 @@ class User
 
     public function assertPasswordComplexity($password)
     {
-        $complexity = explode(',', $this->configService->getValue('user_pw_complexity'));
-
-        PasswordComplexity::assert(
-            $password,
-            $this->configService->getValue('user_pw_length'),
-            isset($complexity[0]) ? intval($complexity[0]) : null,
-            isset($complexity[1]) ? intval($complexity[1]) : null,
-            isset($complexity[2]) ? intval($complexity[2]) : null
-        );
+        PasswordComplexity::assert($password, $this->configService->getValue('user_pw_length'));
     }
 
     public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)

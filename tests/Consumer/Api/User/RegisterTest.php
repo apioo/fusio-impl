@@ -208,21 +208,21 @@ JSON;
         $this->assertEquals('Password must have at least 8 characters', substr($data['message'], 0, 40), $body);
     }
 
-    public function testPostInvalidPasswordComplexity()
+    public function testPostInvalidPasswordCharacters()
     {
         $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'name'     => 'baz',
             'email'    => 'baz@bar.com',
-            'password' => 'foobarfoobar',
+            'password' => 'foobar foobar',
         ]));
 
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
         $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertEquals('Password must have at least 1 numeric character (0-9)', substr($data['message'], 0, 53), $body);
+        $this->assertEquals('Password must contain only printable ascii characters', substr($data['message'], 0, 53), $body);
     }
 
     public function testPut()
