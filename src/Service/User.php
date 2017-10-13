@@ -159,9 +159,9 @@ class User
         PasswordComplexity::assert(
             $password,
             $this->configService->getValue('user_pw_length'),
-            $complexity[0] ?? null,
-            $complexity[1] ?? null,
-            $complexity[2] ?? null
+            isset($complexity[0]) ? intval($complexity[0]) : null,
+            isset($complexity[1]) ? intval($complexity[1]) : null,
+            isset($complexity[2]) ? intval($complexity[2]) : null
         );
     }
 
