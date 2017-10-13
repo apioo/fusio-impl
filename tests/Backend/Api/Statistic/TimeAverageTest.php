@@ -56,6 +56,50 @@ class TimeAverageTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "GET-query": {
+                "type": "object",
+                "title": "query",
+                "properties": {
+                    "from": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "to": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "userAgent": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "header": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "search": {
+                        "type": "string"
+                    }
+                }
+            },
             "Chart": {
                 "type": "object",
                 "title": "chart",
@@ -90,6 +134,7 @@ class TimeAverageTest extends ControllerDbTestCase
     },
     "methods": {
         "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
             }

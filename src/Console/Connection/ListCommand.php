@@ -58,13 +58,14 @@ class ListCommand extends Command
         $this
             ->setName('connection:list')
             ->setDescription('Lists available connection')
-            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list', 0)
+            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list')
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Count of the list')
             ->addArgument('search', InputArgument::OPTIONAL, 'Search value');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->connectionView->getCollection($input->getOption('startIndex'), $input->getArgument('search'));
+        $result = $this->connectionView->getCollection($input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
         $rows   = [];
 
         foreach ($result->entry as $row) {

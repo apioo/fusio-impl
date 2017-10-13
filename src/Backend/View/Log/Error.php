@@ -34,8 +34,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null)
+    public function getCollection($startIndex = null, $count = null, $search = null)
     {
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        if (empty($count) || $count < 1 || $count > 1024) {
+            $count = 16;
+        }
+
         $condition  = new Condition();
 
         if (!empty($search)) {
@@ -48,7 +56,7 @@ class Error extends ViewAbstract
             ->innerJoin('error', 'fusio_log', 'log', 'error.logId = log.id')
             ->orderBy('error.id', 'DESC')
             ->setFirstResult($startIndex)
-            ->setMaxResults(16);
+            ->setMaxResults($count);
 
         if ($condition->hasCondition()) {
             $builder->where($condition->getExpression($this->connection->getDatabasePlatform()));
@@ -58,7 +66,7 @@ class Error extends ViewAbstract
         $definition = [
             'totalResults' => $this->getTable(Table\Log\Error::class)->getCount($condition),
             'startIndex' => $startIndex,
-            'itemsPerPage' => 16,
+            'itemsPerPage' => $count,
             'entry' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
                 'id' => 'id',
                 'message' => 'message',

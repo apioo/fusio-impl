@@ -35,8 +35,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Config extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null)
+    public function getCollection($startIndex = null, $count = null, $search = null)
     {
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        if (empty($count) || $count < 1 || $count > 1024) {
+            $count = 16;
+        }
+
         $condition = new Condition();
 
         if (!empty($search)) {
@@ -46,8 +54,8 @@ class Config extends ViewAbstract
         $definition = [
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
-            'itemsPerPage' => 16,
-            'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'getAll'], [$startIndex, 16, 'name', Sql::SORT_ASC, $condition], [
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
                 'id' => 'id',
                 'type' => 'type',
                 'name' => 'name',

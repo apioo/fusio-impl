@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
 use PSX\Validate\Validate;
 
 /**
@@ -46,6 +47,9 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addQueryParameter('startIndex', Property::getInteger())
+            ->addQueryParameter('count', Property::getInteger())
+            ->addQueryParameter('search', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Log\Error\Collection::class))
         );
 
@@ -60,8 +64,9 @@ class Collection extends BackendApiAbstract
     protected function doGet()
     {
         return $this->tableManager->getTable(View\Log\Error::class)->getCollection(
-            $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: null,
-            $this->getParameter('search', Validate::TYPE_STRING) ?: null
+            $this->queryParameters->getProperty('startIndex'),
+            $this->queryParameters->getProperty('count'),
+            $this->queryParameters->getProperty('search')
         );
     }
 }

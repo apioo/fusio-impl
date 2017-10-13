@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
 
 /**
  * CountRequests
@@ -51,6 +52,18 @@ class CountRequests extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addQueryParameter('from', Property::getDateTime())
+            ->addQueryParameter('to', Property::getDateTime())
+            ->addQueryParameter('routeId', Property::getInteger())
+            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('userId', Property::getInteger())
+            ->addQueryParameter('ip', Property::getString())
+            ->addQueryParameter('userAgent', Property::getString())
+            ->addQueryParameter('method', Property::getString())
+            ->addQueryParameter('path', Property::getString())
+            ->addQueryParameter('header', Property::getString())
+            ->addQueryParameter('body', Property::getString())
+            ->addQueryParameter('search', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Count::class))
         );
 
@@ -60,7 +73,7 @@ class CountRequests extends BackendApiAbstract
     public function doGet()
     {
         return $this->tableManager->getTable(View\Statistic::class)->getCountRequests(
-            View\Log\QueryFilter::create($this->getParameters())
+            View\Log\QueryFilter::create($this->queryParameters->getProperties())
         );
     }
 }

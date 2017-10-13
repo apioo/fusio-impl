@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
 
 /**
  * IssuedTokens
@@ -51,6 +52,14 @@ class IssuedTokens extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addQueryParameter('from', Property::getDateTime())
+            ->addQueryParameter('to', Property::getDateTime())
+            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('userId', Property::getInteger())
+            ->addQueryParameter('status', Property::getInteger())
+            ->addQueryParameter('scope', Property::getString())
+            ->addQueryParameter('ip', Property::getString())
+            ->addQueryParameter('search', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
         );
 
@@ -60,7 +69,7 @@ class IssuedTokens extends BackendApiAbstract
     public function doGet()
     {
         return $this->tableManager->getTable(View\Statistic::class)->getIssuedTokens(
-            View\App\Token\QueryFilter::create($this->getParameters())
+            View\App\Token\QueryFilter::create($this->queryParameters->getProperties())
         );
     }
 }

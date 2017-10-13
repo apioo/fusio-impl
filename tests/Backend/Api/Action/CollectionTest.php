@@ -60,6 +60,21 @@ class CollectionTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "GET-query": {
+                "type": "object",
+                "title": "query",
+                "properties": {
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "count": {
+                        "type": "integer"
+                    },
+                    "search": {
+                        "type": "string"
+                    }
+                }
+            },
             "Action": {
                 "type": "object",
                 "title": "action",
@@ -173,6 +188,7 @@ class CollectionTest extends ControllerDbTestCase
     },
     "methods": {
         "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
             }

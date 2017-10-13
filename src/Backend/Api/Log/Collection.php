@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\View;
 use Fusio\Impl\Backend\View\Log\QueryFilter;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Schema\Property;
 use PSX\Validate\Validate;
 
 /**
@@ -47,6 +48,20 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addQueryParameter('startIndex', Property::getInteger())
+            ->addQueryParameter('count', Property::getInteger())
+            ->addQueryParameter('from', Property::getDateTime())
+            ->addQueryParameter('to', Property::getDateTime())
+            ->addQueryParameter('routeId', Property::getInteger())
+            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('userId', Property::getInteger())
+            ->addQueryParameter('ip', Property::getString())
+            ->addQueryParameter('userAgent', Property::getString())
+            ->addQueryParameter('method', Property::getString())
+            ->addQueryParameter('path', Property::getString())
+            ->addQueryParameter('header', Property::getString())
+            ->addQueryParameter('body', Property::getString())
+            ->addQueryParameter('search', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Log\Collection::class))
         );
 
@@ -61,8 +76,9 @@ class Collection extends BackendApiAbstract
     protected function doGet()
     {
         return $this->tableManager->getTable(View\Log::class)->getCollection(
-            $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: null,
-            QueryFilter::create($this->getParameters())
+            $this->queryParameters->getProperty('startIndex'),
+            $this->queryParameters->getProperty('count'),
+            QueryFilter::create($this->queryParameters->getProperties())
         );
     }
 }

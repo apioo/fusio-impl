@@ -56,6 +56,38 @@ class IssuedTokensTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "GET-query": {
+                "type": "object",
+                "title": "query",
+                "properties": {
+                    "from": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "to": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "search": {
+                        "type": "string"
+                    }
+                }
+            },
             "Chart": {
                 "type": "object",
                 "title": "chart",
@@ -90,6 +122,7 @@ class IssuedTokensTest extends ControllerDbTestCase
     },
     "methods": {
         "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
             }

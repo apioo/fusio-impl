@@ -36,8 +36,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Action extends ViewAbstract
 {
-    public function getCollection($startIndex = 0, $search = null)
+    public function getCollection($startIndex = null, $count = null, $search = null)
     {
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        if (empty($count) || $count < 1 || $count > 1024) {
+            $count = 16;
+        }
+
         $condition = new Condition();
         $condition->equals('status', Table\Action::STATUS_ACTIVE);
 
@@ -48,8 +56,8 @@ class Action extends ViewAbstract
         $definition = [
             'totalResults' => $this->getTable(Table\Action::class)->getCount($condition),
             'startIndex' => $startIndex,
-            'itemsPerPage' => 16,
-            'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'getAll'], [$startIndex, 16, null, Sql::SORT_DESC, $condition, Fields::blacklist(['class', 'config'])], [
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['class', 'config'])], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',

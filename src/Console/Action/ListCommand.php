@@ -58,13 +58,14 @@ class ListCommand extends Command
         $this
             ->setName('action:list')
             ->setDescription('Lists available action')
-            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list', 0)
+            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list')
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Count of the list')
             ->addArgument('search', InputArgument::OPTIONAL, 'Search value');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->actionView->getCollection($input->getOption('startIndex'), $input->getArgument('search'));
+        $result = $this->actionView->getCollection($input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
         $rows   = [];
 
         foreach ($result->entry as $row) {

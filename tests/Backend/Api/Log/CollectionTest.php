@@ -56,6 +56,56 @@ class CollectionTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "GET-query": {
+                "type": "object",
+                "title": "query",
+                "properties": {
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "count": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "to": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "routeId": {
+                        "type": "integer"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "userAgent": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string"
+                    },
+                    "path": {
+                        "type": "string"
+                    },
+                    "header": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "search": {
+                        "type": "string"
+                    }
+                }
+            },
             "Log": {
                 "type": "object",
                 "title": "log",
@@ -136,6 +186,7 @@ class CollectionTest extends ControllerDbTestCase
     },
     "methods": {
         "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
             }
@@ -173,6 +224,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "totalResults": 2,
+    "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
