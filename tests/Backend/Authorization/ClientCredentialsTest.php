@@ -46,7 +46,8 @@ class ClientCredentialsTest extends ControllerDbTestCase
         $body     = 'grant_type=client_credentials&scope=authorization';
         $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL')
+            'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
         $this->assertAccessToken($response);
@@ -57,7 +58,8 @@ class ClientCredentialsTest extends ControllerDbTestCase
         $body     = 'grant_type=client_credentials&scope=authorization';
         $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Basic ' . base64_encode('developer@localhost.com:qf2vX10Ec3wFZHx0K1eL')
+            'Authorization' => 'Basic ' . base64_encode('developer@localhost.com:qf2vX10Ec3wFZHx0K1eL'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
         $this->assertAccessToken($response);
@@ -71,7 +73,8 @@ class ClientCredentialsTest extends ControllerDbTestCase
         $body     = 'grant_type=client_credentials&scope=authorization';
         $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Basic ' . base64_encode('Consumer:qf2vX10Ec3wFZHx0K1eL')
+            'Authorization' => 'Basic ' . base64_encode('Consumer:qf2vX10Ec3wFZHx0K1eL'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
         $body = (string) $response->getBody();
@@ -95,7 +98,8 @@ JSON;
         $body     = 'grant_type=client_credentials&scope=authorization';
         $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Basic ' . base64_encode('Disabled:qf2vX10Ec3wFZHx0K1eL')
+            'Authorization' => 'Basic ' . base64_encode('Disabled:qf2vX10Ec3wFZHx0K1eL'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
         $body = (string) $response->getBody();

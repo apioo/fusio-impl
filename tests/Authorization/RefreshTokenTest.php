@@ -45,7 +45,8 @@ class RefreshTokenTest extends ControllerDbTestCase
         $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
         $response = $this->sendRequest('http://127.0.0.1/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d')
+            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
         $body = (string) $response->getBody();

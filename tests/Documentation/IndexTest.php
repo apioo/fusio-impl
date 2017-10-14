@@ -566,6 +566,17 @@ class IndexTest extends ControllerDbTestCase
             "version": "*"
         },
         {
+            "path": "\/backend\/token",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
+            ],
+            "version": "*"
+        },
+        {
             "path": "\/consumer\/app\/developer",
             "methods": [
                 "GET",
@@ -622,6 +633,17 @@ class IndexTest extends ControllerDbTestCase
         },
         {
             "path": "\/consumer\/scope",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/consumer\/token",
             "methods": [
                 "GET",
                 "POST",
@@ -699,6 +721,17 @@ class IndexTest extends ControllerDbTestCase
         },
         {
             "path": "\/consumer\/account\/change_password",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH"
+            ],
+            "version": "*"
+        },
+        {
+            "path": "\/authorization\/token",
             "methods": [
                 "GET",
                 "POST",
