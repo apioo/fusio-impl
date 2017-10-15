@@ -133,6 +133,7 @@ class Container extends DefaultContainer
         $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
         $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
+        $application->add(new Console\Action\ExecuteCommand($this->get('action_executor_service'), $this->get('table_manager')->getTable(Table\Action::class)));
         $application->add(new Console\Action\ListCommand($this->get('table_manager')->getTable(View\Action::class)));
 
         $application->add(new Console\App\AddCommand($this->get('system_api_executor_service')));
