@@ -232,6 +232,35 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCount()
+    {
+        $response = $this->sendRequest('/backend/cronjob?count=80', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
+        {
+            "id": 1,
+            "name": "Test-Cron",
+            "cron": "*\/30 * * * *",
+            "executeDate": "2015-02-27T19:59:15Z",
+            "exitCode": 0
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         CronFile::reset();

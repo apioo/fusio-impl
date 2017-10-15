@@ -130,7 +130,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'GET', array(
+        $response = $this->sendRequest('/consumer/register', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
         ));
 
@@ -141,7 +141,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $response = $this->sendRequest('/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'name'     => 'baz',
@@ -176,7 +176,7 @@ JSON;
 
     public function testPostInvalidEmail()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $response = $this->sendRequest('/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'name'     => 'baz',
@@ -193,7 +193,7 @@ JSON;
 
     public function testPostInvalidPasswordLength()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $response = $this->sendRequest('/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'name'     => 'baz',
@@ -210,7 +210,7 @@ JSON;
 
     public function testPostInvalidPasswordCharacters()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'POST', array(
+        $response = $this->sendRequest('/consumer/register', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'name'     => 'baz',
@@ -227,7 +227,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'PUT', array(
+        $response = $this->sendRequest('/consumer/register', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -240,7 +240,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/register', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/register', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

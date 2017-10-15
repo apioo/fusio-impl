@@ -125,7 +125,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'GET', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -160,7 +160,7 @@ JSON;
         Environment::getService('http_client')->setHandler($handler);
         Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 7]);
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/facebook', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/facebook', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
@@ -204,7 +204,7 @@ JSON;
         Environment::getService('http_client')->setHandler($handler);
         Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 9]);
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
@@ -248,7 +248,7 @@ JSON;
         Environment::getService('http_client')->setHandler($handler);
         Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 8]);
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/google', 'POST', array(
+        $response = $this->sendRequest('/consumer/provider/google', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'code' => 'foo',
@@ -265,7 +265,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'PUT', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -278,7 +278,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/provider/github', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/provider/github', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

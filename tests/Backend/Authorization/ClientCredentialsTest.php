@@ -44,7 +44,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
     public function testPost()
     {
         $body     = 'grant_type=client_credentials&scope=authorization';
-        $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
+        $response = $this->sendRequest('/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -56,7 +56,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
     public function testPostEmail()
     {
         $body     = 'grant_type=client_credentials&scope=authorization';
-        $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
+        $response = $this->sendRequest('/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('developer@localhost.com:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -71,7 +71,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
     public function testPostConsumer()
     {
         $body     = 'grant_type=client_credentials&scope=authorization';
-        $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
+        $response = $this->sendRequest('/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Consumer:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -96,7 +96,7 @@ JSON;
     public function testPostDisabled()
     {
         $body     = 'grant_type=client_credentials&scope=authorization';
-        $response = $this->sendRequest('http://127.0.0.1/backend/token', 'POST', [
+        $response = $this->sendRequest('/backend/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Disabled:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',

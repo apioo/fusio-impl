@@ -133,7 +133,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'GET', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
         ));
@@ -145,7 +145,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'POST', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
         ), json_encode([
@@ -159,7 +159,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'PUT', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
         ), json_encode([
@@ -192,7 +192,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/account/change_password', 'DELETE', array(
+        $response = $this->sendRequest('/backend/account/change_password', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
         ), json_encode([

@@ -229,13 +229,10 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/app', 'GET', array(
+        $response = $this->sendRequest('/backend/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
-
-        // we need to get the current backend app key
-        $appKey = $this->connection->fetchColumn('SELECT appKey FROM fusio_app ORDER BY id ASC LIMIT 1');
 
         $body = (string) $response->getBody();
         $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
@@ -287,9 +284,66 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCount()
+    {
+        $response = $this->sendRequest('/backend/app?count=80', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
+
+        $expect = <<<JSON
+{
+    "totalResults": 4,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
+        {
+            "id": 4,
+            "userId": 2,
+            "status": 2,
+            "name": "Pending",
+            "appKey": "[app_key]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 3,
+            "userId": 2,
+            "status": 1,
+            "name": "Foo-App",
+            "appKey": "[app_key]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 2,
+            "userId": 1,
+            "status": 1,
+            "name": "Consumer",
+            "appKey": "[app_key]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 1,
+            "userId": 1,
+            "status": 1,
+            "name": "Backend",
+            "appKey": "[app_key]",
+            "date": "[datetime]"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/app', 'POST', array(
+        $response = $this->sendRequest('/backend/app', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -337,7 +391,7 @@ JSON;
 
     public function testPostWithParameters()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/app', 'POST', array(
+        $response = $this->sendRequest('/backend/app', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -386,7 +440,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/app', 'PUT', array(
+        $response = $this->sendRequest('/backend/app', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -400,7 +454,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/app', 'DELETE', array(
+        $response = $this->sendRequest('/backend/app', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

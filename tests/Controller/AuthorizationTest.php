@@ -41,7 +41,7 @@ class AuthorizationTest extends ControllerDbTestCase
 
     public function testPublic()
     {
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -97,7 +97,7 @@ JSON;
 
     public function testPublicWithAuthorization()
     {
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -156,7 +156,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer 1234'
         ));
@@ -190,7 +190,7 @@ JSON;
 
     public function testPublicWithEmptyAuthorization()
     {
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => ''
         ));
@@ -257,7 +257,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), $body);
 
@@ -301,7 +301,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), $body);
@@ -354,7 +354,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer 1234'
         ), $body);
@@ -398,7 +398,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => ''
         ), $body);

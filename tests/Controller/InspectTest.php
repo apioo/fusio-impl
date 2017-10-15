@@ -44,7 +44,7 @@ class InspectTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/inspect/bar?foo=bar', 'GET', array(
+        $response = $this->sendRequest('/inspect/bar?foo=bar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -76,7 +76,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/inspect/bar?foo=bar', 'POST', array(
+        $response = $this->sendRequest('/inspect/bar?foo=bar', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -108,7 +108,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/inspect/bar?foo=bar', 'PUT', array(
+        $response = $this->sendRequest('/inspect/bar?foo=bar', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -140,7 +140,7 @@ JSON;
 
     public function testPatch()
     {
-        $response = $this->sendRequest('http://127.0.0.1/inspect/bar?foo=bar', 'PATCH', array(
+        $response = $this->sendRequest('/inspect/bar?foo=bar', 'PATCH', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -172,7 +172,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/inspect/bar?foo=bar', 'DELETE', array(
+        $response = $this->sendRequest('/inspect/bar?foo=bar', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));

@@ -161,7 +161,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'GET', array(
+        $response = $this->sendRequest('/consumer/authorize', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -173,7 +173,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -189,7 +189,7 @@ JSON;
 
     public function testPostCode()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -233,7 +233,7 @@ JSON;
 
     public function testPostCodeWithoutRedirectUri()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -276,7 +276,7 @@ JSON;
 
     public function testPostCodeDisallow()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -300,7 +300,7 @@ JSON;
 
     public function testPostToken()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -354,7 +354,7 @@ JSON;
 
     public function testPostTokenWithoutRedirectUri()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -377,7 +377,7 @@ JSON;
 
     public function testPostTokenDisallow()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -401,7 +401,7 @@ JSON;
 
     public function testPostInvalidResponseType()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -422,7 +422,7 @@ JSON;
 
     public function testPostInvalidClient()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -443,7 +443,7 @@ JSON;
 
     public function testPostInvalidRedirectUri()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -464,7 +464,7 @@ JSON;
 
     public function testPostInvalidScheme()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -485,7 +485,7 @@ JSON;
 
     public function testPostInvalidHost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'POST', array(
+        $response = $this->sendRequest('/consumer/authorize', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -506,7 +506,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'PUT', array(
+        $response = $this->sendRequest('/consumer/authorize', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -520,7 +520,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/authorize', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/authorize', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

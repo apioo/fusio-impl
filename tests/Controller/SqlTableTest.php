@@ -49,7 +49,7 @@ class SqlTable extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+        $response = $this->sendRequest('/foo', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
@@ -97,7 +97,7 @@ JSON;
 
         foreach ($statuuus as $status) {
             // update the route status
-            $response = $this->sendRequest('http://127.0.0.1/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
+            $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([
@@ -128,7 +128,7 @@ JSON;
             $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
             // send request
-            $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+            $response = $this->sendRequest('/foo', 'GET', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
             ));
@@ -186,7 +186,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), $body);
@@ -223,7 +223,7 @@ JSON;
         $data = ['sub' => 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'];
         $jwt  = JWT::encode($data, $key);
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'POST', array(
+        $response = $this->sendRequest('/foo', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer ' . $jwt
         ), $body);
@@ -250,7 +250,7 @@ JSON;
 
         $response = null;
         for ($i = 0; $i < 10; $i++) {
-            $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+            $response = $this->sendRequest('/foo', 'GET', array(
                 'User-Agent' => 'Fusio TestCase'
             ));
 
@@ -276,7 +276,7 @@ JSON;
 
         $response = null;
         for ($i = 0; $i < 18; $i++) {
-            $response = $this->sendRequest('http://127.0.0.1/foo', 'GET', array(
+            $response = $this->sendRequest('/foo', 'GET', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
             ));
@@ -309,7 +309,7 @@ JSON;
 }
 JSON;
 
-        $response = $this->sendRequest('http://127.0.0.1/foo', 'PUT', array(
+        $response = $this->sendRequest('/foo', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), $body);

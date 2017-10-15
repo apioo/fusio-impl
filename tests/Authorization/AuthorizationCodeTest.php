@@ -43,7 +43,7 @@ class AuthorizationCodeTest extends ControllerDbTestCase
     public function testPost()
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
-        $response = $this->sendRequest('http://127.0.0.1/authorization/token', 'POST', [
+        $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -84,7 +84,7 @@ class AuthorizationCodeTest extends ControllerDbTestCase
     public function testPostPending()
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
-        $response = $this->sendRequest('http://127.0.0.1/authorization/token', 'POST', [
+        $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('7c14809c-544b-43bd-9002-23e1c2de6067:bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -109,7 +109,7 @@ JSON;
     public function testPostDeactivated()
     {
         $body     = 'grant_type=authorization_code&code=GHMbtJi0ZuAUnp80';
-        $response = $this->sendRequest('http://127.0.0.1/authorization/token', 'POST', [
+        $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('f46af464-f7eb-4d04-8661-13063a30826b:17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9'),
             'Content-Type'  => 'application/x-www-form-urlencoded',

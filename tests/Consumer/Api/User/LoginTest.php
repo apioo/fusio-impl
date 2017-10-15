@@ -123,7 +123,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'GET', array(
+        $response = $this->sendRequest('/consumer/login', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -134,7 +134,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'username' => 'Consumer',
@@ -174,7 +174,7 @@ JSON;
 
     public function testPostWithScopes()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'username' => 'Consumer',
@@ -215,7 +215,7 @@ JSON;
 
     public function testPostInvalidCredentials()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'POST', array(
+        $response = $this->sendRequest('/consumer/login', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'username' => 'Consumer',
@@ -231,7 +231,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'PUT', array(
+        $response = $this->sendRequest('/consumer/login', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -244,7 +244,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/login', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/login', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

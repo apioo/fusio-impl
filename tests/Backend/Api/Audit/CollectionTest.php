@@ -213,7 +213,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/audit?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -241,9 +241,39 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCount()
+    {
+        $response = $this->sendRequest('/backend/audit?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<JSON
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
+        {
+            "id": 1,
+            "event": "app.update",
+            "ip": "127.0.0.1",
+            "message": "Created schema foo",
+            "date": "2015-06-25T22:49:09Z"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit', 'PUT', array(
+        $response = $this->sendRequest('/backend/audit', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -257,7 +287,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit', 'PUT', array(
+        $response = $this->sendRequest('/backend/audit', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -271,7 +301,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/audit', 'DELETE', array(
+        $response = $this->sendRequest('/backend/audit', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

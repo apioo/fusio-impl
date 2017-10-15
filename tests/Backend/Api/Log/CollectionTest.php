@@ -214,7 +214,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/log?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+        $response = $this->sendRequest('/backend/log?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -255,9 +255,52 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCount()
+    {
+        $response = $this->sendRequest('/backend/log?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "totalResults": 2,
+    "startIndex": 0,
+    "itemsPerPage": 80,
+    "entry": [
+        {
+            "id": 2,
+            "appId": 3,
+            "routeId": 1,
+            "ip": "127.0.0.1",
+            "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
+            "method": "GET",
+            "path": "\/bar",
+            "date": "2015-06-25T22:49:09Z"
+        },
+        {
+            "id": 1,
+            "appId": 3,
+            "routeId": 1,
+            "ip": "127.0.0.1",
+            "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
+            "method": "GET",
+            "path": "\/bar",
+            "date": "2015-06-25T22:49:09Z"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/log', 'POST', array(
+        $response = $this->sendRequest('/backend/log', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -271,7 +314,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/log', 'PUT', array(
+        $response = $this->sendRequest('/backend/log', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -285,7 +328,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/log', 'DELETE', array(
+        $response = $this->sendRequest('/backend/log', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

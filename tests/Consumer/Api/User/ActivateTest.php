@@ -120,7 +120,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'GET', array(
+        $response = $this->sendRequest('/consumer/activate', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -156,7 +156,7 @@ JSON;
 
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
@@ -195,7 +195,7 @@ JSON;
 
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
@@ -218,7 +218,7 @@ JSON;
 
         $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
 
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'POST', array(
+        $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'token' => $token,
@@ -234,7 +234,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'PUT', array(
+        $response = $this->sendRequest('/consumer/activate', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -247,7 +247,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('http://127.0.0.1/consumer/activate', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/activate', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

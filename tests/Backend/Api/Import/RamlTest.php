@@ -44,7 +44,7 @@ class RamlTest extends ControllerDbTestCase
     public function testPost($spec, $expect)
     {
         $body     = json_encode(['schema' => $spec]);
-        $response = $this->sendRequest('http://127.0.0.1/backend/import/raml', 'POST', array(
+        $response = $this->sendRequest('/backend/import/raml', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
             'Content-Type'  => 'application/json',

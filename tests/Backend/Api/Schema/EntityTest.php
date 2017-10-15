@@ -147,7 +147,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/1', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -176,7 +176,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/10', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/10', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -196,7 +196,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/2', 'POST', array(
+        $response = $this->sendRequest('/backend/schema/2', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -227,7 +227,7 @@ JSON;
             ],
         ];
 
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/2', 'PUT', array(
+        $response = $this->sendRequest('/backend/schema/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -279,7 +279,7 @@ JSON;
 
         Environment::getService('connection')->executeUpdate($sql, ['parameters' => 2, 'request' => 2]);
 
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/2', 'DELETE', array(
+        $response = $this->sendRequest('/backend/schema/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -314,7 +314,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('http://127.0.0.1/backend/schema/2', 'DELETE', array(
+        $response = $this->sendRequest('/backend/schema/2', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
