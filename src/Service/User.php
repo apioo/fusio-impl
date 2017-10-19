@@ -160,11 +160,7 @@ class User
     public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)
     {
         // check whether user exists
-        $condition  = new Condition();
-        $condition->notEquals('status', Table\User::STATUS_DELETED);
-        $condition->equals('name', $name);
-
-        $user = $this->userTable->getOneBy($condition);
+        $user = $this->userTable->getUserByNameOrEmail($name, $email);
 
         if (!empty($user)) {
             throw new StatusCode\BadRequestException('User already exists');

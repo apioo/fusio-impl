@@ -390,9 +390,6 @@ JSON;
         ]));
 
         $body = (string) $response->getBody();
-        $data = json_decode($body);
-        $pw   = isset($data->password) ? $data->password : null;
-        $body = str_replace(trim(json_encode($pw), '"'), '[password]', $body);
 
         $expect = <<<'JSON'
 {
@@ -439,6 +436,64 @@ JSON;
             'userId'  => 6,
             'scopeId' => 5,
         ]], $routes);
+    }
+
+    public function testPostNameExists()
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', false);
+
+        $response = $this->sendRequest('/backend/user', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'status'   => 0,
+            'name'     => 'Consumer',
+            'email'    => 'test@localhost.com',
+            'password' => 'fooo123!',
+            'scopes'   => ['foo', 'bar'],
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "User already exists"
+}
+JSON;
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPostEmailExists()
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', false);
+
+        $response = $this->sendRequest('/backend/user', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'status'   => 0,
+            'name'     => 'test',
+            'email'    => 'consumer@localhost.com',
+            'password' => 'fooo123!',
+            'scopes'   => ['foo', 'bar'],
+        ]));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "User already exists"
+}
+JSON;
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPut()
