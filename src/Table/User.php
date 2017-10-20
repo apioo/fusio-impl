@@ -60,8 +60,7 @@ class User extends TableAbstract
     {
         $sql = 'SELECT id 
                   FROM fusio_user 
-                 WHERE status != :status
-                   AND (name = :name OR email = :email)';
+                 WHERE (name = :name OR email = :email)';
 
         return $this->connection->fetchAssoc($sql, [
             'name'  => $name,
