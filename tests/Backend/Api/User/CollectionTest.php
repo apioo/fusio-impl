@@ -459,7 +459,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "User already exists"
+    "message": "User name already exists"
 }
 JSON;
 
@@ -488,7 +488,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "User already exists"
+    "message": "User email already exists"
 }
 JSON;
 

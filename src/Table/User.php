@@ -56,18 +56,6 @@ class User extends TableAbstract
         );
     }
 
-    public function getUserByNameOrEmail($name, $email)
-    {
-        $sql = 'SELECT id 
-                  FROM fusio_user 
-                 WHERE (name = :name OR email = :email)';
-
-        return $this->connection->fetchAssoc($sql, [
-            'name'  => $name,
-            'email' => $email
-        ]);
-    }
-
     public function changePassword($userId, $oldPassword, $newPassword)
     {
         $password = $this->connection->fetchColumn('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);

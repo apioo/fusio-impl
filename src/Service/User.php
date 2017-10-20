@@ -159,11 +159,14 @@ class User
 
     public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)
     {
-        // check whether user exists
-        $user = $this->userTable->getUserByNameOrEmail($name, $email);
+        // check whether user name exists
+        if ($this->userTable->getCount(new Condition(['name', '=', $name])) > 0) {
+            throw new StatusCode\BadRequestException('User name already exists');
+        }
 
-        if (!empty($user)) {
-            throw new StatusCode\BadRequestException('User already exists');
+        // check whether user email exists
+        if ($this->userTable->getCount(new Condition(['email', '=', $email])) > 0) {
+            throw new StatusCode\BadRequestException('User email already exists');
         }
 
         // check values
