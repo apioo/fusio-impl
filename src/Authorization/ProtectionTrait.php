@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
+use PSX\Framework\Filter\CORS;
 use PSX\Framework\Filter\UserAgentEnforcer;
 
 /**
@@ -62,6 +63,7 @@ trait ProtectionTrait
         $filter = array();
 
         $filter[] = new UserAgentEnforcer();
+
         $filter[] = new Oauth2Filter(
             $this->connection,
             $this->request->getMethod(),
@@ -73,6 +75,11 @@ trait ProtectionTrait
                 $this->userContext = UserContext::newContext($accessToken['userId'], $accessToken['appId']);
             }
         );
+
+        $allowOrigin = $this->config->get('fusio_cors');
+        if (!empty($allowOrigin)) {
+            $filter[] = new CORS($allowOrigin);
+        }
 
         return $filter;
     }

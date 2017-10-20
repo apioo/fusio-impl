@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Authorization;
 
+use PSX\Framework\Filter\CORS;
 use PSX\Framework\Oauth2\TokenAbstract;
 
 /**
@@ -37,4 +38,17 @@ class Token extends TokenAbstract
      * @var \PSX\Framework\Oauth2\GrantTypeFactory
      */
     protected $grantTypeFactory;
+
+    public function getPreFilter()
+    {
+        $filter = parent::getPreFilter();
+
+        // cors header
+        $allowOrigin = $this->config->get('fusio_cors');
+        if (!empty($allowOrigin)) {
+            $filter[] = new CORS($allowOrigin);
+        }
+
+        return $filter;
+    }
 }
