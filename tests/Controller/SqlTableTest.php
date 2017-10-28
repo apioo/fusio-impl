@@ -77,7 +77,16 @@ class SqlTable extends ControllerDbTestCase
 }
 JSON;
 
+        $headers = [
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['16'],
+            'x-ratelimit-remaining' => ['16'],
+        ];
+
         $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
@@ -95,7 +104,7 @@ JSON;
             Resource::STATUS_CLOSED,
         ];
 
-        foreach ($statuuus as $status) {
+        foreach ($statuuus as $key => $status) {
             // update the route status
             $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
@@ -138,7 +147,13 @@ JSON;
             if ($status === Resource::STATUS_CLOSED) {
                 $data = Parser::decode($body);
 
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                ];
+
                 $this->assertEquals(410, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
                 $this->assertEquals(false, $data->success, $body);
                 $this->assertEquals($debug ? 'PSX\\Http\\Exception\\GoneException' : 'Internal Server Error', $data->title, $body);
                 $this->assertEquals('Resource is not longer supported', substr($data->message, 0, 32), $body);
@@ -165,7 +180,21 @@ JSON;
 }
 JSON;
 
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => [16 - $key],
+                ];
+
+                if ($status === Resource::STATUS_DEVELOPMENT) {
+                    $headers['warning'] = ['199 PSX "Resource is in development"'];
+                } elseif ($status === Resource::STATUS_DEPRECATED) {
+                    $headers['warning'] = ['199 PSX "Resource is deprecated"'];
+                }
+
                 $this->assertEquals(200, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
                 $this->assertJsonStringEqualsJsonString($expect, $body, $body);
             }
         }
@@ -200,7 +229,16 @@ JSON;
 }
 JSON;
 
+        $headers = [
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['16'],
+            'x-ratelimit-remaining' => ['16'],
+        ];
+
         $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
@@ -237,7 +275,16 @@ JSON;
 }
 JSON;
 
+        $headers = [
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['16'],
+            'x-ratelimit-remaining' => ['16'],
+        ];
+
         $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
@@ -257,10 +304,28 @@ JSON;
             $body = (string) $response->getBody();
             $data = Parser::decode($body);
 
-            if ($i < 9) {
+            if ($i < 8) {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['8'],
+                    'x-ratelimit-remaining' => [8 - $i],
+                ];
+
                 $this->assertEquals(200, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
             } else {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['8'],
+                    'x-ratelimit-remaining' => ['0'],
+                ];
+
                 $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
                 $this->assertEquals(false, $data->success, $body);
                 $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
             }
@@ -284,10 +349,28 @@ JSON;
             $body = (string) $response->getBody();
             $data = Parser::decode($body);
 
-            if ($i < 17) {
+            if ($i < 16) {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => [16 - $i],
+                ];
+
                 $this->assertEquals(200, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
             } else {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => ['0'],
+                ];
+
                 $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
                 $this->assertEquals(false, $data->success, $body);
                 $this->assertEquals('Rate limit exceeded', substr($data->message, 0, 19), $body);
             }
@@ -317,10 +400,104 @@ JSON;
         $body = (string) $response->getBody();
         $data = Parser::decode($body);
 
+        $headers = [
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+            'allow' => ['OPTIONS, HEAD, GET, POST'],
+        ];
+
         $this->assertEquals(405, $response->getStatusCode(), $body);
-        $this->assertEquals('GET, POST', $response->getHeader('Allow'), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
         $this->assertEquals(false, $data->success, $body);
         $this->assertEquals('Given request method is not supported', substr($data->message, 0, 37), $body);
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testHead($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        $response = $this->sendRequest('/foo', 'HEAD', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $headers = [
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['16'],
+            'x-ratelimit-remaining' => ['16'],
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+            'content-length' => ['379'],
+        ];
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
+        $this->assertEmpty($body);
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testOptions($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        $response = $this->sendRequest('/foo', 'OPTIONS', array(
+            'User-Agent'    => 'Fusio TestCase',
+        ));
+
+        $body = (string) $response->getBody();
+
+        $headers = [
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['8'],
+            'x-ratelimit-remaining' => ['8'],
+            'allow' => ['OPTIONS, HEAD, GET, POST'],
+        ];
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
+        $this->assertEmpty($body);
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testOptionsPreflight($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = Environment::getService('connection');
+        $connection->executeUpdate('UPDATE fusio_config SET value = :origin WHERE name = :name', [
+            'origin' => '*',
+            'name'   => 'cors_allow_origin',
+        ]);
+
+        $response = $this->sendRequest('/foo', 'OPTIONS', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Access-Control-Request-Method' => 'DELETE',
+        ));
+
+        $body = (string) $response->getBody();
+
+        $headers = [
+            'warning' => ['199 PSX "Resource is in development"'],
+            'x-ratelimit-limit' => ['8'],
+            'x-ratelimit-remaining' => ['8'],
+            'allow' => ['OPTIONS, HEAD, GET, POST'],
+            'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
+            'access-control-allow-origin' => ['*'],
+        ];
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
+        $this->assertEmpty($body);
     }
 
     public function providerDebugStatus()
