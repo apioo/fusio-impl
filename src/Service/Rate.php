@@ -195,7 +195,7 @@ class Rate
         $response->setHeader('X-RateLimit-Limit', $rateLimit);
         $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
 
-        if ($count > $rateLimit) {
+        if ($count >= $rateLimit) {
             throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
 
