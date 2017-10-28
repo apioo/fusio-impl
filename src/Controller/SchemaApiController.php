@@ -155,7 +155,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     public function getPreFilter()
     {
-        $method = $this->getActiveMethod();
         $filter = array();
 
         // it is required for every request to have an user agent which
@@ -172,7 +171,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // a header from the client we also add the oauth2 filter so that the
         // client gets maybe another rate limit
         $authorization = $this->request->getHeader('Authorization');
-        if (!$method['public'] || !empty($authorization)) {
+        if ($this->needsAuthorization() || !empty($authorization)) {
             $filter[] = new Oauth2Filter(
                 $this->connection,
                 $this->request->getMethod(),
@@ -248,7 +247,17 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $method   = $this->getActiveMethod();
         $context  = new EngineContext($this->context->get('fusio.routeId'), $baseUrl, $this->app, $this->user);
-        $request  = new Request($this->request, $this->uriFragments, $this->getParameters(), $record);
+
+        if ($this->request->getMethod() === 'HEAD') {
+            // in case of an HEAD request we execute the action with an regular
+            // GET method and then remove the body
+            $httpRequest = clone $this->request;
+            $httpRequest->setMethod('GET');
+        } else {
+            $httpRequest = $this->request;
+        }
+
+        $request  = new Request($httpRequest, $this->uriFragments, $this->getParameters(), $record);
         $response = null;
 
         $actionId    = $method['action'];
@@ -318,18 +327,25 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             return $this->activeMethod;
         }
 
+        $routeId    = $this->context->get('fusio.routeId');
+        $methodName = $this->request->getMethod();
+
+        // in case of HEAD we use the schema of the GET request
+        if ($methodName === 'HEAD') {
+            $methodName = 'GET';
+        }
+
         $version = $this->getSubmittedVersionNumber();
-        $method  = $this->routesMethodService->getMethod(
-            $this->context->get('fusio.routeId'),
-            $version,
-            $this->request->getMethod()
-        );
+        $method  = $this->routesMethodService->getMethod($routeId, $version, $methodName);
 
         if (empty($method)) {
-            $allowedMethods = $this->routesMethodService->getAllowedMethods(
-                $this->context->get('fusio.routeId'),
-                $version
-            );
+            $methods = $this->routesMethodService->getAllowedMethods($routeId, $version);
+            $allowed = ['OPTIONS'];
+            if (in_array('GET', $methods)) {
+                $allowed[] = 'HEAD';
+            }
+
+            $allowedMethods = array_merge($allowed, $methods);
 
             throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $allowedMethods);
         }
@@ -351,6 +367,23 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
 
         return isset($matches[2]) ? $matches[2] : null;
+    }
+
+    /**
+     * Returns whether the current request needs authorization. If yes an 
+     * authorization header is required. For options requests we always return 
+     * false
+     * 
+     * @return boolean
+     */
+    private function needsAuthorization()
+    {
+        if ($this->request->getMethod() === 'OPTIONS') {
+            return false;
+        } else {
+            $method = $this->getActiveMethod();
+            return !$method['public'];
+        }
     }
 
     /**

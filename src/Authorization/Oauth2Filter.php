@@ -69,7 +69,7 @@ class Oauth2Filter extends Oauth2Authentication
         });
 
         $this->connection    = $connection;
-        $this->requestMethod = $requestMethod;
+        $this->requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
         $this->routeId       = $routeId;
         $this->projectKey    = $projectKey;
         $this->appCallback   = $appCallback;
