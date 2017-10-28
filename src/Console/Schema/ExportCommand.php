@@ -60,11 +60,16 @@ class ExportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sql = 'SELECT schema.cache
-                  FROM fusio_schema `schema`
-                 WHERE schema.name = :name';
+        $name   = $input->getArgument('name');
+        $column = is_numeric($name) ? 'id' : 'name';
 
-        $row = $this->connection->fetchAssoc($sql, array('name' => $input->getArgument('name')));
+        $sql = $this->connection->createQueryBuilder()
+            ->select('id', 'cache')
+            ->from('fusio_schema')
+            ->where($column . ' = :name')
+            ->getSQL();
+
+        $row = $this->connection->fetchAssoc($sql, ['name' => $name]);
 
         if (!empty($row)) {
             $generator = new Generator\JsonSchema();
