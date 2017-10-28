@@ -57,8 +57,9 @@ class DetailTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "ObjectId": {
+            "Entry": {
                 "type": "object",
+                "title": "entry",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -75,9 +76,9 @@ class DetailTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Test": {
+            "Collection": {
                 "type": "object",
-                "title": "test",
+                "title": "collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -91,7 +92,7 @@ class DetailTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/ObjectId"
+                            "$ref": "#\/definitions\/Entry"
                         }
                     }
                 }
@@ -102,10 +103,10 @@ class DetailTest extends ControllerDbTestCase
                 "description": "No schema was specified."
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Test"
+                "$ref": "#\/definitions\/Collection"
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Passthru"
+                "$ref": "#\/definitions\/Entry"
             },
             "POST-201-response": {
                 "$ref": "#\/definitions\/Passthru"

@@ -250,9 +250,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'name', 'source', 'cache')
             ->from('fusio_schema')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = 2')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
@@ -299,9 +297,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_schema')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = 2')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);

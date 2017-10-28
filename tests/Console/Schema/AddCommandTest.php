@@ -59,7 +59,7 @@ class AddCommandTest extends ControllerDbTestCase
         // check schema
         $schema = $this->connection->fetchAssoc('SELECT id, status, name, source, cache FROM fusio_schema ORDER BY id DESC');
 
-        $this->assertEquals(3, $schema['id']);
+        $this->assertEquals(4, $schema['id']);
         $this->assertEquals(1, $schema['status']);
         $this->assertEquals('bar', $schema['name']);
         $this->assertJsonStringEqualsJsonString(file_get_contents(__DIR__ . '/schema.json'), $schema['source']);

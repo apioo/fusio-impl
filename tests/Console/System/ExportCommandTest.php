@@ -77,10 +77,31 @@ class ExportCommandTest extends ControllerDbTestCase
     ],
     "schema": [
         {
-            "name": "Foo-Schema",
+            "name": "Entry-Schema",
             "source": {
-                "id": "http:\/\/phpsx.org#",
-                "title": "test",
+                "title": "entry",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Collection-Schema",
+            "source": {
+                "title": "collection",
                 "type": "object",
                 "properties": {
                     "totalResults": {
@@ -95,6 +116,7 @@ class ExportCommandTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
+                            "title": "entry",
                             "type": "object",
                             "properties": {
                                 "id": {
@@ -234,14 +256,14 @@ class ExportCommandTest extends ControllerDbTestCase
                             "active": true,
                             "public": true,
                             "responses": {
-                                "200": "Foo-Schema"
+                                "200": "Collection-Schema"
                             },
                             "action": "Sql-Table"
                         },
                         "POST": {
                             "active": true,
                             "public": false,
-                            "request": "Passthru",
+                            "request": "Entry-Schema",
                             "responses": {
                                 "201": "Passthru"
                             },

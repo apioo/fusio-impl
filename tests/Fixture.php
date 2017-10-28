@@ -56,48 +56,15 @@ class Fixture
 
     protected static function getTestInserts()
     {
-        $schemaSource = <<<'JSON'
-{
-    "id": "http://phpsx.org#",
-    "title": "test",
-    "type": "object",
-    "properties": {
-        "totalResults": {
-            "type": "integer"
-        },
-        "itemsPerPage": {
-            "type": "integer"
-        },
-        "startIndex": {
-            "type": "integer"
-        },
-        "entry": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            }
-        }
-    }
-}
-JSON;
+        $schemaEntrySource = self::getEntrySchema();
+        $schemaCollectionSource = self::getCollectionSchema();
 
         $parser = new JsonSchema();
-        $schema = $parser->parse($schemaSource);
+        $schemaEntry = $parser->parse($schemaEntrySource);
+
+        $parser = new JsonSchema();
+        $schemaCollection = $parser->parse($schemaCollectionSource);
+
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
 
@@ -152,7 +119,7 @@ JSON;
             ],
             'fusio_routes_method' => [
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 3],
-                ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'parameters' => null, 'request' => 1, 'action' => 3],
+                ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'parameters' => null, 'request' => 3, 'action' => 3],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'parameters' => null, 'request' => null, 'action' => null],
@@ -181,7 +148,8 @@ JSON;
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_schema' => [
-                ['status' => 1, 'name' => 'Foo-Schema', 'source' => $schemaSource, 'cache' => serialize($schema)],
+                ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => serialize($schemaCollection)],
+                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => serialize($schemaEntry)],
             ],
             'fusio_scope' => [
                 ['name' => 'foo', 'description' => 'Foo access'],
@@ -224,6 +192,74 @@ JSON;
                 ['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'],
             ],
         ];
+    }
+
+    private static function getEntrySchema()
+    {
+        return <<<'JSON'
+{
+    "title": "entry",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "title": {
+            "type": "string"
+        },
+        "content": {
+            "type": "string"
+        },
+        "date": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}
+JSON;
+    }
+
+    private static function getCollectionSchema()
+    {
+        return <<<'JSON'
+{
+    "title": "collection",
+    "type": "object",
+    "properties": {
+        "totalResults": {
+            "type": "integer"
+        },
+        "itemsPerPage": {
+            "type": "integer"
+        },
+        "startIndex": {
+            "type": "integer"
+        },
+        "entry": {
+            "type": "array",
+            "items": {
+                "title": "entry",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        }
+    }
+}
+JSON;
     }
 
     public static function getLastRouteId()

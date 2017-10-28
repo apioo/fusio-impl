@@ -250,7 +250,7 @@ JSON;
                 "POST": {
                     "active": true,
                     "public": false,
-                    "request": 1,
+                    "request": 3,
                     "responses": {
                         "201": 1
                     },
@@ -526,7 +526,7 @@ JSON;
         $this->assertEquals(1, $methods[1]['active']);
         $this->assertEquals(0, $methods[1]['public']);
         $this->assertEquals(null, $methods[1]['parameters']);
-        $this->assertEquals(1, $methods[1]['request']);
+        $this->assertEquals(3, $methods[1]['request']);
         $this->assertEquals(3, $methods[1]['action']);
 
         // check responses

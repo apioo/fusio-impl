@@ -47,19 +47,18 @@ class ExportCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'name'    => 'Foo-Schema',
+            'name'    => 'Collection-Schema',
         ]);
 
         $actual = $commandTester->getDisplay();
-        $actual = preg_replace('/Object([0-9A-Fa-f]{8})/', 'ObjectId', $actual);
-
         $expect = <<<'JSON'
 {
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
     "id": "urn:schema.phpsx.org#",
     "definitions": {
-        "ObjectId": {
+        "Entry": {
             "type": "object",
+            "title": "entry",
             "properties": {
                 "id": {
                     "type": "integer"
@@ -78,7 +77,7 @@ class ExportCommandTest extends ControllerDbTestCase
         }
     },
     "type": "object",
-    "title": "test",
+    "title": "collection",
     "properties": {
         "totalResults": {
             "type": "integer"
@@ -92,7 +91,7 @@ class ExportCommandTest extends ControllerDbTestCase
         "entry": {
             "type": "array",
             "items": {
-                "$ref": "#\/definitions\/ObjectId"
+                "$ref": "#\/definitions\/Entry"
             }
         }
     }

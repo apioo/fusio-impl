@@ -176,8 +176,8 @@ JSON;
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
-        $this->assertEquals(3, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['parameters']);
+        $this->assertEquals(5, $methods[0]['request']);
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
@@ -187,9 +187,9 @@ JSON;
 
         $this->assertEquals(2, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(5, $responses[0]['response']);
+        $this->assertEquals(6, $responses[0]['response']);
         $this->assertEquals(500, $responses[1]['code']);
-        $this->assertEquals(6, $responses[1]['response']);
+        $this->assertEquals(7, $responses[1]['response']);
 
         // check cronjobs
         $cronjob = $this->connection->fetchAssoc('SELECT id, name, cron, action FROM fusio_cronjob ORDER BY id DESC');
@@ -389,7 +389,7 @@ JSON;
 
 JSON;
 
-        $this->assertEquals(3, $schema['id']);
+        $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
 
@@ -416,7 +416,7 @@ JSON;
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(3, $methods[0]['request']);
+        $this->assertEquals(4, $methods[0]['request']);
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
@@ -426,7 +426,7 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(3, $responses[0]['response']);
+        $this->assertEquals(4, $responses[0]['response']);
     }
 
     private function assertJsonSchema($name, $source)

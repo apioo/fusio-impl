@@ -83,7 +83,7 @@ class RestoreCommandTest extends ControllerDbTestCase
             ['routes', 1, Table\Routes::STATUS_ACTIVE],
             ['routes', '/foo', Table\Routes::STATUS_ACTIVE],
             ['schema', 1, Table\Schema::STATUS_ACTIVE],
-            ['schema', 'Foo-Schema', Table\Schema::STATUS_ACTIVE],
+            ['schema', 'Entry-Schema', Table\Schema::STATUS_ACTIVE],
             ['user', 1, Table\User::STATUS_DISABLED],
             ['user', 'Deleted', Table\User::STATUS_DISABLED],
         ];
