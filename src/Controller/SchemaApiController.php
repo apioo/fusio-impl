@@ -306,13 +306,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $headers    = $response->getHeaders();
 
             if (!empty($statusCode)) {
-                $this->setResponseCode($statusCode);
+                $this->response->setStatus($statusCode);
             }
 
             if (!empty($headers)) {
-                foreach ($headers as $name => $value) {
-                    $this->setHeader($name, $value);
-                }
+                $this->response->setHeaders($headers);
             }
 
             return $response->getBody();
