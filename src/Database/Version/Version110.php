@@ -370,8 +370,8 @@ class Version110 implements VersionInterface
 
             if (empty($route)) {
                 // if we insert a new route its important that we have not
-                // already an old entry which uses this path in case we need to
-                // deactivate this entry
+                // already an old entry which uses this path. If this is the
+                // case we need to deactivate the old entries
                 $count = (int) $connection->fetchColumn('SELECT COUNT(id) AS cnt FROM fusio_routes WHERE path = :path', [
                     'path' => $row['path']
                 ]);
