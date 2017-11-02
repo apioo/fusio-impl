@@ -158,13 +158,14 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/execute/3', 'POST', array(
+        $response = $this->sendRequest('/backend/action/execute/4', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'method'       => 'GET',
-            'uriFragments' => '',
-            'parameters'   => '',
+            'uriFragments' => 'news_id=10',
+            'parameters'   => 'count=10',
+            'headers'      => 'Content-Type=application/json',
             'body'         => new \stdClass(),
         ]));
 
@@ -174,23 +175,18 @@ JSON;
     "statusCode": 200,
     "headers": {},
     "body": {
-        "totalResults": 2,
-        "itemsPerPage": 16,
-        "startIndex": 0,
-        "entry": [
-            {
-                "id": "2",
-                "title": "bar",
-                "content": "foo",
-                "date": "2015-02-27 19:59:15"
-            },
-            {
-                "id": "1",
-                "title": "foo",
-                "content": "bar",
-                "date": "2015-02-27 19:59:15"
-            }
-        ]
+        "method": "GET",
+        "headers": {
+            "content-type": [
+                "application\/json"
+            ]
+        },
+        "uri_fragments": {
+            "news_id": "10"
+        },
+        "parameters": {
+            "count": "10"
+        }
     }
 }
 JSON;
