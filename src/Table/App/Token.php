@@ -82,6 +82,18 @@ class Token extends TableAbstract
         return $this->getOneBy($con);
     }
 
+    public function getTokenByToken($appId, $token)
+    {
+        $now = new DateTime();
+        $con = new Condition();
+        $con->add('appId', '=', $appId);
+        $con->add('status', '=', self::STATUS_ACTIVE);
+        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
+        $con->add('token', '=', $token);
+
+        return $this->getOneBy($con);
+    }
+
     public function removeTokenFromApp($appId, $tokenId)
     {
         $sql = 'UPDATE fusio_app_token

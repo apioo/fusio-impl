@@ -42,6 +42,12 @@ class Revoke extends ApiAbstract
      */
     protected $tableManager;
 
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\App
+     */
+    protected $appService;
+
     public function onPost()
     {
         $header = $this->getHeader('Authorization');
@@ -50,22 +56,15 @@ class Revoke extends ApiAbstract
         $token  = isset($parts[1]) ? $parts[1] : null;
 
         if ($type == 'Bearer') {
-            $sql = 'SELECT id,
-                           appId,
-                           userId,
-                           scope
-                      FROM fusio_app_token
-                     WHERE token = :token';
-
-            $row = $this->connection->fetchAssoc($sql, array('token' => $token));
+            $row = $this->tableManager->getTable(Table\App\Token::class)->getTokenByToken($this->appId, $token);
 
             // the token must be assigned to the user
             if (!empty($row) && $row['appId'] == $this->appId && $row['userId'] == $this->userId) {
-                $this->tableManager->getTable(Table\App\Token::class)->removeTokenFromApp($this->appId, $row['id']);
+                $this->appService->removeToken($row['appId'], $row['id'], $this->userContext);
 
-                $this->setBody(array(
+                $this->setBody([
                     'success' => true
-                ));
+                ]);
             } else {
                 throw new StatusCode\BadRequestException('Invalid token');
             }
