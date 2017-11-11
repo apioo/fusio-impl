@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -115,7 +115,7 @@ class User
         }
 
         // allow login either through username or email
-        if (preg_match('/^' . Schema\User::NAME_PATTERN . '$/', $username)) {
+        if (preg_match('/^' . BackendSchema\User::NAME_PATTERN . '$/', $username)) {
             $column = 'name';
         } else {
             $column = 'email';
