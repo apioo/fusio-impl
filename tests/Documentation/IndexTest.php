@@ -45,7 +45,19 @@ class IndexTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/index.json');
+        $expect = file_get_contents(__DIR__ . '/resources/index_external.json');
+
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testGetFilter()
+    {
+        $response = $this->sendRequest('/doc?filter=internal', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = file_get_contents(__DIR__ . '/resources/index_internal.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }

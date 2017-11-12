@@ -1,0 +1,51 @@
+{
+  "routings": [
+    {
+      "path": "\/",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/foo",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/inspect\/:foo",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    }
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "href": "http:\/\/127.0.0.1\/doc"
+    },
+    {
+      "rel": "detail",
+      "href": "http:\/\/127.0.0.1\/doc\/{version}\/{path}"
+    },
+    {
+      "rel": "api",
+      "href": "http:\/\/127.0.0.1\/"
+    }
+  ]
+}
