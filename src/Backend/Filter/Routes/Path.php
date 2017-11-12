@@ -35,7 +35,7 @@ class Path extends FilterAbstract
     /**
      * @var array
      */
-    protected $reserved = [
+    protected static $reserved = [
         'backend',
         'consumer',
         'doc',
@@ -69,7 +69,7 @@ class Path extends FilterAbstract
             }
 
             // check reserved segments
-            if (in_array(strtolower($parts[0]), $this->reserved)) {
+            if (in_array(strtolower($parts[0]), self::$reserved)) {
                 $this->errorMessage = '%s uses a path segment which is reserved for the system';
                 return false;
             }
@@ -98,5 +98,13 @@ class Path extends FilterAbstract
     public function getErrorMessage()
     {
         return $this->errorMessage;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getReserved()
+    {
+        return self::$reserved;
     }
 }
