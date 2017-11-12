@@ -24,13 +24,13 @@ namespace Fusio\Impl\Service\Routes;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Routes\DeployedEvent;
 use Fusio\Impl\Event\RoutesEvents;
+use Fusio\Impl\Loader\Filter\ExternalFilter;
 use Fusio\Impl\Service\Scope;
 use Fusio\Impl\Table;
 use PSX\Api\ListingInterface;
+use PSX\Api\Listing\CachedListing;
 use PSX\Api\Resource;
-use PSX\Framework\Api\CachedListing;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -181,6 +181,8 @@ class Config
 
         // invalidate resource cache
         if ($this->listing instanceof CachedListing) {
+            $this->listing->invalidateResourceIndex(new ExternalFilter());
+            $this->listing->invalidateResourceCollection(null, new ExternalFilter());
             $this->listing->invalidateResource($path);
         }
 
