@@ -1,0 +1,4357 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PSX",
+    "version": "0"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/backend\/action": {
+      "get": {
+        "operationId": "backendActionGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendActionPostAction",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Action"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/action\/list": {
+      "get": {
+        "operationId": "backendActionListGetIndex",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Index"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/action\/form": {
+      "get": {
+        "operationId": "backendActionFormGetContainer",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Container"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/action\/execute\/{action_id}": {
+      "post": {
+        "operationId": "backendActionExecuteActionid09PostRequest",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/action\/{action_id}": {
+      "get": {
+        "operationId": "backendActionActionid09GetAction",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Action"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendActionActionid09PutAction",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Action"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendActionActionid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/app\/token": {
+      "get": {
+        "operationId": "backendAppTokenGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/app\/token\/{token_id}": {
+      "get": {
+        "operationId": "backendAppTokenTokenid09GetToken",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Token"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/app": {
+      "get": {
+        "operationId": "backendAppGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendAppPostApp",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/App"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/app\/{app_id}": {
+      "get": {
+        "operationId": "backendAppAppid09GetApp",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/App"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendAppAppid09PutApp",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/App"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendAppAppid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/app\/{app_id}\/token\/{token_id}": {
+      "delete": {
+        "operationId": "backendAppAppid09TokenTokenidDeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/audit": {
+      "get": {
+        "operationId": "backendAuditGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "event",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "message",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/audit\/{audit_id}": {
+      "get": {
+        "operationId": "backendAuditAuditid09GetAudit",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Audit"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/config": {
+      "get": {
+        "operationId": "backendConfigGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/config\/{config_id}": {
+      "get": {
+        "operationId": "backendConfigConfigid09GetConfig",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Config"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendConfigConfigid09PutConfig",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Config"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/connection": {
+      "get": {
+        "operationId": "backendConnectionGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendConnectionPostConnection",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Connection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/connection\/list": {
+      "get": {
+        "operationId": "backendConnectionListGetIndex",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Index"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/connection\/form": {
+      "get": {
+        "operationId": "backendConnectionFormGetContainer",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Container"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/connection\/{connection_id}": {
+      "get": {
+        "operationId": "backendConnectionConnectionid09GetConnection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Connection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendConnectionConnectionid09PutConnection",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Connection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendConnectionConnectionid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/cronjob": {
+      "get": {
+        "operationId": "backendCronjobGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendCronjobPostCronjob",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Cronjob"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/cronjob\/{cronjob_id}": {
+      "get": {
+        "operationId": "backendCronjobCronjobid09GetCronjob",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Cronjob"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendCronjobCronjobid09PutCronjob",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Cronjob"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendCronjobCronjobid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/log\/error": {
+      "get": {
+        "operationId": "backendLogErrorGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/log\/error\/{error_id}": {
+      "get": {
+        "operationId": "backendLogErrorErrorid09GetError",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/log": {
+      "get": {
+        "operationId": "backendLogGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/log\/{log_id}": {
+      "get": {
+        "operationId": "backendLogLogid09GetLog",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Log"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/rate": {
+      "get": {
+        "operationId": "backendRateGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendRatePostRate",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Rate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/rate\/{rate_id}": {
+      "get": {
+        "operationId": "backendRateRateid09GetRate",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Rate"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendRateRateid09PutRate",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Rate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendRateRateid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/routes": {
+      "get": {
+        "operationId": "backendRoutesGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendRoutesPostRoutes",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Routes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/routes\/{route_id}": {
+      "get": {
+        "operationId": "backendRoutesRouteid09GetRoutes",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Routes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendRoutesRouteid09PutRoutes",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Routes"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendRoutesRouteid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/schema": {
+      "get": {
+        "operationId": "backendSchemaGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendSchemaPostSchema",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Schema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/schema\/preview\/{schema_id}": {
+      "post": {
+        "operationId": "backendSchemaPreviewSchemaid09PostResponse",
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/schema\/{schema_id}": {
+      "get": {
+        "operationId": "backendSchemaSchemaid09GetSchema",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendSchemaSchemaid09PutSchema",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Schema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendSchemaSchemaid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/scope": {
+      "get": {
+        "operationId": "backendScopeGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendScopePostScope",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Scope"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/scope\/{scope_id}": {
+      "get": {
+        "operationId": "backendScopeScopeid09GetScope",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Scope"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendScopeScopeid09PutScope",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Scope"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendScopeScopeid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/user": {
+      "get": {
+        "operationId": "backendUserGetCollection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "backendUserPostUser",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/user\/{user_id}": {
+      "get": {
+        "operationId": "backendUserUserid09GetUser",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "backendUserUserid09PutUser",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "backendUserUserid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/dashboard": {
+      "get": {
+        "operationId": "backendDashboardGetDashboard",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Dashboard"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/incoming_requests": {
+      "get": {
+        "operationId": "backendStatisticIncomingrequestsGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/most_used_routes": {
+      "get": {
+        "operationId": "backendStatisticMostusedroutesGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/most_used_apps": {
+      "get": {
+        "operationId": "backendStatisticMostusedappsGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/errors_per_route": {
+      "get": {
+        "operationId": "backendStatisticErrorsperrouteGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/issued_tokens": {
+      "get": {
+        "operationId": "backendStatisticIssuedtokensGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/count_requests": {
+      "get": {
+        "operationId": "backendStatisticCountrequestsGetCount",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Count"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/time_average": {
+      "get": {
+        "operationId": "backendStatisticTimeaverageGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/statistic\/time_per_route": {
+      "get": {
+        "operationId": "backendStatisticTimeperrouteGetChart",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "routeId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userAgent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "header",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Chart"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/account\/change_password": {
+      "put": {
+        "operationId": "backendAccountChangepasswordPutCredentials",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Credentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/import\/process": {
+      "post": {
+        "operationId": "backendImportProcessPostAdapter",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Adapter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/import\/{format}": {
+      "post": {
+        "operationId": "backendImportFormatPostSchema",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Schema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Adapter"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/token": {
+      "post": {
+        "operationId": "backendTokenPostAuthorization",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Authorization"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Access_token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/app\/developer": {
+      "get": {
+        "operationId": "consumerAppDeveloperGetCollection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "consumerAppDeveloperPostApp",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/App"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/app\/developer\/{app_id}": {
+      "get": {
+        "operationId": "consumerAppDeveloperAppid09GetApp",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/App"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "consumerAppDeveloperAppid09PutApp",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/App"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "consumerAppDeveloperAppid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/app\/grant": {
+      "get": {
+        "operationId": "consumerAppGrantGetCollection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/app\/grant\/{grant_id}": {
+      "delete": {
+        "operationId": "consumerAppGrantGrantid09",
+        "responses": {}
+      },
+      "parameters": []
+    },
+    "\/consumer\/app\/meta": {
+      "get": {
+        "operationId": "consumerAppMetaGetApp",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/App"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/scope": {
+      "get": {
+        "operationId": "consumerScopeGetCollection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/token": {
+      "post": {
+        "operationId": "consumerTokenPostAuthorization",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Authorization"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Access_token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/authorize": {
+      "post": {
+        "operationId": "consumerAuthorizePostRequest",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/login": {
+      "post": {
+        "operationId": "consumerLoginPostUser",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Jwt"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/register": {
+      "post": {
+        "operationId": "consumerRegisterPostUser",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/provider\/{provider}": {
+      "post": {
+        "operationId": "consumerProviderProviderPostProvider",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Provider"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Jwt"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/activate": {
+      "post": {
+        "operationId": "consumerActivatePostActivate",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Activate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/account": {
+      "get": {
+        "operationId": "consumerAccountGetProfile",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Profile"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "consumerAccountPutProfile",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Profile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/account\/change_password": {
+      "put": {
+        "operationId": "consumerAccountChangepasswordPutPassword",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Password"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/authorization\/token": {
+      "post": {
+        "operationId": "authorizationTokenPostAuthorization",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Authorization"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Access_token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "Action": {
+        "type": "object",
+        "title": "action",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+          },
+          "class": {
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Config"
+          }
+        }
+      },
+      "Config": {
+        "type": "object",
+        "title": "config",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 16
+            }
+          ]
+        },
+        "maxProperties": 16
+      },
+      "Collection": {
+        "type": "object",
+        "title": "collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope"
+            }
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "title": "message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Index": {
+        "type": "object",
+        "title": "index",
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection"
+            }
+          }
+        }
+      },
+      "Input": {
+        "type": "object",
+        "title": "input",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "Select": {
+        "type": "object",
+        "title": "select",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Option"
+            }
+          }
+        }
+      },
+      "Option": {
+        "type": "object",
+        "title": "option",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "title": "tag",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          }
+        }
+      },
+      "Textarea": {
+        "type": "object",
+        "title": "textarea",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          }
+        }
+      },
+      "Container": {
+        "type": "object",
+        "title": "container",
+        "properties": {
+          "element": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#\/components\/schemas\/Input"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Select"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Tag"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Textarea"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Body": {
+        "type": "object",
+        "title": "body",
+        "additionalProperties": true
+      },
+      "Request": {
+        "type": "object",
+        "title": "request",
+        "properties": {
+          "responseType": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "allow": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "responseType",
+          "clientId",
+          "scope",
+          "allow"
+        ]
+      },
+      "Headers": {
+        "type": "object",
+        "title": "headers",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Response": {
+        "type": "object",
+        "title": "response",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "token": {
+            "$ref": "#\/components\/schemas\/Token"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "title": "token",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "App": {
+        "type": "object",
+        "title": "app",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope"
+            }
+          }
+        }
+      },
+      "Audit": {
+        "type": "object",
+        "title": "audit",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "app": {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          "user": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "event": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "content": {
+            "$ref": "#\/components\/schemas\/Object"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "title": "user",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "Object": {
+        "type": "object",
+        "title": "object",
+        "description": "A key value object containing the changes"
+      },
+      "Connection": {
+        "type": "object",
+        "title": "connection",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+          },
+          "class": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Config"
+          }
+        }
+      },
+      "Cronjob": {
+        "type": "object",
+        "title": "cronjob",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "action": {
+            "type": "integer"
+          },
+          "executeDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Error"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "title": "error",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "title": "log",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Error"
+            }
+          }
+        }
+      },
+      "Rate": {
+        "type": "object",
+        "title": "rate",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+          },
+          "rateLimit": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "timespan": {
+            "type": "string",
+            "format": "duration"
+          },
+          "allocation": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Allocation"
+            }
+          }
+        }
+      },
+      "Allocation": {
+        "type": "object",
+        "title": "allocation",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "authenticated": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "string"
+          }
+        }
+      },
+      "Routes": {
+        "type": "object",
+        "title": "routes",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "path": {
+            "type": "string"
+          },
+          "config": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Version"
+            }
+          }
+        }
+      },
+      "Version": {
+        "type": "object",
+        "title": "version",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Methods"
+          }
+        }
+      },
+      "Methods": {
+        "type": "object",
+        "title": "methods",
+        "patternProperties": {
+          "^(GET|POST|PUT|PATCH|DELETE)$": {
+            "$ref": "#\/components\/schemas\/Method"
+          }
+        }
+      },
+      "Method": {
+        "type": "object",
+        "title": "method",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "request": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          },
+          "responses": {
+            "$ref": "#\/components\/schemas\/Responses"
+          },
+          "action": {
+            "type": "string"
+          }
+        }
+      },
+      "Responses": {
+        "type": "object",
+        "title": "responses",
+        "patternProperties": {
+          "^([0-9]{3})$": {
+            "type": "string"
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "title": "schema",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+          },
+          "source": {
+            "$ref": "#\/components\/schemas\/Source"
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "title": "source",
+        "additionalProperties": true
+      },
+      "Scope": {
+        "type": "object",
+        "title": "scope",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[A-z0-9\\-\\_]{3,64}"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Route": {
+        "type": "object",
+        "title": "route",
+        "properties": {
+          "routeId": {
+            "type": "integer"
+          },
+          "allow": {
+            "type": "boolean"
+          },
+          "methods": {
+            "type": "string"
+          }
+        }
+      },
+      "Chart": {
+        "type": "object",
+        "title": "chart",
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Apps": {
+        "type": "object",
+        "title": "apps",
+        "properties": {
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
+            }
+          }
+        }
+      },
+      "Requests": {
+        "type": "object",
+        "title": "requests",
+        "properties": {
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Request"
+            }
+          }
+        }
+      },
+      "Dashboard": {
+        "type": "object",
+        "title": "dashboard",
+        "properties": {
+          "incomingRequests": {
+            "$ref": "#\/components\/schemas\/Chart"
+          },
+          "mostUsedRoutes": {
+            "$ref": "#\/components\/schemas\/Chart"
+          },
+          "timePerRoute": {
+            "$ref": "#\/components\/schemas\/Chart"
+          },
+          "latestApps": {
+            "$ref": "#\/components\/schemas\/Apps"
+          },
+          "latestRequests": {
+            "$ref": "#\/components\/schemas\/Requests"
+          },
+          "errorsPerRoute": {
+            "$ref": "#\/components\/schemas\/Chart"
+          }
+        }
+      },
+      "Count": {
+        "type": "object",
+        "title": "count",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Credentials": {
+        "type": "object",
+        "title": "credentials",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "verifyPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "oldPassword",
+          "newPassword",
+          "verifyPassword"
+        ]
+      },
+      "Adapter": {
+        "type": "object",
+        "title": "adapter",
+        "properties": {
+          "actionClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "connectionClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes"
+            }
+          },
+          "action": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Action"
+            }
+          },
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          },
+          "connection": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection"
+            }
+          }
+        }
+      },
+      "Authorization_code": {
+        "type": "object",
+        "title": "authorization_code",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "const": "authorization_code"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "code"
+        ]
+      },
+      "Password": {
+        "type": "object",
+        "title": "password",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "const": "password"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "username",
+          "password"
+        ]
+      },
+      "Client_credentials": {
+        "type": "object",
+        "title": "client_credentials",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "const": "client_credentials"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type"
+        ]
+      },
+      "Refresh_token": {
+        "type": "object",
+        "title": "refresh_token",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "const": "refresh_token"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "Authorization": {
+        "title": "authorization",
+        "oneOf": [
+          {
+            "$ref": "#\/components\/schemas\/Authorization_code"
+          },
+          {
+            "$ref": "#\/components\/schemas\/Password"
+          },
+          {
+            "$ref": "#\/components\/schemas\/Client_credentials"
+          },
+          {
+            "$ref": "#\/components\/schemas\/Refresh_token"
+          }
+        ]
+      },
+      "Access_token": {
+        "type": "object",
+        "title": "access_token",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "Grant": {
+        "type": "object",
+        "title": "grant",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "app": {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Jwt": {
+        "type": "object",
+        "title": "jwt",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Provider": {
+        "type": "object",
+        "title": "provider",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "Activate": {
+        "type": "object",
+        "title": "activate",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "Profile": {
+        "type": "object",
+        "title": "profile",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

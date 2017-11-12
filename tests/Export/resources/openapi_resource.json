@@ -1,0 +1,105 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "PSX",
+    "version": "0"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/foo": {
+      "get": {
+        "operationId": "getCollection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "postEntry",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Entry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "No schema was specified.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {
+      "Entry": {
+        "type": "object",
+        "title": "entry",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Collection": {
+        "type": "object",
+        "title": "collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "itemsPerPage": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Entry"
+            }
+          }
+        }
+      },
+      "Passthru": {
+        "type": "object",
+        "title": "passthru",
+        "description": "No schema was specified."
+      }
+    }
+  }
+}
