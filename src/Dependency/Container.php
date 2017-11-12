@@ -26,6 +26,8 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\Loader\DatabaseRoutes;
+use Fusio\Impl\Loader\Filter\ExternalFilter;
+use Fusio\Impl\Loader\Filter\InternalFilter;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
@@ -33,7 +35,8 @@ use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
-use PSX\Framework\Api\CachedListing;
+use PSX\Api\Listing\FilterFactory;
+use PSX\Api\Listing\CachedListing;
 use PSX\Framework\Console as FrameworkConsole;
 use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Schema\Console as SchemaConsole;
@@ -82,6 +85,19 @@ class Container extends DefaultContainer
         } else {
             return new CachedListing($resourceListing, $this->get('cache'));
         }
+    }
+
+    /**
+     * @return \PSX\Api\Listing\FilterFactoryInterface
+     */
+    public function getListingFilterFactory()
+    {
+        $filter = new FilterFactory();
+        $filter->addFilter('internal', new InternalFilter());
+        $filter->addFilter('external', new ExternalFilter());
+        $filter->setDefault('external');
+
+        return $filter;
     }
 
     /**
