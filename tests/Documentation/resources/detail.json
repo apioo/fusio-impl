@@ -1,0 +1,93 @@
+{
+  "path": "\/foo",
+  "version": "*",
+  "status": 4,
+  "description": "",
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Entry": {
+        "type": "object",
+        "title": "entry",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Collection": {
+        "type": "object",
+        "title": "collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "itemsPerPage": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/Entry"
+            }
+          }
+        }
+      },
+      "Passthru": {
+        "type": "object",
+        "title": "passthru",
+        "description": "No schema was specified."
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Collection"
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Entry"
+      },
+      "POST-201-response": {
+        "$ref": "#\/definitions\/Passthru"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "201": "#\/definitions\/POST-201-response"
+      }
+    }
+  },
+  "links": [
+    {
+      "rel": "openapi",
+      "href": "\/export\/openapi\/*\/foo"
+    },
+    {
+      "rel": "swagger",
+      "href": "\/export\/swagger\/*\/foo"
+    },
+    {
+      "rel": "raml",
+      "href": "\/export\/raml\/*\/foo"
+    }
+  ]
+}
