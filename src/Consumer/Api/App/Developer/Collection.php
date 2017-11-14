@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Api\App\Developer;
 
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
@@ -55,10 +56,12 @@ class Collection extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->setSecurity(Authorization::CONSUMER, ['consumer'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Developer\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setSecurity(Authorization::CONSUMER, ['consumer'])
             ->setRequest($this->schemaManager->getSchema(Schema\App\Developer\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );

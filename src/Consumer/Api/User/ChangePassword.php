@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Api\User;
 
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
@@ -50,6 +51,7 @@ class ChangePassword extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
+            ->setSecurity(Authorization::CONSUMER, ['consumer'])
             ->setRequest($this->schemaManager->getSchema(Schema\User\ChangePassword::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
