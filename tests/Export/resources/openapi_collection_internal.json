@@ -50,7 +50,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendActionPostAction",
@@ -74,7 +81,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -92,7 +106,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -120,7 +141,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -147,7 +175,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -165,7 +200,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendActionActionid09PutAction",
@@ -189,7 +231,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendActionActionid09DeleteMessage",
@@ -204,7 +253,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -306,7 +362,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -324,7 +387,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -368,7 +438,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendAppPostApp",
@@ -392,7 +469,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -410,7 +494,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendAppAppid09PutApp",
@@ -434,7 +525,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendAppAppid09DeleteMessage",
@@ -449,7 +547,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -467,7 +572,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -569,7 +681,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -587,7 +706,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -631,7 +757,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -649,7 +782,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendConfigConfigid09PutConfig",
@@ -673,7 +813,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -717,7 +864,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendConnectionPostConnection",
@@ -741,7 +895,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -759,7 +920,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -787,7 +955,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -805,7 +980,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendConnectionConnectionid09PutConnection",
@@ -829,7 +1011,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendConnectionConnectionid09DeleteMessage",
@@ -844,7 +1033,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -888,7 +1084,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendCronjobPostCronjob",
@@ -930,7 +1133,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendCronjobCronjobid09PutCronjob",
@@ -954,7 +1164,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendCronjobCronjobid09DeleteMessage",
@@ -969,7 +1186,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1013,7 +1237,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1031,7 +1262,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1165,7 +1403,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1183,7 +1428,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1227,7 +1479,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendRatePostRate",
@@ -1269,7 +1528,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendRateRateid09PutRate",
@@ -1293,7 +1559,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendRateRateid09DeleteMessage",
@@ -1308,7 +1581,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1352,7 +1632,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendRoutesPostRoutes",
@@ -1376,7 +1663,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1394,7 +1688,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendRoutesRouteid09PutRoutes",
@@ -1418,7 +1719,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendRoutesRouteid09DeleteMessage",
@@ -1433,7 +1741,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1477,7 +1792,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendSchemaPostSchema",
@@ -1501,7 +1823,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1519,7 +1848,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1537,7 +1873,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendSchemaSchemaid09PutSchema",
@@ -1561,7 +1904,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendSchemaSchemaid09DeleteMessage",
@@ -1576,7 +1926,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1620,7 +1977,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendScopePostScope",
@@ -1644,7 +2008,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1662,7 +2033,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendScopeScopeid09PutScope",
@@ -1686,7 +2064,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendScopeScopeid09DeleteMessage",
@@ -1701,7 +2086,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1745,7 +2137,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "backendUserPostUser",
@@ -1787,7 +2186,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "backendUserUserid09PutUser",
@@ -1811,7 +2217,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "backendUserUserid09DeleteMessage",
@@ -1826,7 +2239,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1844,7 +2264,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1962,7 +2389,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2080,7 +2514,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2198,7 +2639,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2316,7 +2764,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2402,7 +2857,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2520,7 +2982,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2638,7 +3107,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2756,7 +3232,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2783,7 +3266,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2810,7 +3300,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2837,7 +3334,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2892,7 +3396,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "post": {
         "operationId": "consumerAppDeveloperPostApp",
@@ -2916,7 +3427,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2934,7 +3452,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "consumerAppDeveloperAppid09PutApp",
@@ -2958,7 +3483,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "delete": {
         "operationId": "consumerAppDeveloperAppid09DeleteMessage",
@@ -2973,7 +3505,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2991,14 +3530,28 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
     "\/consumer\/app\/grant\/{grant_id}": {
       "delete": {
         "operationId": "consumerAppGrantGrantid09",
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -3016,7 +3569,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -3034,7 +3594,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -3098,7 +3665,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -3224,7 +3798,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "put": {
         "operationId": "consumerAccountPutProfile",
@@ -3248,7 +3829,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -3275,7 +3863,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -4354,9 +4949,19 @@
       }
     },
     "securitySchemes": {
-      "OAuth2": {
+      "app": {
         "type": "oauth2",
         "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint",
+              "consumer": "Consumer API endpoint",
+              "backend": "Access to the backend API"
+            }
+          },
           "authorizationCode": {
             "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
@@ -4366,6 +4971,30 @@
               "authorization": "Authorization API endpoint",
               "consumer": "Consumer API endpoint",
               "backend": "Access to the backend API"
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "scopes": {
+              "backend": "Backend",
+              "authorization": "Authorization"
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "scopes": {
+              "consumer": "Consumer",
+              "authorization": "Authorization"
             }
           }
         }
