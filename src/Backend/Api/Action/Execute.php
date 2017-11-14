@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Engine\ResponseInterface;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
@@ -52,6 +53,7 @@ class Execute extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->setRequest($this->schemaManager->getSchema(Schema\Action\Execute\Request::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Execute\Response::class))
         );

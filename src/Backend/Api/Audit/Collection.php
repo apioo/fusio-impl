@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Api\Audit;
 
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
@@ -48,6 +49,7 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addQueryParameter('startIndex', Property::getInteger())
             ->addQueryParameter('count', Property::getInteger())
             ->addQueryParameter('from', Property::getDateTime())

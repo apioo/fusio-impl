@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Api\Config;
 
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
@@ -52,10 +53,12 @@ class Entity extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Config::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->setRequest($this->schemaManager->getSchema(Schema\Config\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Adapter\Transform;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
@@ -45,6 +46,7 @@ class Format extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->setRequest($this->schemaManager->getSchema(Schema\Import\Format\Schema::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Adapter\Extern::class))
         );

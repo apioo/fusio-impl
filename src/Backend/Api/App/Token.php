@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Api\App;
 
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
@@ -50,6 +51,7 @@ class Token extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

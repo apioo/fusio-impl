@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Engine\Form\Container;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
@@ -52,6 +53,7 @@ class Form extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Form\Container::class))
             ->addQueryParameter('class', Property::getString())
         );
