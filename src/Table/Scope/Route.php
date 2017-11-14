@@ -63,4 +63,31 @@ class Route extends TableAbstract
 
         $this->connection->executeQuery($sql, array('id' => $routeId));
     }
+
+    public function getScopesForRoute($routeId)
+    {
+        $sql = 'SELECT scope.name,
+                       routes.methods
+                  FROM fusio_scope_routes routes
+            INNER JOIN fusio_scope scope
+                    ON scope.id = routes.scopeId
+                 WHERE routeId = :id
+                   AND allow = 1';
+
+        $result = $this->connection->fetchAll($sql, ['id' => $routeId]);
+        $scopes = [];
+
+        foreach ($result as $row) {
+            $methods = explode('|', $row['methods']);
+            foreach ($methods as $methodName) {
+                if (!isset($scopes[$methodName])) {
+                    $scopes[$methodName] = [];
+                }
+
+                $scopes[$methodName][] = $row['name'];
+            }
+        }
+
+        return $scopes;
+    }
 }

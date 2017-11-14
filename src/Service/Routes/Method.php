@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Engine\Schema\LoaderInterface;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Schema\LazySchema;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
@@ -51,6 +52,11 @@ class Method
     protected $responseTable;
 
     /**
+     * @var \Fusio\Impl\Table\Scope\Route
+     */
+    protected $scopeTable;
+
+    /**
      * @var \Fusio\Engine\Schema\LoaderInterface
      */
     protected $schemaLoader;
@@ -63,12 +69,14 @@ class Method
     /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \Fusio\Impl\Table\Routes\Response $responseTable
+     * @param \Fusio\Impl\Table\Scope\Route $scopeTable
      * @param \Fusio\Engine\Schema\LoaderInterface $schemaLoader
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, LoaderInterface $schemaLoader)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Scope\Route $scopeTable, LoaderInterface $schemaLoader)
     {
         $this->methodTable   = $methodTable;
         $this->responseTable = $responseTable;
+        $this->scopeTable    = $scopeTable;
         $this->schemaLoader  = $schemaLoader;
         $this->resolver      = RefResolver::createDefault();
     }
@@ -95,10 +103,19 @@ class Method
 
         $methods  = $this->methodTable->getMethods($routeId, $version, true, true);
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
+        $scopes   = $this->scopeTable->getScopesForRoute($routeId);
 
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
             $schemaCache    = $method['schemaCache'];
+
+            if (!$method['public']) {
+                if (isset($scopes[$method['method']])) {
+                    $resourceMethod->setSecurity(Authorization::APP, array_unique($scopes[$method['method']]));
+                } else {
+                    $resourceMethod->setSecurity(Authorization::APP, []);
+                }
+            }
 
             if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($schemaCache)) {
                 // if we are not in development mode and a cache is available

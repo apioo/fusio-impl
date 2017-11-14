@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Loader;
 
 use Doctrine\Common\Annotations\Reader;
+use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Table;
 use PSX\Api\Generator;
 use PSX\Api\GeneratorInterface;
@@ -55,7 +56,14 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
             $scopes   = $this->getScopes();
 
             $generator->setTitle('Fusio');
-            $generator->setAuthorizationFlow('OAuth2', Generator\OpenAPI::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, null, $scopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, null, $scopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_PASSWORD, null, $tokenUrl, null, $scopes);
+
+            $tokenUrl = $this->url . '/' . $this->dispatch . 'backend/token';
+            $generator->setAuthorizationFlow(Authorization::BACKEND, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, ['backend' => 'Backend', 'authorization' => 'Authorization']);
+
+            $tokenUrl = $this->url . '/' . $this->dispatch . 'consumer/token';
+            $generator->setAuthorizationFlow(Authorization::CONSUMER, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, ['consumer' => 'Consumer', 'authorization' => 'Authorization']);
         } elseif ($generator instanceof Generator\Raml) {
             $generator->setTitle('Fusio');
         } elseif ($generator instanceof Generator\Swagger) {

@@ -69,6 +69,7 @@ trait Services
         return new Service\Routes\Method(
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('table_manager')->getTable(Table\Routes\Response::class),
+            $this->get('table_manager')->getTable(Table\Scope\Route::class),
             $this->get('schema_loader')
         );
     }
