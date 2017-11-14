@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Loader;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Backend\Filter\Routes\Path;
 use Fusio\Impl\Table\Routes as TableRoutes;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
@@ -53,7 +54,7 @@ class RoutingParser implements LocationFinderInterface
                   FROM fusio_routes
                  WHERE status = :status ';
 
-        $paths  = ['backend', 'consumer', 'authorization', 'export', 'doc'];
+        $paths  = Path::getReserved();
         $found  = false;
         $path   = $request->getUri()->getPath();
         $params = [
