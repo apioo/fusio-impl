@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "PSX",
-    "version": "0"
+    "title": "Fusio",
+    "version": "1"
   },
   "servers": [
     {
@@ -237,6 +237,24 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Entry"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint",
+              "consumer": "Consumer API endpoint",
+              "backend": "Access to the backend API"
             }
           }
         }

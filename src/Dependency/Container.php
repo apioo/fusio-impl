@@ -28,6 +28,7 @@ use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\Filter\ExternalFilter;
 use Fusio\Impl\Loader\Filter\InternalFilter;
+use Fusio\Impl\Loader\GeneratorFactory;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Logger;
@@ -101,6 +102,20 @@ class Container extends DefaultContainer
     }
 
     /**
+     * @return \PSX\Api\GeneratorFactoryInterface
+     */
+    public function getGeneratorFactory()
+    {
+        return new GeneratorFactory(
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('annotation_reader'),
+            $this->get('config')->get('psx_json_namespace'),
+            $this->get('config')->get('psx_url'),
+            $this->get('config')->get('psx_dispatch')
+        );
+    }
+
+    /**
      * @return \Symfony\Component\Console\Application
      */
     public function getConsole()
@@ -139,9 +154,9 @@ class Container extends DefaultContainer
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
         $application->add(new FrameworkConsole\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
 
-        $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
-        $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
-        $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('annotation_reader'), $this->get('config')->get('psx_json_namespace'), $this->get('config')->get('psx_url'), $this->get('config')->get('psx_dispatch')));
+        $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
+        $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
+        $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('generator_factory')));
 
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
