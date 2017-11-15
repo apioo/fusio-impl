@@ -4957,9 +4957,7 @@
             "scopes": {
               "bar": "Bar access",
               "foo": "Foo access",
-              "authorization": "Authorization API endpoint",
-              "consumer": "Consumer API endpoint",
-              "backend": "Access to the backend API"
+              "authorization": "Authorization API endpoint"
             }
           },
           "authorizationCode": {
@@ -4968,9 +4966,7 @@
             "scopes": {
               "bar": "Bar access",
               "foo": "Foo access",
-              "authorization": "Authorization API endpoint",
-              "consumer": "Consumer API endpoint",
-              "backend": "Access to the backend API"
+              "authorization": "Authorization API endpoint"
             }
           }
         }
@@ -4981,8 +4977,7 @@
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "scopes": {
-              "backend": "Backend",
-              "authorization": "Authorization"
+              "backend": "Access to the backend API"
             }
           }
         }
@@ -4993,8 +4988,7 @@
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "scopes": {
-              "consumer": "Consumer",
-              "authorization": "Authorization"
+              "consumer": "Consumer API endpoint"
             }
           }
         }
