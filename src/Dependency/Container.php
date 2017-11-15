@@ -108,6 +108,7 @@ class Container extends DefaultContainer
     {
         return new GeneratorFactory(
             $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('config_service'),
             $this->get('annotation_reader'),
             $this->get('config')->get('psx_json_namespace'),
             $this->get('config')->get('psx_url'),
