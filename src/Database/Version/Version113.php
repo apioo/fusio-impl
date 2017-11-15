@@ -454,6 +454,8 @@ class Version113 implements VersionInterface
                 ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
                 ['name' => 'cors_allow_origin', 'type' => Table\Config::FORM_STRING, 'description' => 'If set each API response contains a Access-Control-Allow-Origin header with the provided value', 'value' => ''],
                 ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
+                ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
+                ['name' => 'authorization_url', 'type' => Table\Config::FORM_STRING, 'description' => 'Url where the user can authorize for the OAuth2 flow', 'value' => ''],
             ],
             'fusio_connection' => [
             ],
