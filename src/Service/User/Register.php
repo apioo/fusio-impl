@@ -89,9 +89,16 @@ class Register
             $this->verifyCaptcha($captcha, $secret);
         }
 
+        // determine initial user status
+        $status   = Table\User::STATUS_DISABLED;
+        $approval = $this->configService->getValue('user_approval');
+        if (!$approval) {
+            $status = Table\User::STATUS_CONSUMER;
+        }
+
         $scopes = $this->getDefaultScopes();
         $userId = $this->userService->create(
-            Table\User::STATUS_DISABLED,
+            $status,
             $name,
             $email,
             $password,
@@ -100,7 +107,9 @@ class Register
         );
 
         // send activation mail
-        $this->sendActivationMail($userId, $name, $email);
+        if ($approval) {
+            $this->sendActivationMail($userId, $name, $email);
+        }
     }
 
     protected function sendActivationMail($userId, $name, $email)
