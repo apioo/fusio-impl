@@ -23,6 +23,7 @@ namespace Fusio\Impl\Loader;
 
 use Doctrine\Common\Annotations\Reader;
 use Fusio\Impl\Authorization\Authorization;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Generator;
 use PSX\Api\GeneratorInterface;
@@ -41,29 +42,36 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
      */
     protected $scopeTable;
 
-    public function __construct(Table\Scope $scopeTable, Reader $reader, $namespace, $url, $dispatch)
+    /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
+
+    public function __construct(Table\Scope $scopeTable, Service\Config $configService, Reader $reader, $namespace, $url, $dispatch)
     {
         parent::__construct($reader, $namespace, $url, $dispatch);
 
-        $this->scopeTable = $scopeTable;
+        $this->scopeTable    = $scopeTable;
+        $this->configService = $configService;
     }
 
     protected function configure(GeneratorInterface $generator)
     {
         if ($generator instanceof Generator\OpenAPI) {
-            $authUrl  = $this->url . '/developer/auth';
+            $authUrl  = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
             $tokenUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
-            $scopes   = $this->getScopes();
+
+            list($appScopes, $backendScopes, $consumerScopes) = $this->getScopes();
 
             $generator->setTitle('Fusio');
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, null, $scopes);
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_PASSWORD, null, $tokenUrl, null, $scopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, null, $appScopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPI::FLOW_PASSWORD, null, $tokenUrl, null, $appScopes);
 
             $tokenUrl = $this->url . '/' . $this->dispatch . 'backend/token';
-            $generator->setAuthorizationFlow(Authorization::BACKEND, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, ['backend' => 'Backend', 'authorization' => 'Authorization']);
+            $generator->setAuthorizationFlow(Authorization::BACKEND, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, $backendScopes);
 
             $tokenUrl = $this->url . '/' . $this->dispatch . 'consumer/token';
-            $generator->setAuthorizationFlow(Authorization::CONSUMER, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, ['consumer' => 'Consumer', 'authorization' => 'Authorization']);
+            $generator->setAuthorizationFlow(Authorization::CONSUMER, Generator\OpenAPI::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, null, $consumerScopes);
         } elseif ($generator instanceof Generator\Raml) {
             $generator->setTitle('Fusio');
         } elseif ($generator instanceof Generator\Swagger) {
@@ -73,12 +81,21 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
 
     private function getScopes()
     {
-        $result = [];
+        $app = [];
+        $backend = [];
+        $consumer = [];
+
         $scopes = $this->scopeTable->getAll(0, 1024);
         foreach ($scopes as $scope) {
-            $result[$scope['name']] = $scope['description'];
+            if ($scope['name'] == 'backend') {
+                $backend[$scope['name']] = $scope['description'];
+            } elseif ($scope['name'] == 'consumer') {
+                $consumer[$scope['name']] = $scope['description'];
+            } else {
+                $app[$scope['name']] = $scope['description'];
+            }
         }
 
-        return $result;
+        return [$app, $backend, $consumer];
     }
 }
