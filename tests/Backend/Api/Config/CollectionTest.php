@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 12,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -183,6 +183,13 @@ JSON;
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
             "value": "16"
+        },
+        {
+            "id": 14,
+            "type": 1,
+            "name": "authorization_url",
+            "description": "Url where the user can authorize for the OAuth2 flow",
+            "value": ""
         },
         {
             "id": 11,
@@ -246,6 +253,13 @@ JSON;
             "name": "scopes_default",
             "description": "If a user registers through the consumer API the following scopes are assigned",
             "value": "authorization,consumer"
+        },
+        {
+            "id": 13,
+            "type": 2,
+            "name": "user_approval",
+            "description": "Whether the user needs to activate the account through an email",
+            "value": "1"
         },
         {
             "id": 12,
@@ -273,7 +287,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 12,
+    "totalResults": 14,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -290,6 +304,13 @@ JSON;
             "name": "app_consumer",
             "description": "The max amount of apps a consumer can register",
             "value": "16"
+        },
+        {
+            "id": 14,
+            "type": 1,
+            "name": "authorization_url",
+            "description": "Url where the user can authorize for the OAuth2 flow",
+            "value": ""
         },
         {
             "id": 11,
@@ -353,6 +374,13 @@ JSON;
             "name": "scopes_default",
             "description": "If a user registers through the consumer API the following scopes are assigned",
             "value": "authorization,consumer"
+        },
+        {
+            "id": 13,
+            "type": 2,
+            "name": "user_approval",
+            "description": "Whether the user needs to activate the account through an email",
+            "value": "1"
         },
         {
             "id": 12,
