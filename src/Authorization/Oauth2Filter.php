@@ -64,9 +64,11 @@ class Oauth2Filter extends Oauth2Authentication
 
     public function __construct(Connection $connection, $requestMethod, $routeId, $projectKey, Closure $appCallback)
     {
-        parent::__construct(function ($token) {
+        $accessCallback = function ($token) {
             return $this->isValidToken($token);
-        });
+        };
+
+        parent::__construct($accessCallback, 'Fusio');
 
         $this->connection    = $connection;
         $this->requestMethod = $requestMethod == 'HEAD' ? 'GET' : $requestMethod;
@@ -136,7 +138,7 @@ class Oauth2Filter extends Oauth2Authentication
 
                 return true;
             } else {
-                throw new InvalidScopeException('Access to this resource is not in the scope of the provided token', 400);
+                throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
             }
         }
 
