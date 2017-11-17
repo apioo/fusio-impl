@@ -246,7 +246,7 @@ class Scope
      */
     public function getValidScopes($appId, $userId, $scopes, array $exclude = array())
     {
-        $scopes = explode(',', $scopes);
+        $scopes = self::split($scopes);
         $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes, $exclude));
         $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes, $exclude));
 
@@ -266,6 +266,15 @@ class Scope
                     ));
                 }
             }
+        }
+    }
+
+    public static function split($scopes)
+    {
+        if (strpos($scopes, ',') !== false) {
+            return explode(',', $scopes);
+        } else {
+            return explode(' ', $scopes);
         }
     }
 }
