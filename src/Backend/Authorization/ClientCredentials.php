@@ -26,7 +26,8 @@ use Fusio\Impl\Table\App;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\ClientCredentialsAbstract;
-use PSX\Oauth2\Authorization\Exception\ServerErrorException;
+use PSX\Oauth2\Authorization\Exception\InvalidClientException;
+use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
 /**
  * ClientCredentials
@@ -83,7 +84,7 @@ class ClientCredentials extends ClientCredentialsAbstract
             // scopes
             $scopes = $this->userService->getValidScopes($userId, $scopes);
             if (empty($scopes)) {
-                throw new ServerErrorException('No valid scope given');
+                throw new InvalidScopeException('No valid scope given');
             }
 
             // generate access token
@@ -95,7 +96,7 @@ class ClientCredentials extends ClientCredentialsAbstract
                 new \DateInterval($this->expireBackend)
             );
         } else {
-            throw new ServerErrorException('Unknown user');
+            throw new InvalidClientException('Unknown credentials');
         }
     }
 }
