@@ -25,7 +25,10 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table\User;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
-use PSX\Oauth2\Authorization\Exception\ServerErrorException;
+use PSX\Oauth2\Authorization\Exception\InvalidClientException;
+use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
+use PSX\Oauth2\Authorization\Exception\InvalidRequestException;
+use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
 /**
  * Password
@@ -92,26 +95,27 @@ class Password extends PasswordAbstract
                 [User::STATUS_ADMINISTRATOR, User::STATUS_CONSUMER]
             );
 
-            if (!empty($userId)) {
-                // validate scopes
-                $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope, ['backend']);
-                if (empty($scopes)) {
-                    throw new ServerErrorException('No valid scope given');
-                }
-
-                // generate access token
-                return $this->appService->generateAccessToken(
-                    $app['id'],
-                    $userId,
-                    $scopes,
-                    isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                    new \DateInterval($this->expireApp)
-                );
-            } else {
-                throw new ServerErrorException('Unknown user');
+            // check whether user is valid
+            if (empty($userId)) {
+                throw new InvalidGrantException('Unknown user');
             }
+
+            // validate scopes
+            $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope, ['backend']);
+            if (empty($scopes)) {
+                throw new InvalidScopeException('No valid scope given');
+            }
+
+            // generate access token
+            return $this->appService->generateAccessToken(
+                $app['id'],
+                $userId,
+                $scopes,
+                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+                new \DateInterval($this->expireApp)
+            );
         } else {
-            throw new ServerErrorException('Unknown credentials');
+            throw new InvalidClientException('Unknown credentials');
         }
     }
 }

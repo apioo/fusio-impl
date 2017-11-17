@@ -24,7 +24,9 @@ namespace Fusio\Impl\Authorization;
 use Fusio\Impl\Service;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
-use PSX\Oauth2\Authorization\Exception\ServerErrorException;
+use PSX\Oauth2\Authorization\Exception\InvalidClientException;
+use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
+use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
 /**
  * AuthorizationCode
@@ -89,13 +91,13 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             // check whether the code is older then 30 minutes. After that we
             // can not exchange it for an access token
             if (time() - strtotime($code['date']) > 60 * 30) {
-                throw new ServerErrorException('Code is expired');
+                throw new InvalidGrantException('Code is expired');
             }
 
             // scopes
             $scopes = $this->scopeService->getValidScopes($code['appId'], $code['userId'], $code['scope'], ['backend']);
             if (empty($scopes)) {
-                throw new ServerErrorException('No valid scope given');
+                throw new InvalidScopeException('No valid scope given');
             }
 
             // generate access token
@@ -107,7 +109,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
                 new \DateInterval($this->expireApp)
             );
         } else {
-            throw new ServerErrorException('Unknown credentials');
+            throw new InvalidClientException('Unknown credentials');
         }
     }
 }
