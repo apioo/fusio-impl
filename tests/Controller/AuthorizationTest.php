@@ -170,12 +170,15 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertEquals(401, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
+    "www-authenticate": [
+        "Bearer realm=\"Fusio\""
+    ],
     "vary": [
         "Accept"
     ],
@@ -277,7 +280,7 @@ JSON;
         $expect = <<<JSON
 {
     "www-authenticate": [
-        "Bearer realm=\"psx\""
+        "Bearer realm=\"Fusio\""
     ],
     "vary": [
         "Accept"
@@ -368,12 +371,15 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertEquals(401, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         $header = json_encode($response->getHeaders(), JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
+    "www-authenticate": [
+        "Bearer realm=\"Fusio\""
+    ],
     "vary": [
         "Accept"
     ],
@@ -419,7 +425,7 @@ JSON;
         $expect = <<<JSON
 {
     "www-authenticate": [
-        "Bearer realm=\"psx\""
+        "Bearer realm=\"Fusio\""
     ],
     "vary": [
         "Accept"

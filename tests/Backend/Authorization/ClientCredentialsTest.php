@@ -81,12 +81,12 @@ class ClientCredentialsTest extends ControllerDbTestCase
         
         $expect = <<<JSON
 {
-    "error": "server_error",
-    "error_description": "Unknown user"
+    "error": "invalid_client",
+    "error_description": "Unknown credentials"
 }
 JSON;
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertEquals(401, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
@@ -106,12 +106,12 @@ JSON;
         
         $expect = <<<JSON
 {
-    "error": "server_error",
-    "error_description": "Unknown user"
+    "error": "invalid_client",
+    "error_description": "Unknown credentials"
 }
 JSON;
 
-        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertEquals(401, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
     
