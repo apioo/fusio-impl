@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Export;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * OpenAPITest
@@ -38,8 +39,13 @@ class OpenAPITest extends ControllerDbTestCase
         return Fixture::getDataSet();
     }
 
-    public function testGetResource()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testGetResource($debug)
     {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
         $response = $this->sendRequest('/export/openapi/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
@@ -50,8 +56,13 @@ class OpenAPITest extends ControllerDbTestCase
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCollectionExternal()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testGetCollectionExternal($debug)
     {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
         $response = $this->sendRequest('/export/openapi/*/*', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
@@ -62,8 +73,13 @@ class OpenAPITest extends ControllerDbTestCase
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testGetCollectionInternal()
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testGetCollectionInternal($debug)
     {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
         $response = $this->sendRequest('/export/openapi/*/*?filter=internal', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
@@ -72,5 +88,13 @@ class OpenAPITest extends ControllerDbTestCase
         $expect = file_get_contents(__DIR__ . '/resources/openapi_collection_internal.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function providerDebugStatus()
+    {
+        return [
+            [true],
+            [false],
+        ];
     }
 }
