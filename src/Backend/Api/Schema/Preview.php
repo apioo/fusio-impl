@@ -70,8 +70,8 @@ class Preview extends BackendApiAbstract
             (int) $this->getUriFragment('schema_id')
         );
 
-        $this->setBody([
+        return [
             'preview' => $body
-        ]);
+        ];
     }
 }

@@ -72,9 +72,9 @@ class Token extends BackendApiAbstract
             $this->userContext
         );
 
-        $this->setBody(array(
+        return [
             'success' => true,
             'message' => 'Removed token successful',
-        ));
+        ];
     }
 }

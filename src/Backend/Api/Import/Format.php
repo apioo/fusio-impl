@@ -59,6 +59,6 @@ class Format extends BackendApiAbstract
         $format = $this->getUriFragment('format');
         $body   = Transform::fromSchema($format, $record->schema);
 
-        $this->setBody($body);
+        return $body;
     }
 }
