@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Base;
 use Fusio\Impl\Database\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -87,6 +88,10 @@ class CheckCommand extends Command
                 return $this->checkInstall();
                 break;
 
+            case 'upgrade':
+                return $this->checkUpgrade();
+                break;
+
             case 'user':
                 return $this->checkUser();
                 break;
@@ -110,6 +115,29 @@ class CheckCommand extends Command
         }
 
         return count(array_diff($names, $existing)) === 0;
+    }
+
+    /**
+     * Check whether we need to upgrade
+     *
+     * @return bool
+     */
+    protected function checkUpgrade()
+    {
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select('version')
+            ->from('fusio_meta')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1);
+
+        $version = $this->connection->fetchColumn($qb->getSQL());
+
+        if (!empty($version)) {
+            return version_compare($version, Base::getVersion()) === 0;
+        }
+
+        return false;
     }
 
     /**

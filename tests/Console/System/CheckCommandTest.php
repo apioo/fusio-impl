@@ -53,6 +53,19 @@ class CheckCommandTest extends ControllerDbTestCase
         $this->assertSame(0, $commandTester->getStatusCode());
     }
 
+    public function testCommandUpgrade()
+    {
+        $command = Environment::getService('console')->find('system:check');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name'    => 'upgrade',
+        ]);
+
+        $this->assertSame(0, $commandTester->getStatusCode());
+    }
+
     public function testCommandUser()
     {
         $command = Environment::getService('console')->find('system:check');

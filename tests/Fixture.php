@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests;
 use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
+use Fusio\Impl\Base;
 use Fusio\Impl\Connection\System;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Service;
@@ -146,6 +147,9 @@ class Fixture
             ],
             'fusio_log_error' => [
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
+            ],
+            'fusio_meta' => [
+                ['version' => Base::getVersion(), 'installDate' => '2015-02-27 19:59:15'],
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => serialize($schemaCollection)],
