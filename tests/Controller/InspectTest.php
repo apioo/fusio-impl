@@ -74,6 +74,23 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetError()
+    {
+        $response = $this->sendRequest('/inspect/bar?throw=1', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(500, $response->getStatusCode(), $body);
+
+        $data = json_decode($body);
+
+        $this->assertFalse($data->success);
+        $this->assertEquals('Foobar', substr($data->message, 0, 6));
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/inspect/bar?foo=bar', 'POST', array(

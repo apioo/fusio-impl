@@ -25,6 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * InspectAction
@@ -42,6 +43,11 @@ class InspectAction extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
+        $throw = $request->getParameter('throw');
+        if ($throw) {
+            throw new StatusCode\InternalServerErrorException('Foobar');
+        }
+
         return $this->response->build(200, [], [
             'method' => $request->getMethod(),
             'headers' => $request->getHeaders(),
