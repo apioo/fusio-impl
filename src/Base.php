@@ -30,7 +30,7 @@ namespace Fusio\Impl;
  */
 class Base
 {
-    const VERSION = '1.1.4';
+    const VERSION = '1.1.5';
 
     public static function getVersion()
     {
