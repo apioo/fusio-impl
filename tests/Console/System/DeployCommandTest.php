@@ -454,6 +454,9 @@ JSON;
   "properties": {
     "content": {
       "$ref": "schema:///Test-Schema"
+    },
+    "title": {
+      "$ref": "schema:///Test-Schema#/properties/foo"
     }
   }
 }
