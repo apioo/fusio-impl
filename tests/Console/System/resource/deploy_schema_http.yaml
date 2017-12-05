@@ -1,0 +1,11 @@
+schema:
+  Ref-Schema: >
+    {
+      "title": "test",
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "http://foo.com/schema.json"
+        }
+      }
+    }

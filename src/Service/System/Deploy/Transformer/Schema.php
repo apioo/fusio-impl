@@ -126,6 +126,8 @@ class Schema implements TransformerInterface
                     if ($uri->isAbsolute()) {
                         if ($uri->getScheme() == 'file') {
                             $data->{$key} = $this->resolveRefs($basePath . '/' . $uri->getPath());
+                        } elseif ($uri->getScheme() == 'schema') {
+                            // schema scheme is allowed
                         } else {
                             throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
                         }
