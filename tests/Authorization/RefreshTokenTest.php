@@ -43,7 +43,12 @@ class RefreshTokenTest extends ControllerDbTestCase
     public function testPost()
     {
         // update insert date so that the refresh token is not expired
-        $this->connection->executeUpdate('UPDATE fusio_app_token SET date = :date', [date('Y-m-d H:i:s')]);
+        $qb  = $this->connection->createQueryBuilder();
+        $qb->update('fusio_app_token')
+            ->set('date', ':date')
+            ->setParameter('date', date('Y-m-d H:i:s'));
+
+        $this->connection->executeUpdate($qb->getSQL(), $qb->getParameters());
 
         $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
         $response = $this->sendRequest('/authorization/token', 'POST', [
