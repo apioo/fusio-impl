@@ -72,11 +72,8 @@ class Token extends TableAbstract
 
     public function getTokenByRefreshToken($appId, $refreshToken)
     {
-        $now = new DateTime();
         $con = new Condition();
         $con->add('appId', '=', $appId);
-        $con->add('status', '=', self::STATUS_ACTIVE);
-        $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
         $con->add('refresh', '=', $refreshToken);
 
         return $this->getOneBy($con);

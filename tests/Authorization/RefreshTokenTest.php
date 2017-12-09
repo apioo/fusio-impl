@@ -42,6 +42,9 @@ class RefreshTokenTest extends ControllerDbTestCase
 
     public function testPost()
     {
+        // update insert date so that the refresh token is not expired
+        $this->connection->executeUpdate('UPDATE fusio_app_token SET date = :date', [date('Y-m-d H:i:s')]);
+
         $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
         $response = $this->sendRequest('/authorization/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
@@ -74,5 +77,47 @@ class RefreshTokenTest extends ControllerDbTestCase
         $this->assertEquals('bar', $row['scope']);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
         $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
+    }
+
+    public function testPostExpiredToken()
+    {
+        $body     = 'grant_type=refresh_token&refresh_token=b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2';
+        $response = $this->sendRequest('/authorization/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
+        ], $body);
+
+        $actual = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "error": "server_error",
+    "error_description": "Refresh token is expired"
+}
+JSON;
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $actual);
+    }
+
+    public function testPostInvalidToken()
+    {
+        $body     = 'grant_type=refresh_token&refresh_token=foobar';
+        $response = $this->sendRequest('/authorization/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('5347307d-d801-4075-9aaa-a21a29a448c5:342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
+        ], $body);
+
+        $actual = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "error": "server_error",
+    "error_description": "Invalid refresh token"
+}
+JSON;
+
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $actual);
     }
 }

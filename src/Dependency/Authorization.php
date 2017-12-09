@@ -58,7 +58,8 @@ trait Authorization
 
         $factory->add(new ApiAuthorization\RefreshToken(
             $this->get('app_service'),
-            $this->get('config')->get('fusio_expire_app')
+            $this->get('config')->get('fusio_expire_app'),
+            $this->get('config')->get('fusio_expire_refresh')
         ));
 
         return $factory;

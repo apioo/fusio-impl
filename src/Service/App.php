@@ -303,12 +303,24 @@ class App
         return $token;
     }
 
-    public function refreshAccessToken($appId, $refreshToken, $ip, DateInterval $expire)
+    public function refreshAccessToken($appId, $refreshToken, $ip, DateInterval $expireApp, DateInterval $expireRefresh)
     {
         $token = $this->appTokenTable->getTokenByRefreshToken($appId, $refreshToken);
+        $now   = new \DateTime();
 
         if (empty($token)) {
             throw new StatusCode\BadRequestException('Invalid refresh token');
+        }
+
+        // check expire date
+        $date = $token->date;
+        if ($date instanceof \DateTime) {
+            $expires = clone $date;
+            $expires->add($expireRefresh);
+
+            if ($expires < $now) {
+                throw new StatusCode\BadRequestException('Refresh token is expired');
+            }
         }
 
         // check whether the refresh was requested from the same app
@@ -318,8 +330,7 @@ class App
 
         $scopes  = explode(',', $token->scope);
         $expires = new \DateTime();
-        $expires->add($expire);
-        $now     = new \DateTime();
+        $expires->add($expireApp);
 
         // generate access token
         $accessToken  = TokenGenerator::generateToken();

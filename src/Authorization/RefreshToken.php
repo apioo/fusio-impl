@@ -44,15 +44,22 @@ class RefreshToken extends RefreshTokenAbstract
      * @var string
      */
     protected $expireApp;
-    
+
+    /**
+     * @var string
+     */
+    protected $expireRefresh;
+
     /**
      * @param \Fusio\Impl\Service\App $appService
      * @param string $expireApp
+     * @param string $expireRefresh
      */
-    public function __construct(Service\App $appService, $expireApp)
+    public function __construct(Service\App $appService, $expireApp, $expireRefresh = null)
     {
-        $this->appService = $appService;
-        $this->expireApp  = $expireApp;
+        $this->appService    = $appService;
+        $this->expireApp     = $expireApp;
+        $this->expireRefresh = $expireRefresh ?: 'P3D';
     }
 
     /**
@@ -74,7 +81,8 @@ class RefreshToken extends RefreshTokenAbstract
                 $app['id'],
                 $refreshToken,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireApp)
+                new \DateInterval($this->expireApp),
+                new \DateInterval($this->expireRefresh)
             );
         } else {
             throw new ServerErrorException('Unknown credentials');
