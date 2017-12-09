@@ -22,6 +22,9 @@
 namespace Fusio\Impl\Tests;
 
 use Fusio\Impl\Logger;
+use PSX\Http\Request;
+use PSX\Http\Stream\StringStream;
+use PSX\Uri\Uri;
 
 /**
  * LoggerTest
@@ -30,77 +33,84 @@ use Fusio\Impl\Logger;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends DbTestCase
 {
     public function testLog()
     {
-        $body = $this->getMockBuilder('Psr\Http\Message\StreamInterface')
-            ->getMock();
+        $request = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $logger  = new Logger($this->connection);
+        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
 
-        $request = $this->getMockBuilder('PSX\Http\RequestInterface')
-            ->getMock();
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
 
-        $request->expects($this->once())
-            ->method('getHeaders')
-            ->will($this->returnValue(['Content-Type' => ['application/json']]));
+        $this->assertEquals(3, $log['id']);
+        $this->assertEquals(1, $log['routeId']);
+        $this->assertEquals(1, $log['appId']);
+        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals('127.0.0.1', $log['ip']);
+        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('GET', $log['method']);
+        $this->assertEquals('/foo', $log['path']);
+        $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
+        $this->assertEquals('', $log['body']);
+    }
 
-        $request->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue($body));
+    public function testLogLongPath()
+    {
+        $request = new Request(new Uri('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $logger  = new Logger($this->connection);
+        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
 
-        $connection = $this->getMockBuilder('Doctrine\DBAL\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
 
-        $connection->expects($this->once())
-            ->method('insert')
-            ->with($this->equalTo('fusio_log'), $this->callback(function ($args) {
-                $args['date'] = substr($args['date'], 0, 16);
+        $this->assertEquals(3, $log['id']);
+        $this->assertEquals(1, $log['routeId']);
+        $this->assertEquals(1, $log['appId']);
+        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals('127.0.0.1', $log['ip']);
+        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('GET', $log['method']);
+        $this->assertEquals('/foo?param=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', $log['path']);
+        $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
+        $this->assertEquals('', $log['body']);
+    }
 
-                $expect = [
-                    'routeId'   => 1,
-                    'appId'     => 1,
-                    'userId'    => 1,
-                    'ip'        => '127.0.0.1',
-                    'userAgent' => null,
-                    'method'    => null,
-                    'path'      => null,
-                    'header'    => 'Content-Type: application/json',
-                    'body'      => null,
-                    'date'      => date('Y-m-d H:i'),
-                ];
+    public function testLogPost()
+    {
+        $body    = new StringStream('foobar');
+        $request = new Request(new Uri('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
+        $logger  = new Logger($this->connection);
+        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
 
-                $this->assertEquals($expect, $args);
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
 
-                return true;
-            }));
-
-        $connection->expects($this->once())
-            ->method('lastInsertId')
-            ->will($this->returnValue(1));
-
-        $logger = new Logger($connection);
-        $logId  = $logger->log(1, 1, 1, '127.0.0.1', $request);
-
-        $this->assertEquals(1, $logId);
+        $this->assertEquals(3, $log['id']);
+        $this->assertEquals(1, $log['routeId']);
+        $this->assertEquals(1, $log['appId']);
+        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals('127.0.0.1', $log['ip']);
+        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('POST', $log['method']);
+        $this->assertEquals('/foo', $log['path']);
+        $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
+        $this->assertEquals('foobar', $log['body']);
     }
 
     public function testAppendError()
     {
-        $connection = $this->getMockBuilder('Doctrine\DBAL\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $logger  = new Logger($this->connection);
+        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
 
-        $connection->expects($this->once())
-            ->method('insert')
-            ->with($this->equalTo('fusio_log_error'), $this->callback(function ($row) {
-                $this->assertEquals(1, $row['logId']);
-                $this->assertEquals('foo', $row['message']);
+        $logger = new Logger($this->connection);
+        $logger->appendError($logId, new \Exception('foo'));
 
-                return true;
-            }));
+        $errors = $this->connection->fetchAll('SELECT * FROM fusio_log_error WHERE logId = :id', ['id' => $logId]);
 
-        $logger = new Logger($connection);
-        $logger->appendError(1, new \Exception('foo'));
+        $this->assertEquals(1, count($errors));
+        $this->assertEquals('foo', $errors[0]['message']);
+        $this->assertNotEmpty($errors[0]['trace']);
+        $this->assertNotEmpty($errors[0]['file']);
+        $this->assertNotEmpty($errors[0]['line']);
     }
 }

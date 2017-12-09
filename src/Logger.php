@@ -58,7 +58,12 @@ class Logger
      */
     public function log($routeId, $appId, $userId, $ip, RequestInterface $request)
     {
-        $now = new \DateTime();
+        $now  = new \DateTime();
+        $path = $request->getRequestTarget();
+
+        if (strlen($path) > 1023) {
+            $path = substr($path, 0, 1023);
+        }
 
         $this->connection->insert('fusio_log', array(
             'routeId'   => $routeId,
@@ -67,7 +72,7 @@ class Logger
             'ip'        => $ip,
             'userAgent' => $request->getHeader('User-Agent'),
             'method'    => $request->getMethod(),
-            'path'      => $request->getRequestTarget(),
+            'path'      => $path,
             'header'    => $this->getHeadersAsString($request),
             'body'      => $this->getBodyAsString($request),
             'date'      => $now->format('Y-m-d H:i:s'),
