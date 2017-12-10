@@ -27,6 +27,7 @@ use Fusio\Impl\Service\System\Deploy\NameGenerator;
 use Fusio\Impl\Service\System\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 use PSX\Json\Parser;
+use PSX\Json\Pointer;
 use PSX\Uri\Uri;
 use RuntimeException;
 
@@ -77,29 +78,26 @@ class Schema implements TransformerInterface
                 $file = $basePath . '/' . substr($data, 9);
 
                 if (is_file($file)) {
-                    return $this->resolveRefs($file);
+                    return $this->resolveFile($file);
                 } else {
                     throw new RuntimeException('Could not resolve file: ' . $file);
                 }
             } else {
-                $data = Parser::decode($data);
-
-                if ($data instanceof \stdClass) {
-                    $this->traverseSchema($data, $basePath);
-                } else {
-                    throw new RuntimeException('JsonSchema must be an object');
-                }
-
-                return $data;
+                return $this->traverseSchema(Parser::decode($data), $basePath);
             }
         } elseif (is_array($data) || $data instanceof \stdClass) {
-            return $data;
+            return $this->traverseSchema($data, $basePath);
         } else {
             throw new RuntimeException('Schema must be a string or array');
         }
     }
 
-    private function resolveRefs($file)
+    /**
+     * @param string $file
+     * @param string $fragment
+     * @return mixed
+     */
+    private function resolveFile($file, $fragment = null)
     {
         if (!is_file($file)) {
             throw new RuntimeException('Could not resolve schema ' . $file);
@@ -108,34 +106,49 @@ class Schema implements TransformerInterface
         $basePath = pathinfo($file, PATHINFO_DIRNAME);
         $data     = Parser::decode(file_get_contents($file));
 
-        if ($data instanceof \stdClass) {
-            $this->traverseSchema($data, $basePath);
+        if (!empty($fragment)) {
+            $pointer = new Pointer($fragment);
+            $data    = $pointer->evaluate($data);
         }
 
-        return $data;
+        return $this->traverseSchema($data, $basePath);
     }
 
-    private function traverseSchema(\stdClass $data, $basePath)
+    /**
+     * @param mixed $data
+     * @param string $basePath
+     * @return mixed
+     */
+    private function traverseSchema($data, $basePath)
     {
-        $props = get_object_vars($data);
-        foreach ($props as $key => $value) {
-            if ($data->{$key} instanceof \stdClass) {
-                if (isset($data->{$key}->{'$ref'}) && is_string($data->{$key}->{'$ref'})) {
-                    $uri = new Uri($data->{$key}->{'$ref'});
+        if ($data instanceof \stdClass) {
+            if (isset($data->{'$ref'}) && is_string($data->{'$ref'})) {
+                $uri = new Uri($data->{'$ref'});
 
-                    if ($uri->isAbsolute()) {
-                        if ($uri->getScheme() == 'file') {
-                            $data->{$key} = $this->resolveRefs($basePath . '/' . $uri->getPath());
-                        } elseif ($uri->getScheme() == 'schema') {
-                            // schema scheme is allowed
-                        } else {
-                            throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
-                        }
+                if ($uri->isAbsolute()) {
+                    if ($uri->getScheme() == 'file') {
+                        return $this->resolveFile($basePath . '/' . $uri->getPath(), $uri->getFragment());
+                    } elseif ($uri->getScheme() == 'schema') {
+                        // schema scheme is allowed
+                    } else {
+                        throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
                     }
-                } else {
-                    $this->traverseSchema($data->{$key}, $basePath);
                 }
             }
+
+            $object = new \stdClass();
+            foreach ($data as $key => $value) {
+                $object->{$key} = $this->traverseSchema($value, $basePath);
+            }
+            return $object;
+        } elseif (is_array($data)) {
+            $array = [];
+            foreach ($data as $value) {
+                $array[] = $this->traverseSchema($value, $basePath);
+            }
+            return $array;
+        } else {
+            return $data;
         }
     }
 

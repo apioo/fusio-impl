@@ -467,6 +467,42 @@ JSON;
         $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
     }
 
+    public function testCommandSchemaFile()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_schema_file.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] schema Ref-Schema/', $display, $display);
+
+        // check schema
+        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+            'name' => 'Ref-Schema',
+        ]);
+
+        $source = <<<'JSON'
+{
+  "title": "test",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string"
+    }
+  }
+}
+JSON;
+
+        $this->assertEquals(4, $schema['id']);
+        $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
+        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+    }
+
     public function testCommandSchemaHttp()
     {
         $command = Environment::getService('console')->find('system:deploy');
