@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\System;
 
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\ConnectionInterface;
+use Fusio\Impl\Service\System\Import\Result;
 use PSX\Json\Parser;
 use ReflectionClass;
 use RuntimeException;
@@ -40,7 +41,7 @@ class Import extends SystemAbstract
     public function import($data)
     {
         $data   = Parser::decode($data, false);
-        $result = [];
+        $result = new Result();
 
         if (!$data instanceof stdClass) {
             throw new RuntimeException('Data must be an object');
@@ -49,58 +50,56 @@ class Import extends SystemAbstract
         $classes = isset($data->actionClass) ? $data->actionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $result[] = $this->importClass('fusio_action_class', $class, ActionInterface::class);
+                $this->importClass('fusio_action_class', $class, ActionInterface::class, $result);
             }
         }
 
         $classes = isset($data->connectionClass) ? $data->connectionClass : null;
         if (!empty($classes) && is_array($classes)) {
             foreach ($classes as $class) {
-                $result[] = $this->importClass('fusio_connection_class', $class, ConnectionInterface::class);
+                $this->importClass('fusio_connection_class', $class, ConnectionInterface::class, $result);
             }
         }
 
         $config = isset($data->config) ? $data->config : null;
         if (!empty($config) && $config instanceof stdClass) {
-            $result[] = $this->importConfig($config);
+            $this->importConfig($config, $result);
         }
 
         if (isset($data->connection) && is_array($data->connection)) {
             foreach ($data->connection as $entry) {
-                $result[] = $this->importGeneral(self::TYPE_CONNECTION, $entry);
+                $this->importGeneral(self::TYPE_CONNECTION, $entry, $result);
             }
         }
 
         if (isset($data->schema) && is_array($data->schema)) {
             foreach ($data->schema as $entry) {
-                $result[] = $this->importGeneral(self::TYPE_SCHEMA, $entry);
+                $this->importGeneral(self::TYPE_SCHEMA, $entry, $result);
             }
         }
 
         if (isset($data->action) && is_array($data->action)) {
             foreach ($data->action as $entry) {
-                $result[] = $this->importGeneral(self::TYPE_ACTION, $entry);
+                $this->importGeneral(self::TYPE_ACTION, $entry, $result);
             }
         }
 
         if (isset($data->routes) && is_array($data->routes)) {
             foreach ($data->routes as $entry) {
-                $result[] = $this->importRoutes($entry);
+                $this->importRoutes($entry, $result);
             }
         }
 
         if (isset($data->cronjob) && is_array($data->cronjob)) {
             foreach ($data->cronjob as $entry) {
-                $result[] = $this->importGeneral(self::TYPE_CRONJOB, $entry);
+                $this->importGeneral(self::TYPE_CRONJOB, $entry, $result);
             }
         }
-
-        $result = array_filter($result);
 
         return $result;
     }
 
-    protected function importGeneral($type, stdClass $data)
+    protected function importGeneral($type, stdClass $data, Result $result)
     {
         $name = $data->name;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE name = :name', [
@@ -116,15 +115,15 @@ class Import extends SystemAbstract
         if (isset($response->success) && $response->success === false) {
             $this->logger->error($response->message);
 
-            return '[ERROR] ' . $type . ' ' . $name . ': ' . $response->message;
+            $result->add($type, Result::ACTION_FAILED, $name . ': ' . $response->message);
         } elseif (!empty($id)) {
-            return '[UPDATED] ' . $type . ' ' . $name;
+            $result->add($type, Result::ACTION_UPDATED, $name);
         } else {
-            return '[CREATED] ' . $type . ' ' . $name;
+            $result->add($type, Result::ACTION_CREATED, $name);
         }
     }
 
-    protected function importRoutes(stdClass $data)
+    protected function importRoutes(stdClass $data, Result $result)
     {
         $path = $data->path;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_routes WHERE path = :path', [
@@ -140,16 +139,17 @@ class Import extends SystemAbstract
         if (isset($response->success) && $response->success === false) {
             $this->logger->error($response->message);
 
-            return '[ERROR] routes ' . $path . ': ' . $response->message;
+            $result->add(self::TYPE_ROUTES, Result::ACTION_FAILED, $path . ': ' . $response->message);
         } elseif (!empty($id)) {
-            return '[UPDATED] routes ' . $path;
+            $result->add(self::TYPE_ROUTES, Result::ACTION_UPDATED, $path);
         } else {
-            return '[CREATED] routes ' . $path;
+            $result->add(self::TYPE_ROUTES, Result::ACTION_CREATED, $path);
         }
     }
 
-    protected function importConfig(stdClass $config)
+    protected function importConfig(stdClass $config, Result $result)
     {
+        $count = 0;
         foreach ($config as $name => $value) {
             if (!is_scalar($value)) {
                 throw new RuntimeException('Config value must be scalar');
@@ -160,7 +160,7 @@ class Import extends SystemAbstract
             ]);
 
             if (!empty($id)) {
-                $this->connection->update('fusio_config', [
+                $count+= $this->connection->update('fusio_config', [
                     'value' => $value,
                 ], [
                     'id' => $id
@@ -170,10 +170,12 @@ class Import extends SystemAbstract
             }
         }
 
-        return '[UPDATED] config';
+        if ($count > 0) {
+            $result->add(self::TYPE_CONFIG, Result::ACTION_UPDATED, 'Changed ' . $count . ' values');
+        }
     }
 
-    protected function importClass($tableName, $className, $interface)
+    protected function importClass($tableName, $className, $interface, Result $result)
     {
         if (!is_string($className)) {
             throw new RuntimeException('Class name must be a string ' . gettype($className) . ' given');
@@ -191,13 +193,11 @@ class Import extends SystemAbstract
                     'class' => $class->getName(),
                 ]);
 
-                return '[REGISTERED] ' . $className;
+                $result->add('class', Result::ACTION_REGISTERED, $className);
             }
         } else {
             throw new RuntimeException('Class ' . $class->getName() . ' must implement the interface ' . $interface);
         }
-
-        return null;
     }
 
     protected function getReference($tableName, $name, $type)

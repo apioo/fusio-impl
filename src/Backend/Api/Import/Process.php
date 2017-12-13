@@ -73,7 +73,7 @@ class Process extends BackendApiAbstract
             return [
                 'success' => true,
                 'message' => 'Import successful',
-                'result'  => $result,
+                'result'  => $result->getLogs(),
             ];
         } catch (\Throwable $e) {
             $this->connection->rollback();

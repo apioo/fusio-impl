@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\System;
 
 use Fusio\Engine\Connector;
+use Fusio\Impl\Service\System\Import\Result;
 use Fusio\Impl\Table;
 use Psr\Log\LoggerInterface;
 use PSX\Sql\Condition;
@@ -62,9 +63,15 @@ class Migration
         $this->logger      = $logger;
     }
 
+    /**
+     * @param array $migration
+     * @param null $basePath
+     * @return \Fusio\Impl\Service\System\Import\Result
+     */
     public function execute(array $migration, $basePath = null)
     {
-        $result = [];
+        $result = new Result();
+
         foreach ($migration as $connectionId => $definitionFiles) {
             if (is_array($definitionFiles)) {
                 foreach ($definitionFiles as $definitionFile) {
@@ -75,7 +82,7 @@ class Migration
                         } catch (\Throwable $e) {
                             $this->logger->error($e->getMessage());
 
-                            $result[] = '[ERROR] ' . $connectionId . ' ' . $definitionFile . ': ' . $e->getMessage();
+                            $result->add(Deploy::TYPE_MIGRATION, Result::ACTION_FAILED, $connectionId . ' ' . $definitionFile . ': ' . $e->getMessage());
                         }
                     }
                 }
@@ -85,7 +92,7 @@ class Migration
         return $result;
     }
 
-    private function executeDefinition($connectionId, $path, $definitionFile, array &$result)
+    private function executeDefinition($connectionId, $path, $definitionFile, Result $result)
     {
         $connection = $this->connector->getConnection($connectionId);
         $hash       = sha1_file($path);
@@ -110,10 +117,10 @@ class Migration
                 'executeDate' => new \DateTime(),
             ]);
 
-            $result[] = '[EXECUTED] ' . $connectionId . ' ' . $definitionFile;
+            $result->add(Deploy::TYPE_MIGRATION, Result::ACTION_EXECUTED, $connectionId . ' ' . $definitionFile);
         } else {
             if ($deploy['fileHash'] != $hash) {
-                $result[] = '[SKIPPED] ' . $connectionId . ' ' . $definitionFile . ' (The file was already executed, but the content has changed)';
+                $result->add(Deploy::TYPE_MIGRATION, Result::ACTION_SKIPPED, $connectionId . ' ' . $definitionFile . ' (The file was already executed, but the content has changed)');
             }
         }
     }

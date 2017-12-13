@@ -107,18 +107,33 @@ class DeployCommand extends Command
             $this->connection->beginTransaction();
 
             $result = $this->deployService->deploy(file_get_contents($file), dirname($file));
+            $logs   = $result->getLogs();
 
-            $this->connection->commit();
-
-            $output->writeln('Deploy successful!');
-            $output->writeln('The following actions were done:');
-            $output->writeln('');
-
-            foreach ($result as $message) {
-                $output->writeln('- ' . $message);
+            foreach ($logs as $log) {
+                $output->writeln('- ' . $log);
             }
 
-            $return = 0;
+            if ($result->hasError()) {
+                $errors = $result->getErrors();
+
+                $output->writeln('');
+                $output->writeln('Deploy contained ' . count($errors) . ' errors!');
+                $output->writeln('');
+
+                foreach ($errors as $error) {
+                    $output->writeln('- ' . $error);
+                }
+
+                $return = 1;
+            } else {
+                $output->writeln('');
+                $output->writeln('Deploy successful!');
+                $output->writeln('');
+
+                $return = 0;
+            }
+
+            $this->connection->commit();
         } catch (\Throwable $e) {
             $this->connection->rollback();
 

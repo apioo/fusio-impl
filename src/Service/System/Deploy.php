@@ -62,7 +62,7 @@ class Deploy
     /**
      * @param string $data
      * @param string|null $basePath
-     * @return array
+     * @return \Fusio\Impl\Service\System\Import\Result
      */
     public function deploy($data, $basePath = null)
     {
@@ -96,15 +96,14 @@ class Deploy
         }
 
         // import definition
-        $json = json_encode($import);
-        $log  = $this->importService->import($json);
+        $result = $this->importService->import(json_encode($import));
 
         // migration
         $migration = isset($data[self::TYPE_MIGRATION]) ? $data[self::TYPE_MIGRATION] : [];
         $migration = IncludeDirective::resolve($migration, $basePath, self::TYPE_MIGRATION);
 
-        $log = array_merge($log, $this->migrationService->execute($migration, $basePath));
+        $result->merge($this->migrationService->execute($migration, $basePath));
 
-        return $log;
+        return $result;
     }
 }
