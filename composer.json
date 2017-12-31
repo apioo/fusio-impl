@@ -14,7 +14,7 @@
     "php": ">=7.0",
     "psx/psx": "^4.0",
     "psx/openssl": "^1.0",
-    "fusio/engine": "^1.0",
+    "fusio/engine": "^2.0",
     "fusio/adapter-sql": "^1.0",
     "fusio/adapter-v8": "^1.0",
     "fusio/adapter-util": "^1.0",
