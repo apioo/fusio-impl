@@ -12,7 +12,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "psx/psx": "^3.0",
+    "psx/psx": "^4.0",
     "psx/openssl": "^1.0",
     "fusio/engine": "^1.0",
     "fusio/adapter-sql": "^1.0",
