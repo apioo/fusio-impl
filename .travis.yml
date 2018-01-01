@@ -6,6 +6,7 @@ php:
 sudo: false
 services:
   - mysql
+  - postgresql
   - memcached
   - mongodb
 before_install:
@@ -19,4 +20,5 @@ script:
   - vendor/bin/phpunit
 env:
   - DB=mysql
+  - DB=pgsql
   - DB=sqlite
