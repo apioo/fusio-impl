@@ -51,7 +51,7 @@ class WelcomeTest extends ControllerDbTestCase
         $expect  = <<<JSON
 {
     "message": "Congratulations the installation of Fusio was successful",
-    "version": "{$version}",
+    "apiVersion": "{$version}",
     "links": [
         {
             "rel": "about",

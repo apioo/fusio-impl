@@ -40,7 +40,7 @@ class Welcome extends ActionAbstract
     {
         return $this->response->build(200, [], [
             'message' => 'Congratulations the installation of Fusio was successful',
-            'version' => Base::getVersion(),
+            'apiVersion' => Base::getVersion(),
             'links' => [[
                 'rel' => 'about',
                 'name' => 'http://fusio-project.org',
