@@ -6,7 +6,6 @@ php:
 sudo: false
 services:
   - mysql
-  - postgresql
 before_install:
   - phpenv config-add tests/config.ini
   - phpenv config-rm xdebug.ini
