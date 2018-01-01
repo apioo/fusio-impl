@@ -60,9 +60,4 @@ class DbTestCase extends \PHPUnit_Extensions_Database_TestCase
     {
         return Fixture::getDataSet();
     }
-
-    protected function getSetUpOperation()
-    {
-        return \PHPUnit_Extensions_Database_Operation_Factory::CLEAN_INSERT(true);
-    }
 }

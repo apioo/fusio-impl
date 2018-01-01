@@ -7,7 +7,6 @@ sudo: false
 services:
   - mysql
   - postgresql
-  - memcached
 before_install:
   - phpenv config-add tests/config.ini
   - phpenv config-rm xdebug.ini
@@ -15,10 +14,8 @@ install:
   - composer install
 before_script:
   - mysql -e 'create database fusio;'
-  - if [ $DB = 'pgsql' ]; then psql -c 'create database fusio;' -U postgres; fi;
 script:
   - vendor/bin/phpunit
 env:
   - DB=mysql
-  - DB=pgsql
   - DB=sqlite
