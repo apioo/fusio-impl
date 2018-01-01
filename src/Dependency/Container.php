@@ -153,7 +153,7 @@ class Container extends DefaultContainer
         // psx commands
         $application->add(new FrameworkConsole\ContainerCommand($this));
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
-        $application->add(new FrameworkConsole\ServeCommand($this->get('config'), $this->get('dispatch'), $this->get('console_reader')));
+        $application->add(new FrameworkConsole\ServeCommand($this));
 
         $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
         $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
