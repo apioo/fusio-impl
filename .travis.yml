@@ -8,7 +8,6 @@ services:
   - mysql
   - postgresql
   - memcached
-  - mongodb
 before_install:
   - phpenv config-add tests/config.ini
   - phpenv config-rm xdebug.ini
