@@ -106,7 +106,7 @@ function getConnectionParams($db)
     switch ($db) {
         case 'mysql':
             return [
-                'dbname'   => 'psx',
+                'dbname'   => 'fusio',
                 'user'     => 'root',
                 'password' => '',
                 'host'     => 'localhost',
@@ -116,7 +116,7 @@ function getConnectionParams($db)
 
         case 'pgsql':
             return [
-                'dbname'   => 'psx',
+                'dbname'   => 'fusio',
                 'user'     => 'root',
                 'password' => '',
                 'host'     => 'localhost',
