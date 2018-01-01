@@ -66,33 +66,20 @@ class Import extends SystemAbstract
             $this->importConfig($config, $result);
         }
 
-        if (isset($data->connection) && is_array($data->connection)) {
-            foreach ($data->connection as $entry) {
-                $this->importGeneral(self::TYPE_CONNECTION, $entry, $result);
-            }
-        }
+        foreach ($this->types as $type) {
+            $entries = isset($data->{$type}) ? $data->{$type} : null;
+            $method  = 'import' . ucfirst($type);
 
-        if (isset($data->schema) && is_array($data->schema)) {
-            foreach ($data->schema as $entry) {
-                $this->importGeneral(self::TYPE_SCHEMA, $entry, $result);
-            }
-        }
-
-        if (isset($data->action) && is_array($data->action)) {
-            foreach ($data->action as $entry) {
-                $this->importGeneral(self::TYPE_ACTION, $entry, $result);
-            }
-        }
-
-        if (isset($data->routes) && is_array($data->routes)) {
-            foreach ($data->routes as $entry) {
-                $this->importRoutes($entry, $result);
-            }
-        }
-
-        if (isset($data->cronjob) && is_array($data->cronjob)) {
-            foreach ($data->cronjob as $entry) {
-                $this->importGeneral(self::TYPE_CRONJOB, $entry, $result);
+            if (is_array($entries)) {
+                foreach ($entries as $entry) {
+                    if ($entry instanceof stdClass) {
+                        if (method_exists($this, $method)) {
+                            $this->$method($type, $entry, $result);
+                        } else {
+                            $this->importGeneral($type, $entry, $result);
+                        }
+                    }
+                }
             }
         }
 
@@ -123,7 +110,7 @@ class Import extends SystemAbstract
         }
     }
 
-    protected function importRoutes(stdClass $data, Result $result)
+    protected function importRoutes($type, stdClass $data, Result $result)
     {
         $path = $data->path;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_routes WHERE path = :path', [

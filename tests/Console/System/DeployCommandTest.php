@@ -199,6 +199,24 @@ JSON;
         $this->assertEquals('15 * * * *', $cronjob['cron']);
         $this->assertEquals(5, $cronjob['action']);
 
+        // check rate
+        $rate = $this->connection->fetchAssoc('SELECT id, priority, name, rateLimit, timespan FROM fusio_rate ORDER BY id DESC');
+
+        $this->assertEquals(5, $rate['id']);
+        $this->assertEquals(16, $rate['priority']);
+        $this->assertEquals('New-Rate', $rate['name']);
+        $this->assertEquals(3600, $rate['rateLimit']);
+        $this->assertEquals('PT1H', $rate['timespan']);
+
+        $rateAllocation = $this->connection->fetchAll('SELECT id, routeId, appId, authenticated, parameters FROM fusio_rate_allocation WHERE rateId = 5');
+
+        $this->assertEquals(1, count($rateAllocation));
+        $this->assertEquals(5, $rateAllocation[0]['id']);
+        $this->assertEquals(null, $rateAllocation[0]['routeId']);
+        $this->assertEquals(null, $rateAllocation[0]['appId']);
+        $this->assertEquals(true, $rateAllocation[0]['authenticated']);
+        $this->assertEquals('foo=bar', $rateAllocation[0]['parameters']);
+
         // check migration entries
         $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
 

@@ -80,6 +80,7 @@ class Deploy
             SystemAbstract::TYPE_ACTION     => new Deploy\Transformer\Action(),
             SystemAbstract::TYPE_ROUTES     => new Deploy\Transformer\Routes(),
             SystemAbstract::TYPE_CRONJOB    => new Deploy\Transformer\Cronjob(),
+            SystemAbstract::TYPE_RATE       => new Deploy\Transformer\Rate(),
         ];
 
         // resolve includes

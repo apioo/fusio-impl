@@ -19,40 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Schema;
+namespace Fusio\Impl\Service\System\Deploy\Transformer;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
-use Symfony\Component\Console\Tester\CommandTester;
+use Fusio\Impl\Service\System\Deploy\IncludeDirective;
+use Fusio\Impl\Service\System\Deploy\NameGenerator;
+use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
- * ExportCommandTest
+ * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExportCommandTest extends ControllerDbTestCase
+class Rate implements TransformerInterface
 {
-    public function getDataSet()
+    public function transform(array $data, \stdClass $import, $basePath)
     {
-        return Fixture::getDataSet();
+        $rate = isset($data[SystemAbstract::TYPE_RATE]) ? $data[SystemAbstract::TYPE_RATE] : [];
+
+        if (!empty($rate) && is_array($rate)) {
+            $result = [];
+            foreach ($rate as $name => $entry) {
+                $result[] = $this->transformRate($name, $entry, $basePath);
+            }
+            $import->rate = $result;
+        }
     }
 
-    public function testCommand()
+    protected function transformRate($name, $data, $basePath)
     {
-        $command = Environment::getService('console')->find('schema:export');
+        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_RATE);
+        $data['name'] = $name;
 
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'name'    => 'Collection-Schema',
-        ]);
-
-        $actual = $commandTester->getDisplay();
-        $expect = file_get_contents(__DIR__ . '/resource/export.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+        return $data;
     }
 }

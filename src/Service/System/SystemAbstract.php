@@ -45,6 +45,7 @@ abstract class SystemAbstract
     const TYPE_ACTION = 'action';
     const TYPE_ROUTES = 'routes';
     const TYPE_CRONJOB = 'cronjob';
+    const TYPE_RATE = 'rate';
 
     /**
      * @var \Fusio\Impl\Service\System\ApiExecutor
@@ -69,7 +70,14 @@ abstract class SystemAbstract
     /**
      * @var array
      */
-    protected $types = [self::TYPE_CONNECTION, self::TYPE_SCHEMA, self::TYPE_ACTION, self::TYPE_ROUTES, self::TYPE_CRONJOB];
+    protected $types = [
+        self::TYPE_CONNECTION,
+        self::TYPE_SCHEMA,
+        self::TYPE_ACTION,
+        self::TYPE_ROUTES,
+        self::TYPE_CRONJOB,
+        self::TYPE_RATE,
+    ];
 
     /**
      * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
@@ -94,29 +102,11 @@ abstract class SystemAbstract
 
     protected function transform($type, stdClass $entity)
     {
-        switch ($type) {
-            case self::TYPE_CONNECTION:
-                return $this->transformConnection($entity);
-                break;
-
-            case self::TYPE_SCHEMA:
-                return $this->transformSchema($entity);
-                break;
-
-            case self::TYPE_ACTION:
-                return $this->transformAction($entity);
-                break;
-
-            case self::TYPE_ROUTES:
-                return $this->transformRoutes($entity);
-                break;
-
-            case self::TYPE_CRONJOB:
-                return $this->transformCronjob($entity);
-                break;
-
-            default:
-                throw new RuntimeException('Invalid type');
+        $method = 'transform' . ucfirst($type);
+        if (in_array($type, $this->types) && method_exists($this, $method)) {
+            return $this->$method($entity);
+        } else {
+            throw new RuntimeException('Invalid type');
         }
     }
 
@@ -214,6 +204,14 @@ abstract class SystemAbstract
         if (!empty($entity->action)) {
             $entity->action = $this->getReference('fusio_action', $entity->action, self::TYPE_CRONJOB);
         }
+
+        return $entity;
+    }
+
+    protected function transformRate(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
 
         return $entity;
     }

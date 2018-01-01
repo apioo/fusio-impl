@@ -57,6 +57,14 @@ cronjob:
   New-Cron:
     cron: "15 * * * *"
     action: Test-Action
+rate:
+  New-Rate:
+    priority: 16
+    rateLimit: 3600
+    timespan: "PT1H"
+    allocation:
+      - authenticated: true
+        parameters: "foo=bar"
 migration:
   New-Connection:
     - v1_schema.php

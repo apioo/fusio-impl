@@ -49,7 +49,7 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             'name'    => 'bar',
-            'file'    => __DIR__ . '/schema.json',
+            'file'    => __DIR__ . '/resource/schema.json',
         ]);
 
         $actual = $commandTester->getDisplay();
@@ -62,7 +62,7 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals(4, $schema['id']);
         $this->assertEquals(1, $schema['status']);
         $this->assertEquals('bar', $schema['name']);
-        $this->assertJsonStringEqualsJsonString(file_get_contents(__DIR__ . '/schema.json'), $schema['source']);
+        $this->assertJsonStringEqualsJsonString(file_get_contents(__DIR__ . '/resource/schema.json'), $schema['source']);
         $this->assertInstanceOf(Schema::class, unserialize($schema['cache']));
     }
 }
