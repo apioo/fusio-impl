@@ -53,7 +53,7 @@ class DbTestCase extends \PHPUnit_Extensions_Database_TestCase
             $this->connection = self::$con;
         }
 
-        return $this->createDefaultDBConnection($this->connection->getWrappedConnection(), Environment::getService('config')->get('psx_sql_db'));
+        return $this->createDefaultDBConnection($this->connection->getWrappedConnection(), 'fusio');
     }
 
     public function getDataSet()
