@@ -1,0 +1,272 @@
+{
+  "routes": [
+    {
+      "path": "\/pets",
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "parameters": "pets-findPets-GET-query",
+              "responses": {
+                "200": "pets-findPets-GET-200-response"
+              },
+              "action": "pets-findPets-GET"
+            },
+            "POST": {
+              "active": true,
+              "public": true,
+              "request": "pets-addPet-POST-request",
+              "responses": {
+                "200": "pets-addPet-POST-200-response"
+              },
+              "action": "pets-addPet-POST"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "\/pets\/:id",
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "responses": {
+                "200": "pets-_id_-find_pet_by_id-GET-200-response"
+              },
+              "action": "pets-_id_-find_pet_by_id-GET"
+            },
+            "DELETE": {
+              "active": true,
+              "public": true,
+              "action": "pets-_id_-deletePet-DELETE"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "action": [
+    {
+      "name": "pets-findPets-GET",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-addPet-POST",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-_id_-find_pet_by_id-GET",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-_id_-deletePet-DELETE",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    }
+  ],
+  "schema": [
+    {
+      "name": "pets-findPets-GET-query",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "query",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      }
+    },
+    {
+      "name": "pets-findPets-GET-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "NewPet": {
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "type": "array",
+        "items": {
+          "title": "Pet",
+          "allOf": [
+            {
+              "$ref": "#\/definitions\/NewPet"
+            },
+            {
+              "$ref": "#\/definitions\/PetId"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "pets-addPet-POST-request",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "title": "NewPet",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "pets-addPet-POST-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "NewPet": {
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "title": "Pet",
+        "allOf": [
+          {
+            "$ref": "#\/definitions\/NewPet"
+          },
+          {
+            "$ref": "#\/definitions\/PetId"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pets-_id_-find_pet_by_id-GET-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "NewPet": {
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "title": "Pet",
+        "allOf": [
+          {
+            "$ref": "#\/definitions\/NewPet"
+          },
+          {
+            "$ref": "#\/definitions\/PetId"
+          }
+        ]
+      }
+    }
+  ]
+}

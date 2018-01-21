@@ -1,0 +1,378 @@
+{
+  "routes": [
+    {
+      "path": "\/pets",
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "parameters": "pets-findPets-GET-query",
+              "responses": {
+                "200": "pets-findPets-GET-200-response",
+                "500": "pets-findPets-GET-500-response"
+              },
+              "action": "pets-findPets-GET"
+            },
+            "POST": {
+              "active": true,
+              "public": true,
+              "request": "pets-addPet-POST-request",
+              "responses": {
+                "200": "pets-addPet-POST-200-response",
+                "500": "pets-addPet-POST-500-response"
+              },
+              "action": "pets-addPet-POST"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "\/pets\/:id",
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "responses": {
+                "200": "pets-_id_-findPetById-GET-200-response",
+                "500": "pets-_id_-findPetById-GET-500-response"
+              },
+              "action": "pets-_id_-findPetById-GET"
+            },
+            "DELETE": {
+              "active": true,
+              "public": true,
+              "responses": {
+                "500": "pets-_id_-deletePet-DELETE-500-response"
+              },
+              "action": "pets-_id_-deletePet-DELETE"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "action": [
+    {
+      "name": "pets-findPets-GET",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-addPet-POST",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-_id_-findPetById-GET",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "200",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    },
+    {
+      "name": "pets-_id_-deletePet-DELETE",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "statusCode": "",
+        "response": "{\"message\":\"Test implementation\"}"
+      }
+    }
+  ],
+  "schema": [
+    {
+      "name": "pets-findPets-GET-query",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "query",
+        "properties": {
+          "tags": {
+            "type": "array",
+            "description": "tags to filter by",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "description": "maximum number of results to return",
+            "format": "int32"
+          }
+        }
+      }
+    },
+    {
+      "name": "pets-findPets-GET-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "Pet": {
+            "type": "object",
+            "title": "Pet",
+            "allOf": [
+              {
+                "$ref": "#\/definitions\/NewPet"
+              },
+              {
+                "$ref": "#\/definitions\/PetId"
+              }
+            ]
+          },
+          "NewPet": {
+            "type": "object",
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "type": "array",
+        "items": {
+          "$ref": "#\/definitions\/Pet"
+        }
+      }
+    },
+    {
+      "name": "pets-findPets-GET-500-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "ErrorModel",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    {
+      "name": "pets-addPet-POST-request",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "NewPet",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "pets-addPet-POST-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "NewPet": {
+            "type": "object",
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Pet",
+        "allOf": [
+          {
+            "$ref": "#\/definitions\/NewPet"
+          },
+          {
+            "$ref": "#\/definitions\/PetId"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pets-addPet-POST-500-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "ErrorModel",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    {
+      "name": "pets-_id_-findPetById-GET-200-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "definitions": {
+          "NewPet": {
+            "type": "object",
+            "title": "NewPet",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "PetId": {
+            "title": "PetId",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          }
+        },
+        "type": "object",
+        "title": "Pet",
+        "allOf": [
+          {
+            "$ref": "#\/definitions\/NewPet"
+          },
+          {
+            "$ref": "#\/definitions\/PetId"
+          }
+        ]
+      }
+    },
+    {
+      "name": "pets-_id_-findPetById-GET-500-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "ErrorModel",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    {
+      "name": "pets-_id_-deletePet-DELETE-500-response",
+      "source": {
+        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+        "id": "urn:schema.phpsx.org#",
+        "type": "object",
+        "title": "ErrorModel",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    }
+  ]
+}
