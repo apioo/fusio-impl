@@ -41,15 +41,17 @@ class Routes implements TransformerInterface
         $routes = isset($data[SystemAbstract::TYPE_ROUTES]) ? $data[SystemAbstract::TYPE_ROUTES] : [];
 
         if (!empty($routes) && is_array($routes)) {
-            $result = [];
+            $priority = count($routes);
+            $result   = [];
             foreach ($routes as $path => $entry) {
-                $result[] = $this->transformRoutes($path, $entry, $basePath);
+                $result[] = $this->transformRoutes($priority, $path, $entry, $basePath);
+                $priority--;
             }
             $import->routes = $result;
         }
     }
 
-    protected function transformRoutes($path, $data, $basePath)
+    protected function transformRoutes($priority, $path, $data, $basePath)
     {
         $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
 
@@ -65,8 +67,9 @@ class Routes implements TransformerInterface
         }
 
         return [
-            'path'   => $path,
-            'config' => $config,
+            'priority' => $priority,
+            'path'     => $path,
+            'config'   => $config,
         ];
     }
 

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Impl\Backend\Filter\Routes\Path;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -45,9 +46,24 @@ class Routes extends TableAbstract
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'status' => self::TYPE_INT,
+            'priority' => self::TYPE_INT,
             'methods' => self::TYPE_VARCHAR,
             'path' => self::TYPE_VARCHAR,
             'controller' => self::TYPE_VARCHAR,
         );
+    }
+    
+    public function getMaxPriority()
+    {
+        $sql = 'SELECT MAX(priority)
+                  FROM fusio_routes 
+                 WHERE status = :status 
+                   AND priority < 0x1000000';
+
+        $params = [
+            'status' => self::STATUS_ACTIVE,
+        ];
+
+        return $this->connection->fetchColumn($sql, $params);
     }
 }

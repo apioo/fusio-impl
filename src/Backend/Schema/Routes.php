@@ -49,7 +49,9 @@ class Routes extends SchemaAbstract
 
         $sb = $this->getSchemaBuilder('routes');
         $sb->integer('id');
+        $sb->integer('priority');
         $sb->string('path');
+        $sb->string('controller');
         $sb->arrayType('config')
             ->setItems($version);
 

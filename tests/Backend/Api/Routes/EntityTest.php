@@ -141,7 +141,13 @@ class EntityTest extends ControllerDbTestCase
                     "id": {
                         "type": "integer"
                     },
+                    "priority": {
+                        "type": "integer"
+                    },
                     "path": {
+                        "type": "string"
+                    },
+                    "controller": {
                         "type": "string"
                     },
                     "config": {

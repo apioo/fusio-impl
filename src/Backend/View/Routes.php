@@ -62,7 +62,7 @@ class Routes extends ViewAbstract
             'totalResults' => $this->getTable(Table\Routes::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Routes::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Routes::class), 'getAll'], [$startIndex, $count, 'priority', Sql::SORT_DESC, $condition], [
                 'id' => 'id',
                 'status' => 'status',
                 'path' => 'path',

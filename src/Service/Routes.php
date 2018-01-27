@@ -76,7 +76,7 @@ class Routes
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($path, $config, UserContext $context)
+    public function create($priority, $path, $controller, $config, UserContext $context)
     {
         // check whether route exists
         $condition  = new Condition();
@@ -89,15 +89,30 @@ class Routes
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
+        if ($priority === null) {
+            $priority = $this->routesTable->getMaxPriority() + 1;
+        } elseif ($priority >= 0x1000000) {
+            throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
+        }
+
+        if (!empty($controller)) {
+            if (!class_exists($controller)) {
+                throw new StatusCode\BadRequestException('Provided controller does not exist');
+            }
+        } else {
+            $controller = SchemaApiController::class;
+        }
+
         try {
             $this->routesTable->beginTransaction();
 
             // create route
             $record = [
                 'status'     => Table\Routes::STATUS_ACTIVE,
+                'priority'   => $priority,
                 'methods'    => 'ANY',
                 'path'       => $path,
-                'controller' => SchemaApiController::class,
+                'controller' => $controller,
             ];
 
             $this->routesTable->create($record);
@@ -117,7 +132,7 @@ class Routes
         $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config, $context));
     }
 
-    public function update($routeId, $config, UserContext $context)
+    public function update($routeId, $priority, $config, UserContext $context)
     {
         $route = $this->routesTable->get($routeId);
 
@@ -129,8 +144,22 @@ class Routes
             throw new StatusCode\GoneException('Route was deleted');
         }
 
+        if ($priority === null) {
+            $priority = $this->routesTable->getMaxPriority() + 1;
+        } elseif ($priority >= 0x1000000) {
+            throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
+        }
+
         try {
             $this->routesTable->beginTransaction();
+
+            // update route
+            $record = [
+                'id'       => $route->id,
+                'priority' => $priority,
+            ];
+
+            $this->routesTable->update($record);
 
             $this->configService->handleConfig($route->id, $route->path, $config, $context);
 

@@ -95,7 +95,9 @@ class Collection extends BackendApiAbstract
     protected function doPost($record)
     {
         $this->routesService->create(
+            $record->priority,
             $record->path,
+            $record->controller,
             $record->config,
             $this->userContext
         );

@@ -106,6 +106,7 @@ class Entity extends BackendApiAbstract
     {
         $this->routesService->update(
             (int) $this->getUriFragment('route_id'),
+            $record->priority,
             $record->config,
             $this->userContext
         );
