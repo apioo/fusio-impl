@@ -57,29 +57,25 @@ class RoutingParser implements LocationFinderInterface
         $paths  = Path::getReserved();
         $found  = false;
         $path   = $request->getUri()->getPath();
-        $params = [
-            'status' => TableRoutes::STATUS_ACTIVE,
-        ];
+        $params = ['status' => TableRoutes::STATUS_ACTIVE];
 
-        // check whether we have a known system path
-        foreach ($paths as $systemPath) {
+        // check whether we have a known system path if yes select only those
+        // routes matching the specific priority
+        foreach ($paths as $value => $systemPath) {
             if (strpos($path, '/' . $systemPath) === 0) {
                 $found = true;
-                $sql  .= 'AND path LIKE :path';
-                $params['path'] = '/' . $systemPath . '%';
+                $sql  .= 'AND (priority >= ' . $value . ' AND priority < ' . ($value << 1) . ') ';
                 break;
             }
         }
 
         // if not we only want to search the user routes and exclude all system
-        // paths
+        // paths means all priorities under 0x1000000
         if (!$found) {
-            foreach ($paths as $index => $systemPath) {
-                $key = 'path_' . $index;
-                $sql.= 'AND path NOT LIKE :' . $key . ' ';
-                $params[$key] = '/' . $systemPath . '%';
-            }
+            $sql.= 'AND priority < 0x1000000 ';
         }
+
+        $sql.= 'ORDER BY priority DESC';
 
         $method      = $request->getMethod();
         $pathMatcher = new PathMatcher($path);

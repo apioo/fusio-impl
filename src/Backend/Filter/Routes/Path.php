@@ -36,11 +36,11 @@ class Path extends FilterAbstract
      * @var array
      */
     protected static $reserved = [
-        'backend',
-        'consumer',
-        'doc',
-        'authorization',
-        'export'
+        0x10000000 => 'backend',
+        0x8000000  => 'consumer',
+        0x4000000  => 'authorization',
+        0x2000000  => 'doc',
+        0x1000000  => 'export'
     ];
 
     /**

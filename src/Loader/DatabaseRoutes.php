@@ -63,7 +63,8 @@ class DatabaseRoutes implements RoutingParserInterface
                            path,
                            controller
                       FROM fusio_routes
-                     WHERE status = :status';
+                     WHERE status = :status
+                  ORDER BY priority DESC';
 
             $collection = new RoutingCollection();
             $result     = $this->connection->fetchAll($sql, ['status' => TableRoutes::STATUS_ACTIVE]);
