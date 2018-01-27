@@ -1,7 +1,7 @@
 {
   "routings": [
     {
-      "path": "\/",
+      "path": "\/inspect\/:foo",
       "methods": [
         "GET",
         "POST",
@@ -23,7 +23,7 @@
       "version": "*"
     },
     {
-      "path": "\/inspect\/:foo",
+      "path": "\/",
       "methods": [
         "GET",
         "POST",
