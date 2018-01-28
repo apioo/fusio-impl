@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
@@ -94,14 +95,30 @@ class Connection
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
-        $this->testConnection($class, $config);
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
+
+        // call lifecycle
+        if ($factory instanceof LifecycleInterface) {
+            $factory->onSetup($name, $parameters);
+        }
+
+        $conn = $factory->getConnection($parameters);
+
+        // test connection
+        $this->testConnection($factory, $conn);
+
+        // call lifecycle
+        if ($factory instanceof LifecycleInterface) {
+            $factory->onCreate($name, $parameters, $conn);
+        }
 
         // create connection
         $record = [
             'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $name,
             'class'  => $class,
-            'config' => self::encryptConfig($config, $this->secretKey),
+            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->create($record);
@@ -123,13 +140,25 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $this->testConnection($class, $config);
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($class);
 
+        $conn = $factory->getConnection($parameters);
+
+        // test connection
+        $this->testConnection($factory, $conn);
+
+        // call lifecycle
+        if ($factory instanceof LifecycleInterface) {
+            $factory->onUpdate($name, $parameters, $conn);
+        }
+
+        // update connection
         $record = [
             'id'     => $connection->id,
             'name'   => $name,
             'class'  => $class,
-            'config' => self::encryptConfig($config, $this->secretKey),
+            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->update($record);
@@ -149,6 +178,23 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
+        $config = self::decryptConfig($connection['config'], $this->secretKey);
+
+        $parameters = new Parameters($config);
+        $factory    = $this->connectionFactory->factory($connection['class']);
+
+        // call lifecycle
+        if ($factory instanceof LifecycleInterface) {
+            $factory->onTeardown($connection->name, $parameters);
+        }
+
+        $conn = $factory->getConnection($parameters);
+
+        // call lifecycle
+        if ($factory instanceof LifecycleInterface) {
+            $factory->onDelete($connection->name, $parameters, $conn);
+        }
+
         $record = [
             'id'     => $connection->id,
             'status' => Table\Connection::STATUS_DELETED,
@@ -159,11 +205,8 @@ class Connection
         $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection, $context));
     }
 
-    protected function testConnection($class, array $config)
+    protected function testConnection($factory, $connection)
     {
-        $factory    = $this->connectionFactory->factory($class);
-        $connection = $factory->getConnection(new Parameters($config));
-
         if (!is_object($connection)) {
             throw new StatusCode\BadRequestException('Invalid connection');
         }
