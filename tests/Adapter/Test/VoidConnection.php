@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Adapter\Test;
 
+use Fusio\Engine\Connection\DeploymentInterface;
+use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -33,7 +35,7 @@ use Fusio\Engine\ParametersInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class VoidConnection implements ConnectionInterface
+class VoidConnection implements ConnectionInterface, DeploymentInterface, LifecycleInterface
 {
     public function getName()
     {
@@ -48,5 +50,25 @@ class VoidConnection implements ConnectionInterface
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newInput('foo', 'Foo', 'text', 'Description'));
+    }
+
+    public function onUp($name, ParametersInterface $config)
+    {
+    }
+
+    public function onDown($name, ParametersInterface $config)
+    {
+    }
+
+    public function onCreate($name, ParametersInterface $config, $connection)
+    {
+    }
+
+    public function onUpdate($name, ParametersInterface $config, $connection)
+    {
+    }
+
+    public function onDelete($name, ParametersInterface $config, $connection)
+    {
     }
 }
