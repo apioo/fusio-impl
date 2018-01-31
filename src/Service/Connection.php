@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\Connection\DeploymentInterface;
 use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;
@@ -99,8 +100,8 @@ class Connection
         $factory    = $this->connectionFactory->factory($class);
 
         // call lifecycle
-        if ($factory instanceof LifecycleInterface) {
-            $factory->onSetup($name, $parameters);
+        if ($factory instanceof DeploymentInterface) {
+            $factory->onUp($name, $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
@@ -184,8 +185,8 @@ class Connection
         $factory    = $this->connectionFactory->factory($connection['class']);
 
         // call lifecycle
-        if ($factory instanceof LifecycleInterface) {
-            $factory->onTeardown($connection->name, $parameters);
+        if ($factory instanceof DeploymentInterface) {
+            $factory->onDown($connection->name, $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
