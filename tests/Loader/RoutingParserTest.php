@@ -39,6 +39,20 @@ use PSX\Uri\Uri;
  */
 class RoutingParserTest extends DbTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        // add route with NULL priority
+        $this->connection->insert('fusio_routes', [
+            'status' => 1,
+            'priority' => null,
+            'methods' => 'ANY',
+            'path' => '/test',
+            'controller' => SchemaApiController::class
+        ]);
+    }
+
     /**
      * @dataProvider resolveProvider
      */
@@ -59,6 +73,7 @@ class RoutingParserTest extends DbTestCase
         $data = [
             ['GET', '/', SchemaApiController::class],
             ['GET', '/foo', SchemaApiController::class],
+            ['GET', '/test', SchemaApiController::class],
         ];
 
         $version = Installer::getLatestVersion();
