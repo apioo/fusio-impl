@@ -88,7 +88,7 @@ class Installer
     /**
      * @param \Fusio\Impl\Database\VersionInterface $version
      */
-    private function executeInstall(VersionInterface $version)
+    protected function executeInstall(VersionInterface $version)
     {
         $this->connection->beginTransaction();
 
@@ -100,7 +100,7 @@ class Installer
     /**
      * @param \Fusio\Impl\Database\VersionInterface $version
      */
-    private function executeUpgrade(VersionInterface $version)
+    protected function executeUpgrade(VersionInterface $version)
     {
         $this->connection->beginTransaction();
 
@@ -116,13 +116,9 @@ class Installer
      * @param \Fusio\Impl\Database\VersionInterface $version
      * @param string $schemaVersion
      */
-    private function executeQueries(VersionInterface $version, $schemaVersion)
+    protected function executeQueries(VersionInterface $version, $schemaVersion)
     {
-        $this->connection->beginTransaction();
-
-        $fromSchema = $this->connection->getSchemaManager()->createSchema();
-        $toSchema   = $version->getSchema();
-        $queries    = $fromSchema->getMigrateToSql($toSchema, $this->connection->getDatabasePlatform());
+        $queries = $this->getQueries($version);
 
         foreach ($queries as $query) {
             $this->connection->query($query);
@@ -135,8 +131,22 @@ class Installer
             'version'     => $schemaVersion,
             'installDate' => $now->format('Y-m-d H:i:s'),
         ]);
+    }
 
-        $this->connection->commit();
+    /**
+     * Returns an array of SQL statements to adjust the current database to the
+     * schema
+     * 
+     * @param \Fusio\Impl\Database\VersionInterface $version
+     * @return array
+     */
+    protected function getQueries(VersionInterface $version)
+    {
+        $fromSchema = $this->connection->getSchemaManager()->createSchema();
+        $toSchema   = $version->getSchema();
+        $queries    = $fromSchema->getMigrateToSql($toSchema, $this->connection->getDatabasePlatform());
+
+        return $queries;
     }
 
     /**

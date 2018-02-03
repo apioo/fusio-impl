@@ -25,10 +25,11 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Base;
 use Fusio\Impl\Database\Installer;
+use Fusio\Impl\Database\Preview;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * InstallCommand
@@ -56,39 +57,46 @@ class InstallCommand extends Command
         $this
             ->setName('system:install')
             ->setAliases(['install'])
-            ->setDescription('Installs or upgrades the database to the latest schema');
+            ->setDescription('Installs or upgrades the database to the latest schema')
+            ->addOption('preview', 'p', InputOption::VALUE_NONE, 'Shows all SQL queries which are executed');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $fromSchema = $this->connection->getSchemaManager()->createSchema();
-        $tableCount = count($fromSchema->getTableNames());
+        $preview    = $input->getOption('preview');
 
-        if ($tableCount > 0) {
-            $helper   = $this->getHelper('question');
-            $question = new ConfirmationQuestion('The provided database "' . $fromSchema->getName() . '" contains already ' . $tableCount . ' tables.' . "\n" . 'The installation script will DELETE all tables on the database which do not belong to the Fusio schema.' . "\n" . 'Do you want to continue with this action (y|n)?', false);
-
-            if (!$helper->ask($input, $output, $question)) {
-                return;
-            }
+        if ($preview) {
+            $installer = new Preview($this->connection, function($query) use ($output){
+                $output->writeln($query);
+            });
+        } else {
+            $installer = new Installer($this->connection);
         }
 
         // execute install or upgrade
         $currentVersion = $this->getInstalledVersion($fromSchema);
-        $installer      = new Installer($this->connection);
 
         if ($currentVersion !== null) {
-            $output->writeln('Upgrade from version ' . $currentVersion . ' to ' . Base::getVersion());
+            if (!$preview) {
+                $output->writeln('Upgrade from version ' . $currentVersion . ' to ' . Base::getVersion());
+            }
 
             $installer->upgrade($currentVersion, Base::getVersion());
 
-            $output->writeln('Upgrade successful');
+            if (!$preview) {
+                $output->writeln('Upgrade successful');
+            }
         } else {
-            $output->writeln('Install version ' . Base::getVersion());
+            if (!$preview) {
+                $output->writeln('Install version ' . Base::getVersion());
+            }
 
             $installer->install(Base::getVersion());
 
-            $output->writeln('Installation successful');
+            if (!$preview) {
+                $output->writeln('Installation successful');
+            }
         }
     }
 
