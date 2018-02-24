@@ -22,20 +22,23 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Engine\Context as EngineContext;
-use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
-use Fusio\Engine\ResponseInterface;
-use Fusio\Impl\Authorization\Oauth2Filter;
+use Fusio\Engine\Model;
+use Fusio\Impl\Filter\Authentication;
+use Fusio\Impl\Filter\Logger;
+use Fusio\Impl\Filter\RequestLimit;
+use Fusio\Impl\Filter\AssertMethod;
 use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Framework\Filter\CORS;
-use PSX\Framework\Filter\UserAgentEnforcer;
-use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Http\Filter\CORS;
+use PSX\Http\Filter\UserAgentEnforcer;
+use PSX\Http\RequestInterface;
 use PSX\Record\Record;
 
 /**
@@ -50,6 +53,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     const SCHEMA_PASSTHRU = 'passthru';
 
     /**
+     * @var \Fusio\Impl\Loader\Context
+     */
+    protected $context;
+
+    /**
      * @Inject
      * @var \Doctrine\DBAL\Connection
      */
@@ -60,24 +68,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * @var \Fusio\Engine\Processor
      */
     protected $processor;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Logger
-     */
-    protected $apiLogger;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Repository\AppInterface
-     */
-    protected $appRepository;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Repository\UserInterface
-     */
-    protected $userRepository;
 
     /**
      * @Inject
@@ -98,64 +88,23 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     protected $rateService;
 
     /**
-     * @var \Fusio\Engine\Model\AppInterface
+     * @Inject
+     * @var \Fusio\Engine\Repository\AppInterface
      */
-    protected $app;
+    protected $appRepository;
 
     /**
-     * @var \Fusio\Engine\Model\UserInterface
+     * @Inject
+     * @var \Fusio\Engine\Repository\UserInterface
      */
-    protected $user;
+    protected $userRepository;
 
     /**
-     * @var integer
+     * @return array
      */
-    protected $appId;
-
-    /**
-     * @var integer
-     */
-    protected $userId;
-
-    /**
-     * @var integer
-     */
-    protected $logId;
-
-    private $activeMethod;
-
-    public function onLoad()
-    {
-        parent::onLoad();
-
-        // get request ip
-        $remoteIp = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-
-        // load app and user
-        $this->app  = $this->getApp($this->appId);
-        $this->user = $this->getUser($this->userId);
-
-        // check rate limit
-        $this->rateService->assertLimit(
-            $remoteIp,
-            $this->context->get('fusio.routeId'),
-            $this->app,
-            $this->response
-        );
-
-        // log request
-        $this->logId = $this->apiLogger->log(
-            $this->context->get('fusio.routeId'),
-            $this->appId,
-            $this->userId,
-            $remoteIp,
-            $this->request
-        );
-    }
-
     public function getPreFilter()
     {
-        $filter = array();
+        $filter = [];
 
         // it is required for every request to have an user agent which
         // identifies the client
@@ -167,22 +116,13 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $filter[] = new CORS($allowOrigin);
         }
 
-        // authorization is required if the method is not public. In case we get
-        // a header from the client we also add the oauth2 filter so that the
-        // client gets maybe another rate limit
-        $authorization = $this->request->getHeader('Authorization');
-        if ($this->needsAuthorization() || !empty($authorization)) {
-            $filter[] = new Oauth2Filter(
-                $this->connection,
-                $this->request->getMethod(),
-                $this->context->get('fusio.routeId'),
-                $this->config->get('fusio_project_key'),
-                function ($accessToken) {
-                    $this->appId  = $accessToken['appId'];
-                    $this->userId = $accessToken['userId'];
-                }
-            );
-        }
+        $filter[] = new AssertMethod($this->routesMethodService, $this->context);
+
+        $filter[] = new Authentication($this->connection, $this->context, $this->config->get('fusio_project_key'));
+
+        $filter[] = new RequestLimit($this->rateService, $this->appRepository, $this->context);
+
+        $filter[] = new Logger($this->connection, $this->context);
 
         return $filter;
     }
@@ -198,199 +138,109 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     public function getDocumentation($version = null)
     {
         return $this->routesMethodService->getDocumentation(
-            $this->context->get('fusio.routeId'),
+            $this->context->getRouteId(),
             $version,
-            $this->context->get(Context::KEY_PATH)
+            $this->context->getPath()
         );
     }
 
-    protected function doGet()
+    /**
+     * @inheritdoc
+     */
+    protected function doGet(HttpContextInterface $context)
     {
-        return $this->executeAction(new Record());
+        return $this->executeAction(new Record(), $context);
     }
 
-    protected function doPost($record)
+    /**
+     * @inheritdoc
+     */
+    protected function doPost($record, HttpContextInterface $context)
     {
-        return $this->executeAction($record);
+        return $this->executeAction($record, $context);
     }
 
-    protected function doPut($record)
+    /**
+     * @inheritdoc
+     */
+    protected function doPut($record, HttpContextInterface $context)
     {
-        return $this->executeAction($record);
+        return $this->executeAction($record, $context);
     }
 
-    protected function doPatch($record)
+    /**
+     * @inheritdoc
+     */
+    protected function doPatch($record, HttpContextInterface $context)
     {
-        return $this->executeAction($record);
+        return $this->executeAction($record, $context);
     }
 
-    protected function doDelete($record)
+    /**
+     * @inheritdoc
+     */
+    protected function doDelete($record, HttpContextInterface $context)
     {
-        return $this->executeAction($record);
+        return $this->executeAction($record, $context);
     }
 
-    protected function parseRequest(MethodAbstract $method)
+    /**
+     * @inheritdoc
+     */
+    protected function parseRequest(RequestInterface $request, MethodAbstract $method)
     {
         if ($method->hasRequest()) {
             if ($method->getRequest()->getDefinition()->getTitle() == self::SCHEMA_PASSTHRU) {
-                return new PassthruRecord($this->getBody());
+                return new PassthruRecord($this->requestReader->getBody($request));
             } else {
-                return $this->getBodyAs($method->getRequest());
+                return $this->requestReader->getBodyAs($request, $method->getRequest(), $this->getValidator($method));
             }
         } else {
             return new Record();
         }
     }
 
-    private function executeAction($record)
+    /**
+     * @param mixed $record
+     * @param \PSX\Http\Environment\HttpContextInterface $httpContext
+     * @return \PSX\Http\Environment\HttpResponseInterface|null
+     */
+    private function executeAction($record, HttpContextInterface $httpContext)
     {
         $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $method   = $this->getActiveMethod();
-        $context  = new EngineContext($this->context->get('fusio.routeId'), $baseUrl, $this->app, $this->user);
+        $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->getApp(), $this->getUser());
 
-        if ($this->request->getMethod() === 'HEAD') {
-            // in case of an HEAD request we execute the action with an regular
-            // GET method and then remove the body
-            $httpRequest = clone $this->request;
-            $httpRequest->setMethod('GET');
-        } else {
-            $httpRequest = $this->request;
-        }
-
-        $request  = new Request($httpRequest, $this->uriFragments, $this->getParameters(), $record);
+        $request  = new Request($httpContext, $record);
         $response = null;
-
-        $actionId    = $method['action'];
-        $actionCache = $method['actionCache'];
+        $method   = $this->context->getMethod();
+        $actionId = $method['action'];
+        $cache    = $method['actionCache'];
 
         if ($actionId > 0) {
-            $startTime = microtime();
-
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($actionCache)) {
+            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {
                 // if the method is not in dev mode we load the action from the
                 // cache
-                $repository = Repository\ActionMemory::fromJson($actionCache);
+                $this->processor->push(Repository\ActionMemory::fromJson($cache));
 
-                $this->processor->push($repository);
-
-                try {
-                    $response = $this->processor->execute($actionId, $request, $context);
-                } catch (\Throwable $e) {
-                    $this->apiLogger->appendError($this->logId, $e);
-
-                    throw $e;
-                }
+                $response = $this->processor->execute($actionId, $request, $context);
 
                 $this->processor->pop();
             } else {
-                // if the action is in dev mode we load the values direct from
-                // the table
-                try {
-                    $response = $this->processor->execute($actionId, $request, $context);
-                } catch (\Throwable $e) {
-                    $this->apiLogger->appendError($this->logId, $e);
-
-                    throw $e;
-                }
+                $response = $this->processor->execute($actionId, $request, $context);
             }
-
-            $endTime = microtime();
-
-            $this->apiLogger->setExecutionTime($this->logId, $startTime, $endTime);
         } else {
             throw new StatusCode\ServiceUnavailableException('No action provided');
         }
 
-        if ($response instanceof ResponseInterface) {
-            $statusCode = $response->getStatusCode();
-            $headers    = $response->getHeaders();
-
-            if (!empty($statusCode)) {
-                $this->response->setStatus($statusCode);
-            }
-
-            if (!empty($headers)) {
-                $this->response->setHeaders($headers);
-            }
-
-            return $response->getBody();
-        } else {
-            throw new StatusCode\InternalServerErrorException('Invalid action response');
-        }
-    }
-
-    private function getActiveMethod()
-    {
-        if ($this->activeMethod) {
-            return $this->activeMethod;
-        }
-
-        $routeId    = $this->context->get('fusio.routeId');
-        $methodName = $this->request->getMethod();
-
-        // in case of HEAD we use the schema of the GET request
-        if ($methodName === 'HEAD') {
-            $methodName = 'GET';
-        }
-
-        $version = $this->getSubmittedVersionNumber();
-        $method  = $this->routesMethodService->getMethod($routeId, $version, $methodName);
-
-        if (empty($method)) {
-            $methods = $this->routesMethodService->getAllowedMethods($routeId, $version);
-            $allowed = ['OPTIONS'];
-            if (in_array('GET', $methods)) {
-                $allowed[] = 'HEAD';
-            }
-
-            $allowedMethods = array_merge($allowed, $methods);
-
-            throw new StatusCode\MethodNotAllowedException('Given request method is not supported', $allowedMethods);
-        }
-
-        return $this->activeMethod = $method;
+        return $response;
     }
 
     /**
-     * Returns the version number which was submitted by the client in the
-     * accept header field
-     *
-     * @return integer
-     */
-    private function getSubmittedVersionNumber()
-    {
-        $accept  = $this->getHeader('Accept');
-        $matches = array();
-
-        preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
-
-        return isset($matches[2]) ? $matches[2] : null;
-    }
-
-    /**
-     * Returns whether the current request needs authorization. If yes an 
-     * authorization header is required. For options requests we always return 
-     * false
-     * 
-     * @return boolean
-     */
-    private function needsAuthorization()
-    {
-        if ($this->request->getMethod() === 'OPTIONS') {
-            return false;
-        } else {
-            $method = $this->getActiveMethod();
-            return !$method['public'];
-        }
-    }
-
-    /**
-     * @param integer $appId
      * @return \Fusio\Engine\Model\AppInterface
      */
-    private function getApp($appId)
+    private function getApp()
     {
-        $app = $this->appRepository->get($appId);
+        $app = $this->appRepository->get($this->context->getAppId());
 
         if (!$app instanceof Model\AppInterface) {
             $app = new Model\App();
@@ -402,12 +252,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     }
 
     /**
-     * @param integer $userId
      * @return \Fusio\Engine\Model\UserInterface
      */
-    private function getUser($userId)
+    private function getUser()
     {
-        $user = $this->userRepository->get($userId);
+        $user = $this->userRepository->get($this->context->getUserId());
 
         if (!$user instanceof Model\UserInterface) {
             $user = new Model\User();
