@@ -26,9 +26,9 @@ use Fusio\Engine\Factory\Resolver\PhpClass;
 use PSX\Api\Parser;
 use PSX\Api\Resource;
 use PSX\Json;
+use PSX\Schema\Generator;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
 use PSX\Schema\Schema;
-use PSX\Schema\Generator;
 
 /**
  * Class which uses the psx api classes to parse and transform an API 
