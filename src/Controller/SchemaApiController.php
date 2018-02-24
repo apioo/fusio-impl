@@ -22,13 +22,13 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Engine\Context as EngineContext;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
-use Fusio\Engine\Model;
+use Fusio\Impl\Filter\AssertMethod;
 use Fusio\Impl\Filter\Authentication;
 use Fusio\Impl\Filter\Logger;
 use Fusio\Impl\Filter\RequestLimit;
-use Fusio\Impl\Filter\AssertMethod;
 use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
