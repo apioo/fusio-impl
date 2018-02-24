@@ -34,8 +34,10 @@ class ResourceListing extends ControllerDocumentation
 {
     protected function newContext(array $route)
     {
-        $context = parent::newContext($route);
-        $context->set('fusio.routeId', $route[3]);
+        $context = new Context();
+        $context->setPath($route[1]);
+        $context->setSource($route[2]);
+        $context->setRouteId($route[3]);
 
         return $context;
     }

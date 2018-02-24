@@ -25,6 +25,7 @@ use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\EventListener\AuditListener;
+use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Loader\DatabaseRoutes;
 use Fusio\Impl\Loader\Filter\ExternalFilter;
 use Fusio\Impl\Loader\Filter\InternalFilter;
@@ -219,6 +220,10 @@ class Container extends DefaultContainer
             'fusio_expire_app'       => 'P2D',
             'fusio_expire_backend'   => 'PT1H',
             'fusio_expire_consumer'  => 'PT1H',
+
+            'psx_context_factory'    => function(){
+                return new Context();
+            },
         ));
     }
 }

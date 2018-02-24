@@ -86,10 +86,10 @@ class RoutingParser implements LocationFinderInterface
 
             if (($row['methods'] == 'ANY' || in_array($method, explode('|', $row['methods']))) &&
                 $pathMatcher->match($row['path'], $parameters)) {
-                $context->set(Context::KEY_FRAGMENT, $parameters);
-                $context->set(Context::KEY_PATH, $row['path']);
-                $context->set(Context::KEY_SOURCE, $row['controller']);
-                $context->set('fusio.routeId', $row['id']);
+                $context->setParameters($parameters);
+                $context->setPath($row['path']);
+                $context->setSource($row['controller']);
+                $context->setRouteId($row['id']);
 
                 return $request;
             }
