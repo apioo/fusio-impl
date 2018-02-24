@@ -560,8 +560,8 @@ class Version202 implements VersionInterface
                 ['status' => 1, 'priority' => 0x4000000 | 1,   'methods' => 'ANY', 'path' => '/authorization/token',                         'controller' => Authorization\Token::class],
                 ['status' => 1, 'priority' => 0x4000000 | 0,   'methods' => 'ANY', 'path' => '/authorization/whoami',                        'controller' => Authorization\Whoami::class],
 
-                ['status' => 1, 'priority' => 0x2000000 | 1,   'methods' => 'GET', 'path' => '/doc',                                         'controller' => Tool\DocumentationController::class . '::doIndex'],
-                ['status' => 1, 'priority' => 0x2000000 | 0,   'methods' => 'GET', 'path' => '/doc/:version/*path',                          'controller' => Tool\DocumentationController::class . '::doDetail'],
+                ['status' => 1, 'priority' => 0x2000000 | 1,   'methods' => 'GET', 'path' => '/doc',                                         'controller' => Tool\Documentation\IndexController::class],
+                ['status' => 1, 'priority' => 0x2000000 | 0,   'methods' => 'GET', 'path' => '/doc/:version/*path',                          'controller' => Tool\Documentation\DetailController::class],
 
                 ['status' => 1, 'priority' => 0x1000000 | 3,   'methods' => 'GET', 'path' => '/export/openapi/:version/*path',               'controller' => Generator\OpenAPIController::class],
                 ['status' => 1, 'priority' => 0x1000000 | 2,   'methods' => 'GET', 'path' => '/export/raml/:version/*path',                  'controller' => Generator\RamlController::class],
