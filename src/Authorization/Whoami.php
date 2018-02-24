@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Consumer\View;
-use PSX\Framework\Controller\ApiAbstract;
+use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Http\RequestInterface;
+use PSX\Http\ResponseInterface;
 
 /**
  * Whoami
@@ -31,7 +33,7 @@ use PSX\Framework\Controller\ApiAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Whoami extends ApiAbstract
+class Whoami extends ControllerAbstract
 {
     use ProtectionTrait;
 
@@ -41,8 +43,10 @@ class Whoami extends ApiAbstract
      */
     protected $tableManager;
 
-    public function onGet()
+    public function onGet(RequestInterface $request, ResponseInterface $response)
     {
-        $this->setBody($this->tableManager->getTable(View\User::class)->getEntity($this->userId));
+        $data = $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
+
+        $this->responseWriter->setBody($response, $data);
     }
 }

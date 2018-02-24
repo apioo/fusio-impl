@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Authorization;
 
-use PSX\Framework\Filter\CORS;
-use PSX\Framework\Filter\UserAgentEnforcer;
+use Fusio\Impl\Filter\Authentication;
+use PSX\Http\Filter\CORS;
+use PSX\Http\Filter\UserAgentEnforcer;
 
 /**
  * ProtectionTrait
@@ -34,52 +35,33 @@ use PSX\Framework\Filter\UserAgentEnforcer;
 trait ProtectionTrait
 {
     /**
+     * @var \Fusio\Impl\Loader\Context
+     */
+    protected $context;
+
+    /**
      * @Inject
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
 
-    /**
-     * ID of the app
-     *
-     * @var integer
-     */
-    protected $appId;
-
-    /**
-     * ID of the authenticated user
-     *
-     * @var integer
-     */
-    protected $userId;
-
-    /**
-     * @var \Fusio\Impl\Authorization\UserContext
-     */
-    protected $userContext;
-
     public function getPreFilter()
     {
-        $filter = array();
-
+        // it is required for every request to have an user agent which
+        // identifies the client
         $filter[] = new UserAgentEnforcer();
 
-        $filter[] = new Oauth2Filter(
-            $this->connection,
-            $this->request->getMethod(),
-            $this->context->get('fusio.routeId'),
-            $this->config->get('fusio_project_key'),
-            function ($accessToken) {
-                $this->appId       = $accessToken['appId'];
-                $this->userId      = $accessToken['userId'];
-                $this->userContext = UserContext::newContext($accessToken['userId'], $accessToken['appId']);
-            }
-        );
-
+        // cors header
         $allowOrigin = $this->config->get('fusio_cors');
         if (!empty($allowOrigin)) {
             $filter[] = new CORS($allowOrigin);
         }
+
+        $filter[] = new Authentication(
+            $this->connection,
+            $this->context,
+            $this->config->get('fusio_project_key')
+        );
 
         return $filter;
     }
