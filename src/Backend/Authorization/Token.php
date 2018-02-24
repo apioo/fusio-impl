@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Backend\Authorization;
 
-use PSX\Framework\Filter\CORS;
 use PSX\Framework\Oauth2\TokenAbstract;
+use PSX\Http\Filter\CORS;
 
 /**
  * Token
