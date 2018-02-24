@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Impl\Backend\Filter\Routes\Path;
 use PSX\Sql\TableAbstract;
 
 /**
