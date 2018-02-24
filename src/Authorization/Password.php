@@ -27,7 +27,6 @@ use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
 use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
-use PSX\Oauth2\Authorization\Exception\InvalidRequestException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
 /**
