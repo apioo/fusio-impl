@@ -31,7 +31,7 @@ use Psr\Log\LoggerInterface;
 use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Request;
 use PSX\Http\Response;
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\Stream;
 use PSX\Json\Parser;
 use PSX\Uri\Url;
 
@@ -89,11 +89,11 @@ class ApiExecutor
         $body     = $body !== null ? Parser::encode($body) : null;
         $request  = new Request(new Url('http://127.0.0.1/backend/' . $path), $method, $header, $body);
         $response = new Response();
-        $response->setBody(new TempStream(fopen('php://memory', 'r+')));
+        $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
         $this->logger->pushHandler($verbose ? new StreamHandler(STDOUT) : new NullHandler());
 
-        $this->dispatch->route($request, $response, null, false);
+        $this->dispatch->route($request, $response);
 
         $this->logger->popHandler();
 

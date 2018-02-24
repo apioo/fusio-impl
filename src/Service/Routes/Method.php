@@ -30,7 +30,6 @@ use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Parser\JsonSchema\Document;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
 use PSX\Schema\Schema;
-use PSX\Schema\SchemaInterface;
 
 /**
  * Method

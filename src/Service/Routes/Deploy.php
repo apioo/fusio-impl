@@ -21,14 +21,11 @@
 
 namespace Fusio\Impl\Service\Routes;
 
-use Fusio\Engine\Form;
 use Fusio\Engine\Model;
-use Fusio\Engine\Parser\ParserAbstract;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\PropertyInterface;
 use PSX\Schema\Schema;
 use PSX\Sql\Condition;
 

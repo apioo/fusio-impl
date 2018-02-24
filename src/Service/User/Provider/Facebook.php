@@ -23,7 +23,7 @@ namespace Fusio\Impl\Service\User\Provider;
 
 use Fusio\Impl\Service\User\Model\User;
 use Fusio\Impl\Service\User\ProviderAbstract;
-use PSX\Http\GetRequest;
+use PSX\Http\Client\GetRequest;
 use PSX\Json\Parser;
 use PSX\Uri\Url;
 use RuntimeException;

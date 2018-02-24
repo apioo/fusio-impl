@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\User;
 
-use PSX\Http\ClientInterface;
+use PSX\Http\Client\ClientInterface;
 
 /**
  * ProviderAbstract
@@ -33,7 +33,7 @@ use PSX\Http\ClientInterface;
 abstract class ProviderAbstract implements ProviderInterface
 {
     /**
-     * @var \PSX\Http\ClientInterface
+     * @var \PSX\Http\Client\ClientInterface
      */
     protected $httpClient;
 

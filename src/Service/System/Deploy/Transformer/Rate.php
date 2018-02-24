@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Service\System\Deploy\Transformer;
 
 use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\NameGenerator;
 use Fusio\Impl\Service\System\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 
