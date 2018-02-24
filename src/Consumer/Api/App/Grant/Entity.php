@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**

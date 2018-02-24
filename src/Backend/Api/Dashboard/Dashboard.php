@@ -23,10 +23,9 @@ namespace Fusio\Impl\Backend\Api\Dashboard;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\View;
 use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**

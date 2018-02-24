@@ -26,11 +26,9 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Record\RecordInterface;
 use PSX\Schema\Property;
-use PSX\Validate\Validate;
 
 /**
  * Collection

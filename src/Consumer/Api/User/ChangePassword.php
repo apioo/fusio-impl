@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**

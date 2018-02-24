@@ -27,7 +27,6 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 

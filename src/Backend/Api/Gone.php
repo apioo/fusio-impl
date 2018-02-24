@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api;
 
 use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\ApiAbstract;
+use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -32,7 +32,7 @@ use PSX\Http\Exception as StatusCode;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Gone extends ApiAbstract
+class Gone extends ControllerAbstract
 {
     use ProtectionTrait;
 
