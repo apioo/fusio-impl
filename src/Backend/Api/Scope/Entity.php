@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -47,12 +48,11 @@ class Entity extends BackendApiAbstract
     protected $scopeService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -74,14 +74,12 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         $scope = $this->tableManager->getTable(View\Scope::class)->getEntity(
-            (int) $this->getUriFragment('scope_id')
+            (int) $context->getUriFragment('scope_id')
         );
 
         if (!empty($scope)) {
@@ -92,19 +90,16 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPut($record)
+    protected function doPut($record, HttpContextInterface $context)
     {
         $this->scopeService->update(
-            (int) $this->getUriFragment('scope_id'),
+            (int) $context->getUriFragment('scope_id'),
             $record->name,
             $record->description,
             $record->routes,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return array(
@@ -114,16 +109,13 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doDelete($record)
+    protected function doDelete($record, HttpContextInterface $context)
     {
         $this->scopeService->delete(
-            (int) $this->getUriFragment('scope_id'),
-            $this->userContext
+            (int) $context->getUriFragment('scope_id'),
+            $this->context->getUserContext()
         );
 
         return array(

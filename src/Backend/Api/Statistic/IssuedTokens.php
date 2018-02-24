@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 
 /**
@@ -45,12 +46,11 @@ class IssuedTokens extends BackendApiAbstract
     protected $tableManager;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -68,10 +68,13 @@ class IssuedTokens extends BackendApiAbstract
         return $resource;
     }
 
-    public function doGet()
+    /**
+     * @inheritdoc
+     */
+    public function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\Statistic::class)->getIssuedTokens(
-            View\App\Token\QueryFilter::create($this->queryParameters->getProperties())
+            View\App\Token\QueryFilter::create($context->getParameters())
         );
     }
 }

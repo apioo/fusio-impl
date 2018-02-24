@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\App\ValidatorTrait;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Entity
@@ -45,12 +46,11 @@ class Entity extends ConsumerApiAbstract
     protected $appGrantService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
             ->setSecurity(Authorization::CONSUMER, ['consumer']));
@@ -59,16 +59,13 @@ class Entity extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doDelete($record)
+    protected function doDelete($record, HttpContextInterface $context)
     {
         $this->appGrantService->delete(
-            (int) $this->getUriFragment('grant_id'),
-            $this->userContext
+            (int) $context->getUriFragment('grant_id'),
+            $this->context->getUserContext()
         );
     }
 }

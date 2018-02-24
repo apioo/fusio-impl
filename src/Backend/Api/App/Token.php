@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Token
@@ -43,12 +44,11 @@ class Token extends BackendApiAbstract
     protected $appService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -59,17 +59,14 @@ class Token extends BackendApiAbstract
     }
 
     /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doDelete($record)
+    protected function doDelete($record, HttpContextInterface $context)
     {
         $this->appService->removeToken(
-            $this->getUriFragment('app_id'),
-            $this->getUriFragment('token_id'),
-            $this->userContext
+            $context->getUriFragment('app_id'),
+            $context->getUriFragment('token_id'),
+            $this->context->getUserContext()
         );
 
         return [

@@ -26,7 +26,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 
 /**
@@ -45,12 +45,11 @@ class Form extends BackendApiAbstract
     protected $actionParser;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -61,9 +60,12 @@ class Form extends BackendApiAbstract
         return $resource;
     }
 
-    public function doGet()
+    /**
+     * @inheritdoc
+     */
+    public function doGet(HttpContextInterface $context)
     {
-        $className = $this->getParameter('class');
+        $className = $context->getParameter('class');
         $form      = $this->actionParser->getForm($className);
 
         if ($form instanceof Container) {

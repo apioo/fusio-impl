@@ -28,6 +28,7 @@ use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -46,12 +47,11 @@ class Entity extends ConsumerApiAbstract
     protected $appService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -62,15 +62,13 @@ class Entity extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         $app = $this->tableManager->getTable(View\App::class)->getEntityByAppKey(
-            $this->getParameter('client_id'),
-            $this->getParameter('scope')
+            $context->getParameter('client_id'),
+            $context->getParameter('scope')
         );
 
         if (!empty($app)) {

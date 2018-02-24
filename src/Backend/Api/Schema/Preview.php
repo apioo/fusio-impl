@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Preview
@@ -43,12 +44,11 @@ class Preview extends BackendApiAbstract
     protected $schemaService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -59,15 +59,12 @@ class Preview extends BackendApiAbstract
     }
 
     /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
         $body = $this->schemaService->getHtmlPreview(
-            (int) $this->getUriFragment('schema_id')
+            (int) $context->getUriFragment('schema_id')
         );
 
         return [

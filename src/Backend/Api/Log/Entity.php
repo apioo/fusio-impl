@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -39,12 +40,11 @@ use PSX\Http\Exception as StatusCode;
 class Entity extends BackendApiAbstract
 {
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -55,14 +55,12 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         $log = $this->tableManager->getTable(View\Log::class)->getEntity(
-            (int) $this->getUriFragment('log_id')
+            (int) $context->getUriFragment('log_id')
         );
 
         if (!empty($log)) {

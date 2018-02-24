@@ -25,6 +25,7 @@ use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -43,12 +44,11 @@ class Provider extends SchemaApiAbstract
     protected $userProviderService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setRequest($this->schemaManager->getSchema(Schema\User\Provider::class))
@@ -59,19 +59,21 @@ class Provider extends SchemaApiAbstract
     }
 
     /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
-        $provider    = $this->getUriFragment('provider');
+        $provider    = $context->getUriFragment('provider');
         $code        = $record->code;
         $clientId    = $record->clientId;
         $redirectUri = $record->redirectUri;
 
-        $token = $this->userProviderService->provider($provider, $code, $clientId, $redirectUri);
+        $token = $this->userProviderService->provider(
+            $provider,
+            $code,
+            $clientId,
+            $redirectUri
+        );
 
         if (!empty($token)) {
             return [

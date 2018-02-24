@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 use PSX\Validate\Validate;
 
@@ -54,12 +55,11 @@ class Collection extends BackendApiAbstract
     protected $schemaService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -79,31 +79,26 @@ class Collection extends BackendApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\Schema::class)->getCollection(
-            $this->queryParameters->getProperty('startIndex'),
-            $this->queryParameters->getProperty('count'),
-            $this->queryParameters->getProperty('search')
+            $context->getParameter('startIndex'),
+            $context->getParameter('count'),
+            $context->getParameter('search')
         );
     }
 
     /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
         $this->schemaService->create(
             $record->name,
             $record->source,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return array(

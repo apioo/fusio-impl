@@ -28,6 +28,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Entity
@@ -47,12 +48,11 @@ class Entity extends ConsumerApiAbstract
     protected $appDeveloperService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -74,32 +74,27 @@ class Entity extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\App\Developer::class)->getEntity(
-            $this->userId,
-            (int) $this->getUriFragment('app_id')
+            $this->context->getUserId(),
+            (int) $context->getUriFragment('app_id')
         );
     }
 
     /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPut($record)
+    protected function doPut($record, HttpContextInterface $context)
     {
         $this->appDeveloperService->update(
-            (int) $this->getUriFragment('app_id'),
+            (int) $context->getUriFragment('app_id'),
             $record->name,
             $record->url,
             $record->scopes,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return array(
@@ -109,16 +104,13 @@ class Entity extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doDelete($record)
+    protected function doDelete($record, HttpContextInterface $context)
     {
         $this->appDeveloperService->delete(
-            (int) $this->getUriFragment('app_id'),
-            $this->userContext
+            (int) $context->getUriFragment('app_id'),
+            $this->context->getUserContext()
         );
 
         return array(

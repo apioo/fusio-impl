@@ -28,6 +28,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Validate\Validate;
 
 /**
@@ -48,12 +49,11 @@ class Collection extends ConsumerApiAbstract
     protected $appDeveloperService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -70,32 +70,27 @@ class Collection extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Api\Resource
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\App\Developer::class)->getCollection(
-            $this->userId,
-            $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0,
-            $this->getParameter('search', Validate::TYPE_STRING) ?: null
+            $this->context->getUserId(),
+            $context->getParameter('startIndex') ?: 0,
+            $context->getParameter('search') ?: null
         );
     }
 
     /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
         $this->appDeveloperService->create(
             $record->name,
             $record->url,
             $record->scopes,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return array(

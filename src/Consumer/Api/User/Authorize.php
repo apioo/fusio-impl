@@ -25,7 +25,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
-use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Authorize
@@ -43,12 +43,11 @@ class Authorize extends ConsumerApiAbstract
     protected $userAuthorizeService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -60,24 +59,12 @@ class Authorize extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
-    {
-    }
-
-    /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
         return $this->userAuthorizeService->authorize(
-            $this->userId,
+            $this->context->getUserId(),
             $record->responseType,
             $record->clientId,
             $record->redirectUri,
@@ -85,25 +72,5 @@ class Authorize extends ConsumerApiAbstract
             $record->state,
             $record->allow
         );
-    }
-
-    /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doPut($record)
-    {
-    }
-
-    /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
-     */
-    protected function doDelete($record)
-    {
     }
 }

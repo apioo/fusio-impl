@@ -28,6 +28,7 @@ use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -48,12 +49,11 @@ class Entity extends BackendApiAbstract
     protected $rateService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -75,14 +75,12 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         $rate = $this->tableManager->getTable(View\Rate::class)->getEntity(
-            (int) $this->getUriFragment('rate_id')
+            (int) $context->getUriFragment('rate_id')
         );
 
         if (!empty($rate)) {
@@ -97,21 +95,18 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPut($record)
+    protected function doPut($record, HttpContextInterface $context)
     {
         $this->rateService->update(
-            (int) $this->getUriFragment('rate_id'),
+            (int) $context->getUriFragment('rate_id'),
             $record->priority,
             $record->name,
             $record->rateLimit,
             $record->timespan,
             $record->allocation,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return array(
@@ -121,16 +116,13 @@ class Entity extends BackendApiAbstract
     }
 
     /**
-     * Returns the DELETE response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doDelete($record)
+    protected function doDelete($record, HttpContextInterface $context)
     {
         $this->rateService->delete(
-            (int) $this->getUriFragment('rate_id'),
-            $this->userContext
+            (int) $context->getUriFragment('rate_id'),
+            $this->context->getUserContext()
         );
 
         return array(

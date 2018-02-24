@@ -27,6 +27,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Validate\Validate;
 
 /**
@@ -39,12 +40,11 @@ use PSX\Validate\Validate;
 class Collection extends ConsumerApiAbstract
 {
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -55,15 +55,13 @@ class Collection extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\Scope::class)->getCollection(
-            $this->userId,
-            $this->getParameter('startIndex', Validate::TYPE_INTEGER) ?: 0
+            $this->context->getUserId(),
+            $context->getParameter('startIndex') ?: 0
         );
     }
 }

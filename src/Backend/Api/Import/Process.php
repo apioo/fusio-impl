@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Json\Parser;
 
 /**
@@ -44,12 +45,11 @@ class Process extends BackendApiAbstract
     protected $systemImportService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -60,7 +60,10 @@ class Process extends BackendApiAbstract
         return $resource;
     }
 
-    public function doPost($record)
+    /**
+     * @inheritdoc
+     */
+    public function doPost($record, HttpContextInterface $context)
     {
         try {
             $this->connection->beginTransaction();

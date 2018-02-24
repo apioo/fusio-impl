@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\Backend\Api\Action;
 
-use Fusio\Engine\ResponseInterface;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Exception\Converter;
-use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
+use PSX\Http\Environment\HttpResponseInterface;
 
 /**
  * Execute
@@ -45,12 +45,11 @@ class Execute extends BackendApiAbstract
     protected $actionExecutorService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -62,16 +61,13 @@ class Execute extends BackendApiAbstract
     }
 
     /**
-     * Returns the POST response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPost($record)
+    protected function doPost($record, HttpContextInterface $context)
     {
         try {
             $response = $this->actionExecutorService->execute(
-                (int) $this->getUriFragment('action_id'),
+                (int) $context->getUriFragment('action_id'),
                 $record->method,
                 $record->uriFragments,
                 $record->parameters,
@@ -79,7 +75,7 @@ class Execute extends BackendApiAbstract
                 $record->body
             );
 
-            if ($response instanceof ResponseInterface) {
+            if ($response instanceof HttpResponseInterface) {
                 return array(
                     'statusCode' => $response->getStatusCode(),
                     'headers'    => $response->getHeaders() ?: new \stdClass(),

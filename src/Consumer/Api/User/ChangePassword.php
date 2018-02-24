@@ -26,6 +26,7 @@ use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * ChangePassword
@@ -43,12 +44,11 @@ class ChangePassword extends ConsumerApiAbstract
     protected $userService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -60,18 +60,15 @@ class ChangePassword extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPut($record)
+    protected function doPut($record, HttpContextInterface $context)
     {
         $this->userService->changePassword(
             $record->oldPassword,
             $record->newPassword,
             $record->verifyPassword,
-            $this->userContext
+            $this->context->getUserContext()
         );
 
         return [

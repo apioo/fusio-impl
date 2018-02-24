@@ -36,6 +36,11 @@ abstract class ConsumerApiAbstract extends SchemaApiAbstract
     use ProtectionTrait;
 
     /**
+     * @var \Fusio\Impl\Loader\Context
+     */
+    protected $context;
+
+    /**
      * @Inject
      * @var \PSX\Schema\SchemaManagerInterface
      */

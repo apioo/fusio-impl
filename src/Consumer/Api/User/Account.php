@@ -27,6 +27,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Account
@@ -44,12 +45,11 @@ class Account extends ConsumerApiAbstract
     protected $userService;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
@@ -66,24 +66,23 @@ class Account extends ConsumerApiAbstract
     }
 
     /**
-     * Returns the GET response
-     *
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doGet()
+    protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\User::class)->getEntity($this->userId);
+        return $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
     }
 
     /**
-     * Returns the PUT response
-     *
-     * @param \PSX\Record\RecordInterface $record
-     * @return array|\PSX\Record\RecordInterface
+     * @inheritdoc
      */
-    protected function doPut($record)
+    protected function doPut($record, HttpContextInterface $context)
     {
-        $this->userService->updateMeta($this->userId, $record->email, $this->userContext);
+        $this->userService->updateMeta(
+            $this->context->getUserId(),
+            $record->email,
+            $this->context->getUserContext()
+        );
 
         return [
             'success' => true,

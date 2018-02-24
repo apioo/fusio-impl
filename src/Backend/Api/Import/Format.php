@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Format
@@ -38,12 +39,11 @@ use PSX\Framework\Loader\Context;
 class Format extends BackendApiAbstract
 {
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -54,9 +54,12 @@ class Format extends BackendApiAbstract
         return $resource;
     }
 
-    public function doPost($record)
+    /**
+     * @inheritdoc
+     */
+    public function doPost($record, HttpContextInterface $context)
     {
-        $format = $this->getUriFragment('format');
+        $format = $context->getUriFragment('format');
         $body   = Transform::fromSchema($format, $record->schema);
 
         return $body;

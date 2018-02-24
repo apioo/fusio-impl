@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\View;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Dashboard
@@ -44,12 +45,11 @@ class Dashboard extends BackendApiAbstract
     protected $tableManager;
 
     /**
-     * @param integer $version
-     * @return \PSX\Api\Resource
+     * @inheritdoc
      */
     public function getDocumentation($version = null)
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->get(Context::KEY_PATH));
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
@@ -59,9 +59,12 @@ class Dashboard extends BackendApiAbstract
         return $resource;
     }
 
-    public function doGet()
+    /**
+     * @inheritdoc
+     */
+    public function doGet(HttpContextInterface $context)
     {
-        $filter = View\Log\QueryFilter::create($this->getParameters());
+        $filter = View\Log\QueryFilter::create($context->getParameters());
 
         return [
             'incomingRequests' => $this->tableManager->getTable(View\Statistic::class)->getIncomingRequests($filter),
