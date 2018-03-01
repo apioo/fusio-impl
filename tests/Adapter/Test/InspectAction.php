@@ -51,8 +51,8 @@ class InspectAction extends ActionAbstract
         return $this->response->build(200, [], [
             'method' => $request->getMethod(),
             'headers' => $request->getHeaders(),
-            'uri_fragments' => $request->getUriFragments()->toArray(),
-            'parameters' => $request->getParameters()->toArray(),
+            'uri_fragments' => $request->getUriFragments(),
+            'parameters' => $request->getParameters(),
         ]);
     }
 }

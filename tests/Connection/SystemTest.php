@@ -23,7 +23,7 @@ namespace Fusio\Impl\Tests\Connection;
 
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\System;
-use PSX\Framework\Dependency\Container;
+use PSX\Dependency\Container;
 
 /**
  * SystemTest
