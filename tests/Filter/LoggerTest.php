@@ -19,10 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests;
+namespace Fusio\Impl\Tests\Filter;
 
-use Fusio\Impl\Logger;
+use Fusio\Engine\Model\App;
+use Fusio\Engine\Model\User;
+use Fusio\Impl\Filter\Logger;
+use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Tests\DbTestCase;
+use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
+use PSX\Http\Response;
 use PSX\Http\Stream\StringStream;
 use PSX\Uri\Uri;
 
@@ -37,11 +43,21 @@ class LoggerTest extends DbTestCase
 {
     public function testLog()
     {
-        $request = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
-        $logger  = new Logger($this->connection);
-        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
+        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $response = new Response();
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response));
+
+        $logger = new Logger($this->connection, $this->newContext());
+        $logger->handle($request, $response, $filterChain);
+
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
         $this->assertEquals(1, $log['routeId']);
@@ -57,11 +73,21 @@ class LoggerTest extends DbTestCase
 
     public function testLogLongPath()
     {
-        $request = new Request(new Uri('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
-        $logger  = new Logger($this->connection);
-        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
+        $request  = new Request(new Uri('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $response = new Response();
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response));
+
+        $logger = new Logger($this->connection, $this->newContext());
+        $logger->handle($request, $response, $filterChain);
+
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
         $this->assertEquals(1, $log['routeId']);
@@ -77,12 +103,22 @@ class LoggerTest extends DbTestCase
 
     public function testLogPost()
     {
-        $body    = new StringStream('foobar');
-        $request = new Request(new Uri('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
-        $logger  = new Logger($this->connection);
-        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
+        $body     = new StringStream('foobar');
+        $request  = new Request(new Uri('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
+        $response = new Response();
 
-        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => $logId]);
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response));
+
+        $logger = new Logger($this->connection, $this->newContext());
+        $logger->handle($request, $response, $filterChain);
+
+        $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
         $this->assertEquals(1, $log['routeId']);
@@ -98,19 +134,48 @@ class LoggerTest extends DbTestCase
 
     public function testAppendError()
     {
-        $request = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
-        $logger  = new Logger($this->connection);
-        $logId   = $logger->log(1, 1, 1, '127.0.0.1', $request);
+        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $response = new Response();
 
-        $logger = new Logger($this->connection);
-        $logger->appendError($logId, new \Exception('foo'));
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
 
-        $errors = $this->connection->fetchAll('SELECT * FROM fusio_log_error WHERE logId = :id', ['id' => $logId]);
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response))
+            ->willReturnCallback(function(){
+                throw new \RuntimeException('foo');
+            });
 
-        $this->assertEquals(1, count($errors));
-        $this->assertEquals('foo', $errors[0]['message']);
-        $this->assertNotEmpty($errors[0]['trace']);
-        $this->assertNotEmpty($errors[0]['file']);
-        $this->assertNotEmpty($errors[0]['line']);
+        try {
+            $logger = new Logger($this->connection, $this->newContext());
+            $logger->handle($request, $response, $filterChain);
+            
+            $this->fail('Should throw an exception');
+        } catch (\RuntimeException $e) {
+        }
+
+        $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
+
+        $this->assertEquals(2, $error['id']);
+        $this->assertEquals(3, $error['logId']);
+        $this->assertEquals('foo', $error['message']);
+    }
+    
+    private function newContext()
+    {
+        $app = new App();
+        $app->setId(1);
+
+        $user = new User();
+        $user->setId(1);
+
+        $context = new Context();
+        $context->setRouteId(1);
+        $context->setApp($app);
+        $context->setUser($user);
+
+        return $context;
     }
 }
