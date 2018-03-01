@@ -27,7 +27,7 @@ use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
-use PSX\Http;
+use PSX\Http\Client\ClientInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 
@@ -51,7 +51,7 @@ class Register
     protected $configService;
 
     /**
-     * @var \PSX\Http\ClientInterface
+     * @var \PSX\Http\Client\ClientInterface
      */
     protected $httpClient;
 
@@ -68,11 +68,11 @@ class Register
     /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
-     * @param \PSX\Http\ClientInterface $httpClient
+     * @param \PSX\Http\Client\ClientInterface $httpClient
      * @param \Fusio\Impl\Mail\MailerInterface $mailer
      * @param \PSX\Framework\Config\Config $psxConfig
      */
-    public function __construct(Service\User $userService, Service\Config $configService, Http\ClientInterface $httpClient, MailerInterface $mailer, Config $psxConfig)
+    public function __construct(Service\User $userService, Service\Config $configService, ClientInterface $httpClient, MailerInterface $mailer, Config $psxConfig)
     {
         $this->userService   = $userService;
         $this->configService = $configService;

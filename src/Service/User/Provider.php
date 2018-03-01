@@ -25,7 +25,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\User\Model\User as UserModel;
 use PSX\Framework\Config\Config;
-use PSX\Http;
+use PSX\Http\Client\ClientInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -58,7 +58,7 @@ class Provider
     protected $tokenIssuer;
 
     /**
-     * @var \PSX\Http\Client
+     * @var \PSX\Http\Client\ClientInterface
      */
     protected $httpClient;
 
@@ -76,10 +76,10 @@ class Provider
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
      * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
-     * @param \PSX\Http\ClientInterface $httpClient
+     * @param \PSX\Http\Client\ClientInterface $httpClient
      * @param \PSX\Framework\Config\Config $psxConfig
      */
-    public function __construct(Service\User $userService, Service\Config $configService, TokenIssuer $tokenIssuer, Http\ClientInterface $httpClient, Config $psxConfig)
+    public function __construct(Service\User $userService, Service\Config $configService, TokenIssuer $tokenIssuer, ClientInterface $httpClient, Config $psxConfig)
     {
         $this->userService   = $userService;
         $this->configService = $configService;
