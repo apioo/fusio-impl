@@ -161,6 +161,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
+                    'x-ratelimit-limit' => ['720'],
+                    'x-ratelimit-remaining' => [720 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $body);
@@ -268,6 +270,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
+                    'x-ratelimit-limit' => ['720'],
+                    'x-ratelimit-remaining' => [720 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $body);

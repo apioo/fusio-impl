@@ -150,6 +150,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => [16 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $body);
@@ -319,7 +321,6 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'warning' => ['199 PSX "Resource is in development"'],
                     'x-ratelimit-limit' => ['8'],
                     'x-ratelimit-remaining' => ['0'],
                 ];
@@ -364,7 +365,6 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'warning' => ['199 PSX "Resource is in development"'],
                     'x-ratelimit-limit' => ['16'],
                     'x-ratelimit-remaining' => ['0'],
                 ];
