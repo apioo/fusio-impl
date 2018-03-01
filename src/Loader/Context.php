@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Loader;
 
+use Fusio\Engine\Model\AppInterface;
+use Fusio\Engine\Model\UserInterface;
 use Fusio\Impl\Authorization\UserContext;
 
 /**
@@ -38,14 +40,14 @@ class Context extends \PSX\Framework\Loader\Context
     protected $routeId;
 
     /**
-     * @var integer
+     * @var \Fusio\Engine\Model\AppInterface
      */
-    protected $appId;
+    protected $app;
 
     /**
-     * @var integer
+     * @var \Fusio\Engine\Model\UserInterface
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @var integer
@@ -79,19 +81,51 @@ class Context extends \PSX\Framework\Loader\Context
     }
 
     /**
+     * @return \Fusio\Engine\Model\AppInterface
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+
+    /**
      * @return integer
      */
     public function getAppId()
     {
-        return $this->appId;
+        return $this->app->getId();
     }
 
     /**
-     * @param integer $appId
+     * @param \Fusio\Engine\Model\AppInterface $app
      */
-    public function setAppId($appId)
+    public function setApp(AppInterface $app)
     {
-        $this->appId = $appId;
+        $this->app = $app;
+    }
+
+    /**
+     * @return \Fusio\Engine\Model\UserInterface
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->user->getId();
+    }
+
+    /**
+     * @param \Fusio\Engine\Model\UserInterface $user
+     */
+    public function setUser(UserInterface $user)
+    {
+        $this->user = $user;
     }
 
     /**
@@ -108,22 +142,6 @@ class Context extends \PSX\Framework\Loader\Context
     public function setLogId($logId)
     {
         $this->logId = $logId;
-    }
-
-    /**
-     * @return integer
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * @param integer $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
     }
 
     /**
@@ -151,6 +169,6 @@ class Context extends \PSX\Framework\Loader\Context
             return $this->userContext;
         }
 
-        return $this->userContext = UserContext::newContext($this->userId, $this->appId);
+        return $this->userContext = UserContext::newContext($this->user->getId(), $this->app->getId());
     }
 }
