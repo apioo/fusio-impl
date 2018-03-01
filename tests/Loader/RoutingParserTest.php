@@ -23,9 +23,9 @@ namespace Fusio\Impl\Tests\Loader;
 
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Database\Installer;
+use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Tests\DbTestCase;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Request;
 use PSX\Http\RequestInterface;
 use PSX\Uri\Uri;
@@ -65,7 +65,7 @@ class RoutingParserTest extends DbTestCase
         $request = $parser->resolve($request, $context);
 
         $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertEquals($controller, $context->get(Context::KEY_SOURCE));
+        $this->assertEquals($controller, $context->getSource());
     }
 
     public function resolveProvider()
