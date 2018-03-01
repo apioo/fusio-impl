@@ -73,7 +73,7 @@ class RequestLimit implements FilterInterface
         $success = $this->rateService->assertLimit(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
             $this->context->getRouteId(),
-            $this->appRepository->get($this->context->getAppId()),
+            $this->context->getApp(),
             $response
         );
 

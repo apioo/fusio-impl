@@ -23,6 +23,9 @@ namespace Fusio\Impl\Filter;
 
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
+use Fusio\Engine\Model;
+use Fusio\Engine\Repository\AppInterface;
+use Fusio\Engine\Repository\UserInterface;
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
 use PSX\Http\Exception\UnauthorizedException;
@@ -56,11 +59,23 @@ class Authentication implements FilterInterface
      */
     protected $projectKey;
 
-    public function __construct(Connection $connection, Context $context, $projectKey)
+    /**
+     * @var \Fusio\Engine\Repository\AppInterface
+     */
+    protected $appRepository;
+
+    /**
+     * @var \Fusio\Engine\Repository\UserInterface
+     */
+    protected $userRepository;
+
+    public function __construct(Connection $connection, Context $context, $projectKey, AppInterface $appRepository, UserInterface $userRepository)
     {
-        $this->connection = $connection;
-        $this->context    = $context;
-        $this->projectKey = $projectKey;
+        $this->connection     = $connection;
+        $this->context        = $context;
+        $this->projectKey     = $projectKey;
+        $this->appRepository  = $appRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
@@ -92,9 +107,15 @@ class Authentication implements FilterInterface
             );
 
             if ($type == 'Bearer' && !empty($accessToken)) {
-                $result = $this->isValidToken($accessToken, $requestMethod);
+                $token = $this->getToken($accessToken, $requestMethod);
 
-                if ($result === true) {
+                if (!empty($token)) {
+                    $app  = $this->appRepository->get($token['appId']);
+                    $user = $this->userRepository->get($token['userId']);
+
+                    $this->context->setApp($app);
+                    $this->context->setUser($user);
+
                     $filterChain->handle($request, $response);
                 } else {
                     throw new UnauthorizedException('Invalid access token', 'Bearer', $params);
@@ -103,11 +124,21 @@ class Authentication implements FilterInterface
                 throw new UnauthorizedException('Missing authorization header', 'Bearer', $params);
             }
         } else {
+            $app = new Model\App();
+            $app->setAnonymous(true);
+            $app->setScopes([]);
+
+            $user = new Model\User();
+            $user->setAnonymous(true);
+
+            $this->context->setApp($app);
+            $this->context->setUser($user);
+
             $filterChain->handle($request, $response);
         }
     }
 
-    protected function isValidToken($token, $requestMethod)
+    protected function getToken($token, $requestMethod)
     {
         // if a user sends a JWT which was obtained through the consumer login
         // we extract the access token
@@ -164,15 +195,12 @@ class Authentication implements FilterInterface
             }
 
             if ($isAllowed) {
-                $this->context->setAppId($accessToken['appId']);
-                $this->context->setUserId($accessToken['userId']);
-
-                return true;
+                return $accessToken;
             } else {
                 throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
             }
         }
 
-        return false;
+        return null;
     }
 }

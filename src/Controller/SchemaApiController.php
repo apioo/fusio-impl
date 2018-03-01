@@ -116,13 +116,29 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $filter[] = new CORS($allowOrigin);
         }
 
-        $filter[] = new AssertMethod($this->routesMethodService, $this->context);
+        $filter[] = new AssertMethod(
+            $this->routesMethodService,
+            $this->context
+        );
 
-        $filter[] = new Authentication($this->connection, $this->context, $this->config->get('fusio_project_key'));
+        $filter[] = new Authentication(
+            $this->connection,
+            $this->context,
+            $this->config->get('fusio_project_key'),
+            $this->appRepository,
+            $this->userRepository
+        );
 
-        $filter[] = new RequestLimit($this->rateService, $this->appRepository, $this->context);
+        $filter[] = new RequestLimit(
+            $this->rateService,
+            $this->appRepository,
+            $this->context
+        );
 
-        $filter[] = new Logger($this->connection, $this->context);
+        $filter[] = new Logger(
+            $this->connection,
+            $this->context
+        );
 
         return $filter;
     }
@@ -208,7 +224,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     private function executeAction($record, HttpContextInterface $httpContext)
     {
         $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->getApp(), $this->getUser());
+        $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->context->getApp(), $this->context->getUser());
 
         $request  = new Request($httpContext, $record);
         $response = null;
@@ -233,36 +249,5 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         }
 
         return $response;
-    }
-
-    /**
-     * @return \Fusio\Engine\Model\AppInterface
-     */
-    private function getApp()
-    {
-        $app = $this->appRepository->get($this->context->getAppId());
-
-        if (!$app instanceof Model\AppInterface) {
-            $app = new Model\App();
-            $app->setAnonymous(true);
-            $app->setScopes([]);
-        }
-
-        return $app;
-    }
-
-    /**
-     * @return \Fusio\Engine\Model\UserInterface
-     */
-    private function getUser()
-    {
-        $user = $this->userRepository->get($this->context->getUserId());
-
-        if (!$user instanceof Model\UserInterface) {
-            $user = new Model\User();
-            $user->setAnonymous(true);
-        }
-
-        return $user;
     }
 }
