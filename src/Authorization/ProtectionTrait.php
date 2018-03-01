@@ -45,6 +45,18 @@ trait ProtectionTrait
      */
     protected $connection;
 
+    /**
+     * @Inject
+     * @var \Fusio\Engine\Repository\AppInterface
+     */
+    protected $appRepository;
+
+    /**
+     * @Inject
+     * @var \Fusio\Engine\Repository\UserInterface
+     */
+    protected $userRepository;
+
     public function getPreFilter()
     {
         // it is required for every request to have an user agent which
@@ -60,7 +72,9 @@ trait ProtectionTrait
         $filter[] = new Authentication(
             $this->connection,
             $this->context,
-            $this->config->get('fusio_project_key')
+            $this->config->get('fusio_project_key'),
+            $this->appRepository,
+            $this->userRepository
         );
 
         return $filter;
