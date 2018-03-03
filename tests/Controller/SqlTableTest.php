@@ -454,7 +454,6 @@ JSON;
         $body = (string) $response->getBody();
 
         $headers = [
-            'warning' => ['199 PSX "Resource is in development"'],
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
@@ -487,7 +486,6 @@ JSON;
         $body = (string) $response->getBody();
 
         $headers = [
-            'warning' => ['199 PSX "Resource is in development"'],
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
