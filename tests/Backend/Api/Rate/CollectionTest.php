@@ -258,6 +258,36 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/backend/rate?search=gol', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 4,
+            "status": 1,
+            "priority": 10,
+            "name": "gold",
+            "rateLimit": 16,
+            "timespan": "P1M"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetCount()
     {
         $response = $this->sendRequest('/backend/rate?count=80', 'GET', array(

@@ -251,6 +251,52 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetSearch()
+    {
+        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=backe', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<JSON
+{
+    "totalResults": 2,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 4,
+            "appId": 1,
+            "userId": 4,
+            "status": 1,
+            "scope": [
+                "backend"
+            ],
+            "ip": "127.0.0.1",
+            "date": "2015-06-25T22:49:09Z"
+        },
+        {
+            "id": 1,
+            "appId": 1,
+            "userId": 1,
+            "status": 1,
+            "scope": [
+                "backend",
+                "authorization"
+            ],
+            "ip": "127.0.0.1",
+            "date": "2015-06-25T22:49:09Z"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetCount()
     {
         $response = $this->sendRequest('/backend/app/token?count=80&from=2015-06-25T00:00:00&to=2015-06-25T23:59:59', 'GET', array(
