@@ -67,7 +67,7 @@ class AssertMethod implements FilterInterface
         $methodName = $request->getMethod();
 
         // in case of HEAD we use the schema of the GET request
-        if ($methodName === 'HEAD') {
+        if ($methodName === 'HEAD' || $methodName === 'OPTIONS') {
             $methodName = 'GET';
         }
 
