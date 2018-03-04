@@ -67,6 +67,7 @@ class SwaggerTest extends ControllerDbTestCase
             ['swagger_case01'],
             ['swagger_case02'],
             ['swagger_case03'],
+            ['swagger_case04'],
         ];
     }
 }

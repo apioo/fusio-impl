@@ -29,6 +29,8 @@ use PSX\Json;
 use PSX\Schema\Generator;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
 use PSX\Schema\Schema;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class which uses the psx api classes to parse and transform an API 
@@ -77,6 +79,18 @@ class Transform
 
     public function transform($type, $schema)
     {
+        // check whether we need to transform YAML into JSON
+        if (in_array($type, [self::TYPE_OPENAPI, self::TYPE_SWAGGER])) {
+            if (!json_decode($schema)) {
+                try {
+                    $data   = Yaml::parse($schema);
+                    $schema = json_encode($data);
+                } catch (ParseException $e) {
+                    // invalid YAML syntax
+                }
+            }
+        }
+
         $this->routes = [];
         $this->schema = [];
         $this->action = [];

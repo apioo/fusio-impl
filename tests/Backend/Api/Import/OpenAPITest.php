@@ -369,6 +369,7 @@ JSON;
         return [
             ['openapi_case01'],
             ['openapi_case02'],
+            ['openapi_case03'],
         ];
     }
 }
