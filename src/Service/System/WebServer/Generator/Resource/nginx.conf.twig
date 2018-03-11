@@ -1,0 +1,41 @@
+{% import _self as self %}
+server {
+    listen {{ host.port }} default_server;
+    listen [::]:{{ host.port }} default_server;
+
+{{ self.render_host(host) }}
+}
+
+{% if host.sslCertificate and host.sslCertificateKey %}
+server {
+    listen {{ host.sslPort }} ssl;
+    listen [::]:{{ host.sslPort }} ssl;
+
+{{ self.render_host(host) }}
+
+    ssl_certificate {{ host.sslCertificate }};
+    ssl_certificate_key {{ host.sslCertificateKey }};
+}
+{% endif %}
+{% macro render_host(host, port) %}
+{% if host.documentRoot %}
+    root {{ host.documentRoot }};
+{% endif %}
+{% if host.index %}
+    index {{ host.index }};
+{% endif %}
+{% if host.serverName %}
+    server_name {{ host.serverName }};
+{% endif %}
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+{% if host.errorLog %}
+    error_log {{ host.errorLog }} warn;
+{% endif %}
+{% if host.accessLog %}
+    access_log {{ host.accessLog }} combined;
+{% endif %}
+{% endmacro %}

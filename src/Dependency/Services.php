@@ -252,7 +252,8 @@ trait Services
     {
         return new Service\System\Deploy(
             $this->get('system_import_service'),
-            $this->get('system_migration_service')
+            $this->get('system_migration_service'),
+            $this->get('system_web_server_service')
         );
     }
 
@@ -265,6 +266,16 @@ trait Services
             $this->get('connector'),
             $this->get('table_manager')->getTable(Table\Deploy\Migration::class),
             $this->get('logger')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\System\WebServer
+     */
+    public function getSystemWebServerService()
+    {
+        return new Service\System\WebServer(
+            $this->get('config')
         );
     }
 

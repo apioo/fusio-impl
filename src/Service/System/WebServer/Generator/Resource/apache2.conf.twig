@@ -1,0 +1,55 @@
+{% import _self as self %}
+<VirtualHost *:{{ host.port }}>
+{% if host.sslForce %}
+    ServerName "{{ host.serverName }}"
+    DocumentRoot "{{ host.documentRoot }}"
+    Redirect permanent / https://{{ host.serverName }}/
+{% else %}
+{{ self.render_host(host) }}
+{% endif %}
+</VirtualHost>
+{% if host.sslCertificate and host.sslCertificateKey %}
+
+<VirtualHost *:{{ host.sslPort }}>
+{{ self.render_host(host) }}
+
+    SSLEngine on
+    SSLCertificateFile "{{ host.sslCertificate }}"
+    SSLCertificateKeyFile "{{ host.sslCertificateKey }}"
+</VirtualHost>
+{% endif %}
+{% macro render_host(host) %}
+    ServerName "{{ host.serverName }}"
+    DocumentRoot "{{ host.documentRoot }}"
+
+    <Directory "{{ host.documentRoot }}">
+{% if host.handler == 'static' %}
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+        SetHandler default-handler
+        {% if host.index %}DirectoryIndex {{ host.index }}{% endif %}
+
+{% elseif host.handler == 'fusio' %}
+        Options FollowSymLinks
+        AllowOverride None
+        Require all granted
+        SetHandler application/x-httpd-php
+        DirectoryIndex index.php
+
+        RewriteEngine On
+        RewriteBase /
+
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule (.*) /index.php/$1 [L]
+
+        RewriteCond %{HTTP:Authorization} ^(.*)
+        RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+{% endif %}
+    </Directory>
+
+    {% if host.errorLog %}ErrorLog "{{ host.errorLog }}"
+{% endif %}
+    {% if host.accessLog %}CustomLog "{{ host.accessLog }}" combined{% endif %}
+{% endmacro %}
