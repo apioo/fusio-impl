@@ -42,9 +42,10 @@ class EnvProperties
 
         // dir properties
         $vars['dir'] = [
-            'cache' => PSX_PATH_CACHE,
-            'src'   => PSX_PATH_LIBRARY,
-            'temp'  => sys_get_temp_dir(),
+            'cache'  => PSX_PATH_CACHE,
+            'src'    => PSX_PATH_LIBRARY,
+            'public' => realpath(PSX_PATH_LIBRARY . '/../public'),
+            'temp'   => sys_get_temp_dir(),
         ];
 
         // env properties
