@@ -45,6 +45,7 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
             'api' => [
                 'host' => 'api.apioo.de',
                 'root' => '/var/www/html/fusio',
+                'index' => 'index.php',
                 'ssl_cert' => '/tmp/domain.crt',
                 'ssl_cert_key' => '/tmp/private.key',
                 'error_log' => '/tmp/error.log',
@@ -54,14 +55,17 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
                 [
                     'host' => 'fusio.apioo.de',
                     'root' => '/var/www/html/fusio/fusio',
+                    'index' => 'index.htm',
                 ],
                 [
                     'host' => 'documentation.apioo.de',
                     'root' => '/var/www/html/fusio/documentation',
+                    'index' => 'index.html',
                 ],
                 [
                     'host' => 'developer.apioo.de',
                     'root' => '/var/www/html/fusio/developer',
+                    'index' => 'index.html',
                 ],
             ],
         ]);
