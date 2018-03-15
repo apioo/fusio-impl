@@ -23,27 +23,15 @@
     DocumentRoot "{{ host.documentRoot }}"
 
     <Directory "{{ host.documentRoot }}">
-{% if host.handler == 'static' %}
         Options FollowSymLinks
         AllowOverride None
         Require all granted
-        SetHandler default-handler
-        {% if host.index %}DirectoryIndex {{ host.index }}{% endif %}
-
-{% elseif host.handler == 'fusio' %}
-        Options FollowSymLinks
-        AllowOverride None
-        Require all granted
-        SetHandler application/x-httpd-php
-        DirectoryIndex index.php
-
+{% if host.index %}
+        DirectoryIndex "/{{ host.index }}"
+        FallbackResource "/{{ host.index }}"
+{% endif %}
+{% if host.handler == 'fusio' %}
         RewriteEngine On
-        RewriteBase /
-
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule (.*) /index.php/$1 [L]
-
         RewriteCond %{HTTP:Authorization} ^(.*)
         RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 {% endif %}
