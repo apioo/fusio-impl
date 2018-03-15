@@ -30,7 +30,7 @@
         DirectoryIndex "/{{ host.index }}"
         FallbackResource "/{{ host.index }}"
 {% endif %}
-{% if host.handler == 'fusio' %}
+{% if host.handler == 'api' %}
         RewriteEngine On
         RewriteCond %{HTTP:Authorization} ^(.*)
         RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]

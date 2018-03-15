@@ -18,24 +18,22 @@ server {
 }
 {% endif %}
 {% macro render_host(host, port) %}
-{% if host.documentRoot %}
-    root {{ host.documentRoot }};
+    {% if host.serverName %}server_name {{ host.serverName }};
 {% endif %}
-{% if host.index %}
-    index {{ host.index }};
+    {% if host.documentRoot %}root {{ host.documentRoot }};
 {% endif %}
-{% if host.serverName %}
-    server_name {{ host.serverName }};
+    {% if host.index %}index {{ host.index }};
 {% endif %}
 
     location / {
+{% if host.handler == 'app' %}
         try_files $uri $uri/ =404;
+{% elseif host.handler == 'api' %}
+        try_files $uri /index.php$is_args$args;
+{% endif %}
     }
 
-{% if host.errorLog %}
-    error_log {{ host.errorLog }} warn;
+    {% if host.errorLog %}error_log {{ host.errorLog }} warn;
 {% endif %}
-{% if host.accessLog %}
-    access_log {{ host.accessLog }} combined;
-{% endif %}
+    {% if host.accessLog %}access_log {{ host.accessLog }} combined;{% endif %}
 {% endmacro %}
