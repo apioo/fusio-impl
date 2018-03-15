@@ -30,8 +30,8 @@ namespace Fusio\Impl\Service\System\WebServer;
  */
 class VirtualHost
 {
-    const HANDLER_STATIC = 'static';
-    const HANDLER_FUSIO = 'fusio';
+    const HANDLER_APP = 'app';
+    const HANDLER_API = 'api';
 
     /**
      * @var string
@@ -266,11 +266,13 @@ class VirtualHost
 
     /**
      * @param array $data
+     * @param string $handler
      * @return \Fusio\Impl\Service\System\WebServer\VirtualHost
      */
-    public static function fromArray(array $data)
+    public static function fromArray(array $data, $handler)
     {
         $host = new self();
+        $host->setHandler($handler);
 
         if (isset($data['port'])) {
             $host->setPort($data['port']);

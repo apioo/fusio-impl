@@ -65,19 +65,13 @@ class WebServer
         $file   = $this->config->get('fusio_server_conf');
 
         if (isset($server['api']) && is_array($server['api'])) {
-            $virtualHost = VirtualHost::fromArray($server['api']);
-            $virtualHost->setHandler(VirtualHost::HANDLER_FUSIO);
-
-            $config->addVirtualHost($virtualHost);
+            $config->addVirtualHost(VirtualHost::fromArray($server['api'], VirtualHost::HANDLER_API));
         }
 
         if (isset($server['apps']) && is_array($server['apps'])) {
             foreach ($server['apps'] as $app) {
                 if (is_array($app)) {
-                    $virtualHost = VirtualHost::fromArray($app);
-                    $virtualHost->setHandler(VirtualHost::HANDLER_STATIC);
-
-                    $config->addVirtualHost($virtualHost);
+                    $config->addVirtualHost(VirtualHost::fromArray($app, VirtualHost::HANDLER_APP));
                 }
             }
         }
