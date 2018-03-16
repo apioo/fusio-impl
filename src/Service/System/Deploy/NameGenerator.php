@@ -43,7 +43,7 @@ class NameGenerator
 
             if (is_file($source)) {
                 $source = realpath($source);
-                $source = substr($source, strlen(realpath(PSX_PATH_LIBRARY)) + 1);
+                $source = substr($source, strlen(realpath(PSX_PATH_SRC)) + 1);
             }
 
             return preg_replace('/[^a-zA-Z0-9\-\_]/', '_', $source);
