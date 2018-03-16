@@ -3910,6 +3910,42 @@
         }
       },
       "parameters": []
+    },
+    "\/doc": {
+      "get": {
+        "operationId": "docGetIndex",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Index"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/doc\/{version}\/{path}": {
+      "get": {
+        "operationId": "docVersionPathGetDetail",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Detail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
     }
   },
   "components": {
@@ -4014,10 +4050,16 @@
         "type": "object",
         "title": "index",
         "properties": {
-          "connections": {
+          "routings": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Connection"
+              "$ref": "#\/components\/schemas\/Route"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Link"
             }
           }
         }
@@ -4504,45 +4546,28 @@
       "Methods": {
         "type": "object",
         "title": "methods",
-        "patternProperties": {
-          "^(GET|POST|PUT|PATCH|DELETE)$": {
-            "$ref": "#\/components\/schemas\/Method"
-          }
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Method"
         }
       },
       "Method": {
         "type": "object",
         "title": "method",
         "properties": {
-          "method": {
+          "description": {
             "type": "string"
           },
-          "version": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "active": {
-            "type": "boolean"
-          },
-          "public": {
-            "type": "boolean"
-          },
-          "parameters": {
+          "queryParameters": {
             "type": "string"
           },
           "request": {
             "type": "string"
           },
-          "response": {
-            "type": "string"
-          },
           "responses": {
-            "$ref": "#\/components\/schemas\/Responses"
-          },
-          "action": {
-            "type": "string"
+            "type": "array",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -4558,21 +4583,7 @@
       "Schema": {
         "type": "object",
         "title": "schema",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
-          },
-          "source": {
-            "$ref": "#\/components\/schemas\/Source"
-          }
-        }
+        "description": "Contains the JSON Schema object"
       },
       "Source": {
         "type": "object",
@@ -4599,13 +4610,16 @@
         "type": "object",
         "title": "route",
         "properties": {
-          "routeId": {
-            "type": "integer"
-          },
-          "allow": {
-            "type": "boolean"
+          "path": {
+            "type": "string"
           },
           "methods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
             "type": "string"
           }
         }
@@ -4950,6 +4964,51 @@
           },
           "email": {
             "type": "string"
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "title": "link",
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
+      },
+      "Detail": {
+        "type": "object",
+        "title": "detail",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#\/components\/schemas\/Schema"
+          },
+          "pathParameters": {
+            "type": "string"
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Methods"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Link"
+            }
           }
         }
       }
