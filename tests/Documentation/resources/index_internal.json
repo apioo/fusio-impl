@@ -692,6 +692,20 @@
         "PATCH"
       ],
       "version": "*"
+    },
+    {
+      "path": "\/doc",
+      "methods": [
+        "GET"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/doc\/:version\/*path",
+      "methods": [
+        "GET"
+      ],
+      "version": "*"
     }
   ],
   "links": [
