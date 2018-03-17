@@ -44,7 +44,7 @@ class Token extends TokenAbstract
         $filter = parent::getPreFilter();
 
         // cors header
-        $allowOrigin = $this->config->get('fusio_cors');
+        $allowOrigin = $this->config->get('psx_cors_origin');
         if (!empty($allowOrigin)) {
             $filter[] = new CORS($allowOrigin);
         }
