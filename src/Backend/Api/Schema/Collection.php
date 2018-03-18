@@ -82,8 +82,8 @@ class Collection extends BackendApiAbstract
     protected function doGet(HttpContextInterface $context)
     {
         return $this->tableManager->getTable(View\Schema::class)->getCollection(
-            $context->getParameter('startIndex'),
-            $context->getParameter('count'),
+            (int) $context->getParameter('startIndex'),
+            (int) $context->getParameter('count'),
             $context->getParameter('search')
         );
     }

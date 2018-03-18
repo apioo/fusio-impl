@@ -74,7 +74,7 @@ class Collection extends ConsumerApiAbstract
     {
         return $this->tableManager->getTable(View\App\Developer::class)->getCollection(
             $this->context->getUserId(),
-            $context->getParameter('startIndex') ?: 0,
+            (int) $context->getParameter('startIndex'),
             $context->getParameter('search') ?: null
         );
     }
