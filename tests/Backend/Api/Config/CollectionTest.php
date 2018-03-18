@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -185,17 +185,10 @@ JSON;
             "value": "16"
         },
         {
-            "id": 14,
+            "id": 13,
             "type": 1,
             "name": "authorization_url",
             "description": "Url where the user can authorize for the OAuth2 flow",
-            "value": ""
-        },
-        {
-            "id": 11,
-            "type": 1,
-            "name": "cors_allow_origin",
-            "description": "If set each API response contains a Access-Control-Allow-Origin header with the provided value",
             "value": ""
         },
         {
@@ -255,14 +248,14 @@ JSON;
             "value": "authorization,consumer"
         },
         {
-            "id": 13,
+            "id": 12,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 12,
+            "id": 11,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
@@ -278,7 +271,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/backend/config?search=cors', 'GET', array(
+        $response = $this->sendRequest('/backend/config?search=register_subject', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -291,11 +284,11 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 11,
+            "id": 4,
             "type": 1,
-            "name": "cors_allow_origin",
-            "description": "If set each API response contains a Access-Control-Allow-Origin header with the provided value",
-            "value": ""
+            "name": "mail_register_subject",
+            "description": "Subject of the activation mail",
+            "value": "Fusio registration"
         }
     ]
 }
@@ -315,7 +308,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 14,
+    "totalResults": 13,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -334,17 +327,10 @@ JSON;
             "value": "16"
         },
         {
-            "id": 14,
+            "id": 13,
             "type": 1,
             "name": "authorization_url",
             "description": "Url where the user can authorize for the OAuth2 flow",
-            "value": ""
-        },
-        {
-            "id": 11,
-            "type": 1,
-            "name": "cors_allow_origin",
-            "description": "If set each API response contains a Access-Control-Allow-Origin header with the provided value",
             "value": ""
         },
         {
@@ -404,14 +390,14 @@ JSON;
             "value": "authorization,consumer"
         },
         {
-            "id": 13,
+            "id": 12,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 12,
+            "id": 11,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
