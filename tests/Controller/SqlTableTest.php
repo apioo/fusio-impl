@@ -467,20 +467,42 @@ JSON;
     /**
      * @dataProvider providerDebugStatus
      */
-    public function testOptionsPreflight($debug)
+    public function testCorsSimpleRequest($debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = Environment::getService('connection');
-        $connection->executeUpdate('UPDATE fusio_config SET value = :origin WHERE name = :name', [
-            'origin' => '*',
-            'name'   => 'cors_allow_origin',
-        ]);
+        $response = $this->sendRequest('/foo', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Origin' => 'http://foo.example',
+        ));
+
+        $body = (string) $response->getBody();
+
+        $headers = [
+            'x-ratelimit-limit' => ['8'],
+            'x-ratelimit-remaining' => ['8'],
+            'access-control-allow-origin' => ['*'],
+            'warning' => ['199 PSX "Resource is in development"'],
+            'vary' => ['Accept'],
+            'content-type' => ['application/json'],
+        ];
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertEquals($headers, $response->getHeaders(), $body);
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testCorsPreflightedRequest($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
         $response = $this->sendRequest('/foo', 'OPTIONS', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Access-Control-Request-Method' => 'DELETE',
+            'User-Agent' => 'Fusio TestCase',
+            'Origin' => 'http://foo.example',
+            'Access-Control-Request-Method' => 'POST',
+            'Access-Control-Request-Headers' => 'Content-Type',
         ));
 
         $body = (string) $response->getBody();
@@ -489,8 +511,9 @@ JSON;
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
-            'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-origin' => ['*'],
+            'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
+            'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
