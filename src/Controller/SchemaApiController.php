@@ -36,7 +36,6 @@ use PSX\Api\Resource\MethodAbstract;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\Filter\CORS;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Record\Record;
@@ -109,12 +108,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // it is required for every request to have an user agent which
         // identifies the client
         $filter[] = new UserAgentEnforcer();
-
-        // cors header
-        $allowOrigin = $this->configService->getValue('cors_allow_origin');
-        if (!empty($allowOrigin)) {
-            $filter[] = new CORS($allowOrigin);
-        }
 
         $filter[] = new AssertMethod(
             $this->routesMethodService,

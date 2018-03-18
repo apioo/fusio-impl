@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Filter\Authentication;
-use PSX\Http\Filter\CORS;
 use PSX\Http\Filter\UserAgentEnforcer;
 
 /**
@@ -62,12 +61,6 @@ trait ProtectionTrait
         // it is required for every request to have an user agent which
         // identifies the client
         $filter[] = new UserAgentEnforcer();
-
-        // cors header
-        $allowOrigin = $this->config->get('psx_cors_origin');
-        if (!empty($allowOrigin)) {
-            $filter[] = new CORS($allowOrigin);
-        }
 
         $filter[] = new Authentication(
             $this->connection,
