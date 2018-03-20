@@ -280,6 +280,16 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\System\FileScanner
+     */
+    public function getSystemFileScannerService()
+    {
+        return new Service\System\FileScanner(
+            $this->get('config')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Schema
      */
     public function getSchemaService()

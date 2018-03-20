@@ -39,6 +39,7 @@ class Deploy
 {
     const TYPE_MIGRATION = 'migration';
     const TYPE_SERVER = 'server';
+    const TYPE_FILE = 'file';
 
     /**
      * @var \Fusio\Impl\Service\System\Import
@@ -59,12 +60,14 @@ class Deploy
      * @param \Fusio\Impl\Service\System\Import $importService
      * @param \Fusio\Impl\Service\System\Migration $migrationService
      * @param \Fusio\Impl\Service\System\WebServer $webServerService
+     * @param \Fusio\Impl\Service\System\FileScanner $fileScannerService
      */
-    public function __construct(Import $importService, Migration $migrationService, WebServer $webServerService)
+    public function __construct(Import $importService, Migration $migrationService, WebServer $webServerService, FileScanner $fileScannerService)
     {
-        $this->importService    = $importService;
-        $this->migrationService = $migrationService;
-        $this->webServerService = $webServerService;
+        $this->importService      = $importService;
+        $this->migrationService   = $migrationService;
+        $this->webServerService   = $webServerService;
+        $this->fileScannerService = $fileScannerService;
     }
 
     /**
@@ -118,6 +121,9 @@ class Deploy
         $server = IncludeDirective::resolve($server, $basePath, self::TYPE_SERVER);
 
         $result->merge($this->webServerService->generate($server));
+
+        // file replace env vars
+        $result->merge($this->fileScannerService->scan());
 
         return $result;
     }

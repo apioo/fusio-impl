@@ -37,6 +37,7 @@ class Result
     const ACTION_EXECUTED   = 'EXECUTED';
     const ACTION_SKIPPED    = 'SKIPPED';
     const ACTION_GENERATED  = 'GENERATED';
+    const ACTION_REPLACED   = 'REPLACED';
 
     /**
      * @var array
