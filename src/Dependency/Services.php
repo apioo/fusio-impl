@@ -253,7 +253,8 @@ trait Services
         return new Service\System\Deploy(
             $this->get('system_import_service'),
             $this->get('system_migration_service'),
-            $this->get('system_web_server_service')
+            $this->get('system_web_server_service'),
+            $this->get('system_file_scanner_service')
         );
     }
 
