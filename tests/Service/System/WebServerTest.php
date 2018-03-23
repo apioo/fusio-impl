@@ -51,8 +51,8 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
         $result = $server->generate([
             'api' => [
                 'host' => 'api.apioo.de',
-                'root' => '/var/www/html/fusio',
-                'index' => 'index.php',
+                'root' => __DIR__ . '/apps/test-app',
+                'index' => 'index.html',
                 'ssl_cert' => '/tmp/domain.crt',
                 'ssl_cert_key' => '/tmp/private.key',
                 'error_log' => '/tmp/error.log',

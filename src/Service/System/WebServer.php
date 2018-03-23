@@ -65,29 +65,19 @@ class WebServer
         $file   = $this->config->get('fusio_server_conf');
 
         if (isset($server['api']) && is_array($server['api'])) {
-            $config->addVirtualHost(VirtualHost::fromArray($server['api'], VirtualHost::HANDLER_API));
+            $host = VirtualHost::fromArray($server['api'], VirtualHost::HANDLER_API);
+
+            $this->assertHost($host, $result, false);
+
+            $config->addVirtualHost($host);
         }
 
         if (isset($server['apps']) && is_array($server['apps'])) {
             foreach ($server['apps'] as $app) {
                 if (is_array($app)) {
-                    $host  = VirtualHost::fromArray($app, VirtualHost::HANDLER_APP);
-                    $root  = $host->getDocumentRoot();
-                    $index = $host->getIndex();
+                    $host = VirtualHost::fromArray($app, VirtualHost::HANDLER_APP);
 
-                    if (!is_dir($root)) {
-                        throw new \RuntimeException('Virtual host root directory ' . $root . ' does not exist');
-                    }
-
-                    if (!empty($index)) {
-                        $indexFile = $root . '/' . $index;
-
-                        if (!is_file($indexFile)) {
-                            throw new \RuntimeException('Virtual host index file ' . $indexFile . ' does not exist');
-                        }
-
-                        $this->replaceFile($indexFile, $result);
-                    }
+                    $this->assertHost($host, $result, true);
 
                     $config->addVirtualHost($host);
                 }
@@ -119,6 +109,33 @@ class WebServer
         }
 
         return null;
+    }
+
+    /**
+     * @param \Fusio\Impl\Service\System\WebServer\VirtualHost $host
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     * @param boolean $replaceEnv
+     */
+    private function assertHost(VirtualHost $host, Result $result, $replaceEnv)
+    {
+        $root  = $host->getDocumentRoot();
+        $index = $host->getIndex();
+
+        if (!is_dir($root)) {
+            throw new \RuntimeException('Virtual host root directory ' . $root . ' does not exist');
+        }
+
+        if (!empty($index)) {
+            $indexFile = $root . '/' . $index;
+
+            if (!is_file($indexFile)) {
+                throw new \RuntimeException('Virtual host index file ' . $indexFile . ' does not exist');
+            }
+
+            if ($replaceEnv) {
+                $this->replaceFile($indexFile, $result);
+            }
+        }
     }
 
     /**
