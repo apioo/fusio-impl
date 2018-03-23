@@ -39,7 +39,6 @@ class Deploy
 {
     const TYPE_MIGRATION = 'migration';
     const TYPE_SERVER = 'server';
-    const TYPE_FILE = 'file';
 
     /**
      * @var \Fusio\Impl\Service\System\Import
