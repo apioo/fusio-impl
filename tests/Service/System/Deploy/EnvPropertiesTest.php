@@ -35,7 +35,7 @@ class EnvPropertiesTest extends \PHPUnit_Framework_TestCase
 {
     public function testReplace()
     {
-        $_SERVER['FOO'] = 'bar';
+        $_ENV['FOO'] = 'bar';
         
         $data   = 'dbname: "${env.FOO}"';
         $actual = EnvProperties::replace($data);
@@ -46,10 +46,10 @@ class EnvPropertiesTest extends \PHPUnit_Framework_TestCase
 
     public function testReplaceMultiple()
     {
-        $_SERVER['APIOO_DB_NAME'] = 'db_name';
-        $_SERVER['APIOO_DB_USER'] = 'db_user';
-        $_SERVER['APIOO_DB_PW'] = 'db_pw';
-        $_SERVER['MYSQL_HOST'] = 'host';
+        $_ENV['APIOO_DB_NAME'] = 'db_name';
+        $_ENV['APIOO_DB_USER'] = 'db_user';
+        $_ENV['APIOO_DB_PW'] = 'db_pw';
+        $_ENV['MYSQL_HOST'] = 'host';
 
         $data = <<<'YAML'
 Default-Connection:
@@ -75,7 +75,7 @@ YAML;
 
     public function testReplaceCase()
     {
-        $_SERVER['foo'] = 'bar';
+        $_ENV['foo'] = 'bar';
 
         $data   = 'dbname: "${env.FOO}"';
         $actual = EnvProperties::replace($data);
@@ -86,7 +86,7 @@ YAML;
 
     public function testReplaceEscape()
     {
-        $_SERVER['foo'] = 'foo' . "\n" . 'bar"test';
+        $_ENV['foo'] = 'foo' . "\n" . 'bar"test';
 
         $data   = 'dbname: "${env.FOO}"';
         $actual = EnvProperties::replace($data);
