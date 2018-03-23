@@ -71,7 +71,23 @@ class WebServer
         if (isset($server['apps']) && is_array($server['apps'])) {
             foreach ($server['apps'] as $app) {
                 if (is_array($app)) {
-                    $config->addVirtualHost(VirtualHost::fromArray($app, VirtualHost::HANDLER_APP));
+                    $host  = VirtualHost::fromArray($app, VirtualHost::HANDLER_APP);
+                    $root  = $host->getDocumentRoot();
+                    $index = $host->getIndex();
+
+                    if (!is_dir($root)) {
+                        throw new \RuntimeException('Virtual host root directory ' . $root . ' does not exist');
+                    }
+
+                    if (!empty($index)) {
+                        if (!is_file($root . '/' . $index)) {
+                            throw new \RuntimeException('Virtual host index file ' . $root . '/' . $index . ' does not exist');
+                        }
+
+                        $this->replaceFile($index, $result);
+                    }
+
+                    $config->addVirtualHost($host);
                 }
             }
         }
@@ -101,5 +117,44 @@ class WebServer
         }
 
         return null;
+    }
+
+    /**
+     * @param string $index
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     */
+    private function replaceFile($index, Result $result)
+    {
+        $content = file_get_contents($index);
+        $content = $this->replaceEnvs($content, $count);
+
+        if ($count > 0) {
+            $bytes = file_put_contents($index, $content);
+
+            if ($bytes) {
+                $result->add(Deploy::TYPE_SERVER, Result::ACTION_REPLACED, 'Environment variables at ' . $index);
+            }
+        }
+    }
+
+    /**
+     * @param string $content
+     * @param integer $replaced
+     * @return string
+     */
+    private function replaceEnvs($content, &$replaced)
+    {
+        $envs = [
+            'FUSIO_URL' => $this->config->get('psx_url'),
+        ];
+
+        $envs = array_merge($envs, $_ENV);
+
+        foreach ($envs as $key => $value) {
+            $content = str_replace('${' . $key . '}', $value, $content, $count);
+            $replaced+= $count;
+        }
+
+        return $content;
     }
 }

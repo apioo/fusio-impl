@@ -253,8 +253,7 @@ trait Services
         return new Service\System\Deploy(
             $this->get('system_import_service'),
             $this->get('system_migration_service'),
-            $this->get('system_web_server_service'),
-            $this->get('system_file_scanner_service')
+            $this->get('system_web_server_service')
         );
     }
 
@@ -276,16 +275,6 @@ trait Services
     public function getSystemWebServerService()
     {
         return new Service\System\WebServer(
-            $this->get('config')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\System\FileScanner
-     */
-    public function getSystemFileScannerService()
-    {
-        return new Service\System\FileScanner(
             $this->get('config')
         );
     }

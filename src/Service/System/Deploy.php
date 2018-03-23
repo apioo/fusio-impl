@@ -60,14 +60,12 @@ class Deploy
      * @param \Fusio\Impl\Service\System\Import $importService
      * @param \Fusio\Impl\Service\System\Migration $migrationService
      * @param \Fusio\Impl\Service\System\WebServer $webServerService
-     * @param \Fusio\Impl\Service\System\FileScanner $fileScannerService
      */
-    public function __construct(Import $importService, Migration $migrationService, WebServer $webServerService, FileScanner $fileScannerService)
+    public function __construct(Import $importService, Migration $migrationService, WebServer $webServerService)
     {
-        $this->importService      = $importService;
-        $this->migrationService   = $migrationService;
-        $this->webServerService   = $webServerService;
-        $this->fileScannerService = $fileScannerService;
+        $this->importService    = $importService;
+        $this->migrationService = $migrationService;
+        $this->webServerService = $webServerService;
     }
 
     /**
@@ -114,16 +112,17 @@ class Deploy
         $migration = isset($data[self::TYPE_MIGRATION]) ? $data[self::TYPE_MIGRATION] : [];
         $migration = IncludeDirective::resolve($migration, $basePath, self::TYPE_MIGRATION);
 
-        $result->merge($this->migrationService->execute($migration, $basePath));
+        if (is_array($migration)) {
+            $result->merge($this->migrationService->execute($migration, $basePath));
+        }
 
         // web server
         $server = isset($data[self::TYPE_SERVER]) ? $data[self::TYPE_SERVER] : [];
         $server = IncludeDirective::resolve($server, $basePath, self::TYPE_SERVER);
 
-        $result->merge($this->webServerService->generate($server));
-
-        // file replace env vars
-        $result->merge($this->fileScannerService->scan());
+        if (is_array($server)) {
+            $result->merge($this->webServerService->generate($server));
+        }
 
         return $result;
     }
