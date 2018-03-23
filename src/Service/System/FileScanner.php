@@ -106,6 +106,8 @@ class FileScanner
             'FUSIO_URL' => $this->config->get('psx_url'),
         ];
 
+        $envs = array_merge($envs, $_ENV);
+
         foreach ($envs as $key => $value) {
             $content = str_replace('${' . $key . '}', $value, $content, $count);
             $replaced+= $count;

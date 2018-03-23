@@ -50,7 +50,7 @@ class EnvProperties
 
         // env properties
         $vars['env'] = [];
-        foreach ($_SERVER as $key => $value) {
+        foreach ($_ENV as $key => $value) {
             if (is_scalar($value)) {
                 $vars['env'][strtolower($key)] = $value;
             }
