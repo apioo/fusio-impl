@@ -80,11 +80,13 @@ class WebServer
                     }
 
                     if (!empty($index)) {
-                        if (!is_file($root . '/' . $index)) {
-                            throw new \RuntimeException('Virtual host index file ' . $root . '/' . $index . ' does not exist');
+                        $indexFile = $root . '/' . $index;
+
+                        if (!is_file($indexFile)) {
+                            throw new \RuntimeException('Virtual host index file ' . $indexFile . ' does not exist');
                         }
 
-                        $this->replaceFile($index, $result);
+                        $this->replaceFile($indexFile, $result);
                     }
 
                     $config->addVirtualHost($host);

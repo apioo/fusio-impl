@@ -35,13 +35,20 @@ use Symfony\Component\Yaml\Yaml;
  */
 class WebServerTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        file_put_contents(__DIR__ . '/apps/test-app/index.html', '<b>Url: ${FUSIO_URL}</b>');
+    }
+
     /**
      * @dataProvider serverTypeProvider
      */
     public function testGenerate($serverType)
     {
-        $webServer = $this->newWebServer($serverType);
-        $webServer->generate([
+        $server = $this->newWebServer($serverType);
+        $result = $server->generate([
             'api' => [
                 'host' => 'api.apioo.de',
                 'root' => '/var/www/html/fusio',
@@ -53,18 +60,8 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
             ],
             'apps' => [
                 [
-                    'host' => 'fusio.apioo.de',
-                    'root' => '/var/www/html/fusio/fusio',
-                    'index' => 'index.htm',
-                ],
-                [
-                    'host' => 'documentation.apioo.de',
-                    'root' => '/var/www/html/fusio/documentation',
-                    'index' => 'index.html',
-                ],
-                [
-                    'host' => 'developer.apioo.de',
-                    'root' => '/var/www/html/fusio/developer',
+                    'host' => 'test.apioo.de',
+                    'root' => __DIR__ . '/apps/test-app',
                     'index' => 'index.html',
                 ],
             ],
@@ -73,9 +70,21 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
         $actual = file_get_contents(__DIR__ . '/Resource/' . $serverType . '.conf');
         $expect = file_get_contents(__DIR__ . '/Resource/' . $serverType . '_expect.conf');
 
+        $actual = str_replace(__DIR__, '', $actual);
         $actual = preg_replace('/\d{4}-\d{2}-\d{2}/', '0000-00-00', $actual);
 
         $this->assertEquals($expect, $actual, $actual);
+        $this->assertEquals('<b>Url: http://foo.bar</b>', file_get_contents(__DIR__ . '/apps/test-app/index.html'));
+
+        $actual = $result->getLogs();
+        $expect = [
+            '[REPLACED] server Environment variables at /apps/test-app/index.html',
+            '[GENERATED] server Generated web server config file  /Resource/' . $serverType . '.conf',
+        ];
+
+        foreach ($expect as $i => $message) {
+            $this->assertEquals($message, str_replace(__DIR__, '', $actual[$i]));
+        }
     }
 
     public function serverTypeProvider()
@@ -89,6 +98,7 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
     private function newWebServer($serverType)
     {
         $config    = new Config([
+            'psx_url'           => 'http://foo.bar',
             'fusio_server_type' => $serverType,
             'fusio_server_conf' => __DIR__ . '/Resource/' . $serverType . '.conf',
         ]);
