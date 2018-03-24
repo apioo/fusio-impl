@@ -62,7 +62,6 @@ class WebServer
     {
         $result = new Result();
         $config = new Configuration();
-        $file   = $this->config->get('fusio_server_conf');
 
         if (isset($server['api']) && is_array($server['api'])) {
             $host = VirtualHost::fromArray($server['api'], VirtualHost::HANDLER_API);
@@ -86,7 +85,9 @@ class WebServer
 
         $generator = $this->newGenerator();
         if ($generator instanceof GeneratorInterface) {
+            $file  = $this->config->get('fusio_server_conf');
             $bytes = $generator->generate($config, $file);
+
             if ($bytes > 0) {
                 $result->add(Deploy::TYPE_SERVER, Result::ACTION_GENERATED, 'Generated web server config file  ' . $file);
             }
