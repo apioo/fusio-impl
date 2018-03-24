@@ -171,8 +171,10 @@ class WebServer
         $envs = array_merge($envs, $_SERVER);
 
         foreach ($envs as $key => $value) {
-            $content = str_replace('${' . $key . '}', $value, $content, $count);
-            $replaced+= $count;
+            if (is_scalar($value)) {
+                $content = str_replace('${' . $key . '}', $value, $content, $count);
+                $replaced+= $count;
+            }
         }
 
         return $content;
