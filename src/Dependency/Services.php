@@ -270,6 +270,18 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\System\Push
+     */
+    public function getSystemPushService()
+    {
+        return new Service\System\Push(
+            $this->get('config'),
+            new Service\System\Push\ZipBuilder(),
+            new Service\System\Push\ZipUpload()
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\System\WebServer
      */
     public function getSystemWebServerService()

@@ -189,6 +189,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\InstallCommand($this->get('connection')));
         $application->add(new Console\System\MigrationCommand($this->get('table_manager')->getTable(Table\Deploy\Migration::class)));
+        $application->add(new Console\System\PushCommand($this->get('system_push_service'), $this->get('config')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
