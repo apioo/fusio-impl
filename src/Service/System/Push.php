@@ -83,7 +83,7 @@ class Push
             $this->zipBuilder->buildZip($file, $basePath);
 
             // upload zip
-            return $this->zipUpload->uploadZip($file, $host, $key);
+            yield from $this->zipUpload->uploadZip($file, $host, $key);
         } else {
             throw new \RuntimeException('Provider "fusio_provider_host" and "fusio_provider_key" not defined in configuration');
         }

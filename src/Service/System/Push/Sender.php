@@ -78,7 +78,7 @@ class Sender
         $promise = $this->client->requestAsync('POST', $deployUrl, [
             'multipart' => [
                 [
-                    'name' => 'deploy',
+                    'name' => 'fusio',
                     'contents' => fopen($file, 'r'),
                 ],
             ],

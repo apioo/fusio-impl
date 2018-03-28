@@ -43,7 +43,7 @@ class ZipUpload
      */
     public function __construct(Client $client = null)
     {
-        $this->client = $client ?: new Client();
+        $this->client = $client ?: new Client(['http_errors' => false]);
     }
 
     /**
@@ -68,7 +68,7 @@ class ZipUpload
 
         $sender = new Sender($this->client);
 
-        return $sender->send($file, $provider->getPushUrl(), $provider->getStatusUrl());
+        yield from $sender->send($file, $provider->getPushUrl(), $provider->getStatusUrl());
     }
 
     /**
