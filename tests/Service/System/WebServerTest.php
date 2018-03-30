@@ -61,6 +61,7 @@ class WebServerTest extends \PHPUnit_Framework_TestCase
             'apps' => [
                 [
                     'host' => 'test.apioo.de',
+                    'alias' => ['myapp.com', 'foo.com'],
                     'root' => __DIR__ . '/apps/test-app',
                     'index' => 'index.html',
                 ],
