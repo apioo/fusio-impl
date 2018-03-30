@@ -18,7 +18,7 @@ server {
 }
 {% endif %}
 {% macro render_host(host, port) %}
-    {% if host.serverName %}server_name {{ host.serverName }};
+    {% if host.serverName %}server_name {{ host.serverName }}{% if host.alias %}{% for alias in host.alias %} {{ alias }}{% endfor %}{% endif %};
 {% endif %}
     {% if host.documentRoot %}root {{ host.documentRoot }};
 {% endif %}

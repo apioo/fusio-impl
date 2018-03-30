@@ -20,6 +20,9 @@
 {% endif %}
 {% macro render_host(host) %}
     ServerName "{{ host.serverName }}"
+    {% for alias in host.alias %}
+    ServerAlias "{{ alias }}"
+{% endfor %}
     DocumentRoot "{{ host.documentRoot }}"
 
     <Directory "{{ host.documentRoot }}">

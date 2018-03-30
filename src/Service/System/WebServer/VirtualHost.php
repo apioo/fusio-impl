@@ -49,6 +49,11 @@ class VirtualHost
     protected $serverName;
 
     /**
+     * @var array
+     */
+    protected $alias;
+
+    /**
      * @var string
      */
     protected $documentRoot;
@@ -134,6 +139,22 @@ class VirtualHost
     public function setServerName($serverName)
     {
         $this->serverName = $serverName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param array $alias
+     */
+    public function setAlias(array $alias)
+    {
+        $this->alias = $alias;
     }
 
     /**
@@ -282,6 +303,10 @@ class VirtualHost
 
         if (isset($data['host'])) {
             $host->setServerName($data['host']);
+        }
+
+        if (isset($data['alias']) && is_array($data['alias'])) {
+            $host->setAlias($data['alias']);
         }
 
         if (isset($data['root'])) {
