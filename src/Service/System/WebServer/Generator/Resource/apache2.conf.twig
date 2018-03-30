@@ -2,6 +2,9 @@
 <VirtualHost *:{{ host.port }}>
 {% if host.sslForce %}
     ServerName "{{ host.serverName }}"
+{% for alias in host.alias %}
+    ServerAlias "{{ alias }}"
+{% endfor %}
     DocumentRoot "{{ host.documentRoot }}"
     Redirect permanent / https://{{ host.serverName }}/
 {% else %}
@@ -20,7 +23,7 @@
 {% endif %}
 {% macro render_host(host) %}
     ServerName "{{ host.serverName }}"
-    {% for alias in host.alias %}
+{% for alias in host.alias %}
     ServerAlias "{{ alias }}"
 {% endfor %}
     DocumentRoot "{{ host.documentRoot }}"
