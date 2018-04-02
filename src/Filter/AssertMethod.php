@@ -66,9 +66,13 @@ class AssertMethod implements FilterInterface
         $routeId    = $this->context->getRouteId();
         $methodName = $request->getMethod();
 
-        // in case of HEAD we use the schema of the GET request
-        if ($methodName === 'HEAD' || $methodName === 'OPTIONS') {
+        if ($methodName === 'HEAD') {
+            // in case of HEAD we use the schema of the GET request
             $methodName = 'GET';
+        } elseif ($methodName === 'OPTIONS') {
+            // for OPTIONS request we dont need method details
+            $filterChain->handle($request, $response);
+            return;
         }
 
         $version = $this->getSubmittedVersionNumber($request);
