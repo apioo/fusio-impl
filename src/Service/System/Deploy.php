@@ -70,9 +70,10 @@ class Deploy
     /**
      * @param string $data
      * @param string|null $basePath
+     * @param boolean $force
      * @return \Fusio\Impl\Service\System\Import\Result
      */
-    public function deploy($data, $basePath = null)
+    public function deploy($data, $basePath = null, $force = false)
     {
         $data   = Yaml::parse(EnvProperties::replace($data));
         $import = new \stdClass();
@@ -112,7 +113,7 @@ class Deploy
         $migration = IncludeDirective::resolve($migration, $basePath, self::TYPE_MIGRATION);
 
         if (is_array($migration)) {
-            $result->merge($this->migrationService->execute($migration, $basePath));
+            $result->merge($this->migrationService->execute($migration, $basePath, $force));
         }
 
         // web server

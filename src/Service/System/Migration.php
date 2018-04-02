@@ -65,10 +65,11 @@ class Migration
 
     /**
      * @param array $migration
-     * @param null $basePath
+     * @param string|null $basePath
+     * @param boolean $force
      * @return \Fusio\Impl\Service\System\Import\Result
      */
-    public function execute(array $migration, $basePath = null)
+    public function execute(array $migration, $basePath = null, $force = false)
     {
         $result = new Result();
 
@@ -78,7 +79,7 @@ class Migration
                     $path = $basePath . '/' . $definitionFile;
                     if (is_file($path)) {
                         try {
-                            $this->executeDefinition($connectionId, $path, $definitionFile, $result);
+                            $this->executeDefinition($connectionId, $path, $definitionFile, $result, $force);
                         } catch (\Throwable $e) {
                             $this->logger->error($e->getMessage());
 
@@ -92,7 +93,14 @@ class Migration
         return $result;
     }
 
-    private function executeDefinition($connectionId, $path, $definitionFile, Result $result)
+    /**
+     * @param integer $connectionId
+     * @param string $path
+     * @param string $definitionFile
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     * @param boolean $force
+     */
+    private function executeDefinition($connectionId, $path, $definitionFile, Result $result, $force)
     {
         $connection = $this->connector->getConnection($connectionId);
         $hash       = sha1_file($path);
@@ -104,18 +112,20 @@ class Migration
 
         $deploy = $this->deployTable->getOneBy($condition);
 
-        if (empty($deploy)) {
+        if (empty($deploy) || $force) {
             // execute if the file was not already executed
             $strategy = Migration\Factory::getStrategy($connection);
             $strategy->execute($connection, $path);
 
             // insert migration
-            $this->deployTable->create([
-                'connection' => $connectionId,
-                'file' => $definitionFile,
-                'fileHash' => $hash,
-                'executeDate' => new \DateTime(),
-            ]);
+            if (empty($deploy)) {
+                $this->deployTable->create([
+                    'connection' => $connectionId,
+                    'file' => $definitionFile,
+                    'fileHash' => $hash,
+                    'executeDate' => new \DateTime(),
+                ]);
+            }
 
             $result->add(Deploy::TYPE_MIGRATION, Result::ACTION_EXECUTED, $connectionId . ' ' . $definitionFile);
         } else {

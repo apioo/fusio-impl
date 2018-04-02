@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -82,7 +83,8 @@ class DeployCommand extends Command
             ->setName('system:deploy')
             ->setAliases(['deploy'])
             ->setDescription('Deploys a Fusio YAML definition')
-            ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file');
+            ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces to re-execute migration files', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -103,10 +105,12 @@ class DeployCommand extends Command
             $this->logger->pushHandler(new NullHandler());
         }
 
+        $force = $input->getOption('force');
+
         try {
             $this->connection->beginTransaction();
 
-            $result = $this->deployService->deploy(file_get_contents($file), dirname($file));
+            $result = $this->deployService->deploy(file_get_contents($file), dirname($file), $force);
             $logs   = $result->getLogs();
 
             foreach ($logs as $log) {
