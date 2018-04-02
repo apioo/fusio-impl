@@ -156,10 +156,6 @@ class CleanCommand extends Command
      */
     private function commentFile($file, $needle)
     {
-        if (!is_file($file)) {
-            return;
-        }
-
         $lines  = file($file);
         $return = '';
 
