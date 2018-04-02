@@ -3313,12 +3313,12 @@
     },
     "\/backend\/import\/{format}": {
       "post": {
-        "operationId": "backendImportFormatPostSchema",
+        "operationId": "backendImportFormatPostImport",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Schema"
+                "$ref": "#\/components\/schemas\/Import"
               }
             }
           }
@@ -3913,14 +3913,14 @@
     },
     "\/doc": {
       "get": {
-        "operationId": "docGetIndex",
+        "operationId": "docGetDocumentation_Index",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Index"
+                  "$ref": "#\/components\/schemas\/Documentation_Index"
                 }
               }
             }
@@ -3931,14 +3931,14 @@
     },
     "\/doc\/{version}\/{path}": {
       "get": {
-        "operationId": "docVersionPathGetDetail",
+        "operationId": "docVersionPathGetDocumentation_Detail",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Detail"
+                  "$ref": "#\/components\/schemas\/Documentation_Detail"
                 }
               }
             }
@@ -3962,7 +3962,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
           },
           "class": {
             "type": "string"
@@ -4050,16 +4050,10 @@
         "type": "object",
         "title": "index",
         "properties": {
-          "routings": {
+          "connections": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Route"
-            }
-          },
-          "links": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Link"
+              "$ref": "#\/components\/schemas\/Connection"
             }
           }
         }
@@ -4349,7 +4343,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
           },
           "class": {
             "type": "string"
@@ -4546,28 +4540,45 @@
       "Methods": {
         "type": "object",
         "title": "methods",
-        "additionalProperties": {
-          "$ref": "#\/components\/schemas\/Method"
+        "patternProperties": {
+          "^(GET|POST|PUT|PATCH|DELETE)$": {
+            "$ref": "#\/components\/schemas\/Method"
+          }
         }
       },
       "Method": {
         "type": "object",
         "title": "method",
         "properties": {
-          "description": {
+          "method": {
             "type": "string"
           },
-          "queryParameters": {
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "parameters": {
             "type": "string"
           },
           "request": {
             "type": "string"
           },
+          "response": {
+            "type": "string"
+          },
           "responses": {
-            "type": "array",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#\/components\/schemas\/Responses"
+          },
+          "action": {
+            "type": "string"
           }
         }
       },
@@ -4583,7 +4594,21 @@
       "Schema": {
         "type": "object",
         "title": "schema",
-        "description": "Contains the JSON Schema object"
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+          },
+          "source": {
+            "$ref": "#\/components\/schemas\/Source"
+          }
+        }
       },
       "Source": {
         "type": "object",
@@ -4610,16 +4635,13 @@
         "type": "object",
         "title": "route",
         "properties": {
-          "path": {
-            "type": "string"
+          "routeId": {
+            "type": "integer"
+          },
+          "allow": {
+            "type": "boolean"
           },
           "methods": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "version": {
             "type": "string"
           }
         }
@@ -4781,6 +4803,15 @@
             "items": {
               "$ref": "#\/components\/schemas\/Connection"
             }
+          }
+        }
+      },
+      "Import": {
+        "type": "object",
+        "title": "import",
+        "properties": {
+          "schema": {
+            "type": "string"
           }
         }
       },
@@ -4967,9 +4998,27 @@
           }
         }
       },
-      "Link": {
+      "Documentation_Route": {
         "type": "object",
-        "title": "link",
+        "title": "Documentation Route",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "Discovery_Link": {
+        "type": "object",
+        "title": "Discovery Link",
         "properties": {
           "rel": {
             "type": "string"
@@ -4979,9 +5028,60 @@
           }
         }
       },
-      "Detail": {
+      "Documentation_Index": {
         "type": "object",
-        "title": "detail",
+        "title": "Documentation Index",
+        "properties": {
+          "routings": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Documentation_Route"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Discovery_Link"
+            }
+          }
+        }
+      },
+      "Documentation_Schema": {
+        "type": "object",
+        "title": "Documentation Schema",
+        "description": "Contains the JSON Schema object"
+      },
+      "Documentation_Methods": {
+        "type": "object",
+        "title": "Documentation Methods",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Documentation_Method"
+        }
+      },
+      "Documentation_Method": {
+        "type": "object",
+        "title": "Documentation Method",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "queryParameters": {
+            "type": "string"
+          },
+          "request": {
+            "type": "string"
+          },
+          "responses": {
+            "type": "array",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Documentation_Detail": {
+        "type": "object",
+        "title": "Documentation Detail",
         "properties": {
           "path": {
             "type": "string"
@@ -4996,18 +5096,18 @@
             "type": "string"
           },
           "schema": {
-            "$ref": "#\/components\/schemas\/Schema"
+            "$ref": "#\/components\/schemas\/Documentation_Schema"
           },
           "pathParameters": {
             "type": "string"
           },
           "methods": {
-            "$ref": "#\/components\/schemas\/Methods"
+            "$ref": "#\/components\/schemas\/Documentation_Methods"
           },
           "links": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Link"
+              "$ref": "#\/components\/schemas\/Discovery_Link"
             }
           }
         }

@@ -51,27 +51,17 @@ class OpenAPITest extends ControllerDbTestCase
     "path": "\/backend\/import\/:format",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Schema": {
+            "Import": {
                 "type": "object",
-                "title": "schema",
+                "title": "import",
                 "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
-                    },
-                    "source": {
-                        "$ref": "#\/definitions\/Source"
+                    "schema": {
+                        "type": "string"
                     }
                 }
             },
@@ -186,7 +176,7 @@ class OpenAPITest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
                     },
                     "class": {
                         "type": "string"
@@ -240,6 +230,25 @@ class OpenAPITest extends ControllerDbTestCase
                 },
                 "maxProperties": 16
             },
+            "Schema": {
+                "type": "object",
+                "title": "schema",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+                    },
+                    "source": {
+                        "$ref": "#\/definitions\/Source"
+                    }
+                }
+            },
             "Source": {
                 "type": "object",
                 "title": "source",
@@ -254,7 +263,7 @@ class OpenAPITest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
                     },
                     "class": {
                         "type": "string"
@@ -307,7 +316,7 @@ class OpenAPITest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Schema"
+                "$ref": "#\/definitions\/Import"
             },
             "POST-200-response": {
                 "$ref": "#\/definitions\/Adapter"

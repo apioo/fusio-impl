@@ -34,7 +34,7 @@ class Schema extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('schema');
+        $sb = $this->getSchemaBuilder('import');
         $sb->string('schema');
 
         return $sb->getProperty();
