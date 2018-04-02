@@ -84,7 +84,7 @@ class DeployCommand extends Command
             ->setAliases(['deploy'])
             ->setDescription('Deploys a Fusio YAML definition')
             ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces to re-execute migration files', false);
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces to re-execute migration files');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
