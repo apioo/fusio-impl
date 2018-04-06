@@ -80,7 +80,7 @@ class Push
         if (!empty($host) && !empty($key)) {
             // create zip
             $file = $this->config->get('psx_path_cache') . '/fusio-push-' . time() . '.zip';
-            $this->zipBuilder->buildZip($file, $basePath);
+            yield from $this->zipBuilder->buildZip($file, $basePath);
 
             // upload zip
             yield from $this->zipUpload->uploadZip($file, $host, $key);

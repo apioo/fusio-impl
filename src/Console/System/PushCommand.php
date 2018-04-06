@@ -85,10 +85,6 @@ class PushCommand extends Command
                 $output->write($line);
             }
 
-            $output->writeln('');
-            $output->writeln('Push successful!');
-            $output->writeln('');
-
             $return = 0;
         } catch (\Throwable $e) {
             $output->writeln('An exception occurred during push.');

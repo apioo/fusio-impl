@@ -72,15 +72,20 @@ class ZipBuilder
      * 
      * @param string $file
      * @param string $basePath
+     * @return \Generator
      */
     public function buildZip($file, $basePath)
     {
+        yield 'Generating zip file ' . $file;
+
         $zip = new \ZipArchive();
         $res = $zip->open($file, \ZipArchive::CREATE);
 
         if ($res === true) {
             $this->buildZipArchive($basePath, $zip, $basePath, 0);
             $zip->close();
+
+            yield 'Generation completed file size ' . (filesize($file) / 1024) . 'kb';
         } else {
             throw new \RuntimeException('Could not create zip file ' . $file);
         }

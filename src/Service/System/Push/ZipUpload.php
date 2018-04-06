@@ -61,10 +61,14 @@ class ZipUpload
         $hash = hash_file('sha256', $file);
         $size = filesize($file);
 
+        yield 'Discovering provider at ' . $providerHost;
+
         $provider = $this->discoverProvider($providerHost, $providerKey, $hash, $size);
         if (!$provider instanceof Provider) {
             throw new \RuntimeException('Could not discover provider');
         }
+
+        yield 'Discovered instance for host ' . $provider->getHostname();
 
         $sender = new Sender($this->client);
 

@@ -22,8 +22,7 @@
 namespace Fusio\Impl\Service\System\Push;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\ResponseInterface;
+use PSX\Json\Parser;
 
 /**
  * Sender
@@ -34,25 +33,12 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Sender
 {
+    const COMPLETED_LINE = '----5ac7cda93bcaf';
+
     /**
      * @var \GuzzleHttp\Client
      */
     private $client;
-
-    /**
-     * @var boolean
-     */
-    private $sending;
-
-    /**
-     * @var boolean
-     */
-    private $upload;
-
-    /**
-     * @var integer
-     */
-    private $line;
 
     /**
      * @param \GuzzleHttp\Client $client
@@ -70,12 +56,10 @@ class Sender
      */
     public function send($file, $deployUrl, $statusUrl)
     {
-        $this->sending = true;
-        $this->upload  = false;
-        $this->line    = 0;
+        yield 'Uploading ' . $file;
 
         // upload zip
-        $promise = $this->client->requestAsync('POST', $deployUrl, [
+        $response = $this->client->request('POST', $deployUrl, [
             'multipart' => [
                 [
                     'name' => 'fusio',
@@ -84,48 +68,53 @@ class Sender
             ],
         ]);
 
-        $promise->then(
-            function (ResponseInterface $response) {
-                $this->sending = false;
-                $this->upload  = true;
-            },
-            function (RequestException $e) {
-                $this->sending = false;
-                $this->upload  = false;
+        if ($response->getStatusCode() >= 400) {
+            $body = (string) $response->getBody();
+            $data = Parser::decode($body, true);
+
+            $message = $data['message'] ?? 'An error occurred while uploading, received status code ' . $response->getStatusCode();
+
+            throw new \RuntimeException($message);
+        }
+
+        yield 'Upload completed execute deployment on remote instance';
+
+        // request status during deployment
+        $line    = 0;
+        $pending = true;
+
+        while ($pending) {
+            $response = $this->client->request('GET', $statusUrl);
+
+            $body = (string) $response->getBody();
+            $data = Parser::decode($body, true);
+
+            if ($response->getStatusCode() >= 400) {
+                $message = $data['message'] ?? 'Received an error status code ' . $response->getStatusCode();
+
+                throw new \RuntimeException($message);
             }
-        );
 
-        while (true) {
-            if (!$this->sending) {
-                if (!$this->upload) {
-                    throw new \RuntimeException('An error occurred while uploading');
-                }
+            if (isset($data['logs']) && is_array($data['logs'])) {
+                foreach ($data['logs'] as $index => $message) {
+                    // check for completed line
+                    if ($message == self::COMPLETED_LINE) {
+                        $pending = false;
+                        break;
+                    }
 
-                $response = $this->client->request('GET', $statusUrl, [
-                    'headers' => [
-                        'Range' => 'lines=' . $this->line . '-'
-                    ],
-                ]);
+                    // we yield only new lines
+                    if ($index > $line) {
+                        yield $message;
+                    }
 
-                if ($response->getStatusCode() == 206) {
-                    // get content range
-                    $range   = $response->getHeaderLine('Content-Range');
-                    $matches = [];
-                    preg_match('/lines (\d+)-(\d+)/', $range, $matches);
-
-                    $line = $matches[2] ?? 0;
-                    $this->line = intval($line);
-
-                    yield $response->getBody()->getContents();
-                } else {
-                    // invalid status code
-                    break;
+                    $line = $index;
                 }
             } else {
-                // currently uploading the zip ... wait
+                throw new \RuntimeException('Received invalid data');
             }
 
-            usleep(1000);
+            usleep(1500);
         }
     }
 }
