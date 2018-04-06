@@ -82,7 +82,7 @@ class PushCommand extends Command
             $generator = $this->pushService->push($baseDir);
 
             foreach ($generator as $line) {
-                $output->write($line);
+                $output->writeln($line);
             }
 
             $return = 0;
