@@ -64,6 +64,7 @@ class Sender
                 [
                     'name' => 'fusio',
                     'contents' => fopen($file, 'r'),
+                    'headers'  => ['Content-Type' => 'application/zip']
                 ],
             ],
         ]);
