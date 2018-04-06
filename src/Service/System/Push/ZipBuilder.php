@@ -85,7 +85,7 @@ class ZipBuilder
             $this->buildZipArchive($basePath, $zip, $basePath, 0);
             $zip->close();
 
-            yield 'Generation completed file size ' . (filesize($file) / 1024) . 'kb';
+            yield 'Generation completed file size ' . (round(filesize($file) / 1024, 2)) . 'kb';
         } else {
             throw new \RuntimeException('Could not create zip file ' . $file);
         }
