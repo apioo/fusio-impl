@@ -82,11 +82,12 @@ class ZipUpload
      */
     private function discoverProvider($providerHost, $providerKey, $hash, $size)
     {
-        $url = 'https://' . $providerHost . '/.well-known/deploy';
+        $url = 'http://deploy.' . $providerHost . '/.well-known/deploy';
 
         $response = $this->client->request('POST', $url, [
             'headers' => [
-                'Authorization' => 'Bearer ' . $providerKey
+                'Authorization' => 'Bearer ' . $providerKey,
+                'Accept' => 'application/json'
             ],
             'json' => [
                 'hash' => $hash,
@@ -94,17 +95,21 @@ class ZipUpload
             ],
         ]);
 
-        if ($response->getStatusCode() == 200) {
-            $data     = Parser::decode($response->getBody()->getContents(), true);
-            $provider = Provider::fromArray($data);
+        $body = (string) $response->getBody();
+        $data = Parser::decode($body, true);
 
-            return $provider;
+        if ($response->getStatusCode() == 200) {
+            return Provider::fromArray($data);
         } elseif ($response->getStatusCode() == 429) {
             $retryAfter = $response->getHeaderLine('Retry-After') ?: 300;
 
             throw new \RuntimeException(sprintf('You have made too many deploys please try again after %s seconds', $retryAfter));
         } else {
-            throw new \RuntimeException(sprintf('Looks like %s is not valid Fusio cloud provider', $providerHost));
+            if ($data['message'] && is_string($data['message'])) {
+                throw new \RuntimeException($data['message']);
+            } else {
+                throw new \RuntimeException(sprintf('Looks like %s is not valid Fusio cloud provider', $providerHost));
+            }
         }
     }
 }
