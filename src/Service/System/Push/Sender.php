@@ -81,7 +81,7 @@ class Sender
         yield 'Upload completed execute deployment on remote instance';
 
         // request status during deployment
-        $line    = 0;
+        $line    = -1;
         $pending = true;
 
         while ($pending) {
@@ -107,9 +107,8 @@ class Sender
                     // we yield only new lines
                     if ($index > $line) {
                         yield $message;
+                        $line = $index;
                     }
-
-                    $line = $index;
                 }
             } else {
                 throw new \RuntimeException('Received invalid data');
