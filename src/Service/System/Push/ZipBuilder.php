@@ -39,7 +39,7 @@ class ZipBuilder
         'public',
         'resources',
         'src',
-        'tests'
+        'tests',
     ];
 
     /**
@@ -48,7 +48,9 @@ class ZipBuilder
     private $includeFiles = [
         '.fusio.yml',
         'composer.json',
-        'composer.lock'
+        'composer.lock',
+        'configuration.php',
+        'container.php',
     ];
 
     /**
@@ -57,7 +59,7 @@ class ZipBuilder
     private $excludeDirs  = [
         '\.(.*)', // i.e. .git
         'node_modules',
-        'vendor'
+        'vendor',
     ];
 
     /**
