@@ -78,7 +78,7 @@ class CleanCommand extends Command
         }
 
         if ($confirm) {
-            $output->writeln('This command removes the following files and directories from the Fusio directory:');
+            $output->writeln('This command removes the following files and directories:');
             $output->writeln('');
             foreach ($deleteFiles as $file) {
                 $output->writeln('- ' . $file);
@@ -86,7 +86,7 @@ class CleanCommand extends Command
             $output->writeln('');
 
             $helper   = $this->getHelper('question');
-            $question = new ConfirmationQuestion('Are you sure you want to delete the files and directories? (y/n): ', false);
+            $question = new ConfirmationQuestion('Are you sure you want to proceed? (y/n): ', false);
 
             if (!$helper->ask($input, $output, $question)) {
                 // we dont want to delete any files
@@ -134,7 +134,7 @@ class CleanCommand extends Command
             }
         }
 
-        rmdir($path);
+        rmdir($dir);
     }
 
     /**
