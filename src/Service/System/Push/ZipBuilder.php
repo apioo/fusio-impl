@@ -34,6 +34,7 @@ class ZipBuilder
      * @var array
      */
     private $includeDirs  = [
+        'bin',
         'apps',
         'public',
         'resources',
