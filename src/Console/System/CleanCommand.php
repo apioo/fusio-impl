@@ -23,6 +23,7 @@ namespace Fusio\Impl\Console\System;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -39,12 +40,14 @@ class CleanCommand extends Command
     {
         $this
             ->setName('system:clean')
-            ->setDescription('Removes all demo files from the Fusio directory');
+            ->setDescription('Removes all demo files from the Fusio directory')
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Removes all files without asking the user');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseDir = realpath(PSX_PATH_SRC . '/../');
+        $confirm = !$input->getOption('force');
 
         if ($baseDir === false) {
             throw new \RuntimeException('Could not determine base dir');
@@ -62,31 +65,33 @@ class CleanCommand extends Command
             'README.md',
         ];
 
-        $output->writeln('This command removes the following files and directories from the Fusio directory:');
-        $output->writeln('');
-
         $deleteFiles = [];
         foreach ($files as $file) {
             $path = realpath($baseDir . '/' . $file);
             if ($path !== false) {
                 if (is_dir($path)) {
-                    $output->writeln('- ' . $path);
                     $deleteFiles[] = $path;
                 } elseif (is_file($path)) {
-                    $output->writeln('- ' . $path);
                     $deleteFiles[] = $path;
                 }
             }
         }
 
-        $output->writeln('');
+        if ($confirm) {
+            $output->writeln('This command removes the following files and directories from the Fusio directory:');
+            $output->writeln('');
+            foreach ($deleteFiles as $file) {
+                $output->writeln('- ' . $file);
+            }
+            $output->writeln('');
 
-        $helper   = $this->getHelper('question');
-        $question = new ConfirmationQuestion('Are you sure you want to delete the files and directories? (y/n): ', false);
+            $helper   = $this->getHelper('question');
+            $question = new ConfirmationQuestion('Are you sure you want to delete the files and directories? (y/n): ', false);
 
-        if (!$helper->ask($input, $output, $question)) {
-            // we dont want to delete any files
-            return;
+            if (!$helper->ask($input, $output, $question)) {
+                // we dont want to delete any files
+                return;
+            }
         }
 
         $this->cleanFiles($deleteFiles);
