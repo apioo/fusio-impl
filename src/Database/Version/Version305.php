@@ -420,6 +420,16 @@ class Version304 implements VersionInterface
                 }
             }
         }
+
+        foreach ($inserts['fusio_config'] as $row) {
+            $config = $connection->fetchAssoc('SELECT id, name FROM fusio_config WHERE name = :name', [
+                'name' => $row['name']
+            ]);
+
+            if (empty($config)) {
+                $connection->insert('fusio_config', $row);
+            }
+        }
     }
 
     public function getInstallInserts()
