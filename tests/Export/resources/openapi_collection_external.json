@@ -10,73 +10,6 @@
     }
   ],
   "paths": {
-    "\/": {
-      "get": {
-        "operationId": "getPassthru",
-        "responses": {
-          "200": {
-            "description": "No schema was specified.",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Passthru"
-                }
-              }
-            }
-          }
-        }
-      },
-      "parameters": []
-    },
-    "\/foo": {
-      "get": {
-        "operationId": "fooGetCollection",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "operationId": "fooPostEntry",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Entry"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "No schema was specified.",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Passthru"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "bar"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
     "\/inspect\/{foo}": {
       "get": {
         "operationId": "inspectFooGetPassthru",
@@ -199,6 +132,73 @@
         }
       },
       "parameters": []
+    },
+    "\/foo": {
+      "get": {
+        "operationId": "fooGetCollection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fooPostEntry",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Entry"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "No schema was specified.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/": {
+      "get": {
+        "operationId": "getPassthru",
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
     }
   },
   "components": {
@@ -250,33 +250,12 @@
       }
     },
     "securitySchemes": {
-      "app": {
-        "type": "oauth2",
-        "flows": {
-          "password": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
-            }
-          },
-          "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
-            }
-          }
-        }
-      },
       "backend": {
         "type": "oauth2",
         "flows": {
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "backend": "Access to the backend API"
             }
@@ -288,8 +267,33 @@
         "flows": {
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "consumer": "Consumer API endpoint"
+            }
+          }
+        }
+      },
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
             }
           }
         }
