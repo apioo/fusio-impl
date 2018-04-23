@@ -159,9 +159,9 @@ JSON;
 {
     "id": 3,
     "type": 1,
-    "name": "scopes_default",
-    "description": "If a user registers through the consumer API the following scopes are assigned",
-    "value": "authorization,consumer"
+    "name": "authorization_url",
+    "description": "Url where the user can authorize for the OAuth2 flow",
+    "value": ""
 }
 JSON;
 
@@ -214,8 +214,8 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['type']);
-        $this->assertEquals('scopes_default', $row['name']);
-        $this->assertEquals('If a user registers through the consumer API the following scopes are assigned', $row['description']);
+        $this->assertEquals('authorization_url', $row['name']);
+        $this->assertEquals('Url where the user can authorize for the OAuth2 flow', $row['description']);
         $this->assertEquals('foo,bar', $row['value']);
     }
 
