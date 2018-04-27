@@ -53,6 +53,11 @@ class Routes
     protected $methodTable;
 
     /**
+     * @var \Fusio\Impl\Service\Scope
+     */
+    protected $scopeService;
+
+    /**
      * @var \Fusio\Impl\Service\Routes\Config
      */
     protected $configService;
@@ -65,18 +70,20 @@ class Routes
     /**
      * @param \Fusio\Impl\Table\Routes $routesTable
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\Routes\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Routes $routesTable, Table\Routes\Method $methodTable, Service\Routes\Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Routes $routesTable, Table\Routes\Method $methodTable, Service\Scope $scopeService, Service\Routes\Config $configService, EventDispatcherInterface $eventDispatcher)
     {
         $this->routesTable     = $routesTable;
         $this->methodTable     = $methodTable;
+        $this->scopeService    = $scopeService;
         $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($priority, $path, $controller, $config, UserContext $context)
+    public function create($priority, $path, $controller, $scopes, $config, UserContext $context)
     {
         // check whether route exists
         $condition  = new Condition();
@@ -120,6 +127,12 @@ class Routes
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
 
+            // assign scopes
+            if (!empty($scopes)) {
+                $this->scopeService->createFromRoute($routeId, $scopes, $context);
+            }
+
+            // handle config
             $this->configService->handleConfig($routeId, $path, $config, $context);
 
             $this->routesTable->commit();
@@ -132,7 +145,7 @@ class Routes
         $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config, $context));
     }
 
-    public function update($routeId, $priority, $config, UserContext $context)
+    public function update($routeId, $priority, $scopes, $config, UserContext $context)
     {
         $route = $this->routesTable->get($routeId);
 
@@ -161,6 +174,12 @@ class Routes
 
             $this->routesTable->update($record);
 
+            // assign scopes
+            if (!empty($scopes)) {
+                $this->scopeService->createFromRoute($route->id, $scopes, $context);
+            }
+
+            // handle config
             $this->configService->handleConfig($route->id, $route->path, $config, $context);
 
             $this->routesTable->commit();

@@ -55,25 +55,28 @@ class Routes implements TransformerInterface
     {
         $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
 
+        $scopes = [];
+
         // if we have an indexed array we have a config with multiple versions
         // else we only have a single config
         $config = [];
         if (isset($data[0])) {
             foreach ($data as $row) {
-                $config[] = $this->transformRouteConfig($row, $basePath);
+                $config[] = $this->transformRouteConfig($row, $basePath, $scopes);
             }
         } else {
-            $config[] = $this->transformRouteConfig($data, $basePath);
+            $config[] = $this->transformRouteConfig($data, $basePath, $scopes);
         }
 
         return [
             'priority' => $priority,
             'path'     => $path,
+            'scopes'   => $scopes,
             'config'   => $config,
         ];
     }
 
-    private function transformRouteConfig(array $row, $basePath)
+    private function transformRouteConfig(array $row, $basePath, array &$scopes)
     {
         $methods = [];
         if (isset($row['methods']) && is_array($row['methods'])) {
@@ -118,10 +121,13 @@ class Routes implements TransformerInterface
             }
         }
 
+        if (isset($row['scopes'])) {
+            $scopes = array_merge($scopes, $row['scopes']);
+        }
+
         return [
             'version' => isset($row['version']) ? $row['version'] : 1,
             'status'  => isset($row['status']) ? $row['status'] : 4,
-            'scopes'  => isset($row['scopes']) ? $row['scopes'] : [],
             'methods' => $methods,
         ];
     }

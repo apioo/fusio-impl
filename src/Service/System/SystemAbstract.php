@@ -39,6 +39,9 @@ abstract class SystemAbstract
 {
     const COLLECTION_SIZE = 16;
 
+    const TYPE_SCOPE = 'scope';
+    const TYPE_USER = 'user';
+    const TYPE_APP = 'app';
     const TYPE_CONFIG = 'config';
     const TYPE_CONNECTION = 'connection';
     const TYPE_SCHEMA = 'schema';
@@ -68,15 +71,23 @@ abstract class SystemAbstract
     protected $connectionParser;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @var array
      */
     protected $types = [
+        self::TYPE_SCOPE,
         self::TYPE_CONNECTION,
         self::TYPE_SCHEMA,
         self::TYPE_ACTION,
         self::TYPE_ROUTES,
         self::TYPE_CRONJOB,
         self::TYPE_RATE,
+        self::TYPE_USER,
+        self::TYPE_APP,
     ];
 
     /**
@@ -212,6 +223,36 @@ abstract class SystemAbstract
     {
         unset($entity->id);
         unset($entity->status);
+
+        return $entity;
+    }
+
+    protected function transformApp(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->appKey);
+        unset($entity->appSecret);
+        unset($entity->tokens);
+
+        if (!empty($entity->userId)) {
+            $entity->userId = $this->getReference('fusio_user', $entity->userId, self::TYPE_USER);
+        }
+
+        return $entity;
+    }
+
+    protected function transformUser(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->apps);
+
+        return $entity;
+    }
+
+    protected function transformScope(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->routes);
 
         return $entity;
     }

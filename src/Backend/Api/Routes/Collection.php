@@ -91,6 +91,7 @@ class Collection extends BackendApiAbstract
             $record->priority,
             $record->path,
             $record->controller,
+            $record->scopes,
             $record->config,
             $this->context->getUserContext()
         );

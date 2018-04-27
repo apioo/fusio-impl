@@ -64,6 +64,18 @@ class Route extends TableAbstract
         $this->connection->executeQuery($sql, array('id' => $routeId));
     }
 
+    public function getScopeNamesForRoute($routeId)
+    {
+        $sql = 'SELECT scope.name
+                  FROM fusio_scope_routes routes
+            INNER JOIN fusio_scope scope
+                    ON scope.id = routes.scopeId
+                 WHERE routeId = :id
+                   AND allow = 1';
+
+        return $this->connection->fetchAll($sql, ['id' => $routeId]);
+    }
+
     public function getScopesForRoute($routeId)
     {
         $sql = 'SELECT scope.name,

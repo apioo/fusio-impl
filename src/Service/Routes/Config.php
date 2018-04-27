@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Routes\DeployedEvent;
 use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Loader\Filter\ExternalFilter;
-use Fusio\Impl\Service\Scope;
 use Fusio\Impl\Table;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\ListingInterface;
@@ -53,11 +52,6 @@ class Config
     protected $responseTable;
 
     /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    protected $scopeService;
-
-    /**
      * @var \Fusio\Impl\Service\Routes\Deploy
      */
     protected $deployService;
@@ -75,16 +69,14 @@ class Config
     /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \Fusio\Impl\Table\Routes\Response $responseTable
-     * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\Routes\Deploy $deployService
      * @param \PSX\Api\ListingInterface $listing
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Scope $scopeService, Deploy $deployService, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Deploy $deployService, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;
         $this->responseTable   = $responseTable;
-        $this->scopeService    = $scopeService;
         $this->deployService   = $deployService;
         $this->listing         = $listing;
         $this->eventDispatcher = $eventDispatcher;
@@ -102,7 +94,6 @@ class Config
     public function handleConfig($routeId, $path, $result, UserContext $context)
     {
         $availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
-        $availableScopes  = [];
 
         foreach ($result as $version) {
             // check version
@@ -115,11 +106,6 @@ class Config
             $status = isset($version['status']) ? $version['status'] : 0;
             if (!in_array($status, [Resource::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
                 throw new StatusCode\BadRequestException('Invalid status value');
-            }
-
-            // insert scopes
-            if (isset($version['scopes'])) {
-                $availableScopes[$ver] = $version['scopes'];
             }
 
             $existingMethods = $this->methodTable->getMethods($routeId, $ver, null);
@@ -184,18 +170,6 @@ class Config
             $this->listing->invalidateResourceIndex(new ExternalFilter());
             $this->listing->invalidateResourceCollection(null, new ExternalFilter());
             $this->listing->invalidateResource($path);
-        }
-
-        // handle scopes
-        if (!empty($availableScopes)) {
-            $allScopes = [];
-            foreach ($availableScopes as $version => $scopes) {
-                $allScopes = array_merge($allScopes, $scopes);
-            }
-
-            if (!empty($allScopes)) {
-                $this->scopeService->createFromRoute($routeId, array_unique($allScopes), $context);
-            }
         }
     }
 

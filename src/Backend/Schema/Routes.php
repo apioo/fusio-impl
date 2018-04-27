@@ -42,8 +42,6 @@ class Routes extends SchemaAbstract
         $sb = $this->getSchemaBuilder('version');
         $sb->integer('version');
         $sb->integer('status');
-        $sb->arrayType('scopes')
-            ->setItems(Property::getString());
         $sb->objectType('methods', $methods);
         $version = $sb->getProperty();
 
@@ -52,6 +50,8 @@ class Routes extends SchemaAbstract
         $sb->integer('priority');
         $sb->string('path');
         $sb->string('controller');
+        $sb->arrayType('scopes')
+            ->setItems(Property::getString());
         $sb->arrayType('config')
             ->setItems($version);
 

@@ -80,6 +80,7 @@ class Routes extends ViewAbstract
             'status' => 'status',
             'path' => 'path',
             'controller' => 'controller',
+            'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
             'config' => $this->doCollection([$this->getTable(Table\Routes\Method::class), 'getMethods'], [new Reference('id')], [
                 'version' => 'version',
                 'status' => 'status',
