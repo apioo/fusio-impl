@@ -81,6 +81,12 @@ class OpenAPITest extends ControllerDbTestCase
                     "controller": {
                         "type": "string"
                     },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "config": {
                         "type": "array",
                         "items": {
@@ -98,12 +104,6 @@ class OpenAPITest extends ControllerDbTestCase
                     },
                     "status": {
                         "type": "integer"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     },
                     "methods": {
                         "$ref": "#\/definitions\/Methods"

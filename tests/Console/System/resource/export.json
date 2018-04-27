@@ -12,6 +12,28 @@
     "Fusio\\Adapter\\Sql\\Connection\\Sql",
     "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
   ],
+  "scope": [
+    {
+      "name": "bar",
+      "description": "Bar access"
+    },
+    {
+      "name": "foo",
+      "description": "Foo access"
+    },
+    {
+      "name": "authorization",
+      "description": "Authorization API endpoint"
+    },
+    {
+      "name": "consumer",
+      "description": "Consumer API endpoint"
+    },
+    {
+      "name": "backend",
+      "description": "Access to the backend API"
+    }
+  ],
   "connection": [
     {
       "status": 1,
@@ -134,6 +156,9 @@
       "status": 1,
       "path": "\/inspect\/:foo",
       "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "bar"
+      ],
       "config": [
         {
           "version": 1,
@@ -192,6 +217,9 @@
       "status": 1,
       "path": "\/foo",
       "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "bar"
+      ],
       "config": [
         {
           "version": 1,
@@ -222,6 +250,9 @@
       "status": 1,
       "path": "\/",
       "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "bar"
+      ],
       "config": [
         {
           "version": 1,
@@ -299,6 +330,104 @@
           "rateId": 1
         }
       ]
+    }
+  ],
+  "user": [
+    {
+      "provider": 1,
+      "status": 1,
+      "name": "Developer",
+      "email": "developer@localhost.com",
+      "scopes": [
+        "backend",
+        "consumer",
+        "authorization"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "provider": 1,
+      "status": 2,
+      "name": "Disabled",
+      "email": "disabled@localhost.com",
+      "scopes": [
+        "authorization"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "provider": 1,
+      "status": 0,
+      "name": "Consumer",
+      "email": "consumer@localhost.com",
+      "scopes": [
+        "consumer",
+        "authorization",
+        "foo",
+        "bar"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "provider": 1,
+      "status": 1,
+      "name": "Administrator",
+      "email": "admin@localhost.com",
+      "scopes": [
+        "backend",
+        "consumer",
+        "authorization",
+        "foo",
+        "bar"
+      ],
+      "date": "[datetime]"
+    }
+  ],
+  "app": [
+    {
+      "userId": "Consumer",
+      "status": 2,
+      "name": "Pending",
+      "url": "http:\/\/google.com",
+      "parameters": "",
+      "date": "[datetime]"
+    },
+    {
+      "userId": "Consumer",
+      "status": 1,
+      "name": "Foo-App",
+      "url": "http:\/\/google.com",
+      "parameters": "",
+      "scopes": [
+        "authorization",
+        "foo",
+        "bar"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "userId": "Administrator",
+      "status": 1,
+      "name": "Consumer",
+      "url": "http:\/\/fusio-project.org",
+      "parameters": "",
+      "scopes": [
+        "consumer",
+        "authorization"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "userId": "Administrator",
+      "status": 1,
+      "name": "Backend",
+      "url": "http:\/\/fusio-project.org",
+      "parameters": "",
+      "scopes": [
+        "backend",
+        "authorization"
+      ],
+      "date": "[datetime]"
     }
   ]
 }

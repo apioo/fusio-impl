@@ -4508,6 +4508,12 @@
           "controller": {
             "type": "string"
           },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "config": {
             "type": "array",
             "items": {
@@ -4525,12 +4531,6 @@
           },
           "status": {
             "type": "integer"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           },
           "methods": {
             "$ref": "#\/components\/schemas\/Methods"
@@ -5114,30 +5114,6 @@
       }
     },
     "securitySchemes": {
-      "backend": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "backend": "Access to the backend API"
-            }
-          }
-        }
-      },
-      "consumer": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "consumer": "Consumer API endpoint"
-            }
-          }
-        }
-      },
       "app": {
         "type": "oauth2",
         "flows": {
@@ -5158,6 +5134,30 @@
               "bar": "Bar access",
               "foo": "Foo access",
               "authorization": "Authorization API endpoint"
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend": "Access to the backend API"
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer": "Consumer API endpoint"
             }
           }
         }

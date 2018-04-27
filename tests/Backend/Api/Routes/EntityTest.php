@@ -54,7 +54,7 @@ class EntityTest extends ControllerDbTestCase
     "path": "\/backend\/routes\/$route_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -68,12 +68,6 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "status": {
                         "type": "integer"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     },
                     "methods": {
                         "$ref": "#\/definitions\/Methods"
@@ -149,6 +143,12 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "controller": {
                         "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     },
                     "config": {
                         "type": "array",
@@ -240,6 +240,9 @@ JSON;
     "status": 1,
     "path": "\/foo",
     "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController",
+    "scopes": [
+        "bar"
+    ],
     "config": [
         {
             "version": 1,
@@ -315,10 +318,10 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'path'   => '/foo',
+            'scopes' => ['foo', 'baz'],
             'config' => [[
                 'version' => 1,
                 'status'  => 4,
-                'scopes'  => ['foo', 'baz'],
                 'methods' => [
                     'GET' => [
                         'active'     => true,

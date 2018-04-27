@@ -52,7 +52,7 @@ class ProcessTest extends ControllerDbTestCase
     "path": "\/backend\/import\/process",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -73,6 +73,12 @@ class ProcessTest extends ControllerDbTestCase
                     "controller": {
                         "type": "string"
                     },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "config": {
                         "type": "array",
                         "items": {
@@ -90,12 +96,6 @@ class ProcessTest extends ControllerDbTestCase
                     },
                     "status": {
                         "type": "integer"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     },
                     "methods": {
                         "$ref": "#\/definitions\/Methods"

@@ -52,7 +52,7 @@ class CollectionTest extends ControllerDbTestCase
     "path": "\/backend\/routes",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -88,6 +88,12 @@ class CollectionTest extends ControllerDbTestCase
                     "controller": {
                         "type": "string"
                     },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "config": {
                         "type": "array",
                         "items": {
@@ -109,12 +115,6 @@ class CollectionTest extends ControllerDbTestCase
                     },
                     "status": {
                         "type": "integer"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     },
                     "methods": {
                         "$ref": "#\/definitions\/Methods"
@@ -365,10 +365,10 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'path'   => '/bar',
+            'scopes' => ['foo', 'baz'],
             'config' => [[
                 'version' => 1,
                 'status'  => 4,
-                'scopes'  => ['foo', 'baz'],
                 'methods' => [
                     'GET' => [
                         'active'     => true,
