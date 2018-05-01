@@ -87,6 +87,7 @@ class Routes extends ViewAbstract
                 'method' => 'method',
                 'active' => 'active',
                 'public' => 'public',
+                'description' => 'description',
                 'parameters' => 'parameters',
                 'request' => 'request',
                 'responses' => $this->doCollection([$this->getTable(Table\Routes\Response::class), 'getResponses'], [new Reference('id')], [
