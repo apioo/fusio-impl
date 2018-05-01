@@ -224,7 +224,7 @@ class Version306 implements VersionInterface
         $routesMethodTable->addColumn('status', 'integer');
         $routesMethodTable->addColumn('active', 'integer', array('default' => 0));
         $routesMethodTable->addColumn('public', 'integer', array('default' => 0));
-        $routesMethodTable->addColumn('description', 'string', array('length' => 500));
+        $routesMethodTable->addColumn('description', 'string', array('notnull' => false, 'length' => 500));
         $routesMethodTable->addColumn('parameters', 'integer', array('notnull' => false));
         $routesMethodTable->addColumn('request', 'integer', array('notnull' => false));
         $routesMethodTable->addColumn('action', 'integer', array('notnull' => false));
