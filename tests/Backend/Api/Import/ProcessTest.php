@@ -130,6 +130,9 @@ class ProcessTest extends ControllerDbTestCase
                     "public": {
                         "type": "boolean"
                     },
+                    "description": {
+                        "type": "string"
+                    },
                     "parameters": {
                         "type": "string"
                     },

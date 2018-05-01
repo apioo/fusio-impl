@@ -138,6 +138,9 @@ class OpenAPITest extends ControllerDbTestCase
                     "public": {
                         "type": "boolean"
                     },
+                    "description": {
+                        "type": "string"
+                    },
                     "parameters": {
                         "type": "string"
                     },

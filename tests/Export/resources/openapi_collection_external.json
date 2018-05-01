@@ -131,7 +131,16 @@
           }
         }
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "foo",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/foo": {
       "get": {
