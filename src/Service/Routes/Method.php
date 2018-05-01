@@ -29,6 +29,7 @@ use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Parser\JsonSchema\Document;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
+use PSX\Schema\Property;
 use PSX\Schema\Schema;
 
 /**
@@ -104,9 +105,31 @@ class Method
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
         $scopes   = $this->scopeTable->getScopesForRoute($routeId);
 
+        // check variable path fragments
+        $parts = explode('/', $path);
+        foreach ($parts as $part) {
+            if (isset($part[0])) {
+                $name = null;
+                if ($part[0] == ':') {
+                    $name = substr($part, 1);
+                } elseif ($part[0] == '$') {
+                    $pos  = strpos($part, '<');
+                    $name = substr($part, 1, $pos - 1);
+                }
+
+                if ($name !== null) {
+                    $resource->addPathParameter($name, Property::getString());
+                }
+            }
+        }
+
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
             $schemaCache    = $method['schemaCache'];
+
+            if (!empty($method['description'])) {
+                $resourceMethod->setDescription($method['description']);
+            }
 
             if (!$method['public']) {
                 if (isset($scopes[$method['method']])) {
