@@ -183,23 +183,25 @@ class Config
      */
     private function createMethod($routeId, $method, $ver, $status, $config)
     {
-        $active     = isset($config['active'])     ? $config['active']     : false;
-        $public     = isset($config['public'])     ? $config['public']     : false;
-        $parameters = isset($config['parameters']) ? $config['parameters'] : null;
-        $request    = isset($config['request'])    ? $config['request']    : null;
-        $action     = isset($config['action'])     ? $config['action']     : null;
+        $active      = isset($config['active'])      ? $config['active']      : false;
+        $public      = isset($config['public'])      ? $config['public']      : false;
+        $description = isset($config['description']) ? $config['description'] : null;
+        $parameters  = isset($config['parameters'])  ? $config['parameters']  : null;
+        $request     = isset($config['request'])     ? $config['request']     : null;
+        $action      = isset($config['action'])      ? $config['action']      : null;
 
         // create method
         $data = [
-            'routeId'    => $routeId,
-            'method'     => $method,
-            'version'    => $ver,
-            'status'     => $status,
-            'active'     => $active ? 1 : 0,
-            'public'     => $public ? 1 : 0,
-            'parameters' => $parameters,
-            'request'    => $request,
-            'action'     => $action,
+            'routeId'     => $routeId,
+            'method'      => $method,
+            'version'     => $ver,
+            'status'      => $status,
+            'active'      => $active ? 1 : 0,
+            'public'      => $public ? 1 : 0,
+            'description' => $description,
+            'parameters'  => $parameters,
+            'request'     => $request,
+            'action'      => $action,
         ];
 
         $this->methodTable->create($data);
