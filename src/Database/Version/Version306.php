@@ -213,7 +213,6 @@ class Version306 implements VersionInterface
         $routesTable->addColumn('methods', 'string', array('length' => 64));
         $routesTable->addColumn('path', 'string', array('length' => 255));
         $routesTable->addColumn('controller', 'string', array('length' => 255));
-        $routesTable->addColumn('description', 'string', array('length' => 500));
         $routesTable->setPrimaryKey(array('id'));
         $routesTable->addIndex(array('priority'));
 
@@ -225,6 +224,7 @@ class Version306 implements VersionInterface
         $routesMethodTable->addColumn('status', 'integer');
         $routesMethodTable->addColumn('active', 'integer', array('default' => 0));
         $routesMethodTable->addColumn('public', 'integer', array('default' => 0));
+        $routesMethodTable->addColumn('description', 'string', array('length' => 500));
         $routesMethodTable->addColumn('parameters', 'integer', array('notnull' => false));
         $routesMethodTable->addColumn('request', 'integer', array('notnull' => false));
         $routesMethodTable->addColumn('action', 'integer', array('notnull' => false));
