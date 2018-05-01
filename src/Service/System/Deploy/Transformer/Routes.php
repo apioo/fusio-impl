@@ -90,6 +90,10 @@ class Routes implements TransformerInterface
                     'public' => isset($config['public']) ? boolval($config['public']) : true,
                 ];
 
+                if (isset($config['description'])) {
+                    $methods[$method]['description'] = $config['description'];
+                }
+
                 if (isset($config['parameters'])) {
                     $methods[$method]['parameters'] = NameGenerator::getSchemaNameFromSource($config['parameters']);
                 }
