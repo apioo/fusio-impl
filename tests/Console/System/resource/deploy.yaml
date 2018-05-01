@@ -47,8 +47,9 @@ routes:
     methods:
       GET:
         public: true
-        request: Request-Schema
+        description: Example bar GET method
         parameters: Parameters
+        request: Request-Schema
         responses:
           200: Response-Schema
           500: Error-Schema

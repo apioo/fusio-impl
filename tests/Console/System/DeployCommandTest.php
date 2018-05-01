@@ -21,8 +21,9 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Adapter\Sql\Connection\SqlAdvanced;
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Factory\Resolver\PhpFile;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -69,7 +70,7 @@ class DeployCommandTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(2, $connection['id']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\SqlAdvanced', $connection['class']);
+        $this->assertEquals(SqlAdvanced::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 
         // check schema
@@ -151,7 +152,7 @@ JSON;
         ]);
 
         $this->assertEquals(5, $action['id']);
-        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
+        $this->assertEquals(UtilStaticResponse::class, $action['class']);
         $this->assertEquals(['response' => '{"foo": "bar"}'], unserialize($action['config']));
 
         // check routes
@@ -162,10 +163,10 @@ JSON;
         $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
+        $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
+        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, description, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
             'routeId' => $route['id'],
         ]);
 
@@ -176,6 +177,7 @@ JSON;
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals('Example bar GET method', $methods[0]['description']);
         $this->assertEquals(4, $methods[0]['parameters']);
         $this->assertEquals(5, $methods[0]['request']);
         $this->assertEquals(5, $methods[0]['action']);
