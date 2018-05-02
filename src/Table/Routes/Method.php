@@ -138,7 +138,7 @@ class Method extends TableAbstract
      */
     public function getMethods($routeId, $version = null, $active = true, $cache = false)
     {
-        $fields = ['method.id', 'method.routeId', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.parameters', 'method.request', 'method.action'];
+        $fields = ['method.id', 'method.routeId', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.description', 'method.parameters', 'method.request', 'method.action'];
         if ($cache) {
             $fields[] = 'method.schemaCache';
         }
