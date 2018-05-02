@@ -374,22 +374,24 @@ JSON;
                 'status'  => 4,
                 'methods' => [
                     'GET' => [
-                        'active'     => true,
-                        'public'     => true,
-                        'parameters' => 2,
-                        'responses'  => [
-                            '200'    => 1
+                        'active'      => true,
+                        'public'      => true,
+                        'description' => 'The GET method',
+                        'parameters'  => 2,
+                        'responses'   => [
+                            '200'     => 1
                         ],
                         'action'     => 3,
                     ],
                     'POST' => [
-                        'active'     => true,
-                        'public'     => true,
-                        'request'    => 2,
-                        'responses'  => [
-                            '201'    => 1
+                        'active'      => true,
+                        'public'      => true,
+                        'description' => 'The POST method',
+                        'request'     => 2,
+                        'responses'   => [
+                            '201'     => 1
                         ],
-                        'action'     => 3,
+                        'action'      => 3,
                     ]
                 ],
             ]],
@@ -425,7 +427,7 @@ JSON;
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action')
+            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'description', 'parameters', 'request', 'action')
             ->from('fusio_routes_method')
             ->where('routeId = :routeId')
             ->orderBy('id', 'ASC')
@@ -441,6 +443,7 @@ JSON;
         $this->assertEquals(4, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
+        $this->assertEquals('The GET method', $methods[0]['description']);
         $this->assertEquals(2, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
         $this->assertEquals(3, $methods[0]['action']);
@@ -465,6 +468,7 @@ JSON;
         $this->assertEquals(4, $methods[1]['status']);
         $this->assertEquals(1, $methods[1]['active']);
         $this->assertEquals(1, $methods[1]['public']);
+        $this->assertEquals('The POST method', $methods[1]['description']);
         $this->assertEquals(2, $methods[1]['request']);
         $this->assertEquals(3, $methods[1]['action']);
 
