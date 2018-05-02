@@ -48,7 +48,7 @@ class Method extends TableAbstract
             'status' => self::TYPE_INT,
             'active' => self::TYPE_INT,
             'public' => self::TYPE_INT,
-            'description' => self::TYPE_INT,
+            'description' => self::TYPE_VARCHAR,
             'parameters' => self::TYPE_INT,
             'request' => self::TYPE_INT,
             'action' => self::TYPE_INT,
