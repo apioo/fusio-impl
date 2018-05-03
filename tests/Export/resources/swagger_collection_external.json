@@ -1,0 +1,268 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Fusio",
+    "version": "1"
+  },
+  "host": "127.0.0.1",
+  "basePath": "\/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "\/inspect\/{foo}": {
+      "get": {
+        "operationId": "inspectFooGetPassthru",
+        "parameters": [
+          {
+            "description": "No schema was specified.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "inspectFooPutPassthru",
+        "parameters": [
+          {
+            "description": "No schema was specified.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "inspectFooPostPassthru",
+        "parameters": [
+          {
+            "description": "No schema was specified.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "inspectFooDeletePassthru",
+        "parameters": [
+          {
+            "description": "No schema was specified.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "inspectFooPatchPassthru",
+        "parameters": [
+          {
+            "description": "No schema was specified.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "foo",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "\/foo": {
+      "get": {
+        "operationId": "fooGetCollection",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "schema": {
+              "$ref": "#\/definitions\/Collection"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "fooPostEntry",
+        "parameters": [
+          {
+            "description": "POST request",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#\/definitions\/Entry"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/": {
+      "get": {
+        "operationId": "getPassthru",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "No schema was specified.",
+            "schema": {
+              "$ref": "#\/definitions\/Passthru"
+            }
+          }
+        }
+      },
+      "parameters": []
+    }
+  },
+  "definitions": {
+    "Passthru": {
+      "type": "object",
+      "title": "passthru",
+      "description": "No schema was specified."
+    },
+    "Entry": {
+      "type": "object",
+      "title": "entry",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Collection": {
+      "type": "object",
+      "title": "collection",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$ref": "#\/definitions\/Entry"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "app": {
+      "type": "oauth2",
+      "flow": "password",
+      "scopes": {
+        "bar": "Bar access",
+        "foo": "Foo access",
+        "authorization": "Authorization API endpoint"
+      },
+      "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token"
+    },
+    "backend": {
+      "type": "oauth2",
+      "flow": "application",
+      "scopes": {
+        "backend": "Access to the backend API"
+      },
+      "tokenUrl": "http:\/\/127.0.0.1\/backend\/token"
+    },
+    "consumer": {
+      "type": "oauth2",
+      "flow": "application",
+      "scopes": {
+        "consumer": "Consumer API endpoint"
+      },
+      "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token"
+    }
+  }
+}
