@@ -193,6 +193,23 @@ JSON;
         $this->assertEquals(500, $responses[1]['code']);
         $this->assertEquals(7, $responses[1]['response']);
 
+        // check scopes
+        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scopeId WHERE routeId = :routeId', [
+            'routeId' => $route['id'],
+        ]);
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(4, $responses[0]['id']);
+        $this->assertEquals('foo', $responses[0]['name']);
+        $this->assertEquals('Foo access', $responses[0]['description']);
+        $this->assertEquals(1, $responses[0]['allow']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[0]['methods']);
+        $this->assertEquals(5, $responses[1]['id']);
+        $this->assertEquals('bar', $responses[1]['name']);
+        $this->assertEquals('Bar access', $responses[1]['description']);
+        $this->assertEquals(1, $responses[1]['allow']);
+        $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[1]['methods']);
+
         // check cronjobs
         $cronjob = $this->connection->fetchAssoc('SELECT id, name, cron, action FROM fusio_cronjob ORDER BY id DESC');
 
