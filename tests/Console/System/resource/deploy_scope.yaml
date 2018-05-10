@@ -1,0 +1,3 @@
+scope:
+  Foo-Scope:
+    description: "Foo scope"

@@ -538,6 +538,85 @@ JSON;
         $this->assertRegExp('/Scheme http is not supported/', $display, $display);
     }
 
+    public function testCommandApp()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_app.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] app Bar-App/', $display, $display);
+
+        // check app
+        $app = $this->connection->fetchAssoc('SELECT id, status, name, appKey, appSecret, parameters FROM fusio_app WHERE name = :name', [
+            'name' => 'Bar-App',
+        ]);
+
+        $this->assertEquals(6, $app['id']);
+        $this->assertEquals(1, $app['status']);
+        $this->assertEquals('Bar-App', $app['name']);
+        $this->assertNotEmpty($app['appKey']);
+        $this->assertNotEmpty($app['appSecret']);
+        $this->assertEquals('foo=bar', $app['parameters']);
+    }
+
+    public function testCommandUser()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_user.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] user Foo-User/', $display, $display);
+
+        // check user
+        $user = $this->connection->fetchAssoc('SELECT id, provider, status, remoteId, name, email, password FROM fusio_user WHERE name = :name', [
+            'name' => 'Foo-User',
+        ]);
+
+        $this->assertEquals(6, $user['id']);
+        $this->assertEquals(1, $user['provider']);
+        $this->assertEquals(1, $user['status']);
+        $this->assertEmpty($user['remoteId']);
+        $this->assertEquals('Foo-User', $user['name']);
+        $this->assertEquals('foo@bar.com', $user['email']);
+        $this->assertTrue(password_verify('test1234!', $user['password']));
+    }
+
+    public function testCommandScope()
+    {
+        $command = Environment::getService('console')->find('system:deploy');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'file'    => __DIR__ . '/resource/deploy_scope.yaml',
+        ]);
+
+        $display = $commandTester->getDisplay();
+
+        $this->assertRegExp('/- \[CREATED\] scope Foo-Scope/', $display, $display);
+
+        // check scope
+        $scope = $this->connection->fetchAssoc('SELECT id, name, description FROM fusio_scope WHERE name = :name', [
+            'name' => 'Foo-Scope',
+        ]);
+
+        $this->assertEquals(6, $scope['id']);
+        $this->assertEquals('Foo-Scope', $scope['name']);
+        $this->assertEquals('Foo scope', $scope['description']);
+    }
+
     private function assertJsonSchema($name, $source)
     {
         $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
