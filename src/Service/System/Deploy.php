@@ -83,6 +83,9 @@ class Deploy
         }
 
         $transformers = [
+            SystemAbstract::TYPE_SCOPE      => new Deploy\Transformer\Scope(),
+            SystemAbstract::TYPE_USER       => new Deploy\Transformer\User(),
+            SystemAbstract::TYPE_APP        => new Deploy\Transformer\App(),
             SystemAbstract::TYPE_CONFIG     => new Deploy\Transformer\Config(),
             SystemAbstract::TYPE_CONNECTION => new Deploy\Transformer\Connection(),
             SystemAbstract::TYPE_SCHEMA     => new Deploy\Transformer\Schema(),
