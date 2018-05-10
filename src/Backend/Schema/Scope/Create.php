@@ -36,7 +36,7 @@ class Create extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema(Schema\Scope::class);
-        $schema->setRequired(['name', 'routes']);
+        $schema->setRequired(['name']);
 
         return $schema;
     }
