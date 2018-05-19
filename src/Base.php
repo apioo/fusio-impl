@@ -30,10 +30,15 @@ namespace Fusio\Impl;
  */
 class Base
 {
-    const VERSION = '3.0.7';
+    const VERSION = '3.1.0';
 
     public static function getVersion()
     {
         return self::VERSION;
+    }
+
+    public static function getUserAgent()
+    {
+        return 'Fusio v' . self::getVersion() . ' (https://www.fusio-project.org/)';
     }
 }
