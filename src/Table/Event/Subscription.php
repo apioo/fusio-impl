@@ -45,7 +45,7 @@ class Subscription extends TableAbstract
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'eventId' => self::TYPE_INT,
-            'subscriptionId' => self::TYPE_INT,
+            'userId' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'endpoint' => self::TYPE_VARCHAR,
         );
