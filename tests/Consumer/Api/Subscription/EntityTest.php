@@ -26,13 +26,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * CollectionTest
+ * EntityTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class EntityTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
