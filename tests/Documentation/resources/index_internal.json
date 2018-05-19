@@ -221,6 +221,28 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/event",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/event\/$event_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/log\/error",
       "methods": [
         "GET",
@@ -585,6 +607,28 @@
     },
     {
       "path": "\/consumer\/scope",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/subscription",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/subscription\/$subscription_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
