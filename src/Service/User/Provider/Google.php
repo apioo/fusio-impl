@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\User\Provider;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Service\User\Model\User;
 use Fusio\Impl\Service\User\ProviderAbstract;
 use PSX\Http\Client\GetRequest;
@@ -49,7 +50,11 @@ class Google extends ProviderAbstract
 
         if (!empty($accessToken)) {
             $url      = new Url('https://www.googleapis.com/plus/v1/people/me/openIdConnect');
-            $headers  = ['Authorization' => 'Bearer ' . $accessToken, 'User-Agent' => $this->ua];
+            $headers  = [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'User-Agent'    => Base::getUserAgent()
+            ];
+
             $response = $this->httpClient->request(new GetRequest($url, $headers));
 
             if ($response->getStatusCode() == 200) {
@@ -83,7 +88,12 @@ class Google extends ProviderAbstract
             'grant_type'    => 'authorization_code'
         ];
 
-        $response = $this->httpClient->request(new PostRequest($url, ['Accept' => 'application/json', 'User-Agent' => $this->ua], $params));
+        $headers = [
+            'Accept'     => 'application/json',
+            'User-Agent' => Base::getUserAgent()
+        ];
+
+        $response = $this->httpClient->request(new PostRequest($url, $headers, $params));
 
         if ($response->getStatusCode() == 200) {
             $data = Parser::decode($response->getBody());

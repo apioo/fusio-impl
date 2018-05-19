@@ -85,7 +85,7 @@ class ApiExecutor
      */
     public function request($method, $path, $body = null, $verbose = false)
     {
-        $header   = ['User-Agent' => 'Fusio-System v' . Base::getVersion(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
+        $header   = ['User-Agent' => Base::getUserAgent(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
         $body     = $body !== null ? Parser::encode($body) : null;
         $request  = new Request(new Url('http://127.0.0.1/backend/' . $path), $method, $header, $body);
         $response = new Response();

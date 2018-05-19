@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\User\Provider;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Service\User\Model\User;
 use Fusio\Impl\Service\User\ProviderAbstract;
 use PSX\Http\Client\GetRequest;
@@ -48,7 +49,10 @@ class Facebook extends ProviderAbstract
 
         if (!empty($accessToken)) {
             $url      = new Url('https://graph.facebook.com/v2.5/me');
-            $headers  = ['Authorization' => 'Bearer ' . $accessToken, 'User-Agent' => $this->ua];
+            $headers  = [
+                'Authorization' => 'Bearer ' . $accessToken,
+                'User-Agent'    => Base::getUserAgent()
+            ];
 
             $url = $url->withParameters([
                 'access_token' => $accessToken,
