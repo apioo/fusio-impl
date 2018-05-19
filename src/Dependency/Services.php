@@ -206,6 +206,43 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Event
+     */
+    public function getEventService()
+    {
+        return new Service\Event(
+            $this->get('table_manager')->getTable(Table\Event::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Event\Executor
+     */
+    public function getEventExecutorService()
+    {
+        return new Service\Event\Executor(
+            $this->get('table_manager')->getTable(Table\Event\Trigger::class),
+            $this->get('table_manager')->getTable(Table\Event\Subscription::class),
+            $this->get('table_manager')->getTable(Table\Event\Response::class),
+            $this->get('http_client'),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Event\Subscription
+     */
+    public function getEventSubscriptionService()
+    {
+        return new Service\Event\Subscription(
+            $this->get('table_manager')->getTable(Table\Event::class),
+            $this->get('table_manager')->getTable(Table\Event\Subscription::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\System\ApiExecutor
      */
     public function getSystemApiExecutorService()

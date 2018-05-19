@@ -19,50 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Backend\Schema;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * DeletedEvent
+ * Event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DeletedEvent extends EventAbstract
+class Event extends SchemaAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $rateId;
+    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
 
-    /**
-     * @var array
-     */
-    protected $rate;
-
-    /**
-     * @param integer $eventId
-     * @param array $event
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($eventId, $event, UserContext $context)
+    public function getDefinition()
     {
-        parent::__construct($context);
+        $sb = $this->getSchemaBuilder('event');
+        $sb->integer('id');
+        $sb->string('name')
+            ->setPattern(self::NAME_PATTERN);
+        $sb->string('description');
 
-        $this->rateId = $eventId;
-        $this->rate   = $event;
-    }
-
-    public function getRateId()
-    {
-        return $this->rateId;
-    }
-
-    public function getRate()
-    {
-        return $this->rate;
+        return $sb->getProperty();
     }
 }

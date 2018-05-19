@@ -54,17 +54,17 @@ class UpdatedEvent extends EventAbstract
     protected $rate;
 
     /**
-     * @param integer $rateId
+     * @param integer $eventId
      * @param array $record
      * @param array $allocations
      * @param array $rate
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($rateId, array $record, $allocations, $rate, UserContext $context)
+    public function __construct($eventId, array $record, $allocations, $rate, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $rateId;
+        $this->rateId      = $eventId;
         $this->record      = $record;
         $this->allocations = $allocations;
         $this->rate        = $rate;

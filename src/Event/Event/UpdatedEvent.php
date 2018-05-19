@@ -19,24 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Event\Event;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * CreatedEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
     /**
      * @var integer
      */
-    protected $rateId;
+    protected $eventId;
 
     /**
      * @var array
@@ -46,26 +46,26 @@ class CreatedEvent extends EventAbstract
     /**
      * @var array
      */
-    protected $allocations;
+    protected $event;
 
     /**
      * @param integer $eventId
      * @param array $record
-     * @param array $allocations
+     * @param array $event
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($eventId, array $record, $allocations, UserContext $context)
+    public function __construct($eventId, array $record, $event, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $eventId;
-        $this->record      = $record;
-        $this->allocations = $allocations;
+        $this->eventId = $eventId;
+        $this->record  = $record;
+        $this->event   = $event;
     }
 
-    public function getRateId()
+    public function getEventId()
     {
-        return $this->rateId;
+        return $this->eventId;
     }
 
     public function getRecord()
@@ -76,5 +76,10 @@ class CreatedEvent extends EventAbstract
     public function getAllocations()
     {
         return $this->allocations;
+    }
+
+    public function getEvent()
+    {
+        return $this->event;
     }
 }

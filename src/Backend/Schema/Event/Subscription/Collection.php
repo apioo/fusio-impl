@@ -19,50 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Backend\Schema\Event\Subscription;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Backend\Schema;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * DeletedEvent
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DeletedEvent extends EventAbstract
+class Collection extends SchemaAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $rateId;
-
-    /**
-     * @var array
-     */
-    protected $rate;
-
-    /**
-     * @param integer $eventId
-     * @param array $event
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($eventId, $event, UserContext $context)
+    public function getDefinition()
     {
-        parent::__construct($context);
+        $sb = $this->getSchemaBuilder('collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Event\Subscription::class));
 
-        $this->rateId = $eventId;
-        $this->rate   = $event;
-    }
-
-    public function getRateId()
-    {
-        return $this->rateId;
-    }
-
-    public function getRate()
-    {
-        return $this->rate;
+        return $sb->getProperty();
     }
 }

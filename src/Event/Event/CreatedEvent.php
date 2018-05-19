@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Event\Event;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
@@ -36,7 +36,7 @@ class CreatedEvent extends EventAbstract
     /**
      * @var integer
      */
-    protected $rateId;
+    protected $eventId;
 
     /**
      * @var array
@@ -51,30 +51,23 @@ class CreatedEvent extends EventAbstract
     /**
      * @param integer $eventId
      * @param array $record
-     * @param array $allocations
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($eventId, array $record, $allocations, UserContext $context)
+    public function __construct($eventId, array $record, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $eventId;
-        $this->record      = $record;
-        $this->allocations = $allocations;
+        $this->eventId = $eventId;
+        $this->record  = $record;
     }
 
-    public function getRateId()
+    public function getEventId()
     {
-        return $this->rateId;
+        return $this->eventId;
     }
 
     public function getRecord()
     {
         return $this->record;
-    }
-
-    public function getAllocations()
-    {
-        return $this->allocations;
     }
 }

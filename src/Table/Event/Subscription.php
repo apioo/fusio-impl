@@ -19,62 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Table\Event;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
+use PSX\Sql\TableAbstract;
 
 /**
- * CreatedEvent
+ * Subscription
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class Subscription extends TableAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $rateId;
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 2;
 
-    /**
-     * @var array
-     */
-    protected $record;
-
-    /**
-     * @var array
-     */
-    protected $allocations;
-
-    /**
-     * @param integer $eventId
-     * @param array $record
-     * @param array $allocations
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($eventId, array $record, $allocations, UserContext $context)
+    public function getName()
     {
-        parent::__construct($context);
-
-        $this->rateId      = $eventId;
-        $this->record      = $record;
-        $this->allocations = $allocations;
+        return 'fusio_event_subscription';
     }
 
-    public function getRateId()
+    public function getColumns()
     {
-        return $this->rateId;
+        return array(
+            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'eventId' => self::TYPE_INT,
+            'subscriptionId' => self::TYPE_INT,
+            'status' => self::TYPE_INT,
+            'endpoint' => self::TYPE_VARCHAR,
+        );
     }
 
-    public function getRecord()
+    public function getSubscriptionsForEvent($eventId)
     {
-        return $this->record;
-    }
+        $sql = 'SELECT id
+                  FROM fusio_event_subscription
+                 WHERE eventId = :eventId
+                       status = :status';
 
-    public function getAllocations()
-    {
-        return $this->allocations;
+        return $this->connection->fetchAll($sql, [
+            'eventId' => $eventId,
+            'status'  => self::STATUS_ACTIVE,
+        ]);
     }
 }

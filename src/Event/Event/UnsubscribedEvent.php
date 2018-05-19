@@ -19,62 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Rate;
+namespace Fusio\Impl\Event\Event;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * CreatedEvent
+ * UnsubscribedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class UnsubscribedEvent extends EventAbstract
 {
     /**
      * @var integer
      */
-    protected $rateId;
+    protected $subscriptionId;
 
     /**
      * @var array
      */
-    protected $record;
+    protected $subscription;
 
     /**
-     * @var array
-     */
-    protected $allocations;
-
-    /**
-     * @param integer $eventId
-     * @param array $record
-     * @param array $allocations
+     * @param integer $subscriptionId
+     * @param array $subscription
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($eventId, array $record, $allocations, UserContext $context)
+    public function __construct($subscriptionId, $subscription, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $eventId;
-        $this->record      = $record;
-        $this->allocations = $allocations;
+        $this->subscriptionId = $subscriptionId;
+        $this->subscription   = $subscription;
     }
 
-    public function getRateId()
+    public function getSubscriptionId()
     {
-        return $this->rateId;
+        return $this->subscriptionId;
     }
 
-    public function getRecord()
+    public function getSubscription()
     {
-        return $this->record;
-    }
-
-    public function getAllocations()
-    {
-        return $this->allocations;
+        return $this->subscription;
     }
 }
