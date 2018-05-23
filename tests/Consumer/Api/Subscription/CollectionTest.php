@@ -55,7 +55,7 @@ class CollectionTest extends ControllerDbTestCase
             "id": "1",
             "status": "1",
             "event": "foo-event",
-            "endpoint": "http:\/\/127.0.0.1\/callback.php"
+            "endpoint": "http:\/\/127.0.0.1\/foo\/callback.php"
         }
     ]
 }
@@ -98,7 +98,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['eventId']);
         $this->assertEquals(1, $row['userId']);
         $this->assertEquals(1, $row['status']);
