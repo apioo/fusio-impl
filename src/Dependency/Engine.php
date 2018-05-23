@@ -23,6 +23,7 @@ namespace Fusio\Impl\Dependency;
 
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
 use Fusio\Engine\Processor;
@@ -32,6 +33,8 @@ use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Parser as ImplParser;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
+use Fusio\Impl\Service\Event\Dispatcher;
+use Fusio\Impl\Table;
 use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
@@ -69,6 +72,7 @@ trait Engine
         $services = [
             ConnectorInterface::class => 'connector',
             ProcessorInterface::class => 'processor',
+            DispatcherInterface::class => 'engine_dispatcher',
             Response\FactoryInterface::class => 'engine_response',
             LoggerInterface::class => 'engine_logger',
             CacheInterface::class => 'engine_cache',
@@ -118,6 +122,17 @@ trait Engine
         return new Processor(
             $this->get('action_repository'),
             $this->get('action_factory')
+        );
+    }
+
+    /**
+     * @return \Fusio\Engine\DispatcherInterface
+     */
+    public function getEngineDispatcher()
+    {
+        return new Dispatcher(
+            $this->get('table_manager')->getTable(Table\Event::class),
+            $this->get('table_manager')->getTable(Table\Event\Trigger::class)
         );
     }
 

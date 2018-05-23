@@ -192,9 +192,9 @@ class Version310 implements VersionInterface
         $eventResponseTable->addColumn('triggerId', 'integer');
         $eventResponseTable->addColumn('subscriptionId', 'integer');
         $eventResponseTable->addColumn('status', 'integer');
-        $eventResponseTable->addColumn('code', 'integer');
+        $eventResponseTable->addColumn('code', 'integer', array('notnull' => false));
         $eventResponseTable->addColumn('attempts', 'integer');
-        $eventResponseTable->addColumn('executeDate', 'datetime');
+        $eventResponseTable->addColumn('executeDate', 'datetime', array('notnull' => false));
         $eventResponseTable->addColumn('insertDate', 'datetime');
         $eventResponseTable->setPrimaryKey(array('id'));
 

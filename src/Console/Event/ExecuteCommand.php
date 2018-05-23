@@ -19,48 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Event;
+namespace Fusio\Impl\Console\Event;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Service;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Subscription
+ * ExecuteCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Subscription extends TableAbstract
+class ExecuteCommand extends Command
 {
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 2;
+    /**
+     * @var \Fusio\Impl\Service\Event\Executor
+     */
+    protected $eventExecutorService;
 
-    public function getName()
+    public function __construct(Service\Event\Executor $eventExecutorService)
     {
-        return 'fusio_event_subscription';
+        parent::__construct();
+
+        $this->eventExecutorService = $eventExecutorService;
     }
 
-    public function getColumns()
+    protected function configure()
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'eventId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'endpoint' => self::TYPE_VARCHAR,
-        );
+        $this
+            ->setName('event:execute')
+            ->setDescription('Executes all pending events');
     }
 
-    public function getSubscriptionsForEvent($eventId)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $sql = 'SELECT id
-                  FROM fusio_event_subscription
-                 WHERE eventId = :eventId
-                   AND status = :status';
+        $this->eventExecutorService->execute();
 
-        return $this->connection->fetchAll($sql, [
-            'eventId' => $eventId,
-            'status'  => self::STATUS_ACTIVE,
-        ]);
+        $output->writeln('Execution successful');
     }
 }

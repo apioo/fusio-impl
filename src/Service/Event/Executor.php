@@ -111,7 +111,7 @@ class Executor
                     'subscriptionId' => $subscription['id'],
                     'status' => Table\Event\Response::STATUS_PENDING,
                     'attempts' => 0,
-                    'insertDate' => $now->format('Y-m-d H:i:s'),
+                    'insertDate' => $now,
                 ]);
             }
 
@@ -124,12 +124,6 @@ class Executor
         $responses = $this->responseTable->getAllPending();
 
         foreach ($responses as $resp) {
-            // mark response as exceeded in case max attempts is reached
-            if ($resp['attempts'] > self::MAX_ATTEMPTS) {
-                $this->responseTable->markExceeded($resp['id']);
-                continue;
-            }
-
             try {
                 $headers = [
                     'Content-Type' => 'application/json',
@@ -139,15 +133,9 @@ class Executor
                 $request  = new Request(new Url($resp['endpoint']), 'POST', $headers, $resp['payload']);
                 $response = $this->httpClient->request($request);
 
-                if (($response->getStatusCode() >= 200 && $response->getStatusCode() < 400) || $response->getStatusCode() == 410) {
-                    $this->responseTable->markDone($resp['id']);
-                } else {
-                    // wrong response status code try again later
-                    $this->responseTable->increaseAttempt($resp['id']);
-                }
+                $this->responseTable->setResponse($resp['id'], $response->getStatusCode(), $resp['attempts'], self::MAX_ATTEMPTS);
             } catch (\Exception $e) {
-                // an error occurred try again later
-                $this->responseTable->increaseAttempt($resp['id']);
+                $this->responseTable->setResponse($resp['id'], null, $resp['attempts'], self::MAX_ATTEMPTS);
             }
         }
     }

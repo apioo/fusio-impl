@@ -47,7 +47,7 @@ class Response extends TableAbstract
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'triggerId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
+            'subscriptionId' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'code' => self::TYPE_INT,
             'attempts' => self::TYPE_INT,
@@ -74,39 +74,34 @@ class Response extends TableAbstract
         ]);
     }
 
-    public function markExceeded($responseId)
-    {
-        return $this->connection->update('fusio_event_response', [
-            'status' => self::STATUS_EXCEEDED,
-        ], [
-            'id' => $responseId,
-        ]);
-    }
-
-    public function markDone($responseId, $status)
+    public function setResponse($responseId, $code, $attempts, $maxAttempts)
     {
         $now = new \DateTime();
 
-        return $this->connection->update('fusio_event_response', [
-            'status' => self::STATUS_DONE,
-            'executeDate' => $now->format('Y-m-d H:i:s'),
-        ], [
-            'id' => $responseId,
-        ]);
-    }
+        if (($code >= 200 && $code < 400) || $code == 410) {
+            $status = self::STATUS_DONE;
+        } else {
+            $status = self::STATUS_PENDING;
+        }
 
-    public function increaseAttempt($responseId)
-    {
-        $now = new \DateTime();
+        // mark response as exceeded in case max attempts is reached
+        if ($attempts > $maxAttempts) {
+            $status = self::STATUS_EXCEEDED;
+        }
 
         $sql = 'UPDATE fusio_event_response
-                   SET attempts = attempts + 1,
+                   SET status = :status,
+                       code = :code,
+                       attempts = :attempts,
                        executeDate = :now
                  WHERE id = :id';
 
         return $this->connection->executeUpdate($sql, [
-            'id'  => $responseId,
-            'now' => $now->format('Y-m-d H:i:s'),
+            'id'       => $responseId,
+            'status'   => $status,
+            'code'     => $code,
+            'attempts' => $attempts + 1,
+            'now'      => $now->format('Y-m-d H:i:s'),
         ]);
     }
 }

@@ -54,7 +54,8 @@ class Trigger extends TableAbstract
 
     public function getAllPending()
     {
-        $sql = 'SELECT eventId
+        $sql = 'SELECT id,
+                       eventId
                   FROM fusio_event_trigger 
                  WHERE status = :status';
 
