@@ -33,7 +33,6 @@ class EventEvents
     const CREATE = 'event.create';
     const DELETE = 'event.delete';
     const SUBSCRIBE = 'event.subscribed';
-    const TRIGGER = 'event.triggered';
     const UNSUBSCRIBE = 'event.unsubscribed';
     const UPDATE = 'event.update';
 }
