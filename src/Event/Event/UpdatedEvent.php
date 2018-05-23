@@ -73,11 +73,6 @@ class UpdatedEvent extends EventAbstract
         return $this->record;
     }
 
-    public function getAllocations()
-    {
-        return $this->allocations;
-    }
-
     public function getEvent()
     {
         return $this->event;
