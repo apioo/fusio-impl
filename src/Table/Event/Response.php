@@ -61,14 +61,14 @@ class Response extends TableAbstract
         $sql = 'SELECT response.id,
                        response.attempts,
                        subscription.endpoint,
-                       trigger.payload
+                       trigg.payload
                   FROM fusio_event_response response
             INNER JOIN fusio_event_subscription subscription
                     ON subscription.id = response.subscriptionId
-            INNER JOIN fusio_event_trigger trigger
-                    ON trigger.id = response.triggerId
+            INNER JOIN fusio_event_trigger trigg
+                    ON trigg.id = response.triggerId
                  WHERE response.status = :status';
-        
+
         return $this->connection->fetchAll($sql, [
             'status' => Table\Event\Response::STATUS_PENDING
         ]);
