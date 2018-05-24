@@ -21,18 +21,13 @@
 
 namespace Fusio\Impl\Service\Event;
 
-use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Event\SubscribedEvent;
 use Fusio\Impl\Event\Event\UnsubscribedEvent;
 use Fusio\Impl\Event\EventEvents;
-use Fusio\Impl\Event\Rate\CreatedEvent;
-use Fusio\Impl\Event\Rate\DeletedEvent;
-use Fusio\Impl\Event\Rate\UpdatedEvent;
-use Fusio\Impl\Event\RateEvents;
+use Fusio\Impl\Service\Config;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\ResponseInterface;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -56,6 +51,11 @@ class Subscription
     protected $subscriptionTable;
 
     /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
@@ -63,12 +63,14 @@ class Subscription
     /**
      * @param \Fusio\Impl\Table\Event $eventTable
      * @param \Fusio\Impl\Table\Event\Subscription $subscriptionTable
+     * @param \Fusio\Impl\Service\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Event $eventTable, Table\Event\Subscription $subscriptionTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Event $eventTable, Table\Event\Subscription $subscriptionTable, Config $configService, EventDispatcherInterface $eventDispatcher)
     {
         $this->eventTable        = $eventTable;
         $this->subscriptionTable = $subscriptionTable;
+        $this->configService     = $configService;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
@@ -84,7 +86,12 @@ class Subscription
             throw new StatusCode\BadRequestException('Event does not exist');
         }
 
-        // @TODO check max subscription count
+        // check max subscription count
+        $count = $this->subscriptionTable->getSubscriptionCount($context->getUserId());
+
+        if ($count > $this->configService->getValue('consumer_subscription')) {
+            throw new StatusCode\BadRequestException('Max subscription count reached');
+        }
 
         // create event
         $record = [

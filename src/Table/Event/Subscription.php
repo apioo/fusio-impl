@@ -63,4 +63,11 @@ class Subscription extends TableAbstract
             'status'  => self::STATUS_ACTIVE,
         ]);
     }
+
+    public function getSubscriptionCount($userId)
+    {
+        return $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE userId = :userId', [
+            'userId' => $userId
+        ]);
+    }
 }

@@ -238,6 +238,7 @@ trait Services
         return new Service\Event\Subscription(
             $this->get('table_manager')->getTable(Table\Event::class),
             $this->get('table_manager')->getTable(Table\Event\Subscription::class),
+            $this->get('config_service'),
             $this->get('event_dispatcher')
         );
     }
