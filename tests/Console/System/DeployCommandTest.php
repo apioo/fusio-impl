@@ -294,7 +294,7 @@ JSON;
             'name' => 'mail_register_subject',
         ]);
 
-        $this->assertEquals(12, $config['id']);
+        $this->assertEquals(13, $config['id']);
         $this->assertEquals('foo bar', $config['value']);
     }
 

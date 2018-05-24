@@ -154,7 +154,7 @@ JSON;
         $client = new Client(['handler' => $handler]);
 
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 15]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 16]);
 
         $response = $this->sendRequest('/consumer/provider/facebook', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -199,7 +199,7 @@ JSON;
         $client = new Client(['handler' => $handler]);
 
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 17]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 18]);
 
         $response = $this->sendRequest('/consumer/provider/github', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -245,7 +245,7 @@ JSON;
         $client = new Client(['handler' => $handler]);
 
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 16]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 17]);
 
         $response = $this->sendRequest('/consumer/provider/google', 'POST', array(
             'User-Agent' => 'Fusio TestCase',

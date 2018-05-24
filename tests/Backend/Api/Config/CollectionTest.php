@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 21,
+    "totalResults": 22,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -192,94 +192,94 @@ JSON;
             "value": ""
         },
         {
-            "id": 9,
+            "id": 4,
+            "type": 3,
+            "name": "consumer_subscription",
+            "description": "The max amount of subscriptions a consumer can add",
+            "value": "8"
+        },
+        {
+            "id": 10,
             "type": 1,
             "name": "info_contact_email",
             "description": "The email address of the contact person\/organization. MUST be in the format of an email address",
             "value": ""
         },
         {
-            "id": 7,
+            "id": 8,
             "type": 1,
             "name": "info_contact_name",
             "description": "The identifying name of the contact person\/organization",
             "value": ""
         },
         {
-            "id": 8,
+            "id": 9,
             "type": 1,
             "name": "info_contact_url",
             "description": "The URL pointing to the contact information. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 5,
+            "id": 6,
             "type": 1,
             "name": "info_description",
             "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
             "value": ""
         },
         {
-            "id": 10,
+            "id": 11,
             "type": 1,
             "name": "info_license_name",
             "description": "The license name used for the API",
             "value": ""
         },
         {
-            "id": 11,
+            "id": 12,
             "type": 1,
             "name": "info_license_url",
             "description": "A URL to the license used for the API. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 4,
+            "id": 5,
             "type": 1,
             "name": "info_title",
             "description": "The title of the application",
             "value": "Fusio"
         },
         {
-            "id": 6,
+            "id": 7,
             "type": 1,
             "name": "info_tos",
             "description": "A URL to the Terms of Service for the API. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 13,
+            "id": 14,
             "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
             "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
         },
         {
-            "id": 12,
+            "id": 13,
             "type": 1,
             "name": "mail_register_subject",
             "description": "Subject of the activation mail",
             "value": "Fusio registration"
         },
         {
-            "id": 14,
+            "id": 15,
             "type": 1,
             "name": "mail_sender",
             "description": "Email address which is used in the \"From\" header",
             "value": ""
         },
         {
-            "id": 15,
+            "id": 16,
             "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
-            "value": ""
-        },
-        {
-            "id": 17,
-            "type": 1,
-            "name": "provider_github_secret",
-            "description": "GitHub app secret",
             "value": ""
         }
     ]
@@ -305,7 +305,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 12,
+            "id": 13,
             "type": 1,
             "name": "mail_register_subject",
             "description": "Subject of the activation mail",
@@ -329,7 +329,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 21,
+    "totalResults": 22,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -355,126 +355,133 @@ JSON;
             "value": ""
         },
         {
-            "id": 9,
+            "id": 4,
+            "type": 3,
+            "name": "consumer_subscription",
+            "description": "The max amount of subscriptions a consumer can add",
+            "value": "8"
+        },
+        {
+            "id": 10,
             "type": 1,
             "name": "info_contact_email",
             "description": "The email address of the contact person\/organization. MUST be in the format of an email address",
             "value": ""
         },
         {
-            "id": 7,
+            "id": 8,
             "type": 1,
             "name": "info_contact_name",
             "description": "The identifying name of the contact person\/organization",
             "value": ""
         },
         {
-            "id": 8,
+            "id": 9,
             "type": 1,
             "name": "info_contact_url",
             "description": "The URL pointing to the contact information. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 5,
+            "id": 6,
             "type": 1,
             "name": "info_description",
             "description": "A short description of the application. CommonMark syntax MAY be used for rich text representation",
             "value": ""
         },
         {
-            "id": 10,
+            "id": 11,
             "type": 1,
             "name": "info_license_name",
             "description": "The license name used for the API",
             "value": ""
         },
         {
-            "id": 11,
+            "id": 12,
             "type": 1,
             "name": "info_license_url",
             "description": "A URL to the license used for the API. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 4,
+            "id": 5,
             "type": 1,
             "name": "info_title",
             "description": "The title of the application",
             "value": "Fusio"
         },
         {
-            "id": 6,
+            "id": 7,
             "type": 1,
             "name": "info_tos",
             "description": "A URL to the Terms of Service for the API. MUST be in the format of a URL",
             "value": ""
         },
         {
-            "id": 13,
+            "id": 14,
             "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
             "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
         },
         {
-            "id": 12,
+            "id": 13,
             "type": 1,
             "name": "mail_register_subject",
             "description": "Subject of the activation mail",
             "value": "Fusio registration"
         },
         {
-            "id": 14,
+            "id": 15,
             "type": 1,
             "name": "mail_sender",
             "description": "Email address which is used in the \"From\" header",
             "value": ""
         },
         {
-            "id": 15,
+            "id": 16,
             "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
             "value": ""
         },
         {
-            "id": 17,
+            "id": 18,
             "type": 1,
             "name": "provider_github_secret",
             "description": "GitHub app secret",
             "value": ""
         },
         {
-            "id": 16,
+            "id": 17,
             "type": 1,
             "name": "provider_google_secret",
             "description": "Google app secret",
             "value": ""
         },
         {
-            "id": 18,
+            "id": 19,
             "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
             "value": ""
         },
         {
-            "id": 19,
+            "id": 20,
             "type": 1,
             "name": "scopes_default",
             "description": "If a user registers through the consumer API the following scopes are assigned",
             "value": "authorization,consumer"
         },
         {
-            "id": 21,
+            "id": 22,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 20,
+            "id": 21,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
