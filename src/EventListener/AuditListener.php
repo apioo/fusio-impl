@@ -102,7 +102,14 @@ class AuditListener implements EventSubscriberInterface
             $event->getAppId(),
             'app.generate_token',
             sprintf('Generated token for app'),
-            ['appId' => $event->getAppId(), 'tokenId' => $event->getTokenId(), 'access_token' => $event->getAccessToken(), 'scope' => $event->getScopes(), 'expires' => $event->getExpires()->format('Y-m-d H:i:s'), 'now' => $event->getNow()->format('Y-m-d H:i:s')]
+            [
+                'appId' => $event->getAppId(),
+                'tokenId' => $event->getTokenId(),
+                'access_token' => $event->getAccessToken(),
+                'scope' => $event->getScopes(),
+                'expires' => $event->getExpires()->format('Y-m-d H:i:s'),
+                'now' => $event->getNow()->format('Y-m-d H:i:s')
+            ]
         );
     }
 
@@ -167,6 +174,91 @@ class AuditListener implements EventSubscriberInterface
             $event->getConnectionId(),
             'connection.update',
             sprintf('Updated connection %s', $event->getConnection()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onCronjobCreate(Event\Cronjob\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getCronjobId(),
+            'cronjob.create',
+            sprintf('Created cronjob %s', $event->getRecord()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onCronjobDelete(Event\Cronjob\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getCronjobId(),
+            'cronjob.delete',
+            sprintf('Deleted cronjob %s', $event->getCronjob()['name'])
+        );
+    }
+
+    public function onCronjobUpdate(Event\Cronjob\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getCronjobId(),
+            'cronjob.update',
+            sprintf('Updated cronjob %s', $event->getCronjob()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onEventCreate(Event\Event\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getEventId(),
+            'event.create',
+            sprintf('Created event %s', $event->getRecord()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onEventDelete(Event\Event\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getEventId(),
+            'event.delete',
+            sprintf('Deleted event %s', $event->getEvent()['name'])
+        );
+    }
+
+    public function onEventSubscribe(Event\Event\SubscribedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getSubscriptionId(),
+            'event.subscribe',
+            sprintf('Subscribed event %s', $event->getRecord()['eventId']),
+            $event->getRecord()
+        );
+    }
+
+    public function onEventUnsubscribe(Event\Event\UnsubscribedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getSubscriptionId(),
+            'event.unsubscribe',
+            sprintf('Unsubscribed event %s', $event->getSubscription()['eventId'])
+        );
+    }
+
+    public function onEventUpdate(Event\Event\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getEventId(),
+            'event.update',
+            sprintf('Updated event %s', $event->getEvent()['name']),
             $event->getRecord()
         );
     }
@@ -414,6 +506,16 @@ class AuditListener implements EventSubscriberInterface
             Event\ConnectionEvents::CREATE    => 'onConnectionCreate',
             Event\ConnectionEvents::DELETE    => 'onConnectionDelete',
             Event\ConnectionEvents::UPDATE    => 'onConnectionUpdate',
+
+            Event\CronjobEvents::CREATE       => 'onCronjobCreate',
+            Event\CronjobEvents::DELETE       => 'onCronjobDelete',
+            Event\CronjobEvents::UPDATE       => 'onCronjobUpdate',
+
+            Event\EventEvents::CREATE         => 'onEventCreate',
+            Event\EventEvents::DELETE         => 'onEventDelete',
+            Event\EventEvents::SUBSCRIBE      => 'onEventSubscribe',
+            Event\EventEvents::UNSUBSCRIBE    => 'onEventUnsubscribe',
+            Event\EventEvents::UPDATE         => 'onEventUpdate',
 
             Event\RateEvents::CREATE          => 'onRateCreate',
             Event\RateEvents::DELETE          => 'onRateDelete',
