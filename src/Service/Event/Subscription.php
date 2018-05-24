@@ -84,6 +84,8 @@ class Subscription
             throw new StatusCode\BadRequestException('Event does not exist');
         }
 
+        // @TODO check max subscription count
+
         // create event
         $record = [
             'eventId'  => $event->id,
@@ -133,6 +135,7 @@ class Subscription
             throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
         }
 
+        // remove subscription
         $record = [
             'id' => $subscription['id'],
         ];
