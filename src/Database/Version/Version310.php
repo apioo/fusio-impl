@@ -524,9 +524,16 @@ class Version310 implements VersionInterface
 
                 ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
                 ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
-
             ],
             'fusio_connection' => [
+            ],
+            'fusio_event' => [
+            ],
+            'fusio_event_response' => [
+            ],
+            'fusio_event_subscription' => [
+            ],
+            'fusio_event_trigger' => [
             ],
             'fusio_audit' => [
             ],
