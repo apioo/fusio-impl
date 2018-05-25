@@ -107,8 +107,8 @@ class Fixture
                 ['status' => 1, 'name' => 'foo-event', 'description' => 'Foo event description'],
             ],
             'fusio_event_subscription' => [
-                ['eventId' => 1, 'userId' => 1, 'status' => 1, 'endpoint' => 'http://127.0.0.1/foo/callback.php'],
-                ['eventId' => 1, 'userId' => 2, 'status' => 1, 'endpoint' => 'http://127.0.0.1/bar/callback.php'],
+                ['eventId' => 1, 'userId' => 1, 'status' => 1, 'endpoint' => 'http://httpbin.org/post'],
+                ['eventId' => 1, 'userId' => 2, 'status' => 1, 'endpoint' => 'http://httpbin.org/post'],
             ],
             'fusio_deploy_migration' => [
                 ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],

@@ -65,14 +65,14 @@ class ExecuteCommandTest extends ControllerDbTestCase
         $this->assertEquals(2, count($responses));
         $this->assertEquals(1, $responses[0]['triggerId']);
         $this->assertEquals(1, $responses[0]['subscriptionId']);
-        $this->assertEquals(1, $responses[0]['status']);
-        $this->assertEquals(500, $responses[0]['code']);
+        $this->assertEquals(2, $responses[0]['status']);
+        $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
         $this->assertEquals(1, $responses[1]['triggerId']);
         $this->assertEquals(2, $responses[1]['subscriptionId']);
-        $this->assertEquals(1, $responses[1]['status']);
-        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(2, $responses[1]['status']);
+        $this->assertEquals(200, $responses[1]['code']);
         $this->assertEquals(1, $responses[1]['attempts']);
     }
 }
