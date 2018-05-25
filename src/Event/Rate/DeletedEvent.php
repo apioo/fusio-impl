@@ -44,16 +44,16 @@ class DeletedEvent extends EventAbstract
     protected $rate;
 
     /**
-     * @param integer $eventId
-     * @param array $event
+     * @param integer $rateId
+     * @param array $rate
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($eventId, $event, UserContext $context)
+    public function __construct($rateId, $rate, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId = $eventId;
-        $this->rate   = $event;
+        $this->rateId = $rateId;
+        $this->rate   = $rate;
     }
 
     public function getRateId()

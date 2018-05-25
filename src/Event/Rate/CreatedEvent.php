@@ -49,16 +49,16 @@ class CreatedEvent extends EventAbstract
     protected $allocations;
 
     /**
-     * @param integer $eventId
+     * @param integer $rateId
      * @param array $record
      * @param array $allocations
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($eventId, array $record, $allocations, UserContext $context)
+    public function __construct($rateId, array $record, $allocations, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $eventId;
+        $this->rateId      = $rateId;
         $this->record      = $record;
         $this->allocations = $allocations;
     }
