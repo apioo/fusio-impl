@@ -55,7 +55,7 @@ class CollectionTest extends ControllerDbTestCase
             "id": "1",
             "status": "1",
             "event": "foo-event",
-            "endpoint": "http:\/\/127.0.0.1\/foo\/callback.php"
+            "endpoint": "http:\/\/httpbin.org\/post"
         }
     ]
 }
