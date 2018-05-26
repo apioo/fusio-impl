@@ -69,6 +69,9 @@ rate:
     allocation:
       - authenticated: true
         parameters: "foo=bar"
+event:
+  New-Event:
+    description: "A description of the event"
 migration:
   New-Connection:
     - v1_schema.php

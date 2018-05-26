@@ -49,6 +49,7 @@ abstract class SystemAbstract
     const TYPE_ROUTES = 'routes';
     const TYPE_CRONJOB = 'cronjob';
     const TYPE_RATE = 'rate';
+    const TYPE_EVENT = 'event';
 
     /**
      * @var \Fusio\Impl\Service\System\ApiExecutor
@@ -88,6 +89,7 @@ abstract class SystemAbstract
         self::TYPE_RATE,
         self::TYPE_USER,
         self::TYPE_APP,
+        self::TYPE_EVENT,
     ];
 
     /**
@@ -253,6 +255,13 @@ abstract class SystemAbstract
     {
         unset($entity->id);
         unset($entity->routes);
+
+        return $entity;
+    }
+
+    protected function transformEvent(stdClass $entity)
+    {
+        unset($entity->id);
 
         return $entity;
     }

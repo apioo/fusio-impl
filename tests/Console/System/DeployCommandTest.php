@@ -236,6 +236,13 @@ JSON;
         $this->assertEquals(true, $rateAllocation[0]['authenticated']);
         $this->assertEquals('foo=bar', $rateAllocation[0]['parameters']);
 
+        // check event
+        $event = $this->connection->fetchAssoc('SELECT id, name, description FROM fusio_event WHERE name = :name', ['name' => 'New-Event']);
+
+        $this->assertEquals(2, $event['id']);
+        $this->assertEquals('New-Event', $event['name']);
+        $this->assertEquals('A description of the event', $event['description']);
+
         // check migration entries
         $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
 

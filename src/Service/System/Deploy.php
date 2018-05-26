@@ -93,6 +93,7 @@ class Deploy
             SystemAbstract::TYPE_ROUTES     => new Deploy\Transformer\Routes(),
             SystemAbstract::TYPE_CRONJOB    => new Deploy\Transformer\Cronjob(),
             SystemAbstract::TYPE_RATE       => new Deploy\Transformer\Rate(),
+            SystemAbstract::TYPE_EVENT      => new Deploy\Transformer\Event(),
         ];
 
         // resolve includes
