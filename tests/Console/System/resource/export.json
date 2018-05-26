@@ -429,5 +429,11 @@
       ],
       "date": "[datetime]"
     }
+  ],
+  "event": [
+    {
+      "name": "foo-event",
+      "description": "Foo event description"
+    }
   ]
 }
