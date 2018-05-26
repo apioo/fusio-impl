@@ -75,7 +75,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals('application/json', $container[1]['request']->getHeaderLine('Content-Type'));
         $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
         $this->assertEquals(500, $container[1]['response']->getStatusCode());
-        
+
         // check database
         $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
 
