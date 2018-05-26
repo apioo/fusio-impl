@@ -25,9 +25,11 @@ use Fusio\Engine\DispatcherInterface;
 use Fusio\Impl\Service\Event\Executor;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -148,6 +150,52 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(2, $responses[1]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[1]['status']);
         $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(3, $responses[1]['attempts']);
+    }
+
+    public function testExecuteExceptionExceeded()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => true])),
+            new RequestException("Error Communicating with Server", new Request('GET', '/foo'))
+        ]);
+
+        $container = [];
+        $executor  = $this->newExecutor($mock, $container);
+
+        $this->dispatchEvent('foo-event', ['foo' => 'bar']);
+
+        // execute requests
+        for ($i = 0; $i < 8; $i++) {
+            $executor->execute();
+        }
+
+        // check requests
+        $this->assertEquals(2, count($container));
+
+        $this->assertEquals('POST', $container[0]['request']->getMethod());
+        $this->assertEquals('application/json', $container[0]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[0]['request']->getBody());
+        $this->assertEquals(200, $container[0]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[1]['request']->getMethod());
+        $this->assertEquals('application/json', $container[1]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
+
+        // check database
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(1, $responses[0]['triggerId']);
+        $this->assertEquals(1, $responses[0]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['attempts']);
+
+        $this->assertEquals(1, $responses[1]['triggerId']);
+        $this->assertEquals(2, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[1]['status']);
+        $this->assertEquals(null, $responses[1]['code']);
         $this->assertEquals(3, $responses[1]['attempts']);
     }
 
