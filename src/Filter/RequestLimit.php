@@ -24,6 +24,7 @@ namespace Fusio\Impl\Filter;
 use Fusio\Engine\Repository\AppInterface;
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Service;
+use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -79,6 +80,8 @@ class RequestLimit implements FilterInterface
 
         if ($success) {
             $filterChain->handle($request, $response);
+        } else {
+            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
     }
 }
