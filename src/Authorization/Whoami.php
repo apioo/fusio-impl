@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Fusio\Impl\Backend\Schema\User;
 use Fusio\Impl\Consumer\View;
-use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Http\RequestInterface;
-use PSX\Http\ResponseInterface;
+use PSX\Api\Resource;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
  * Whoami
@@ -33,7 +34,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Whoami extends ControllerAbstract
+class Whoami extends SchemaApiAbstract
 {
     use ProtectionTrait;
 
@@ -43,10 +44,22 @@ class Whoami extends ControllerAbstract
      */
     protected $tableManager;
 
-    public function onGet(RequestInterface $request, ResponseInterface $response)
+    /**
+     * @inheritdoc
+     */
+    public function getDocumentation($version = null)
     {
-        $data = $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $this->responseWriter->setBody($response, $data);
+        $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->addResponse(200, $this->schemaManager->getSchema(User::class))
+        );
+
+        return $resource;
+    }
+
+    protected function doGet(HttpContextInterface $context)
+    {
+        return $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
     }
 }

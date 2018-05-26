@@ -21,11 +21,12 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Fusio\Impl\Backend\Schema\Message;
 use Fusio\Impl\Table;
-use PSX\Framework\Controller\ControllerAbstract;
+use PSX\Api\Resource;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\RequestInterface;
-use PSX\Http\ResponseInterface;
 
 /**
  * Revoke
@@ -34,7 +35,7 @@ use PSX\Http\ResponseInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Revoke extends ControllerAbstract
+class Revoke extends SchemaApiAbstract
 {
     use ProtectionTrait;
 
@@ -50,9 +51,23 @@ class Revoke extends ControllerAbstract
      */
     protected $appService;
 
-    public function onPost(RequestInterface $request, ResponseInterface $response)
+    /**
+     * @inheritdoc
+     */
+    public function getDocumentation($version = null)
     {
-        $header = $request->getHeader('Authorization');
+        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+
+        $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->addResponse(200, $this->schemaManager->getSchema(Message::class))
+        );
+
+        return $resource;
+    }
+
+    protected function doPost($record, HttpContextInterface $context)
+    {
+        $header = $context->getHeader('Authorization');
         $parts  = explode(' ', $header, 2);
         $type   = isset($parts[0]) ? $parts[0] : null;
         $token  = isset($parts[1]) ? $parts[1] : null;
@@ -64,11 +79,9 @@ class Revoke extends ControllerAbstract
             if (!empty($row) && $row['appId'] == $this->context->getAppId() && $row['userId'] == $this->context->getUserId()) {
                 $this->appService->removeToken($row['appId'], $row['id'], $this->context->getUserContext());
 
-                $data = [
+                return [
                     'success' => true
                 ];
-
-                $this->responseWriter->setBody($response, $data);
             } else {
                 throw new StatusCode\BadRequestException('Invalid token');
             }

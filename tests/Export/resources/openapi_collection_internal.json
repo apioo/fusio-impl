@@ -4161,6 +4161,24 @@
       },
       "parameters": []
     },
+    "\/authorization\/revoke": {
+      "post": {
+        "operationId": "authorizationRevokePostMessage",
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/authorization\/token": {
       "post": {
         "operationId": "authorizationTokenPostAuthorization",
@@ -4190,6 +4208,24 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/authorization\/whoami": {
+      "get": {
+        "operationId": "authorizationWhoamiGetUser",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/User"
                 }
               }
             }
@@ -4530,17 +4566,25 @@
         "type": "object",
         "title": "token",
         "properties": {
-          "access_token": {
-            "type": "string"
+          "id": {
+            "type": "integer"
           },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
+          "token": {
             "type": "string"
           },
           "scope": {
             "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "expire": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -4548,16 +4592,45 @@
         "type": "object",
         "title": "app",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
           "name": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
           },
           "url": {
             "type": "string"
           },
+          "parameters": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
           "scopes": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Scope"
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Token"
             }
           }
         }
@@ -4597,24 +4670,36 @@
         "type": "object",
         "title": "user",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
           "name": {
-            "type": "string"
+            "type": "string",
+            "pattern": "[a-zA-Z0-9\\-\\_\\.]{3,32}"
           },
           "email": {
             "type": "string"
           },
-          "password": {
-            "type": "string"
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          "captcha": {
-            "type": "string"
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
+            }
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
           }
-        },
-        "required": [
-          "name",
-          "email",
-          "password"
-        ]
+        }
       },
       "Object": {
         "type": "object",

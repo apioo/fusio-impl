@@ -65,7 +65,7 @@ class WhoamiTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(null, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }
