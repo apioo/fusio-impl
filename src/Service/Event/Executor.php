@@ -99,13 +99,13 @@ class Executor
     private function insertTriggerEntries()
     {
         $triggers = $this->triggerTable->getAllPending();
-        
+
         foreach ($triggers as $trigger) {
             $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['eventId']);
-            
+
             foreach ($subscriptions as $subscription) {
                 $now = new \DateTime();
-                
+
                 $this->responseTable->create([
                     'triggerId' => $trigger['id'],
                     'subscriptionId' => $subscription['id'],

@@ -37,6 +37,8 @@ class Response extends TableAbstract
     const STATUS_DONE = 2;
     const STATUS_EXCEEDED = 3;
 
+    const RESPONSE_LIMIT = 60;
+
     public function getName()
     {
         return 'fusio_event_response';
@@ -67,7 +69,10 @@ class Response extends TableAbstract
                     ON subscription.id = response.subscriptionId
             INNER JOIN fusio_event_trigger trigg
                     ON trigg.id = response.triggerId
-                 WHERE response.status = :status';
+                 WHERE response.status = :status
+              ORDER BY trigg.insertDate ASC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, self::RESPONSE_LIMIT);
 
         return $this->connection->fetchAll($sql, [
             'status' => Table\Event\Response::STATUS_PENDING
@@ -76,7 +81,8 @@ class Response extends TableAbstract
 
     public function setResponse($responseId, $code, $attempts, $maxAttempts)
     {
-        $now = new \DateTime();
+        $now      = new \DateTime();
+        $attempts = $attempts + 1;
 
         if (($code >= 200 && $code < 400) || $code == 410) {
             $status = self::STATUS_DONE;
@@ -85,7 +91,7 @@ class Response extends TableAbstract
         }
 
         // mark response as exceeded in case max attempts is reached
-        if ($attempts > $maxAttempts) {
+        if ($attempts >= $maxAttempts) {
             $status = self::STATUS_EXCEEDED;
         }
 
@@ -100,7 +106,7 @@ class Response extends TableAbstract
             'id'       => $responseId,
             'status'   => $status,
             'code'     => $code,
-            'attempts' => $attempts + 1,
+            'attempts' => $attempts,
             'now'      => $now->format('Y-m-d H:i:s'),
         ]);
     }

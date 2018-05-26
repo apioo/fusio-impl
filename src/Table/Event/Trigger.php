@@ -57,7 +57,8 @@ class Trigger extends TableAbstract
         $sql = 'SELECT id,
                        eventId
                   FROM fusio_event_trigger 
-                 WHERE status = :status';
+                 WHERE status = :status
+              ORDER BY id ASC';
 
         return $this->connection->fetchAll($sql, [
             'status' => Table\Event\Trigger::STATUS_PENDING

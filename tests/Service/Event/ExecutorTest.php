@@ -1,0 +1,232 @@
+<?php
+/*
+ * Fusio
+ * A web-application to create dynamically RESTful APIs
+ *
+ * Copyright (C) 2015-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace Fusio\Impl\Tests\Service\Event;
+
+use Fusio\Engine\DispatcherInterface;
+use Fusio\Impl\Service\Event\Executor;
+use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Fixture;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
+use PSX\Http\Client\Client;
+
+/**
+ * ExecutorTest
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * @link    http://phpsx.org
+ */
+class ExecutorTest extends ControllerDbTestCase
+{
+    public function getDataSet()
+    {
+        return Fixture::getDataSet();
+    }
+
+    public function testExecute()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => true])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+        ]);
+
+        $container = [];
+        $executor  = $this->newExecutor($mock, $container);
+
+        $this->dispatchEvent('foo-event', ['foo' => 'bar']);
+
+        // execute requests
+        $executor->execute();
+
+        // check requests
+        $this->assertEquals(2, count($container));
+        $this->assertEquals('POST', $container[0]['request']->getMethod());
+        $this->assertEquals('application/json', $container[0]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[0]['request']->getBody());
+        $this->assertEquals(200, $container[0]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[1]['request']->getMethod());
+        $this->assertEquals('application/json', $container[1]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
+        $this->assertEquals(500, $container[1]['response']->getStatusCode());
+        
+        // check database
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(1, $responses[0]['triggerId']);
+        $this->assertEquals(1, $responses[0]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['attempts']);
+
+        $this->assertEquals(1, $responses[1]['triggerId']);
+        $this->assertEquals(2, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_PENDING, $responses[1]['status']);
+        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(1, $responses[1]['attempts']);
+    }
+
+    public function testExecuteAttemptExceed()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => true])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+        ]);
+
+        $container = [];
+        $executor  = $this->newExecutor($mock, $container);
+
+        $this->dispatchEvent('foo-event', ['foo' => 'bar']);
+
+        // execute requests
+        for ($i = 0; $i < 8; $i++) {
+            $executor->execute();
+        }
+
+        // check requests
+        $this->assertEquals(4, count($container));
+
+        $this->assertEquals('POST', $container[0]['request']->getMethod());
+        $this->assertEquals('application/json', $container[0]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[0]['request']->getBody());
+        $this->assertEquals(200, $container[0]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[1]['request']->getMethod());
+        $this->assertEquals('application/json', $container[1]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
+        $this->assertEquals(500, $container[1]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[2]['request']->getMethod());
+        $this->assertEquals('application/json', $container[2]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[2]['request']->getBody());
+        $this->assertEquals(500, $container[2]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[3]['request']->getMethod());
+        $this->assertEquals('application/json', $container[3]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[3]['request']->getBody());
+        $this->assertEquals(500, $container[3]['response']->getStatusCode());
+
+        // check database
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(1, $responses[0]['triggerId']);
+        $this->assertEquals(1, $responses[0]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['attempts']);
+
+        $this->assertEquals(1, $responses[1]['triggerId']);
+        $this->assertEquals(2, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[1]['status']);
+        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(3, $responses[1]['attempts']);
+    }
+
+    public function testExecuteErrorThenSuccess()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => true])),
+            new Response(500, ['Content-Type' => 'application/json'], \json_encode(['success' => false])),
+            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => true])),
+        ]);
+
+        $container = [];
+        $executor  = $this->newExecutor($mock, $container);
+
+        $this->dispatchEvent('foo-event', ['foo' => 'bar']);
+
+        // execute requests
+        for ($i = 0; $i < 8; $i++) {
+            $executor->execute();
+        }
+
+        // check requests
+        $this->assertEquals(3, count($container));
+
+        $this->assertEquals('POST', $container[0]['request']->getMethod());
+        $this->assertEquals('application/json', $container[0]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[0]['request']->getBody());
+        $this->assertEquals(200, $container[0]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[1]['request']->getMethod());
+        $this->assertEquals('application/json', $container[1]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
+        $this->assertEquals(500, $container[1]['response']->getStatusCode());
+
+        $this->assertEquals('POST', $container[2]['request']->getMethod());
+        $this->assertEquals('application/json', $container[2]['request']->getHeaderLine('Content-Type'));
+        $this->assertEquals('{"foo":"bar"}', (string) $container[2]['request']->getBody());
+        $this->assertEquals(200, $container[2]['response']->getStatusCode());
+
+        // check database
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+
+        $this->assertEquals(2, count($responses));
+        $this->assertEquals(1, $responses[0]['triggerId']);
+        $this->assertEquals(1, $responses[0]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
+        $this->assertEquals(200, $responses[0]['code']);
+        $this->assertEquals(1, $responses[0]['attempts']);
+
+        $this->assertEquals(1, $responses[1]['triggerId']);
+        $this->assertEquals(2, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
+        $this->assertEquals(200, $responses[1]['code']);
+        $this->assertEquals(2, $responses[1]['attempts']);
+    }
+
+    private function newExecutor($mock, array &$container)
+    {
+        $history = Middleware::history($container);
+
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+
+        $httpClient = new Client(['handler' => $stack]);
+
+        return new Executor(
+            Environment::getService('table_manager')->getTable(Table\Event\Trigger::class),
+            Environment::getService('table_manager')->getTable(Table\Event\Subscription::class),
+            Environment::getService('table_manager')->getTable(Table\Event\Response::class),
+            $httpClient,
+            Environment::getService('event_dispatcher')
+        );
+    }
+
+    private function dispatchEvent($name, $payload)
+    {
+        // dispatch event
+        /** @var DispatcherInterface $dispatcher */
+        $dispatcher = Environment::getService('engine_dispatcher');
+        $dispatcher->dispatch($name, $payload);
+    }
+}
