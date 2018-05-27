@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
+use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
@@ -96,7 +98,13 @@ class Action
         }
 
         // check source
-        $this->assertSource($class, $engine);
+        $parameters = new Parameters($config ?: []);
+        $handler    = $this->newAction($class, $engine);
+
+        // call lifecycle
+        if ($handler instanceof LifecycleInterface) {
+            $handler->onCreate($name, $parameters);
+        }
 
         // create action
         $record = [
@@ -137,7 +145,13 @@ class Action
         }
 
         // check source
-        $this->assertSource($class, $engine);
+        $parameters = new Parameters($config ?: []);
+        $handler    = $this->newAction($class, $engine);
+
+        // call lifecycle
+        if ($handler instanceof LifecycleInterface) {
+            $handler->onUpdate($name, $parameters);
+        }
 
         // update action
         $record = [
@@ -171,6 +185,14 @@ class Action
             throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
         }
 
+        $parameters = new Parameters($action['config'] ?: []);
+        $handler    = $this->newAction($action['class'], $action['engine']);
+
+        // call lifecycle
+        if ($handler instanceof LifecycleInterface) {
+            $handler->onDelete($action['name'], $parameters);
+        }
+
         $this->actionTable->update([
             'id'     => $action->id,
             'status' => Table\Action::STATUS_DELETED,
@@ -180,13 +202,14 @@ class Action
     }
 
     /**
-     * Checks whether the provided class is resolvable. Note the class can also
-     * be a file
+     * Checks whether the provided class is resolvable and returns an action
+     * instance
      * 
      * @param string $class
      * @param string $engine
+     * @return \Fusio\Engine\ActionInterface
      */
-    private function assertSource($class, $engine)
+    private function newAction($class, $engine)
     {
         if (!class_exists($engine)) {
             throw new StatusCode\BadRequestException('Could not resolve engine');
@@ -201,5 +224,7 @@ class Action
         if (!$action instanceof ActionInterface) {
             throw new StatusCode\BadRequestException('Could not resolve action');
         }
+
+        return $action;
     }
 }
