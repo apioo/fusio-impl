@@ -33,7 +33,7 @@ use PSX\Http\Request;
 use PSX\Http\Response;
 use PSX\Http\Stream\Stream;
 use PSX\Json\Parser;
-use PSX\Uri\Url;
+use PSX\Uri\Uri;
 
 /**
  * ApiExecutor
@@ -87,7 +87,7 @@ class ApiExecutor
     {
         $header   = ['User-Agent' => Base::getUserAgent(), 'Authorization' => 'Bearer ' . $this->getAccessToken()];
         $body     = $body !== null ? Parser::encode($body) : null;
-        $request  = new Request(new Url('http://127.0.0.1/backend/' . $path), $method, $header, $body);
+        $request  = new Request(new Uri('/backend/' . $path), $method, $header, $body);
         $response = new Response();
         $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
