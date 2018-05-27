@@ -96,10 +96,10 @@ class Connection
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
-        $parameters = new Parameters($config);
+        $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($class);
 
-        // call lifecycle
+        // call deployment
         if ($factory instanceof DeploymentInterface) {
             $factory->onUp($name, $parameters);
         }
@@ -141,7 +141,7 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $parameters = new Parameters($config);
+        $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($class);
 
         $conn = $factory->getConnection($parameters);
@@ -181,10 +181,10 @@ class Connection
 
         $config = self::decryptConfig($connection['config'], $this->secretKey);
 
-        $parameters = new Parameters($config);
+        $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($connection['class']);
 
-        // call lifecycle
+        // call deployment
         if ($factory instanceof DeploymentInterface) {
             $factory->onDown($connection->name, $parameters);
         }
