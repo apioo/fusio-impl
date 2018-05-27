@@ -3,6 +3,7 @@
     "Fusio\\Adapter\\File\\Action\\FileProcessor",
     "Fusio\\Adapter\\Http\\Action\\HttpProcessor",
     "Fusio\\Adapter\\Php\\Action\\PhpProcessor",
+    "Fusio\\Adapter\\Php\\Action\\PhpSandbox",
     "Fusio\\Adapter\\Sql\\Action\\SqlTable",
     "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
     "Fusio\\Adapter\\V8\\Action\\V8Processor"

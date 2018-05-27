@@ -136,6 +136,10 @@ JSON;
             "class": "Fusio\\Adapter\\Php\\Action\\PhpProcessor"
         },
         {
+            "name": "PHP-Sandbox",
+            "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
+        },
+        {
             "name": "SQL-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         },

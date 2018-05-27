@@ -58,6 +58,7 @@ class ClassCommandTest extends ControllerDbTestCase
 | File-Processor       | Fusio\Adapter\File\Action\FileProcessor      |
 | HTTP-Processor       | Fusio\Adapter\Http\Action\HttpProcessor      |
 | PHP-Processor        | Fusio\Adapter\Php\Action\PhpProcessor        |
+| PHP-Sandbox          | Fusio\Adapter\Php\Action\PhpSandbox          |
 | SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable            |
 | Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse |
 | V8-Processor         | Fusio\Adapter\V8\Action\V8Processor          |
