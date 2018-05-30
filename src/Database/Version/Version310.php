@@ -555,6 +555,7 @@ class Version310 implements VersionInterface
             'fusio_action_class' => [
                 ['class' => Adapter\Http\Action\HttpProcessor::class],
                 ['class' => Adapter\Php\Action\PhpProcessor::class],
+                ['class' => Adapter\Php\Action\PhpSandbox::class],
                 ['class' => Adapter\Sql\Action\SqlTable::class],
                 ['class' => Adapter\Util\Action\UtilStaticResponse::class],
                 ['class' => Adapter\V8\Action\V8Processor::class],
