@@ -46,6 +46,7 @@ class Event extends ViewAbstract
         }
 
         $condition = new Condition();
+        $condition->equals('status', Table\Event::STATUS_ACTIVE);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
