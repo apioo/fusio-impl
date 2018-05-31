@@ -52,14 +52,14 @@ class AccountTest extends ControllerDbTestCase
     "path": "\/consumer\/account",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Profile": {
+            "Consumer_User_Account": {
                 "type": "object",
-                "title": "profile",
+                "title": "Consumer User Account",
                 "properties": {
                     "name": {
                         "type": "string"
@@ -71,7 +71,7 @@ class AccountTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -82,10 +82,10 @@ class AccountTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Profile"
+                "$ref": "#\/definitions\/Consumer_User_Account"
             },
             "PUT-request": {
-                "$ref": "#\/definitions\/Profile"
+                "$ref": "#\/definitions\/Consumer_User_Account"
             },
             "PUT-200-response": {
                 "$ref": "#\/definitions\/Message"

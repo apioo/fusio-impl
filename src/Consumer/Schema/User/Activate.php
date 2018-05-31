@@ -34,7 +34,7 @@ class Activate extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('activate');
+        $sb = $this->getSchemaBuilder('Consumer User Activate');
         $sb->string('token');
         $sb->setRequired(['token']);
 

@@ -53,14 +53,14 @@ class LoginTest extends ControllerDbTestCase
     "path": "\/consumer\/login",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "User": {
+            "Consumer_User_Login": {
                 "type": "object",
-                "title": "user",
+                "title": "Consumer User Login",
                 "properties": {
                     "username": {
                         "type": "string"
@@ -76,9 +76,9 @@ class LoginTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Jwt": {
+            "Consumer_User_JWT": {
                 "type": "object",
-                "title": "jwt",
+                "title": "Consumer User JWT",
                 "properties": {
                     "token": {
                         "type": "string"
@@ -86,10 +86,10 @@ class LoginTest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/User"
+                "$ref": "#\/definitions\/Consumer_User_Login"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Jwt"
+                "$ref": "#\/definitions\/Consumer_User_JWT"
             }
         }
     },

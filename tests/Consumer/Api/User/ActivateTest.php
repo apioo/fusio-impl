@@ -53,14 +53,14 @@ class ActivateTest extends ControllerDbTestCase
     "path": "\/consumer\/activate",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Activate": {
+            "Consumer_User_Activate": {
                 "type": "object",
-                "title": "activate",
+                "title": "Consumer User Activate",
                 "properties": {
                     "token": {
                         "type": "string"
@@ -72,7 +72,7 @@ class ActivateTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -83,7 +83,7 @@ class ActivateTest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Activate"
+                "$ref": "#\/definitions\/Consumer_User_Activate"
             },
             "POST-200-response": {
                 "$ref": "#\/definitions\/Message"

@@ -56,9 +56,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Scope": {
+            "Consumer_Scope": {
                 "type": "object",
-                "title": "scope",
+                "title": "Consumer Scope",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -72,9 +72,9 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
-            "App": {
+            "Consumer_App_Meta": {
                 "type": "object",
-                "title": "app",
+                "title": "Consumer App Meta",
                 "properties": {
                     "name": {
                         "type": "string"
@@ -85,13 +85,13 @@ class EntityTest extends ControllerDbTestCase
                     "scopes": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Scope"
+                            "$ref": "#\/definitions\/Consumer_Scope"
                         }
                     }
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/App"
+                "$ref": "#\/definitions\/Consumer_App_Meta"
             }
         }
     },

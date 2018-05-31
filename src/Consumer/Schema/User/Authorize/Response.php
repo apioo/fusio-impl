@@ -34,14 +34,14 @@ class Response extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('token');
+        $sb = $this->getSchemaBuilder('Consumer User Authorize Token');
         $sb->string('access_token');
         $sb->string('token_type');
         $sb->string('expires_in');
         $sb->string('scope');
         $token = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('response');
+        $sb = $this->getSchemaBuilder('Consumer User Authorize Response');
         $sb->string('type');
         $sb->objectType('token', $token);
         $sb->string('code');

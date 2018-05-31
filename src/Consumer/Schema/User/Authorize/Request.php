@@ -34,7 +34,7 @@ class Request extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('request');
+        $sb = $this->getSchemaBuilder('Consumer User Authorize Request');
         $sb->setRequired(['responseType', 'clientId', 'scope', 'allow']);
         $sb->string('responseType');
         $sb->string('clientId');

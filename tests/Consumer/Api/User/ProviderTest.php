@@ -61,14 +61,14 @@ class ProviderTest extends ControllerDbTestCase
     "path": "\/consumer\/provider\/:provider",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Provider": {
+            "Consumer_User_Provider": {
                 "type": "object",
-                "title": "provider",
+                "title": "Consumer User Provider",
                 "properties": {
                     "code": {
                         "type": "string"
@@ -82,9 +82,9 @@ class ProviderTest extends ControllerDbTestCase
                 },
                 "additionalProperties": true
             },
-            "Jwt": {
+            "Consumer_User_JWT": {
                 "type": "object",
-                "title": "jwt",
+                "title": "Consumer User JWT",
                 "properties": {
                     "token": {
                         "type": "string"
@@ -92,10 +92,10 @@ class ProviderTest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Provider"
+                "$ref": "#\/definitions\/Consumer_User_Provider"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Jwt"
+                "$ref": "#\/definitions\/Consumer_User_JWT"
             }
         }
     },

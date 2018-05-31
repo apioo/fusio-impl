@@ -52,14 +52,14 @@ class AuthorizeTest extends ControllerDbTestCase
     "path": "\/consumer\/authorize",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Request": {
+            "Consumer_User_Authorize_Request": {
                 "type": "object",
-                "title": "request",
+                "title": "Consumer User Authorize Request",
                 "properties": {
                     "responseType": {
                         "type": "string"
@@ -87,9 +87,9 @@ class AuthorizeTest extends ControllerDbTestCase
                     "allow"
                 ]
             },
-            "Token": {
+            "Consumer_User_Authorize_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "Consumer User Authorize Token",
                 "properties": {
                     "access_token": {
                         "type": "string"
@@ -105,15 +105,15 @@ class AuthorizeTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Response": {
+            "Consumer_User_Authorize_Response": {
                 "type": "object",
-                "title": "response",
+                "title": "Consumer User Authorize Response",
                 "properties": {
                     "type": {
                         "type": "string"
                     },
                     "token": {
-                        "$ref": "#\/definitions\/Token"
+                        "$ref": "#\/definitions\/Consumer_User_Authorize_Token"
                     },
                     "code": {
                         "type": "string"
@@ -124,10 +124,10 @@ class AuthorizeTest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Request"
+                "$ref": "#\/definitions\/Consumer_User_Authorize_Request"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Response"
+                "$ref": "#\/definitions\/Consumer_User_Authorize_Response"
             }
         }
     },

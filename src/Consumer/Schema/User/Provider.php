@@ -34,7 +34,7 @@ class Provider extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('provider');
+        $sb = $this->getSchemaBuilder('Consumer User Provider');
         $sb->setAdditionalProperties(true);
         $sb->string('code');
         $sb->string('clientId');

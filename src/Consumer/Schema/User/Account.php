@@ -34,7 +34,7 @@ class Account extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('profile');
+        $sb = $this->getSchemaBuilder('Consumer User Account');
         $sb->string('name');
         $sb->string('email');
 

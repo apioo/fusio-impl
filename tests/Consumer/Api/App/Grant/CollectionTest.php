@@ -56,15 +56,15 @@ class CollectionTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Grant": {
+            "Consumer_App_Grant": {
                 "type": "object",
-                "title": "grant",
+                "title": "Consumer App Grant",
                 "properties": {
                     "id": {
                         "type": "integer"
                     },
                     "app": {
-                        "$ref": "#\/definitions\/App"
+                        "$ref": "#\/definitions\/Consumer_App"
                     },
                     "createDate": {
                         "type": "string",
@@ -72,9 +72,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "App": {
+            "Consumer_App": {
                 "type": "object",
-                "title": "app",
+                "title": "Consumer App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -110,20 +110,20 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Consumer_App_Grant_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Consumer App Grant Collection",
                 "properties": {
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Grant"
+                            "$ref": "#\/definitions\/Consumer_App_Grant"
                         }
                     }
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Consumer_App_Grant_Collection"
             }
         }
     },

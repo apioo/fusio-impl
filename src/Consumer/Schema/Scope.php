@@ -34,7 +34,7 @@ class Scope extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('scope');
+        $sb = $this->getSchemaBuilder('Consumer Scope');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern('^[A-z0-9\-\_]{3,64}$');

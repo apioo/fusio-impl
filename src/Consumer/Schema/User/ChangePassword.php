@@ -34,7 +34,7 @@ class ChangePassword extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('password');
+        $sb = $this->getSchemaBuilder('Consumer User Credentials');
         $sb->string('oldPassword');
         $sb->string('newPassword');
         $sb->string('verifyPassword');

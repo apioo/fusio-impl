@@ -58,9 +58,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "App": {
+            "Consumer_App": {
                 "type": "object",
-                "title": "app",
+                "title": "Consumer App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -99,7 +99,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -110,10 +110,10 @@ class EntityTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/App"
+                "$ref": "#\/definitions\/Consumer_App"
             },
             "PUT-request": {
-                "$ref": "#\/definitions\/App"
+                "$ref": "#\/definitions\/Consumer_App"
             },
             "PUT-200-response": {
                 "$ref": "#\/definitions\/Message"

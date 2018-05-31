@@ -58,9 +58,9 @@ class CollectionTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "App": {
+            "Consumer_App": {
                 "type": "object",
-                "title": "app",
+                "title": "Consumer App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -98,9 +98,9 @@ class CollectionTest extends ControllerDbTestCase
                     "scopes"
                 ]
             },
-            "Collection": {
+            "Consumer_App_Developer_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Consumer App Developer Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -111,14 +111,14 @@ class CollectionTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/App"
+                            "$ref": "#\/definitions\/Consumer_App"
                         }
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -129,10 +129,10 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Consumer_App_Developer_Collection"
             },
             "POST-request": {
-                "$ref": "#\/definitions\/App"
+                "$ref": "#\/definitions\/Consumer_App"
             },
             "POST-201-response": {
                 "$ref": "#\/definitions\/Message"

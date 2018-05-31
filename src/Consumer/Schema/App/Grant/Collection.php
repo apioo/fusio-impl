@@ -35,7 +35,7 @@ class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('collection');
+        $sb = $this->getSchemaBuilder('Consumer App Grant Collection');
         $sb->arrayType('entry')
             ->setItems($this->getSchema(Schema\App\Grant::class));
 

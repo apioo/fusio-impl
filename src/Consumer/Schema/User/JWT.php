@@ -34,7 +34,7 @@ class JWT extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('jwt');
+        $sb = $this->getSchemaBuilder('Consumer User JWT');
         $sb->string('token');
 
         return $sb->getProperty();

@@ -34,7 +34,7 @@ class Register extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('user');
+        $sb = $this->getSchemaBuilder('Consumer User Register');
         $sb->setRequired(['name', 'email', 'password']);
         $sb->string('name');
         $sb->string('email');

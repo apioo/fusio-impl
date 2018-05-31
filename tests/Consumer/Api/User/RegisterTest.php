@@ -52,14 +52,14 @@ class RegisterTest extends ControllerDbTestCase
     "path": "\/consumer\/register",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "User": {
+            "Consumer_User_Register": {
                 "type": "object",
-                "title": "user",
+                "title": "Consumer User Register",
                 "properties": {
                     "name": {
                         "type": "string"
@@ -82,7 +82,7 @@ class RegisterTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -93,7 +93,7 @@ class RegisterTest extends ControllerDbTestCase
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/User"
+                "$ref": "#\/definitions\/Consumer_User_Register"
             },
             "POST-200-response": {
                 "$ref": "#\/definitions\/Message"

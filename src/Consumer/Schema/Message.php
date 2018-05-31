@@ -34,7 +34,7 @@ class Message extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('message');
+        $sb = $this->getSchemaBuilder('Message');
         $sb->boolean('success');
         $sb->string('message');
 

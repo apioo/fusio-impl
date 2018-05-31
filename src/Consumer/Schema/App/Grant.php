@@ -35,7 +35,7 @@ class Grant extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('grant');
+        $sb = $this->getSchemaBuilder('Consumer App Grant');
         $sb->integer('id');
         $sb->objectType('app', $this->getSchema(Schema\App::class));
         $sb->dateTime('createDate');

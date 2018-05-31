@@ -35,7 +35,7 @@ class Meta extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('app');
+        $sb = $this->getSchemaBuilder('Consumer App Meta');
         $sb->string('name');
         $sb->string('url');
         $sb->arrayType('scopes')
