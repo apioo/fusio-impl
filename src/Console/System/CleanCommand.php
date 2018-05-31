@@ -56,6 +56,7 @@ class CleanCommand extends Command
         $files = [
             'build',
             'doc',
+            'public/install.php',
             'resources/routes/todo',
             'resources/schema/todo',
             'src/Todo',
