@@ -4285,7 +4285,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
           },
           "class": {
             "type": "string"
@@ -4603,7 +4603,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
           },
           "url": {
             "type": "string"
@@ -4678,7 +4678,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_\\.]{3,32}"
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
           },
           "email": {
             "type": "string"
@@ -4715,7 +4715,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
           },
           "class": {
             "type": "string"
@@ -4734,7 +4734,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
           },
           "cron": {
             "type": "string"
@@ -4784,7 +4784,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
           },
           "description": {
             "type": "string"
@@ -4841,7 +4841,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
           },
           "rateLimit": {
             "type": "integer",
@@ -4994,7 +4994,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
           },
           "source": {
             "$ref": "#\/components\/schemas\/Source"
@@ -5015,7 +5015,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "[A-z0-9\\-\\_]{3,64}"
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
           },
           "description": {
             "type": "string"

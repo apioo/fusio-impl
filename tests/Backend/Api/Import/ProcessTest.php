@@ -171,7 +171,7 @@ class ProcessTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "class": {
                         "type": "string"
@@ -237,7 +237,7 @@ class ProcessTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "source": {
                         "$ref": "#\/definitions\/Source"
@@ -258,7 +258,7 @@ class ProcessTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "class": {
                         "type": "string"

@@ -66,7 +66,7 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
                     },
                     "description": {
                         "type": "string"

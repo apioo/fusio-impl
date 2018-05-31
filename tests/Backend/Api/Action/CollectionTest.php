@@ -55,7 +55,7 @@ class CollectionTest extends ControllerDbTestCase
     "path": "\/backend\/action",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -87,7 +87,7 @@ class CollectionTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,255}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "class": {
                         "type": "string"

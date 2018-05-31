@@ -52,7 +52,7 @@ class EntityTest extends ControllerDbTestCase
     "path": "\/backend\/rate\/$rate_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -91,7 +91,7 @@ class EntityTest extends ControllerDbTestCase
                     },
                     "name": {
                         "type": "string",
-                        "pattern": "[a-zA-Z0-9\\-\\_]{3,64}"
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
                     },
                     "rateLimit": {
                         "type": "integer",
