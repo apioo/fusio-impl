@@ -98,6 +98,8 @@ class Entity extends BackendApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
+        $this->assertSandboxAccess($record);
+
         $this->actionService->update(
             (int) $context->getUriFragment('action_id'),
             $record->name,

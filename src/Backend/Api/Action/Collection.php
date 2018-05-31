@@ -87,6 +87,8 @@ class Collection extends BackendApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
+        $this->assertSandboxAccess($record);
+
         $this->actionService->create(
             $record->name,
             $record->class,

@@ -21,11 +21,13 @@
 
 namespace Fusio\Impl\Backend\Api\Action;
 
+use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Impl\Backend\Filter\PrimaryKey;
 use Fusio\Impl\Table;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Schema\Validation\Field;
 use PSX\Schema\Validation\Validator;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * ValidatorTrait
@@ -41,5 +43,14 @@ trait ValidatorTrait
         return new Validator(array(
             new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Action::class))]),
         ));
+    }
+
+    protected function assertSandboxAccess($record)
+    {
+        $class = ltrim($record->class, '\\');
+
+        if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
+            throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
+        }
     }
 }
