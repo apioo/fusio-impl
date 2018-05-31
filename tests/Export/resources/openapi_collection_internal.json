@@ -12,7 +12,7 @@
   "paths": {
     "\/backend\/action": {
       "get": {
-        "operationId": "backendActionGetCollection",
+        "operationId": "backendActionGetAction_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -45,7 +45,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Action_Collection"
                 }
               }
             }
@@ -94,14 +94,14 @@
     },
     "\/backend\/action\/list": {
       "get": {
-        "operationId": "backendActionListGetIndex",
+        "operationId": "backendActionListGetAction_Index",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Index"
+                  "$ref": "#\/components\/schemas\/Action_Index"
                 }
               }
             }
@@ -154,12 +154,12 @@
     },
     "\/backend\/action\/execute\/{action_id}": {
       "post": {
-        "operationId": "backendActionExecuteActionid09PostRequest",
+        "operationId": "backendActionExecuteActionid09PostAction_Request",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Request"
+                "$ref": "#\/components\/schemas\/Action_Request"
               }
             }
           }
@@ -170,7 +170,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Response"
+                  "$ref": "#\/components\/schemas\/Action_Response"
                 }
               }
             }
@@ -266,7 +266,7 @@
     },
     "\/backend\/app\/token": {
       "get": {
-        "operationId": "backendAppTokenGetCollection",
+        "operationId": "backendAppTokenGetApp_Token_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -357,7 +357,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/App_Token_Collection"
                 }
               }
             }
@@ -375,14 +375,14 @@
     },
     "\/backend\/app\/token\/{token_id}": {
       "get": {
-        "operationId": "backendAppTokenTokenid09GetToken",
+        "operationId": "backendAppTokenTokenid09GetApp_Token",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Token"
+                  "$ref": "#\/components\/schemas\/App_Token"
                 }
               }
             }
@@ -400,7 +400,7 @@
     },
     "\/backend\/app": {
       "get": {
-        "operationId": "backendAppGetCollection",
+        "operationId": "backendAppGetApp_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -433,7 +433,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/App_Collection"
                 }
               }
             }
@@ -585,7 +585,7 @@
     },
     "\/backend\/audit": {
       "get": {
-        "operationId": "backendAuditGetCollection",
+        "operationId": "backendAuditGetAudit_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -676,7 +676,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Audit_Collection"
                 }
               }
             }
@@ -719,7 +719,7 @@
     },
     "\/backend\/config": {
       "get": {
-        "operationId": "backendConfigGetCollection",
+        "operationId": "backendConfigGetConfig_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -752,7 +752,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Config_Collection"
                 }
               }
             }
@@ -826,7 +826,7 @@
     },
     "\/backend\/connection": {
       "get": {
-        "operationId": "backendConnectionGetCollection",
+        "operationId": "backendConnectionGetConnection_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -859,7 +859,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Connection_Collection"
                 }
               }
             }
@@ -908,14 +908,14 @@
     },
     "\/backend\/connection\/list": {
       "get": {
-        "operationId": "backendConnectionListGetIndex",
+        "operationId": "backendConnectionListGetConnection_Index",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Index"
+                  "$ref": "#\/components\/schemas\/Connection_Index"
                 }
               }
             }
@@ -1046,7 +1046,7 @@
     },
     "\/backend\/cronjob": {
       "get": {
-        "operationId": "backendCronjobGetCollection",
+        "operationId": "backendCronjobGetCronjob_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1079,7 +1079,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Cronjob_Collection"
                 }
               }
             }
@@ -1199,7 +1199,7 @@
     },
     "\/backend\/event": {
       "get": {
-        "operationId": "backendEventGetCollection",
+        "operationId": "backendEventGetEvent_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1232,7 +1232,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Event_Collection"
                 }
               }
             }
@@ -1352,7 +1352,7 @@
     },
     "\/backend\/log\/error": {
       "get": {
-        "operationId": "backendLogErrorGetCollection",
+        "operationId": "backendLogErrorGetLog_Error_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1385,7 +1385,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Log_Error_Collection"
                 }
               }
             }
@@ -1403,14 +1403,14 @@
     },
     "\/backend\/log\/error\/{error_id}": {
       "get": {
-        "operationId": "backendLogErrorErrorid09GetError",
+        "operationId": "backendLogErrorErrorid09GetLog_Error",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Error"
+                  "$ref": "#\/components\/schemas\/Log_Error"
                 }
               }
             }
@@ -1428,7 +1428,7 @@
     },
     "\/backend\/log": {
       "get": {
-        "operationId": "backendLogGetCollection",
+        "operationId": "backendLogGetLog_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1551,7 +1551,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Log_Collection"
                 }
               }
             }
@@ -1594,7 +1594,7 @@
     },
     "\/backend\/rate": {
       "get": {
-        "operationId": "backendRateGetCollection",
+        "operationId": "backendRateGetRate_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1627,7 +1627,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Rate_Collection"
                 }
               }
             }
@@ -1747,7 +1747,7 @@
     },
     "\/backend\/routes": {
       "get": {
-        "operationId": "backendRoutesGetCollection",
+        "operationId": "backendRoutesGetRoutes_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1780,7 +1780,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Routes_Collection"
                 }
               }
             }
@@ -1907,7 +1907,7 @@
     },
     "\/backend\/schema": {
       "get": {
-        "operationId": "backendSchemaGetCollection",
+        "operationId": "backendSchemaGetSchema_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -1940,7 +1940,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Schema_Collection"
                 }
               }
             }
@@ -1989,14 +1989,14 @@
     },
     "\/backend\/schema\/preview\/{schema_id}": {
       "post": {
-        "operationId": "backendSchemaPreviewSchemaid09PostResponse",
+        "operationId": "backendSchemaPreviewSchemaid09PostSchema_Preview_Response",
         "responses": {
           "200": {
             "description": "POST 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Response"
+                  "$ref": "#\/components\/schemas\/Schema_Preview_Response"
                 }
               }
             }
@@ -2092,7 +2092,7 @@
     },
     "\/backend\/scope": {
       "get": {
-        "operationId": "backendScopeGetCollection",
+        "operationId": "backendScopeGetScope_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -2125,7 +2125,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Scope_Collection"
                 }
               }
             }
@@ -2252,7 +2252,7 @@
     },
     "\/backend\/user": {
       "get": {
-        "operationId": "backendUserGetCollection",
+        "operationId": "backendUserGetUser_Collection",
         "parameters": [
           {
             "name": "startIndex",
@@ -2285,7 +2285,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/User_Collection"
                 }
               }
             }
@@ -2430,7 +2430,7 @@
     },
     "\/backend\/statistic\/incoming_requests": {
       "get": {
-        "operationId": "backendStatisticIncomingrequestsGetChart",
+        "operationId": "backendStatisticIncomingrequestsGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -2537,7 +2537,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -2555,7 +2555,7 @@
     },
     "\/backend\/statistic\/most_used_routes": {
       "get": {
-        "operationId": "backendStatisticMostusedroutesGetChart",
+        "operationId": "backendStatisticMostusedroutesGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -2662,7 +2662,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -2680,7 +2680,7 @@
     },
     "\/backend\/statistic\/most_used_apps": {
       "get": {
-        "operationId": "backendStatisticMostusedappsGetChart",
+        "operationId": "backendStatisticMostusedappsGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -2787,7 +2787,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -2805,7 +2805,7 @@
     },
     "\/backend\/statistic\/errors_per_route": {
       "get": {
-        "operationId": "backendStatisticErrorsperrouteGetChart",
+        "operationId": "backendStatisticErrorsperrouteGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -2912,7 +2912,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -2930,7 +2930,7 @@
     },
     "\/backend\/statistic\/issued_tokens": {
       "get": {
-        "operationId": "backendStatisticIssuedtokensGetChart",
+        "operationId": "backendStatisticIssuedtokensGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -3005,7 +3005,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -3023,7 +3023,7 @@
     },
     "\/backend\/statistic\/count_requests": {
       "get": {
-        "operationId": "backendStatisticCountrequestsGetCount",
+        "operationId": "backendStatisticCountrequestsGetStatistic_Count",
         "parameters": [
           {
             "name": "from",
@@ -3130,7 +3130,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Count"
+                  "$ref": "#\/components\/schemas\/Statistic_Count"
                 }
               }
             }
@@ -3148,7 +3148,7 @@
     },
     "\/backend\/statistic\/time_average": {
       "get": {
-        "operationId": "backendStatisticTimeaverageGetChart",
+        "operationId": "backendStatisticTimeaverageGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -3255,7 +3255,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -3273,7 +3273,7 @@
     },
     "\/backend\/statistic\/time_per_route": {
       "get": {
-        "operationId": "backendStatisticTimeperrouteGetChart",
+        "operationId": "backendStatisticTimeperrouteGetStatistic_Chart",
         "parameters": [
           {
             "name": "from",
@@ -3380,7 +3380,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Chart"
+                  "$ref": "#\/components\/schemas\/Statistic_Chart"
                 }
               }
             }
@@ -3398,12 +3398,12 @@
     },
     "\/backend\/account\/change_password": {
       "put": {
-        "operationId": "backendAccountChangepasswordPutCredentials",
+        "operationId": "backendAccountChangepasswordPutAccount_Credentials",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Credentials"
+                "$ref": "#\/components\/schemas\/Account_Credentials"
               }
             }
           }
@@ -3448,7 +3448,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Response"
+                  "$ref": "#\/components\/schemas\/Import_Response"
                 }
               }
             }
@@ -3537,14 +3537,14 @@
     },
     "\/consumer\/app\/developer": {
       "get": {
-        "operationId": "consumerAppDeveloperGetCollection",
+        "operationId": "consumerAppDeveloperGetConsumer_App_Developer_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_App_Developer_Collection"
                 }
               }
             }
@@ -3559,12 +3559,12 @@
         ]
       },
       "post": {
-        "operationId": "consumerAppDeveloperPostApp",
+        "operationId": "consumerAppDeveloperPostConsumer_App",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/App"
+                "$ref": "#\/components\/schemas\/Consumer_App"
               }
             }
           }
@@ -3593,14 +3593,14 @@
     },
     "\/consumer\/app\/developer\/{app_id}": {
       "get": {
-        "operationId": "consumerAppDeveloperAppid09GetApp",
+        "operationId": "consumerAppDeveloperAppid09GetConsumer_App",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/App"
+                  "$ref": "#\/components\/schemas\/Consumer_App"
                 }
               }
             }
@@ -3615,12 +3615,12 @@
         ]
       },
       "put": {
-        "operationId": "consumerAppDeveloperAppid09PutApp",
+        "operationId": "consumerAppDeveloperAppid09PutConsumer_App",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/App"
+                "$ref": "#\/components\/schemas\/Consumer_App"
               }
             }
           }
@@ -3671,14 +3671,14 @@
     },
     "\/consumer\/app\/grant": {
       "get": {
-        "operationId": "consumerAppGrantGetCollection",
+        "operationId": "consumerAppGrantGetConsumer_App_Grant_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_App_Grant_Collection"
                 }
               }
             }
@@ -3710,14 +3710,14 @@
     },
     "\/consumer\/app\/meta": {
       "get": {
-        "operationId": "consumerAppMetaGetApp",
+        "operationId": "consumerAppMetaGetConsumer_App_Meta",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/App"
+                  "$ref": "#\/components\/schemas\/Consumer_App_Meta"
                 }
               }
             }
@@ -3735,14 +3735,14 @@
     },
     "\/consumer\/scope": {
       "get": {
-        "operationId": "consumerScopeGetCollection",
+        "operationId": "consumerScopeGetConsumer_Scope_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
                 }
               }
             }
@@ -3760,14 +3760,14 @@
     },
     "\/consumer\/subscription": {
       "get": {
-        "operationId": "consumerSubscriptionGetCollection",
+        "operationId": "consumerSubscriptionGetConsumer_Subscription_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Subscription_Collection"
                 }
               }
             }
@@ -3782,12 +3782,12 @@
         ]
       },
       "post": {
-        "operationId": "consumerSubscriptionPostSubscription",
+        "operationId": "consumerSubscriptionPostConsumer_Subscription",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Subscription"
+                "$ref": "#\/components\/schemas\/Consumer_Subscription"
               }
             }
           }
@@ -3816,14 +3816,14 @@
     },
     "\/consumer\/subscription\/{subscription_id}": {
       "get": {
-        "operationId": "consumerSubscriptionSubscriptionid09GetCollection",
+        "operationId": "consumerSubscriptionSubscriptionid09GetConsumer_Subscription_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Subscription_Collection"
                 }
               }
             }
@@ -3838,12 +3838,12 @@
         ]
       },
       "put": {
-        "operationId": "consumerSubscriptionSubscriptionid09PutSubscription",
+        "operationId": "consumerSubscriptionSubscriptionid09PutConsumer_Subscription",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Subscription"
+                "$ref": "#\/components\/schemas\/Consumer_Subscription"
               }
             }
           }
@@ -3931,12 +3931,12 @@
     },
     "\/consumer\/authorize": {
       "post": {
-        "operationId": "consumerAuthorizePostRequest",
+        "operationId": "consumerAuthorizePostConsumer_User_Authorize_Request",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Request"
+                "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Request"
               }
             }
           }
@@ -3947,7 +3947,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Response"
+                  "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Response"
                 }
               }
             }
@@ -3965,12 +3965,12 @@
     },
     "\/consumer\/login": {
       "post": {
-        "operationId": "consumerLoginPostUser",
+        "operationId": "consumerLoginPostConsumer_User_Login",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/User"
+                "$ref": "#\/components\/schemas\/Consumer_User_Login"
               }
             }
           }
@@ -3981,7 +3981,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Jwt"
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
                 }
               }
             }
@@ -3992,12 +3992,12 @@
     },
     "\/consumer\/register": {
       "post": {
-        "operationId": "consumerRegisterPostUser",
+        "operationId": "consumerRegisterPostConsumer_User_Register",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/User"
+                "$ref": "#\/components\/schemas\/Consumer_User_Register"
               }
             }
           }
@@ -4019,12 +4019,12 @@
     },
     "\/consumer\/provider\/{provider}": {
       "post": {
-        "operationId": "consumerProviderProviderPostProvider",
+        "operationId": "consumerProviderProviderPostConsumer_User_Provider",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Provider"
+                "$ref": "#\/components\/schemas\/Consumer_User_Provider"
               }
             }
           }
@@ -4035,7 +4035,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Jwt"
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
                 }
               }
             }
@@ -4046,12 +4046,12 @@
     },
     "\/consumer\/activate": {
       "post": {
-        "operationId": "consumerActivatePostActivate",
+        "operationId": "consumerActivatePostConsumer_User_Activate",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Activate"
+                "$ref": "#\/components\/schemas\/Consumer_User_Activate"
               }
             }
           }
@@ -4073,14 +4073,14 @@
     },
     "\/consumer\/account": {
       "get": {
-        "operationId": "consumerAccountGetProfile",
+        "operationId": "consumerAccountGetConsumer_User_Account",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Profile"
+                  "$ref": "#\/components\/schemas\/Consumer_User_Account"
                 }
               }
             }
@@ -4095,12 +4095,12 @@
         ]
       },
       "put": {
-        "operationId": "consumerAccountPutProfile",
+        "operationId": "consumerAccountPutConsumer_User_Account",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Profile"
+                "$ref": "#\/components\/schemas\/Consumer_User_Account"
               }
             }
           }
@@ -4129,12 +4129,12 @@
     },
     "\/consumer\/account\/change_password": {
       "put": {
-        "operationId": "consumerAccountChangepasswordPutPassword",
+        "operationId": "consumerAccountChangepasswordPutConsumer_User_Credentials",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Password"
+                "$ref": "#\/components\/schemas\/Consumer_User_Credentials"
               }
             }
           }
@@ -4275,7 +4275,7 @@
     "schemas": {
       "Action": {
         "type": "object",
-        "title": "action",
+        "title": "Action",
         "properties": {
           "id": {
             "type": "integer"
@@ -4339,9 +4339,9 @@
         },
         "maxProperties": 16
       },
-      "Collection": {
+      "Action_Collection": {
         "type": "object",
-        "title": "collection",
+        "title": "Action Collection",
         "properties": {
           "totalResults": {
             "type": "integer"
@@ -4352,14 +4352,14 @@
           "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Subscription"
+              "$ref": "#\/components\/schemas\/Action"
             }
           }
         }
       },
       "Message": {
         "type": "object",
-        "title": "message",
+        "title": "Message",
         "properties": {
           "success": {
             "type": "boolean"
@@ -4369,14 +4369,26 @@
           }
         }
       },
-      "Index": {
+      "Action_Action": {
         "type": "object",
-        "title": "index",
+        "title": "Action Action",
         "properties": {
-          "connections": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Action_Index": {
+        "type": "object",
+        "title": "Action Index",
+        "properties": {
+          "actions": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Connection"
+              "$ref": "#\/components\/schemas\/Action_Action"
             }
           }
         }
@@ -4502,69 +4514,66 @@
           }
         }
       },
-      "Body": {
+      "Action_Request_Body": {
         "type": "object",
-        "title": "body",
+        "title": "Action Request Body",
         "additionalProperties": true
       },
-      "Request": {
+      "Action_Request": {
         "type": "object",
-        "title": "request",
+        "title": "Action Request",
         "properties": {
-          "responseType": {
+          "method": {
+            "type": "string",
+            "pattern": "GET|POST|PUT|PATCH|DELETE"
+          },
+          "uriFragments": {
             "type": "string"
           },
-          "clientId": {
+          "parameters": {
             "type": "string"
           },
-          "redirectUri": {
+          "headers": {
             "type": "string"
           },
-          "scope": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          },
-          "allow": {
-            "type": "boolean"
+          "body": {
+            "$ref": "#\/components\/schemas\/Action_Request_Body"
           }
         },
         "required": [
-          "responseType",
-          "clientId",
-          "scope",
-          "allow"
+          "method"
         ]
       },
-      "Headers": {
+      "Action_Response_Headers": {
         "type": "object",
-        "title": "headers",
+        "title": "Action Response Headers",
         "additionalProperties": {
           "type": "string"
         }
       },
-      "Response": {
+      "Action_Response_Body": {
         "type": "object",
-        "title": "response",
+        "title": "Action Response Body",
+        "additionalProperties": true
+      },
+      "Action_Response": {
+        "type": "object",
+        "title": "Action Response",
         "properties": {
-          "type": {
-            "type": "string"
+          "statusCode": {
+            "type": "integer"
           },
-          "token": {
-            "$ref": "#\/components\/schemas\/Token"
+          "headers": {
+            "$ref": "#\/components\/schemas\/Action_Response_Headers"
           },
-          "code": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
+          "body": {
+            "$ref": "#\/components\/schemas\/Action_Response_Body"
           }
         }
       },
-      "Token": {
+      "App_Token": {
         "type": "object",
-        "title": "token",
+        "title": "App Token",
         "properties": {
           "id": {
             "type": "integer"
@@ -4588,9 +4597,27 @@
           }
         }
       },
+      "App_Token_Collection": {
+        "type": "object",
+        "title": "App Token Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App_Token"
+            }
+          }
+        }
+      },
       "App": {
         "type": "object",
-        "title": "app",
+        "title": "App",
         "properties": {
           "id": {
             "type": "integer"
@@ -4630,23 +4657,41 @@
           "tokens": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Token"
+              "$ref": "#\/components\/schemas\/App_Token"
+            }
+          }
+        }
+      },
+      "App_Collection": {
+        "type": "object",
+        "title": "App Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
             }
           }
         }
       },
       "Audit": {
         "type": "object",
-        "title": "audit",
+        "title": "Audit",
         "properties": {
           "id": {
             "type": "integer"
           },
           "app": {
-            "$ref": "#\/components\/schemas\/App"
+            "$ref": "#\/components\/schemas\/Audit_App"
           },
           "user": {
-            "$ref": "#\/components\/schemas\/User"
+            "$ref": "#\/components\/schemas\/Audit_User"
           },
           "event": {
             "type": "string"
@@ -4658,7 +4703,7 @@
             "type": "string"
           },
           "content": {
-            "$ref": "#\/components\/schemas\/Object"
+            "$ref": "#\/components\/schemas\/Audit_Object"
           },
           "date": {
             "type": "string",
@@ -4666,9 +4711,671 @@
           }
         }
       },
+      "Audit_App": {
+        "type": "object",
+        "title": "Audit App",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Audit_User": {
+        "type": "object",
+        "title": "Audit User",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Audit_Object": {
+        "type": "object",
+        "title": "Audit Object",
+        "description": "A key value object containing the changes"
+      },
+      "Audit_Collection": {
+        "type": "object",
+        "title": "Audit Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Audit"
+            }
+          }
+        }
+      },
+      "Config_Collection": {
+        "type": "object",
+        "title": "Config Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Config"
+            }
+          }
+        }
+      },
+      "Connection": {
+        "type": "object",
+        "title": "Connection",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "class": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Connection_Config"
+          }
+        }
+      },
+      "Connection_Config": {
+        "type": "object",
+        "title": "Connection Config",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 16
+            }
+          ]
+        },
+        "maxProperties": 16
+      },
+      "Connection_Collection": {
+        "type": "object",
+        "title": "Connection Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection"
+            }
+          }
+        }
+      },
+      "Connection_Connection": {
+        "type": "object",
+        "title": "Connection Connection",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Connection_Index": {
+        "type": "object",
+        "title": "Connection Index",
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection_Connection"
+            }
+          }
+        }
+      },
+      "Cronjob": {
+        "type": "object",
+        "title": "Cronjob",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "action": {
+            "type": "integer"
+          },
+          "executeDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Cronjob_Error"
+            }
+          }
+        }
+      },
+      "Cronjob_Error": {
+        "type": "object",
+        "title": "Cronjob Error",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "trace": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          }
+        }
+      },
+      "Cronjob_Collection": {
+        "type": "object",
+        "title": "Cronjob Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Cronjob"
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "title": "Event",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Collection": {
+        "type": "object",
+        "title": "Event Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Event"
+            }
+          }
+        }
+      },
+      "Log_Error": {
+        "type": "object",
+        "title": "Log Error",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "trace": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          }
+        }
+      },
+      "Log_Error_Collection": {
+        "type": "object",
+        "title": "Log Error Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "title": "Log",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log_Collection": {
+        "type": "object",
+        "title": "Log Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log"
+            }
+          }
+        }
+      },
+      "Rate": {
+        "type": "object",
+        "title": "Rate",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "rateLimit": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "timespan": {
+            "type": "string",
+            "format": "duration"
+          },
+          "allocation": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Rate_Allocation"
+            }
+          }
+        }
+      },
+      "Rate_Allocation": {
+        "type": "object",
+        "title": "Rate Allocation",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "authenticated": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "string"
+          }
+        }
+      },
+      "Rate_Collection": {
+        "type": "object",
+        "title": "Rate Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Rate"
+            }
+          }
+        }
+      },
+      "Routes": {
+        "type": "object",
+        "title": "Routes",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "path": {
+            "type": "string"
+          },
+          "controller": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes_Version"
+            }
+          }
+        }
+      },
+      "Routes_Version": {
+        "type": "object",
+        "title": "Routes Version",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Routes_Methods"
+          }
+        }
+      },
+      "Routes_Methods": {
+        "type": "object",
+        "title": "Routes Methods",
+        "patternProperties": {
+          "^(GET|POST|PUT|PATCH|DELETE)$": {
+            "$ref": "#\/components\/schemas\/Routes_Method"
+          }
+        }
+      },
+      "Routes_Method": {
+        "type": "object",
+        "title": "Routes Method",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "request": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          },
+          "responses": {
+            "$ref": "#\/components\/schemas\/Routes_Method_Responses"
+          },
+          "action": {
+            "type": "string"
+          }
+        }
+      },
+      "Routes_Method_Responses": {
+        "type": "object",
+        "title": "Routes Method Responses",
+        "patternProperties": {
+          "^([0-9]{3})$": {
+            "type": "string"
+          }
+        }
+      },
+      "Routes_Collection": {
+        "type": "object",
+        "title": "Routes Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes"
+            }
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "title": "Schema",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "source": {
+            "$ref": "#\/components\/schemas\/Schema_Source"
+          }
+        }
+      },
+      "Schema_Source": {
+        "type": "object",
+        "title": "Schema Source",
+        "additionalProperties": true
+      },
+      "Schema_Collection": {
+        "type": "object",
+        "title": "Schema Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          }
+        }
+      },
+      "Schema_Preview_Response": {
+        "type": "object",
+        "title": "Schema Preview Response",
+        "properties": {
+          "preview": {
+            "type": "string"
+          }
+        }
+      },
+      "Scope": {
+        "type": "object",
+        "title": "Scope",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope_Route"
+            }
+          }
+        }
+      },
+      "Scope_Route": {
+        "type": "object",
+        "title": "Scope Route",
+        "properties": {
+          "routeId": {
+            "type": "integer"
+          },
+          "allow": {
+            "type": "boolean"
+          },
+          "methods": {
+            "type": "string"
+          }
+        }
+      },
+      "Scope_Collection": {
+        "type": "object",
+        "title": "Scope Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope"
+            }
+          }
+        }
+      },
       "User": {
         "type": "object",
-        "title": "user",
+        "title": "User",
         "properties": {
           "id": {
             "type": "integer"
@@ -4701,345 +5408,27 @@
           }
         }
       },
-      "Object": {
+      "User_Collection": {
         "type": "object",
-        "title": "object",
-        "description": "A key value object containing the changes"
-      },
-      "Connection": {
-        "type": "object",
-        "title": "connection",
+        "title": "User Collection",
         "properties": {
-          "id": {
+          "totalResults": {
             "type": "integer"
           },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "class": {
-            "type": "string"
-          },
-          "config": {
-            "$ref": "#\/components\/schemas\/Config"
-          }
-        }
-      },
-      "Cronjob": {
-        "type": "object",
-        "title": "cronjob",
-        "properties": {
-          "id": {
+          "startIndex": {
             "type": "integer"
           },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "cron": {
-            "type": "string"
-          },
-          "action": {
-            "type": "integer"
-          },
-          "executeDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "exitCode": {
-            "type": "integer"
-          },
-          "errors": {
+          "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Error"
+              "$ref": "#\/components\/schemas\/User"
             }
           }
         }
       },
-      "Error": {
+      "Statistic_Chart": {
         "type": "object",
-        "title": "error",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "error_description": {
-            "type": "string"
-          },
-          "error_uri": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "title": "event",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "title": "log",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Error"
-            }
-          }
-        }
-      },
-      "Rate": {
-        "type": "object",
-        "title": "rate",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "rateLimit": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "timespan": {
-            "type": "string",
-            "format": "duration"
-          },
-          "allocation": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Allocation"
-            }
-          }
-        }
-      },
-      "Allocation": {
-        "type": "object",
-        "title": "allocation",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "authenticated": {
-            "type": "boolean"
-          },
-          "parameters": {
-            "type": "string"
-          }
-        }
-      },
-      "Routes": {
-        "type": "object",
-        "title": "routes",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer"
-          },
-          "path": {
-            "type": "string"
-          },
-          "controller": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "config": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Version"
-            }
-          }
-        }
-      },
-      "Version": {
-        "type": "object",
-        "title": "version",
-        "properties": {
-          "version": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "methods": {
-            "$ref": "#\/components\/schemas\/Methods"
-          }
-        }
-      },
-      "Methods": {
-        "type": "object",
-        "title": "methods",
-        "patternProperties": {
-          "^(GET|POST|PUT|PATCH|DELETE)$": {
-            "$ref": "#\/components\/schemas\/Method"
-          }
-        }
-      },
-      "Method": {
-        "type": "object",
-        "title": "method",
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "version": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "active": {
-            "type": "boolean"
-          },
-          "public": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "request": {
-            "type": "string"
-          },
-          "response": {
-            "type": "string"
-          },
-          "responses": {
-            "$ref": "#\/components\/schemas\/Responses"
-          },
-          "action": {
-            "type": "string"
-          }
-        }
-      },
-      "Responses": {
-        "type": "object",
-        "title": "responses",
-        "patternProperties": {
-          "^([0-9]{3})$": {
-            "type": "string"
-          }
-        }
-      },
-      "Schema": {
-        "type": "object",
-        "title": "schema",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "source": {
-            "$ref": "#\/components\/schemas\/Source"
-          }
-        }
-      },
-      "Source": {
-        "type": "object",
-        "title": "source",
-        "additionalProperties": true
-      },
-      "Scope": {
-        "type": "object",
-        "title": "scope",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Route": {
-        "type": "object",
-        "title": "route",
-        "properties": {
-          "routeId": {
-            "type": "integer"
-          },
-          "allow": {
-            "type": "boolean"
-          },
-          "methods": {
-            "type": "string"
-          }
-        }
-      },
-      "Chart": {
-        "type": "object",
-        "title": "chart",
+        "title": "Statistic Chart",
         "properties": {
           "labels": {
             "type": "array",
@@ -5064,57 +5453,86 @@
           }
         }
       },
-      "Apps": {
+      "Dashboard_Apps": {
         "type": "object",
-        "title": "apps",
+        "title": "Dashboard Apps",
         "properties": {
           "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/App"
+              "$ref": "#\/components\/schemas\/Dashboard_App"
             }
           }
         }
       },
-      "Requests": {
+      "Dashboard_App": {
         "type": "object",
-        "title": "requests",
+        "title": "Dashboard App",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Dashboard_Requests": {
+        "type": "object",
+        "title": "Dashboard Requests",
         "properties": {
           "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Request"
+              "$ref": "#\/components\/schemas\/Dashboard_Request"
             }
+          }
+        }
+      },
+      "Dashboard_Request": {
+        "type": "object",
+        "title": "Dashboard Request",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
       "Dashboard": {
         "type": "object",
-        "title": "dashboard",
+        "title": "Dashboard",
         "properties": {
           "incomingRequests": {
-            "$ref": "#\/components\/schemas\/Chart"
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
           },
           "mostUsedRoutes": {
-            "$ref": "#\/components\/schemas\/Chart"
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
           },
           "timePerRoute": {
-            "$ref": "#\/components\/schemas\/Chart"
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
           },
           "latestApps": {
-            "$ref": "#\/components\/schemas\/Apps"
+            "$ref": "#\/components\/schemas\/Dashboard_Apps"
           },
           "latestRequests": {
-            "$ref": "#\/components\/schemas\/Requests"
+            "$ref": "#\/components\/schemas\/Dashboard_Requests"
           },
           "errorsPerRoute": {
-            "$ref": "#\/components\/schemas\/Chart"
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
           }
         }
       },
-      "Count": {
+      "Statistic_Count": {
         "type": "object",
-        "title": "count",
+        "title": "Statistic Count",
         "properties": {
           "count": {
             "type": "integer"
@@ -5129,9 +5547,9 @@
           }
         }
       },
-      "Credentials": {
+      "Account_Credentials": {
         "type": "object",
-        "title": "credentials",
+        "title": "Account Credentials",
         "properties": {
           "oldPassword": {
             "type": "string",
@@ -5157,7 +5575,7 @@
       },
       "Adapter": {
         "type": "object",
-        "title": "adapter",
+        "title": "Adapter",
         "properties": {
           "actionClass": {
             "type": "array",
@@ -5194,6 +5612,21 @@
             "items": {
               "$ref": "#\/components\/schemas\/Connection"
             }
+          }
+        }
+      },
+      "Import_Response": {
+        "type": "object",
+        "title": "Import Response",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "array"
           }
         }
       },
@@ -5324,15 +5757,89 @@
           }
         }
       },
-      "Grant": {
+      "Error": {
         "type": "object",
-        "title": "grant",
+        "title": "error",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_App": {
+        "type": "object",
+        "title": "Consumer App",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Consumer_App_Developer_Collection": {
+        "type": "object",
+        "title": "Consumer App Developer Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_App"
+            }
+          }
+        }
+      },
+      "Consumer_App_Grant": {
+        "type": "object",
+        "title": "Consumer App Grant",
         "properties": {
           "id": {
             "type": "integer"
           },
           "app": {
-            "$ref": "#\/components\/schemas\/App"
+            "$ref": "#\/components\/schemas\/Consumer_App"
           },
           "createDate": {
             "type": "string",
@@ -5340,9 +5847,73 @@
           }
         }
       },
-      "Subscription": {
+      "Consumer_App_Grant_Collection": {
         "type": "object",
-        "title": "subscription",
+        "title": "Consumer App Grant Collection",
+        "properties": {
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_App_Grant"
+            }
+          }
+        }
+      },
+      "Consumer_Scope": {
+        "type": "object",
+        "title": "Consumer Scope",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_App_Meta": {
+        "type": "object",
+        "title": "Consumer App Meta",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Scope"
+            }
+          }
+        }
+      },
+      "Consumer_Scope_Collection": {
+        "type": "object",
+        "title": "Consumer Scope Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Scope"
+            }
+          }
+        }
+      },
+      "Consumer_Subscription": {
+        "type": "object",
+        "title": "Consumer Subscription",
         "properties": {
           "id": {
             "type": "integer"
@@ -5358,18 +5929,143 @@
           }
         }
       },
-      "Jwt": {
+      "Consumer_Subscription_Collection": {
         "type": "object",
-        "title": "jwt",
+        "title": "Consumer Subscription Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Subscription"
+            }
+          }
+        }
+      },
+      "Consumer_User_Authorize_Request": {
+        "type": "object",
+        "title": "Consumer User Authorize Request",
+        "properties": {
+          "responseType": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "allow": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "responseType",
+          "clientId",
+          "scope",
+          "allow"
+        ]
+      },
+      "Consumer_User_Authorize_Token": {
+        "type": "object",
+        "title": "Consumer User Authorize Token",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Authorize_Response": {
+        "type": "object",
+        "title": "Consumer User Authorize Response",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "token": {
+            "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Token"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Login": {
+        "type": "object",
+        "title": "Consumer User Login",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Consumer_User_JWT": {
+        "type": "object",
+        "title": "Consumer User JWT",
         "properties": {
           "token": {
             "type": "string"
           }
         }
       },
-      "Provider": {
+      "Consumer_User_Register": {
         "type": "object",
-        "title": "provider",
+        "title": "Consumer User Register",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "Consumer_User_Provider": {
+        "type": "object",
+        "title": "Consumer User Provider",
         "properties": {
           "code": {
             "type": "string"
@@ -5383,9 +6079,9 @@
         },
         "additionalProperties": true
       },
-      "Activate": {
+      "Consumer_User_Activate": {
         "type": "object",
-        "title": "activate",
+        "title": "Consumer User Activate",
         "properties": {
           "token": {
             "type": "string"
@@ -5395,14 +6091,29 @@
           "token"
         ]
       },
-      "Profile": {
+      "Consumer_User_Account": {
         "type": "object",
-        "title": "profile",
+        "title": "Consumer User Account",
         "properties": {
           "name": {
             "type": "string"
           },
           "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Credentials": {
+        "type": "object",
+        "title": "Consumer User Credentials",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "verifyPassword": {
             "type": "string"
           }
         }
