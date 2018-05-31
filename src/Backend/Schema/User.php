@@ -33,7 +33,7 @@ use PSX\Schema\SchemaAbstract;
  */
 class User extends SchemaAbstract
 {
-    const NAME_PATTERN = '[a-zA-Z0-9\-\_\.]{3,32}';
+    const NAME_PATTERN = '^[a-zA-Z0-9\-\_\.]{3,32}$';
 
     public function getDefinition()
     {

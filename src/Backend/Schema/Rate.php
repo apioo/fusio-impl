@@ -32,7 +32,7 @@ use PSX\Schema\SchemaAbstract;
  */
 class Rate extends SchemaAbstract
 {
-    const NAME_PATTERN = '[a-zA-Z0-9\-\_]{3,64}';
+    const NAME_PATTERN = '^[a-zA-Z0-9\-\_]{3,64}$';
 
     public function getDefinition()
     {

@@ -63,7 +63,7 @@ class NameGenerator
                 $source = str_replace(' ', '-', ucwords(str_replace('/', ' ', $source)));
 
                 return $source;
-            } elseif (preg_match('/^' . Schema\Schema::NAME_PATTERN . '$/', $source)) {
+            } elseif (preg_match('/' . Schema\Schema::NAME_PATTERN . '/', $source)) {
                 return $source;
             } else {
                 return self::getNameFromJsonSchema($source);

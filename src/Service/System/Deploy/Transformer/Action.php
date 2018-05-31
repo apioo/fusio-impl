@@ -104,6 +104,6 @@ class Action implements TransformerInterface
 
     private function isName($schema)
     {
-        return is_string($schema) && preg_match('/^' . Backend\Schema\Action::NAME_PATTERN . '$/', $schema);
+        return is_string($schema) && preg_match('/' . Backend\Schema\Action::NAME_PATTERN . '/', $schema);
     }
 }

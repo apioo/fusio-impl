@@ -214,6 +214,6 @@ class Schema implements TransformerInterface
 
     private function isName($schema)
     {
-        return is_string($schema) && preg_match('/^' . Backend\Schema\Schema::NAME_PATTERN . '$/', $schema);
+        return is_string($schema) && preg_match('/' . Backend\Schema\Schema::NAME_PATTERN . '/', $schema);
     }
 }

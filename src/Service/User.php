@@ -115,7 +115,7 @@ class User
         }
 
         // allow login either through username or email
-        if (preg_match('/^' . BackendSchema\User::NAME_PATTERN . '$/', $username)) {
+        if (preg_match('/' . BackendSchema\User::NAME_PATTERN . '/', $username)) {
             $column = 'name';
         } else {
             $column = 'email';
