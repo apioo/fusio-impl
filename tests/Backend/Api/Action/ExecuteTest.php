@@ -51,19 +51,19 @@ class ExecuteTest extends ControllerDbTestCase
     "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Body": {
+            "Action_Request_Body": {
                 "type": "object",
-                "title": "body",
+                "title": "Action Request Body",
                 "additionalProperties": true
             },
-            "Request": {
+            "Action_Request": {
                 "type": "object",
-                "title": "request",
+                "title": "Action Request",
                 "properties": {
                     "method": {
                         "type": "string",
@@ -79,40 +79,45 @@ class ExecuteTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "body": {
-                        "$ref": "#\/definitions\/Body"
+                        "$ref": "#\/definitions\/Action_Request_Body"
                     }
                 },
                 "required": [
                     "method"
                 ]
             },
-            "Headers": {
+            "Action_Response_Headers": {
                 "type": "object",
-                "title": "headers",
+                "title": "Action Response Headers",
                 "additionalProperties": {
                     "type": "string"
                 }
             },
-            "Response": {
+            "Action_Response_Body": {
                 "type": "object",
-                "title": "response",
+                "title": "Action Response Body",
+                "additionalProperties": true
+            },
+            "Action_Response": {
+                "type": "object",
+                "title": "Action Response",
                 "properties": {
                     "statusCode": {
                         "type": "integer"
                     },
                     "headers": {
-                        "$ref": "#\/definitions\/Headers"
+                        "$ref": "#\/definitions\/Action_Response_Headers"
                     },
                     "body": {
-                        "$ref": "#\/definitions\/Body"
+                        "$ref": "#\/definitions\/Action_Response_Body"
                     }
                 }
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Request"
+                "$ref": "#\/definitions\/Action_Request"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Response"
+                "$ref": "#\/definitions\/Action_Response"
             }
         }
     },

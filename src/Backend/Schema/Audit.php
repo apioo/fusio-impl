@@ -34,19 +34,19 @@ class Audit extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('app');
+        $sb = $this->getSchemaBuilder('Audit App');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name');
         $app = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('user');
+        $sb = $this->getSchemaBuilder('Audit User');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name');
         $user = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('audit');
+        $sb = $this->getSchemaBuilder('Audit');
         $sb->integer('id');
         $sb->objectType('app', $app);
         $sb->objectType('user', $user);
@@ -54,7 +54,7 @@ class Audit extends SchemaAbstract
         $sb->string('ip');
         $sb->string('message');
         $sb->objectType('content')
-            ->setTitle('object')
+            ->setTitle('Audit Object')
             ->setDescription('A key value object containing the changes');
         $sb->dateTime('date');
 

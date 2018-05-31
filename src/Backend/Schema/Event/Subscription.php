@@ -34,7 +34,7 @@ class Subscription extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('subscription');
+        $sb = $this->getSchemaBuilder('Event Subscription');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('event');

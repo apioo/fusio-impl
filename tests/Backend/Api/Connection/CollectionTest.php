@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Connection": {
                 "type": "object",
-                "title": "connection",
+                "title": "Connection",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -87,7 +87,7 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "config": {
-                        "$ref": "#\/definitions\/Config"
+                        "$ref": "#\/definitions\/Connection_Config"
                     }
                 },
                 "required": [
@@ -95,9 +95,9 @@ class CollectionTest extends ControllerDbTestCase
                     "config"
                 ]
             },
-            "Config": {
+            "Connection_Config": {
                 "type": "object",
-                "title": "config",
+                "title": "Connection Config",
                 "additionalProperties": {
                     "oneOf": [
                         {
@@ -136,9 +136,9 @@ class CollectionTest extends ControllerDbTestCase
                 },
                 "maxProperties": 16
             },
-            "Collection": {
+            "Connection_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Connection Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -156,7 +156,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -167,7 +167,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Connection_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Connection"

@@ -40,12 +40,12 @@ class Connection extends SchemaAbstract
         $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
         $value  = array_merge($scalar, [Property::getArray()->setItems(Property::get()->setOneOf($scalar))->setMaxItems(16)]);
 
-        $sb = $this->getSchemaBuilder('config');
+        $sb = $this->getSchemaBuilder('Connection Config');
         $sb->setAdditionalProperties(Property::get()->setOneOf($value));
         $sb->setMaxProperties(16);
         $config = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('connection');
+        $sb = $this->getSchemaBuilder('Connection');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);

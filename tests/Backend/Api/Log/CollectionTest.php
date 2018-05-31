@@ -51,7 +51,7 @@ class CollectionTest extends ControllerDbTestCase
     "path": "\/backend\/log",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -108,7 +108,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Log": {
                 "type": "object",
-                "title": "log",
+                "title": "Log",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -138,14 +138,14 @@ class CollectionTest extends ControllerDbTestCase
                     "errors": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Error"
+                            "$ref": "#\/definitions\/Log_Error"
                         }
                     }
                 }
             },
-            "Error": {
+            "Log_Error": {
                 "type": "object",
-                "title": "error",
+                "title": "Log Error",
                 "properties": {
                     "message": {
                         "type": "string"
@@ -161,9 +161,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Log_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Log Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -180,7 +180,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Log_Collection"
             }
         }
     },

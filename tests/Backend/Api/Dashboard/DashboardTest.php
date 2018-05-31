@@ -51,14 +51,14 @@ class DashboardTest extends ControllerDbTestCase
     "path": "\/backend\/dashboard",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Chart": {
+            "Statistic_Chart": {
                 "type": "object",
-                "title": "chart",
+                "title": "Statistic Chart",
                 "properties": {
                     "labels": {
                         "type": "array",
@@ -83,21 +83,21 @@ class DashboardTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Apps": {
+            "Dashboard_Apps": {
                 "type": "object",
-                "title": "apps",
+                "title": "Dashboard Apps",
                 "properties": {
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/App"
+                            "$ref": "#\/definitions\/Dashboard_App"
                         }
                     }
                 }
             },
-            "App": {
+            "Dashboard_App": {
                 "type": "object",
-                "title": "app",
+                "title": "Dashboard App",
                 "properties": {
                     "name": {
                         "type": "string"
@@ -108,21 +108,21 @@ class DashboardTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Requests": {
+            "Dashboard_Requests": {
                 "type": "object",
-                "title": "requests",
+                "title": "Dashboard Requests",
                 "properties": {
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Request"
+                            "$ref": "#\/definitions\/Dashboard_Request"
                         }
                     }
                 }
             },
-            "Request": {
+            "Dashboard_Request": {
                 "type": "object",
-                "title": "request",
+                "title": "Dashboard Request",
                 "properties": {
                     "path": {
                         "type": "string"
@@ -138,25 +138,25 @@ class DashboardTest extends ControllerDbTestCase
             },
             "Dashboard": {
                 "type": "object",
-                "title": "dashboard",
+                "title": "Dashboard",
                 "properties": {
                     "incomingRequests": {
-                        "$ref": "#\/definitions\/Chart"
+                        "$ref": "#\/definitions\/Statistic_Chart"
                     },
                     "mostUsedRoutes": {
-                        "$ref": "#\/definitions\/Chart"
+                        "$ref": "#\/definitions\/Statistic_Chart"
                     },
                     "timePerRoute": {
-                        "$ref": "#\/definitions\/Chart"
+                        "$ref": "#\/definitions\/Statistic_Chart"
                     },
                     "latestApps": {
-                        "$ref": "#\/definitions\/Apps"
+                        "$ref": "#\/definitions\/Dashboard_Apps"
                     },
                     "latestRequests": {
-                        "$ref": "#\/definitions\/Requests"
+                        "$ref": "#\/definitions\/Dashboard_Requests"
                     },
                     "errorsPerRoute": {
-                        "$ref": "#\/definitions\/Chart"
+                        "$ref": "#\/definitions\/Statistic_Chart"
                     }
                 }
             },

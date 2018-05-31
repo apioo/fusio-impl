@@ -51,14 +51,14 @@ class EntityTest extends ControllerDbTestCase
     "path": "\/backend\/log\/error\/$error_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Error": {
+            "Log_Error": {
                 "type": "object",
-                "title": "error",
+                "title": "Log Error",
                 "properties": {
                     "message": {
                         "type": "string"
@@ -75,7 +75,7 @@ class EntityTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Error"
+                "$ref": "#\/definitions\/Log_Error"
             }
         }
     },

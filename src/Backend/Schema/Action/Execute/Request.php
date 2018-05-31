@@ -34,11 +34,11 @@ class Request extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('body');
+        $sb = $this->getSchemaBuilder('Action Request Body');
         $sb->setAdditionalProperties(true);
         $body = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('request');
+        $sb = $this->getSchemaBuilder('Action Request');
         $sb->string('method')
             ->setPattern('GET|POST|PUT|PATCH|DELETE');
         $sb->string('uriFragments');

@@ -57,9 +57,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Config": {
+            "Connection_Config": {
                 "type": "object",
-                "title": "config",
+                "title": "Connection Config",
                 "additionalProperties": {
                     "oneOf": [
                         {
@@ -100,7 +100,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Connection": {
                 "type": "object",
-                "title": "connection",
+                "title": "Connection",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -113,13 +113,13 @@ class EntityTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "config": {
-                        "$ref": "#\/definitions\/Config"
+                        "$ref": "#\/definitions\/Connection_Config"
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

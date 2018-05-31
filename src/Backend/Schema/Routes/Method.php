@@ -35,11 +35,11 @@ class Method extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('responses');
+        $sb = $this->getSchemaBuilder('Routes Method Responses');
         $sb->addPatternProperty('^([0-9]{3})$', Property::getInteger());
         $responses = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('method');
+        $sb = $this->getSchemaBuilder('Routes Method');
         $sb->string('method');
         $sb->integer('version');
         $sb->integer('status');

@@ -34,7 +34,7 @@ class Allocation extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('allocation');
+        $sb = $this->getSchemaBuilder('Rate Allocation');
         $sb->integer('id');
         $sb->integer('routeId');
         $sb->integer('appId');

@@ -51,7 +51,7 @@ class CollectionTest extends ControllerDbTestCase
     "path": "\/backend\/app\/token",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -94,9 +94,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Token": {
+            "App_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "App Token",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -120,9 +120,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "App_Token_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "App Token Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -133,13 +133,13 @@ class CollectionTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Token"
+                            "$ref": "#\/definitions\/App_Token"
                         }
                     }
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/App_Token_Collection"
             }
         }
     },

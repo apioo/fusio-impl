@@ -34,12 +34,12 @@ class Index extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('action');
+        $sb = $this->getSchemaBuilder('Action Action');
         $sb->string('name');
         $sb->string('class');
         $action = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('index');
+        $sb = $this->getSchemaBuilder('Action Index');
         $sb->arrayType('actions')
             ->setItems($action);
 

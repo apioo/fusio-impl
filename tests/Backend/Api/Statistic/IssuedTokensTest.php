@@ -51,7 +51,7 @@ class IssuedTokensTest extends ControllerDbTestCase
     "path": "\/backend\/statistic\/issued_tokens",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -88,9 +88,9 @@ class IssuedTokensTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Chart": {
+            "Statistic_Chart": {
                 "type": "object",
-                "title": "chart",
+                "title": "Statistic Chart",
                 "properties": {
                     "labels": {
                         "type": "array",
@@ -116,7 +116,7 @@ class IssuedTokensTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Chart"
+                "$ref": "#\/definitions\/Statistic_Chart"
             }
         }
     },

@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Routes": {
                 "type": "object",
-                "title": "routes",
+                "title": "Routes",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -97,7 +97,7 @@ class CollectionTest extends ControllerDbTestCase
                     "config": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Version"
+                            "$ref": "#\/definitions\/Routes_Version"
                         }
                     }
                 },
@@ -106,9 +106,9 @@ class CollectionTest extends ControllerDbTestCase
                     "config"
                 ]
             },
-            "Version": {
+            "Routes_Version": {
                 "type": "object",
-                "title": "version",
+                "title": "Routes Version",
                 "properties": {
                     "version": {
                         "type": "integer"
@@ -117,22 +117,22 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "integer"
                     },
                     "methods": {
-                        "$ref": "#\/definitions\/Methods"
+                        "$ref": "#\/definitions\/Routes_Methods"
                     }
                 }
             },
-            "Methods": {
+            "Routes_Methods": {
                 "type": "object",
-                "title": "methods",
+                "title": "Routes Methods",
                 "patternProperties": {
                     "^(GET|POST|PUT|PATCH|DELETE)$": {
-                        "$ref": "#\/definitions\/Method"
+                        "$ref": "#\/definitions\/Routes_Method"
                     }
                 }
             },
-            "Method": {
+            "Routes_Method": {
                 "type": "object",
-                "title": "method",
+                "title": "Routes Method",
                 "properties": {
                     "method": {
                         "type": "string"
@@ -162,25 +162,25 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "integer"
                     },
                     "responses": {
-                        "$ref": "#\/definitions\/Responses"
+                        "$ref": "#\/definitions\/Routes_Method_Responses"
                     },
                     "action": {
                         "type": "integer"
                     }
                 }
             },
-            "Responses": {
+            "Routes_Method_Responses": {
                 "type": "object",
-                "title": "responses",
+                "title": "Routes Method Responses",
                 "patternProperties": {
                     "^([0-9]{3})$": {
                         "type": "integer"
                     }
                 }
             },
-            "Collection": {
+            "Routes_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Routes Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -198,7 +198,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -209,7 +209,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Routes_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Routes"

@@ -51,7 +51,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
     "path": "\/backend\/statistic\/errors_per_route",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -100,9 +100,9 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Chart": {
+            "Statistic_Chart": {
                 "type": "object",
-                "title": "chart",
+                "title": "Statistic Chart",
                 "properties": {
                     "labels": {
                         "type": "array",
@@ -128,7 +128,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Chart"
+                "$ref": "#\/definitions\/Statistic_Chart"
             }
         }
     },

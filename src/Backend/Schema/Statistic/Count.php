@@ -35,7 +35,7 @@ class Count extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('count');
+        $sb = $this->getSchemaBuilder('Statistic Count');
         $sb->integer('count');
         $sb->string('from')
             ->setFormat(PropertyType::FORMAT_DATETIME);

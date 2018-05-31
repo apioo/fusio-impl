@@ -60,7 +60,7 @@ class EntityTest extends ControllerDbTestCase
         "definitions": {
             "App": {
                 "type": "object",
-                "title": "app",
+                "title": "App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -100,14 +100,14 @@ class EntityTest extends ControllerDbTestCase
                     "tokens": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Token"
+                            "$ref": "#\/definitions\/App_Token"
                         }
                     }
                 }
             },
-            "Token": {
+            "App_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "App Token",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -133,7 +133,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "User": {
                 "type": "object",
-                "title": "user",
+                "title": "User",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -168,7 +168,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

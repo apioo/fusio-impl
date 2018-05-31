@@ -36,7 +36,7 @@ class Intern extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('adapter');
+        $sb = $this->getSchemaBuilder('Adapter');
         $sb->arrayType('actionClass')
             ->setItems(Property::getString());
         $sb->arrayType('connectionClass')

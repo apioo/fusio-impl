@@ -59,9 +59,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Version": {
+            "Routes_Version": {
                 "type": "object",
-                "title": "version",
+                "title": "Routes Version",
                 "properties": {
                     "version": {
                         "type": "integer"
@@ -70,22 +70,22 @@ class EntityTest extends ControllerDbTestCase
                         "type": "integer"
                     },
                     "methods": {
-                        "$ref": "#\/definitions\/Methods"
+                        "$ref": "#\/definitions\/Routes_Methods"
                     }
                 }
             },
-            "Methods": {
+            "Routes_Methods": {
                 "type": "object",
-                "title": "methods",
+                "title": "Routes Methods",
                 "patternProperties": {
                     "^(GET|POST|PUT|PATCH|DELETE)$": {
-                        "$ref": "#\/definitions\/Method"
+                        "$ref": "#\/definitions\/Routes_Method"
                     }
                 }
             },
-            "Method": {
+            "Routes_Method": {
                 "type": "object",
-                "title": "method",
+                "title": "Routes Method",
                 "properties": {
                     "method": {
                         "type": "string"
@@ -115,16 +115,16 @@ class EntityTest extends ControllerDbTestCase
                         "type": "integer"
                     },
                     "responses": {
-                        "$ref": "#\/definitions\/Responses"
+                        "$ref": "#\/definitions\/Routes_Method_Responses"
                     },
                     "action": {
                         "type": "integer"
                     }
                 }
             },
-            "Responses": {
+            "Routes_Method_Responses": {
                 "type": "object",
-                "title": "responses",
+                "title": "Routes Method Responses",
                 "patternProperties": {
                     "^([0-9]{3})$": {
                         "type": "integer"
@@ -133,7 +133,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Routes": {
                 "type": "object",
-                "title": "routes",
+                "title": "Routes",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -156,7 +156,7 @@ class EntityTest extends ControllerDbTestCase
                     "config": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Version"
+                            "$ref": "#\/definitions\/Routes_Version"
                         }
                     }
                 },
@@ -166,7 +166,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

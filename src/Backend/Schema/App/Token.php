@@ -34,7 +34,7 @@ class Token extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('token');
+        $sb = $this->getSchemaBuilder('App Token');
         $sb->integer('id');
         $sb->string('token');
         $sb->string('scope');

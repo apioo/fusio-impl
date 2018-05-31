@@ -75,7 +75,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Cronjob": {
                 "type": "object",
-                "title": "cronjob",
+                "title": "Cronjob",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -100,7 +100,7 @@ class CollectionTest extends ControllerDbTestCase
                     "errors": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Error"
+                            "$ref": "#\/definitions\/Cronjob_Error"
                         }
                     }
                 },
@@ -110,9 +110,9 @@ class CollectionTest extends ControllerDbTestCase
                     "action"
                 ]
             },
-            "Error": {
+            "Cronjob_Error": {
                 "type": "object",
-                "title": "error",
+                "title": "Cronjob Error",
                 "properties": {
                     "message": {
                         "type": "string"
@@ -128,9 +128,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Cronjob_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Cronjob Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -148,7 +148,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -159,7 +159,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Cronjob_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Cronjob"

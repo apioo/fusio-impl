@@ -37,7 +37,7 @@ class Config extends SchemaAbstract
     {
         $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
 
-        $sb = $this->getSchemaBuilder('config');
+        $sb = $this->getSchemaBuilder('Config');
         $sb->integer('id');
         $sb->integer('type');
         $sb->string('name');

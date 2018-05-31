@@ -36,7 +36,7 @@ class Cronjob extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('cronjob');
+        $sb = $this->getSchemaBuilder('Cronjob');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);

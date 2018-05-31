@@ -57,14 +57,14 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Source": {
+            "Schema_Source": {
                 "type": "object",
-                "title": "source",
+                "title": "Schema Source",
                 "additionalProperties": true
             },
             "Schema": {
                 "type": "object",
-                "title": "schema",
+                "title": "Schema",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -77,13 +77,13 @@ class EntityTest extends ControllerDbTestCase
                         "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "source": {
-                        "$ref": "#\/definitions\/Source"
+                        "$ref": "#\/definitions\/Schema_Source"
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

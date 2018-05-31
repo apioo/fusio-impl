@@ -38,7 +38,7 @@ class Chart extends SchemaAbstract
         $data = Property::getArray()
             ->setItems(Property::getNumber());
 
-        $sb = $this->getSchemaBuilder('chart');
+        $sb = $this->getSchemaBuilder('Statistic Chart');
         $sb->arrayType('labels')
             ->setItems(Property::getString());
         $sb->arrayType('data')

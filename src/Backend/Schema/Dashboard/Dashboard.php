@@ -35,7 +35,7 @@ class Dashboard extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('dashboard');
+        $sb = $this->getSchemaBuilder('Dashboard');
         $sb->objectType('incomingRequests', $this->getSchema(Schema\Statistic\Chart::class));
         $sb->objectType('mostUsedRoutes', $this->getSchema(Schema\Statistic\Chart::class));
         $sb->objectType('timePerRoute', $this->getSchema(Schema\Statistic\Chart::class));

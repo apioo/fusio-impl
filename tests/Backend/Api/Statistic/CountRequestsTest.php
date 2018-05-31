@@ -51,7 +51,7 @@ class CountRequestsTest extends ControllerDbTestCase
     "path": "\/backend\/statistic\/count_requests",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -100,9 +100,9 @@ class CountRequestsTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Count": {
+            "Statistic_Count": {
                 "type": "object",
-                "title": "count",
+                "title": "Statistic Count",
                 "properties": {
                     "count": {
                         "type": "integer"
@@ -118,7 +118,7 @@ class CountRequestsTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Count"
+                "$ref": "#\/definitions\/Statistic_Count"
             }
         }
     },

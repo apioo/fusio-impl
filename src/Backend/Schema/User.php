@@ -37,7 +37,7 @@ class User extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('user');
+        $sb = $this->getSchemaBuilder('User');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')

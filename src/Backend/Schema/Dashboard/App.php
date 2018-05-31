@@ -35,13 +35,13 @@ class App extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('app');
+        $sb = $this->getSchemaBuilder('Dashboard App');
         $sb->string('name');
         $sb->string('date')
             ->setFormat(PropertyType::FORMAT_DATETIME);
         $app = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('apps');
+        $sb = $this->getSchemaBuilder('Dashboard Apps');
         $sb->arrayType('entry')
             ->setItems($app);
 

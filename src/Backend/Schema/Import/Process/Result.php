@@ -35,7 +35,7 @@ class Result extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('response');
+        $sb = $this->getSchemaBuilder('Import Response');
         $sb->boolean('success');
         $sb->string('message');
         $sb->arrayType('result', Property::getString());

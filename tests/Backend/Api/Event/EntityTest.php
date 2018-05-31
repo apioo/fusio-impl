@@ -59,7 +59,7 @@ class EntityTest extends ControllerDbTestCase
         "definitions": {
             "Event": {
                 "type": "object",
-                "title": "event",
+                "title": "Event",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -75,7 +75,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

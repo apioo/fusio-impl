@@ -51,14 +51,14 @@ class EntityTest extends ControllerDbTestCase
     "path": "\/backend\/audit\/$audit_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "App": {
+            "Audit_App": {
                 "type": "object",
-                "title": "app",
+                "title": "Audit App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -71,9 +71,9 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
-            "User": {
+            "Audit_User": {
                 "type": "object",
-                "title": "user",
+                "title": "Audit User",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -86,23 +86,23 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Object": {
+            "Audit_Object": {
                 "type": "object",
-                "title": "object",
+                "title": "Audit Object",
                 "description": "A key value object containing the changes"
             },
             "Audit": {
                 "type": "object",
-                "title": "audit",
+                "title": "Audit",
                 "properties": {
                     "id": {
                         "type": "integer"
                     },
                     "app": {
-                        "$ref": "#\/definitions\/App"
+                        "$ref": "#\/definitions\/Audit_App"
                     },
                     "user": {
-                        "$ref": "#\/definitions\/User"
+                        "$ref": "#\/definitions\/Audit_User"
                     },
                     "event": {
                         "type": "string"
@@ -114,7 +114,7 @@ class EntityTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "content": {
-                        "$ref": "#\/definitions\/Object"
+                        "$ref": "#\/definitions\/Audit_Object"
                     },
                     "date": {
                         "type": "string",

@@ -37,7 +37,7 @@ class App extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('app');
+        $sb = $this->getSchemaBuilder('App');
         $sb->integer('id');
         $sb->integer('userId');
         $sb->integer('status');

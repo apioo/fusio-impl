@@ -34,7 +34,7 @@ class Error extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('error');
+        $sb = $this->getSchemaBuilder('Cronjob Error');
         $sb->string('message');
         $sb->string('trace');
         $sb->string('file');

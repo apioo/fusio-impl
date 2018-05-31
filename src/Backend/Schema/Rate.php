@@ -36,7 +36,7 @@ class Rate extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('rate');
+        $sb = $this->getSchemaBuilder('Rate');
         $sb->integer('id');
         $sb->integer('priority')
             ->setMinimum(0);

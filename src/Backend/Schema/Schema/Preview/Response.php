@@ -34,7 +34,7 @@ class Response extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('response');
+        $sb = $this->getSchemaBuilder('Schema Preview Response');
         $sb->string('preview');
 
         return $sb->getProperty();

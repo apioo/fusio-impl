@@ -35,7 +35,7 @@ class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('collection');
+        $sb = $this->getSchemaBuilder('App Collection');
         $sb->integer('totalResults');
         $sb->integer('startIndex');
         $sb->arrayType('entry')

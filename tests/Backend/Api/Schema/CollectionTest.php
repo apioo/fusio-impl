@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Schema": {
                 "type": "object",
-                "title": "schema",
+                "title": "Schema",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -87,21 +87,21 @@ class CollectionTest extends ControllerDbTestCase
                         "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "source": {
-                        "$ref": "#\/definitions\/Source"
+                        "$ref": "#\/definitions\/Schema_Source"
                     }
                 },
                 "required": [
                     "name"
                 ]
             },
-            "Source": {
+            "Schema_Source": {
                 "type": "object",
-                "title": "source",
+                "title": "Schema Source",
                 "additionalProperties": true
             },
-            "Collection": {
+            "Schema_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Schema Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -119,7 +119,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -130,7 +130,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Schema_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Schema"

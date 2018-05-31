@@ -100,7 +100,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Action": {
                 "type": "object",
-                "title": "action",
+                "title": "Action",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -125,7 +125,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

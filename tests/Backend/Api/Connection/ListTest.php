@@ -51,14 +51,14 @@ class ListTest extends ControllerDbTestCase
     "path": "\/backend\/connection\/list",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Connection": {
+            "Connection_Connection": {
                 "type": "object",
-                "title": "connection",
+                "title": "Connection Connection",
                 "properties": {
                     "name": {
                         "type": "string"
@@ -68,20 +68,20 @@ class ListTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Index": {
+            "Connection_Index": {
                 "type": "object",
-                "title": "index",
+                "title": "Connection Index",
                 "properties": {
                     "connections": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Connection"
+                            "$ref": "#\/definitions\/Connection_Connection"
                         }
                     }
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Index"
+                "$ref": "#\/definitions\/Connection_Index"
             }
         }
     },

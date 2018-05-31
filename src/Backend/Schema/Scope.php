@@ -36,7 +36,7 @@ class Scope extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('scope');
+        $sb = $this->getSchemaBuilder('Scope');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);

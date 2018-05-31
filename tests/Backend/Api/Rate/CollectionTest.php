@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Rate": {
                 "type": "object",
-                "title": "rate",
+                "title": "Rate",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -98,7 +98,7 @@ class CollectionTest extends ControllerDbTestCase
                     "allocation": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Allocation"
+                            "$ref": "#\/definitions\/Rate_Allocation"
                         }
                     }
                 },
@@ -108,9 +108,9 @@ class CollectionTest extends ControllerDbTestCase
                     "timespan"
                 ]
             },
-            "Allocation": {
+            "Rate_Allocation": {
                 "type": "object",
-                "title": "allocation",
+                "title": "Rate Allocation",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -129,9 +129,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Rate_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Rate Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -149,7 +149,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -160,7 +160,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Rate_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Rate"

@@ -67,7 +67,7 @@ class OpenAPITest extends ControllerDbTestCase
             },
             "Routes": {
                 "type": "object",
-                "title": "routes",
+                "title": "Routes",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -90,14 +90,14 @@ class OpenAPITest extends ControllerDbTestCase
                     "config": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Version"
+                            "$ref": "#\/definitions\/Routes_Version"
                         }
                     }
                 }
             },
-            "Version": {
+            "Routes_Version": {
                 "type": "object",
-                "title": "version",
+                "title": "Routes Version",
                 "properties": {
                     "version": {
                         "type": "integer"
@@ -106,22 +106,22 @@ class OpenAPITest extends ControllerDbTestCase
                         "type": "integer"
                     },
                     "methods": {
-                        "$ref": "#\/definitions\/Methods"
+                        "$ref": "#\/definitions\/Routes_Methods"
                     }
                 }
             },
-            "Methods": {
+            "Routes_Methods": {
                 "type": "object",
-                "title": "methods",
+                "title": "Routes Methods",
                 "patternProperties": {
                     "^(GET|POST|PUT|PATCH|DELETE)$": {
-                        "$ref": "#\/definitions\/Method"
+                        "$ref": "#\/definitions\/Routes_Method"
                     }
                 }
             },
-            "Method": {
+            "Routes_Method": {
                 "type": "object",
-                "title": "method",
+                "title": "Routes Method",
                 "properties": {
                     "method": {
                         "type": "string"
@@ -151,16 +151,16 @@ class OpenAPITest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "responses": {
-                        "$ref": "#\/definitions\/Responses"
+                        "$ref": "#\/definitions\/Routes_Method_Responses"
                     },
                     "action": {
                         "type": "string"
                     }
                 }
             },
-            "Responses": {
+            "Routes_Method_Responses": {
                 "type": "object",
-                "title": "responses",
+                "title": "Routes Method Responses",
                 "patternProperties": {
                     "^([0-9]{3})$": {
                         "type": "string"
@@ -169,7 +169,7 @@ class OpenAPITest extends ControllerDbTestCase
             },
             "Action": {
                 "type": "object",
-                "title": "action",
+                "title": "Action",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -235,7 +235,7 @@ class OpenAPITest extends ControllerDbTestCase
             },
             "Schema": {
                 "type": "object",
-                "title": "schema",
+                "title": "Schema",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -248,18 +248,18 @@ class OpenAPITest extends ControllerDbTestCase
                         "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
                     },
                     "source": {
-                        "$ref": "#\/definitions\/Source"
+                        "$ref": "#\/definitions\/Schema_Source"
                     }
                 }
             },
-            "Source": {
+            "Schema_Source": {
                 "type": "object",
-                "title": "source",
+                "title": "Schema Source",
                 "additionalProperties": true
             },
             "Connection": {
                 "type": "object",
-                "title": "connection",
+                "title": "Connection",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -272,13 +272,54 @@ class OpenAPITest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "config": {
-                        "$ref": "#\/definitions\/Config"
+                        "$ref": "#\/definitions\/Connection_Config"
                     }
                 }
             },
+            "Connection_Config": {
+                "type": "object",
+                "title": "Connection Config",
+                "additionalProperties": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    },
+                                    {
+                                        "type": "boolean"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "maxItems": 16
+                        }
+                    ]
+                },
+                "maxProperties": 16
+            },
             "Adapter": {
                 "type": "object",
-                "title": "adapter",
+                "title": "Adapter",
                 "properties": {
                     "actionClass": {
                         "type": "array",

@@ -34,12 +34,12 @@ class Index extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('connection');
+        $sb = $this->getSchemaBuilder('Connection Connection');
         $sb->string('name');
         $sb->string('class');
         $connection = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('index');
+        $sb = $this->getSchemaBuilder('Connection Index');
         $sb->arrayType('connections')
             ->setItems($connection);
 

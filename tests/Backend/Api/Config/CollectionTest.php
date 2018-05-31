@@ -51,7 +51,7 @@ class CollectionTest extends ControllerDbTestCase
     "path": "\/backend\/config",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -73,7 +73,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Config": {
                 "type": "object",
-                "title": "config",
+                "title": "Config",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -105,9 +105,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Config_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Config Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -124,7 +124,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Config_Collection"
             }
         }
     },

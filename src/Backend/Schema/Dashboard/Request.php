@@ -35,14 +35,14 @@ class Request extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('request');
+        $sb = $this->getSchemaBuilder('Dashboard Request');
         $sb->string('path');
         $sb->string('ip');
         $sb->string('date')
             ->setFormat(PropertyType::FORMAT_DATETIME);
         $request = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('requests');
+        $sb = $this->getSchemaBuilder('Dashboard Requests');
         $sb->arrayType('entry')
             ->setItems($request);
 

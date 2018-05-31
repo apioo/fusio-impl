@@ -34,7 +34,7 @@ class Log extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('log');
+        $sb = $this->getSchemaBuilder('Log');
         $sb->integer('id');
         $sb->string('ip');
         $sb->string('userAgent');

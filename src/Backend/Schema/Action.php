@@ -45,7 +45,7 @@ class Action extends SchemaAbstract
         $sb->setMaxProperties(16);
         $config = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('action');
+        $sb = $this->getSchemaBuilder('Action');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')

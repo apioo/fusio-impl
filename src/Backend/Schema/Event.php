@@ -36,7 +36,7 @@ class Event extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('event');
+        $sb = $this->getSchemaBuilder('Event');
         $sb->integer('id');
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);

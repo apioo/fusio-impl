@@ -35,15 +35,15 @@ class Response extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('headers');
+        $sb = $this->getSchemaBuilder('Action Response Headers');
         $sb->setAdditionalProperties(Property::getString());
         $headers = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('body');
+        $sb = $this->getSchemaBuilder('Action Response Body');
         $sb->setAdditionalProperties(true);
         $body = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('response');
+        $sb = $this->getSchemaBuilder('Action Response');
         $sb->integer('statusCode');
         $sb->objectType('headers', $headers);
         $sb->objectType('body', $body);

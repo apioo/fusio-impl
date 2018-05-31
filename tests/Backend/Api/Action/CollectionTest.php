@@ -77,7 +77,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Action": {
                 "type": "object",
-                "title": "action",
+                "title": "Action",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -145,9 +145,9 @@ class CollectionTest extends ControllerDbTestCase
                 },
                 "maxProperties": 16
             },
-            "Collection": {
+            "Action_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Action Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -165,7 +165,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -176,7 +176,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Action_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Action"

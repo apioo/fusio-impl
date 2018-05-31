@@ -58,9 +58,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Token": {
+            "App_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "App Token",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -86,7 +86,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "App": {
                 "type": "object",
-                "title": "app",
+                "title": "App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -126,14 +126,14 @@ class EntityTest extends ControllerDbTestCase
                     "tokens": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Token"
+                            "$ref": "#\/definitions\/App_Token"
                         }
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

@@ -51,14 +51,14 @@ class EntityTest extends ControllerDbTestCase
     "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Token": {
+            "App_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "App Token",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -83,7 +83,7 @@ class EntityTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Token"
+                "$ref": "#\/definitions\/App_Token"
             }
         }
     },

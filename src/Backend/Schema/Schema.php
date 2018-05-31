@@ -36,11 +36,11 @@ class Schema extends SchemaAbstract
 
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('source');
+        $sb = $this->getSchemaBuilder('Schema Source');
         $sb->setAdditionalProperties(true);
         $source = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('schema');
+        $sb = $this->getSchemaBuilder('Schema');
         $sb->integer('id');
         $sb->integer('status');
         $sb->string('name')

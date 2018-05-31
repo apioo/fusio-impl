@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Scope": {
                 "type": "object",
-                "title": "scope",
+                "title": "Scope",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -89,7 +89,7 @@ class CollectionTest extends ControllerDbTestCase
                     "routes": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Route"
+                            "$ref": "#\/definitions\/Scope_Route"
                         }
                     }
                 },
@@ -97,9 +97,9 @@ class CollectionTest extends ControllerDbTestCase
                     "name"
                 ]
             },
-            "Route": {
+            "Scope_Route": {
                 "type": "object",
-                "title": "route",
+                "title": "Scope Route",
                 "properties": {
                     "routeId": {
                         "type": "integer"
@@ -112,9 +112,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "Scope_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "Scope Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -132,7 +132,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -143,7 +143,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/Scope_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/Scope"

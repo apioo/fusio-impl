@@ -57,9 +57,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Allocation": {
+            "Rate_Allocation": {
                 "type": "object",
-                "title": "allocation",
+                "title": "Rate Allocation",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -80,7 +80,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Rate": {
                 "type": "object",
-                "title": "rate",
+                "title": "Rate",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -104,14 +104,14 @@ class EntityTest extends ControllerDbTestCase
                     "allocation": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Allocation"
+                            "$ref": "#\/definitions\/Rate_Allocation"
                         }
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

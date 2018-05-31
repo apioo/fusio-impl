@@ -52,14 +52,14 @@ class ChangePasswordTest extends ControllerDbTestCase
     "path": "\/backend\/account\/change_password",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Credentials": {
+            "Account_Credentials": {
                 "type": "object",
-                "title": "credentials",
+                "title": "Account Credentials",
                 "properties": {
                     "oldPassword": {
                         "type": "string",
@@ -85,7 +85,7 @@ class ChangePasswordTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -96,7 +96,7 @@ class ChangePasswordTest extends ControllerDbTestCase
                 }
             },
             "PUT-request": {
-                "$ref": "#\/definitions\/Credentials"
+                "$ref": "#\/definitions\/Account_Credentials"
             },
             "PUT-200-response": {
                 "$ref": "#\/definitions\/Message"

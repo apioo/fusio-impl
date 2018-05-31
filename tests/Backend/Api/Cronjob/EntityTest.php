@@ -59,9 +59,9 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Error": {
+            "Cronjob_Error": {
                 "type": "object",
-                "title": "error",
+                "title": "Cronjob Error",
                 "properties": {
                     "message": {
                         "type": "string"
@@ -79,7 +79,7 @@ class EntityTest extends ControllerDbTestCase
             },
             "Cronjob": {
                 "type": "object",
-                "title": "cronjob",
+                "title": "Cronjob",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -104,14 +104,14 @@ class EntityTest extends ControllerDbTestCase
                     "errors": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Error"
+                            "$ref": "#\/definitions\/Cronjob_Error"
                         }
                     }
                 }
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"

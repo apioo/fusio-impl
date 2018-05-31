@@ -74,7 +74,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "User": {
                 "type": "object",
-                "title": "user",
+                "title": "User",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -118,7 +118,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "App": {
                 "type": "object",
-                "title": "app",
+                "title": "App",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -158,14 +158,14 @@ class CollectionTest extends ControllerDbTestCase
                     "tokens": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Token"
+                            "$ref": "#\/definitions\/App_Token"
                         }
                     }
                 }
             },
-            "Token": {
+            "App_Token": {
                 "type": "object",
-                "title": "token",
+                "title": "App Token",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -189,9 +189,9 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Collection": {
+            "User_Collection": {
                 "type": "object",
-                "title": "collection",
+                "title": "User Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -209,7 +209,7 @@ class CollectionTest extends ControllerDbTestCase
             },
             "Message": {
                 "type": "object",
-                "title": "message",
+                "title": "Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -220,7 +220,7 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Collection"
+                "$ref": "#\/definitions\/User_Collection"
             },
             "POST-request": {
                 "$ref": "#\/definitions\/User"
