@@ -19,12 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\App\Developer;
+namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
-use Fusio\Impl\Table\App;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * CollectionTest
@@ -42,7 +40,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/app/developer', 'GET', array(
+        $response = $this->sendRequest('/doc/*/consumer/event', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +48,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/app\/developer",
+    "path": "\/consumer\/event",
     "version": "*",
     "status": 1,
     "description": null,
@@ -58,49 +56,25 @@ class CollectionTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Consumer_App": {
+            "Consumer_Event": {
                 "type": "object",
-                "title": "Consumer App",
+                "title": "Consumer Event",
                 "properties": {
                     "id": {
-                        "type": "integer"
-                    },
-                    "status": {
                         "type": "integer"
                     },
                     "name": {
                         "type": "string",
                         "pattern": "^[A-z0-9\\-\\_]{3,64}$"
                     },
-                    "url": {
+                    "description": {
                         "type": "string"
-                    },
-                    "appKey": {
-                        "type": "string"
-                    },
-                    "appSecret": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
                     }
-                },
-                "required": [
-                    "name",
-                    "url",
-                    "scopes"
-                ]
+                }
             },
-            "Consumer_App_Developer_Collection": {
+            "Consumer_Event_Collection": {
                 "type": "object",
-                "title": "Consumer App Developer Collection",
+                "title": "Consumer Event Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -111,31 +85,13 @@ class CollectionTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Consumer_App"
+                            "$ref": "#\/definitions\/Consumer_Event"
                         }
                     }
                 }
             },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_App_Developer_Collection"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Consumer_App"
-            },
-            "POST-201-response": {
-                "$ref": "#\/definitions\/Message"
+                "$ref": "#\/definitions\/Consumer_Event_Collection"
             }
         }
     },
@@ -144,26 +100,20 @@ class CollectionTest extends ControllerDbTestCase
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
             }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "201": "#\/definitions\/POST-201-response"
-            }
         }
     },
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/app\/developer"
+            "href": "\/export\/openapi\/*\/consumer\/event"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/app\/developer"
+            "href": "\/export\/swagger\/*\/consumer\/event"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/app\/developer"
+            "href": "\/export\/raml\/*\/consumer\/event"
         }
     ]
 }
@@ -174,36 +124,20 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/app/developer', 'GET', array(
+        $response = $this->sendRequest('/consumer/event', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
 
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
-    "startIndex": 0,
-    "itemsPerPage": 16,
     "entry": [
         {
-            "id": 2,
-            "userId": 1,
-            "status": 1,
-            "name": "Consumer",
-            "appKey": "[app_key]",
-            "date": "[datetime]"
-        },
-        {
-            "id": 1,
-            "userId": 1,
-            "status": 1,
-            "name": "Backend",
-            "appKey": "[app_key]",
-            "date": "[datetime]"
+            "id": "1",
+            "name": "foo-event",
+            "description": "Foo event description"
         }
     ]
 }
@@ -215,48 +149,21 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/app/developer', 'POST', array(
+        $response = $this->sendRequest('/consumer/event', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'status' => 3, // status and userID are ignored so it doesnt matter
-            'name'   => 'Foo',
-            'url'    => 'http://google.com',
-            'scopes' => ['foo', 'bar']
+            'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successful created"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
-            ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(6, $row['id']);
-        $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals(1, $row['userId']);
-        $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('http://google.com', $row['url']);
+        $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/app/developer', 'PUT', array(
+        $response = $this->sendRequest('/consumer/event', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -270,7 +177,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/app/developer', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/event', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([

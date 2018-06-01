@@ -19,29 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\User\Authorize;
+namespace Fusio\Impl\Consumer\Schema;
 
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Request
+ * Event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends SchemaAbstract
+class Event extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer User Authorize Request');
-        $sb->setRequired(['responseType', 'clientId', 'scope', 'allow']);
-        $sb->string('responseType');
-        $sb->string('clientId');
-        $sb->string('redirectUri');
-        $sb->string('scope');
-        $sb->string('state');
-        $sb->boolean('allow');
+        $sb = $this->getSchemaBuilder('Consumer Event');
+        $sb->integer('id');
+        $sb->string('name')
+            ->setPattern('^[A-z0-9\-\_]{3,64}$');
+        $sb->string('description');
 
         return $sb->getProperty();
     }

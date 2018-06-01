@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Developer;
+namespace Fusio\Impl\Consumer\Api\App;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
@@ -60,7 +60,7 @@ class Entity extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\App\Developer\Update::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\App\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
@@ -77,7 +77,7 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\App\Developer::class)->getEntity(
+        return $this->tableManager->getTable(View\App::class)->getEntity(
             $this->context->getUserId(),
             (int) $context->getUriFragment('app_id')
         );

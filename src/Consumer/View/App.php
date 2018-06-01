@@ -25,6 +25,7 @@ use Fusio\Impl\Table;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -36,6 +37,65 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
+    public function getCollection($userId, $startIndex = 0, $search = null)
+    {
+        $condition = new Condition();
+        $condition->equals('userId', $userId);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        if (!empty($search)) {
+            $condition->like('name', '%' . $search . '%');
+        }
+
+        $definition = [
+            'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => 16,
+            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'getAll'], [$startIndex, 16, null, Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
+                'id' => 'id',
+                'userId' => 'userId',
+                'status' => 'status',
+                'name' => 'name',
+                'appKey' => 'appKey',
+                'date' => $this->fieldDateTime('date'),
+            ]),
+        ];
+
+        return $this->build($definition);
+    }
+
+    public function getEntity($userId, $appId)
+    {
+        $condition = new Condition();
+        $condition->equals('id', $appId);
+        $condition->equals('userId', $userId);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition], [
+            'id' => 'id',
+            'userId' => 'userId',
+            'status' => 'status',
+            'name' => 'name',
+            'url' => 'url',
+            'appKey' => 'appKey',
+            'appSecret' => 'appSecret',
+            'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
+                'id' => 'id',
+                'userId' => 'userId',
+                'status' => 'status',
+                'token' => 'token',
+                'scope' => $this->fieldCsv('scope'),
+                'ip' => 'ip',
+                'expire' => 'expire',
+                'date' => $this->fieldDateTime('date'),
+            ]),
+            'date' => $this->fieldDateTime('date'),
+        ]);
+
+        return $this->build($definition);
+    }
+
     public function getEntityByAppKey($appKey, $scope)
     {
         $condition = new Condition();

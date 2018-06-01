@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Grant;
+namespace Fusio\Impl\Consumer\Api\Grant;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;

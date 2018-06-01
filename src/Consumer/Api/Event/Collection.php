@@ -19,32 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Meta;
+namespace Fusio\Impl\Consumer\Api\Event;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
-use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\Exception as StatusCode;
 
 /**
- * Entity
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends ConsumerApiAbstract
+class Collection extends ConsumerApiAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\App
-     */
-    protected $appService;
-
     /**
      * @inheritdoc
      */
@@ -54,7 +46,7 @@ class Entity extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Meta::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Event\Collection::class))
         );
 
         return $resource;
@@ -65,19 +57,9 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        $app = $this->tableManager->getTable(View\App::class)->getEntityByAppKey(
-            $context->getParameter('client_id'),
-            $context->getParameter('scope')
+        return $this->tableManager->getTable(View\Event::class)->getCollection(
+            $this->context->getUserId(),
+            (int) $context->getParameter('startIndex')
         );
-
-        if (!empty($app)) {
-            if ($app['status'] == Table\App::STATUS_DELETED) {
-                throw new StatusCode\GoneException('App was deleted');
-            }
-
-            return $app;
-        } else {
-            throw new StatusCode\NotFoundException('Could not find app');
-        }
     }
 }

@@ -19,26 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App\Grant;
+namespace Fusio\Impl\Consumer\Schema\App;
 
 use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Collection
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaAbstract
+class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer App Grant Collection');
-        $sb->arrayType('entry')
-            ->setItems($this->getSchema(Schema\App\Grant::class));
+        $schema = $this->getSchema(Schema\App::class);
+        $schema->setRequired(['name', 'url', 'scopes']);
 
-        return $sb->getProperty();
+        return $schema;
     }
 }

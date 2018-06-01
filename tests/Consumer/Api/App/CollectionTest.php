@@ -19,21 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\App\Developer;
+namespace Fusio\Impl\Tests\Consumer\Api\App;
 
-use Fusio\Impl\Table;
+use Fusio\Impl\Table\App;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * EntityTest
+ * CollectionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class CollectionTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/app/developer/2', 'GET', array(
+        $response = $this->sendRequest('/doc/*/consumer/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +50,7 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/app\/developer\/$app_id<[0-9]+>",
+    "path": "\/consumer\/app\/",
     "version": "*",
     "status": 1,
     "description": null,
@@ -63,6 +63,9 @@ class EntityTest extends ControllerDbTestCase
                 "title": "Consumer App",
                 "properties": {
                     "id": {
+                        "type": "integer"
+                    },
+                    "userId": {
                         "type": "integer"
                     },
                     "status": {
@@ -94,12 +97,31 @@ class EntityTest extends ControllerDbTestCase
                 },
                 "required": [
                     "name",
-                    "url"
+                    "url",
+                    "scopes"
                 ]
             },
-            "Message": {
+            "Consumer_App_Collection": {
                 "type": "object",
-                "title": "Message",
+                "title": "Consumer App Collection",
+                "properties": {
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "startIndex": {
+                        "type": "integer"
+                    },
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Consumer_App"
+                        }
+                    }
+                }
+            },
+            "Consumer_Message": {
+                "type": "object",
+                "title": "Consumer Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -110,16 +132,13 @@ class EntityTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
+                "$ref": "#\/definitions\/Consumer_App_Collection"
+            },
+            "POST-request": {
                 "$ref": "#\/definitions\/Consumer_App"
             },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Consumer_App"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Message"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Message"
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Consumer_Message"
             }
         }
     },
@@ -129,30 +148,25 @@ class EntityTest extends ControllerDbTestCase
                 "200": "#\/definitions\/GET-200-response"
             }
         },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
+        "POST": {
+            "request": "#\/definitions\/POST-request",
             "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
+                "201": "#\/definitions\/POST-201-response"
             }
         }
     },
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/app\/developer\/$app_id<[0-9]+>"
+            "href": "\/export\/openapi\/*\/consumer\/app\/"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/app\/developer\/$app_id<[0-9]+>"
+            "href": "\/export\/swagger\/*\/consumer\/app\/"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/app\/developer\/$app_id<[0-9]+>"
+            "href": "\/export\/raml\/*\/consumer\/app\/"
         }
     ]
 }
@@ -163,7 +177,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/app/developer/2', 'GET', array(
+        $response = $this->sendRequest('/consumer/app', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -172,48 +186,26 @@ JSON;
         $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
         $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '[app_key]', $body);
 
-        $data = json_decode($body);
-        $sec  = isset($data->appSecret) ? $data->appSecret : null;
-        $body = str_replace(trim(json_encode($sec), '"'), '[app_secret]', $body);
-
         $expect = <<<'JSON'
 {
-    "id": 2,
-    "userId": 1,
-    "status": 1,
-    "name": "Consumer",
-    "url": "http:\/\/fusio-project.org",
-    "appKey": "[app_key]",
-    "appSecret": "[app_secret]",
-    "date": "[datetime]",
-    "scopes": [
-        "consumer",
-        "authorization"
-    ],
-    "tokens": [
-        {
-            "id": 5,
-            "userId": 2,
-            "status": 1,
-            "token": "1b8fca875fc81c78538d541b3ed0557a34e33feaf71c2ecdc2b9ebd40aade51b",
-            "scope": [
-                "consumer"
-            ],
-            "ip": "127.0.0.1",
-            "expire": "[datetime]",
-            "date": "[datetime]"
-        },
+    "totalResults": 2,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
         {
             "id": 2,
             "userId": 1,
             "status": 1,
-            "token": "b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2",
-            "scope": [
-                "consumer",
-                "authorization"
-            ],
-            "ip": "127.0.0.1",
-            "expire": "[datetime]",
+            "name": "Consumer",
+            "appKey": "[app_key]",
+            "date": "[datetime]"
+        },
+        {
+            "id": 1,
+            "userId": 1,
+            "status": 1,
+            "name": "Backend",
+            "appKey": "[app_key]",
             "date": "[datetime]"
         }
     ]
@@ -226,7 +218,48 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/app/developer/2', 'POST', array(
+        $response = $this->sendRequest('/consumer/app', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        ), json_encode([
+            'status' => 3, // status and userID are ignored so it doesnt matter
+            'name'   => 'Foo',
+            'url'    => 'http://google.com',
+            'scopes' => ['foo', 'bar']
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "App successful created"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status', 'userId', 'name', 'url')
+            ->from('fusio_app')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(6, $row['id']);
+        $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals('Foo', $row['name']);
+        $this->assertEquals('http://google.com', $row['url']);
+    }
+
+    public function testPut()
+    {
+        $response = $this->sendRequest('/consumer/app', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -238,78 +271,17 @@ JSON;
         $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 
-    public function testPut()
+    public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/app/developer/2', 'PUT', array(
+        $response = $this->sendRequest('/consumer/app', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'status' => 2,
-            'name'   => 'Bar',
-            'url'    => 'http://microsoft.com',
-            'scopes' => ['foo', 'bar']
+            'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successful updated"
-}
-JSON;
+        $body = (string) $response->getBody();
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
-            ->from('fusio_app')
-            ->where('id = 2')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(2, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals(1, $row['userId']);
-        $this->assertEquals('Bar', $row['name']);
-        $this->assertEquals('http://microsoft.com', $row['url']);
-
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(2);
-        $scopes = Table\Scope::getNames($scopes);
-
-        $this->assertEquals(['foo', 'bar'], $scopes);
-    }
-
-    public function testDelete()
-    {
-        $response = $this->sendRequest('/consumer/app/developer/2', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "App successful deleted"
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-
-        // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status')
-            ->from('fusio_app')
-            ->where('id = 2')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(2, $row['id']);
-        $this->assertEquals(Table\App::STATUS_DELETED, $row['status']);
+        $this->assertEquals(405, $response->getStatusCode(), $body);
     }
 }

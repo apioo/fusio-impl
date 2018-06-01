@@ -19,27 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App\Developer;
+namespace Fusio\Impl\Consumer\Schema\Authorize;
 
 use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Collection
+ * Meta
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends SchemaAbstract
+class Meta extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer App Developer Collection');
-        $sb->integer('totalResults');
-        $sb->integer('startIndex');
-        $sb->arrayType('entry')
-            ->setItems($this->getSchema(Schema\App\Developer::class));
+        $sb = $this->getSchemaBuilder('Consumer Authorize Meta');
+        $sb->string('name');
+        $sb->string('url');
+        $sb->arrayType('scopes')
+            ->setItems($this->getSchema(Schema\Scope::class));
 
         return $sb->getProperty();
     }

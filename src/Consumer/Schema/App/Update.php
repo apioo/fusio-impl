@@ -25,18 +25,18 @@ use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Developer
+ * Update
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Developer extends SchemaAbstract
+class Update extends SchemaAbstract
 {
     public function getDefinition()
     {
         $schema = $this->getSchema(Schema\App::class);
-        $schema->removeProperty('userId');
+        $schema->setRequired(['name', 'url']);
 
         return $schema;
     }

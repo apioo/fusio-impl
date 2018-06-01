@@ -57,9 +57,55 @@ class AuthorizeTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Consumer_User_Authorize_Request": {
+            "GET-query": {
                 "type": "object",
-                "title": "Consumer User Authorize Request",
+                "title": "query",
+                "properties": {
+                    "client_id": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Consumer_Scope": {
+                "type": "object",
+                "title": "Consumer Scope",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Consumer_Authorize_Meta": {
+                "type": "object",
+                "title": "Consumer Authorize Meta",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Consumer_Scope"
+                        }
+                    }
+                }
+            },
+            "Consumer_Authorize_Request": {
+                "type": "object",
+                "title": "Consumer Authorize Request",
                 "properties": {
                     "responseType": {
                         "type": "string"
@@ -87,9 +133,9 @@ class AuthorizeTest extends ControllerDbTestCase
                     "allow"
                 ]
             },
-            "Consumer_User_Authorize_Token": {
+            "Consumer_Authorize_Token": {
                 "type": "object",
-                "title": "Consumer User Authorize Token",
+                "title": "Consumer Authorize Token",
                 "properties": {
                     "access_token": {
                         "type": "string"
@@ -105,15 +151,15 @@ class AuthorizeTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Consumer_User_Authorize_Response": {
+            "Consumer_Authorize_Response": {
                 "type": "object",
-                "title": "Consumer User Authorize Response",
+                "title": "Consumer Authorize Response",
                 "properties": {
                     "type": {
                         "type": "string"
                     },
                     "token": {
-                        "$ref": "#\/definitions\/Consumer_User_Authorize_Token"
+                        "$ref": "#\/definitions\/Consumer_Authorize_Token"
                     },
                     "code": {
                         "type": "string"
@@ -123,15 +169,24 @@ class AuthorizeTest extends ControllerDbTestCase
                     }
                 }
             },
+            "GET-200-response": {
+                "$ref": "#\/definitions\/Consumer_Authorize_Meta"
+            },
             "POST-request": {
-                "$ref": "#\/definitions\/Consumer_User_Authorize_Request"
+                "$ref": "#\/definitions\/Consumer_Authorize_Request"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Consumer_User_Authorize_Response"
+                "$ref": "#\/definitions\/Consumer_Authorize_Response"
             }
         }
     },
     "methods": {
+        "GET": {
+            "queryParameters": "#\/definitions\/GET-query",
+            "responses": {
+                "200": "#\/definitions\/GET-200-response"
+            }
+        },
         "POST": {
             "request": "#\/definitions\/POST-request",
             "responses": {
@@ -161,14 +216,35 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/authorize', 'GET', array(
+        $response = $this->sendRequest('/consumer/authorize?client_id=5347307d-d801-4075-9aaa-a21a29a448c5&scope=backend,foo,bar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
         $body = (string) $response->getBody();
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $expect = <<<'JSON'
+{
+    "id": 3,
+    "name": "Foo-App",
+    "url": "http:\/\/google.com",
+    "scopes": [
+        {
+            "id": "4",
+            "name": "foo",
+            "description": "Foo access"
+        },
+        {
+            "id": "5",
+            "name": "bar",
+            "description": "Bar access"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testPost()

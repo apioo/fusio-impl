@@ -24,8 +24,12 @@ namespace Fusio\Impl\Consumer\Api\User;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Property;
 
 /**
  * Authorize
@@ -49,13 +53,41 @@ class Authorize extends ConsumerApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
+        $resource->addMethod(Resource\Factory::getMethod('GET')
+            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->addQueryParameter('client_id', Property::getString())
+            ->addQueryParameter('scope', Property::getString())
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Meta::class))
+        );
+
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\User\Authorize\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\Authorize\Response::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Authorize\Request::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Response::class))
         );
 
         return $resource;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doGet(HttpContextInterface $context)
+    {
+        $app = $this->tableManager->getTable(View\App::class)->getEntityByAppKey(
+            $context->getParameter('client_id'),
+            $context->getParameter('scope')
+        );
+
+        if (!empty($app)) {
+            if ($app['status'] == Table\App::STATUS_DELETED) {
+                throw new StatusCode\GoneException('App was deleted');
+            }
+
+            return $app;
+        } else {
+            throw new StatusCode\NotFoundException('Could not find app');
+        }
     }
 
     /**

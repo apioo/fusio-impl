@@ -19,14 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Grant;
+namespace Fusio\Impl\Consumer\Schema\Grant;
 
-use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
-use Fusio\Impl\Consumer\View;
-use PSX\Api\Resource;
-use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * Collection
@@ -35,30 +31,14 @@ use PSX\Http\Environment\HttpContextInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends ConsumerApiAbstract
+class Collection extends SchemaAbstract
 {
-    /**
-     * @inheritdoc
-     */
-    public function getDocumentation($version = null)
+    public function getDefinition()
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $sb = $this->getSchemaBuilder('Consumer Grant Collection');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Grant::class));
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Grant\Collection::class))
-        );
-
-        return $resource;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function doGet(HttpContextInterface $context)
-    {
-        return $this->tableManager->getTable(View\App\Grant::class)->getCollection(
-            $this->context->getUserId()
-        );
+        return $sb->getProperty();
     }
 }

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\App\Grant;
+namespace Fusio\Impl\Tests\Consumer\Api\Grant;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -40,7 +40,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/app/grant/1', 'GET', array(
+        $response = $this->sendRequest('/doc/*/consumer/grant/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -48,10 +48,10 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/app\/grant\/$grant_id<[0-9]+>",
+    "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
     "version": "*",
     "status": 1,
-    "description": "",
+    "description": null,
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
@@ -63,15 +63,15 @@ class EntityTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/app\/grant\/$grant_id<[0-9]+>"
+            "href": "\/export\/openapi\/*\/consumer\/grant\/$grant_id<[0-9]+>"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/app\/grant\/$grant_id<[0-9]+>"
+            "href": "\/export\/swagger\/*\/consumer\/grant\/$grant_id<[0-9]+>"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/app\/grant\/$grant_id<[0-9]+>"
+            "href": "\/export\/raml\/*\/consumer\/grant\/$grant_id<[0-9]+>"
         }
     ]
 }
@@ -82,7 +82,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/app/grant/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -94,7 +94,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/app/grant/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -108,7 +108,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/app/grant/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -122,7 +122,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/app/grant/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/grant/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));

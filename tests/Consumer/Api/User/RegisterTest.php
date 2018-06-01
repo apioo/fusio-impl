@@ -80,9 +80,9 @@ class RegisterTest extends ControllerDbTestCase
                     "password"
                 ]
             },
-            "Message": {
+            "Consumer_Message": {
                 "type": "object",
-                "title": "Message",
+                "title": "Consumer Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -96,7 +96,7 @@ class RegisterTest extends ControllerDbTestCase
                 "$ref": "#\/definitions\/Consumer_User_Register"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Message"
+                "$ref": "#\/definitions\/Consumer_Message"
             }
         }
     },

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\User\Authorize;
+namespace Fusio\Impl\Consumer\Schema\Authorize;
 
 use PSX\Schema\SchemaAbstract;
 
@@ -34,14 +34,14 @@ class Response extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer User Authorize Token');
+        $sb = $this->getSchemaBuilder('Consumer Authorize Token');
         $sb->string('access_token');
         $sb->string('token_type');
         $sb->string('expires_in');
         $sb->string('scope');
         $token = $sb->getProperty();
 
-        $sb = $this->getSchemaBuilder('Consumer User Authorize Response');
+        $sb = $this->getSchemaBuilder('Consumer Authorize Response');
         $sb->string('type');
         $sb->objectType('token', $token);
         $sb->string('code');

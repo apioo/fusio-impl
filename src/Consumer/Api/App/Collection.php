@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\App\Developer;
+namespace Fusio\Impl\Consumer\Api\App;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\App\ValidatorTrait;
@@ -55,12 +55,12 @@ class Collection extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Developer\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\App\Developer\Create::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\App\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
@@ -72,7 +72,7 @@ class Collection extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\App\Developer::class)->getCollection(
+        return $this->tableManager->getTable(View\App::class)->getCollection(
             $this->context->getUserId(),
             (int) $context->getParameter('startIndex'),
             $context->getParameter('search') ?: null

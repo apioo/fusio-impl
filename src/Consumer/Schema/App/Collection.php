@@ -25,20 +25,21 @@ use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Grant
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Grant extends SchemaAbstract
+class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer App Grant');
-        $sb->integer('id');
-        $sb->objectType('app', $this->getSchema(Schema\App::class));
-        $sb->dateTime('createDate');
+        $sb = $this->getSchemaBuilder('Consumer App Collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\App::class));
 
         return $sb->getProperty();
     }

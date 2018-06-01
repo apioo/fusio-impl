@@ -70,9 +70,9 @@ class ActivateTest extends ControllerDbTestCase
                     "token"
                 ]
             },
-            "Message": {
+            "Consumer_Message": {
                 "type": "object",
-                "title": "Message",
+                "title": "Consumer Message",
                 "properties": {
                     "success": {
                         "type": "boolean"
@@ -86,7 +86,7 @@ class ActivateTest extends ControllerDbTestCase
                 "$ref": "#\/definitions\/Consumer_User_Activate"
             },
             "POST-200-response": {
-                "$ref": "#\/definitions\/Message"
+                "$ref": "#\/definitions\/Consumer_Message"
             }
         }
     },

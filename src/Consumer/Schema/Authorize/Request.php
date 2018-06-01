@@ -19,25 +19,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App\Developer;
+namespace Fusio\Impl\Consumer\Schema\Authorize;
 
-use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Create
+ * Request
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+class Request extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Schema\App\Developer::class);
-        $schema->setRequired(['name', 'url', 'scopes']);
+        $sb = $this->getSchemaBuilder('Consumer Authorize Request');
+        $sb->setRequired(['responseType', 'clientId', 'scope', 'allow']);
+        $sb->string('responseType');
+        $sb->string('clientId');
+        $sb->string('redirectUri');
+        $sb->string('scope');
+        $sb->string('state');
+        $sb->boolean('allow');
 
-        return $schema;
+        return $sb->getProperty();
     }
 }

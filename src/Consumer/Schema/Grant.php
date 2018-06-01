@@ -24,19 +24,20 @@ namespace Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Message
+ * Grant
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Message extends SchemaAbstract
+class Grant extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer Message');
-        $sb->boolean('success');
-        $sb->string('message');
+        $sb = $this->getSchemaBuilder('Consumer App Grant');
+        $sb->integer('id');
+        $sb->objectType('app', $this->getSchema(App::class));
+        $sb->dateTime('createDate');
 
         return $sb->getProperty();
     }

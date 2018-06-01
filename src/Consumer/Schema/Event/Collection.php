@@ -19,27 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\App;
+namespace Fusio\Impl\Consumer\Schema\Event;
 
 use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Meta
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Meta extends SchemaAbstract
+class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer App Meta');
-        $sb->string('name');
-        $sb->string('url');
-        $sb->arrayType('scopes')
-            ->setItems($this->getSchema(Schema\Scope::class));
+        $sb = $this->getSchemaBuilder('Consumer Event Collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Event::class));
 
         return $sb->getProperty();
     }

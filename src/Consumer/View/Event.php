@@ -19,43 +19,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\View\App;
+namespace Fusio\Impl\Consumer\View;
 
-use Fusio\Impl\Table;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Grant
+ * Event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Grant extends ViewAbstract
+class Event extends ViewAbstract
 {
-    public function getCollection($userId)
+    public function getCollection($userId, $startIndex = 0)
     {
-        $sql = '    SELECT userGrant.id,
-                           userGrant.date,
-                           userGrant.appId AS appId,
-                           app.name AS appName,
-                           app.url AS appUrl
-                      FROM fusio_user_grant userGrant
-                INNER JOIN fusio_app app
-                        ON userGrant.appId = app.id
-                     WHERE userGrant.allow = 1
-                       AND userGrant.userId = :userId
-                       AND app.status = :status';
+        $sql = '    SELECT id,
+                           name,
+                           description
+                      FROM fusio_event
+                  ORDER BY name ASC';
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['userId' => $userId, 'status' => Table\App::STATUS_ACTIVE], [
+            'entry' => $this->doCollection($sql, [], [
                 'id' => 'id',
-                'createDate' => $this->fieldDateTime('date'),
-                'app' => [
-                    'id' => 'appId',
-                    'name' => 'appName',
-                    'url' => 'appUrl',
-                ],
+                'name' => 'name',
+                'description' => 'description',
             ]),
         ];
 
