@@ -3535,16 +3535,16 @@
       },
       "parameters": []
     },
-    "\/consumer\/app\/developer": {
+    "\/consumer\/app\/": {
       "get": {
-        "operationId": "consumerAppDeveloperGetConsumer_App_Developer_Collection",
+        "operationId": "consumerAppGetConsumer_App_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_App_Developer_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_App_Collection"
                 }
               }
             }
@@ -3559,7 +3559,7 @@
         ]
       },
       "post": {
-        "operationId": "consumerAppDeveloperPostConsumer_App",
+        "operationId": "consumerAppPostConsumer_App",
         "requestBody": {
           "content": {
             "application\/json": {
@@ -3575,7 +3575,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3591,9 +3591,9 @@
       },
       "parameters": []
     },
-    "\/consumer\/app\/developer\/{app_id}": {
+    "\/consumer\/app\/{app_id}": {
       "get": {
-        "operationId": "consumerAppDeveloperAppid09GetConsumer_App",
+        "operationId": "consumerAppAppid09GetConsumer_App",
         "responses": {
           "200": {
             "description": "GET 200 response",
@@ -3615,7 +3615,7 @@
         ]
       },
       "put": {
-        "operationId": "consumerAppDeveloperAppid09PutConsumer_App",
+        "operationId": "consumerAppAppid09PutConsumer_App",
         "requestBody": {
           "content": {
             "application\/json": {
@@ -3631,7 +3631,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3646,14 +3646,14 @@
         ]
       },
       "delete": {
-        "operationId": "consumerAppDeveloperAppid09DeleteMessage",
+        "operationId": "consumerAppAppid09DeleteConsumer_Message",
         "responses": {
           "200": {
             "description": "DELETE 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3669,16 +3669,16 @@
       },
       "parameters": []
     },
-    "\/consumer\/app\/grant": {
+    "\/consumer\/grant": {
       "get": {
-        "operationId": "consumerAppGrantGetConsumer_App_Grant_Collection",
+        "operationId": "consumerGrantGetConsumer_Grant_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_App_Grant_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Grant_Collection"
                 }
               }
             }
@@ -3694,35 +3694,10 @@
       },
       "parameters": []
     },
-    "\/consumer\/app\/grant\/{grant_id}": {
+    "\/consumer\/grant\/{grant_id}": {
       "delete": {
-        "operationId": "consumerAppGrantGrantid09",
+        "operationId": "consumerGrantGrantid09",
         "responses": {},
-        "security": [
-          {
-            "consumer": [
-              "consumer"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/consumer\/app\/meta": {
-      "get": {
-        "operationId": "consumerAppMetaGetConsumer_App_Meta",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_App_Meta"
-                }
-              }
-            }
-          }
-        },
         "security": [
           {
             "consumer": [
@@ -3743,6 +3718,31 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/event": {
+      "get": {
+        "operationId": "consumerEventGetConsumer_Event_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Collection"
                 }
               }
             }
@@ -3798,7 +3798,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3854,7 +3854,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3869,14 +3869,14 @@
         ]
       },
       "delete": {
-        "operationId": "consumerSubscriptionSubscriptionid09DeleteMessage",
+        "operationId": "consumerSubscriptionSubscriptionid09DeleteConsumer_Message",
         "responses": {
           "200": {
             "description": "DELETE 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -3930,13 +3930,53 @@
       "parameters": []
     },
     "\/consumer\/authorize": {
+      "get": {
+        "operationId": "consumerAuthorizeGetConsumer_Authorize_Meta",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Meta"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
       "post": {
-        "operationId": "consumerAuthorizePostConsumer_User_Authorize_Request",
+        "operationId": "consumerAuthorizePostConsumer_Authorize_Request",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Request"
+                "$ref": "#\/components\/schemas\/Consumer_Authorize_Request"
               }
             }
           }
@@ -3947,7 +3987,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Response"
                 }
               }
             }
@@ -4008,7 +4048,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -4062,7 +4102,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -4111,7 +4151,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -4145,7 +4185,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -5813,9 +5853,9 @@
           }
         }
       },
-      "Consumer_App_Developer_Collection": {
+      "Consumer_App_Collection": {
         "type": "object",
-        "title": "Consumer App Developer Collection",
+        "title": "Consumer App Collection",
         "properties": {
           "totalResults": {
             "type": "integer"
@@ -5828,6 +5868,18 @@
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_App"
             }
+          }
+        }
+      },
+      "Consumer_Message": {
+        "type": "object",
+        "title": "Consumer Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
           }
         }
       },
@@ -5847,9 +5899,9 @@
           }
         }
       },
-      "Consumer_App_Grant_Collection": {
+      "Consumer_Grant_Collection": {
         "type": "object",
-        "title": "Consumer App Grant Collection",
+        "title": "Consumer Grant Collection",
         "properties": {
           "entry": {
             "type": "array",
@@ -5875,24 +5927,6 @@
           }
         }
       },
-      "Consumer_App_Meta": {
-        "type": "object",
-        "title": "Consumer App Meta",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Consumer_Scope"
-            }
-          }
-        }
-      },
       "Consumer_Scope_Collection": {
         "type": "object",
         "title": "Consumer Scope Collection",
@@ -5907,6 +5941,40 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_Scope"
+            }
+          }
+        }
+      },
+      "Consumer_Event": {
+        "type": "object",
+        "title": "Consumer Event",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Event_Collection": {
+        "type": "object",
+        "title": "Consumer Event Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Event"
             }
           }
         }
@@ -5947,9 +6015,27 @@
           }
         }
       },
-      "Consumer_User_Authorize_Request": {
+      "Consumer_Authorize_Meta": {
         "type": "object",
-        "title": "Consumer User Authorize Request",
+        "title": "Consumer Authorize Meta",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Scope"
+            }
+          }
+        }
+      },
+      "Consumer_Authorize_Request": {
+        "type": "object",
+        "title": "Consumer Authorize Request",
         "properties": {
           "responseType": {
             "type": "string"
@@ -5977,9 +6063,9 @@
           "allow"
         ]
       },
-      "Consumer_User_Authorize_Token": {
+      "Consumer_Authorize_Token": {
         "type": "object",
-        "title": "Consumer User Authorize Token",
+        "title": "Consumer Authorize Token",
         "properties": {
           "access_token": {
             "type": "string"
@@ -5995,15 +6081,15 @@
           }
         }
       },
-      "Consumer_User_Authorize_Response": {
+      "Consumer_Authorize_Response": {
         "type": "object",
-        "title": "Consumer User Authorize Response",
+        "title": "Consumer Authorize Response",
         "properties": {
           "type": {
             "type": "string"
           },
           "token": {
-            "$ref": "#\/components\/schemas\/Consumer_User_Authorize_Token"
+            "$ref": "#\/components\/schemas\/Consumer_Authorize_Token"
           },
           "code": {
             "type": "string"

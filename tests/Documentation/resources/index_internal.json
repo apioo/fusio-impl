@@ -551,7 +551,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/developer",
+      "path": "\/consumer\/app\/",
       "methods": [
         "GET",
         "POST",
@@ -562,7 +562,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/developer\/$app_id<[0-9]+>",
+      "path": "\/consumer\/app\/$app_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -573,7 +573,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/grant",
+      "path": "\/consumer\/grant",
       "methods": [
         "GET",
         "POST",
@@ -584,18 +584,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/grant\/$grant_id<[0-9]+>",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/consumer\/app\/meta",
+      "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -607,6 +596,17 @@
     },
     {
       "path": "\/consumer\/scope",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/event",
       "methods": [
         "GET",
         "POST",
