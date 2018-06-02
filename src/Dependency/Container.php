@@ -140,14 +140,6 @@ class Container extends DefaultContainer
         );
     }
 
-    /**
-     * @return \Fusio\Impl\Logger
-     */
-    public function getApiLogger()
-    {
-        return new Logger($this->get('connection'));
-    }
-
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
