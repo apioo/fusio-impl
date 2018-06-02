@@ -37,8 +37,10 @@ class Subscription extends SchemaAbstract
         $sb = $this->getSchemaBuilder('Consumer Subscription');
         $sb->integer('id');
         $sb->integer('status');
-        $sb->string('event');
-        $sb->string('endpoint');
+        $sb->string('event')
+            ->setMinLength(3);
+        $sb->string('endpoint')
+            ->setMinLength(8);
 
         return $sb->getProperty();
     }
