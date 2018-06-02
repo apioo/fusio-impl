@@ -3816,14 +3816,14 @@
     },
     "\/consumer\/subscription\/{subscription_id}": {
       "get": {
-        "operationId": "consumerSubscriptionSubscriptionid09GetConsumer_Subscription_Collection",
+        "operationId": "consumerSubscriptionSubscriptionid09GetConsumer_Subscription",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Subscription"
                 }
               }
             }
@@ -6001,6 +6001,30 @@
           "endpoint": {
             "type": "string",
             "minLength": 8
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Subscription_Response"
+            }
+          }
+        }
+      },
+      "Consumer_Subscription_Response": {
+        "type": "object",
+        "title": "Consumer Subscription Response",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "attempts": {
+            "type": "integer"
+          },
+          "executeDate": {
+            "type": "string"
           }
         }
       },
