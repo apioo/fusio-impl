@@ -3838,12 +3838,12 @@
         ]
       },
       "put": {
-        "operationId": "consumerSubscriptionSubscriptionid09PutConsumer_Subscription",
+        "operationId": "consumerSubscriptionSubscriptionid09PutConsumer_App",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Subscription"
+                "$ref": "#\/components\/schemas\/Consumer_App"
               }
             }
           }
@@ -5833,7 +5833,8 @@
             "pattern": "^[A-z0-9\\-\\_]{3,64}$"
           },
           "url": {
-            "type": "string"
+            "type": "string",
+            "minLength": 8
           },
           "appKey": {
             "type": "string"
@@ -5851,7 +5852,11 @@
               "type": "string"
             }
           }
-        }
+        },
+        "required": [
+          "event",
+          "endpoint"
+        ]
       },
       "Consumer_App_Collection": {
         "type": "object",
@@ -5990,10 +5995,12 @@
             "type": "integer"
           },
           "event": {
-            "type": "string"
+            "type": "string",
+            "minLength": 3
           },
           "endpoint": {
-            "type": "string"
+            "type": "string",
+            "minLength": 8
           }
         }
       },

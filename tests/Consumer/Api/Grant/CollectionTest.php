@@ -90,7 +90,8 @@ class CollectionTest extends ControllerDbTestCase
                         "pattern": "^[A-z0-9\\-\\_]{3,64}$"
                     },
                     "url": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 8
                     },
                     "appKey": {
                         "type": "string"
