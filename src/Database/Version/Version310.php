@@ -366,7 +366,7 @@ class Version310 implements VersionInterface
         $eventSubscriptionTable->addForeignKeyConstraint($eventTable, array('eventId'), array('id'), array(), 'eventSubscriptionEventId');
         $eventSubscriptionTable->addForeignKeyConstraint($userTable, array('userId'), array('id'), array(), 'eventSubscriptionUserId');
 
-        $eventTriggerTable->addForeignKeyConstraint($eventTriggerTable, array('eventId'), array('id'), array(), 'eventTriggerEventId');
+        $eventTriggerTable->addForeignKeyConstraint($eventTable, array('eventId'), array('id'), array(), 'eventTriggerEventId');
 
         $routesMethodTable->addForeignKeyConstraint($routesTable, array('routeId'), array('id'), array(), 'routesMethodRouteId');
         $routesMethodTable->addForeignKeyConstraint($schemaTable, array('parameters'), array('id'), array(), 'routesMethodParameters');
