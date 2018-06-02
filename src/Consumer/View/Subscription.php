@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Impl\Table;
+use PSX\Sql\Reference;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -45,8 +47,8 @@ class Subscription extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, ['userId' => $userId], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'event' => 'name',
                 'endpoint' => 'endpoint',
             ]),
@@ -68,10 +70,16 @@ class Subscription extends ViewAbstract
                        AND eventSubscription.userId = :id';
 
         $definition = $this->doEntity($sql, ['userId' => $userId, 'id' => $subscriptionId], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'event' => 'name',
             'endpoint' => 'endpoint',
+            'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [$userId, new Reference('id')], [
+                'status' => $this->fieldInteger('status'),
+                'code' => $this->fieldInteger('code'),
+                'attempts' => $this->fieldInteger('attempts'),
+                'executeDate' => $this->fieldDateTime('executeDate'),
+            ]),
         ]);
 
         return $this->build($definition);
