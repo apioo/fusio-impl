@@ -28,6 +28,7 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
+use PSX\Http\Client\PostRequest;
 use PSX\Http\Exception as StatusCode;
 use PSX\Json\Parser;
 
@@ -138,7 +139,7 @@ class Register
 
     protected function verifyCaptcha($captcha, $secret)
     {
-        $request = new Http\PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
+        $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
             'secret'   => $secret,
             'response' => $captcha,
             'remoteip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
