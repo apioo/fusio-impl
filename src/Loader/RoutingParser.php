@@ -38,13 +38,24 @@ use PSX\Http\RequestInterface;
  */
 class RoutingParser implements LocationFinderInterface
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $connection;
 
+    /**
+     * @param \Doctrine\DBAL\Connection $connection
+     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
+    /**
+     * @param \PSX\Http\RequestInterface $request
+     * @param \Fusio\Impl\Loader\Context $context
+     * @return \PSX\Http\RequestInterface|null
+     */
     public function resolve(RequestInterface $request, Context $context)
     {
         $sql = 'SELECT id,
