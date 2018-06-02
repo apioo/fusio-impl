@@ -77,20 +77,26 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(500, $container[1]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
-        $this->assertEquals(2, count($responses));
+        $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['triggerId']);
         $this->assertEquals(1, $responses[0]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
-        $this->assertEquals(1, $responses[1]['triggerId']);
-        $this->assertEquals(2, $responses[1]['subscriptionId']);
-        $this->assertEquals(Table\Event\Response::STATUS_PENDING, $responses[1]['status']);
-        $this->assertEquals(500, $responses[1]['code']);
+        $this->assertEquals(2, $responses[1]['triggerId']);
+        $this->assertEquals(1, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
+        $this->assertEquals(200, $responses[1]['code']);
         $this->assertEquals(1, $responses[1]['attempts']);
+
+        $this->assertEquals(2, $responses[2]['triggerId']);
+        $this->assertEquals(2, $responses[2]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_PENDING, $responses[2]['status']);
+        $this->assertEquals(500, $responses[2]['code']);
+        $this->assertEquals(1, $responses[2]['attempts']);
     }
 
     public function testExecuteAttemptExceed()
@@ -137,20 +143,26 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(500, $container[3]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
-        $this->assertEquals(2, count($responses));
+        $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['triggerId']);
         $this->assertEquals(1, $responses[0]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
-        $this->assertEquals(1, $responses[1]['triggerId']);
-        $this->assertEquals(2, $responses[1]['subscriptionId']);
-        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[1]['status']);
-        $this->assertEquals(500, $responses[1]['code']);
-        $this->assertEquals(3, $responses[1]['attempts']);
+        $this->assertEquals(2, $responses[1]['triggerId']);
+        $this->assertEquals(1, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
+        $this->assertEquals(200, $responses[1]['code']);
+        $this->assertEquals(1, $responses[1]['attempts']);
+
+        $this->assertEquals(2, $responses[2]['triggerId']);
+        $this->assertEquals(2, $responses[2]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[2]['status']);
+        $this->assertEquals(500, $responses[2]['code']);
+        $this->assertEquals(3, $responses[2]['attempts']);
     }
 
     public function testExecuteExceptionExceeded()
@@ -183,20 +195,26 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals('{"foo":"bar"}', (string) $container[1]['request']->getBody());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
-        $this->assertEquals(2, count($responses));
+        $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['triggerId']);
         $this->assertEquals(1, $responses[0]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
-        $this->assertEquals(1, $responses[1]['triggerId']);
-        $this->assertEquals(2, $responses[1]['subscriptionId']);
-        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[1]['status']);
-        $this->assertEquals(null, $responses[1]['code']);
-        $this->assertEquals(3, $responses[1]['attempts']);
+        $this->assertEquals(2, $responses[1]['triggerId']);
+        $this->assertEquals(1, $responses[1]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
+        $this->assertEquals(200, $responses[1]['code']);
+        $this->assertEquals(1, $responses[1]['attempts']);
+
+        $this->assertEquals(2, $responses[2]['triggerId']);
+        $this->assertEquals(2, $responses[2]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_EXCEEDED, $responses[2]['status']);
+        $this->assertEquals(null, $responses[2]['code']);
+        $this->assertEquals(3, $responses[2]['attempts']);
     }
 
     public function testExecuteErrorThenSuccess()
@@ -236,20 +254,26 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(200, $container[2]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response');
+        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
-        $this->assertEquals(2, count($responses));
+        $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['triggerId']);
         $this->assertEquals(1, $responses[0]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
-        $this->assertEquals(1, $responses[1]['triggerId']);
-        $this->assertEquals(2, $responses[1]['subscriptionId']);
+        $this->assertEquals(2, $responses[1]['triggerId']);
+        $this->assertEquals(1, $responses[1]['subscriptionId']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
         $this->assertEquals(200, $responses[1]['code']);
-        $this->assertEquals(2, $responses[1]['attempts']);
+        $this->assertEquals(1, $responses[1]['attempts']);
+
+        $this->assertEquals(2, $responses[2]['triggerId']);
+        $this->assertEquals(2, $responses[2]['subscriptionId']);
+        $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[2]['status']);
+        $this->assertEquals(200, $responses[2]['code']);
+        $this->assertEquals(2, $responses[2]['attempts']);
     }
 
     private function newExecutor($mock, array &$container)

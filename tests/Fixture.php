@@ -110,6 +110,12 @@ class Fixture
                 ['eventId' => 1, 'userId' => 1, 'status' => 1, 'endpoint' => 'http://httpbin.org/post'],
                 ['eventId' => 1, 'userId' => 2, 'status' => 1, 'endpoint' => 'http://httpbin.org/post'],
             ],
+            'fusio_event_trigger' => [
+                ['eventId' => 1, 'status' => 2, 'payload' => '{"foo":"bar"}', 'insertDate' => '2018-06-02 14:24:30'],
+            ],
+            'fusio_event_response' => [
+                ['triggerId' => 1, 'subscriptionId' => 1, 'status' => 2, 'code' => 200, 'attempts' => 1, 'executeDate' => '2018-06-02 14:41:23', 'insertDate' => '2018-06-02 14:41:23'],
+            ],
             'fusio_deploy_migration' => [
                 ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
             ],

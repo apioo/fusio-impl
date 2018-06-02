@@ -50,10 +50,18 @@ class EntityTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "id": "1",
-    "status": "1",
+    "id": 1,
+    "status": 1,
     "event": "foo-event",
-    "endpoint": "http:\/\/httpbin.org\/post"
+    "endpoint": "http:\/\/httpbin.org\/post",
+    "responses": [
+        {
+            "status": 2,
+            "code": 200,
+            "attempts": 1,
+            "executeDate": "2018-06-02T14:41:23Z"
+        }
+    ]
 }
 JSON;
 
