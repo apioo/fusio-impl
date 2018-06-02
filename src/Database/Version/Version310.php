@@ -531,11 +531,11 @@ class Version310 implements VersionInterface
             ],
             'fusio_event' => [
             ],
-            'fusio_event_response' => [
-            ],
             'fusio_event_subscription' => [
             ],
             'fusio_event_trigger' => [
+            ],
+            'fusio_event_response' => [
             ],
             'fusio_audit' => [
             ],
