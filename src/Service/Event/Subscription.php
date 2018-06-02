@@ -142,6 +142,9 @@ class Subscription
             throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
         }
 
+        // delete all responses
+        $this->subscriptionTable->deleteAllResponses($subscriptionId);
+
         // remove subscription
         $record = [
             'id' => $subscription['id'],

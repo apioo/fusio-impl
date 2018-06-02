@@ -70,4 +70,11 @@ class Subscription extends TableAbstract
             'userId' => $userId
         ]);
     }
+
+    public function deleteAllResponses($subscriptionId)
+    {
+        return $this->connection->executeUpdate('DELETE FROM fusio_event_response WHERE subscriptionId = :subscriptionId', [
+            'subscriptionId' => $subscriptionId
+        ]);
+    }
 }
