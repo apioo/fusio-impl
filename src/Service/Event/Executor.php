@@ -21,20 +21,10 @@
 
 namespace Fusio\Impl\Service\Event;
 
-use Fusio\Engine\Model;
-use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Base;
-use Fusio\Impl\Event\Rate\CreatedEvent;
-use Fusio\Impl\Event\Rate\DeletedEvent;
-use Fusio\Impl\Event\Rate\UpdatedEvent;
-use Fusio\Impl\Event\RateEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Client\ClientInterface;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\Request;
-use PSX\Http\ResponseInterface;
-use PSX\Sql\Condition;
-use PSX\Uri\Uri;
 use PSX\Uri\Url;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

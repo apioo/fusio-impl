@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\Php\Action\PhpEngine;
-use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory\ResolverInterface;
 
 /**

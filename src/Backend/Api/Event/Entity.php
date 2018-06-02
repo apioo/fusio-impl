@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;

@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Controller;
 
 use Fusio\Engine\Context as EngineContext;
-use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Filter\AssertMethod;

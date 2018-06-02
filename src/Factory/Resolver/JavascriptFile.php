@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\V8\Action\V8Engine;
-use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory\ResolverInterface;
 
 /**
