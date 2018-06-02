@@ -36,7 +36,7 @@ class Update extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema(Schema\App::class);
-        $schema->setRequired(['name', 'url']);
+        $schema->setRequired(['name', 'url', 'scopes']);
 
         return $schema;
     }
