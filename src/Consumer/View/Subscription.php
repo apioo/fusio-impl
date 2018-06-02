@@ -66,8 +66,8 @@ class Subscription extends ViewAbstract
                       FROM fusio_event_subscription eventSubscription
                 INNER JOIN fusio_event event
                         ON eventSubscription.eventId = event.id
-                     WHERE eventSubscription.userId = :userId
-                       AND eventSubscription.userId = :id';
+                     WHERE eventSubscription.id = :id
+                       AND eventSubscription.userId = :userId';
 
         $definition = $this->doEntity($sql, ['userId' => $userId, 'id' => $subscriptionId], [
             'id' => $this->fieldInteger('id'),
