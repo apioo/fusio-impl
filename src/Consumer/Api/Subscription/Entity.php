@@ -52,7 +52,7 @@ class Entity extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Subscription\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Subscription::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')

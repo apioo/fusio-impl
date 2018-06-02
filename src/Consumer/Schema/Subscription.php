@@ -34,6 +34,13 @@ class Subscription extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('Consumer Subscription Response');
+        $sb->integer('status');
+        $sb->integer('code');
+        $sb->integer('attempts');
+        $sb->string('executeDate');
+        $response = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('Consumer Subscription');
         $sb->integer('id');
         $sb->integer('status');
@@ -41,6 +48,8 @@ class Subscription extends SchemaAbstract
             ->setMinLength(3);
         $sb->string('endpoint')
             ->setMinLength(8);
+        $sb->arrayType('responses')
+            ->setItems($response);
 
         return $sb->getProperty();
     }
