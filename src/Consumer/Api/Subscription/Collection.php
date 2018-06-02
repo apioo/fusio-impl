@@ -57,7 +57,7 @@ class Collection extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Subscription::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Subscription\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
