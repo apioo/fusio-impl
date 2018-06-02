@@ -106,15 +106,15 @@ class DetailCommandAbstract extends Command
         } elseif ($element instanceof Form\Element\Connection) {
             return '';
         } elseif ($element instanceof Form\Element\Input) {
-            return $element->type;
+            return $element->getType();
         } elseif ($element instanceof Form\Element\Select) {
             $options = [];
-            foreach ($element->options as $option) {
+            foreach ($element->getOptions() as $option) {
                 $options[] = $option['key'] . ': ' . $option['value'];
             }
             return implode(', ', $options);
         } elseif ($element instanceof Form\Element\TextArea) {
-            return $element->mode;
+            return $element->getMode();
         } else {
             return '';
         }
