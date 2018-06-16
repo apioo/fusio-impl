@@ -31,6 +31,16 @@ namespace Fusio\Impl\Service\System\WebServer;
 abstract class GeneratorAbstract implements GeneratorInterface
 {
     /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    public function __construct()
+    {
+        $this->twig = $this->newTwig();
+    }
+
+    /**
      * @inheritdoc
      */
     public function generate(Configuration $configuration, $file)
@@ -71,14 +81,7 @@ abstract class GeneratorAbstract implements GeneratorInterface
      */
     private function render(array $context)
     {
-        $loader = new \Twig_Loader_Filesystem([__DIR__ . '/Generator/Resource']);
-        $twig   = new \Twig_Environment($loader, [
-            'cache' => PSX_PATH_CACHE,
-            'debug' => true,
-            'autoescape' => false,
-        ]);
-
-        return $twig->render($this->getName() . '.conf.twig', $context);
+        return $this->twig->render($this->getName() . '.conf.twig', $context);
     }
 
     /**
@@ -101,5 +104,24 @@ abstract class GeneratorAbstract implements GeneratorInterface
         }
 
         return file_put_contents($file, $config);
+    }
+
+    /**
+     * Creates a new twig environment. Note we explicit ignore any cache
+     * settings since we dont want that the template engine writes to the
+     * filesystem which could create problems on docker where it is not possible
+     * to write to the fs. Also since it is executed through a command
+     * performance is not an issue
+     * 
+     * @return \Twig_Environment
+     */
+    private function newTwig()
+    {
+        $loader = new \Twig_Loader_Filesystem([__DIR__ . '/Generator/Resource']);
+        $twig   = new \Twig_Environment($loader, [
+            'autoescape' => false,
+        ]);
+
+        return $twig;
     }
 }
