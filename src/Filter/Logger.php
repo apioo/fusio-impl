@@ -130,9 +130,14 @@ class Logger implements FilterInterface
             $this->appendError($previousException);
         }
 
+        $message = $exception->getMessage();
+        if (strlen($message) > 500) {
+            $message = substr($message, 0, 500);
+        }
+
         $this->connection->insert('fusio_log_error', array(
             'logId'   => $this->context->getLogId(),
-            'message' => $exception->getMessage(),
+            'message' => $message,
             'trace'   => $exception->getTraceAsString(),
             'file'    => $exception->getFile(),
             'line'    => $exception->getLine(),
