@@ -162,7 +162,38 @@ class LoggerTest extends DbTestCase
         $this->assertEquals(3, $error['logId']);
         $this->assertEquals('foo', $error['message']);
     }
-    
+
+    public function testAppendErrorLongMessage()
+    {
+        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
+        $response = new Response();
+
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->once())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response))
+            ->willReturnCallback(function(){
+                throw new \RuntimeException(str_repeat('a', 600));
+            });
+
+        try {
+            $logger = new Logger($this->connection, $this->newContext());
+            $logger->handle($request, $response, $filterChain);
+
+            $this->fail('Should throw an exception');
+        } catch (\RuntimeException $e) {
+        }
+
+        $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
+
+        $this->assertEquals(2, $error['id']);
+        $this->assertEquals(3, $error['logId']);
+        $this->assertEquals(str_repeat('a', 500), $error['message']);
+    }
+
     private function newContext()
     {
         $app = new App();
