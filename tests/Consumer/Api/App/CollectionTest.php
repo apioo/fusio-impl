@@ -217,6 +217,28 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetUnauthorized()
+    {
+        Environment::getService('config')->set('psx_debug', false);
+
+        $response = $this->sendRequest('/consumer/app', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
+{
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "Missing authorization header"
+}
+JSON;
+
+        $this->assertEquals(401, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/consumer/app', 'POST', array(

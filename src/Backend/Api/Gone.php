@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Api;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Http\Exception as StatusCode;
 
@@ -34,8 +33,6 @@ use PSX\Http\Exception as StatusCode;
  */
 class Gone extends ControllerAbstract
 {
-    use ProtectionTrait;
-
     public function onLoad()
     {
         throw new StatusCode\GoneException('Resource is not longer available');

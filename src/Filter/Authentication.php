@@ -84,10 +84,10 @@ class Authentication implements FilterInterface
             $needsAuth = false;
         } else {
             $method = $this->context->getMethod();
-            if (isset($method['public'])) {
+            if (is_array($method)) {
                 $needsAuth = !$method['public'];
             } else {
-                $needsAuth = false;
+                $needsAuth = true;
             }
         }
 
