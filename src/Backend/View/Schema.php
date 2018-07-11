@@ -78,4 +78,23 @@ class Schema extends ViewAbstract
 
         return $this->build($definition);
     }
+
+    public function getEntityWithForm($name)
+    {
+        if (is_numeric($name)) {
+            $method = 'get';
+        } else {
+            $method = 'getOneByName';
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
+            'id' => 'id',
+            'status' => 'status',
+            'name' => 'name',
+            'cache' => 'cache',
+            'form' => 'form',
+        ]);
+
+        return $this->build($definition);
+    }
 }

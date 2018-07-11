@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Export\Schema;
 
-use PSX\Sql\TableAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * Schema
@@ -30,25 +30,18 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Schema extends TableAbstract
+class Schema extends SchemaAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
+    public function getDefinition()
     {
-        return 'fusio_schema';
-    }
+        $sb = $this->getSchemaBuilder('Export Schema');
+        $sb->objectType('schema')
+            ->setTitle('Export Schema JsonSchema')
+            ->setDescription('Contains a JsonSchema');
+        $sb->objectType('form')
+            ->setTitle('Export Schema Form')
+            ->setDescription('Contains a ui vocabulary to augment the request JsonSchema');
 
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'source' => self::TYPE_JSON,
-            'cache' => self::TYPE_TEXT,
-            'form' => self::TYPE_JSON,
-        );
+        return $sb->getProperty();
     }
 }
