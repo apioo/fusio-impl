@@ -33,6 +33,7 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Database\VersionInterface;
+use Fusio\Impl\Export;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
@@ -280,6 +281,7 @@ class Version312 implements VersionInterface
         $schemaTable->addColumn('name', 'string', array('length' => 255));
         $schemaTable->addColumn('source', 'text');
         $schemaTable->addColumn('cache', 'blob');
+        $schemaTable->addColumn('form', 'text', array('notnull' => false, 'default' => null));
         $schemaTable->setPrimaryKey(array('id'));
         $schemaTable->addUniqueIndex(array('name'));
 
@@ -562,7 +564,7 @@ class Version312 implements VersionInterface
                 ['class' => Adapter\File\Action\FileProcessor::class],
             ],
             'fusio_schema' => [
-                ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache]
+                ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rateLimit' => 720, 'timespan' => 'PT1H'],
@@ -644,6 +646,7 @@ class Version312 implements VersionInterface
                 ['status' => 1, 'priority' => 0x2000000 | 1,   'methods' => 'GET', 'path' => '/doc',                                         'controller' => Tool\Documentation\IndexController::class],
                 ['status' => 1, 'priority' => 0x2000000 | 0,   'methods' => 'GET', 'path' => '/doc/:version/*path',                          'controller' => Tool\Documentation\DetailController::class],
 
+                ['status' => 1, 'priority' => 0x1000000 | 4,   'methods' => 'ANY', 'path' => '/export/schema/:name',                         'controller' => Export\Api\Schema::class],
                 ['status' => 1, 'priority' => 0x1000000 | 3,   'methods' => 'GET', 'path' => '/export/openapi/:version/*path',               'controller' => Generator\OpenAPIController::class],
                 ['status' => 1, 'priority' => 0x1000000 | 2,   'methods' => 'GET', 'path' => '/export/raml/:version/*path',                  'controller' => Generator\RamlController::class],
                 ['status' => 1, 'priority' => 0x1000000 | 1,   'methods' => 'GET', 'path' => '/export/swagger/:version/*path',               'controller' => Generator\SwaggerController::class],
