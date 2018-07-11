@@ -75,6 +75,7 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
             $tokenUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
 
             $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPIAbstract::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, $refreshUrl, $appScopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $appScopes);
             $generator->setAuthorizationFlow(Authorization::APP, Generator\OpenAPIAbstract::FLOW_PASSWORD, null, $tokenUrl, $refreshUrl, $appScopes);
 
             $tokenUrl = $this->url . '/' . $this->dispatch . 'backend/token';
