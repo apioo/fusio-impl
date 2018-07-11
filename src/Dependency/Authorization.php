@@ -56,6 +56,13 @@ trait Authorization
             $this->get('config')->get('fusio_expire_app')
         ));
 
+        $factory->add(new ApiAuthorization\ClientCredentials(
+            $this->get('app_service'),
+            $this->get('scope_service'),
+            $this->get('user_service'),
+            $this->get('config')->get('fusio_expire_app')
+        ));
+
         $factory->add(new ApiAuthorization\RefreshToken(
             $this->get('app_service'),
             $this->get('config')->get('fusio_expire_app'),
