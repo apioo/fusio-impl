@@ -91,7 +91,7 @@ JSON;
     }
 
     /**
-     * A pending app can not request an API token
+     * A deactivated app can not request an API token
      */
     public function testPostDeactivated()
     {
