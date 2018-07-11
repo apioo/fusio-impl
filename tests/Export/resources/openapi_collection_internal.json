@@ -4309,6 +4309,24 @@
         }
       },
       "parameters": []
+    },
+    "\/export\/schema\/{name}": {
+      "get": {
+        "operationId": "exportSchemaNameGetExport_Schema",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
     }
   },
   "components": {
@@ -6348,6 +6366,28 @@
             }
           }
         }
+      },
+      "Export_Schema_JsonSchema": {
+        "type": "object",
+        "title": "Export Schema JsonSchema",
+        "description": "Contains a JsonSchema"
+      },
+      "Export_Schema_Form": {
+        "type": "object",
+        "title": "Export Schema Form",
+        "description": "Contains a ui vocabulary to augment the request JsonSchema"
+      },
+      "Export_Schema": {
+        "type": "object",
+        "title": "Export Schema",
+        "properties": {
+          "schema": {
+            "$ref": "#\/components\/schemas\/Export_Schema_JsonSchema"
+          },
+          "form": {
+            "$ref": "#\/components\/schemas\/Export_Schema_Form"
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -6355,6 +6395,15 @@
         "type": "oauth2",
         "flows": {
           "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
+            }
+          },
+          "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {

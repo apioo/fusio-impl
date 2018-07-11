@@ -109,6 +109,39 @@
       }
     },
     "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "authorization": "Authorization API endpoint"
+            }
+          }
+        }
+      },
       "backend": {
         "type": "oauth2",
         "flows": {
@@ -129,30 +162,6 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "consumer": "Consumer API endpoint"
-            }
-          }
-        }
-      },
-      "app": {
-        "type": "oauth2",
-        "flows": {
-          "password": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
-            }
-          },
-          "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
             }
           }
         }

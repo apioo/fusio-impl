@@ -772,6 +772,17 @@
         "GET"
       ],
       "version": "*"
+    },
+    {
+      "path": "\/export\/schema\/:name",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
     }
   ],
   "links": [
