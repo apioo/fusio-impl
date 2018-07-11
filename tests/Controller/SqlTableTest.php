@@ -457,6 +457,7 @@ JSON;
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
+            'link' => ['<http://127.0.0.1/export/schema/3>; rel="post-schema"'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -514,6 +515,7 @@ JSON;
             'access-control-allow-origin' => ['*'],
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
+            'link' => ['<http://127.0.0.1/export/schema/3>; rel="post-schema"'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
