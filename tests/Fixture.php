@@ -57,8 +57,9 @@ class Fixture
 
     protected static function getTestInserts()
     {
-        $schemaEntrySource = self::getEntrySchema();
-        $schemaCollectionSource = self::getCollectionSchema();
+        $schemaEntrySource = file_get_contents(__DIR__ . '/resources/entry_schema.json');
+        $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
+        $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
         $parser = new JsonSchema();
         $schemaEntry = $parser->parse($schemaEntrySource);
@@ -166,7 +167,7 @@ class Fixture
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => serialize($schemaCollection)],
-                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => serialize($schemaEntry)],
+                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => serialize($schemaEntry), 'form' => $schemaEntryForm],
             ],
             'fusio_scope' => [
                 ['name' => 'foo', 'description' => 'Foo access'],
@@ -209,74 +210,6 @@ class Fixture
                 ['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'],
             ],
         ];
-    }
-
-    private static function getEntrySchema()
-    {
-        return <<<'JSON'
-{
-    "title": "entry",
-    "type": "object",
-    "properties": {
-        "id": {
-            "type": "integer"
-        },
-        "title": {
-            "type": "string"
-        },
-        "content": {
-            "type": "string"
-        },
-        "date": {
-            "type": "string",
-            "format": "date-time"
-        }
-    }
-}
-JSON;
-    }
-
-    private static function getCollectionSchema()
-    {
-        return <<<'JSON'
-{
-    "title": "collection",
-    "type": "object",
-    "properties": {
-        "totalResults": {
-            "type": "integer"
-        },
-        "itemsPerPage": {
-            "type": "integer"
-        },
-        "startIndex": {
-            "type": "integer"
-        },
-        "entry": {
-            "type": "array",
-            "items": {
-                "title": "entry",
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            }
-        }
-    }
-}
-JSON;
     }
 
     public static function getLastRouteId()

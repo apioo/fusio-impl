@@ -1,0 +1,12 @@
+{
+  "title": {
+    "ui:autofocus": true,
+    "ui:emptyValue": ""
+  },
+  "content": {
+    "ui:widget": "textarea"
+  },
+  "date": {
+    "ui:widget": "alt-datetime"
+  }
+}
