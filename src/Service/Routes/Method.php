@@ -218,11 +218,46 @@ class Method
         return $this->methodTable->getMethod($routeId, $version, $method);
     }
 
+    /**
+     * @param integer $routeId
+     * @param string $version
+     * @return array
+     */
     public function getAllowedMethods($routeId, $version)
     {
         return $this->methodTable->getAllowedMethods($routeId, $version);
     }
 
+    /**
+     * @param integer $routeId
+     * @param string $version
+     * @return array
+     */
+    public function getRequestSchemas($routeId, $version)
+    {
+        if ($version == '*' || empty($version)) {
+            $version = $this->methodTable->getLatestVersion($routeId);
+        } else {
+            $version = $this->methodTable->getVersion($routeId, $version);
+        }
+
+        if (empty($version)) {
+            throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
+        }
+
+        $methods = $this->methodTable->getMethods($routeId, $version);
+        $schemas = [];
+
+        foreach ($methods as $method) {
+            $schemaId = $method['request'];
+            if (!empty($schemaId)) {
+                $schemas[$method['method']] = $schemaId;
+            }
+        }
+
+        return $schemas;
+    }
+    
     private function getStatusFromMethods(array $methods)
     {
         $method = reset($methods);
