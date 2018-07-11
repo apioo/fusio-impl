@@ -175,21 +175,21 @@ JSON;
         {
             "id": 72,
             "scopeId": 5,
-            "routeId": 78,
+            "routeId": 79,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 71,
             "scopeId": 5,
-            "routeId": 77,
+            "routeId": 78,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 70,
             "scopeId": 5,
-            "routeId": 76,
+            "routeId": 77,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
