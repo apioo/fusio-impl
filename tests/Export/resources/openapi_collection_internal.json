@@ -1987,6 +1987,40 @@
       },
       "parameters": []
     },
+    "\/backend\/schema\/form\/{schema_id}": {
+      "put": {
+        "operationId": "backendSchemaFormSchemaid09PutSchema_Form",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Schema_Form"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/schema\/preview\/{schema_id}": {
       "post": {
         "operationId": "backendSchemaPreviewSchemaid09PostSchema_Preview_Response",
@@ -5366,6 +5400,12 @@
             }
           }
         }
+      },
+      "Schema_Form": {
+        "type": "object",
+        "title": "Schema Form",
+        "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
+        "additionalProperties": true
       },
       "Schema_Preview_Response": {
         "type": "object",

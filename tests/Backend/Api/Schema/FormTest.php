@@ -57,19 +57,11 @@ class FormTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Schema_Form_Object": {
-                "type": "object",
-                "title": "Schema Form Object",
-                "additionalProperties": true
-            },
             "Schema_Form": {
                 "type": "object",
                 "title": "Schema Form",
-                "properties": {
-                    "form": {
-                        "$ref": "#\/definitions\/Schema_Form_Object"
-                    }
-                }
+                "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
+                "additionalProperties": true
             },
             "Message": {
                 "type": "object",
@@ -163,9 +155,7 @@ JSON;
         $response = $this->sendRequest('/backend/schema/form/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ), json_encode([
-            'form' => $form,
-        ]));
+        ), json_encode($form));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
