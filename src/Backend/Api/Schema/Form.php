@@ -67,7 +67,7 @@ class Form extends BackendApiAbstract
     {
         $this->schemaService->updateForm(
             (int) $context->getUriFragment('schema_id'),
-            $record->form,
+            $record,
             $this->context->getUserContext()
         );
 

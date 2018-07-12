@@ -34,12 +34,9 @@ class Form extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Schema Form Object');
-        $sb->setAdditionalProperties(true);
-        $form = $sb->getProperty();
-
         $sb = $this->getSchemaBuilder('Schema Form');
-        $sb->objectType('form', $form);
+        $sb->setDescription('Contains a JsonSchema UI vocabulary to describe the UI of the schema');
+        $sb->setAdditionalProperties(true);
 
         return $sb->getProperty();
     }
