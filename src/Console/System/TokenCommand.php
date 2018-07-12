@@ -77,7 +77,7 @@ class TokenCommand extends Command
             ->setDescription('Generates a new access token')
             ->addArgument('appId', InputArgument::REQUIRED, 'Name or ID of the app')
             ->addArgument('userId', InputArgument::REQUIRED, 'Name or ID of the user')
-            ->addArgument('scopes', InputArgument::REQUIRED, 'Comma seperated list of scopes')
+            ->addArgument('scopes', InputArgument::REQUIRED, 'Comma separated list of scopes')
             ->addArgument('expire', InputArgument::REQUIRED, 'Interval when the token expires (i.e. P1D for one day)');
     }
 
