@@ -48,7 +48,20 @@ class ExecuteCommandTest extends ControllerDbTestCase
         $dispatcher = Environment::getService('engine_dispatcher');
 
         // dispatch event
-        $dispatcher->dispatch('foo-event', ['foo' => 'bar']);
+        $dispatcher->dispatch('foo-event', [
+            'branch' => getenv('TRAVIS_BRANCH'),
+            'build_id' => getenv('TRAVIS_BUILD_ID'),
+            'build_number' => getenv('TRAVIS_BUILD_NUMBER'),
+            'commit' => getenv('TRAVIS_COMMIT'),
+            'commit_message' => getenv('TRAVIS_COMMIT_MESSAGE'),
+            'event_type' => getenv('TRAVIS_EVENT_TYPE'),
+            'job_id' => getenv('TRAVIS_JOB_ID'),
+            'job_number' => getenv('TRAVIS_JOB_NUMBER'),
+            'os_name' => getenv('TRAVIS_OS_NAME'),
+            'repo_slug' => getenv('TRAVIS_REPO_SLUG'),
+            'travis_tag' => getenv('TRAVIS_TAG'),
+            'php_version' => getenv('TRAVIS_PHP_VERSION'),
+        ]);
 
         $command = Environment::getService('console')->find('event:execute');
 
