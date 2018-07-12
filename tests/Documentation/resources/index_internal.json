@@ -342,7 +342,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
+      "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -353,7 +353,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+      "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
