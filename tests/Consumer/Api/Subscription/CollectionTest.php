@@ -52,10 +52,10 @@ class CollectionTest extends ControllerDbTestCase
 {
     "entry": [
         {
-            "id": "1",
-            "status": "1",
+            "id": 1,
+            "status": 1,
             "event": "foo-event",
-            "endpoint": "http:\/\/httpbin.org\/post"
+            "endpoint": "http:\/\/www.fusio-project.org\/ping"
         }
     ]
 }

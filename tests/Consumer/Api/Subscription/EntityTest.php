@@ -53,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 1,
     "status": 1,
     "event": "foo-event",
-    "endpoint": "http:\/\/httpbin.org\/post",
+    "endpoint": "http:\/\/www.fusio-project.org\/ping",
     "responses": [
         {
             "status": 2,
