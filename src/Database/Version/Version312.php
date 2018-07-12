@@ -603,6 +603,7 @@ class Version312 implements VersionInterface
                 ['status' => 1, 'priority' => 0x10000000 | 20, 'methods' => 'ANY', 'path' => '/backend/routes/$route_id<[0-9]+>',            'controller' => Backend\Api\Routes\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 19, 'methods' => 'ANY', 'path' => '/backend/schema',                              'controller' => Backend\Api\Schema\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 18, 'methods' => 'ANY', 'path' => '/backend/schema/preview/$schema_id<[0-9]+>',   'controller' => Backend\Api\Schema\Preview::class],
+                ['status' => 1, 'priority' => 0x10000000 | 18, 'methods' => 'ANY', 'path' => '/backend/schema/form/$schema_id<[0-9]+>',      'controller' => Backend\Api\Schema\Form::class],
                 ['status' => 1, 'priority' => 0x10000000 | 17, 'methods' => 'ANY', 'path' => '/backend/schema/$schema_id<[0-9]+>',           'controller' => Backend\Api\Schema\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 16, 'methods' => 'ANY', 'path' => '/backend/scope',                               'controller' => Backend\Api\Scope\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 15, 'methods' => 'ANY', 'path' => '/backend/scope/$scope_id<[0-9]+>',             'controller' => Backend\Api\Scope\Entity::class],

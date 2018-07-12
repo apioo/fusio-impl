@@ -161,6 +161,26 @@ class Schema
         $this->eventDispatcher->dispatch(SchemaEvents::DELETE, new DeletedEvent($schemaId, $schema, $context));
     }
 
+    public function updateForm($schemaId, $form, UserContext $context)
+    {
+        $schema = $this->schemaTable->get($schemaId);
+
+        if (empty($schema)) {
+            throw new StatusCode\NotFoundException('Could not find schema');
+        }
+
+        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Schema was deleted');
+        }
+
+        $record = [
+            'id'   => $schema->id,
+            'form' => $form,
+        ];
+
+        $this->schemaTable->update($record);
+    }
+
     public function getHtmlPreview($schemaId)
     {
         $schema = $this->schemaTable->get($schemaId);
