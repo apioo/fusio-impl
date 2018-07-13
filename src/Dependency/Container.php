@@ -210,7 +210,6 @@ class Container extends DefaultContainer
         $application->add(new Console\User\ListCommand($this->get('table_manager')->getTable(View\User::class)));
 
         // migrations commands
-        $application->add(new Migrations\DiffCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Migrations\ExecuteCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Migrations\GenerateCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Migrations\LatestCommand($this->get('connection'), $this->get('connector')));
