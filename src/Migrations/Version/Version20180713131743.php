@@ -10,6 +10,7 @@ use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
+use Fusio\Impl\Connection\System;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Export;
@@ -116,6 +117,7 @@ class Version20180713131743 extends AbstractMigration
                 ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
             ],
             'fusio_connection' => [
+                ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => null],
             ],
             'fusio_event' => [
             ],

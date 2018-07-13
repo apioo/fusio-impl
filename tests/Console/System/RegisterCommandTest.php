@@ -83,7 +83,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             'name' => 'Adapter-Connection',
         ]);
 
-        $this->assertEquals(2, $connection['id']);
+        $this->assertEquals(3, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 
@@ -123,7 +123,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => '2'], unserialize($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 3], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -196,7 +196,7 @@ JSON;
             'name' => 'Adapter-Connection',
         ]);
 
-        $this->assertEquals(2, $connection['id']);
+        $this->assertEquals(3, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 
@@ -235,7 +235,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => '2'], unserialize($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 3], unserialize($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [

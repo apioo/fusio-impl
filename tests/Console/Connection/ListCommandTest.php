@@ -55,6 +55,7 @@ class ListCommandTest extends ControllerDbTestCase
 +----+--------+
 | ID | Name   |
 +----+--------+
+| 2  | Test   |
 | 1  | System |
 +----+--------+
 

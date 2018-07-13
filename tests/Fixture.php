@@ -84,7 +84,7 @@ class Fixture
             ],
             'fusio_action' => [
                 ['status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => serialize(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => serialize(['connection' => 1, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => serialize(['connection' => 2, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
                 ['status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => serialize([]), 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_app' => [
@@ -99,7 +99,7 @@ class Fixture
                 ['appId' => 1, 'userId' => 1, 'refId' => 1, 'event' => 'app.update', 'ip' => '127.0.0.1', 'message' => 'Created schema foo', 'content' => null, 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_connection' => [
-                ['status' => 1, 'name' => 'System', 'class' => Environment::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
+                ['status' => 1, 'name' => 'Test', 'class' => Environment::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_cronjob' => [
                 ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 3, 'executeDate' => '2015-02-27 19:59:15', 'exitCode' => 0],

@@ -203,7 +203,7 @@ JSON;
     "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
     "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
     "config": {
-        "connection": 1,
+        "connection": 2,
         "table": "app_news"
     },
     "date": "2015-02-27T19:59:15Z"

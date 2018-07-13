@@ -38,8 +38,14 @@
   "connection": [
     {
       "status": 1,
-      "name": "System",
+      "name": "Test",
       "class": "Fusio\\Impl\\Tests\\Connection\\Environment",
+      "config": {}
+    },
+    {
+      "status": 1,
+      "name": "System",
+      "class": "Fusio\\Impl\\Connection\\System",
       "config": {}
     }
   ],
@@ -130,7 +136,7 @@
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
-        "connection": "System",
+        "connection": "Test",
         "table": "app_news"
       },
       "date": "[datetime]"

@@ -194,10 +194,8 @@ JSON;
     "id": 1,
     "status": 1,
     "name": "System",
-    "class": "Fusio\\Impl\\Tests\\Connection\\Environment",
-    "config": {
-        "foo": "bar"
-    }
+    "class": "Fusio\\Impl\\Connection\\System",
+    "config": {}
 }
 JSON;
 
@@ -308,7 +306,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_connection')
-            ->orderBy('id', 'DESC')
+            ->where('id = 1')
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
