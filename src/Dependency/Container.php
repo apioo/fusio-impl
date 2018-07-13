@@ -129,7 +129,7 @@ class Container extends DefaultContainer
     {
         $params = $this->get('config')->get('psx_connection');
         $config = new DBAL\Configuration();
-        $config->setFilterSchemaAssetsExpression("~^(?!fusio_)~");
+        $config->setFilterSchemaAssetsExpression("~^fusio_~");
 
         return DBAL\DriverManager::getConnection($params, $config);
     }

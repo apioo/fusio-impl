@@ -56,7 +56,7 @@ class System implements ConnectionInterface, ContainerAwareInterface
     {
         $params = $this->container->get('config')->get('psx_connection');
         $config = new DBAL\Configuration();
-        $config->setFilterSchemaAssetsExpression("~^fusio_~");
+        $config->setFilterSchemaAssetsExpression("~^(?!fusio_)~");
 
         return DBAL\DriverManager::getConnection($params, $config);
     }
