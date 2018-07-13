@@ -30,7 +30,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for checking if your database is up to date or not.
+ * Command for checking if your database is up to date or not
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.gnu.org/licenses/agpl-3.0
+ * @link    http://fusio-project.org
  */
 class UpToDateCommand extends DoctrineUpToDateCommand
 {

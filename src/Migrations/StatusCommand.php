@@ -30,7 +30,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command to view the status of a set of migrations.
+ * Command to view the status of a set of migrations
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.gnu.org/licenses/agpl-3.0
+ * @link    http://fusio-project.org
  */
 class StatusCommand extends DoctrineStatusCommand
 {

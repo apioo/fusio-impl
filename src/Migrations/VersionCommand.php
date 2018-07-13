@@ -30,7 +30,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for manually adding and deleting migration versions from the version table.
+ * Command for manually adding and deleting migration versions from the version
+ * table
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.gnu.org/licenses/agpl-3.0
+ * @link    http://fusio-project.org
  */
 class VersionCommand extends DoctrineVersionCommand
 {

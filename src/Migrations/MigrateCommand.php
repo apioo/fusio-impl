@@ -30,7 +30,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for executing a migration to a specified version or the latest available version.
+ * Command for executing a migration to a specified version or the latest
+ * available version
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.gnu.org/licenses/agpl-3.0
+ * @link    http://fusio-project.org
  */
 class MigrateCommand extends DoctrineMigrateCommand
 {
