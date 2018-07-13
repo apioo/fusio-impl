@@ -75,7 +75,7 @@ class ConfigurationBuilder
         $configuration = new Migrations\Configuration\Configuration($connection, $outputWriter);
         $configuration->setName($connectionId . ' migrations');
         $configuration->setMigrationsNamespace(self::getBaseNamespace() . '\\Migrations\\' . $namespace);
-        $configuration->setMigrationsTableName('fusio_migration_versions');
+        $configuration->setMigrationsTableName(strtolower($namespace) . '_migration_versions');
         $configuration->setMigrationsDirectory(PSX_PATH_SRC . '/Migrations/' . $namespace);
 
         $configuration->registerMigrationsFromDirectory($configuration->getMigrationsDirectory());
@@ -96,7 +96,7 @@ class ConfigurationBuilder
         $composer = \json_decode(\file_get_contents($composerFile), true);
 
         if (isset($composer['autoload'])) {
-            $paths = $composer['psr-4'] ?? [];
+            $paths = $composer['autoload']['psr-4'] ?? [];
             $base  = trim(key($paths), '\\');
 
             if (!empty($base)) {
