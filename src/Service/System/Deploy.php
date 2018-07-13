@@ -37,7 +37,6 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Deploy
 {
-    const TYPE_MIGRATION = 'migration';
     const TYPE_SERVER = 'server';
 
     /**
@@ -46,24 +45,17 @@ class Deploy
     protected $importService;
 
     /**
-     * @var \Fusio\Impl\Service\System\Migration
-     */
-    protected $migrationService;
-
-    /**
      * @var \Fusio\Impl\Service\System\WebServer
      */
     protected $webServerService;
 
     /**
      * @param \Fusio\Impl\Service\System\Import $importService
-     * @param \Fusio\Impl\Service\System\Migration $migrationService
      * @param \Fusio\Impl\Service\System\WebServer $webServerService
      */
-    public function __construct(Import $importService, Migration $migrationService, WebServer $webServerService)
+    public function __construct(Import $importService, WebServer $webServerService)
     {
         $this->importService    = $importService;
-        $this->migrationService = $migrationService;
         $this->webServerService = $webServerService;
     }
 
@@ -111,14 +103,6 @@ class Deploy
 
         // import definition
         $result = $this->importService->import(json_encode($import));
-
-        // migration
-        $migration = isset($data[self::TYPE_MIGRATION]) ? $data[self::TYPE_MIGRATION] : [];
-        $migration = IncludeDirective::resolve($migration, $basePath, self::TYPE_MIGRATION);
-
-        if (is_array($migration)) {
-            $result->merge($this->migrationService->execute($migration, $basePath, $force));
-        }
 
         // web server
         $server = isset($data[self::TYPE_SERVER]) ? $data[self::TYPE_SERVER] : [];

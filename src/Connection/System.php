@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Connection;
 
+use Doctrine\DBAL;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory\ContainerAwareInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -53,7 +54,11 @@ class System implements ConnectionInterface, ContainerAwareInterface
      */
     public function getConnection(ParametersInterface $config)
     {
-        return $this->container->get('connection');
+        $params = $this->container->get('config')->get('psx_connection');
+        $config = new DBAL\Configuration();
+        $config->setFilterSchemaAssetsExpression("~^fusio_~");
+
+        return DBAL\DriverManager::getConnection($params, $config);
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)

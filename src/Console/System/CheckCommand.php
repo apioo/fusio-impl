@@ -22,8 +22,6 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Base;
-use Fusio\Impl\Database\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,7 +53,7 @@ class CheckCommand extends Command
         $this
             ->setName('system:check')
             ->setDescription('Status check of the system')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name of the check i.e. install or user');
+            ->addArgument('name', InputArgument::REQUIRED, 'Name of the check i.e. user');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -84,60 +82,12 @@ class CheckCommand extends Command
     protected function executeCheck($check)
     {
         switch ($check) {
-            case 'install':
-                return $this->checkInstall();
-                break;
-
-            case 'upgrade':
-                return $this->checkUpgrade();
-                break;
-
             case 'user':
                 return $this->checkUser();
                 break;
         }
 
         return null;
-    }
-
-    /**
-     * Check whether all tables from the schema are available
-     *
-     * @return bool
-     */
-    protected function checkInstall()
-    {
-        $existing = $this->connection->getSchemaManager()->listTableNames();
-        $tables   = Installer::getLatestVersion()->getSchema()->getTables();
-        $names    = [];
-        foreach ($tables as $table) {
-            $names[] = $table->getName();
-        }
-
-        return count(array_diff($names, $existing)) === 0;
-    }
-
-    /**
-     * Check whether we need to upgrade
-     *
-     * @return bool
-     */
-    protected function checkUpgrade()
-    {
-        $qb = $this->connection->createQueryBuilder();
-        $qb->select('version')
-            ->from('fusio_meta')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1);
-
-        $version = $this->connection->fetchColumn($qb->getSQL());
-
-        if (!empty($version)) {
-            return version_compare($version, Base::getVersion()) === 0;
-        }
-
-        return false;
     }
 
     /**

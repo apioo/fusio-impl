@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Doctrine\DBAL;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
@@ -34,6 +36,7 @@ use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
+use Fusio\Impl\Migrations;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
 use PSX\Api\Listing\CachedListing;
@@ -41,8 +44,11 @@ use PSX\Api\Listing\FilterFactory;
 use PSX\Framework\Console as FrameworkConsole;
 use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Schema\Console as SchemaConsole;
+use PSX\Sql\Logger as SqlLogger;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -117,11 +123,24 @@ class Container extends DefaultContainer
     }
 
     /**
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getConnection()
+    {
+        $params = $this->get('config')->get('psx_connection');
+        $config = new DBAL\Configuration();
+        $config->setFilterSchemaAssetsExpression("~^(?!fusio_)~");
+
+        return DBAL\DriverManager::getConnection($params, $config);
+    }
+
+    /**
      * @return \Symfony\Component\Console\Application
      */
     public function getConsole()
     {
         $application = new Application('fusio', Base::getVersion());
+        $application->setHelperSet(new HelperSet($this->appendConsoleHelpers()));
 
         $this->appendConsoleCommands($application);
 
@@ -182,8 +201,6 @@ class Container extends DefaultContainer
         $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
-        $application->add(new Console\System\InstallCommand($this->get('connection')));
-        $application->add(new Console\System\MigrationCommand($this->get('table_manager')->getTable(Table\Deploy\Migration::class)));
         $application->add(new Console\System\PushCommand($this->get('system_push_service'), $this->get('config')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
@@ -192,9 +209,30 @@ class Container extends DefaultContainer
         $application->add(new Console\User\AddCommand($this->get('user_service')));
         $application->add(new Console\User\ListCommand($this->get('table_manager')->getTable(View\User::class)));
 
+        // migrations commands
+        $application->add(new Migrations\DiffCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\ExecuteCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\GenerateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\LatestCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\MigrateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\StatusCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\UpToDateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Migrations\VersionCommand($this->get('connection'), $this->get('connector')));
+
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
         $application->add(new SymfonyCommand\ListCommand());
+    }
+
+    /**
+     * @return array
+     */
+    protected function appendConsoleHelpers()
+    {
+        return array(
+            'db' => new ConnectionHelper($this->get('connection')),
+            'question' => new QuestionHelper(),
+        );
     }
 
     protected function appendDefaultListener(EventDispatcherInterface $eventDispatcher)

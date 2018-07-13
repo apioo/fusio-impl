@@ -290,20 +290,7 @@ trait Services
     {
         return new Service\System\Deploy(
             $this->get('system_import_service'),
-            $this->get('system_migration_service'),
             $this->get('system_web_server_service')
-        );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\System\Migration
-     */
-    public function getSystemMigrationService()
-    {
-        return new Service\System\Migration(
-            $this->get('connector'),
-            $this->get('table_manager')->getTable(Table\Deploy\Migration::class),
-            $this->get('logger')
         );
     }
 
