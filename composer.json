@@ -23,7 +23,8 @@
     "fusio/adapter-file": "^3.0",
     "paragonie/random_compat": "^2.0",
     "firebase/php-jwt": "^3.0",
-    "swiftmailer/swiftmailer": "^5.4"
+    "swiftmailer/swiftmailer": "^5.4",
+    "doctrine/migrations": "^1.5"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.6",
