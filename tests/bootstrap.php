@@ -2,10 +2,22 @@
 
 require(__DIR__ . '/../vendor/autoload.php');
 
-PSX\Framework\Test\Environment::setup(__DIR__ . '/..', function ($fromSchema) {
-    $version = \Fusio\Impl\Database\Installer::getLatestVersion();
-    $schema  = $version->getSchema();
-    Fusio\Impl\Tests\TestSchema::appendSchema($schema);
+define('FUSIO_IN_TEST', true);
 
-    return $schema;
-});
+PSX\Framework\Test\Environment::setup(__DIR__ . '/..');
+
+runMigrations();
+
+function runMigrations()
+{
+    $configuration = \Fusio\Impl\Migrations\ConfigurationBuilder::fromSystem(
+        \PSX\Framework\Test\Environment::getService('connection')
+    );
+
+    $versions = $configuration->getAvailableVersions();
+
+    foreach ($versions as $versionNumber) {
+        $version = $configuration->getVersion($versionNumber);
+        $version->execute(\Doctrine\DBAL\Migrations\Version::DIRECTION_UP);
+    }
+}

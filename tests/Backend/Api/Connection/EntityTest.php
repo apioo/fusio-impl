@@ -194,7 +194,7 @@ JSON;
     "id": 1,
     "status": 1,
     "name": "System",
-    "class": "Fusio\\Impl\\Connection\\System",
+    "class": "Fusio\\Impl\\Tests\\Connection\\Environment",
     "config": {
         "foo": "bar"
     }

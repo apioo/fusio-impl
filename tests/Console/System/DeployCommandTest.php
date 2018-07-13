@@ -62,7 +62,6 @@ class DeployCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/- \[CREATED\] schema Response-Schema/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] action Test-Action/', $display, $display);
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
-        $this->assertRegExp('/- \[EXECUTED\] migration New-Connection v1_schema.php/', $display, $display);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -242,15 +241,6 @@ JSON;
         $this->assertEquals(2, $event['id']);
         $this->assertEquals('New-Event', $event['name']);
         $this->assertEquals('A description of the event', $event['description']);
-
-        // check migration entries
-        $migration = $this->connection->fetchAssoc('SELECT id, connection, file, fileHash, executeDate FROM fusio_deploy_migration ORDER BY id DESC');
-
-        $this->assertEquals(2, $migration['id']);
-        $this->assertEquals('New-Connection', $migration['connection']);
-        $this->assertEquals('v1_schema.php', $migration['file']);
-        $this->assertNotEmpty($migration['fileHash']);
-        $this->assertNotEmpty($migration['executeDate']);
     }
 
     public function testCommandActionInclude()

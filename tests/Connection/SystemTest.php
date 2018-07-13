@@ -21,9 +21,11 @@
 
 namespace Fusio\Impl\Tests\Connection;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\System;
 use PSX\Dependency\Container;
+use PSX\Framework\Config\Config;
 
 /**
  * SystemTest
@@ -36,15 +38,18 @@ class SystemTest extends \PHPUnit_Framework_TestCase
 {
     public function testConnection()
     {
+        $config = new Config(['psx_connection' => [
+            'memory' => true,
+            'driver' => 'pdo_sqlite',
+        ]]);
+
         $container = new Container();
-        $container->set('connection', new \stdClass());
+        $container->set('config', $config);
 
         $connection = new System();
         $connection->setContainer($container);
 
-        $config = new Parameters([]);
-
         $this->assertEquals('System', $connection->getName());
-        $this->assertInstanceOf(\stdClass::class, $connection->getConnection($config));
+        $this->assertInstanceOf(Connection::class, $connection->getConnection(new Parameters([])));
     }
 }

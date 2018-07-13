@@ -25,10 +25,11 @@ use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Base;
-use Fusio\Impl\Connection\System;
 use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Migrations\Version\Version20180713131743;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
+use Fusio\Impl\Tests\Connection\Environment;
 use PSX\Api\Resource;
 use PSX\Schema\Parser\JsonSchema;
 
@@ -49,8 +50,10 @@ class Fixture
             return self::$dataSet;
         }
 
-        $version = \Fusio\Impl\Database\Installer::getLatestVersion();
-        $dataSet = array_merge_recursive($version->getInstallInserts(), self::getTestInserts());
+        $dataSet = array_merge_recursive(
+            Version20180713131743::getInstallInserts(),
+            self::getTestInserts()
+        );
 
         return self::$dataSet = new \PHPUnit_Extensions_Database_DataSet_ArrayDataSet($dataSet);
     }
@@ -96,7 +99,7 @@ class Fixture
                 ['appId' => 1, 'userId' => 1, 'refId' => 1, 'event' => 'app.update', 'ip' => '127.0.0.1', 'message' => 'Created schema foo', 'content' => null, 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_connection' => [
-                ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
+                ['status' => 1, 'name' => 'System', 'class' => Environment::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_cronjob' => [
                 ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 3, 'executeDate' => '2015-02-27 19:59:15', 'exitCode' => 0],
@@ -116,9 +119,6 @@ class Fixture
             ],
             'fusio_event_response' => [
                 ['triggerId' => 1, 'subscriptionId' => 1, 'status' => 2, 'code' => 200, 'attempts' => 1, 'executeDate' => '2018-06-02 14:41:23', 'insertDate' => '2018-06-02 14:41:23'],
-            ],
-            'fusio_deploy_migration' => [
-                ['connection' => 'Default-Connection', 'file' => 'resources/sql/v4_schema.php', 'fileHash' => 'db8b19c8da5872ca683510944b27db5fbbd011bb', 'executeDate' => '2017-04-30 17:15:42'],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'priority' => 1, 'methods' => 'ANY', 'path' => '/foo', 'controller' => SchemaApiController::class],
@@ -220,8 +220,7 @@ class Fixture
             return $routeId;
         }
 
-        $version = \Fusio\Impl\Database\Installer::getLatestVersion();
-        $data    = $version->getInstallInserts();
+        $data    = Version20180713131743::getInstallInserts();
         $routeId = count($data['fusio_routes']);
 
         return $routeId;

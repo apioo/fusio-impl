@@ -19,45 +19,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Database;
+namespace Fusio\Impl\Tests\Connection;
 
-use Fusio\Impl\Base;
-use Fusio\Impl\Database\Installer;
-use Fusio\Impl\Database\Preview;
-use Fusio\Impl\Database\VersionInterface;
-use Fusio\Impl\Tests\DbTestCase;
+use Fusio\Engine\ConnectionInterface;
+use Fusio\Engine\Form\BuilderInterface;
+use Fusio\Engine\Form\ElementFactoryInterface;
+use Fusio\Engine\ParametersInterface;
+use PSX\Framework\Test\Environment as TestEnvironment;
 
 /**
- * PreviewTest
+ * Environment
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PreviewTest extends DbTestCase
+class Environment implements ConnectionInterface
 {
-    public function testInstall()
+    public function getName()
     {
-        $installer = new Preview($this->connection, function($query){
-            $this->assertNotEmpty($query);
-        });
-
-        $path = Installer::getUpgradePath();
-        $to   = array_shift($path);
-
-        $installer->install($to);
+        return 'Test-Environment';
     }
 
-    public function testUpgrade()
+    /**
+     * @param \Fusio\Engine\ParametersInterface $config
+     * @return \Doctrine\DBAL\Connection
+     */
+    public function getConnection(ParametersInterface $config)
     {
-        $installer = new Preview($this->connection, function($query){
-            $this->assertNotEmpty($query);
-        });
+        return TestEnvironment::getService('connection');
+    }
 
-        $path = Installer::getUpgradePath();
-        $to   = array_shift($path);
-        $from = array_shift($path);
-
-        $installer->upgrade($from, $to);
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    {
     }
 }
