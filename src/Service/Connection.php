@@ -157,8 +157,6 @@ class Connection
         // update connection
         $record = [
             'id'     => $connection->id,
-            'name'   => $name,
-            'class'  => $class,
             'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
