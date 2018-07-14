@@ -284,8 +284,8 @@ JSON;
         $this->assertEquals(1, $row['id']);
         $this->assertNotEmpty($row['config']);
 
-        $projetKey = Environment::getService('config')->get('fusio_project_key');
-        $newConfig = Connection::decryptConfig($row['config'], $projetKey);
+        $projectKey = Environment::getService('config')->get('fusio_project_key');
+        $newConfig  = Connection::decryptConfig($row['config'], $projectKey);
 
         $this->assertEquals($config, $newConfig);
 
