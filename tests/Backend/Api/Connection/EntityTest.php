@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Connection;
 
+use Fusio\Impl\Service\Connection;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -241,19 +242,21 @@ JSON;
 
     public function testPut()
     {
+        $config = [
+            'type'     => 'pdo_mysql',
+            'host'     => '127.0.0.1',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'fusio',
+        ];
+
         $response = $this->sendRequest('/backend/connection/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
             'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
-            'config' => [
-                'type'     => 'pdo_mysql',
-                'host'     => '127.0.0.1',
-                'username' => 'root',
-                'password' => '',
-                'database' => 'fusio',
-            ],
+            'config' => $config,
         ]));
 
         $body   = (string) $response->getBody();
@@ -280,6 +283,11 @@ JSON;
 
         $this->assertEquals(1, $row['id']);
         $this->assertNotEmpty($row['config']);
+
+        $projetKey = Environment::getService('config')->get('fusio_project_key');
+        $newConfig = Connection::decryptConfig($row['config'], $projetKey);
+
+        $this->assertEquals($config, $newConfig);
 
         // it is not possible to change the name or class so check whether they
         // have not changed
