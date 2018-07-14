@@ -279,9 +279,12 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
         $this->assertNotEmpty($row['config']);
+
+        // it is not possible to change the name or class so check whether they
+        // have not changed
+        $this->assertEquals('System', $row['name']);
+        $this->assertEquals('Fusio\Impl\Connection\System', $row['class']);
     }
 
     public function testDelete()
