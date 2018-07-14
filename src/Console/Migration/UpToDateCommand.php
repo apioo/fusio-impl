@@ -19,24 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Migrations;
+namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\OutputWriter;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand as DoctrineLatestCommand;
+use Doctrine\DBAL\Migrations\Tools\Console\Command\UpToDateCommand as DoctrineUpToDateCommand;
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for outputting the latest version number
+ * Command for checking if your database is up to date or not
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class LatestCommand extends DoctrineLatestCommand
+class UpToDateCommand extends DoctrineUpToDateCommand
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -65,7 +66,7 @@ class LatestCommand extends DoctrineLatestCommand
         parent::configure();
 
         $this
-            ->setName('migration:latest')
+            ->setName('migration:up-to-date')
             ->addOption('connection', null, InputOption::VALUE_REQUIRED, 'The connection name to use for this command.')
         ;
     }

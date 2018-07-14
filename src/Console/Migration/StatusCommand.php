@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Migrations;
+namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\OutputWriter;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\StatusCommand as DoctrineStatusCommand;
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

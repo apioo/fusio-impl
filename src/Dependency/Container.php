@@ -192,6 +192,14 @@ class Container extends DefaultContainer
 
         $application->add(new Console\Event\ExecuteCommand($this->get('event_executor_service')));
 
+        $application->add(new Console\Migration\ExecuteCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\GenerateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\LatestCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\MigrateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\StatusCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\UpToDateCommand($this->get('connection'), $this->get('connector')));
+        $application->add(new Console\Migration\VersionCommand($this->get('connection'), $this->get('connector')));
+
         $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
@@ -208,15 +216,6 @@ class Container extends DefaultContainer
 
         $application->add(new Console\User\AddCommand($this->get('user_service')));
         $application->add(new Console\User\ListCommand($this->get('table_manager')->getTable(View\User::class)));
-
-        // migrations commands
-        $application->add(new Migrations\ExecuteCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\GenerateCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\LatestCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\MigrateCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\StatusCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\UpToDateCommand($this->get('connection'), $this->get('connector')));
-        $application->add(new Migrations\VersionCommand($this->get('connection'), $this->get('connector')));
 
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());

@@ -19,24 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Migrations;
+namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\OutputWriter;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\ExecuteCommand as DoctrineExecuteCommand;
+use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand as DoctrineVersionCommand;
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for executing single migrations up or down manually
+ * Command for manually adding and deleting migration versions from the version
+ * table
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExecuteCommand extends DoctrineExecuteCommand
+class VersionCommand extends DoctrineVersionCommand
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -65,7 +67,7 @@ class ExecuteCommand extends DoctrineExecuteCommand
         parent::configure();
 
         $this
-            ->setName('migration:execute')
+            ->setName('migration:version')
             ->addOption('connection', null, InputOption::VALUE_REQUIRED, 'The connection name to use for this command.')
         ;
     }

@@ -19,24 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Migrations;
+namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Migrations\OutputWriter;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand as DoctrineGenerateCommand;
+use Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand as DoctrineLatestCommand;
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for generating new blank migration classes
+ * Command for outputting the latest version number
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class GenerateCommand extends DoctrineGenerateCommand
+class LatestCommand extends DoctrineLatestCommand
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -65,7 +66,7 @@ class GenerateCommand extends DoctrineGenerateCommand
         parent::configure();
 
         $this
-            ->setName('migration:generate')
+            ->setName('migration:latest')
             ->addOption('connection', null, InputOption::VALUE_REQUIRED, 'The connection name to use for this command.')
         ;
     }
