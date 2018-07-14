@@ -25,11 +25,11 @@ use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Base;
+use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Migrations\Version\Version20180713131743;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
-use Fusio\Impl\Tests\Connection\Environment;
 use PSX\Api\Resource;
 use PSX\Schema\Parser\JsonSchema;
 
@@ -99,7 +99,7 @@ class Fixture
                 ['appId' => 1, 'userId' => 1, 'refId' => 1, 'event' => 'app.update', 'ip' => '127.0.0.1', 'message' => 'Created schema foo', 'content' => null, 'date' => '2015-06-25 22:49:09'],
             ],
             'fusio_connection' => [
-                ['status' => 1, 'name' => 'Test', 'class' => Environment::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
+                ['status' => 1, 'name' => 'Test', 'class' => Native::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_cronjob' => [
                 ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 3, 'executeDate' => '2015-02-27 19:59:15', 'exitCode' => 0],

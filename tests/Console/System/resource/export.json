@@ -39,7 +39,7 @@
     {
       "status": 1,
       "name": "Test",
-      "class": "Fusio\\Impl\\Tests\\Connection\\Environment",
+      "class": "Fusio\\Impl\\Connection\\Native",
       "config": {}
     },
     {
