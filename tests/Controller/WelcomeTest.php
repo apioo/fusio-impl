@@ -46,7 +46,7 @@ class WelcomeTest extends ControllerDbTestCase
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $version = Base::VERSION;
+        $version = Base::getVersion();
         $body    = (string) $response->getBody();
         $expect  = <<<JSON
 {

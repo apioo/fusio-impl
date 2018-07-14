@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl;
 
+use PackageVersions\Versions;
+
 /**
  * Base
  *
@@ -30,13 +32,17 @@ namespace Fusio\Impl;
  */
 class Base
 {
-    const VERSION = '4.0.0';
-
+    /**
+     * @return string
+     */
     public static function getVersion()
     {
-        return self::VERSION;
+        return Versions::getVersion('fusio/impl');
     }
 
+    /**
+     * @return string
+     */
     public static function getUserAgent()
     {
         return 'Fusio v' . self::getVersion() . ' (https://www.fusio-project.org/)';
