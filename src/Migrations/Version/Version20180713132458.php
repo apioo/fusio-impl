@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
- * 
+ *
  * Inserts the test data if in test mode
  */
 class Version20180713132458 extends AbstractMigration
@@ -20,11 +20,11 @@ class Version20180713132458 extends AbstractMigration
         $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
 
         $actionTable = $schema->createTable('app_news');
-        $actionTable->addColumn('id', 'integer', array('autoincrement' => true));
-        $actionTable->addColumn('title', 'string', array('length' => 64));
-        $actionTable->addColumn('content', 'string', array('length' => 255));
+        $actionTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $actionTable->addColumn('title', 'string', ['length' => 64]);
+        $actionTable->addColumn('content', 'string', ['length' => 255]);
         $actionTable->addColumn('date', 'datetime');
-        $actionTable->setPrimaryKey(array('id'));
+        $actionTable->setPrimaryKey(['id']);
     }
 
     /**
