@@ -162,9 +162,6 @@ class Fixture
             'fusio_log_error' => [
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
-            'fusio_meta' => [
-                ['version' => Base::getVersion(), 'installDate' => '2015-02-27 19:59:15'],
-            ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => serialize($schemaCollection)],
                 ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => serialize($schemaEntry), 'form' => $schemaEntryForm],
