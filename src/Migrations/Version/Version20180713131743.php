@@ -33,19 +33,26 @@ class Version20180713131743 extends AbstractMigration
         $inserts = self::getInstallInserts();
 
         foreach ($inserts as $tableName => $rows) {
-            foreach ($rows as $row) {
-                $columnList = array();
-                $paramPlaceholders = array();
-                $paramValues = array();
-
-                foreach ($row as $columnName => $value) {
-                    $columnList[] = $columnName;
-                    $paramPlaceholders[] = '?';
-                    $paramValues[] = $value;
+            if (!empty($rows)) {
+                $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+                if ($count > 0) {
+                    continue;
                 }
 
-                if (!empty($columnList)) {
-                    $this->addSql('INSERT INTO ' . $tableName . ' (' . implode(', ', $columnList) . ') VALUES (' . implode(', ', $paramPlaceholders) . ')', $paramValues);
+                foreach ($rows as $row) {
+                    $columnList = array();
+                    $paramPlaceholders = array();
+                    $paramValues = array();
+
+                    foreach ($row as $columnName => $value) {
+                        $columnList[] = $columnName;
+                        $paramPlaceholders[] = '?';
+                        $paramValues[] = $value;
+                    }
+
+                    if (!empty($columnList)) {
+                        $this->addSql('INSERT INTO ' . $tableName . ' (' . implode(', ', $columnList) . ') VALUES (' . implode(', ', $paramPlaceholders) . ')', $paramValues);
+                    }
                 }
             }
         }
