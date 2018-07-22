@@ -19,12 +19,12 @@ class Version20180713132458 extends AbstractMigration
     {
         $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
 
-        $actionTable = $schema->createTable('app_news');
-        $actionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $actionTable->addColumn('title', 'string', ['length' => 64]);
-        $actionTable->addColumn('content', 'string', ['length' => 255]);
-        $actionTable->addColumn('date', 'datetime');
-        $actionTable->setPrimaryKey(['id']);
+        $appTable = $schema->createTable('app_news');
+        $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $appTable->addColumn('title', 'string', ['length' => 64]);
+        $appTable->addColumn('content', 'string', ['length' => 255]);
+        $appTable->addColumn('date', 'datetime');
+        $appTable->setPrimaryKey(['id']);
     }
 
     /**
