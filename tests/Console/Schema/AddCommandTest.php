@@ -21,10 +21,11 @@
 
 namespace Fusio\Impl\Tests\Console\Schema;
 
+use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use PSX\Schema\Schema;
+use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -63,6 +64,6 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals(1, $schema['status']);
         $this->assertEquals('bar', $schema['name']);
         $this->assertJsonStringEqualsJsonString(file_get_contents(__DIR__ . '/resource/schema.json'), $schema['source']);
-        $this->assertInstanceOf(Schema::class, unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 }

@@ -24,7 +24,6 @@ namespace Fusio\Impl\Tests;
 use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
-use Fusio\Impl\Base;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Migrations\Version\Version20180713131743;
@@ -64,11 +63,8 @@ class Fixture
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
-        $parser = new JsonSchema();
-        $schemaEntry = $parser->parse($schemaEntrySource);
-
-        $parser = new JsonSchema();
-        $schemaCollection = $parser->parse($schemaCollectionSource);
+        $schemaEntry = (new JsonSchema())->parse($schemaEntrySource);
+        $schemaCollection = (new JsonSchema())->parse($schemaCollectionSource);
 
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
@@ -83,9 +79,9 @@ class Fixture
                 ['status' => 3, 'name' => 'Deleted', 'email' => 'deleted@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_action' => [
-                ['status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => serialize(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => serialize(['connection' => 2, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => serialize([]), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
+                ['status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig([]), 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_app' => [
                 ['userId' => 2, 'status' => 1, 'name' => 'Foo-App', 'url' => 'http://google.com', 'parameters' => '', 'appKey' => '5347307d-d801-4075-9aaa-a21a29a448c5', 'appSecret' => '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', 'date' => '2015-02-22 22:19:07'],
@@ -163,8 +159,8 @@ class Fixture
                 ['logId' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_schema' => [
-                ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => serialize($schemaCollection)],
-                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => serialize($schemaEntry), 'form' => $schemaEntryForm],
+                ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => Service\Schema::serializeCache($schemaCollection)],
+                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => Service\Schema::serializeCache($schemaEntry), 'form' => $schemaEntryForm],
             ],
             'fusio_scope' => [
                 ['name' => 'foo', 'description' => 'Foo access'],

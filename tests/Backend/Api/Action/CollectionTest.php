@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Action;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
+use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -408,7 +409,7 @@ JSON;
             ->getSQL();
 
         $row    = Environment::getService('connection')->fetchAssoc($sql);
-        $config = json_encode(unserialize($row['config']));
+        $config = json_encode(Service\Action::unserializeConfig($row['config']));
 
         $this->assertEquals(5, $row['id']);
         $this->assertEquals('Foo', $row['name']);

@@ -21,10 +21,12 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -91,7 +93,7 @@ JSON;
 
         $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
@@ -100,7 +102,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
-        $this->assertEquals(['response' => '{"foo": "bar"}'], unserialize($action['config']));
+        $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [

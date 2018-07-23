@@ -287,7 +287,7 @@ JSON;
         $this->assertEquals(3, $row['id']);
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Action\SqlTable', $row['class']);
-        $this->assertEquals('a:1:{s:8:"response";s:13:"{"foo":"bar"}";}', $row['config']);
+        $this->assertEquals('{"response":"{\"foo\":\"bar\"}"}', $row['config']);
     }
 
     public function testDelete()

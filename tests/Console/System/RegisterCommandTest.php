@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\VoidAction;
 use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
 use Fusio\Impl\Tests\Adapter\TestAdapter;
@@ -30,6 +31,7 @@ use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -113,7 +115,7 @@ JSON;
 
         $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
@@ -123,7 +125,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 3], unserialize($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 3], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -226,7 +228,7 @@ JSON;
 
         $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
@@ -235,7 +237,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 3], unserialize($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 3], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [

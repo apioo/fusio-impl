@@ -24,10 +24,12 @@ namespace Fusio\Impl\Tests\Console\System;
 use Fusio\Adapter\Sql\Connection\SqlAdvanced;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -152,7 +154,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);
-        $this->assertEquals(['response' => '{"foo": "bar"}'], unserialize($action['config']));
+        $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -266,7 +268,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
-        $config   = unserialize($action['config']);
+        $config   = Service\Action::unserializeConfig($action['config']);
         $response = json_decode($config['response'], true);
 
         $this->assertEquals(['foo' => sys_get_temp_dir()], $response);
@@ -333,7 +335,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
-        $config   = unserialize($action['config']);
+        $config   = Service\Action::unserializeConfig($action['config']);
         $response = json_decode($config['response'], true);
 
         $this->assertEquals(['foo' => sys_get_temp_dir()], $response);
@@ -424,7 +426,7 @@ JSON;
 
         $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -498,7 +500,7 @@ JSON;
 
         $this->assertEquals(5, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 
     public function testCommandSchemaFile()
@@ -534,7 +536,7 @@ JSON;
 
         $this->assertEquals(4, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 
     public function testCommandSchemaHttp()
@@ -638,6 +640,6 @@ JSON;
         ]);
 
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf('PSX\Schema\Schema', unserialize($schema['cache']));
+        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 }

@@ -67,6 +67,6 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals('foobar', $action['name']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals('a:1:{s:8:"response";s:13:"{"foo":"bar"}";}', $action['config']);
+        $this->assertEquals('{"response":"{\"foo\":\"bar\"}"}', $action['config']);
     }
 }
