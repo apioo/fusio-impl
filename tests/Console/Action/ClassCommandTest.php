@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Console\Action;
 
-use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;

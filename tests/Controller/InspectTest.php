@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;

@@ -23,7 +23,6 @@ namespace Fusio\Impl\Tests\Console\System\Deploy;
 
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Factory\Resolver\HttpUrl;
-use Fusio\Impl\Factory\Resolver\PhpFile;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;

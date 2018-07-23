@@ -32,7 +32,6 @@ use GuzzleHttp\Psr7\Response;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
-use PSX\Http\RequestInterface;
 
 /**
  * ProviderTest

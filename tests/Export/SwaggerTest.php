@@ -24,7 +24,6 @@ namespace Fusio\Impl\Tests\Export;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * SwaggerTest

@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Tests\Service\System;
 
-use Fusio\Impl\Service\System\Deploy\EnvProperties;
 use Fusio\Impl\Service\System\WebServer;
 use PSX\Framework\Config\Config;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * WebServerTest

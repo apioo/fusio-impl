@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
-use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
