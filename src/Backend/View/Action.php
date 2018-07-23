@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Service;
 use PSX\Sql\Condition;
 use PSX\Sql\Fields;
 use PSX\Sql\Sql;
@@ -76,7 +77,9 @@ class Action extends ViewAbstract
             'name' => 'name',
             'class' => 'class',
             'engine' => 'engine',
-            'config' => 'config',
+            'config' => $this->fieldCallback('config', function ($config) {
+                return Service\Action::unserializeConfig($config);
+            }),
             'date' => $this->fieldDateTime('date'),
         ]);
 

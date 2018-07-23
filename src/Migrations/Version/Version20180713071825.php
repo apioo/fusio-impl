@@ -28,7 +28,7 @@ class Version20180713071825 extends AbstractMigration
             $actionTable->addColumn('name', 'string', ['length' => 255]);
             $actionTable->addColumn('class', 'string', ['length' => 255]);
             $actionTable->addColumn('engine', 'string', ['length' => 255, 'notnull' => false]);
-            $actionTable->addColumn('config', 'blob', ['notnull' => false]);
+            $actionTable->addColumn('config', 'text', ['notnull' => false]);
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
         }
@@ -126,7 +126,7 @@ class Version20180713071825 extends AbstractMigration
             $connectionTable->addColumn('status', 'integer', ['default' => Table\Connection::STATUS_ACTIVE]);
             $connectionTable->addColumn('name', 'string', ['length' => 255]);
             $connectionTable->addColumn('class', 'string', ['length' => 255]);
-            $connectionTable->addColumn('config', 'blob', ['notnull' => false]);
+            $connectionTable->addColumn('config', 'text', ['notnull' => false]);
             $connectionTable->setPrimaryKey(['id']);
             $connectionTable->addUniqueIndex(['name']);
         }
@@ -282,7 +282,7 @@ class Version20180713071825 extends AbstractMigration
             $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
             $schemaTable->addColumn('name', 'string', ['length' => 255]);
             $schemaTable->addColumn('source', 'text');
-            $schemaTable->addColumn('cache', 'blob');
+            $schemaTable->addColumn('cache', 'text');
             $schemaTable->addColumn('form', 'text', ['notnull' => false, 'default' => null]);
             $schemaTable->setPrimaryKey(['id']);
             $schemaTable->addUniqueIndex(['name']);

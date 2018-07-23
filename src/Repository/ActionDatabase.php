@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Engine\Model\Action;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
+use Fusio\Impl\Service;
 
 /**
  * ActionDatabase
@@ -104,7 +105,7 @@ class ActionDatabase implements Repository\ActionInterface
 
     protected function newAction(array $row)
     {
-        $config = !empty($row['config']) ? unserialize($row['config']) : [];
+        $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
 
         $action = new Action();
         $action->setId($row['id']);

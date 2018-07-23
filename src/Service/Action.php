@@ -112,7 +112,7 @@ class Action
             'name'   => $name,
             'class'  => $class,
             'engine' => $engine,
-            'config' => $config ?: null,
+            'config' => self::serializeConfig($config),
             'date'   => new \DateTime(),
         ];
 
@@ -159,7 +159,7 @@ class Action
             'name'   => $name,
             'class'  => $class,
             'engine' => $engine,
-            'config' => $config ?: null,
+            'config' => self::serializeConfig($config),
             'date'   => new \DateTime(),
         ];
 
@@ -185,7 +185,8 @@ class Action
             throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
         }
 
-        $parameters = new Parameters($action['config'] ?: []);
+        $config     = self::unserializeConfig($action['config']);
+        $parameters = new Parameters($config ?: []);
         $handler    = $this->newAction($action['class'], $action['engine']);
 
         // call lifecycle
@@ -226,5 +227,36 @@ class Action
         }
 
         return $action;
+    }
+
+    /**
+     * @param array|null $config
+     * @return string|null
+     */
+    public static function serializeConfig(array $config = null)
+    {
+        if (empty($config)) {
+            return null;
+        }
+
+        return \json_encode($config);
+    }
+
+    /**
+     * @param string $data
+     * @return array
+     */
+    public static function unserializeConfig($data)
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        // BC check whether data is PHP serialized
+        if (substr($data, 0, 2) === 'a:') {
+            return \unserialize($data);
+        }
+
+        return \json_decode($data, true);
     }
 }

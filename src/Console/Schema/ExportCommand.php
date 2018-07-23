@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Schema;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Service;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
 use Symfony\Component\Console\Command\Command;
@@ -73,7 +74,7 @@ class ExportCommand extends Command
 
         if (!empty($row)) {
             $generator = new Generator\JsonSchema();
-            $schema    = unserialize($row['cache']);
+            $schema    = Service\Schema::unserializeCache($row['cache']);
 
             if ($schema instanceof SchemaInterface) {
                 $output->writeln($generator->generate($schema));

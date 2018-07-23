@@ -23,6 +23,7 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Schema\LoaderInterface;
+use Fusio\Impl\Service;
 use PSX\Schema\SchemaInterface;
 use RuntimeException;
 
@@ -50,7 +51,7 @@ class Loader implements LoaderInterface
             $cache = isset($row['cache']) ? $row['cache'] : null;
 
             if (!empty($cache)) {
-                $cache = unserialize($cache);
+                $cache = Service\Schema::unserializeCache($cache);
 
                 if ($cache instanceof SchemaInterface) {
                     return $cache;

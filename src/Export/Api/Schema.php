@@ -23,6 +23,7 @@ namespace Fusio\Impl\Export\Api;
 
 use Fusio\Impl\Export\Schema as ExportSchema;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\Generator;
@@ -81,7 +82,7 @@ class Schema extends SchemaApiAbstract
             }
 
             $generator   = new Generator\JsonSchema();
-            $schemaCache = unserialize($schema['cache']);
+            $schemaCache = Service\Schema::unserializeCache($schema['cache']);
 
             if ($schemaCache instanceof SchemaInterface) {
                 $json = \json_decode($generator->generate($schemaCache));

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Schema\ParserInterface;
+use Fusio\Impl\Service;
 use PSX\Schema\Parser\JsonSchema;
 use PSX\Schema\Parser\JsonSchema\RefResolver;
 
@@ -60,6 +61,6 @@ class Parser implements ParserInterface
         $parser = new JsonSchema(null, $resolver);
         $schema = $parser->parse($source);
 
-        return serialize($schema);
+        return Service\Schema::serializeCache($schema);
     }
 }

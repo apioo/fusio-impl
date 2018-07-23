@@ -47,7 +47,7 @@ class Connection extends TableAbstract
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'class' => self::TYPE_VARCHAR,
-            'config' => self::TYPE_BLOB,
+            'config' => self::TYPE_TEXT,
         );
     }
 }

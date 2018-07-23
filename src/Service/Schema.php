@@ -187,7 +187,7 @@ class Schema
 
         if (!empty($schema)) {
             $generator = new Generator\Html();
-            $schema    = unserialize($schema['cache']);
+            $schema    = self::unserializeCache($schema['cache']);
 
             if ($schema instanceof SchemaInterface) {
                 return $generator->generate($schema);
@@ -197,5 +197,31 @@ class Schema
         } else {
             throw new StatusCode\NotFoundException('Invalid schema id');
         }
+    }
+
+    /**
+     * @param \PSX\Schema\SchemaInterface|null $schema
+     * @return string
+     */
+    public static function serializeCache(SchemaInterface $schema = null)
+    {
+        if ($schema === null) {
+            return null;
+        }
+
+        return base64_encode(serialize($schema));
+    }
+
+    /**
+     * @param string $data
+     * @return \PSX\Schema\SchemaInterface|null
+     */
+    public static function unserializeCache($data)
+    {
+        if ($data === null) {
+            return null;
+        }
+
+        return unserialize(base64_decode($data));
     }
 }

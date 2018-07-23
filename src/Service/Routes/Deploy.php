@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service\Routes;
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
+use Fusio\Impl\Service;
 use PSX\Api\Resource;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\Schema;
@@ -117,7 +118,7 @@ class Deploy
         $result    = $this->schemaTable->get($schemaId);
 
         if (!empty($result)) {
-            $schema = unserialize($result['cache']);
+            $schema = Service\Schema::unserializeCache($result['cache']);
             if ($schema instanceof Schema) {
                 return $generator->toArray($schema);
             }
@@ -132,12 +133,14 @@ class Deploy
         $action     = $this->actionTable->get($actionId);
 
         if (!empty($action)) {
+            $config = Service\Action::unserializeConfig($action['config']);
+
             $entry = new Model\Action();
             $entry->setId($action['id']);
             $entry->setName($action['name']);
             $entry->setClass($action['class']);
             $entry->setEngine($action['engine']);
-            $entry->setConfig($action['config'] ?: []);
+            $entry->setConfig($config ?: []);
             $entry->setDate($action['date']->format('Y-m-d H:i:s'));
 
             $repository->add($entry);
