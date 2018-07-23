@@ -14,10 +14,6 @@ function runMigrations()
         \PSX\Framework\Test\Environment::getService('connection')
     );
 
-    $versions = $configuration->getAvailableVersions();
-
-    foreach ($versions as $versionNumber) {
-        $version = $configuration->getVersion($versionNumber);
-        $version->execute(\Doctrine\DBAL\Migrations\Version::DIRECTION_UP);
-    }
+    $migration = new \Doctrine\DBAL\Migrations\Migration($configuration);
+    $migration->migrate();
 }
