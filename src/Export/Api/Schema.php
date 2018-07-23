@@ -21,15 +21,15 @@
 
 namespace Fusio\Impl\Export\Api;
 
-use Fusio\Impl\Export\Schema as ExportSchema;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Export\Schema as ExportSchema;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Schema\Generator;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
 
 /**

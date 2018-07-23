@@ -21,12 +21,12 @@
 
 namespace Fusio\Impl\Service\System;
 
+use Fusio\Impl\Service\System\Import\Result;
 use Fusio\Impl\Service\System\WebServer\Configuration;
 use Fusio\Impl\Service\System\WebServer\Generator\Apache2;
 use Fusio\Impl\Service\System\WebServer\Generator\Nginx;
 use Fusio\Impl\Service\System\WebServer\GeneratorInterface;
 use Fusio\Impl\Service\System\WebServer\VirtualHost;
-use Fusio\Impl\Service\System\Import\Result;
 use PSX\Framework\Config\Config;
 
 /**

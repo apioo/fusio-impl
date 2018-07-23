@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventEvents;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
+use Fusio\Impl\Event\EventEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;

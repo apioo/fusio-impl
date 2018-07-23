@@ -23,8 +23,8 @@ namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
-use Fusio\Impl\Table;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\Schema;

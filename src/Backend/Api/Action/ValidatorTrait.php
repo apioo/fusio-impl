@@ -25,9 +25,9 @@ use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Impl\Backend\Filter\PrimaryKey;
 use Fusio\Impl\Table;
 use PSX\Api\Resource\MethodAbstract;
+use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Validation\Field;
 use PSX\Schema\Validation\Validator;
-use PSX\Http\Exception as StatusCode;
 
 /**
  * ValidatorTrait
