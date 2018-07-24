@@ -128,6 +128,16 @@ class Fixture
                 ['rateId' => 3, 'routeId' => self::getLastRouteId() + 1, 'appId' => null, 'authenticated' => null, 'parameters' => null],
                 ['rateId' => 4, 'routeId' => self::getLastRouteId() + 1, 'appId' => null, 'authenticated' => 1, 'parameters' => null],
             ],
+            'fusio_routes_response' => [
+                ['methodId' => 2, 'code' => 200, 'response' => 2],
+                ['methodId' => 3, 'code' => 201, 'response' => 1],
+
+                ['methodId' => 7, 'code' => 200, 'response' => 1],
+                ['methodId' => 8, 'code' => 200, 'response' => 1],
+                ['methodId' => 9, 'code' => 200, 'response' => 1],
+                ['methodId' => 10, 'code' => 200, 'response' => 1],
+                ['methodId' => 11, 'code' => 200, 'response' => 1],
+            ],
             'fusio_routes_method' => [
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 3],
                 ['routeId' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'parameters' => null, 'request' => 3, 'action' => 3],
@@ -140,16 +150,6 @@ class Fixture
                 ['routeId' => self::getLastRouteId() + 2, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
                 ['routeId' => self::getLastRouteId() + 2, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
                 ['routeId' => self::getLastRouteId() + 2, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => 1, 'action' => 4],
-            ],
-            'fusio_routes_response' => [
-                ['methodId' => 2, 'code' => 200, 'response' => 2],
-                ['methodId' => 3, 'code' => 201, 'response' => 1],
-
-                ['methodId' => 7, 'code' => 200, 'response' => 1],
-                ['methodId' => 8, 'code' => 200, 'response' => 1],
-                ['methodId' => 9, 'code' => 200, 'response' => 1],
-                ['methodId' => 10, 'code' => 200, 'response' => 1],
-                ['methodId' => 11, 'code' => 200, 'response' => 1],
             ],
             'fusio_log' => [
                 ['appId' => 3, 'routeId' => 1, 'ip' => '127.0.0.1', 'userAgent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'executionTime' => 500000, 'date' => '2015-06-25 22:49:09'],
