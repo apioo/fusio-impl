@@ -250,6 +250,10 @@ class Version20180713131743 extends AbstractMigration
 
                 ['status' => 1, 'priority' => 0,               'methods' => 'ANY', 'path' => '/',                                            'controller' => SchemaApiController::class],
             ],
+            'fusio_routes_method' => [
+            ],
+            'fusio_routes_response' => [
+            ],
             'fusio_rate_allocation' => [
                 ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
                 ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
@@ -265,20 +269,16 @@ class Version20180713131743 extends AbstractMigration
                 ['userId' => 1, 'scopeId' => 2],
                 ['userId' => 1, 'scopeId' => 3],
             ],
+            'fusio_scope_routes' => [
+            ],
         ];
 
         // routes method
         $lastRouteId = count($data['fusio_routes']);
-        $data['fusio_routes_method'] = [
-            ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1],
-        ];
-
-        $data['fusio_routes_response'] = [
-            ['methodId' => 1, 'code' => 200, 'response' => 1],
-        ];
+        $data['fusio_routes_method'][] = ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1];
+        $data['fusio_routes_response'][] = ['methodId' => 1, 'code' => 200, 'response' => 1];
 
         // scope routes
-        $data['fusio_scope_routes'] = [];
         foreach ($data['fusio_routes'] as $index => $row) {
             $scopeId = self::getScopeIdFromPath($row['path']);
             if ($scopeId !== null) {
