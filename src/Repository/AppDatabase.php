@@ -51,12 +51,12 @@ class AppDatabase implements Repository\AppInterface
     public function getAll()
     {
         $sql = 'SELECT id,
-                       userId,
+                       user_id,
                        status,
                        name,
                        url,
                        parameters,
-                       appKey
+                       app_key
                   FROM fusio_app
                  WHERE status = :status
               ORDER BY id DESC';
@@ -80,16 +80,16 @@ class AppDatabase implements Repository\AppInterface
         }
 
         $sql = 'SELECT id,
-                       userId,
+                       user_id,
                        status,
                        name,
                        url,
                        parameters,
-                       appKey
+                       app_key
                   FROM fusio_app
-                 WHERE id = :appId';
+                 WHERE id = :app_id';
 
-        $row = $this->connection->fetchAssoc($sql, array('appId' => $appId));
+        $row = $this->connection->fetchAssoc($sql, array('app_id' => $appId));
 
         if (!empty($row)) {
             $app = $this->newApp($row);
@@ -104,12 +104,12 @@ class AppDatabase implements Repository\AppInterface
     protected function getScopes($appId)
     {
         $sql = '    SELECT scope.name
-                      FROM fusio_app_scope appScope
+                      FROM fusio_app_scope app_scope
                 INNER JOIN fusio_scope scope
-                        ON scope.id = appScope.scopeId
-                     WHERE appScope.appId = :appId';
+                        ON scope.id = app_scope.scope_id
+                     WHERE app_scope.app_id = :app_id';
 
-        $result = $this->connection->fetchAll($sql, array('appId' => $appId)) ?: array();
+        $result = $this->connection->fetchAll($sql, array('app_id' => $appId)) ?: array();
         $names  = array();
 
         foreach ($result as $row) {
@@ -128,12 +128,12 @@ class AppDatabase implements Repository\AppInterface
 
         $app = new App();
         $app->setId($row['id']);
-        $app->setUserId($row['userId']);
+        $app->setUserId($row['user_id']);
         $app->setStatus($row['status']);
         $app->setName($row['name']);
         $app->setUrl($row['url']);
         $app->setParameters($parameters);
-        $app->setAppKey($row['appKey']);
+        $app->setAppKey($row['app_key']);
 
         return $app;
     }

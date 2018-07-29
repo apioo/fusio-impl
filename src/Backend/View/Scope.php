@@ -72,10 +72,10 @@ class Scope extends ViewAbstract
             'id' => 'id',
             'name' => 'name',
             'description' => 'description',
-            'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'getByScopeId'], [new Reference('id'), null, 0, 1024], [
+            'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'getByScope_id'], [new Reference('id'), null, 0, 1024], [
                 'id' => 'id',
-                'scopeId' => 'scopeId',
-                'routeId' => 'routeId',
+                'scopeId' => 'scope_id',
+                'routeId' => 'route_id',
                 'allow' => 'allow',
                 'methods' => 'methods',
             ]),

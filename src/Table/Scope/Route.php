@@ -41,8 +41,8 @@ class Route extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'scopeId' => self::TYPE_INT,
-            'routeId' => self::TYPE_INT,
+            'scope_id' => self::TYPE_INT,
+            'route_id' => self::TYPE_INT,
             'allow' => self::TYPE_INT,
             'methods' => self::TYPE_VARCHAR,
         );
@@ -51,7 +51,7 @@ class Route extends TableAbstract
     public function deleteAllFromScope($scopeId)
     {
         $sql = 'DELETE FROM fusio_scope_routes
-                      WHERE scopeId = :id';
+                      WHERE scope_id = :id';
 
         $this->connection->executeQuery($sql, array('id' => $scopeId));
     }
@@ -59,7 +59,7 @@ class Route extends TableAbstract
     public function deleteAllFromRoute($routeId)
     {
         $sql = 'DELETE FROM fusio_scope_routes
-                      WHERE routeId = :id';
+                      WHERE route_id = :id';
 
         $this->connection->executeQuery($sql, array('id' => $routeId));
     }
@@ -69,8 +69,8 @@ class Route extends TableAbstract
         $sql = 'SELECT scope.name
                   FROM fusio_scope_routes routes
             INNER JOIN fusio_scope scope
-                    ON scope.id = routes.scopeId
-                 WHERE routeId = :id
+                    ON scope.id = routes.scope_id
+                 WHERE route_id = :id
                    AND allow = 1';
 
         return $this->connection->fetchAll($sql, ['id' => $routeId]);
@@ -82,8 +82,8 @@ class Route extends TableAbstract
                        routes.methods
                   FROM fusio_scope_routes routes
             INNER JOIN fusio_scope scope
-                    ON scope.id = routes.scopeId
-                 WHERE routeId = :id
+                    ON scope.id = routes.scope_id
+                 WHERE route_id = :id
                    AND allow = 1';
 
         $result = $this->connection->fetchAll($sql, ['id' => $routeId]);

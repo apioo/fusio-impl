@@ -36,17 +36,17 @@ class Subscription extends ViewAbstract
 {
     public function getCollection($userId, $startIndex = 0)
     {
-        $sql = '    SELECT eventSubscription.id,
-                           eventSubscription.status,
-                           eventSubscription.endpoint,
+        $sql = '    SELECT event_subscription.id,
+                           event_subscription.status,
+                           event_subscription.endpoint,
                            event.name
-                      FROM fusio_event_subscription eventSubscription
+                      FROM fusio_event_subscription event_subscription
                 INNER JOIN fusio_event event
-                        ON eventSubscription.eventId = event.id
-                     WHERE eventSubscription.userId = :userId';
+                        ON event_subscription.event_id = event.id
+                     WHERE event_subscription.user_id = :user_id';
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['userId' => $userId], [
+            'entry' => $this->doCollection($sql, ['user_id' => $userId], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'event' => 'name',
@@ -59,17 +59,17 @@ class Subscription extends ViewAbstract
 
     public function getEntity($userId, $subscriptionId)
     {
-        $sql = '    SELECT eventSubscription.id,
-                           eventSubscription.status,
-                           eventSubscription.endpoint,
+        $sql = '    SELECT event_subscription.id,
+                           event_subscription.status,
+                           event_subscription.endpoint,
                            event.name
-                      FROM fusio_event_subscription eventSubscription
+                      FROM fusio_event_subscription event_subscription
                 INNER JOIN fusio_event event
-                        ON eventSubscription.eventId = event.id
-                     WHERE eventSubscription.id = :id
-                       AND eventSubscription.userId = :userId';
+                        ON event_subscription.event_id = event.id
+                     WHERE event_subscription.id = :id
+                       AND event_subscription.user_id = :user_id';
 
-        $definition = $this->doEntity($sql, ['userId' => $userId, 'id' => $subscriptionId], [
+        $definition = $this->doEntity($sql, ['user_id' => $userId, 'id' => $subscriptionId], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'event' => 'name',
@@ -78,7 +78,7 @@ class Subscription extends ViewAbstract
                 'status' => $this->fieldInteger('status'),
                 'code' => $this->fieldInteger('code'),
                 'attempts' => $this->fieldInteger('attempts'),
-                'executeDate' => $this->fieldDateTime('executeDate'),
+                'executeDate' => $this->fieldDateTime('execute_date'),
             ]),
         ]);
 

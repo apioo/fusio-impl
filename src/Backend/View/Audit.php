@@ -68,17 +68,17 @@ class Audit extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'get'], [$id], [
             'id' => 'id',
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('appId')], [
+            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('app_id')], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('userId')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',
             ]),
-            'refId' => 'refId',
+            'refId' => 'ref_id',
             'event' => 'event',
             'ip' => 'ip',
             'message' => 'message',

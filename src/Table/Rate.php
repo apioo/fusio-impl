@@ -47,7 +47,7 @@ class Rate extends TableAbstract
             'status' => self::TYPE_INT,
             'priority' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
-            'rateLimit' => self::TYPE_INT,
+            'rate_limit' => self::TYPE_INT,
             'timespan' => self::TYPE_VARCHAR,
         );
     }

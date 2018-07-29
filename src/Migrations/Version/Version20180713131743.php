@@ -88,8 +88,8 @@ class Version20180713131743 extends AbstractMigration
                 ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'date' => $now->format('Y-m-d H:i:s')],
             ],
             'fusio_app' => [
-                ['userId' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $backendAppKey, 'appSecret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
-                ['userId' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'appKey' => $consumerAppKey, 'appSecret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
+                ['user_id' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $backendAppKey, 'app_secret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
+                ['user_id' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $consumerAppKey, 'app_secret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
             ],
             'fusio_config' => [
                 ['name' => 'app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', 'value' => 0],
@@ -162,8 +162,8 @@ class Version20180713131743 extends AbstractMigration
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
             ],
             'fusio_rate' => [
-                ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rateLimit' => 720, 'timespan' => 'PT1H'],
-                ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rateLimit' => 60, 'timespan' => 'PT1H'],
+                ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rate_limit' => 720, 'timespan' => 'PT1H'],
+                ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rate_limit' => 60, 'timespan' => 'PT1H'],
             ],
             'fusio_routes' => [
                 ['status' => 1, 'priority' => 0x10000000 | 50, 'methods' => 'ANY', 'path' => '/backend/action',                              'controller' => Backend\Api\Action\Collection::class],
@@ -255,19 +255,19 @@ class Version20180713131743 extends AbstractMigration
             'fusio_routes_response' => [
             ],
             'fusio_rate_allocation' => [
-                ['rateId' => 1, 'routeId' => null, 'appId' => null, 'authenticated' => null, 'parameters' => null],
-                ['rateId' => 2, 'routeId' => null, 'appId' => null, 'authenticated' => 0, 'parameters' => null],
+                ['rate_id' => 1, 'route_id' => null, 'app_id' => null, 'authenticated' => null, 'parameters' => null],
+                ['rate_id' => 2, 'route_id' => null, 'app_id' => null, 'authenticated' => 0, 'parameters' => null],
             ],
             'fusio_app_scope' => [
-                ['appId' => 1, 'scopeId' => 1],
-                ['appId' => 1, 'scopeId' => 3],
-                ['appId' => 2, 'scopeId' => 2],
-                ['appId' => 2, 'scopeId' => 3],
+                ['app_id' => 1, 'scope_id' => 1],
+                ['app_id' => 1, 'scope_id' => 3],
+                ['app_id' => 2, 'scope_id' => 2],
+                ['app_id' => 2, 'scope_id' => 3],
             ],
             'fusio_user_scope' => [
-                ['userId' => 1, 'scopeId' => 1],
-                ['userId' => 1, 'scopeId' => 2],
-                ['userId' => 1, 'scopeId' => 3],
+                ['user_id' => 1, 'scope_id' => 1],
+                ['user_id' => 1, 'scope_id' => 2],
+                ['user_id' => 1, 'scope_id' => 3],
             ],
             'fusio_scope_routes' => [
             ],
@@ -275,14 +275,14 @@ class Version20180713131743 extends AbstractMigration
 
         // routes method
         $lastRouteId = count($data['fusio_routes']);
-        $data['fusio_routes_method'][] = ['routeId' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1];
-        $data['fusio_routes_response'][] = ['methodId' => 1, 'code' => 200, 'response' => 1];
+        $data['fusio_routes_method'][] = ['route_id' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1];
+        $data['fusio_routes_response'][] = ['method_id' => 1, 'code' => 200, 'response' => 1];
 
         // scope routes
         foreach ($data['fusio_routes'] as $index => $row) {
             $scopeId = self::getScopeIdFromPath($row['path']);
             if ($scopeId !== null) {
-                $data['fusio_scope_routes'][] = ['scopeId' => $scopeId, 'routeId' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
+                $data['fusio_scope_routes'][] = ['scope_id' => $scopeId, 'route_id' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
             }
         }
 

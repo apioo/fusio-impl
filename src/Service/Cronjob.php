@@ -112,7 +112,7 @@ class Cronjob
         }
 
         $record = [
-            'id'     => $cronjob->id,
+            'id'     => $cronjob['id'],
             'name'   => $name,
             'cron'   => $cron,
             'action' => $action,
@@ -138,7 +138,7 @@ class Cronjob
         }
 
         $record = [
-            'id'     => $cronjob->id,
+            'id'     => $cronjob['id'],
             'status' => Table\Cronjob::STATUS_DELETED,
         ];
 
@@ -180,11 +180,11 @@ class Cronjob
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
             $this->errorTable->create([
-                'cronjobId' => $cronjob->id,
-                'message'   => $e->getMessage(),
-                'trace'     => $e->getTraceAsString(),
-                'file'      => $e->getFile(),
-                'line'      => $e->getLine(),
+                'cronjob_id' => $cronjob['id'],
+                'message'    => $e->getMessage(),
+                'trace'      => $e->getTraceAsString(),
+                'file'       => $e->getFile(),
+                'line'       => $e->getLine(),
             ]);
 
             $exitCode = Table\Cronjob::CODE_ERROR;
@@ -192,9 +192,9 @@ class Cronjob
 
         // set execute date
         $record = [
-            'id' => $cronjob->id,
-            'executeDate' => new \DateTime(),
-            'exitCode' => $exitCode,
+            'id' => $cronjob['id'],
+            'execute_date' => new \DateTime(),
+            'exit_code' => $exitCode,
         ];
 
         $this->cronjobTable->update($record);

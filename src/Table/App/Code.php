@@ -42,10 +42,10 @@ class Code extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'appId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
             'code' => self::TYPE_VARCHAR,
-            'redirectUri' => self::TYPE_VARCHAR,
+            'redirect_uri' => self::TYPE_VARCHAR,
             'scope' => self::TYPE_VARCHAR,
             'state' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
@@ -55,25 +55,25 @@ class Code extends TableAbstract
     public function getCodeByRequest($appKey, $appSecret, $code, $redirectUri)
     {
         $sql = '    SELECT code.id,
-                           code.appId,
-                           code.userId,
+                           code.app_id,
+                           code.user_id,
                            code.scope,
                            code.date
                       FROM fusio_app_code code
                 INNER JOIN fusio_app app
-                        ON app.id = code.appId
-                     WHERE app.appKey = :app_key
-                       AND app.appSecret = :app_secret
+                        ON app.id = code.app_id
+                     WHERE app.app_key = :app_key
+                       AND app.app_secret = :app_secret
                        AND app.status = :status
                        AND code.code = :code
-                       AND code.redirectUri = :redirectUri';
+                       AND code.redirect_uri = :redirect_uri';
 
         return $this->connection->fetchAssoc($sql, array(
-            'app_key'     => $appKey,
-            'app_secret'  => $appSecret,
-            'status'      => App::STATUS_ACTIVE,
-            'code'        => $code,
-            'redirectUri' => $redirectUri ?: '',
+            'app_key'      => $appKey,
+            'app_secret'   => $appSecret,
+            'status'       => App::STATUS_ACTIVE,
+            'code'         => $code,
+            'redirect_uri' => $redirectUri ?: '',
         ));
     }
 }

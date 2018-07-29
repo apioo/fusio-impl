@@ -86,7 +86,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         if (!empty($app)) {
             // use app user id this means only the owner of the app can use this
             // grant type to generate an access token
-            $userId = $app->userId;
+            $userId = $app['user_id'];
 
             // check whether user is valid
             if (empty($userId)) {

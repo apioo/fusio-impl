@@ -131,10 +131,10 @@ class Scope
             if (!empty($scope)) {
                 // assign route to scope
                 $this->scopeRouteTable->create([
-                    'scopeId' => $scope['id'],
-                    'routeId' => $routeId,
-                    'allow'   => 1,
-                    'methods' => 'GET|POST|PUT|PATCH|DELETE',
+                    'scope_id' => $scope['id'],
+                    'route_id' => $routeId,
+                    'allow'    => 1,
+                    'methods'  => 'GET|POST|PUT|PATCH|DELETE',
                 ]);
             } else {
                 // create new scope
@@ -196,12 +196,12 @@ class Scope
         }
 
         // check whether the scope is used by an app or user
-        $appScopes = $this->appScopeTable->getCount(new Condition(['scopeId', '=', $scope['id']]));
+        $appScopes = $this->appScopeTable->getCount(new Condition(['scope_id', '=', $scope['id']]));
         if ($appScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an app. Remove the scope from the app in order to delete the scope');
         }
 
-        $userScopes = $this->userScopeTable->getCount(new Condition(['scopeId', '=', $scope['id']]));
+        $userScopes = $this->userScopeTable->getCount(new Condition(['scope_id', '=', $scope['id']]));
         if ($userScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assgined to an user. Remove the scope from the user in order to delete the scope');
         }
@@ -259,10 +259,10 @@ class Scope
             foreach ($routes as $route) {
                 if ($route->allow) {
                     $this->scopeRouteTable->create(array(
-                        'scopeId' => $scopeId,
-                        'routeId' => $route->routeId,
-                        'allow'   => $route->allow ? 1 : 0,
-                        'methods' => $route->methods,
+                        'scope_id' => $scopeId,
+                        'route_id' => $route->routeId,
+                        'allow'    => $route->allow ? 1 : 0,
+                        'methods'  => $route->methods,
                     ));
                 }
             }

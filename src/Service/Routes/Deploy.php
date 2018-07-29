@@ -87,7 +87,7 @@ class Deploy
 
         // get existing responses
         $condition = new Condition();
-        $condition->equals('methodId', $method['id']);
+        $condition->equals('method_id', $method['id']);
         $responses = $this->responseTable->getBy($condition);
 
         if (!empty($responses)) {
@@ -105,9 +105,9 @@ class Deploy
         }
 
         // create cache and change status
-        $method['status']      = Resource::STATUS_ACTIVE;
-        $method['schemaCache'] = json_encode($schema);
-        $method['actionCache'] = json_encode($action);
+        $method['status']       = Resource::STATUS_ACTIVE;
+        $method['schema_cache'] = json_encode($schema);
+        $method['action_cache'] = json_encode($action);
 
         $this->methodTable->update($method);
     }

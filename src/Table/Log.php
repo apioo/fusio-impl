@@ -41,15 +41,15 @@ class Log extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'appId' => self::TYPE_INT,
-            'routeId' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
+            'route_id' => self::TYPE_INT,
             'ip' => self::TYPE_VARCHAR,
-            'userAgent' => self::TYPE_VARCHAR,
+            'user_agent' => self::TYPE_VARCHAR,
             'method' => self::TYPE_VARCHAR,
             'path' => self::TYPE_VARCHAR,
             'header' => self::TYPE_TEXT,
             'body' => self::TYPE_TEXT,
-            'executionTime' => self::TYPE_INT,
+            'execution_time' => self::TYPE_INT,
             'date' => self::TYPE_DATETIME,
         );
     }

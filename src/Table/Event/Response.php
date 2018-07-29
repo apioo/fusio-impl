@@ -48,13 +48,13 @@ class Response extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'triggerId' => self::TYPE_INT,
-            'subscriptionId' => self::TYPE_INT,
+            'trigger_id' => self::TYPE_INT,
+            'subscription_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'code' => self::TYPE_INT,
             'attempts' => self::TYPE_INT,
-            'executeDate' => self::TYPE_DATETIME,
-            'insertDate' => self::TYPE_DATETIME,
+            'execute_date' => self::TYPE_DATETIME,
+            'insert_date' => self::TYPE_DATETIME,
         );
     }
     
@@ -66,11 +66,11 @@ class Response extends TableAbstract
                        trigg.payload
                   FROM fusio_event_response response
             INNER JOIN fusio_event_subscription subscription
-                    ON subscription.id = response.subscriptionId
+                    ON subscription.id = response.subscription_id
             INNER JOIN fusio_event_trigger trigg
-                    ON trigg.id = response.triggerId
+                    ON trigg.id = response.trigger_id
                  WHERE response.status = :status
-              ORDER BY trigg.insertDate ASC';
+              ORDER BY trigg.insert_date ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, self::RESPONSE_LIMIT);
 
@@ -85,19 +85,19 @@ class Response extends TableAbstract
                        response.status,
                        response.code,
                        response.attempts,
-                       response.executeDate
+                       response.execute_date
                   FROM fusio_event_response response
             INNER JOIN fusio_event_subscription subscription
-                    ON subscription.id = response.subscriptionId
+                    ON subscription.id = response.subscription_id
                  WHERE subscription.id = :id
-                   AND subscription.userId = :userId
-              ORDER BY response.executeDate DESC';
+                   AND subscription.user_id = :user_id
+              ORDER BY response.execute_date DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 8);
 
         return $this->connection->fetchAll($sql, [
-            'id'     => $subscriptionId,
-            'userId' => $userId,
+            'id'      => $subscriptionId,
+            'user_id' => $userId,
         ]);
     }
     
@@ -121,7 +121,7 @@ class Response extends TableAbstract
                    SET status = :status,
                        code = :code,
                        attempts = :attempts,
-                       executeDate = :now
+                       execute_date = :now
                  WHERE id = :id';
 
         return $this->connection->executeUpdate($sql, [

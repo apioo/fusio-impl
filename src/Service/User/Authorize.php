@@ -217,25 +217,25 @@ class Authorize
     protected function saveUserDecision($userId, $appId, $allow)
     {
         $condition = new Condition();
-        $condition->equals('userId', $userId);
-        $condition->equals('appId', $appId);
+        $condition->equals('user_id', $userId);
+        $condition->equals('app_id', $appId);
 
         $userApp = $this->userGrantTable->getOneBy($condition);
 
         if (empty($userApp)) {
             $this->userGrantTable->create([
-                'userId' => $userId,
-                'appId'  => $appId,
-                'allow'  => $allow ? 1 : 0,
-                'date'   => new \DateTime(),
+                'user_id' => $userId,
+                'app_id'  => $appId,
+                'allow'   => $allow ? 1 : 0,
+                'date'    => new \DateTime(),
             ]);
         } else {
             $this->userGrantTable->update([
-                'id'     => $userApp['id'],
-                'userId' => $userId,
-                'appId'  => $appId,
-                'allow'  => $allow ? 1 : 0,
-                'date'   => new \DateTime(),
+                'id'      => $userApp['id'],
+                'user_id' => $userId,
+                'app_id'  => $appId,
+                'allow'   => $allow ? 1 : 0,
+                'date'    => new \DateTime(),
             ]);
         }
     }

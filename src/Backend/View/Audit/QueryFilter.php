@@ -88,11 +88,11 @@ class QueryFilter extends QueryFilterAbstract
         $alias     = $alias !== null ? $alias . '.' : '';
 
         if (!empty($this->appId)) {
-            $condition->equals($alias . 'appId', $this->appId);
+            $condition->equals($alias . 'app_id', $this->appId);
         }
 
         if (!empty($this->userId)) {
-            $condition->equals($alias . 'userId', $this->userId);
+            $condition->equals($alias . 'user_id', $this->userId);
         }
 
         if (!empty($this->event)) {

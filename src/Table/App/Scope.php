@@ -41,17 +41,17 @@ class Scope extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'appId' => self::TYPE_INT,
-            'scopeId' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
+            'scope_id' => self::TYPE_INT,
         );
     }
 
     public function deleteAllFromApp($appId)
     {
         $sql = 'DELETE FROM fusio_app_scope
-                      WHERE appId = :appId';
+                      WHERE app_id = :app_id';
 
-        $this->connection->executeQuery($sql, array('appId' => $appId));
+        $this->connection->executeQuery($sql, array('app_id' => $appId));
     }
 
     public function getValidScopes($appId, array $scopes, array $exclude = array())
@@ -78,12 +78,12 @@ class Scope extends TableAbstract
         $sql = '    SELECT scope.id,
                            scope.name,
                            scope.description
-                      FROM fusio_app_scope appScope
+                      FROM fusio_app_scope app_scope
                 INNER JOIN fusio_scope scope
-                        ON scope.id = appScope.scopeId
-                     WHERE appScope.appId = :appId
+                        ON scope.id = app_scope.scope_id
+                     WHERE app_scope.app_id = :app_id
                   ORDER BY scope.id ASC';
 
-        return $this->connection->fetchAll($sql, array('appId' => $appId)) ?: [];
+        return $this->connection->fetchAll($sql, array('app_id' => $appId)) ?: [];
     }
 }

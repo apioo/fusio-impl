@@ -44,8 +44,8 @@ class Subscription extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'eventId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
+            'event_id' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'endpoint' => self::TYPE_VARCHAR,
         );
@@ -55,26 +55,26 @@ class Subscription extends TableAbstract
     {
         $sql = 'SELECT id
                   FROM fusio_event_subscription
-                 WHERE eventId = :eventId
+                 WHERE event_id = :event_id
                    AND status = :status';
 
         return $this->connection->fetchAll($sql, [
-            'eventId' => $eventId,
-            'status'  => self::STATUS_ACTIVE,
+            'event_id' => $eventId,
+            'status'   => self::STATUS_ACTIVE,
         ]);
     }
 
     public function getSubscriptionCount($userId)
     {
-        return $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE userId = :userId', [
-            'userId' => $userId
+        return $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_event_subscription WHERE user_id = :user_id', [
+            'user_id' => $userId
         ]);
     }
 
     public function deleteAllResponses($subscriptionId)
     {
-        return $this->connection->executeUpdate('DELETE FROM fusio_event_response WHERE subscriptionId = :subscriptionId', [
-            'subscriptionId' => $subscriptionId
+        return $this->connection->executeUpdate('DELETE FROM fusio_event_response WHERE subscription_id = :subscription_id', [
+            'subscription_id' => $subscriptionId
         ]);
     }
 }

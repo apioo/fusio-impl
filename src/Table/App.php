@@ -49,13 +49,13 @@ class App extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'userId' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'url' => self::TYPE_VARCHAR,
             'parameters' => self::TYPE_VARCHAR,
-            'appKey' => self::TYPE_VARCHAR,
-            'appSecret' => self::TYPE_VARCHAR,
+            'app_key' => self::TYPE_VARCHAR,
+            'app_secret' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
         );
     }

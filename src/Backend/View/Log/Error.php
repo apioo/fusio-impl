@@ -53,7 +53,7 @@ class Error extends ViewAbstract
         $builder = $this->connection->createQueryBuilder()
             ->select(['error.id', 'error.message', 'log.path', 'log.date'])
             ->from('fusio_log_error', 'error')
-            ->innerJoin('error', 'fusio_log', 'log', 'error.logId = log.id')
+            ->innerJoin('error', 'fusio_log', 'log', 'error.log_id = log.id')
             ->orderBy('error.id', 'DESC')
             ->setFirstResult($startIndex)
             ->setMaxResults($count);
@@ -82,7 +82,7 @@ class Error extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Log\Error::class), 'get'], [$id], [
             'id' => 'id',
-            'logId' => 'logId',
+            'logId' => 'log_id',
             'message' => 'message',
             'trace' => 'trace',
             'file' => 'file',

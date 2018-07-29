@@ -45,17 +45,17 @@ class Trigger extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'eventId' => self::TYPE_INT,
+            'event_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'payload' => self::TYPE_TEXT,
-            'insertDate' => self::TYPE_DATETIME,
+            'insert_date' => self::TYPE_DATETIME,
         );
     }
 
     public function getAllPending()
     {
         $sql = 'SELECT id,
-                       eventId
+                       event_id
                   FROM fusio_event_trigger 
                  WHERE status = :status
               ORDER BY id ASC';

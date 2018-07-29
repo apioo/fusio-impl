@@ -115,14 +115,14 @@ class ApiExecutor
             $now    = new DateTime();
 
             $this->connection->insert('fusio_app_token', [
-                'appId'  => 1,
-                'userId' => 1,
-                'status' => 1,
-                'token'  => $token,
-                'scope'  => 'backend',
-                'ip'     => '127.0.0.1',
-                'expire' => $expire->format('Y-m-d H:i:s'),
-                'date'   => $now->format('Y-m-d H:i:s'),
+                'app_id'  => 1,
+                'user_id' => 1,
+                'status'  => 1,
+                'token'   => $token,
+                'scope'   => 'backend',
+                'ip'      => '127.0.0.1',
+                'expire'  => $expire->format('Y-m-d H:i:s'),
+                'date'    => $now->format('Y-m-d H:i:s'),
             ]);
 
             return $this->accessToken = $token;

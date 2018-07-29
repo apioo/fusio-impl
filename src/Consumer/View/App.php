@@ -40,7 +40,7 @@ class App extends ViewAbstract
     public function getCollection($userId, $startIndex = 0, $search = null)
     {
         $condition = new Condition();
-        $condition->equals('userId', $userId);
+        $condition->equals('user_id', $userId);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         if (!empty($search)) {
@@ -53,10 +53,10 @@ class App extends ViewAbstract
             'itemsPerPage' => 16,
             'entry' => $this->doCollection([$this->getTable(Table\App::class), 'getAll'], [$startIndex, 16, null, Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
                 'id' => 'id',
-                'userId' => 'userId',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'name' => 'name',
-                'appKey' => 'appKey',
+                'appKey' => 'app_key',
                 'date' => $this->fieldDateTime('date'),
             ]),
         ];
@@ -68,21 +68,21 @@ class App extends ViewAbstract
     {
         $condition = new Condition();
         $condition->equals('id', $appId);
-        $condition->equals('userId', $userId);
+        $condition->equals('user_id', $userId);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition], [
             'id' => 'id',
-            'userId' => 'userId',
+            'userId' => 'user_id',
             'status' => 'status',
             'name' => 'name',
             'url' => 'url',
-            'appKey' => 'appKey',
-            'appSecret' => 'appSecret',
+            'appKey' => 'app_key',
+            'appSecret' => 'app_secret',
             'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
                 'id' => 'id',
-                'userId' => 'userId',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'token' => 'token',
                 'scope' => $this->fieldCsv('scope'),
@@ -100,9 +100,9 @@ class App extends ViewAbstract
     {
         $condition = new Condition();
         $condition->equals('status', Table\App::STATUS_ACTIVE);
-        $condition->equals('appKey', $appKey);
+        $condition->equals('app_key', $appKey);
 
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition, Fields::blacklist(['userId', 'status', 'parameters', 'appKey', 'appSecret', 'date'])], [
+        $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition, Fields::blacklist(['user_id', 'status', 'parameters', 'app_key', 'app_secret', 'date'])], [
             'id' => 'id',
             'name' => 'name',
             'url' => 'url',

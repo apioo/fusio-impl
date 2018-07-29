@@ -55,10 +55,10 @@ class Log extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['header', 'body'])], [
                 'id' => 'id',
-                'appId' => 'appId',
-                'routeId' => 'routeId',
+                'appId' => 'app_id',
+                'routeId' => 'route_id',
                 'ip' => 'ip',
-                'userAgent' => 'userAgent',
+                'userAgent' => 'user_agent',
                 'method' => 'method',
                 'path' => 'path',
                 'date' => $this->fieldDateTime('date'),
@@ -72,15 +72,15 @@ class Log extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Log::class), 'get'], [$id], [
             'id' => 'id',
-            'appId' => 'appId',
-            'routeId' => 'routeId',
+            'appId' => 'app_id',
+            'routeId' => 'route_id',
             'ip' => 'ip',
-            'userAgent' => 'userAgent',
+            'userAgent' => 'user_agent',
             'method' => 'method',
             'path' => 'path',
             'header' => 'header',
             'body' => 'body',
-            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'getByLogId'], [new Reference('id')], [
+            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'getByLog_id'], [new Reference('id')], [
                 'message' => 'message',
                 'trace' => 'trace',
                 'file' => 'file',

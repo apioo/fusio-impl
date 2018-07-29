@@ -41,7 +41,7 @@ class Error extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'logId' => self::TYPE_INT,
+            'log_id' => self::TYPE_INT,
             'message' => self::TYPE_VARCHAR,
             'trace' => self::TYPE_TEXT,
             'file' => self::TYPE_VARCHAR,

@@ -44,32 +44,32 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_app')) {
             $appTable = $schema->createTable('fusio_app');
             $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appTable->addColumn('userId', 'integer');
+            $appTable->addColumn('user_id', 'integer');
             $appTable->addColumn('status', 'integer');
             $appTable->addColumn('name', 'string', ['length' => 64]);
             $appTable->addColumn('url', 'string', ['length' => 255]);
             $appTable->addColumn('parameters', 'string', ['length' => 255, 'notnull' => false]);
-            $appTable->addColumn('appKey', 'string', ['length' => 255]);
-            $appTable->addColumn('appSecret', 'string', ['length' => 255]);
+            $appTable->addColumn('app_key', 'string', ['length' => 255]);
+            $appTable->addColumn('app_secret', 'string', ['length' => 255]);
             $appTable->addColumn('date', 'datetime');
             $appTable->setPrimaryKey(['id']);
-            $appTable->addUniqueIndex(['appKey']);
+            $appTable->addUniqueIndex(['app_key']);
         }
 
         if (!$schema->hasTable('fusio_app_scope')) {
             $appScopeTable = $schema->createTable('fusio_app_scope');
             $appScopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appScopeTable->addColumn('appId', 'integer');
-            $appScopeTable->addColumn('scopeId', 'integer');
+            $appScopeTable->addColumn('app_id', 'integer');
+            $appScopeTable->addColumn('scope_id', 'integer');
             $appScopeTable->setPrimaryKey(['id']);
-            $appScopeTable->addUniqueIndex(['appId', 'scopeId']);
+            $appScopeTable->addUniqueIndex(['app_id', 'scope_id']);
         }
 
         if (!$schema->hasTable('fusio_app_token')) {
             $appTokenTable = $schema->createTable('fusio_app_token');
             $appTokenTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appTokenTable->addColumn('appId', 'integer');
-            $appTokenTable->addColumn('userId', 'integer');
+            $appTokenTable->addColumn('app_id', 'integer');
+            $appTokenTable->addColumn('user_id', 'integer');
             $appTokenTable->addColumn('status', 'integer', ['default' => 1]);
             $appTokenTable->addColumn('token', 'string', ['length' => 255]);
             $appTokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
@@ -84,10 +84,10 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_app_code')) {
             $appCodeTable = $schema->createTable('fusio_app_code');
             $appCodeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $appCodeTable->addColumn('appId', 'integer');
-            $appCodeTable->addColumn('userId', 'integer');
+            $appCodeTable->addColumn('app_id', 'integer');
+            $appCodeTable->addColumn('user_id', 'integer');
             $appCodeTable->addColumn('code', 'string', ['length' => 255]);
-            $appCodeTable->addColumn('redirectUri', 'string', ['length' => 255, 'notnull' => false]);
+            $appCodeTable->addColumn('redirect_uri', 'string', ['length' => 255, 'notnull' => false]);
             $appCodeTable->addColumn('scope', 'string', ['length' => 255]);
             $appCodeTable->addColumn('date', 'datetime');
             $appCodeTable->setPrimaryKey(['id']);
@@ -97,9 +97,9 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_audit')) {
             $auditTable = $schema->createTable('fusio_audit');
             $auditTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $auditTable->addColumn('appId', 'integer');
-            $auditTable->addColumn('userId', 'integer');
-            $auditTable->addColumn('refId', 'integer', ['notnull' => false]);
+            $auditTable->addColumn('app_id', 'integer');
+            $auditTable->addColumn('user_id', 'integer');
+            $auditTable->addColumn('ref_id', 'integer', ['notnull' => false]);
             $auditTable->addColumn('event', 'string');
             $auditTable->addColumn('ip', 'string', ['length' => 40]);
             $auditTable->addColumn('message', 'string');
@@ -146,8 +146,8 @@ class Version20180713071825 extends AbstractMigration
             $cronjobTable->addColumn('name', 'string', ['length' => 64]);
             $cronjobTable->addColumn('cron', 'string');
             $cronjobTable->addColumn('action', 'integer', ['notnull' => false]);
-            $cronjobTable->addColumn('executeDate', 'datetime', ['notnull' => false]);
-            $cronjobTable->addColumn('exitCode', 'integer', ['notnull' => false]);
+            $cronjobTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
+            $cronjobTable->addColumn('exit_code', 'integer', ['notnull' => false]);
             $cronjobTable->setPrimaryKey(['id']);
             $cronjobTable->addUniqueIndex(['name']);
         }
@@ -155,7 +155,7 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_cronjob_error')) {
             $cronjobErrorTable = $schema->createTable('fusio_cronjob_error');
             $cronjobErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $cronjobErrorTable->addColumn('cronjobId', 'integer');
+            $cronjobErrorTable->addColumn('cronjob_id', 'integer');
             $cronjobErrorTable->addColumn('message', 'string', ['length' => 500]);
             $cronjobErrorTable->addColumn('trace', 'text');
             $cronjobErrorTable->addColumn('file', 'string', ['length' => 255]);
@@ -176,21 +176,21 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_event_response')) {
             $eventResponseTable = $schema->createTable('fusio_event_response');
             $eventResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventResponseTable->addColumn('triggerId', 'integer');
-            $eventResponseTable->addColumn('subscriptionId', 'integer');
+            $eventResponseTable->addColumn('trigger_id', 'integer');
+            $eventResponseTable->addColumn('subscription_id', 'integer');
             $eventResponseTable->addColumn('status', 'integer');
             $eventResponseTable->addColumn('code', 'integer', ['notnull' => false]);
             $eventResponseTable->addColumn('attempts', 'integer');
-            $eventResponseTable->addColumn('executeDate', 'datetime', ['notnull' => false]);
-            $eventResponseTable->addColumn('insertDate', 'datetime');
+            $eventResponseTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
+            $eventResponseTable->addColumn('insert_date', 'datetime');
             $eventResponseTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_event_subscription')) {
             $eventSubscriptionTable = $schema->createTable('fusio_event_subscription');
             $eventSubscriptionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventSubscriptionTable->addColumn('eventId', 'integer');
-            $eventSubscriptionTable->addColumn('userId', 'integer');
+            $eventSubscriptionTable->addColumn('event_id', 'integer');
+            $eventSubscriptionTable->addColumn('user_id', 'integer');
             $eventSubscriptionTable->addColumn('status', 'integer');
             $eventSubscriptionTable->addColumn('endpoint', 'string', ['length' => 255]);
             $eventSubscriptionTable->setPrimaryKey(['id']);
@@ -199,26 +199,26 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_event_trigger')) {
             $eventTriggerTable = $schema->createTable('fusio_event_trigger');
             $eventTriggerTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $eventTriggerTable->addColumn('eventId', 'integer');
+            $eventTriggerTable->addColumn('event_id', 'integer');
             $eventTriggerTable->addColumn('status', 'integer');
             $eventTriggerTable->addColumn('payload', 'text');
-            $eventTriggerTable->addColumn('insertDate', 'datetime');
+            $eventTriggerTable->addColumn('insert_date', 'datetime');
             $eventTriggerTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logTable->addColumn('routeId', 'integer', ['notnull' => false]);
-            $logTable->addColumn('appId', 'integer', ['notnull' => false]);
-            $logTable->addColumn('userId', 'integer', ['notnull' => false]);
+            $logTable->addColumn('route_id', 'integer', ['notnull' => false]);
+            $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
+            $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('ip', 'string', ['length' => 40]);
-            $logTable->addColumn('userAgent', 'string', ['length' => 255]);
+            $logTable->addColumn('user_agent', 'string', ['length' => 255]);
             $logTable->addColumn('method', 'string', ['length' => 16]);
             $logTable->addColumn('path', 'string', ['length' => 1023]);
             $logTable->addColumn('header', 'text');
             $logTable->addColumn('body', 'text', ['notnull' => false]);
-            $logTable->addColumn('executionTime', 'integer', ['notnull' => false, 'default' => null]);
+            $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
             $logTable->addOption('engine', 'MyISAM');
@@ -227,7 +227,7 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_log_error')) {
             $logErrorTable = $schema->createTable('fusio_log_error');
             $logErrorTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logErrorTable->addColumn('logId', 'integer');
+            $logErrorTable->addColumn('log_id', 'integer');
             $logErrorTable->addColumn('message', 'string', ['length' => 500]);
             $logErrorTable->addColumn('trace', 'text');
             $logErrorTable->addColumn('file', 'string', ['length' => 255]);
@@ -251,7 +251,7 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_routes_method')) {
             $routesMethodTable = $schema->createTable('fusio_routes_method');
             $routesMethodTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $routesMethodTable->addColumn('routeId', 'integer');
+            $routesMethodTable->addColumn('route_id', 'integer');
             $routesMethodTable->addColumn('method', 'string', ['length' => 8]);
             $routesMethodTable->addColumn('version', 'integer');
             $routesMethodTable->addColumn('status', 'integer');
@@ -261,16 +261,16 @@ class Version20180713071825 extends AbstractMigration
             $routesMethodTable->addColumn('parameters', 'integer', ['notnull' => false]);
             $routesMethodTable->addColumn('request', 'integer', ['notnull' => false]);
             $routesMethodTable->addColumn('action', 'integer', ['notnull' => false]);
-            $routesMethodTable->addColumn('schemaCache', 'text', ['notnull' => false]);
-            $routesMethodTable->addColumn('actionCache', 'text', ['notnull' => false]);
+            $routesMethodTable->addColumn('schema_cache', 'text', ['notnull' => false]);
+            $routesMethodTable->addColumn('action_cache', 'text', ['notnull' => false]);
             $routesMethodTable->setPrimaryKey(['id']);
-            $routesMethodTable->addUniqueIndex(['routeId', 'method', 'version']);
+            $routesMethodTable->addUniqueIndex(['route_id', 'method', 'version']);
         }
 
         if (!$schema->hasTable('fusio_routes_response')) {
             $routesResponseTable = $schema->createTable('fusio_routes_response');
             $routesResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $routesResponseTable->addColumn('methodId', 'integer');
+            $routesResponseTable->addColumn('method_id', 'integer');
             $routesResponseTable->addColumn('code', 'smallint');
             $routesResponseTable->addColumn('response', 'integer');
             $routesResponseTable->setPrimaryKey(['id']);
@@ -303,7 +303,7 @@ class Version20180713071825 extends AbstractMigration
             $rateTable->addColumn('status', 'integer');
             $rateTable->addColumn('priority', 'integer');
             $rateTable->addColumn('name', 'string', ['length' => 64]);
-            $rateTable->addColumn('rateLimit', 'integer');
+            $rateTable->addColumn('rate_limit', 'integer');
             $rateTable->addColumn('timespan', 'string');
             $rateTable->setPrimaryKey(['id']);
         }
@@ -311,9 +311,9 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_rate_allocation')) {
             $rateAllocationTable = $schema->createTable('fusio_rate_allocation');
             $rateAllocationTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $rateAllocationTable->addColumn('rateId', 'integer');
-            $rateAllocationTable->addColumn('routeId', 'integer', ['notnull' => false, 'default' => null]);
-            $rateAllocationTable->addColumn('appId', 'integer', ['notnull' => false, 'default' => null]);
+            $rateAllocationTable->addColumn('rate_id', 'integer');
+            $rateAllocationTable->addColumn('route_id', 'integer', ['notnull' => false, 'default' => null]);
+            $rateAllocationTable->addColumn('app_id', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('authenticated', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('parameters', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $rateAllocationTable->setPrimaryKey(['id']);
@@ -324,13 +324,13 @@ class Version20180713071825 extends AbstractMigration
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $userTable->addColumn('provider', 'integer', ['default' => ProviderInterface::PROVIDER_SYSTEM]);
             $userTable->addColumn('status', 'integer');
-            $userTable->addColumn('remoteId', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $userTable->addColumn('remote_id', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('name', 'string', ['length' => 64]);
             $userTable->addColumn('email', 'string', ['length' => 128, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
-            $userTable->addUniqueIndex(['provider', 'remoteId']);
+            $userTable->addUniqueIndex(['provider', 'remote_id']);
             $userTable->addUniqueIndex(['name']);
             $userTable->addUniqueIndex(['email']);
         }
@@ -338,8 +338,8 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_scope_routes')) {
             $scopeRoutesTable = $schema->createTable('fusio_scope_routes');
             $scopeRoutesTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $scopeRoutesTable->addColumn('scopeId', 'integer');
-            $scopeRoutesTable->addColumn('routeId', 'integer');
+            $scopeRoutesTable->addColumn('scope_id', 'integer');
+            $scopeRoutesTable->addColumn('route_id', 'integer');
             $scopeRoutesTable->addColumn('allow', 'smallint');
             $scopeRoutesTable->addColumn('methods', 'string', ['length' => 64, 'notnull' => false]);
             $scopeRoutesTable->setPrimaryKey(['id']);
@@ -348,82 +348,82 @@ class Version20180713071825 extends AbstractMigration
         if (!$schema->hasTable('fusio_user_grant')) {
             $userGrantTable = $schema->createTable('fusio_user_grant');
             $userGrantTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $userGrantTable->addColumn('userId', 'integer');
-            $userGrantTable->addColumn('appId', 'integer');
+            $userGrantTable->addColumn('user_id', 'integer');
+            $userGrantTable->addColumn('app_id', 'integer');
             $userGrantTable->addColumn('allow', 'integer');
             $userGrantTable->addColumn('date', 'datetime');
             $userGrantTable->setPrimaryKey(['id']);
-            $userGrantTable->addUniqueIndex(['userId', 'appId']);
+            $userGrantTable->addUniqueIndex(['user_id', 'app_id']);
         }
 
         if (!$schema->hasTable('fusio_user_scope')) {
             $userScopeTable = $schema->createTable('fusio_user_scope');
             $userScopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $userScopeTable->addColumn('userId', 'integer');
-            $userScopeTable->addColumn('scopeId', 'integer');
+            $userScopeTable->addColumn('user_id', 'integer');
+            $userScopeTable->addColumn('scope_id', 'integer');
             $userScopeTable->setPrimaryKey(['id']);
-            $userScopeTable->addUniqueIndex(['userId', 'scopeId']);
+            $userScopeTable->addUniqueIndex(['user_id', 'scope_id']);
         }
 
         if (isset($appTable)) {
-            $appTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['userId'], ['id'], [], 'appUserId');
+            $appTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_user_id');
         }
 
         if (isset($appScopeTable)) {
-            $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['appId'], ['id'], [], 'appScopeAppId');
-            $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scopeId'], ['id'], [], 'appScopeScopeId');
+            $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_scope_app_id');
+            $appScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'app_scope_scope_id');
         }
 
         if (isset($appTokenTable)) {
-            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['appId'], ['id'], [], 'appTokenAppId');
-            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['userId'], ['id'], [], 'appTokenUserId');
+            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'app_token_app_id');
+            $appTokenTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'app_token_user_id');
         }
 
         if (isset($eventResponseTable)) {
-            $eventResponseTable->addForeignKeyConstraint($schema->getTable('fusio_event_trigger'), ['triggerId'], ['id'], [], 'eventResponseTriggerId');
-            $eventResponseTable->addForeignKeyConstraint($schema->getTable('fusio_event_subscription'), ['subscriptionId'], ['id'], [], 'eventResponseSubscriptionId');
+            $eventResponseTable->addForeignKeyConstraint($schema->getTable('fusio_event_trigger'), ['trigger_id'], ['id'], [], 'event_response_trigger_id');
+            $eventResponseTable->addForeignKeyConstraint($schema->getTable('fusio_event_subscription'), ['subscription_id'], ['id'], [], 'event_response_subscription_id');
         }
 
         if (isset($eventSubscriptionTable)) {
-            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['eventId'], ['id'], [], 'eventSubscriptionEventId');
-            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['userId'], ['id'], [], 'eventSubscriptionUserId');
+            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_subscription_event_id');
+            $eventSubscriptionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'event_subscription_user_id');
         }
 
         if (isset($eventTriggerTable)) {
-            $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['eventId'], ['id'], [], 'eventTriggerEventId');
+            $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_trigger_event_id');
         }
 
         if (isset($routesMethodTable)) {
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['routeId'], ['id'], [], 'routesMethodRouteId');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['parameters'], ['id'], [], 'routesMethodParameters');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['request'], ['id'], [], 'routesMethodRequest');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action'], ['id'], [], 'routesMethodAction');
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'routes_method_route_id');
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['parameters'], ['id'], [], 'routes_method_parameters');
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['request'], ['id'], [], 'routes_method_request');
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action'], ['id'], [], 'routes_method_action');
         }
 
         if (isset($routesResponseTable)) {
-            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_routes_method'), ['methodId'], ['id'], [], 'routesResponseMethodId');
-            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['response'], ['id'], [], 'routesResponseResponse');
+            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_routes_method'), ['method_id'], ['id'], [], 'routes_response_method_id');
+            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['response'], ['id'], [], 'routes_response_response');
         }
 
         if (isset($rateAllocationTable)) {
-            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_rate'), ['rateId'], ['id'], [], 'rateAllocationRateId');
-            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['routeId'], ['id'], [], 'rateAllocationRouteId');
-            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['appId'], ['id'], [], 'rateAllocationAppId');
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_rate'), ['rate_id'], ['id'], [], 'rate_allocation_rate_id');
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'rate_allocation_route_id');
+            $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'rate_allocation_app_id');
         }
 
         if (isset($scopeRoutesTable)) {
-            $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scopeId'], ['id'], [], 'scopeRoutesScopeId');
-            $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['routeId'], ['id'], [], 'scopeRoutesRouteId');
+            $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'scope_routes_scope_id');
+            $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'scope_routes_route_id');
         }
 
         if (isset($userGrantTable)) {
-            $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['userId'], ['id'], [], 'userGrantUserId');
-            $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['appId'], ['id'], [], 'userGrantAppId');
+            $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_grant_user_id');
+            $userGrantTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'user_grant_app_id');
         }
 
         if (isset($userScopeTable)) {
-            $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scopeId'], ['id'], [], 'userScopeScopeId');
-            $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['userId'], ['id'], [], 'userScopeUserId');
+            $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'user_scope_scope_id');
+            $userScopeTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_scope_user_id');
         }
     }
 

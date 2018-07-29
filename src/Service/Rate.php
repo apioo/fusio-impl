@@ -94,11 +94,11 @@ class Rate
 
             // create rate
             $record = [
-                'status'    => Table\Rate::STATUS_ACTIVE,
-                'priority'  => $priority,
-                'name'      => $name,
-                'rateLimit' => $rateLimit,
-                'timespan'  => $timespan,
+                'status'     => Table\Rate::STATUS_ACTIVE,
+                'priority'   => $priority,
+                'name'       => $name,
+                'rate_limit' => $rateLimit,
+                'timespan'   => $timespan,
             ];
 
             $this->rateTable->create($record);
@@ -135,11 +135,11 @@ class Rate
 
             // update rate
             $record = [
-                'id'        => $rate['id'],
-                'priority'  => $priority,
-                'name'      => $name,
-                'rateLimit' => $rateLimit,
-                'timespan'  => $timespan,
+                'id'         => $rate['id'],
+                'priority'   => $priority,
+                'name'       => $name,
+                'rate_limit' => $rateLimit,
+                'timespan'   => $timespan,
             ];
 
             $this->rateTable->update($record);
@@ -190,7 +190,7 @@ class Rate
         }
 
         $count     = (int) $this->getRequestCount($ip, $rate['timespan'], $app);
-        $rateLimit = (int) $rate['rateLimit'];
+        $rateLimit = (int) $rate['rate_limit'];
 
         $response->setHeader('X-RateLimit-Limit', $rateLimit);
         $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
@@ -223,7 +223,7 @@ class Rate
         if ($app->isAnonymous()) {
             $condition->equals('ip', $ip);
         } else {
-            $condition->equals('appId', $app->getId());
+            $condition->equals('app_id', $app->getId());
         }
 
         $condition->between('date', $past->format('Y-m-d H:i:s'), $now->format('Y-m-d H:i:s'));
@@ -238,9 +238,9 @@ class Rate
         if (!empty($allocations)) {
             foreach ($allocations as $allocation) {
                 $this->rateAllocationTable->create(array(
-                    'rateId'        => $rateId,
-                    'routeId'       => $allocation->routeId,
-                    'appId'         => $allocation->appId,
+                    'rate_id'       => $rateId,
+                    'route_id'      => $allocation->routeId,
+                    'app_id'        => $allocation->appId,
                     'authenticated' => $allocation->authenticated,
                     'parameters'    => $allocation->parameters,
                 ));

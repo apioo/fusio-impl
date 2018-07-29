@@ -47,8 +47,8 @@ class Token extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'appId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'token' => self::TYPE_VARCHAR,
             'refresh' => self::TYPE_VARCHAR,
@@ -63,7 +63,7 @@ class Token extends TableAbstract
     {
         $now = new DateTime();
         $con = new Condition();
-        $con->add('appId', '=', $appId);
+        $con->add('app_id', '=', $appId);
         $con->add('status', '=', self::STATUS_ACTIVE);
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
 
@@ -73,7 +73,7 @@ class Token extends TableAbstract
     public function getTokenByRefreshToken($appId, $refreshToken)
     {
         $con = new Condition();
-        $con->add('appId', '=', $appId);
+        $con->add('app_id', '=', $appId);
         $con->add('refresh', '=', $refreshToken);
 
         return $this->getOneBy($con);
@@ -83,7 +83,7 @@ class Token extends TableAbstract
     {
         $now = new DateTime();
         $con = new Condition();
-        $con->add('appId', '=', $appId);
+        $con->add('app_id', '=', $appId);
         $con->add('status', '=', self::STATUS_ACTIVE);
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
         $con->add('token', '=', $token);
@@ -95,12 +95,12 @@ class Token extends TableAbstract
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
-                 WHERE appId = :appId
+                 WHERE app_id = :app_id
                    AND id = :id';
 
         $affectedRows = $this->connection->executeUpdate($sql, array(
             'status' => self::STATUS_DELETED,
-            'appId'  => $appId,
+            'app_id' => $appId,
             'id'     => $tokenId
         ));
 
@@ -113,13 +113,13 @@ class Token extends TableAbstract
     {
         $sql = 'UPDATE fusio_app_token
                    SET status = :status
-                 WHERE appId = :appId
-                   AND userId = :userId';
+                 WHERE app_id = :app_id
+                   AND user_id = :user_id';
 
         $this->connection->executeUpdate($sql, array(
-            'status' => self::STATUS_DELETED,
-            'appId'  => $appId,
-            'userId' => $userId
+            'status'  => self::STATUS_DELETED,
+            'app_id'  => $appId,
+            'user_id' => $userId
         ));
     }
 }

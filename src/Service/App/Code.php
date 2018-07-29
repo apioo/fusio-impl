@@ -56,12 +56,12 @@ class Code
         $code = TokenGenerator::generateCode();
 
         $this->appCodeTable->create([
-            'appId'       => $appId,
-            'userId'      => $userId,
-            'code'        => $code,
-            'redirectUri' => $redirectUri,
-            'scope'       => implode(',', $scopes),
-            'date'        => new \DateTime(),
+            'app_id'       => $appId,
+            'user_id'      => $userId,
+            'code'         => $code,
+            'redirect_uri' => $redirectUri,
+            'scope'        => implode(',', $scopes),
+            'date'         => new \DateTime(),
         ]);
 
         return $code;

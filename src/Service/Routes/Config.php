@@ -192,7 +192,7 @@ class Config
 
         // create method
         $data = [
-            'routeId'     => $routeId,
+            'route_id'    => $routeId,
             'method'      => $method,
             'version'     => $ver,
             'status'      => $status,
@@ -221,16 +221,16 @@ class Config
         if (!empty($responses)) {
             foreach ($responses as $statusCode => $response) {
                 $this->responseTable->create([
-                    'methodId' => $methodId,
-                    'code'     => $statusCode,
-                    'response' => $response,
+                    'method_id' => $methodId,
+                    'code'      => $statusCode,
+                    'response'  => $response,
                 ]);
             }
         } elseif (!empty($response)) {
             $this->responseTable->create([
-                'methodId' => $methodId,
-                'code'     => 200,
-                'response' => $response,
+                'method_id' => $methodId,
+                'code'      => 200,
+                'response'  => $response,
             ]);
         }
     }

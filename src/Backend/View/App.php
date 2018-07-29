@@ -60,10 +60,10 @@ class App extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\App::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
                 'id' => 'id',
-                'userId' => 'userId',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'name' => 'name',
-                'appKey' => 'appKey',
+                'appKey' => 'app_key',
                 'date' => $this->fieldDateTime('date'),
             ]),
         ];
@@ -75,17 +75,17 @@ class App extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\App::class), 'get'], [$id], [
             'id' => 'id',
-            'userId' => 'userId',
+            'userId' => 'user_id',
             'status' => 'status',
             'name' => 'name',
             'url' => 'url',
             'parameters' => 'parameters',
-            'appKey' => 'appKey',
-            'appSecret' => 'appSecret',
+            'appKey' => 'app_key',
+            'appSecret' => 'app_secret',
             'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
                 'id' => 'id',
-                'userId' => 'userId',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'token' => 'token',
                 'scope' => $this->fieldCsv('scope'),

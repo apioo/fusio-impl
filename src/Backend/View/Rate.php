@@ -62,7 +62,7 @@ class Rate extends ViewAbstract
                 'status' => 'status',
                 'priority' => 'priority',
                 'name' => 'name',
-                'rateLimit' => 'rateLimit',
+                'rateLimit' => 'rate_limit',
                 'timespan' => 'timespan',
             ]),
         ];
@@ -77,13 +77,13 @@ class Rate extends ViewAbstract
             'status' => 'status',
             'priority' => 'priority',
             'name' => 'name',
-            'rateLimit' => 'rateLimit',
+            'rateLimit' => 'rate_limit',
             'timespan' => 'timespan',
-            'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'getByRateId'], [new Reference('id')], [
+            'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'getByRate_id'], [new Reference('id')], [
                 'id' => 'id',
-                'rateId' => 'rateId',
-                'routeId' => 'routeId',
-                'appId' => 'appId',
+                'rateId' => 'rate_id',
+                'routeId' => 'route_id',
+                'appId' => 'app_id',
                 'authenticated' => 'authenticated',
                 'parameters' => 'parameters',
             ]),

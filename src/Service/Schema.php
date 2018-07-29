@@ -123,7 +123,7 @@ class Schema
         }
 
         $record = [
-            'id'     => $schema->id,
+            'id'     => $schema['id'],
             'name'   => $name,
             'source' => $source,
             'cache'  => $this->schemaParser->parse(json_encode($source)),
@@ -152,7 +152,7 @@ class Schema
         }
 
         $record = [
-            'id'     => $schema->id,
+            'id'     => $schema['id'],
             'status' => Table\Schema::STATUS_DELETED,
         ];
 
@@ -174,7 +174,7 @@ class Schema
         }
 
         $record = [
-            'id'   => $schema->id,
+            'id'   => $schema['id'],
             'form' => $form,
         ];
 

@@ -91,17 +91,17 @@ class Executor
         $triggers = $this->triggerTable->getAllPending();
 
         foreach ($triggers as $trigger) {
-            $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['eventId']);
+            $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['event_id']);
 
             foreach ($subscriptions as $subscription) {
                 $now = new \DateTime();
 
                 $this->responseTable->create([
-                    'triggerId' => $trigger['id'],
-                    'subscriptionId' => $subscription['id'],
+                    'trigger_id' => $trigger['id'],
+                    'subscription_id' => $subscription['id'],
                     'status' => Table\Event\Response::STATUS_PENDING,
                     'attempts' => 0,
-                    'insertDate' => $now,
+                    'insert_date' => $now,
                 ]);
             }
 

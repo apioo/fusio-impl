@@ -51,8 +51,8 @@ class Cronjob extends TableAbstract
             'name' => self::TYPE_VARCHAR,
             'cron' => self::TYPE_VARCHAR,
             'action' => self::TYPE_VARCHAR,
-            'executeDate' => self::TYPE_DATETIME,
-            'exitCode' => self::TYPE_INT,
+            'execute_date' => self::TYPE_DATETIME,
+            'exit_code' => self::TYPE_INT,
         );
     }
 }

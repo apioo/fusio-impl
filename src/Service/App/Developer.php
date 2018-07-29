@@ -89,7 +89,7 @@ class Developer
 
         // check limit of apps which an user can create
         $condition = new Condition();
-        $condition->equals('userId', $userId);
+        $condition->equals('user_id', $userId);
         $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
 
         if ($this->appTable->getCount($condition) > $this->appCount) {
@@ -121,7 +121,7 @@ class Developer
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['userId'] != $userId) {
+        if ($app['user_id'] != $userId) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
@@ -154,7 +154,7 @@ class Developer
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['userId'] != $userId) {
+        if ($app['user_id'] != $userId) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 

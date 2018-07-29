@@ -237,7 +237,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             $event->getSubscriptionId(),
             'event.subscribe',
-            sprintf('Subscribed event %s', $event->getRecord()['eventId']),
+            sprintf('Subscribed event %s', $event->getRecord()['event_id']),
             $event->getRecord()
         );
     }
@@ -456,14 +456,14 @@ class AuditListener implements EventSubscriberInterface
     private function log(UserContext $context, $refId, $event, $message, array $content = null)
     {
         $this->auditTable->create([
-            'appId'   => $context->getAppId(),
-            'userId'  => $context->getUserId(),
-            'refId'   => $refId,
-            'event'   => $event,
-            'ip'      => $context->getIp(),
-            'message' => $message,
-            'content' => $this->normalize($content),
-            'date'    => new \DateTime(),
+            'app_id'   => $context->getAppId(),
+            'user_id'  => $context->getUserId(),
+            'ref_id'   => $refId,
+            'event'    => $event,
+            'ip'       => $context->getIp(),
+            'message'  => $message,
+            'content'  => $this->normalize($content),
+            'date'     => new \DateTime(),
         ]);
     }
 

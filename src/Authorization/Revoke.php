@@ -76,8 +76,8 @@ class Revoke extends SchemaApiAbstract
             $row = $this->tableManager->getTable(Table\App\Token::class)->getTokenByToken($this->context->getAppId(), $token);
 
             // the token must be assigned to the user
-            if (!empty($row) && $row['appId'] == $this->context->getAppId() && $row['userId'] == $this->context->getUserId()) {
-                $this->appService->removeToken($row['appId'], $row['id'], $this->context->getUserContext());
+            if (!empty($row) && $row['app_id'] == $this->context->getAppId() && $row['user_id'] == $this->context->getUserId()) {
+                $this->appService->removeToken($row['app_id'], $row['id'], $this->context->getUserContext());
 
                 return [
                     'success' => true

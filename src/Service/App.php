@@ -97,7 +97,7 @@ class App
     public function getByAppKey($appKey)
     {
         $condition = new Condition();
-        $condition->equals('appKey', $appKey);
+        $condition->equals('app_key', $appKey);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         return $this->appTable->getOneBy($condition);
@@ -106,8 +106,8 @@ class App
     public function getByAppKeyAndSecret($appKey, $appSecret)
     {
         $condition = new Condition();
-        $condition->equals('appKey', $appKey);
-        $condition->equals('appSecret', $appSecret);
+        $condition->equals('app_key', $appKey);
+        $condition->equals('app_secret', $appSecret);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         return $this->appTable->getOneBy($condition);
@@ -117,7 +117,7 @@ class App
     {
         // check whether app exists
         $condition  = new Condition();
-        $condition->equals('userId', $userId);
+        $condition->equals('user_id', $userId);
         $condition->notEquals('status', Table\App::STATUS_DELETED);
         $condition->equals('name', $name);
 
@@ -140,13 +140,13 @@ class App
             $this->appTable->beginTransaction();
 
             $record = [
-                'userId'     => $userId,
+                'user_id'    => $userId,
                 'status'     => $status,
                 'name'       => $name,
                 'url'        => $url,
                 'parameters' => $parameters,
-                'appKey'     => $appKey,
-                'appSecret'  => $appSecret,
+                'app_key'    => $appKey,
+                'app_secret' => $appSecret,
                 'date'       => new DateTime(),
             ];
 
@@ -269,8 +269,8 @@ class App
         $refreshToken = TokenGenerator::generateToken();
 
         $this->appTokenTable->create([
-            'appId'   => $appId,
-            'userId'  => $userId,
+            'app_id'  => $appId,
+            'user_id' => $userId,
             'status'  => Table\App\Token::STATUS_ACTIVE,
             'token'   => $accessToken,
             'refresh' => $refreshToken,
@@ -313,7 +313,7 @@ class App
         }
 
         // check expire date
-        $date = $token->date;
+        $date = $token['date'];
         if ($date instanceof \DateTime) {
             $expires = clone $date;
             $expires->add($expireRefresh);
@@ -324,11 +324,11 @@ class App
         }
 
         // check whether the refresh was requested from the same app
-        if ($token->appId != $appId) {
+        if ($token['app_id'] != $appId) {
             throw new StatusCode\BadRequestException('Token was requested from another app');
         }
 
-        $scopes  = explode(',', $token->scope);
+        $scopes  = explode(',', $token['scope']);
         $expires = new \DateTime();
         $expires->add($expireApp);
 
@@ -337,7 +337,7 @@ class App
         $refreshToken = TokenGenerator::generateToken();
 
         $this->appTokenTable->update([
-            'id'      => $token->id,
+            'id'      => $token['id'],
             'status'  => Table\App\Token::STATUS_ACTIVE,
             'token'   => $accessToken,
             'refresh' => $refreshToken,
@@ -349,12 +349,12 @@ class App
         // dispatch event
         $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
             $appId,
-            $token->id,
+            $token['id'],
             $accessToken,
             $scopes,
             $expires,
             $now,
-            new UserContext($appId, $token->userId, $ip)
+            new UserContext($appId, $token['user_id'], $ip)
         ));
 
         $token = new AccessToken();
@@ -374,8 +374,8 @@ class App
 
             foreach ($scopes as $scope) {
                 $this->appScopeTable->create(array(
-                    'appId'   => $appId,
-                    'scopeId' => $scope['id'],
+                    'app_id'   => $appId,
+                    'scope_id' => $scope['id'],
                 ));
             }
         }

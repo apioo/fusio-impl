@@ -55,8 +55,8 @@ class Token extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['token'])], [
                 'id' => 'id',
-                'appId' => 'appId',
-                'userId' => 'userId',
+                'appId' => 'app_id',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'scope' => $this->fieldCsv('scope'),
                 'ip' => 'ip',
@@ -71,13 +71,13 @@ class Token extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\App\Token::class), 'get'], [$id], [
             'id' => 'id',
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('appId')], [
+            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('app_id')], [
                 'id' => 'id',
-                'userId' => 'userId',
+                'userId' => 'user_id',
                 'status' => 'status',
                 'name' => 'name',
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('userId')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',

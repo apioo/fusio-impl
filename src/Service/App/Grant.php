@@ -70,7 +70,7 @@ class Grant
             throw new StatusCode\NotFoundException('Could not find grant');
         }
 
-        if ($grant['userId'] != $userId) {
+        if ($grant['user_id'] != $userId) {
             throw new StatusCode\BadRequestException('Invalid grant id');
         }
 
@@ -80,7 +80,7 @@ class Grant
             $this->userGrantTable->delete($grant);
 
             // delete tokens
-            $this->appTokenTable->removeAllTokensFromAppAndUser($grant['appId'], $grant['userId']);
+            $this->appTokenTable->removeAllTokensFromAppAndUser($grant['app_id'], $grant['user_id']);
 
             $this->userGrantTable->commit();
         } catch (\Throwable $e) {

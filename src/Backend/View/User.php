@@ -80,12 +80,12 @@ class User extends ViewAbstract
             'name' => 'name',
             'email' => 'email',
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUserId'], [new Reference('id'), Fields::blacklist(['userId', 'parameters', 'appSecret'])], [
+            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUser_id'], [new Reference('id'), Fields::blacklist(['userId', 'parameters', 'appSecret'])], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',
                 'url' => 'url',
-                'appKey' => 'appKey',
+                'appKey' => 'app_key',
                 'date' => 'date',
             ]),
             'date' => $this->fieldDateTime('date'),

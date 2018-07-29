@@ -41,15 +41,15 @@ class Scope extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'userId' => self::TYPE_INT,
-            'scopeId' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
+            'scope_id' => self::TYPE_INT,
         );
     }
 
     public function deleteAllFromUser($userId)
     {
         $sql = 'DELETE FROM fusio_user_scope
-                      WHERE userId = :id';
+                      WHERE user_id = :id';
 
         $this->connection->executeQuery($sql, array('id' => $userId));
     }
@@ -78,12 +78,12 @@ class Scope extends TableAbstract
         $sql = '    SELECT scope.id,
                            scope.name,
                            scope.description
-                      FROM fusio_user_scope userScope
+                      FROM fusio_user_scope user_scope
                 INNER JOIN fusio_scope scope
-                        ON scope.id = userScope.scopeId
-                     WHERE userScope.userId = :userId
+                        ON scope.id = user_scope.scope_id
+                     WHERE user_scope.user_id = :user_id
                   ORDER BY scope.id ASC';
 
-        return $this->connection->fetchAll($sql, array('userId' => $userId)) ?: [];
+        return $this->connection->fetchAll($sql, array('user_id' => $userId)) ?: [];
     }
 }

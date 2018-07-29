@@ -156,7 +156,7 @@ class Connection
 
         // update connection
         $record = [
-            'id'     => $connection->id,
+            'id'     => $connection['id'],
             'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
@@ -184,18 +184,18 @@ class Connection
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
-            $factory->onDown($connection->name, $parameters);
+            $factory->onDown($connection['name'], $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onDelete($connection->name, $parameters, $conn);
+            $factory->onDelete($connection['name'], $parameters, $conn);
         }
 
         $record = [
-            'id'     => $connection->id,
+            'id'     => $connection['id'],
             'status' => Table\Connection::STATUS_DELETED,
         ];
 

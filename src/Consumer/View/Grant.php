@@ -35,26 +35,26 @@ class Grant extends ViewAbstract
 {
     public function getCollection($userId)
     {
-        $sql = '    SELECT userGrant.id,
-                           userGrant.date,
-                           userGrant.appId AS appId,
-                           app.name AS appName,
-                           app.url AS appUrl
-                      FROM fusio_user_grant userGrant
+        $sql = '    SELECT user_grant.id,
+                           user_grant.date,
+                           user_grant.app_id,
+                           app.name AS app_name,
+                           app.url AS app_url
+                      FROM fusio_user_grant user_grant
                 INNER JOIN fusio_app app
-                        ON userGrant.appId = app.id
-                     WHERE userGrant.allow = 1
-                       AND userGrant.userId = :userId
+                        ON user_grant.app_id = app.id
+                     WHERE user_grant.allow = 1
+                       AND user_grant.user_id = :user_id
                        AND app.status = :status';
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['userId' => $userId, 'status' => Table\App::STATUS_ACTIVE], [
+            'entry' => $this->doCollection($sql, ['user_id' => $userId, 'status' => Table\App::STATUS_ACTIVE], [
                 'id' => 'id',
                 'createDate' => $this->fieldDateTime('date'),
                 'app' => [
-                    'id' => 'appId',
-                    'name' => 'appName',
-                    'url' => 'appUrl',
+                    'id' => 'app_id',
+                    'name' => 'app_name',
+                    'url' => 'app_url',
                 ],
             ]),
         ];

@@ -61,8 +61,8 @@ class Cronjob extends ViewAbstract
                 'id' => 'id',
                 'name' => 'name',
                 'cron' => 'cron',
-                'executeDate' => $this->fieldDateTime('executeDate'),
-                'exitCode' => $this->fieldInteger('exitCode'),
+                'executeDate' => $this->fieldDateTime('execute_date'),
+                'exitCode' => $this->fieldInteger('exit_code'),
             ]),
         ];
 
@@ -76,9 +76,9 @@ class Cronjob extends ViewAbstract
             'name' => 'name',
             'cron' => 'cron',
             'action' => $this->fieldInteger('action'),
-            'executeDate' => $this->fieldDateTime('executeDate'),
-            'exitCode' => $this->fieldInteger('exitCode'),
-            'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'getByCronjobId'], [new Reference('id')], [
+            'executeDate' => $this->fieldDateTime('execute_date'),
+            'exitCode' => $this->fieldInteger('exit_code'),
+            'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'getByCronjob_id'], [new Reference('id')], [
                 'message' => 'message',
                 'trace' => 'trace',
                 'file' => 'file',

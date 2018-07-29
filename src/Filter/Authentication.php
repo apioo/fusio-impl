@@ -110,8 +110,8 @@ class Authentication implements FilterInterface
                 $token = $this->getToken($accessToken, $requestMethod);
 
                 if (!empty($token)) {
-                    $app  = $this->appRepository->get($token['appId']);
-                    $user = $this->userRepository->get($token['userId']);
+                    $app  = $this->appRepository->get($token['app_id']);
+                    $user = $this->userRepository->get($token['user_id']);
 
                     $this->context->setApp($app);
                     $this->context->setUser($user);
@@ -148,16 +148,16 @@ class Authentication implements FilterInterface
         }
 
         $now = new \DateTime();
-        $sql = 'SELECT appToken.appId,
-                       appToken.userId,
-                       appToken.token,
-                       appToken.scope,
-                       appToken.expire,
-                       appToken.date
-                  FROM fusio_app_token appToken
-                 WHERE appToken.token = :token
-                   AND appToken.status = :status
-                   AND (appToken.expire IS NULL OR appToken.expire > :now)';
+        $sql = 'SELECT app_token.app_id,
+                       app_token.user_id,
+                       app_token.token,
+                       app_token.scope,
+                       app_token.expire,
+                       app_token.date
+                  FROM fusio_app_token app_token
+                 WHERE app_token.token = :token
+                   AND app_token.status = :status
+                   AND (app_token.expire IS NULL OR app_token.expire > :now)';
 
         $accessToken = $this->connection->fetchAssoc($sql, array(
             'token'  => $token,
@@ -171,12 +171,12 @@ class Authentication implements FilterInterface
 
             // get all scopes which are assigned to this route
             $sql = '    SELECT scope.name,
-                               scopeRoutes.allow,
-                               scopeRoutes.methods
-                          FROM fusio_scope_routes scopeRoutes
+                               scope_routes.allow,
+                               scope_routes.methods
+                          FROM fusio_scope_routes scope_routes
                     INNER JOIN fusio_scope scope
-                            ON scope.id = scopeRoutes.scopeId
-                         WHERE scopeRoutes.routeId = :route';
+                            ON scope.id = scope_routes.scope_id
+                         WHERE scope_routes.route_id = :route';
 
             $availableScopes = $this->connection->fetchAll($sql, array('route' => $this->context->getRouteId()));
 

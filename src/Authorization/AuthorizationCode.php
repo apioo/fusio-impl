@@ -95,15 +95,15 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             }
 
             // scopes
-            $scopes = $this->scopeService->getValidScopes($code['appId'], $code['userId'], $code['scope'], ['backend']);
+            $scopes = $this->scopeService->getValidScopes($code['app_id'], $code['user_id'], $code['scope'], ['backend']);
             if (empty($scopes)) {
                 throw new InvalidScopeException('No valid scope given');
             }
 
             // generate access token
             return $this->appService->generateAccessToken(
-                $code['appId'],
-                $code['userId'],
+                $code['app_id'],
+                $code['user_id'],
                 $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
                 new \DateInterval($this->expireApp)

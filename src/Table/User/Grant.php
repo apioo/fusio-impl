@@ -41,8 +41,8 @@ class Grant extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'userId' => self::TYPE_INT,
-            'appId' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
             'allow' => self::TYPE_INT,
             'date' => self::TYPE_DATETIME,
         );

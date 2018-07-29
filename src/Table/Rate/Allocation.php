@@ -43,9 +43,9 @@ class Allocation extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'rateId' => self::TYPE_INT,
-            'routeId' => self::TYPE_INT,
-            'appId' => self::TYPE_INT,
+            'rate_id' => self::TYPE_INT,
+            'route_id' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
             'authenticated' => self::TYPE_BOOLEAN,
             'parameters' => self::TYPE_VARCHAR,
         );
@@ -54,34 +54,34 @@ class Allocation extends TableAbstract
     public function deleteAllFromRate($rateId)
     {
         $sql = 'DELETE FROM fusio_rate_allocation 
-                      WHERE rateId = :rateId';
+                      WHERE rate_id = :rate_id';
 
-        $this->connection->executeUpdate($sql, ['rateId' => $rateId]);
+        $this->connection->executeUpdate($sql, ['rate_id' => $rateId]);
     }
 
     public function getRateForRequest($routeId, Model\AppInterface $app)
     {
-        $sql = '    SELECT rate.rateLimit,
+        $sql = '    SELECT rate.rate_limit,
                            rate.timespan
-                      FROM fusio_rate_allocation rateAllocation
+                      FROM fusio_rate_allocation rate_allocation
                 INNER JOIN fusio_rate rate
-                        ON rateAllocation.rateId = rate.id 
+                        ON rate_allocation.rate_id = rate.id 
                      WHERE rate.status = :status
-                       AND (rateAllocation.routeId IS NULL OR rateAllocation.routeId = :routeId)
-                       AND (rateAllocation.appId IS NULL OR rateAllocation.appId = :appId)
-                       AND (rateAllocation.authenticated IS NULL OR rateAllocation.authenticated = :authenticated)';
+                       AND (rate_allocation.route_id IS NULL OR rate_allocation.route_id = :route_id)
+                       AND (rate_allocation.app_id IS NULL OR rate_allocation.app_id = :app_id)
+                       AND (rate_allocation.authenticated IS NULL OR rate_allocation.authenticated = :authenticated)';
 
         $params = [
             'status' => Rate::STATUS_ACTIVE,
-            'routeId' => $routeId,
-            'appId' => $app->getId(),
+            'route_id' => $routeId,
+            'app_id' => $app->getId(),
             'authenticated' => $app->isAnonymous() ? 0 : 1,
         ];
 
         $parameters = $app->getParameters();
         if (!empty($parameters)) {
-            $sql.= ' AND (rateAllocation.parameters IS NULL OR ';
-            $sql.= $this->connection->getDatabasePlatform()->getLocateExpression(':parameters', 'rateAllocation.parameters');
+            $sql.= ' AND (rate_allocation.parameters IS NULL OR ';
+            $sql.= $this->connection->getDatabasePlatform()->getLocateExpression(':parameters', 'rate_allocation.parameters');
             $sql.= ' > 0)';
 
             $params['parameters'] = http_build_query($parameters, '', '&');

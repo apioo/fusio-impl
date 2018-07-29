@@ -95,8 +95,8 @@ class Subscription
 
         // create event
         $record = [
-            'eventId'  => $event->id,
-            'userId'   => $context->getUserId(),
+            'event_id' => $event['id'],
+            'user_id'  => $context->getUserId(),
             'status'   => Table\Event\Subscription::STATUS_ACTIVE,
             'endpoint' => $endpoint,
         ];
@@ -117,7 +117,7 @@ class Subscription
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
-        if ($subscription['userId'] != $context->getUserId()) {
+        if ($subscription['user_id'] != $context->getUserId()) {
             throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
         }
 
@@ -138,7 +138,7 @@ class Subscription
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
-        if ($subscription['userId'] != $context->getUserId()) {
+        if ($subscription['user_id'] != $context->getUserId()) {
             throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
         }
 

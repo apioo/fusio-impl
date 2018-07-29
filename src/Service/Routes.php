@@ -168,7 +168,7 @@ class Routes
 
             // update route
             $record = [
-                'id'       => $route->id,
+                'id'       => $route['id'],
                 'priority' => $priority,
             ];
 
@@ -211,7 +211,7 @@ class Routes
 
         // delete route
         $record = [
-            'id'     => $route->id,
+            'id'     => $route['id'],
             'status' => Table\Routes::STATUS_DELETED
         ];
 

@@ -37,13 +37,13 @@ class Scope extends ViewAbstract
         $sql = '    SELECT scope.id,
                            scope.name,
                            scope.description
-                      FROM fusio_user_scope userScope
+                      FROM fusio_user_scope user_scope
                 INNER JOIN fusio_scope scope
-                        ON userScope.scopeId = scope.id
-                     WHERE userScope.userId = :userId';
+                        ON user_scope.scope_id = scope.id
+                     WHERE user_scope.user_id = :user_id';
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['userId' => $userId], [
+            'entry' => $this->doCollection($sql, ['user_id' => $userId], [
                 'id' => 'id',
                 'name' => 'name',
                 'description' => 'description',

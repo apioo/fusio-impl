@@ -129,15 +129,15 @@ class User
 
         if (!empty($user)) {
             // we can authenticate only local users
-            if ($user->provider != ProviderInterface::PROVIDER_SYSTEM) {
+            if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
                 return null;
             }
 
-            if ($user->status == Table\User::STATUS_DISABLED) {
+            if ($user['status'] == Table\User::STATUS_DISABLED) {
                 throw new StatusCode\BadRequestException('The assigned account is disabled');
             }
 
-            if ($user->status == Table\User::STATUS_DELETED) {
+            if ($user['status'] == Table\User::STATUS_DELETED) {
                 throw new StatusCode\BadRequestException('The assigned account is deleted');
             }
 
@@ -211,7 +211,7 @@ class User
         // check whether user exists
         $condition  = new Condition();
         $condition->equals('provider', $provider);
-        $condition->equals('remoteId', $id);
+        $condition->equals('remote_id', $id);
 
         $user = $this->userTable->getOneBy($condition);
 
@@ -236,13 +236,13 @@ class User
 
             // create user
             $record = [
-                'provider' => $provider,
-                'status'   => Table\User::STATUS_CONSUMER,
-                'remoteId' => $id,
-                'name'     => $name,
-                'email'    => $email,
-                'password' => null,
-                'date'     => new DateTime(),
+                'provider'  => $provider,
+                'status'    => Table\User::STATUS_CONSUMER,
+                'remote_id' => $id,
+                'name'      => $name,
+                'email'     => $email,
+                'password'  => null,
+                'date'      => new DateTime(),
             ];
 
             $this->userTable->create($record);
@@ -417,8 +417,8 @@ class User
 
             foreach ($scopes as $scope) {
                 $this->userScopeTable->create(array(
-                    'userId'  => $userId,
-                    'scopeId' => $scope['id'],
+                    'user_id'  => $userId,
+                    'scope_id' => $scope['id'],
                 ));
             }
         }

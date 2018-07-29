@@ -137,11 +137,11 @@ class Action
 
         // in case the class is empty use the existing class
         if (empty($class)) {
-            $class = $action->class;
+            $class = $action['class'];
         }
 
         if (empty($engine)) {
-            $engine = $action->engine;
+            $engine = $action['engine'];
         }
 
         // check source
@@ -155,7 +155,7 @@ class Action
 
         // update action
         $record = [
-            'id'     => $action->id,
+            'id'     => $action['id'],
             'name'   => $name,
             'class'  => $class,
             'engine' => $engine,

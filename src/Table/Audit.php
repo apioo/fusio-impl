@@ -41,9 +41,9 @@ class Audit extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'appId' => self::TYPE_INT,
-            'userId' => self::TYPE_INT,
-            'refId' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
+            'user_id' => self::TYPE_INT,
+            'ref_id' => self::TYPE_INT,
             'event' => self::TYPE_VARCHAR,
             'ip' => self::TYPE_VARCHAR,
             'message' => self::TYPE_VARCHAR,

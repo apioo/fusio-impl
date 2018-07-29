@@ -238,7 +238,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $response = null;
         $method   = $this->context->getMethod();
         $actionId = $method['action'];
-        $cache    = $method['actionCache'];
+        $cache    = $method['action_cache'];
 
         if ($actionId > 0) {
             if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {

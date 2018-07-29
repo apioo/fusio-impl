@@ -68,16 +68,16 @@ class Logger implements FilterInterface
         }
 
         $this->connection->insert('fusio_log', array(
-            'routeId'   => $this->context->getRouteId(),
-            'appId'     => $this->context->getAppId(),
-            'userId'    => $this->context->getUserId(),
-            'ip'        => $remoteIp,
-            'userAgent' => $request->getHeader('User-Agent'),
-            'method'    => $request->getMethod(),
-            'path'      => $path,
-            'header'    => $this->getHeadersAsString($request),
-            'body'      => $this->getBodyAsString($request),
-            'date'      => $now->format('Y-m-d H:i:s'),
+            'route_id'   => $this->context->getRouteId(),
+            'app_id'     => $this->context->getAppId(),
+            'user_id'    => $this->context->getUserId(),
+            'ip'         => $remoteIp,
+            'user_agent' => $request->getHeader('User-Agent'),
+            'method'     => $request->getMethod(),
+            'path'       => $path,
+            'header'     => $this->getHeadersAsString($request),
+            'body'       => $this->getBodyAsString($request),
+            'date'       => $now->format('Y-m-d H:i:s'),
         ));
 
         $logId = $this->connection->lastInsertId();
@@ -109,7 +109,7 @@ class Logger implements FilterInterface
         $diffUsec = $endUsec - $startUsec;
 
         $this->connection->update('fusio_log', [
-            'executionTime' => intval(($diffSec + $diffUsec) * 1000000),
+            'execution_time' => intval(($diffSec + $diffUsec) * 1000000),
         ], [
             'id' => $this->context->getLogId(),
         ]);
@@ -136,7 +136,7 @@ class Logger implements FilterInterface
         }
 
         $this->connection->insert('fusio_log_error', array(
-            'logId'   => $this->context->getLogId(),
+            'log_id'  => $this->context->getLogId(),
             'message' => $message,
             'trace'   => $exception->getTraceAsString(),
             'file'    => $exception->getFile(),

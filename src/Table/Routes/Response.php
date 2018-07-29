@@ -41,7 +41,7 @@ class Response extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'methodId' => self::TYPE_INT,
+            'method_id' => self::TYPE_INT,
             'code' => self::TYPE_INT,
             'response' => self::TYPE_INT,
         );
@@ -53,7 +53,7 @@ class Response extends TableAbstract
                        response.code, 
                        response.response 
                   FROM fusio_routes_response response
-                 WHERE response.methodId = :id';
+                 WHERE response.method_id = :id';
 
         return $this->connection->fetchAll($sql, [
             'id' => $methodId
@@ -63,7 +63,7 @@ class Response extends TableAbstract
     public function deleteAllFromMethod($methodId)
     {
         $sql = 'DELETE FROM fusio_routes_response
-                      WHERE methodId = :id';
+                      WHERE method_id = :id';
 
         $params = ['id' => $methodId];
 

@@ -42,7 +42,7 @@ class Method extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'routeId' => self::TYPE_INT,
+            'route_id' => self::TYPE_INT,
             'method' => self::TYPE_VARCHAR,
             'version' => self::TYPE_INT,
             'status' => self::TYPE_INT,
@@ -52,15 +52,15 @@ class Method extends TableAbstract
             'parameters' => self::TYPE_INT,
             'request' => self::TYPE_INT,
             'action' => self::TYPE_INT,
-            'schemaCache' => self::TYPE_TEXT,
-            'actionCache' => self::TYPE_TEXT,
+            'schema_cache' => self::TYPE_TEXT,
+            'action_cache' => self::TYPE_TEXT,
         );
     }
 
     public function deleteAllFromRoute($routeId, $version = null, $status = null)
     {
         $sql = 'DELETE FROM fusio_routes_method
-                      WHERE routeId = :id';
+                      WHERE route_id = :id';
 
         $params = ['id' => $routeId];
 
@@ -90,14 +90,14 @@ class Method extends TableAbstract
         $sql = '    SELECT COUNT(resp.id) AS cnt
                       FROM fusio_routes_response resp
                 INNER JOIN fusio_routes_method method
-                        ON resp.methodId = method.id
+                        ON resp.method_id = method.id
                 INNER JOIN fusio_routes routes
-                        ON routes.id = method.routeId
+                        ON routes.id = method.route_id
                      WHERE routes.status = 1
-                       AND (method.parameters = :schemaId OR method.request = :schemaId OR resp.response = :schemaId)';
+                       AND (method.parameters = :schema_id OR method.request = :schema_id OR resp.response = :schema_id)';
 
         $count = $this->connection->fetchColumn($sql, [
-            'schemaId' => $schemaId,
+            'schema_id' => $schemaId,
         ]);
 
         return $count > 0;
@@ -116,12 +116,12 @@ class Method extends TableAbstract
         $sql = '    SELECT COUNT(method.id) AS cnt
                       FROM fusio_routes_method method
                 INNER JOIN fusio_routes routes
-                        ON routes.id = method.routeId
+                        ON routes.id = method.route_id
                      WHERE routes.status = 1
-                       AND method.action = :actionId';
+                       AND method.action = :action_id';
 
         $count = $this->connection->fetchColumn($sql, [
-            'actionId' => $actionId,
+            'action_id' => $actionId,
         ]);
 
         return $count > 0;
@@ -138,16 +138,16 @@ class Method extends TableAbstract
      */
     public function getMethods($routeId, $version = null, $active = true, $cache = false)
     {
-        $fields = ['method.id', 'method.routeId', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.description', 'method.parameters', 'method.request', 'method.action'];
+        $fields = ['method.id', 'method.route_id', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.description', 'method.parameters', 'method.request', 'method.action'];
         if ($cache) {
-            $fields[] = 'method.schemaCache';
+            $fields[] = 'method.schema_cache';
         }
 
         $sql = '  SELECT ' . implode(',', $fields) . '
                     FROM fusio_routes_method method
-                   WHERE method.routeId = :routeId';
+                   WHERE method.route_id = :route_id';
 
-        $params = ['routeId' => $routeId];
+        $params = ['route_id' => $routeId];
 
         if ($active !== null) {
             $sql.= ' AND method.active = ' . ($active ? '1' : '0');
@@ -180,18 +180,18 @@ class Method extends TableAbstract
         $sql = 'SELECT method.public,
                        method.action,
                        method.status,
-                       method.actionCache
+                       method.action_cache
                   FROM fusio_routes_method method
-                 WHERE routeId = :routeId
+                 WHERE route_id = :route_id
                    AND version = :version
                    AND method = :method
                    AND active = :active';
 
         return $this->connection->fetchAssoc($sql, [
-            'routeId' => $routeId,
+            'route_id' => $routeId,
             'version' => $version,
-            'method'  => $method,
-            'active'  => Resource::STATUS_ACTIVE,
+            'method' => $method,
+            'active' => Resource::STATUS_ACTIVE,
         ]);
     }
 
@@ -199,11 +199,11 @@ class Method extends TableAbstract
     {
         $sql = 'SELECT version
                   FROM fusio_routes_method
-                 WHERE routeId = :routeId
+                 WHERE route_id = :route_id
                    AND version = :version';
 
         return $this->connection->fetchColumn($sql, [
-            'routeId' => $routeId,
+            'route_id' => $routeId,
             'version' => $version,
         ]);
     }
@@ -212,12 +212,12 @@ class Method extends TableAbstract
     {
         $sql = 'SELECT MAX(version)
                   FROM fusio_routes_method
-                 WHERE routeId = :routeId
+                 WHERE route_id = :route_id
                    AND status = :status';
 
         $version = $this->connection->fetchColumn($sql, [
-            'routeId' => $routeId,
-            'status'  => Resource::STATUS_ACTIVE,
+            'route_id' => $routeId,
+            'status' => Resource::STATUS_ACTIVE,
         ]);
 
         if (empty($version)) {
@@ -225,10 +225,10 @@ class Method extends TableAbstract
             // version
             $sql = 'SELECT MAX(version)
                       FROM fusio_routes_method
-                     WHERE routeId = :routeId';
+                     WHERE route_id = :route_id';
 
             return $this->connection->fetchColumn($sql, [
-                'routeId' => $routeId,
+                'route_id' => $routeId,
             ]);
         } else {
             return $version;
@@ -237,14 +237,14 @@ class Method extends TableAbstract
 
     public function hasProductionVersion($routeId)
     {
-        $sql = 'SELECT COUNT(id)
+        $sql = 'SELECT COUNT(id) AS cnt
                   FROM fusio_routes_method
-                 WHERE routeId = :id
+                 WHERE route_id = :route_id
                    AND status IN (:production, :deprecated)
                    AND active = :active';
 
         $count = (int) $this->connection->fetchColumn($sql, [
-            'id'         => $routeId,
+            'route_id'   => $routeId,
             'production' => Resource::STATUS_ACTIVE,
             'deprecated' => Resource::STATUS_DEPRECATED,
             'active'     => 1,
