@@ -134,7 +134,7 @@ JSON;
         Environment::getService('user_register_service')->register('baz', 'baz@localhost.com', 'test1234!', null);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'provider', 'status', 'remoteId', 'name', 'email')
+            ->select('id', 'provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -145,7 +145,7 @@ JSON;
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(2, $row['status']);
-        $this->assertEquals('', $row['remoteId']);
+        $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
 
@@ -171,7 +171,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('provider', 'status', 'remoteId', 'name', 'email')
+            ->select('provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->setFirstResult(0)
@@ -181,7 +181,7 @@ JSON;
 
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(0, $row['status']);
-        $this->assertEquals('', $row['remoteId']);
+        $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
     }

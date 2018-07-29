@@ -264,7 +264,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
+            ->select('id', 'status', 'user_id', 'name', 'url')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -275,7 +275,7 @@ JSON;
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(App::STATUS_ACTIVE, $row['status']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
     }

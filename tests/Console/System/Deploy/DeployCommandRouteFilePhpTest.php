@@ -79,12 +79,12 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
         $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
-            'routeId' => $route['id'],
+        $methods = $this->connection->fetchAll('SELECT id, route_id, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE route_id = :route_id', [
+            'route_id' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['routeId']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -95,8 +95,8 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
-        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
-            'methodId' => $methods[0]['id'],
+        $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
+            'method_id' => $methods[0]['id'],
         ]);
 
         $this->assertEquals(1, count($responses));

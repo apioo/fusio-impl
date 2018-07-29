@@ -61,7 +61,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
         $this->assertEquals('Test-Cron', $cronjob['name']);
         $this->assertEquals('*/30 * * * *', $cronjob['cron']);
         $this->assertEquals(3, $cronjob['action']);
-        $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['executeDate'])));
-        $this->assertEquals(0, $cronjob['exitCode']);
+        $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
+        $this->assertEquals(0, $cronjob['exit_code']);
     }
 }

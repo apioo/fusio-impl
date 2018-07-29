@@ -354,26 +354,26 @@ JSON;
         $this->assertEquals('Test description', $row['description']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'scopeId', 'routeId', 'allow', 'methods')
+            ->select('id', 'scope_id', 'route_id', 'allow', 'methods')
             ->from('fusio_scope_routes')
-            ->where('scopeId = :scopeId')
+            ->where('scope_id = :scope_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scopeId' => 6]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 6]);
 
         $this->assertEquals([[
-            'id'      => 75,
-            'scopeId' => 6,
-            'routeId' => 2,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+            'id'       => 75,
+            'scope_id' => 6,
+            'route_id' => 2,
+            'allow'    => 1,
+            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'id'      => 74,
-            'scopeId' => 6,
-            'routeId' => 1,
-            'allow'   => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE',
+            'id'       => 74,
+            'scope_id' => 6,
+            'route_id' => 1,
+            'allow'    => 1,
+            'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);
     }
 

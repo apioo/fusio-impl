@@ -133,10 +133,10 @@ JSON;
         $this->assertEquals('consumer,authorization', $data['scope']);
 
         // check whether the token was created
-        $row = $this->connection->fetchAssoc('SELECT appId, userId, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
+        $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
-        $this->assertEquals(2, $row['appId']);
-        $this->assertEquals($userId, $row['userId']);
+        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals($userId, $row['user_id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals('consumer,authorization', $row['scope']);

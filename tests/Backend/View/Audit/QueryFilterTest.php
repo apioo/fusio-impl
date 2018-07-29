@@ -53,7 +53,7 @@ class QueryFilterTest extends \PHPUnit_Framework_TestCase
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (date >= ? AND date <= ? AND appId = ? AND userId = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatment());
+        $this->assertEquals('WHERE (date >= ? AND date <= ? AND app_id = ? AND user_id = ? AND event LIKE ? AND ip LIKE ? AND message LIKE ?)', $condition->getStatment());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',

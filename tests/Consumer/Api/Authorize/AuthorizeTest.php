@@ -290,7 +290,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'code', 'redirectUri', 'scope')
+            ->select('app_id', 'user_id', 'code', 'redirect_uri', 'scope')
             ->from('fusio_app_code')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -299,10 +299,10 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['appId']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(3, $row['app_id']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals($data['code'], $row['code']);
-        $this->assertEquals('http://google.com', $row['redirectUri']);
+        $this->assertEquals('http://google.com', $row['redirect_uri']);
         // its important that we can not obtain a backend scope
         $this->assertEquals('authorization,foo,bar', $row['scope']);
     }
@@ -333,7 +333,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'code', 'redirectUri', 'scope')
+            ->select('app_id', 'user_id', 'code', 'redirect_uri', 'scope')
             ->from('fusio_app_code')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -342,10 +342,10 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['appId']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(3, $row['app_id']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals($data['code'], $row['code']);
-        $this->assertNull($row['redirectUri']);
+        $this->assertNull($row['redirect_uri']);
         // its important that we can not obtain a backend scope
         $this->assertEquals('authorization,foo,bar', $row['scope']);
     }
@@ -409,7 +409,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'expire')
+            ->select('app_id', 'user_id', 'status', 'token', 'scope', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->setFirstResult(0)
@@ -420,8 +420,8 @@ JSON;
             'token' => $data['token']['access_token']
         ]);
 
-        $this->assertEquals(3, $row['appId']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(3, $row['app_id']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals($data['token']['access_token'], $row['token']);
         $this->assertEquals('authorization,foo,bar', $row['scope']);

@@ -155,15 +155,15 @@ JSON;
 
         // check database access token
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
+            ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
 
-        $this->assertEquals(2, $row['appId']);
-        $this->assertEquals(2, $row['userId']);
+        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals($row['token'], $token->sub);
@@ -196,15 +196,15 @@ JSON;
 
         // check database access token
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('appId', 'userId', 'status', 'token', 'scope', 'ip', 'expire')
+            ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
             ->from('fusio_app_token')
             ->where('token = :token')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
 
-        $this->assertEquals(2, $row['appId']);
-        $this->assertEquals(2, $row['userId']);
+        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals($row['token'], $token->sub);

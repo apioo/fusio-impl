@@ -193,7 +193,7 @@ JSON;
 
         // check database user
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('provider', 'status', 'remoteId', 'name', 'email')
+            ->select('provider', 'status', 'remote_id', 'name', 'email')
             ->from('fusio_user')
             ->where('id = :id')
             ->getSQL();
@@ -202,7 +202,7 @@ JSON;
 
         $this->assertEquals(1, $row['provider']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals('', $row['remoteId']);
+        $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('Administrator', $row['name']);
         $this->assertEquals('foo@bar.com', $row['email']);
     }

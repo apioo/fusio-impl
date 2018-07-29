@@ -400,7 +400,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url', 'parameters')
+            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -411,7 +411,7 @@ JSON;
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(0, $row['status']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('', $row['parameters']);
@@ -449,7 +449,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url', 'parameters')
+            ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -460,7 +460,7 @@ JSON;
 
         $this->assertEquals(6, $row['id']);
         $this->assertEquals(0, $row['status']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('http://google.com', $row['url']);
         $this->assertEquals('foo=bar&bar=1', $row['parameters']);

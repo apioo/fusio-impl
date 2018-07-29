@@ -167,12 +167,12 @@ JSON;
         $this->assertEquals(SchemaApiController::class, $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, description, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
-            'routeId' => $route['id'],
+        $methods = $this->connection->fetchAll('SELECT id, route_id, method, version, status, active, public, description, parameters, request, action FROM fusio_routes_method WHERE route_id = :route_id', [
+            'route_id' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['routeId']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -184,8 +184,8 @@ JSON;
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
-        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
-            'methodId' => $methods[0]['id'],
+        $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
+            'method_id' => $methods[0]['id'],
         ]);
 
         $this->assertEquals(2, count($responses));
@@ -195,8 +195,8 @@ JSON;
         $this->assertEquals(7, $responses[1]['response']);
 
         // check scopes
-        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scopeId WHERE routeId = :routeId', [
-            'routeId' => $route['id'],
+        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scope_id WHERE route_id = :route_id', [
+            'route_id' => $route['id'],
         ]);
 
         $this->assertEquals(2, count($responses));
@@ -220,20 +220,20 @@ JSON;
         $this->assertEquals(5, $cronjob['action']);
 
         // check rate
-        $rate = $this->connection->fetchAssoc('SELECT id, priority, name, rateLimit, timespan FROM fusio_rate ORDER BY id DESC');
+        $rate = $this->connection->fetchAssoc('SELECT id, priority, name, rate_limit, timespan FROM fusio_rate ORDER BY id DESC');
 
         $this->assertEquals(5, $rate['id']);
         $this->assertEquals(16, $rate['priority']);
         $this->assertEquals('New-Rate', $rate['name']);
-        $this->assertEquals(3600, $rate['rateLimit']);
+        $this->assertEquals(3600, $rate['rate_limit']);
         $this->assertEquals('PT1H', $rate['timespan']);
 
-        $rateAllocation = $this->connection->fetchAll('SELECT id, routeId, appId, authenticated, parameters FROM fusio_rate_allocation WHERE rateId = 5');
+        $rateAllocation = $this->connection->fetchAll('SELECT id, route_id, app_id, authenticated, parameters FROM fusio_rate_allocation WHERE rate_id = 5');
 
         $this->assertEquals(1, count($rateAllocation));
         $this->assertEquals(5, $rateAllocation[0]['id']);
-        $this->assertEquals(null, $rateAllocation[0]['routeId']);
-        $this->assertEquals(null, $rateAllocation[0]['appId']);
+        $this->assertEquals(null, $rateAllocation[0]['route_id']);
+        $this->assertEquals(null, $rateAllocation[0]['app_id']);
         $this->assertEquals(true, $rateAllocation[0]['authenticated']);
         $this->assertEquals('foo=bar', $rateAllocation[0]['parameters']);
 
@@ -439,12 +439,12 @@ JSON;
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
 
         // check methods
-        $methods = $this->connection->fetchAll('SELECT id, routeId, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE routeId = :routeId', [
-            'routeId' => $route['id'],
+        $methods = $this->connection->fetchAll('SELECT id, route_id, method, version, status, active, public, parameters, request, action FROM fusio_routes_method WHERE route_id = :route_id', [
+            'route_id' => $route['id'],
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['routeId']);
+        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -455,8 +455,8 @@ JSON;
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
-        $responses = $this->connection->fetchAll('SELECT methodId, code, response FROM fusio_routes_response WHERE methodId = :methodId', [
-            'methodId' => $methods[0]['id'],
+        $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
+            'method_id' => $methods[0]['id'],
         ]);
 
         $this->assertEquals(1, count($responses));
@@ -569,15 +569,15 @@ JSON;
         $this->assertRegExp('/- \[CREATED\] app Bar-App/', $display, $display);
 
         // check app
-        $app = $this->connection->fetchAssoc('SELECT id, status, name, appKey, appSecret, parameters FROM fusio_app WHERE name = :name', [
+        $app = $this->connection->fetchAssoc('SELECT id, status, name, app_key, app_secret, parameters FROM fusio_app WHERE name = :name', [
             'name' => 'Bar-App',
         ]);
 
         $this->assertEquals(6, $app['id']);
         $this->assertEquals(1, $app['status']);
         $this->assertEquals('Bar-App', $app['name']);
-        $this->assertNotEmpty($app['appKey']);
-        $this->assertNotEmpty($app['appSecret']);
+        $this->assertNotEmpty($app['app_key']);
+        $this->assertNotEmpty($app['app_secret']);
         $this->assertEquals('foo=bar', $app['parameters']);
     }
 
@@ -596,14 +596,14 @@ JSON;
         $this->assertRegExp('/- \[CREATED\] user Foo-User/', $display, $display);
 
         // check user
-        $user = $this->connection->fetchAssoc('SELECT id, provider, status, remoteId, name, email, password FROM fusio_user WHERE name = :name', [
+        $user = $this->connection->fetchAssoc('SELECT id, provider, status, remote_id, name, email, password FROM fusio_user WHERE name = :name', [
             'name' => 'Foo-User',
         ]);
 
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(1, $user['status']);
-        $this->assertEmpty($user['remoteId']);
+        $this->assertEmpty($user['remote_id']);
         $this->assertEquals('Foo-User', $user['name']);
         $this->assertEquals('foo@bar.com', $user['email']);
         $this->assertTrue(password_verify('test1234!', $user['password']));

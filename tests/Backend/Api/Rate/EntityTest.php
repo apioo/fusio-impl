@@ -265,7 +265,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'rateLimit', 'timespan')
+            ->select('id', 'status', 'name', 'rate_limit', 'timespan')
             ->from('fusio_rate')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -277,7 +277,7 @@ JSON;
         $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('Gold', $row['name']);
-        $this->assertEquals(20, $row['rateLimit']);
+        $this->assertEquals(20, $row['rate_limit']);
         $this->assertEquals('P2M', $row['timespan']);
     }
 

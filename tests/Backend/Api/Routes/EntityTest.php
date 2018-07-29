@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
+use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Table\Routes as TableRoutes;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
@@ -378,14 +379,14 @@ JSON;
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action')
+            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action')
             ->from('fusio_routes_method')
-            ->where('routeId = :routeId')
+            ->where('route_id = :route_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $methods = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+        $methods = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
 
         $this->assertEquals(2, count($methods));
 
@@ -400,14 +401,14 @@ JSON;
 
         // check responses
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'methodId', 'code', 'response')
+            ->select('id', 'method_id', 'code', 'response')
             ->from('fusio_routes_response')
-            ->where('methodId = :methodId')
+            ->where('method_id = :method_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[0]['id']]);
+        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[0]['id']]);
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
@@ -424,14 +425,14 @@ JSON;
 
         // check responses
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'methodId', 'code', 'response')
+            ->select('id', 'method_id', 'code', 'response')
             ->from('fusio_routes_response')
-            ->where('methodId = :methodId')
+            ->where('method_id = :method_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[1]['id']]);
+        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[1]['id']]);
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(201, $responses[0]['code']);
@@ -441,13 +442,13 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('s.name')
             ->from('fusio_scope_routes', 'r')
-            ->innerJoin('r', 'fusio_scope', 's', 's.id = r.scopeId')
-            ->where('r.routeId = :routeId')
+            ->innerJoin('r', 'fusio_scope', 's', 's.id = r.scope_id')
+            ->where('r.route_id = :route_id')
             ->orderBy('s.id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
 
         $this->assertEquals(2, count($scopes));
         $this->assertEquals('foo', $scopes[0]['name']);
@@ -493,18 +494,18 @@ JSON;
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('ANY', $row['methods']);
         $this->assertEquals('/foo', $row['path']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
+        $this->assertEquals(SchemaApiController::class, $row['controller']);
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'routeId', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action', 'schemaCache', 'actionCache')
+            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action', 'schema_cache', 'action_cache')
             ->from('fusio_routes_method')
-            ->where('routeId = :routeId')
+            ->where('route_id = :route_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $methods = Environment::getService('connection')->fetchAll($sql, ['routeId' => $row['id']]);
+        $methods = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
 
         $this->assertEquals(5, count($methods));
 
@@ -519,14 +520,14 @@ JSON;
 
         // check responses
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'methodId', 'code', 'response')
+            ->select('id', 'method_id', 'code', 'response')
             ->from('fusio_routes_response')
-            ->where('methodId = :methodId')
+            ->where('method_id = :method_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[0]['id']]);
+        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[0]['id']]);
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
@@ -543,14 +544,14 @@ JSON;
 
         // check responses
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'methodId', 'code', 'response')
+            ->select('id', 'method_id', 'code', 'response')
             ->from('fusio_routes_response')
-            ->where('methodId = :methodId')
+            ->where('method_id = :method_id')
             ->orderBy('id', 'ASC')
             ->setFirstResult(0)
             ->getSQL();
 
-        $responses = Environment::getService('connection')->fetchAll($sql, ['methodId' => $methods[1]['id']]);
+        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[1]['id']]);
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(201, $responses[0]['code']);

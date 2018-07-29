@@ -60,15 +60,15 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals('App successful created', trim($actual));
 
         // check app
-        $connection = $this->connection->fetchAssoc('SELECT id, userId, status, name, url, parameters, appKey, appSecret FROM fusio_app ORDER BY id DESC');
+        $connection = $this->connection->fetchAssoc('SELECT id, user_id, status, name, url, parameters, app_key, app_secret FROM fusio_app ORDER BY id DESC');
 
         $this->assertEquals(6, $connection['id']);
-        $this->assertEquals(1, $connection['userId']);
+        $this->assertEquals(1, $connection['user_id']);
         $this->assertEquals(1, $connection['status']);
         $this->assertEquals('Bar-App', $connection['name']);
         $this->assertEquals('http://google.com', $connection['url']);
         $this->assertEquals('foo=bar&bar=foo', $connection['parameters']);
-        $this->assertNotEmpty($connection['appKey']);
-        $this->assertNotEmpty($connection['appSecret']);
+        $this->assertNotEmpty($connection['app_key']);
+        $this->assertNotEmpty($connection['app_secret']);
     }
 }

@@ -74,23 +74,23 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
         $this->assertContains('Execution successful', $actual);
 
-        $responses = $this->connection->fetchAll('SELECT triggerId, subscriptionId, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
-        $this->assertEquals(1, $responses[0]['triggerId']);
-        $this->assertEquals(1, $responses[0]['subscriptionId']);
+        $this->assertEquals(1, $responses[0]['trigger_id']);
+        $this->assertEquals(1, $responses[0]['subscription_id']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[0]['status']);
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['attempts']);
 
-        $this->assertEquals(2, $responses[1]['triggerId']);
-        $this->assertEquals(1, $responses[1]['subscriptionId']);
+        $this->assertEquals(2, $responses[1]['trigger_id']);
+        $this->assertEquals(1, $responses[1]['subscription_id']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[1]['status']);
         $this->assertEquals(200, $responses[1]['code']);
         $this->assertEquals(1, $responses[1]['attempts']);
 
-        $this->assertEquals(2, $responses[2]['triggerId']);
-        $this->assertEquals(2, $responses[2]['subscriptionId']);
+        $this->assertEquals(2, $responses[2]['trigger_id']);
+        $this->assertEquals(2, $responses[2]['subscription_id']);
         $this->assertEquals(Table\Event\Response::STATUS_DONE, $responses[2]['status']);
         $this->assertEquals(200, $responses[2]['code']);
         $this->assertEquals(1, $responses[2]['attempts']);

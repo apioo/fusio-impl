@@ -60,11 +60,11 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['routeId']);
-        $this->assertEquals(1, $log['appId']);
-        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['app_id']);
+        $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
-        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('FooAgent 1.0', $log['user_agent']);
         $this->assertEquals('GET', $log['method']);
         $this->assertEquals('/foo', $log['path']);
         $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
@@ -90,11 +90,11 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['routeId']);
-        $this->assertEquals(1, $log['appId']);
-        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['app_id']);
+        $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
-        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('FooAgent 1.0', $log['user_agent']);
         $this->assertEquals('GET', $log['method']);
         $this->assertEquals('/foo?param=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', $log['path']);
         $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
@@ -121,11 +121,11 @@ class LoggerTest extends DbTestCase
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
 
         $this->assertEquals(3, $log['id']);
-        $this->assertEquals(1, $log['routeId']);
-        $this->assertEquals(1, $log['appId']);
-        $this->assertEquals(1, $log['userId']);
+        $this->assertEquals(1, $log['route_id']);
+        $this->assertEquals(1, $log['app_id']);
+        $this->assertEquals(1, $log['user_id']);
         $this->assertEquals('127.0.0.1', $log['ip']);
-        $this->assertEquals('FooAgent 1.0', $log['userAgent']);
+        $this->assertEquals('FooAgent 1.0', $log['user_agent']);
         $this->assertEquals('POST', $log['method']);
         $this->assertEquals('/foo', $log['path']);
         $this->assertEquals('Content-Type: application/json' . "\n" . 'User-Agent: FooAgent 1.0', $log['header']);
@@ -159,7 +159,7 @@ class LoggerTest extends DbTestCase
         $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
 
         $this->assertEquals(2, $error['id']);
-        $this->assertEquals(3, $error['logId']);
+        $this->assertEquals(3, $error['log_id']);
         $this->assertEquals('foo', $error['message']);
     }
 
@@ -190,7 +190,7 @@ class LoggerTest extends DbTestCase
         $error = $this->connection->fetchAssoc('SELECT * FROM fusio_log_error WHERE id = :id', ['id' => 2]);
 
         $this->assertEquals(2, $error['id']);
-        $this->assertEquals(3, $error['logId']);
+        $this->assertEquals(3, $error['log_id']);
         $this->assertEquals(str_repeat('a', 500), $error['message']);
     }
 

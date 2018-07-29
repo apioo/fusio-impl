@@ -107,7 +107,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'eventId', 'userId', 'status', 'endpoint')
+            ->select('id', 'event_id', 'user_id', 'status', 'endpoint')
             ->from('fusio_event_subscription')
             ->where('id = :id')
             ->getSQL();
@@ -115,8 +115,8 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 1]);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals(1, $row['eventId']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(1, $row['event_id']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('http://127.0.0.1/changed-callback.php', $row['endpoint']);
     }
@@ -144,7 +144,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'eventId', 'userId', 'status', 'endpoint')
+            ->select('id', 'event_id', 'user_id', 'status', 'endpoint')
             ->from('fusio_event_subscription')
             ->where('id = :id')
             ->getSQL();

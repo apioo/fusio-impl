@@ -70,7 +70,7 @@ class RegisterTest extends ControllerDbTestCase
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
-        $this->assertEquals('', $user['remoteId']);
+        $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);
         $this->assertEquals('user@host.com', $user['email']);
         $this->assertNotEmpty($user['password']);
@@ -97,7 +97,7 @@ class RegisterTest extends ControllerDbTestCase
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(Table\User::STATUS_CONSUMER, $user['status']);
-        $this->assertEquals('', $user['remoteId']);
+        $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);
         $this->assertEquals('user@host.com', $user['email']);
         $this->assertNotEmpty($user['password']);
@@ -124,7 +124,7 @@ class RegisterTest extends ControllerDbTestCase
         $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(Table\User::STATUS_DISABLED, $user['status']);
-        $this->assertEquals('', $user['remoteId']);
+        $this->assertEquals('', $user['remote_id']);
         $this->assertEquals('new_user', $user['name']);
         $this->assertEquals('user@host.com', $user['email']);
         $this->assertNotEmpty($user['password']);

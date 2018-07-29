@@ -275,8 +275,8 @@ JSON;
     public function testDelete()
     {
         // delete all scope references to successful delete an scope
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scopeId = :scopeId', ['scopeId' => 5]);
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scopeId = :scopeId', ['scopeId' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
 
         $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -310,7 +310,7 @@ JSON;
 
     public function testDeleteAppScopeAssigned()
     {
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scopeId = :scopeId', ['scopeId' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
 
         $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -338,7 +338,7 @@ JSON;
 
     public function testDeleteUserScopeAssigned()
     {
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scopeId = :scopeId', ['scopeId' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
 
         $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',

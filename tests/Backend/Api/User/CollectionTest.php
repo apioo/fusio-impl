@@ -451,22 +451,22 @@ JSON;
         $this->assertTrue(password_verify('fooo123!', $row['password']));
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'userId', 'scopeId')
+            ->select('id', 'user_id', 'scope_id')
             ->from('fusio_user_scope')
-            ->where('userId = :userId')
+            ->where('user_id = :user_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['userId' => 6]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
 
         $this->assertEquals([[
-            'id'      => 15,
-            'userId'  => 6,
-            'scopeId' => 4,
+            'id'       => 15,
+            'user_id'  => 6,
+            'scope_id' => 4,
         ], [
-            'id'      => 14,
-            'userId'  => 6,
-            'scopeId' => 5,
+            'id'       => 14,
+            'user_id'  => 6,
+            'scope_id' => 5,
         ]], $routes);
     }
 

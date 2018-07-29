@@ -45,14 +45,14 @@ class DispatcherTest extends ControllerDbTestCase
         $this->newDispatcher()->dispatch('foo-event', ['foo' => 'bar']);
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT eventId, status, payload FROM fusio_event_trigger');
+        $responses = $this->connection->fetchAll('SELECT event_id, status, payload FROM fusio_event_trigger');
 
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(1, $responses[0]['eventId']);
+        $this->assertEquals(1, $responses[0]['event_id']);
         $this->assertEquals(2, $responses[0]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[0]['payload']);
 
-        $this->assertEquals(1, $responses[1]['eventId']);
+        $this->assertEquals(1, $responses[1]['event_id']);
         $this->assertEquals(1, $responses[1]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[1]['payload']);
     }

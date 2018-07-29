@@ -363,17 +363,17 @@ JSON;
         $this->assertEquals('bar@bar.com', $row['email']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('userId', 'scopeId')
+            ->select('user_id', 'scope_id')
             ->from('fusio_user_scope')
-            ->where('userId = :userId')
+            ->where('user_id = :user_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['userId' => 4]);
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
 
         $this->assertEquals([[
-            'userId'  => 4,
-            'scopeId' => 5,
+            'user_id'  => 4,
+            'scope_id' => 5,
         ]], $scopes);
     }
 

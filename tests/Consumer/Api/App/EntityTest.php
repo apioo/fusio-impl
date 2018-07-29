@@ -268,7 +268,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'userId', 'name', 'url')
+            ->select('id', 'status', 'user_id', 'name', 'url')
             ->from('fusio_app')
             ->where('id = 2')
             ->getSQL();
@@ -277,7 +277,7 @@ JSON;
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(1, $row['status']);
-        $this->assertEquals(1, $row['userId']);
+        $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
 
