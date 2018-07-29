@@ -62,10 +62,9 @@ class Deploy
     /**
      * @param string $data
      * @param string|null $basePath
-     * @param boolean $force
      * @return \Fusio\Impl\Service\System\Import\Result
      */
-    public function deploy($data, $basePath = null, $force = false)
+    public function deploy($data, $basePath = null)
     {
         $data   = Yaml::parse(EnvProperties::replace($data));
         $import = new \stdClass();

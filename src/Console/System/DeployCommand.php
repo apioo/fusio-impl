@@ -83,8 +83,7 @@ class DeployCommand extends Command
             ->setName('system:deploy')
             ->setAliases(['deploy'])
             ->setDescription('Deploys a Fusio YAML definition')
-            ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces to re-execute migration files');
+            ->addArgument('file', InputArgument::OPTIONAL, 'Optional the definition file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -105,12 +104,10 @@ class DeployCommand extends Command
             $this->logger->pushHandler(new NullHandler());
         }
 
-        $force = $input->getOption('force');
-
         try {
             $this->connection->beginTransaction();
 
-            $result = $this->deployService->deploy(file_get_contents($file), dirname($file), $force);
+            $result = $this->deployService->deploy(file_get_contents($file), dirname($file));
             $logs   = $result->getLogs();
 
             foreach ($logs as $log) {
