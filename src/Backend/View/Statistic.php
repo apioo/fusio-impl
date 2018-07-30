@@ -85,7 +85,7 @@ class Statistic extends ViewAbstract
                 INNER JOIN fusio_routes routes
                         ON log.route_id = routes.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.route_id';
+                  GROUP BY DATE(log.date), log.route_id, routes.path';
 
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
@@ -294,7 +294,7 @@ class Statistic extends ViewAbstract
                 INNER JOIN fusio_routes routes
                         ON log.route_id = routes.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.route_id';
+                  GROUP BY DATE(log.date), log.route_id, routes.path';
 
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
@@ -481,7 +481,7 @@ class Statistic extends ViewAbstract
                 INNER JOIN fusio_routes routes
                         ON log.route_id = routes.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.route_id';
+                  GROUP BY DATE(log.date), log.route_id, routes.path';
 
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
