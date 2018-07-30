@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Tests;
 
-use PSX\Framework\Test\Environment;
-
 /**
  * DbTestCase
  *
@@ -30,32 +28,11 @@ use PSX\Framework\Test\Environment;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DbTestCase extends \PHPUnit_Extensions_Database_TestCase
+class DbTestCase extends \PSX\Framework\Test\DbTestCase
 {
-    protected static $con;
-
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @inheritdoc
      */
-    protected $connection;
-
-    public function getConnection()
-    {
-        if (!Environment::hasConnection()) {
-            $this->markTestSkipped('No database connection available');
-        }
-
-        if (self::$con === null) {
-            self::$con = Environment::getService('connection');
-        }
-
-        if ($this->connection === null) {
-            $this->connection = self::$con;
-        }
-
-        return $this->createDefaultDBConnection($this->connection->getWrappedConnection(), 'fusio');
-    }
-
     public function getDataSet()
     {
         return Fixture::getDataSet();
