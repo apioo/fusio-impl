@@ -158,7 +158,7 @@ class Method extends TableAbstract
             $params['version'] = $version;
         }
 
-        $sql.= ' ORDER BY method.version ASC';
+        $sql.= ' ORDER BY method.version ASC, method.id ASC';
 
         return $this->project($sql, $params);
     }
