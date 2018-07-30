@@ -83,7 +83,7 @@ class RoutingParser implements LocationFinderInterface
         // if not we only want to search the user routes and exclude all system
         // paths means all priorities under 0x1000000
         if (!$found) {
-            $sql.= 'AND (priority IS NULL OR priority < 0x1000000) ';
+            $sql.= 'AND (priority IS NULL OR priority < ' . 0x1000000 . ') ';
         }
 
         $sql.= 'ORDER BY priority DESC';
