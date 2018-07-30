@@ -199,8 +199,8 @@ class Fixture
                 ['user_id' => 1, 'app_id' => 1, 'allow' => 1, 'date' => '2015-02-27 19:59:15'],
             ],
             'app_news' => [
-                ['id' => 1, 'title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],
-                ['id' => 2, 'title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'],
+                ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],
+                ['title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'],
             ],
         ];
     }
