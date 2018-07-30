@@ -51,13 +51,13 @@ class Routes extends TableAbstract
             'controller' => self::TYPE_VARCHAR,
         );
     }
-    
+
     public function getMaxPriority()
     {
         $sql = 'SELECT MAX(priority)
                   FROM fusio_routes 
                  WHERE status = :status 
-                   AND priority < 0x1000000';
+                   AND priority < ' . 0x1000000;
 
         $params = [
             'status' => self::STATUS_ACTIVE,
