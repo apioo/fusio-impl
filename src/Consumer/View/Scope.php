@@ -40,7 +40,8 @@ class Scope extends ViewAbstract
                       FROM fusio_user_scope user_scope
                 INNER JOIN fusio_scope scope
                         ON user_scope.scope_id = scope.id
-                     WHERE user_scope.user_id = :user_id';
+                     WHERE user_scope.user_id = :user_id
+                  ORDER BY scope.id ASC';
 
         $definition = [
             'entry' => $this->doCollection($sql, ['user_id' => $userId], [
