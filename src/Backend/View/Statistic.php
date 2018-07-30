@@ -210,7 +210,7 @@ class Statistic extends ViewAbstract
                 INNER JOIN fusio_app app
                         ON log.app_id = app.id
                      WHERE ' . $expression . '
-                  GROUP BY DATE(log.date), log.app_id';
+                  GROUP BY DATE(log.date), log.app_id, app.name';
 
         $result = $this->connection->fetchAll($sql, $condition->getValues());
 
