@@ -29,13 +29,13 @@ use PSX\Framework\Test\Environment;
 use PSX\Json\Parser;
 
 /**
- * SqlTable
+ * SqlTableTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SqlTable extends ControllerDbTestCase
+class SqlTableTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
