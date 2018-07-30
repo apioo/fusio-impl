@@ -408,7 +408,7 @@ class Statistic extends ViewAbstract
         }
 
         // fill values
-        $sql = '  SELECT AVG(log.execution_time / 1000) AS execTime,
+        $sql = '  SELECT AVG(log.execution_time / 1000) AS exec_time,
                          DATE(log.date) AS date
                     FROM fusio_log log
                    WHERE ' . $expression . '
@@ -418,7 +418,7 @@ class Statistic extends ViewAbstract
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {
-                $data[$row['date']] = (float) $row['execTime']; // microseconds
+                $data[$row['date']] = (float) $row['exec_time']; // microseconds
             }
         }
 
@@ -473,7 +473,7 @@ class Statistic extends ViewAbstract
         // fill data with values
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
-        $sql = '    SELECT AVG(log.execution_time / 1000) AS execTime,
+        $sql = '    SELECT AVG(log.execution_time / 1000) AS exec_time,
                            log.route_id,
                            routes.path,
                            DATE(log.date) AS date
@@ -488,7 +488,7 @@ class Statistic extends ViewAbstract
         foreach ($result as $row) {
             if (isset($data[$row['route_id']][$row['date']])) {
                 $series[$row['route_id']] = $row['path'] . ' (ms)';
-                $data[$row['route_id']][$row['date']] = (float) $row['execTime']; // microseconds
+                $data[$row['route_id']][$row['date']] = (float) $row['exec_time']; // microseconds
             }
         }
 
