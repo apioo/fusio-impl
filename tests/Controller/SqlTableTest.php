@@ -426,17 +426,23 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $headers = [
+        $expectHeaders = [
             'warning' => ['199 PSX "Resource is in development"'],
             'x-ratelimit-limit' => ['16'],
             'x-ratelimit-remaining' => ['16'],
             'vary' => ['Accept'],
             'content-type' => ['application/json'],
-            'content-length' => ['379'],
         ];
 
+        $actualHeaders = $response->getHeaders();
+
+        $this->assertArrayHasKey('content-length', $actualHeaders);
+        $this->assertTrue($actualHeaders['content-length'] > 375);
+
+        unset($actualHeaders['content-length']);
+
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertEquals($headers, $response->getHeaders(), $body);
+        $this->assertEquals($expectHeaders, $actualHeaders, $body);
         $this->assertEmpty($body);
     }
 
