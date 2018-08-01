@@ -45,8 +45,9 @@ class Statistic extends ViewAbstract
                      WHERE ' . $expression . '
                        AND log.route_id IS NOT NULL
                   GROUP BY log.route_id
-                  ORDER BY COUNT(error.id) DESC
-                     LIMIT 6';
+                  ORDER BY COUNT(error.id) DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $result   = $this->connection->fetchAll($sql, $condition->getValues());
         $routeIds = array();
@@ -172,8 +173,9 @@ class Statistic extends ViewAbstract
                    WHERE ' . $expression . '
                      AND log.app_id IS NOT NULL
                 GROUP BY log.app_id
-                ORDER BY COUNT(log.app_id) DESC
-                   LIMIT 6';
+                ORDER BY COUNT(log.app_id) DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $result = $this->connection->fetchAll($sql, $condition->getValues());
         $appIds = array();
@@ -256,8 +258,9 @@ class Statistic extends ViewAbstract
                    WHERE ' . $expression . '
                      AND log.route_id IS NOT NULL
                 GROUP BY log.route_id
-                ORDER BY COUNT(log.route_id) DESC
-                   LIMIT 6';
+                ORDER BY COUNT(log.route_id) DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $result   = $this->connection->fetchAll($sql, $condition->getValues());
         $routeIds = array();
@@ -441,8 +444,9 @@ class Statistic extends ViewAbstract
                        AND log.route_id IS NOT NULL
                        AND log.execution_time IS NOT NULL
                   GROUP BY log.route_id
-                  ORDER BY SUM(log.execution_time) DESC
-                     LIMIT 6';
+                  ORDER BY SUM(log.execution_time) DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $result   = $this->connection->fetchAll($sql, $condition->getValues());
         $routeIds = array();

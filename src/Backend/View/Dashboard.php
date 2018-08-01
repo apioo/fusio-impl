@@ -37,8 +37,9 @@ class Dashboard extends ViewAbstract
         $sql = '  SELECT app.name,
                          app.date
                     FROM fusio_app app
-                ORDER BY app.date DESC
-                   LIMIT 6';
+                ORDER BY app.date DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
@@ -56,8 +57,9 @@ class Dashboard extends ViewAbstract
                          log.ip,
                          log.date
                     FROM fusio_log log
-                ORDER BY log.date DESC
-                   LIMIT 6';
+                ORDER BY log.date DESC';
+
+        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
