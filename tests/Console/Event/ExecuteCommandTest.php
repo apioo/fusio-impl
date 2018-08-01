@@ -74,7 +74,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
         $this->assertContains('Execution successful', $actual);
 
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
+        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY trigger_id ASC, subscription_id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
