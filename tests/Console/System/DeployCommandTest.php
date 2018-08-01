@@ -195,7 +195,7 @@ JSON;
         $this->assertEquals(7, $responses[1]['response']);
 
         // check scopes
-        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scope_id WHERE route_id = :route_id', [
+        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scope_id WHERE route_id = :route_id ORDER BY fusio_scope.id ASC', [
             'route_id' => $route['id'],
         ]);
 
