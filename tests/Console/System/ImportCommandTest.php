@@ -167,7 +167,7 @@ JSON;
         $this->assertEquals(5, $methods[0]['action']);
 
         // check responses
-        $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
+        $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id ORDER BY id ASC', [
             'method_id' => $methods[0]['id'],
         ]);
 
