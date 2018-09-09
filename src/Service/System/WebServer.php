@@ -88,7 +88,9 @@ class WebServer
             $file  = $this->config->get('fusio_server_conf');
             $bytes = $generator->generate($config, $file);
 
-            if ($bytes > 0) {
+            if ($bytes === false) {
+                $result->add(Deploy::TYPE_SERVER, Result::ACTION_FAILED, 'Could not write web server config file  ' . $file);
+            } elseif ($bytes > 0) {
                 $result->add(Deploy::TYPE_SERVER, Result::ACTION_GENERATED, 'Generated web server config file  ' . $file);
             }
         }
