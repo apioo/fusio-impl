@@ -52,6 +52,7 @@ class User extends TableAbstract
             'name' => self::TYPE_VARCHAR,
             'email' => self::TYPE_VARCHAR,
             'password' => self::TYPE_VARCHAR,
+            'points' => self::TYPE_INT,
             'date' => self::TYPE_DATETIME,
         );
     }
@@ -75,5 +76,17 @@ class User extends TableAbstract
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param integer $userId
+     * @param integer $points
+     */
+    public function payPoints($userId, $points)
+    {
+        $this->connection->executeUpdate('UPDATE fusio_user SET points = points - :points WHERE id = :id', [
+            'id' => $userId,
+            'points' => $points,
+        ]);
     }
 }
