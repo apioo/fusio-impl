@@ -89,6 +89,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
+     * @var \Fusio\Impl\Service\Plan\Payer
+     */
+    protected $planPayerService;
+
+    /**
+     * @Inject
      * @var \Fusio\Engine\Repository\AppInterface
      */
     protected $appRepository;
@@ -238,7 +244,24 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $response = null;
         $method   = $this->context->getMethod();
         $actionId = $method['action'];
+        $costs    = (int) $method['costs'];
         $cache    = $method['action_cache'];
+
+        if ($costs > 0) {
+            // as anonymous user it is not possible to pay
+            if ($this->context->getUser()->isAnonymous()) {
+                throw new StatusCode\ForbiddenException('This action costs points because of this you must be authenticated in order to call this action');
+            }
+
+            // in case the method has assigned costs check whether the user has
+            // enough points
+            $remaining = $this->context->getUser()->getPoints() - $costs;
+            if ($remaining <= 0) {
+                throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
+            }
+
+            $this->planPayerService->pay($context, $costs);
+        }
 
         if ($actionId > 0) {
             if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {
