@@ -180,6 +180,7 @@ class Method extends TableAbstract
         $sql = 'SELECT method.public,
                        method.action,
                        method.status,
+                       method.costs,
                        method.action_cache
                   FROM fusio_routes_method method
                  WHERE route_id = :route_id
