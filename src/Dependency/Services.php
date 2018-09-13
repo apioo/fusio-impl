@@ -370,6 +370,29 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Plan
+     */
+    public function getPlanService()
+    {
+        return new Service\Plan(
+            $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Plan\Payer
+     */
+    public function getPlanPayerService()
+    {
+        return new Service\Plan\Payer(
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('table_manager')->getTable(Table\Plan\Usage::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\User\Activate
      */
     public function getUserActivateService()
