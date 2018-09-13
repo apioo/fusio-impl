@@ -19,20 +19,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Plan;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * EventEvents
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EventEvents
+class CreatedEvent extends EventAbstract
 {
-    const CREATE = 'event.create';
-    const DELETE = 'event.delete';
-    const SUBSCRIBE = 'event.subscribe';
-    const UNSUBSCRIBE = 'event.unsubscribe';
-    const UPDATE = 'event.update';
+    /**
+     * @var integer
+     */
+    protected $planId;
+
+    /**
+     * @var array
+     */
+    protected $record;
+
+    /**
+     * @var array
+     */
+    protected $allocations;
+
+    /**
+     * @param integer $planId
+     * @param array $record
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct($planId, array $record, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->planId = $planId;
+        $this->record  = $record;
+    }
+
+    public function getPlanId()
+    {
+        return $this->planId;
+    }
+
+    public function getRecord()
+    {
+        return $this->record;
+    }
 }

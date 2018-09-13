@@ -19,20 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Plan;
+
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * EventEvents
+ * PurchasedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EventEvents
+class PurchasedEvent extends EventAbstract
 {
-    const CREATE = 'event.create';
-    const DELETE = 'event.delete';
-    const SUBSCRIBE = 'event.subscribe';
-    const UNSUBSCRIBE = 'event.unsubscribe';
-    const UPDATE = 'event.update';
 }

@@ -22,17 +22,17 @@
 namespace Fusio\Impl\Event;
 
 /**
- * EventEvents
+ * PlanEvents
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EventEvents
+class PlanEvents
 {
-    const CREATE = 'event.create';
-    const DELETE = 'event.delete';
-    const SUBSCRIBE = 'event.subscribe';
-    const UNSUBSCRIBE = 'event.unsubscribe';
-    const UPDATE = 'event.update';
+    const CREATE = 'plan.create';
+    const DELETE = 'plan.delete';
+    const PURCHASE = 'plan.purchase';
+    const PAY = 'plan.pay';
+    const UPDATE = 'plan.update';
 }

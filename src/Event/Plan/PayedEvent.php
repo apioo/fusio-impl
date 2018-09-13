@@ -19,20 +19,52 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Plan;
+
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * EventEvents
+ * PayedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EventEvents
+class PayedEvent extends EventAbstract
 {
-    const CREATE = 'event.create';
-    const DELETE = 'event.delete';
-    const SUBSCRIBE = 'event.subscribe';
-    const UNSUBSCRIBE = 'event.unsubscribe';
-    const UPDATE = 'event.update';
+    /**
+     * @var \Fusio\Engine\ContextInterface
+     */
+    protected $engineContext;
+
+    /**
+     * @var integer
+     */
+    protected $points;
+
+    public function __construct(ContextInterface $engineContext, $points)
+    {
+        parent::__construct(UserContext::newContext($engineContext->getUser()->getId(), $engineContext->getApp()->getId()));
+
+        $this->engineContext = $engineContext;
+        $this->points        = $points;
+    }
+
+    /**
+     * @return \Fusio\Engine\ContextInterface
+     */
+    public function getEngineContext()
+    {
+        return $this->engineContext;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
 }
