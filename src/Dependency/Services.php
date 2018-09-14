@@ -411,10 +411,26 @@ trait Services
         return new Service\User\Provider(
             $this->get('user_service'),
             $this->get('config_service'),
-            $this->get('user_token_issuer_service'),
-            $this->get('http_client'),
-            $this->get('config')
+            $this->get('user_provider_factory'),
+            $this->get('user_token_issuer_service')
         );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\User\ProviderFactory
+     */
+    public function getUserProviderFactory()
+    {
+        $factory = new Service\User\ProviderFactory(
+            $this->get('http_client'),
+            $this->get('config_service')
+        );
+
+        $factory->register('facebook', Service\User\Provider\Facebook::class);
+        $factory->register('github', Service\User\Provider\Github::class);
+        $factory->register('google', Service\User\Provider\Google::class);
+
+        return $factory;
     }
 
     /**

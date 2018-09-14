@@ -43,7 +43,7 @@ interface ProviderInterface
     public function getId();
 
     /**
-     * Requests user informations of an remote provider
+     * Requests user information of an remote provider
      *
      * @param string $code
      * @param string $clientId
