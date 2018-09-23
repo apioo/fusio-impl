@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Event\Plan;
 
-use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
@@ -35,29 +34,15 @@ use Fusio\Impl\Event\EventAbstract;
 class PayedEvent extends EventAbstract
 {
     /**
-     * @var \Fusio\Engine\ContextInterface
-     */
-    protected $engineContext;
-
-    /**
      * @var integer
      */
     protected $points;
 
-    public function __construct(ContextInterface $engineContext, $points)
+    public function __construct($userId, $points)
     {
-        parent::__construct(UserContext::newContext($engineContext->getUser()->getId(), $engineContext->getApp()->getId()));
+        parent::__construct(UserContext::newContext($userId));
 
-        $this->engineContext = $engineContext;
-        $this->points        = $points;
-    }
-
-    /**
-     * @return \Fusio\Engine\ContextInterface
-     */
-    public function getEngineContext()
-    {
-        return $this->engineContext;
+        $this->points = $points;
     }
 
     /**

@@ -19,21 +19,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Plan;
+
+use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * PlanEvents
+ * CreditedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PlanEvents
+class CreditedEvent extends EventAbstract
 {
-    const CREATE = 'plan.create';
-    const DELETE = 'plan.delete';
-    const PURCHASE = 'plan.purchase';
-    const PAY = 'plan.pay';
-    const CREDIT = 'plan.credit';
-    const UPDATE = 'plan.update';
+    /**
+     * @var integer
+     */
+    protected $userId;
+
+    /**
+     * @var integer
+     */
+    protected $points;
+
+    public function __construct($userId, $points)
+    {
+        parent::__construct(UserContext::newContext($userId));
+
+        $this->points = $points;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
 }
