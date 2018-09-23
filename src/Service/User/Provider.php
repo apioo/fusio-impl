@@ -43,14 +43,14 @@ class Provider
     protected $userService;
 
     /**
-     * @var \Fusio\Impl\Service\App
-     */
-    protected $appService;
-
-    /**
      * @var \Fusio\Impl\Service\Config
      */
     protected $configService;
+
+    /**
+     * @var \Fusio\Impl\Service\User\ProviderFactory
+     */
+    protected $providerFactory;
 
     /**
      * @var \Fusio\Impl\Service\User\TokenIssuer
@@ -58,40 +58,23 @@ class Provider
     protected $tokenIssuer;
 
     /**
-     * @var \PSX\Http\Client\ClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @var \Fusio\Impl\Mail\MailerInterface
-     */
-    protected $mailer;
-
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    protected $psxConfig;
-
-    /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
+     * @param \Fusio\Impl\Service\User\ProviderFactory $providerFactory
      * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
-     * @param \PSX\Http\Client\ClientInterface $httpClient
-     * @param \PSX\Framework\Config\Config $psxConfig
      */
-    public function __construct(Service\User $userService, Service\Config $configService, TokenIssuer $tokenIssuer, ClientInterface $httpClient, Config $psxConfig)
+    public function __construct(Service\User $userService, Service\Config $configService, ProviderFactory $providerFactory, TokenIssuer $tokenIssuer)
     {
-        $this->userService   = $userService;
-        $this->configService = $configService;
-        $this->tokenIssuer   = $tokenIssuer;
-        $this->httpClient    = $httpClient;
-        $this->psxConfig     = $psxConfig;
+        $this->userService     = $userService;
+        $this->configService   = $configService;
+        $this->providerFactory = $providerFactory;
+        $this->tokenIssuer     = $tokenIssuer;
     }
 
     public function provider($providerName, $code, $clientId, $redirectUri)
     {
         $providerName = strtolower($providerName);
-        $provider     = $this->getProvider($providerName);
+        $provider     = $this->providerFactory->factory($providerName);
 
         if ($provider instanceof ProviderInterface) {
             $user = $provider->requestUser($code, $clientId, $redirectUri);
@@ -114,32 +97,6 @@ class Provider
         } else {
             throw new StatusCode\BadRequestException('Not supported provider');
         }
-    }
-
-    protected function getProvider($provider)
-    {
-        switch ($provider) {
-            case 'facebook':
-                $secret = $this->configService->getValue('provider_facebook_secret');
-                if (!empty($secret)) {
-                    return new Provider\Facebook($this->httpClient, $secret);
-                }
-                break;
-            case 'github':
-                $secret = $this->configService->getValue('provider_github_secret');
-                if (!empty($secret)) {
-                    return new Provider\Github($this->httpClient, $secret);
-                }
-                break;
-            case 'google':
-                $secret = $this->configService->getValue('provider_google_secret');
-                if (!empty($secret)) {
-                    return new Provider\Google($this->httpClient, $secret);
-                }
-                break;
-        }
-
-        return null;
     }
 
     protected function getDefaultScopes()

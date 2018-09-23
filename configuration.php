@@ -56,12 +56,12 @@ return array(
 
     // The web server type, based on this type Fusio generates the fitting
     // configuration format
-    'fusio_server_type'       => \Fusio\Impl\Service\System\WebServer::APACHE2,
+    'fusio_server_type'       => null,
 
     // Location of the automatically generated web server config file. Note
     // Fusio writes only to this file if it exists. Also you may need to restart
     // the web server so that the config changes take affect
-    'fusio_server_conf'       => '/etc/apache2/sites-available/000-fusio.conf',
+    'fusio_server_conf'       => null,
 
     // The url to the psx public folder (i.e. http://127.0.0.1/psx/public or 
     // http://localhost.com)
