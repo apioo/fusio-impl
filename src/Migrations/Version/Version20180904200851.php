@@ -29,7 +29,9 @@ class Version20180904200851 extends AbstractMigration
         $planTransactionTable->addColumn('plan_id', 'integer');
         $planTransactionTable->addColumn('user_id', 'integer');
         $planTransactionTable->addColumn('status', 'integer');
+        $planTransactionTable->addColumn('provider', 'string');
         $planTransactionTable->addColumn('transaction_id', 'string');
+        $planTransactionTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
         $planTransactionTable->addColumn('insert_date', 'datetime');
         $planTransactionTable->setPrimaryKey(['id']);
 
@@ -42,6 +44,7 @@ class Version20180904200851 extends AbstractMigration
         $planUsageTable->addColumn('points', 'integer');
         $planUsageTable->addColumn('insert_date', 'datetime');
         $planUsageTable->setPrimaryKey(['id']);
+        $planUsageTable->addOption('engine', 'MyISAM');
 
         $userTable = $schema->getTable('fusio_user');
         $userTable->addColumn('points', 'integer');
