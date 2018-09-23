@@ -41,7 +41,7 @@ class Prepare extends ConsumerApiAbstract
      * @var \Fusio\Impl\Service\Plan\Payment
      */
     protected $planPayment;
-    
+
     /**
      * @inheritdoc
      */
@@ -51,7 +51,7 @@ class Prepare extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Payment::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Payment\Prepare::class))
         );
 
         return $resource;
@@ -62,6 +62,6 @@ class Prepare extends ConsumerApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        return $this->planPayment->prepare($context->getUriFragment('provider'), $context->getUriFragment('plan_id'));
+        return $this->planPayment->prepare($context->getUriFragment('provider'), $record->planId, $this->context->getUserContext());
     }
 }

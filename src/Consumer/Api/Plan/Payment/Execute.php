@@ -37,6 +37,12 @@ use PSX\Http\Environment\HttpContextInterface;
 class Execute extends ConsumerApiAbstract
 {
     /**
+     * @Inject
+     * @var \Fusio\Impl\Service\Plan\Payment
+     */
+    protected $planPayment;
+
+    /**
      * @inheritdoc
      */
     public function getDocumentation($version = null)
@@ -56,7 +62,6 @@ class Execute extends ConsumerApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-
-        
+        $this->planPayment->execute($context->getUriFragment('provider'), $record, $this->context->getUserContext());
     }
 }
