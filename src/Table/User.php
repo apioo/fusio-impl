@@ -89,4 +89,16 @@ class User extends TableAbstract
             'points' => $points,
         ]);
     }
+
+    /**
+     * @param integer $userId
+     * @param integer $points
+     */
+    public function creditPoints($userId, $points)
+    {
+        $this->connection->executeUpdate('UPDATE fusio_user SET points = points + :points WHERE id = :id', [
+            'id' => $userId,
+            'points' => $points,
+        ]);
+    }
 }
