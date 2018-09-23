@@ -32,11 +32,6 @@ use PSX\Sql\TableAbstract;
  */
 class Transaction extends TableAbstract
 {
-    const STATUS_COMPLETED = 1;
-    const STATUS_PENDING = 2;
-    const STATUS_CHARGEBACK = 3;
-    const STATUS_CANCELED = 0;
-
     public function getName()
     {
         return 'fusio_plan_transaction';
@@ -49,8 +44,17 @@ class Transaction extends TableAbstract
             'plan_id' => self::TYPE_INT,
             'user_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
+            'provider' => self::TYPE_VARCHAR,
             'transaction_id' => self::TYPE_VARCHAR,
+            'amount' => self::TYPE_FLOAT,
             'insert_date' => self::TYPE_DATETIME,
         );
+    }
+    
+    public function getByTransactionId($transactionId)
+    {
+        return $this->connection->fetchAssoc('SELECT * FROM fusio_plan_transaction WHERE transaction_id = :transaction_id', [
+            'transaction_id' => $transactionId,
+        ]);
     }
 }
