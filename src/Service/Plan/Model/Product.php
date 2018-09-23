@@ -21,12 +21,6 @@
 
 namespace Fusio\Impl\Service\Plan\Model;
 
-use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Event\Plan\PayedEvent;
-use Fusio\Impl\Event\PlanEvents;
-use Fusio\Impl\Table;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 /**
  * Product
  *
@@ -36,12 +30,28 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Product
 {
+    /**
+     * @var integer
+     */
     protected $id;
+
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var float
+     */
     protected $price;
 
     /**
-     * @return mixed
+     * @var integer
+     */
+    protected $points;
+
+    /**
+     * @return integer
      */
     public function getId()
     {
@@ -49,7 +59,7 @@ class Product
     }
 
     /**
-     * @param mixed $id
+     * @param integer $id
      */
     public function setId($id)
     {
@@ -57,7 +67,7 @@ class Product
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -65,7 +75,7 @@ class Product
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -73,7 +83,7 @@ class Product
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getPrice()
     {
@@ -81,10 +91,26 @@ class Product
     }
 
     /**
-     * @param mixed $price
+     * @param float $price
      */
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPoints()
+    {
+        return $this->points;
+    }
+
+    /**
+     * @param int $points
+     */
+    public function setPoints($points)
+    {
+        $this->points = $points;
     }
 }

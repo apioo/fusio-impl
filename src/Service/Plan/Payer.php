@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Event\Plan\CreditedEvent;
 use Fusio\Impl\Event\Plan\PayedEvent;
 use Fusio\Impl\Event\PlanEvents;
 use Fusio\Impl\Table;
@@ -64,12 +65,19 @@ class Payer
     }
 
     /**
-     * @inheritdoc
+     * Method which is called in case a user visits a route which cost a
+     * specific amount of points. This method decreases the points from the
+     * user account
+     * 
+     * @param \Fusio\Engine\ContextInterface $context
+     * @param integer $points
      */
     public function pay(ContextInterface $context, $points)
     {
+        $userId = $context->getUser()->getId();
+
         // decrease user points
-        $this->userTable->payPoints($context->getUser()->getId(), $points);
+        $this->userTable->payPoints($userId, $points);
 
         // add usage entry
         $this->usageTable->create([
@@ -82,6 +90,22 @@ class Payer
         ]);
 
         // dispatch payed event
-        $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($context, $points));
+        $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($userId, $points));
+    }
+
+    /**
+     * Method which is called in case the user has bought new points. It adds
+     * the points to the user account
+     * 
+     * @param integer $userId
+     * @param integer $points
+     */
+    public function credit($userId, $points)
+    {
+        // credit points
+        $this->userTable->creditPoints($userId, $points);
+
+        // dispatch credited event
+        $this->eventDispatcher->dispatch(PlanEvents::CREDIT, new CreditedEvent($userId, $points));
     }
 }

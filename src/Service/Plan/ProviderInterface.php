@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Service\Plan\Model\Product;
+use Fusio\Impl\Service\Plan\Model\Transaction;
 
 /**
  * ProviderInterface
@@ -33,15 +34,23 @@ use Fusio\Impl\Service\Plan\Model\Product;
 interface ProviderInterface
 {
     /**
+     * Creates a transaction and returns it with the fitting parameter which can
+     * i.e. include an approval url to authorize this transaction
+     * 
+     * @param mixed $connection
      * @param \Fusio\Impl\Service\Plan\Model\Product $product
-     * @param string $returnUrl
-     * @param string $cancelUrl
-     * @return string
+     * @return \Fusio\Impl\Service\Plan\Model\Transaction
      */
-    public function prepare(Product $product, $returnUrl, $cancelUrl);
+    public function prepare($connection, Product $product);
 
     /**
-     * @return mixed
+     * Is called after the user has approved the transaction. Checks whether the
+     * transaction was successful and credits the points to the user
+     * 
+     * @param mixed $connection
+     * @param \Fusio\Impl\Service\Plan\Model\Product $product
+     * @param \Fusio\Impl\Service\Plan\Model\Transaction $transaction
+     * @return \Fusio\Impl\Service\Plan\Model\Transaction
      */
-    public function execute();
+    public function execute($connection, Product $product, Transaction $transaction);
 }

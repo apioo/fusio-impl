@@ -21,12 +21,10 @@
 
 namespace Fusio\Impl\Service\Plan;
 
-use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Event\Plan\PayedEvent;
-use Fusio\Impl\Event\PlanEvents;
-use Fusio\Impl\Service\Plan\Model\Product;
+use Fusio\Engine\ConnectorInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Plan\Model;
 use Fusio\Impl\Table;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -38,37 +36,124 @@ use PSX\Http\Exception as StatusCode;
  */
 class Payment
 {
+    /**
+     * @var \Fusio\Impl\Service\Plan\ProviderInterface[]
+     */
     protected $providers;
-    
+
+    /**
+     * @var \Fusio\Engine\ConnectorInterface
+     */
+    protected $connector;
+
+    /**
+     * @var \Fusio\Impl\Service\Plan\Payer
+     */
+    protected $payerService;
+
+    /**
+     * @var \Fusio\Impl\Table\Plan
+     */
     protected $planTable;
-    
-    public function __construct(Table\Plan $planTable)
+
+    /**
+     * @var \Fusio\Impl\Table\Plan\Transaction
+     */
+    protected $transactionTable;
+
+    /**
+     * @param \Fusio\Engine\ConnectorInterface $connector
+     * @param \Fusio\Impl\Service\Plan\Payer $payerService
+     * @param \Fusio\Impl\Table\Plan $planTable
+     * @param \Fusio\Impl\Table\Plan\Transaction $transactionTable
+     */
+    public function __construct(ConnectorInterface $connector, Payer $payerService, Table\Plan $planTable, Table\Plan\Transaction $transactionTable)
     {
+        $this->connector = $connector;
+        $this->payerService = $payerService;
         $this->planTable = $planTable;
+        $this->transactionTable = $transactionTable;
     }
 
+    /**
+     * @param string $name
+     * @param ProviderInterface $provider
+     */
     public function addProvider($name, ProviderInterface $provider)
     {
         $this->providers[$name] = $provider;
     }
 
-    public function prepare($name, $planId)
+    /**
+     * @param string $name
+     * @param integer $planId
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     * @return array
+     */
+    public function prepare($name, $planId, UserContext $context)
     {
-        $provider = $this->getProvider($name);
-        $product  = $this->createProduct($planId);
+        $provider   = $this->getProvider($name);
+        $product    = $this->createProduct($planId);
+        $connection = $this->connector->getConnection($name);
 
-        $returnUrl   = '';
-        $cancelUrl   = '';
-        $approvalUrl = $provider->prepare($product, $returnUrl, $cancelUrl);
+        // prepare payment
+        $transaction = $provider->prepare($connection, $product);
 
+        // create transaction
+        $this->transactionTable->create([
+            'plan_id' => $transaction->getPlanId(),
+            'user_id' => $context->getUserId(),
+            'status' => $transaction->getStatus(),
+            'provider' => $name,
+            'transaction_id' => $transaction->getTransactionId(),
+            'amount' => $transaction->getAmount(),
+            'insert_date' => $transaction->getCreateDate(),
+        ]);
+
+        // return transaction
         return [
-            'approvalUrl' => $approvalUrl,
+            'id' => $transaction->getId(),
+            'status' => $transaction->getStatus(),
+            'amount' => $transaction->getAmount(),
+            'createDate' => $transaction->getCreateDate(),
+            'parameters' => $transaction->getParameters(),
         ];
     }
 
-    public function execute()
+    /**
+     * @param string $name
+     * @param mixed $options
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     * @return array
+     */
+    public function execute($name, $options, UserContext $context)
     {
-        
+        $provider   = $this->getProvider($name);
+        $connection = $this->connector->getConnection($name);
+
+        // create transaction
+        $transaction = $this->createTransaction($options);
+
+        // create product
+        $product = $this->createProduct($transaction->getPlanId());
+
+        // execute transaction
+        $transaction = $provider->execute($connection, $product, $transaction);
+
+        // update transaction
+        $this->transactionTable->update([
+            'id' => $transaction->getId(),
+            'status' => $transaction->getStatus(),
+        ]);
+
+        // if approved add points to user
+        if ($transaction == Model\Transaction::STATUS_APPROVED) {
+            $this->payerService->credit($transaction['user_id'], $product->getPoints());
+        }
+
+        return [
+            'status' => $transaction->getStatus(),
+        ];
     }
 
     /**
@@ -97,14 +182,48 @@ class Payment
         }
 
         if ($plan['status'] != Table\Plan::STATUS_ACTIVE) {
-            throw new StatusCode\BadRequestException('Invalid plan id');
+            throw new StatusCode\BadRequestException('Invalid plan status');
         }
 
-        $product = new Product();
+        $product = new Model\Product();
         $product->setId($plan['id']);
         $product->setName($plan['name']);
-        $product->setPrice(floatval($plan['price']));
+        $product->setPrice($plan['price']);
+        $product->setPoints($plan['points']);
 
         return $product;
+    }
+
+    private function createTransaction($options)
+    {
+        $transactionId = $options['paymentId'];
+
+        if (empty($transactionId)) {
+            throw new StatusCode\BadRequestException('No transaction id provided');
+        }
+
+        $result = $this->transactionTable->getByTransactionId($transactionId);
+
+        if (empty($result)) {
+            throw new StatusCode\BadRequestException('Invalid transaction id');
+        }
+
+        if ($result['status'] == Model\Transaction::STATUS_APPROVED) {
+            throw new StatusCode\BadRequestException('Transaction is already approved');
+        }
+
+        $transaction = new Model\Transaction();
+        $transaction->setId($result['id']);
+        $transaction->setPlanId($result['plan_id']);
+        $transaction->setStatus($result['status']);
+        $transaction->setTransactionId($result['transaction_id']);
+        $transaction->setAmount($result['amount']);
+        $transaction->setCreateDate($result['insert_date']);
+
+        foreach ($options as $key => $value) {
+            $transaction->setParameter($key, $value);
+        }
+
+        return $transaction;
     }
 }
