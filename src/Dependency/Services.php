@@ -393,6 +393,23 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Plan\Payment
+     */
+    public function getPlanPaymentService()
+    {
+        $payment = new Service\Plan\Payment(
+            $this->get('connector'),
+            $this->get('plan_payer_service'),
+            $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('table_manager')->getTable(Table\Plan\Transaction::class)
+        );
+
+        $payment->addProvider('paypal', new Service\Plan\Provider\Paypal());
+
+        return $payment;
+    }
+
+    /**
      * @return \Fusio\Impl\Service\User\Activate
      */
     public function getUserActivateService()
