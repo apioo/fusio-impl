@@ -47,10 +47,13 @@ class Version20180904200851 extends AbstractMigration
         $planUsageTable->addOption('engine', 'MyISAM');
 
         $userTable = $schema->getTable('fusio_user');
-        $userTable->addColumn('points', 'integer');
+        $userTable->addColumn('points', 'integer', ['notnull' => false]);
 
         $routesTable = $schema->getTable('fusio_routes_method');
-        $routesTable->addColumn('costs', 'integer');
+        $routesTable->addColumn('costs', 'integer', ['notnull' => false]);
+
+        $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_transaction_plan_id');
+        $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_transaction_user_id');
     }
 
     /**
