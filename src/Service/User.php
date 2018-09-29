@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
@@ -32,7 +33,6 @@ use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Event\UserEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\User\PasswordComplexity;
-use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
@@ -184,6 +184,7 @@ class User
                 'name'     => $name,
                 'email'    => $email,
                 'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
+                'points'   => $this->configService->getValue('points_default') ?: null,
                 'date'     => new DateTime(),
             ];
 
@@ -216,7 +217,7 @@ class User
         $user = $this->userTable->getOneBy($condition);
 
         if (!empty($user)) {
-            return $user->id;
+            return $user['id'];
         }
 
         // replace spaces with a dot
@@ -242,6 +243,7 @@ class User
                 'name'      => $name,
                 'email'     => $email,
                 'password'  => null,
+                'points'    => $this->configService->getValue('points_default') ?: null,
                 'date'      => new DateTime(),
             ];
 
@@ -408,6 +410,23 @@ class User
     public function getAvailableScopes($userId)
     {
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
+    }
+
+    /**
+     * Returns the default scopes which every new user gets automatically
+     * assigned
+     * 
+     * @return array
+     */
+    public function getDefaultScopes()
+    {
+        $scopes = $this->configService->getValue('scopes_default');
+
+        return array_filter(array_map('trim', Service\Scope::split($scopes)), function ($scope) {
+            // we filter out the backend scope since this would be a major
+            // security issue
+            return !empty($scope) && $scope != 'backend';
+        });
     }
 
     protected function insertScopes($userId, $scopes)
