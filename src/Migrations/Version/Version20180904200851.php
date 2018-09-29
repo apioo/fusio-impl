@@ -57,8 +57,13 @@ class Version20180904200851 extends AbstractMigration
 
         // remove action and connection class table which is now available
         // through the provider file
-        $schema->dropTable('fusio_action_class');
-        $schema->dropTable('fusio_connection_class');
+        if ($schema->hasTable('fusio_action_class')) {
+            $schema->dropTable('fusio_action_class');
+        }
+
+        if ($schema->hasTable('fusio_connection_class')) {
+            $schema->dropTable('fusio_connection_class');
+        }
     }
 
     /**

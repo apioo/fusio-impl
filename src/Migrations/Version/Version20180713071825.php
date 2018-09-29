@@ -33,14 +33,6 @@ class Version20180713071825 extends AbstractMigration
             $actionTable->setPrimaryKey(['id']);
         }
 
-        if (!$schema->hasTable('fusio_action_class')) {
-            $actionClassTable = $schema->createTable('fusio_action_class');
-            $actionClassTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $actionClassTable->addColumn('class', 'string', ['length' => 255]);
-            $actionClassTable->setPrimaryKey(['id']);
-            $actionClassTable->addUniqueIndex(['class']);
-        }
-
         if (!$schema->hasTable('fusio_app')) {
             $appTable = $schema->createTable('fusio_app');
             $appTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -129,14 +121,6 @@ class Version20180713071825 extends AbstractMigration
             $connectionTable->addColumn('config', 'text', ['notnull' => false]);
             $connectionTable->setPrimaryKey(['id']);
             $connectionTable->addUniqueIndex(['name']);
-        }
-
-        if (!$schema->hasTable('fusio_connection_class')) {
-            $connectionClassTable = $schema->createTable('fusio_connection_class');
-            $connectionClassTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $connectionClassTable->addColumn('class', 'string', ['length' => 255]);
-            $connectionClassTable->setPrimaryKey(['id']);
-            $connectionClassTable->addUniqueIndex(['class']);
         }
 
         if (!$schema->hasTable('fusio_cronjob')) {
