@@ -54,6 +54,11 @@ class Version20180904200851 extends AbstractMigration
 
         $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_transaction_plan_id');
         $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_transaction_user_id');
+
+        // remove action and connection class table which is now available
+        // through the provider file
+        $schema->dropTable('fusio_action_class');
+        $schema->dropTable('fusio_connection_class');
     }
 
     /**
@@ -61,7 +66,8 @@ class Version20180904200851 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
-
+        $schema->dropTable('fusio_plan');
+        $schema->dropTable('fusio_plan_transaction');
+        $schema->dropTable('fusio_plan_usage');
     }
 }
