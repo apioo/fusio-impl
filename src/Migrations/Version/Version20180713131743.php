@@ -136,11 +136,6 @@ class Version20180713131743 extends AbstractMigration
             ],
             'fusio_audit' => [
             ],
-            'fusio_connection_class' => [
-                ['class' => Adapter\Http\Connection\Http::class],
-                ['class' => Adapter\Sql\Connection\Sql::class],
-                ['class' => Adapter\Sql\Connection\SqlAdvanced::class],
-            ],
             'fusio_scope' => [
                 ['name' => 'backend', 'description' => 'Access to the backend API'],
                 ['name' => 'consumer', 'description' => 'Consumer API endpoint'],
@@ -148,15 +143,6 @@ class Version20180713131743 extends AbstractMigration
             ],
             'fusio_action' => [
                 ['status' => 1, 'name' => 'Welcome', 'class' => Welcome::class, 'engine' => PhpClass::class, 'config' => null, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_action_class' => [
-                ['class' => Adapter\Http\Action\HttpProcessor::class],
-                ['class' => Adapter\Php\Action\PhpProcessor::class],
-                ['class' => Adapter\Php\Action\PhpSandbox::class],
-                ['class' => Adapter\Sql\Action\SqlTable::class],
-                ['class' => Adapter\Util\Action\UtilStaticResponse::class],
-                ['class' => Adapter\V8\Action\V8Processor::class],
-                ['class' => Adapter\File\Action\FileProcessor::class],
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
