@@ -5,10 +5,10 @@ namespace Fusio\Impl\Migrations\Version;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Adapter;
+use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Export;
-use Fusio\Impl\Service\User\ProviderInterface;
 use Fusio\Impl\Table;
 
 /**
