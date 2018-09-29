@@ -21,6 +21,10 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Fusio\Engine\Payment;
+use Fusio\Engine\User;
+use Fusio\Impl\Provider\ProviderConfig;
+use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 
@@ -397,16 +401,13 @@ trait Services
      */
     public function getPlanPaymentService()
     {
-        $payment = new Service\Plan\Payment(
+        return new Service\Plan\Payment(
             $this->get('connector'),
             $this->get('plan_payer_service'),
+            new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
             $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('table_manager')->getTable(Table\Plan\Transaction::class)
         );
-
-        $payment->addProvider('paypal', new Service\Plan\Provider\Paypal());
-
-        return $payment;
     }
 
     /**
@@ -451,26 +452,9 @@ trait Services
         return new Service\User\Provider(
             $this->get('user_service'),
             $this->get('config_service'),
-            $this->get('user_provider_factory'),
+            new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_USER, User\ProviderInterface::class),
             $this->get('user_token_issuer_service')
         );
-    }
-
-    /**
-     * @return \Fusio\Impl\Service\User\ProviderFactory
-     */
-    public function getUserProviderFactory()
-    {
-        $factory = new Service\User\ProviderFactory(
-            $this->get('http_client'),
-            $this->get('config_service')
-        );
-
-        $factory->register('facebook', Service\User\Provider\Facebook::class);
-        $factory->register('github', Service\User\Provider\Github::class);
-        $factory->register('google', Service\User\Provider\Google::class);
-
-        return $factory;
     }
 
     /**
