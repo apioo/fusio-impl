@@ -21,11 +21,10 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Engine\Model\User;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
-use Fusio\Impl\Service\User\Model\User as UserModel;
-use PSX\Framework\Config\Config;
-use PSX\Http\Client\ClientInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -48,7 +47,7 @@ class Provider
     protected $configService;
 
     /**
-     * @var \Fusio\Impl\Service\User\ProviderFactory
+     * @var \Fusio\Impl\Provider\ProviderFactory
      */
     protected $providerFactory;
 
@@ -60,7 +59,7 @@ class Provider
     /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
-     * @param \Fusio\Impl\Service\User\ProviderFactory $providerFactory
+     * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
      * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
      */
     public function __construct(Service\User $userService, Service\Config $configService, ProviderFactory $providerFactory, TokenIssuer $tokenIssuer)
@@ -71,42 +70,33 @@ class Provider
         $this->tokenIssuer     = $tokenIssuer;
     }
 
+    /**
+     * @param string $providerName
+     * @param string $code
+     * @param string $clientId
+     * @param string $redirectUri
+     * @return string
+     * @throws \Throwable
+     */
     public function provider($providerName, $code, $clientId, $redirectUri)
     {
-        $providerName = strtolower($providerName);
-        $provider     = $this->providerFactory->factory($providerName);
+        $provider = $this->providerFactory->factory($providerName);
+        $user     = $provider->requestUser($code, $clientId, $redirectUri);
 
-        if ($provider instanceof ProviderInterface) {
-            $user = $provider->requestUser($code, $clientId, $redirectUri);
+        if ($user instanceof User) {
+            $scopes = $this->userService->getDefaultScopes();
+            $userId = $this->userService->createRemote(
+                $provider->getId(),
+                $user->getId(),
+                $user->getName(),
+                $user->getEmail(),
+                $scopes,
+                UserContext::newAnonymousContext()
+            );
 
-            if ($user instanceof UserModel) {
-                $scopes = $this->getDefaultScopes();
-                $userId = $this->userService->createRemote(
-                    $provider->getId(),
-                    $user->getId(),
-                    $user->getName(),
-                    $user->getEmail(),
-                    $scopes,
-                    UserContext::newAnonymousContext()
-                );
-
-                return $this->tokenIssuer->createToken($userId, $scopes);
-            } else {
-                throw new StatusCode\BadRequestException('Could not request user information');
-            }
+            return $this->tokenIssuer->createToken($userId, $scopes);
         } else {
-            throw new StatusCode\BadRequestException('Not supported provider');
+            throw new StatusCode\BadRequestException('Could not request user information');
         }
-    }
-
-    protected function getDefaultScopes()
-    {
-        $scopes = $this->configService->getValue('scopes_default');
-
-        return array_filter(array_map('trim', Service\Scope::split($scopes)), function ($scope) {
-            // we filter out the backend scope since this would be a major
-            // security issue
-            return !empty($scope) && $scope != 'backend';
-        });
     }
 }

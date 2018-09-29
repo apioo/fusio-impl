@@ -97,7 +97,7 @@ class Register
             $status = Table\User::STATUS_CONSUMER;
         }
 
-        $scopes = $this->getDefaultScopes();
+        $scopes = $this->userService->getDefaultScopes();
         $userId = $this->userService->create(
             $status,
             $name,
@@ -155,16 +155,5 @@ class Register
         }
 
         throw new StatusCode\BadRequestException('Invalid captcha');
-    }
-
-    protected function getDefaultScopes()
-    {
-        $scopes = $this->configService->getValue('scopes_default');
-
-        return array_filter(array_map('trim', Service\Scope::split($scopes)), function ($scope) {
-            // we filter out the backend scope since this would be a major
-            // security issue
-            return !empty($scope) && $scope != 'backend';
-        });
     }
 }
