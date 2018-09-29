@@ -36,6 +36,7 @@ use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
+use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
 use PSX\Api\Listing\CachedListing;
@@ -157,6 +158,19 @@ class Container extends DefaultContainer
         );
     }
 
+    /**
+     * @return \Fusio\Impl\Provider\ProviderConfig
+     */
+    public function getProviderConfig()
+    {
+        $providerFile = $this->get('config')->get('fusio_provider');
+        if (!empty($providerFile)) {
+            return ProviderConfig::fromFile($providerFile);
+        } else {
+            return new ProviderConfig($this->appendDefaultProvider());
+        }
+    }
+
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
@@ -254,5 +268,32 @@ class Container extends DefaultContainer
                 return new Context();
             },
         ));
+    }
+
+    protected function appendDefaultProvider()
+    {
+        return [
+            'action' => [
+                \Fusio\Adapter\File\Action\FileProcessor::class,
+                \Fusio\Adapter\Http\Action\HttpProcessor::class,
+                \Fusio\Adapter\Php\Action\PhpProcessor::class,
+                \Fusio\Adapter\Php\Action\PhpSandbox::class,
+                \Fusio\Adapter\Sql\Action\SqlTable::class,
+                \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
+                \Fusio\Adapter\V8\Action\V8Processor::class,
+            ],
+            'connection' => [
+                \Fusio\Adapter\Http\Connection\Http::class,
+                \Fusio\Adapter\Sql\Connection\Sql::class,
+                \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
+            ],
+            'payment' => [
+            ],
+            'user' => [
+                \Fusio\Impl\Provider\User\Facebook::class,
+                \Fusio\Impl\Provider\User\Github::class,
+                \Fusio\Impl\Provider\User\Google::class,
+            ],
+        ];
     }
 }
