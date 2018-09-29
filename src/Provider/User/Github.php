@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\User\Provider;
+namespace Fusio\Impl\Provider\User;
 
+use Fusio\Engine\Model\User;
+use Fusio\Engine\User\ProviderAbstract;
 use Fusio\Impl\Base;
-use Fusio\Impl\Service\User\Model\User;
-use Fusio\Impl\Service\User\ProviderAbstract;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Json\Parser;
@@ -31,25 +31,31 @@ use PSX\Uri\Url;
 use RuntimeException;
 
 /**
- * Google
+ * Github
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Google extends ProviderAbstract
+class Github extends ProviderAbstract
 {
+    /**
+     * @inheritdoc
+     */
     public function getId()
     {
-        return self::PROVIDER_GOOGLE;
+        return self::PROVIDER_GITHUB;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function requestUser($code, $clientId, $redirectUri)
     {
         $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
 
         if (!empty($accessToken)) {
-            $url      = new Url('https://www.googleapis.com/plus/v1/people/me/openIdConnect');
+            $url      = new Url('https://api.github.com/user');
             $headers  = [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'User-Agent'    => Base::getUserAgent()
@@ -59,12 +65,17 @@ class Google extends ProviderAbstract
 
             if ($response->getStatusCode() == 200) {
                 $data  = Parser::decode($response->getBody());
-                $id    = isset($data->sub) ? $data->sub : null;
-                $name  = isset($data->name) ? $data->name : null;
+                $id    = isset($data->id) ? $data->id: null;
+                $name  = isset($data->login) ? $data->login : null;
                 $email = isset($data->email) ? $data->email : null;
 
                 if (!empty($id) && !empty($name)) {
-                    return new User($id, $name, $email);
+                    $user = new User();
+                    $user->setId($id);
+                    $user->setName($name);
+                    $user->setEmail($email);
+
+                    return $user;
                 }
             }
         }
@@ -78,14 +89,12 @@ class Google extends ProviderAbstract
             throw new RuntimeException('No secret provided');
         }
 
-        $url = new Url('https://accounts.google.com/o/oauth2/token');
-
+        $url    = new Url('https://github.com/login/oauth/access_token');
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
             'client_secret' => $clientSecret,
             'redirect_uri'  => $redirectUri,
-            'grant_type'    => 'authorization_code'
         ];
 
         $headers = [

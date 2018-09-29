@@ -19,59 +19,68 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Parser;
+namespace Fusio\Impl\Provider;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Engine\Factory\FactoryInterface;
 use Fusio\Engine\Form;
 use Fusio\Engine\Parser\ParserAbstract;
 
 /**
- * Database
+ * ProviderParser
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Database extends ParserAbstract
+class ProviderParser extends ParserAbstract
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var \Fusio\Impl\Provider\ProviderConfig
      */
-    protected $connection;
+    protected $providerConfig;
 
     /**
      * @var string
      */
-    protected $tableName;
+    protected $type;
 
     /**
      * @var string
      */
     protected $instanceOf;
 
-    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, Connection $connection, $tableName, $instanceOf)
+    /**
+     * @param \Fusio\Engine\Factory\FactoryInterface $factory
+     * @param \Fusio\Engine\Form\ElementFactoryInterface $elementFactory
+     * @param \Fusio\Impl\Provider\ProviderConfig $providerConfig
+     * @param string $type
+     * @param string $instanceOf
+     */
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderConfig $providerConfig, $type, $instanceOf)
     {
         parent::__construct($factory, $elementFactory);
 
-        $this->connection = $connection;
-        $this->tableName  = $tableName;
-        $this->instanceOf = $instanceOf;
+        $this->providerConfig = $providerConfig;
+        $this->type           = $type;
+        $this->instanceOf     = $instanceOf;
     }
 
+    /**
+     * @return array
+     */
     public function getClasses()
     {
-        $classes = $this->connection->fetchAll('SELECT class FROM ' . $this->tableName . ' ORDER BY class ASC');
+        $classes = $this->providerConfig->getClasses($this->type);
         $result  = array();
 
-        foreach ($classes as $row) {
-            $object     = $this->getObject($row['class']);
+        foreach ($classes as $name => $class) {
+            $object     = $this->getObject($class);
             $instanceOf = $this->instanceOf;
 
             if ($object instanceof $instanceOf) {
                 $result[] = array(
                     'name'  => $object->getName(),
-                    'class' => $row['class'],
+                    'class' => $class,
                 );
             }
         }

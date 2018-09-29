@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\User\Provider;
+namespace Fusio\Impl\Provider\User;
 
+use Fusio\Engine\Model\User;
+use Fusio\Engine\User\ProviderAbstract;
 use Fusio\Impl\Base;
-use Fusio\Impl\Service\User\Model\User;
-use Fusio\Impl\Service\User\ProviderAbstract;
 use PSX\Http\Client\GetRequest;
 use PSX\Json\Parser;
 use PSX\Uri\Url;
@@ -38,11 +38,17 @@ use RuntimeException;
  */
 class Facebook extends ProviderAbstract
 {
+    /**
+     * @inheritdoc
+     */
     public function getId()
     {
         return self::PROVIDER_FACEBOOK;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function requestUser($code, $clientId, $redirectUri)
     {
         $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
@@ -68,7 +74,12 @@ class Facebook extends ProviderAbstract
                 $email = isset($data->email) ? $data->email : null;
 
                 if (!empty($id) && !empty($name) && !empty($email)) {
-                    return new User($id, $name, $email);
+                    $user = new User();
+                    $user->setId($id);
+                    $user->setName($name);
+                    $user->setEmail($email);
+
+                    return $user;
                 }
             }
         }
