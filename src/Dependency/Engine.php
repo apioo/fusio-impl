@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Dependency;
 
+use Fusio\Engine\ActionInterface;
+use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
@@ -30,7 +32,8 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Response;
 use Fusio\Impl\Factory\Resolver;
-use Fusio\Impl\Parser as ImplParser;
+use Fusio\Impl\Provider\ProviderConfig;
+use Fusio\Impl\Provider\ProviderParser;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
 use Fusio\Impl\Service\Event\Dispatcher;
@@ -55,12 +58,12 @@ trait Engine
      */
     public function getActionParser()
     {
-        return new ImplParser\Database(
+        return new ProviderParser(
             $this->get('action_factory'),
             $this->get('form_element_factory'),
-            $this->get('connection'),
-            'fusio_action_class',
-            'Fusio\Engine\ActionInterface'
+            $this->get('provider_config'),
+            ProviderConfig::TYPE_ACTION,
+            ActionInterface::class
         );
     }
 
@@ -141,12 +144,12 @@ trait Engine
      */
     public function getConnectionParser()
     {
-        return new ImplParser\Database(
+        return new ProviderParser(
             $this->get('connection_factory'),
             $this->get('form_element_factory'),
-            $this->get('connection'),
-            'fusio_connection_class',
-            'Fusio\Engine\ConnectionInterface'
+            $this->get('provider_config'),
+            ProviderConfig::TYPE_CONNECTION,
+            ConnectionInterface::class
         );
     }
 
