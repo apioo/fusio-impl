@@ -22,8 +22,12 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\Model\Product;
+use Fusio\Engine\Model\Transaction;
+use Fusio\Engine\Model\TransactionInterface;
+use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Plan\Model;
+use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 
@@ -37,11 +41,6 @@ use PSX\Http\Exception as StatusCode;
 class Payment
 {
     /**
-     * @var \Fusio\Impl\Service\Plan\ProviderInterface[]
-     */
-    protected $providers;
-
-    /**
      * @var \Fusio\Engine\ConnectorInterface
      */
     protected $connector;
@@ -50,6 +49,11 @@ class Payment
      * @var \Fusio\Impl\Service\Plan\Payer
      */
     protected $payerService;
+
+    /**
+     * @var \Fusio\Impl\Provider\ProviderFactory
+     */
+    protected $providerFactory;
 
     /**
      * @var \Fusio\Impl\Table\Plan
@@ -64,24 +68,17 @@ class Payment
     /**
      * @param \Fusio\Engine\ConnectorInterface $connector
      * @param \Fusio\Impl\Service\Plan\Payer $payerService
+     * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
      * @param \Fusio\Impl\Table\Plan $planTable
      * @param \Fusio\Impl\Table\Plan\Transaction $transactionTable
      */
-    public function __construct(ConnectorInterface $connector, Payer $payerService, Table\Plan $planTable, Table\Plan\Transaction $transactionTable)
+    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Table\Plan $planTable, Table\Plan\Transaction $transactionTable)
     {
         $this->connector = $connector;
         $this->payerService = $payerService;
+        $this->providerFactory = $providerFactory;
         $this->planTable = $planTable;
         $this->transactionTable = $transactionTable;
-    }
-
-    /**
-     * @param string $name
-     * @param ProviderInterface $provider
-     */
-    public function addProvider($name, ProviderInterface $provider)
-    {
-        $this->providers[$name] = $provider;
     }
 
     /**
@@ -92,7 +89,8 @@ class Payment
      */
     public function prepare($name, $planId, UserContext $context)
     {
-        $provider   = $this->getProvider($name);
+        /** @var ProviderInterface $provider */
+        $provider   = $this->providerFactory->factory($name);
         $product    = $this->createProduct($planId);
         $connection = $this->connector->getConnection($name);
 
@@ -128,7 +126,7 @@ class Payment
      */
     public function execute($name, $options, UserContext $context)
     {
-        $provider   = $this->getProvider($name);
+        $provider   = $this->providerFactory->factory($name);
         $connection = $this->connector->getConnection($name);
 
         // create transaction
@@ -147,7 +145,7 @@ class Payment
         ]);
 
         // if approved add points to user
-        if ($transaction == Model\Transaction::STATUS_APPROVED) {
+        if ($transaction == TransactionInterface::STATUS_APPROVED) {
             $this->payerService->credit($transaction['user_id'], $product->getPoints());
         }
 
@@ -157,21 +155,8 @@ class Payment
     }
 
     /**
-     * @param string $name
-     * @return \Fusio\Impl\Service\Plan\ProviderInterface
-     */
-    private function getProvider($name)
-    {
-        if (!isset($this->providers[$name])) {
-            throw new StatusCode\BadRequestException('Invalid payment provider');
-        }
-
-        return $this->providers[$name];
-    }
-
-    /**
      * @param integer $planId
-     * @return \Fusio\Impl\Service\Plan\Model\Product
+     * @return \Fusio\Engine\Model\ProductInterface
      */
     private function createProduct($planId)
     {
@@ -185,7 +170,7 @@ class Payment
             throw new StatusCode\BadRequestException('Invalid plan status');
         }
 
-        $product = new Model\Product();
+        $product = new Product();
         $product->setId($plan['id']);
         $product->setName($plan['name']);
         $product->setPrice($plan['price']);
@@ -208,11 +193,11 @@ class Payment
             throw new StatusCode\BadRequestException('Invalid transaction id');
         }
 
-        if ($result['status'] == Model\Transaction::STATUS_APPROVED) {
+        if ($result['status'] == TransactionInterface::STATUS_APPROVED) {
             throw new StatusCode\BadRequestException('Transaction is already approved');
         }
 
-        $transaction = new Model\Transaction();
+        $transaction = new Transaction();
         $transaction->setId($result['id']);
         $transaction->setPlanId($result['plan_id']);
         $transaction->setStatus($result['status']);
