@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Controller\SchemaApiController;
+use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\VoidAction;
 use Fusio\Impl\Tests\Adapter\Test\VoidConnection;
@@ -67,18 +68,33 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/Registration successful/', $display, $display);
 
         // check action class
-        $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => VoidAction::class,
-        ]);
+        $file   = Environment::getService('config')->get('fusio_provider');
+        $config = ProviderConfig::fromFile($file);
 
-        $this->assertEquals(8, $actionId);
+        $actual = $config->get(ProviderConfig::TYPE_ACTION);
+        $expect = [
+            \Fusio\Adapter\File\Action\FileProcessor::class,
+            \Fusio\Adapter\Http\Action\HttpProcessor::class,
+            \Fusio\Adapter\Php\Action\PhpProcessor::class,
+            \Fusio\Adapter\Php\Action\PhpSandbox::class,
+            \Fusio\Adapter\Sql\Action\SqlTable::class,
+            \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
+            \Fusio\Adapter\V8\Action\V8Processor::class,
+            \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
+        ];
+
+        $this->assertEquals($actual, $expect);
 
         // check connection class
-        $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => VoidConnection::class,
-        ]);
+        $actual = $config->get(ProviderConfig::TYPE_CONNECTION);
+        $expect = [
+            \Fusio\Adapter\Http\Connection\Http::class,
+            \Fusio\Adapter\Sql\Connection\Sql::class,
+            \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
+            \Fusio\Impl\Tests\Adapter\Test\VoidConnection::class,
+        ];
 
-        $this->assertEquals(4, $connectionId);
+        $this->assertEquals($actual, $expect);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -180,18 +196,33 @@ JSON;
         $this->assertRegExp('/Registration successful/', $display, $display);
 
         // check action class
-        $actionId = $this->connection->fetchColumn('SELECT id FROM fusio_action_class WHERE class = :class', [
-            'class' => VoidAction::class,
-        ]);
+        $file   = Environment::getService('config')->get('fusio_provider');
+        $config = ProviderConfig::fromFile($file);
 
-        $this->assertEquals(8, $actionId);
+        $actual = $config->get(ProviderConfig::TYPE_ACTION);
+        $expect = [
+            \Fusio\Adapter\File\Action\FileProcessor::class,
+            \Fusio\Adapter\Http\Action\HttpProcessor::class,
+            \Fusio\Adapter\Php\Action\PhpProcessor::class,
+            \Fusio\Adapter\Php\Action\PhpSandbox::class,
+            \Fusio\Adapter\Sql\Action\SqlTable::class,
+            \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
+            \Fusio\Adapter\V8\Action\V8Processor::class,
+            \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
+        ];
+
+        $this->assertEquals($actual, $expect);
 
         // check connection class
-        $connectionId = $this->connection->fetchColumn('SELECT id FROM fusio_connection_class WHERE class = :class', [
-            'class' => VoidConnection::class,
-        ]);
+        $actual = $config->get(ProviderConfig::TYPE_CONNECTION);
+        $expect = [
+            \Fusio\Adapter\Http\Connection\Http::class,
+            \Fusio\Adapter\Sql\Connection\Sql::class,
+            \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
+            \Fusio\Impl\Tests\Adapter\Test\VoidConnection::class,
+        ];
 
-        $this->assertEquals(4, $connectionId);
+        $this->assertEquals($actual, $expect);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
