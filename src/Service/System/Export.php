@@ -37,16 +37,6 @@ class Export extends SystemAbstract
     {
         $data = new stdClass();
 
-        $classes = $this->getClasses('fusio_action_class');
-        if (!empty($classes)) {
-            $data->actionClass = $classes;
-        }
-
-        $classes = $this->getClasses('fusio_connection_class');
-        if (!empty($classes)) {
-            $data->connectionClass = $classes;
-        }
-
         // @TODO for schema and action exports there can be a problem with the
         // order. In case a schema reference another schema and the depending
         // schema is listed afterwards the import will not work. The same
