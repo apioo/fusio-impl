@@ -37,6 +37,7 @@ use Fusio\Impl\Loader\RoutingParser;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Mail\TransportFactory;
 use Fusio\Impl\Provider\ProviderConfig;
+use Fusio\Impl\Provider\ProviderWriter;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
 use PSX\Api\Listing\CachedListing;
@@ -163,12 +164,25 @@ class Container extends DefaultContainer
      */
     public function getProviderConfig()
     {
+        $config = new ProviderConfig($this->appendDefaultProviderConfig());
+
         $providerFile = $this->get('config')->get('fusio_provider');
         if (!empty($providerFile)) {
-            return ProviderConfig::fromFile($providerFile);
-        } else {
-            return new ProviderConfig($this->appendDefaultProvider());
+            $config->merge(ProviderConfig::fromFile($providerFile));
         }
+
+        return $config;
+    }
+
+    /**
+     * @return \Fusio\Impl\Provider\ProviderWriter
+     */
+    public function getProviderWriter()
+    {
+        $file   = $this->get('config')->get('fusio_provider');
+        $writer = new ProviderWriter($this->get('provider_config'), $file);
+
+        return $writer;
     }
 
     protected function appendConsoleCommands(Application $application)
@@ -270,7 +284,7 @@ class Container extends DefaultContainer
         ));
     }
 
-    protected function appendDefaultProvider()
+    protected function appendDefaultProviderConfig()
     {
         return [
             'action' => [
