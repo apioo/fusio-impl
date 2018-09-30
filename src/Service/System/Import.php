@@ -21,11 +21,12 @@
 
 namespace Fusio\Impl\Service\System;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ConnectionInterface;
+use Doctrine\DBAL\Connection;
+use Fusio\Engine\Parser\ParserInterface;
+use Fusio\Impl\Provider\ProviderWriter;
 use Fusio\Impl\Service\System\Import\Result;
+use Psr\Log\LoggerInterface;
 use PSX\Json\Parser;
-use ReflectionClass;
 use RuntimeException;
 use stdClass;
 
@@ -38,6 +39,18 @@ use stdClass;
  */
 class Import extends SystemAbstract
 {
+    /**
+     * @var \Fusio\Impl\Provider\ProviderWriter
+     */
+    protected $providerWriter;
+
+    public function __construct(ApiExecutor $apiExecutor, Connection $connection, ParserInterface $actionParser, ParserInterface $connectionParser, LoggerInterface $logger, ProviderWriter $providerWriter)
+    {
+        parent::__construct($apiExecutor, $connection, $actionParser, $connectionParser, $logger);
+
+        $this->providerWriter = $providerWriter;
+    }
+
     public function import($data)
     {
         $data   = Parser::decode($data, false);
@@ -47,19 +60,9 @@ class Import extends SystemAbstract
             throw new RuntimeException('Data must be an object');
         }
 
-        $classes = isset($data->actionClass) ? $data->actionClass : null;
-        if (!empty($classes) && is_array($classes)) {
-            foreach ($classes as $class) {
-                $this->importClass('fusio_action_class', $class, ActionInterface::class, $result);
-            }
-        }
-
-        $classes = isset($data->connectionClass) ? $data->connectionClass : null;
-        if (!empty($classes) && is_array($classes)) {
-            foreach ($classes as $class) {
-                $this->importClass('fusio_connection_class', $class, ConnectionInterface::class, $result);
-            }
-        }
+        // check whether the adapter wants to add a new provider classes to the
+        // provider.php file
+        $this->importProvider($data, $result);
 
         $config = isset($data->config) ? $data->config : null;
         if (!empty($config) && $config instanceof stdClass) {
@@ -162,28 +165,27 @@ class Import extends SystemAbstract
         }
     }
 
-    protected function importClass($tableName, $className, $interface, Result $result)
+    protected function importProvider(stdClass $data, Result $result)
     {
-        if (!is_string($className)) {
-            throw new RuntimeException('Class name must be a string ' . gettype($className) . ' given');
+        $providerTypes  = $this->providerWriter->getAvailableTypes();
+        $providerConfig = [];
+        $newClasses     = [];
+
+        foreach ($providerTypes as $providerType) {
+            $name    = $providerType . 'Class';
+            $classes = isset($data->{$name}) ? $data->{$name} : null;
+            if (!empty($classes) && is_array($classes)) {
+                $providerConfig[$providerType] = $classes;
+
+                $newClasses = array_merge($newClasses, $classes);
+            }
         }
 
-        $class = new ReflectionClass($className);
-
-        if ($class->implementsInterface($interface)) {
-            $id = $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE class = :class', [
-                'class' => $class->getName(),
-            ]);
-
-            if (empty($id)) {
-                $this->connection->insert($tableName, [
-                    'class' => $class->getName(),
-                ]);
-
-                $result->add('class', Result::ACTION_REGISTERED, $className);
+        $bytes = $this->providerWriter->write($providerConfig);
+        if ($bytes > 0) {
+            foreach ($newClasses as $newClass) {
+                $result->add('class', Result::ACTION_REGISTERED, $newClass);
             }
-        } else {
-            throw new RuntimeException('Class ' . $class->getName() . ' must implement the interface ' . $interface);
         }
     }
 
