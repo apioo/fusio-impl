@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\User;
 
 use Firebase\JWT\JWT;
-use Fusio\Impl\Service\User\ProviderInterface;
+use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Table\User;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
