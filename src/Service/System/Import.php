@@ -44,6 +44,14 @@ class Import extends SystemAbstract
      */
     protected $providerWriter;
 
+    /**
+     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param \Fusio\Engine\Parser\ParserInterface $actionParser
+     * @param \Fusio\Engine\Parser\ParserInterface $connectionParser
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Fusio\Impl\Provider\ProviderWriter $providerWriter
+     */
     public function __construct(ApiExecutor $apiExecutor, Connection $connection, ParserInterface $actionParser, ParserInterface $connectionParser, LoggerInterface $logger, ProviderWriter $providerWriter)
     {
         parent::__construct($apiExecutor, $connection, $actionParser, $connectionParser, $logger);
@@ -51,6 +59,10 @@ class Import extends SystemAbstract
         $this->providerWriter = $providerWriter;
     }
 
+    /**
+     * @param string $data
+     * @return \Fusio\Impl\Service\System\Import\Result
+     */
     public function import($data)
     {
         $data   = Parser::decode($data, false);
@@ -89,6 +101,11 @@ class Import extends SystemAbstract
         return $result;
     }
 
+    /**
+     * @param string $type
+     * @param \stdClass $data
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     */
     protected function importGeneral($type, stdClass $data, Result $result)
     {
         $name = $data->name;
@@ -113,6 +130,11 @@ class Import extends SystemAbstract
         }
     }
 
+    /**
+     * @param string $type
+     * @param \stdClass $data
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     */
     protected function importRoutes($type, stdClass $data, Result $result)
     {
         $path = $data->path;
@@ -137,6 +159,10 @@ class Import extends SystemAbstract
         }
     }
 
+    /**
+     * @param \stdClass $config
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     */
     protected function importConfig(stdClass $config, Result $result)
     {
         $count = 0;
@@ -165,6 +191,10 @@ class Import extends SystemAbstract
         }
     }
 
+    /**
+     * @param \stdClass $data
+     * @param \Fusio\Impl\Service\System\Import\Result $result
+     */
     protected function importProvider(stdClass $data, Result $result)
     {
         $providerTypes  = $this->providerWriter->getAvailableTypes();
@@ -189,6 +219,12 @@ class Import extends SystemAbstract
         }
     }
 
+    /**
+     * @param string $tableName
+     * @param string $name
+     * @param string $type
+     * @return integer
+     */
     protected function getReference($tableName, $name, $type)
     {
         $id = (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);

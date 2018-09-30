@@ -56,6 +56,11 @@ class Export extends SystemAbstract
         return Parser::encode($data, JSON_PRETTY_PRINT);
     }
 
+    /**
+     * @param string $type
+     * @param integer $index
+     * @param array $result
+     */
     protected function exportType($type, $index, array &$result)
     {
         $collection = $this->doRequest('GET', $type . '?startIndex=' . $index);
@@ -75,18 +80,12 @@ class Export extends SystemAbstract
         }
     }
 
-    protected function getClasses($tableName)
-    {
-        $classes = [];
-        $result  = $this->connection->fetchAll('SELECT class FROM ' . $tableName . ' ORDER BY class ASC');
-
-        foreach ($result as $row) {
-            $classes[] = $row['class'];
-        }
-
-        return $classes;
-    }
-
+    /**
+     * @param string $tableName
+     * @param string $id
+     * @param string $type
+     * @return string
+     */
     protected function getReference($tableName, $id, $type)
     {
         $name = $this->connection->fetchColumn('SELECT name FROM ' . $tableName . ' WHERE id = :id', ['id' => $id]);
