@@ -269,7 +269,8 @@ trait Services
             $this->get('connection'),
             $this->get('action_parser'),
             $this->get('connection_parser'),
-            $this->get('logger')
+            $this->get('logger'),
+            $this->get('provider_writer')
         );
     }
 
