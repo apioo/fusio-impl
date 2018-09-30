@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Provider;
 
-use PSX\Framework\Config\NotFoundException;
+use PSX\Framework\Config\Config;
 
 /**
  * ProviderConfig
@@ -30,7 +30,7 @@ use PSX\Framework\Config\NotFoundException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ProviderConfig
+class ProviderConfig extends Config
 {
     const TYPE_ACTION = 'action';
     const TYPE_CONNECTION = 'connection';
@@ -38,16 +38,11 @@ class ProviderConfig
     const TYPE_USER = 'user';
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
      * @param array $config
      */
     public function __construct(array $config)
     {
-        $this->config = $this->parse($config);
+        parent::__construct($this->parse($config));
     }
 
     /**
@@ -56,7 +51,7 @@ class ProviderConfig
      */
     public function getClasses($type)
     {
-        return $this->config[$type] ?? [];
+        return $this->get($type);
     }
 
     /**
@@ -66,17 +61,7 @@ class ProviderConfig
      */
     public function getClass($type, $name)
     {
-        return $this->config[$type][$name] ?? null;
-    }
-
-    /**
-     * @param string $type
-     * @param string $name
-     * @return boolean
-     */
-    public function hasClass($type, $name)
-    {
-        return isset($this->config[$type][$name]);
+        return $this->get($type)[$name] ?? null;
     }
 
     /**
@@ -101,21 +86,5 @@ class ProviderConfig
         }
 
         return $result;
-    }
-
-    /**
-     * @param string $file
-     * @return \Fusio\Impl\Provider\ProviderConfig
-     * @throws \PSX\Framework\Config\NotFoundException
-     */
-    public static function fromFile($file)
-    {
-        $config = include($file);
-
-        if (is_array($config)) {
-            return new self($config);
-        } else {
-            throw new NotFoundException('Config file must return an array');
-        }
     }
 }
