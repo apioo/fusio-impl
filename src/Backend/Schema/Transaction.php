@@ -24,22 +24,23 @@ namespace Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Transaction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends SchemaAbstract
+class Transaction extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Plan');
+        $sb = $this->getSchemaBuilder('Transaction');
         $sb->integer('id');
-        $sb->string('name');
-        $sb->string('description');
-        $sb->number('price');
-        $sb->integer('points');
+        $sb->integer('status');
+        $sb->string('transactionId');
+        $sb->number('amount');
+        $sb->dateTime('updateDate');
+        $sb->dateTime('insertDate');
 
         return $sb->getProperty();
     }

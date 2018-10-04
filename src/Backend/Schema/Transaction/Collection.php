@@ -19,27 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema;
+namespace Fusio\Impl\Backend\Schema\Transaction;
 
+use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends SchemaAbstract
+class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Plan');
-        $sb->integer('id');
-        $sb->string('name');
-        $sb->string('description');
-        $sb->number('price');
-        $sb->integer('points');
+        $sb = $this->getSchemaBuilder('Transaction Collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Transaction::class));
 
         return $sb->getProperty();
     }
