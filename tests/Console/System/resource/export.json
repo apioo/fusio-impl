@@ -114,8 +114,8 @@
       "name": "Inspect-Action",
       "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {},
-      "date": "[datetime]"
+      "date": "[datetime]",
+      "config": {}
     },
     {
       "name": "Sql-Table",
@@ -281,7 +281,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "routeId": 79,
+          "routeId": 89,
           "authenticated": true
         }
       ]
@@ -295,7 +295,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "routeId": 79
+          "routeId": 89
         }
       ]
     },
