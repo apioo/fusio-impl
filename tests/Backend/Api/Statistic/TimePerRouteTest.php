@@ -238,7 +238,7 @@ JSON;
         ]
     ],
     "series": [
-        "\/backend\/action (ms)"
+        "\/backend\/account\/change_password (ms)"
     ]
 }
 JSON;
