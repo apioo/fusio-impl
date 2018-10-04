@@ -26,7 +26,7 @@ use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Migrations\Version\Version20180713131743;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use PSX\Api\Resource;
@@ -50,7 +50,7 @@ class Fixture
         }
 
         $dataSet = array_merge_recursive(
-            Version20180713131743::getInstallInserts(),
+            NewInstallation::getData(),
             self::getTestInserts()
         );
 
@@ -158,6 +158,9 @@ class Fixture
             'fusio_log_error' => [
                 ['log_id' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
+            'fusio_plan' => [
+                ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500],
+            ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => Service\Schema::serializeCache($schemaCollection)],
                 ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => Service\Schema::serializeCache($schemaEntry), 'form' => $schemaEntryForm],
@@ -213,7 +216,7 @@ class Fixture
             return $routeId;
         }
 
-        $data    = Version20180713131743::getInstallInserts();
+        $data    = NewInstallation::getData();
         $routeId = count($data['fusio_routes']);
 
         return $routeId;
