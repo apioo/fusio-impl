@@ -342,7 +342,7 @@ JSON;
             ]
         ],
         "series": [
-            "\/backend\/action"
+            "\/backend\/account\/change_password"
         ]
     },
     "timePerRoute": {
@@ -413,7 +413,7 @@ JSON;
             ]
         ],
         "series": [
-            "\/backend\/action (ms)"
+            "\/backend\/account\/change_password (ms)"
         ]
     },
     "latestApps": {
@@ -522,7 +522,7 @@ JSON;
             ]
         ],
         "series": [
-            "\/backend\/action"
+            "\/backend\/account\/change_password"
         ]
     }
 }
