@@ -19,40 +19,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\View;
+namespace Fusio\Impl\Consumer\Schema;
 
-use PSX\Sql\ViewAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Transaction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends ViewAbstract
+class Transaction extends SchemaAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getDefinition()
     {
-        $sql = '    SELECT id,
-                           name,
-                           description
-                      FROM fusio_event
-                  ORDER BY name ASC';
+        $sb = $this->getSchemaBuilder('Consumer Transaction');
+        $sb->integer('id');
+        $sb->integer('status');
+        $sb->string('transactionId');
+        $sb->number('amount');
+        $sb->dateTime('updateDate');
+        $sb->dateTime('insertDate');
 
-        $definition = [
-            'entry' => $this->doCollection($sql, [], [
-                'id' => 'id',
-                'name' => 'name',
-                'description' => 'description',
-            ]),
-        ];
-
-        return $this->build($definition);
-    }
-
-    public function getEntity($userId, $startIndex = 0)
-    {
-        
+        return $sb->getProperty();
     }
 }

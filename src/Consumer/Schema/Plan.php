@@ -19,9 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\View;
+namespace Fusio\Impl\Consumer\Schema;
 
-use PSX\Sql\ViewAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
  * Plan
@@ -30,29 +30,17 @@ use PSX\Sql\ViewAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends ViewAbstract
+class Plan extends SchemaAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getDefinition()
     {
-        $sql = '    SELECT id,
-                           name,
-                           description
-                      FROM fusio_event
-                  ORDER BY name ASC';
+        $sb = $this->getSchemaBuilder('Consumer Plan');
+        $sb->integer('id');
+        $sb->string('name');
+        $sb->string('description');
+        $sb->number('price');
+        $sb->integer('points');
 
-        $definition = [
-            'entry' => $this->doCollection($sql, [], [
-                'id' => 'id',
-                'name' => 'name',
-                'description' => 'description',
-            ]),
-        ];
-
-        return $this->build($definition);
-    }
-
-    public function getEntity($userId, $startIndex = 0)
-    {
-        
+        return $sb->getProperty();
     }
 }

@@ -19,40 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\View;
+namespace Fusio\Impl\Consumer\Schema\Transaction\Prepare;
 
-use PSX\Sql\ViewAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Request
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends ViewAbstract
+class Request extends SchemaAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getDefinition()
     {
-        $sql = '    SELECT id,
-                           name,
-                           description
-                      FROM fusio_event
-                  ORDER BY name ASC';
+        $sb = $this->getSchemaBuilder('Consumer Transaction Prepare Request');
+        $sb->integer('planId');
+        $sb->string('returnUrl');
+        $sb->setRequired(['planId', 'returnUrl']);
 
-        $definition = [
-            'entry' => $this->doCollection($sql, [], [
-                'id' => 'id',
-                'name' => 'name',
-                'description' => 'description',
-            ]),
-        ];
-
-        return $this->build($definition);
-    }
-
-    public function getEntity($userId, $startIndex = 0)
-    {
-        
+        return $sb->getProperty();
     }
 }

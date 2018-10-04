@@ -19,29 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Plan\Payment;
+namespace Fusio\Impl\Consumer\Api\Plan;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * Execute
+ * Entity
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Execute extends ConsumerApiAbstract
+class Entity extends ConsumerApiAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Plan\Payment
-     */
-    protected $planPayment;
-
     /**
      * @inheritdoc
      */
@@ -49,9 +44,9 @@ class Execute extends ConsumerApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
+        $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Payment::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan::class))
         );
 
         return $resource;
@@ -60,8 +55,11 @@ class Execute extends ConsumerApiAbstract
     /**
      * @inheritdoc
      */
-    protected function doPost($record, HttpContextInterface $context)
+    protected function doGet(HttpContextInterface $context)
     {
-        $this->planPayment->execute($context->getUriFragment('provider'), $record, $this->context->getUserContext());
+        return $this->tableManager->getTable(View\Plan::class)->getEntity(
+            $this->context->getUserId(),
+            (int) $context->getParameter('startIndex')
+        );
     }
 }
