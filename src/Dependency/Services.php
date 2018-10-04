@@ -398,14 +398,15 @@ trait Services
     }
 
     /**
-     * @return \Fusio\Impl\Service\Plan\Payment
+     * @return \Fusio\Impl\Service\Transaction
      */
-    public function getPlanPaymentService()
+    public function getTransactionService()
     {
-        return new Service\Plan\Payment(
+        return new Service\Transaction(
             $this->get('connector'),
             $this->get('plan_payer_service'),
             new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
+            $this->get('config'),
             $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('table_manager')->getTable(Table\Plan\Transaction::class)
         );
