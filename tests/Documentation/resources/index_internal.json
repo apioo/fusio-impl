@@ -1,6 +1,17 @@
 {
   "routings": [
     {
+      "path": "\/backend\/account\/change_password",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/action",
       "methods": [
         "GET",
@@ -221,6 +232,17 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/dashboard",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/event",
       "methods": [
         "GET",
@@ -233,6 +255,28 @@
     },
     {
       "path": "\/backend\/event\/$event_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/import\/process",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/import\/:format",
       "methods": [
         "GET",
         "POST",
@@ -277,6 +321,28 @@
     },
     {
       "path": "\/backend\/log\/$log_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/plan",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/plan\/$plan_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -397,39 +463,6 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/user",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/user\/$user_id<[0-9]+>",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/dashboard",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
       "path": "\/backend\/statistic\/incoming_requests",
       "methods": [
         "GET",
@@ -518,7 +551,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/account\/change_password",
+      "path": "\/backend\/transaction",
       "methods": [
         "GET",
         "POST",
@@ -529,7 +562,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/import\/process",
+      "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -540,7 +573,18 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/import\/:format",
+      "path": "\/backend\/user",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/user\/$user_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -584,6 +628,17 @@
       "version": "*"
     },
     {
+      "path": "\/consumer\/event",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/consumer\/grant",
       "methods": [
         "GET",
@@ -606,7 +661,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/scope",
+      "path": "\/consumer\/plan\/",
       "methods": [
         "GET",
         "POST",
@@ -617,7 +672,18 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/event",
+      "path": "\/consumer\/plan\/$plan_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/scope",
       "methods": [
         "GET",
         "POST",
@@ -650,7 +716,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/token",
+      "path": "\/consumer\/transaction",
       "methods": [
         "GET",
         "POST",
@@ -661,7 +727,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/authorize",
+      "path": "\/consumer\/transaction\/execute",
       "methods": [
         "GET",
         "POST",
@@ -672,7 +738,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/login",
+      "path": "\/consumer\/transaction\/prepare\/:provider",
       "methods": [
         "GET",
         "POST",
@@ -683,29 +749,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/register",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/consumer\/provider\/:provider",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/consumer\/activate",
+      "path": "\/consumer\/transaction\/$transaction_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -727,7 +771,73 @@
       "version": "*"
     },
     {
+      "path": "\/consumer\/activate",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/authorize",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/consumer\/account\/change_password",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/login",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/provider\/:provider",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/register",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/token",
       "methods": [
         "GET",
         "POST",
