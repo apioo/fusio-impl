@@ -4,6 +4,9 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Fusio\Impl\Backend;
+use Fusio\Impl\Consumer;
+use Fusio\Impl\Migrations\MigrationUtil;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -24,17 +27,6 @@ class Version20180904200851 extends AbstractMigration
         $planTable->addColumn('points', 'integer');
         $planTable->setPrimaryKey(['id']);
 
-        $planTransactionTable = $schema->createTable('fusio_plan_transaction');
-        $planTransactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $planTransactionTable->addColumn('plan_id', 'integer');
-        $planTransactionTable->addColumn('user_id', 'integer');
-        $planTransactionTable->addColumn('status', 'integer');
-        $planTransactionTable->addColumn('provider', 'string');
-        $planTransactionTable->addColumn('transaction_id', 'string');
-        $planTransactionTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
-        $planTransactionTable->addColumn('insert_date', 'datetime');
-        $planTransactionTable->setPrimaryKey(['id']);
-
         $planUsageTable = $schema->createTable('fusio_plan_usage');
         $planUsageTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $planUsageTable->addColumn('route_id', 'integer');
@@ -45,6 +37,21 @@ class Version20180904200851 extends AbstractMigration
         $planUsageTable->addColumn('insert_date', 'datetime');
         $planUsageTable->setPrimaryKey(['id']);
         $planUsageTable->addOption('engine', 'MyISAM');
+
+        $planTransactionTable = $schema->createTable('fusio_transaction');
+        $planTransactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
+        $planTransactionTable->addColumn('plan_id', 'integer');
+        $planTransactionTable->addColumn('user_id', 'integer');
+        $planTransactionTable->addColumn('status', 'integer');
+        $planTransactionTable->addColumn('provider', 'string');
+        $planTransactionTable->addColumn('transaction_id', 'string');
+        $planTransactionTable->addColumn('remote_id', 'string', ['notnull' => false]);
+        $planTransactionTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
+        $planTransactionTable->addColumn('return_url', 'string');
+        $planTransactionTable->addColumn('update_date', 'datetime', ['notnull' => false]);
+        $planTransactionTable->addColumn('insert_date', 'datetime');
+        $planTransactionTable->setPrimaryKey(['id']);
+        $planTransactionTable->addUniqueIndex(['transaction_id']);
 
         $userTable = $schema->getTable('fusio_user');
         $userTable->addColumn('points', 'integer', ['notnull' => false]);
@@ -64,6 +71,11 @@ class Version20180904200851 extends AbstractMigration
         if ($schema->hasTable('fusio_connection_class')) {
             $schema->dropTable('fusio_connection_class');
         }
+
+        // sync routes
+        MigrationUtil::syncRoutes($this->connection, function($sql, $params){
+            $this->addSql($sql, $params);
+        });
     }
 
     /**
