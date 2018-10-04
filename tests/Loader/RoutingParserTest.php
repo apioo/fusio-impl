@@ -24,7 +24,7 @@ namespace Fusio\Impl\Tests\Loader;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Loader\RoutingParser;
-use Fusio\Impl\Migrations\Version\Version20180713131743;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Http\Request;
 use PSX\Http\RequestInterface;
@@ -76,7 +76,7 @@ class RoutingParserTest extends DbTestCase
             ['GET', '/test', SchemaApiController::class],
         ];
 
-        $inserts = Version20180713131743::getInstallInserts();
+        $inserts = NewInstallation::getData();
         $routes  = $inserts['fusio_routes'] ?? [];
 
         foreach ($routes as $route) {
