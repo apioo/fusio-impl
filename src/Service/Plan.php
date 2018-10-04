@@ -51,10 +51,10 @@ class Plan
     protected $eventDispatcher;
 
     /**
-     * @param \Fusio\Impl\Table\Event $planTable
+     * @param \Fusio\Impl\Table\Plan $planTable
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Event $planTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->planTable       = $planTable;
         $this->eventDispatcher = $eventDispatcher;

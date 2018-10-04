@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Plan;
+namespace Fusio\Impl\Table;
 
 use PSX\Sql\TableAbstract;
 
@@ -34,7 +34,7 @@ class Transaction extends TableAbstract
 {
     public function getName()
     {
-        return 'fusio_plan_transaction';
+        return 'fusio_transaction';
     }
 
     public function getColumns()
@@ -46,15 +46,11 @@ class Transaction extends TableAbstract
             'status' => self::TYPE_INT,
             'provider' => self::TYPE_VARCHAR,
             'transaction_id' => self::TYPE_VARCHAR,
+            'remote_id' => self::TYPE_VARCHAR,
             'amount' => self::TYPE_FLOAT,
+            'return_url' => self::TYPE_VARCHAR,
+            'update_date' => self::TYPE_DATETIME,
             'insert_date' => self::TYPE_DATETIME,
         );
-    }
-    
-    public function getByTransactionId($transactionId)
-    {
-        return $this->connection->fetchAssoc('SELECT * FROM fusio_plan_transaction WHERE transaction_id = :transaction_id', [
-            'transaction_id' => $transactionId,
-        ]);
     }
 }
