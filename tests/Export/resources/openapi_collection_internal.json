@@ -10,6 +10,40 @@
     }
   ],
   "paths": {
+    "\/backend\/account\/change_password": {
+      "put": {
+        "operationId": "backendAccountChangepasswordPutAccount_Credentials",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Account_Credentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/action": {
       "get": {
         "operationId": "backendActionGetAction_Collection",
@@ -1197,6 +1231,31 @@
       },
       "parameters": []
     },
+    "\/backend\/dashboard": {
+      "get": {
+        "operationId": "backendDashboardGetDashboard",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Dashboard"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/event": {
       "get": {
         "operationId": "backendEventGetEvent_Collection",
@@ -1335,6 +1394,74 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/import\/process": {
+      "post": {
+        "operationId": "backendImportProcessPostAdapter",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Adapter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Import_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/import\/{format}": {
+      "post": {
+        "operationId": "backendImportFormatPostImport",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Import"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Adapter"
                 }
               }
             }
@@ -1577,6 +1704,159 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Log"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/plan": {
+      "get": {
+        "operationId": "backendPlanGetPlan_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendPlanPostPlan",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/plan\/{plan_id}": {
+      "get": {
+        "operationId": "backendPlanPlanid09GetPlan",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendPlanPlanid09PutPlan",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "backendPlanPlanid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1987,6 +2267,31 @@
       },
       "parameters": []
     },
+    "\/backend\/schema\/preview\/{schema_id}": {
+      "post": {
+        "operationId": "backendSchemaPreviewSchemaid09PostSchema_Preview_Response",
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Schema_Preview_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/schema\/form\/{schema_id}": {
       "put": {
         "operationId": "backendSchemaFormSchemaid09PutSchema_Form",
@@ -2006,31 +2311,6 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/backend\/schema\/preview\/{schema_id}": {
-      "post": {
-        "operationId": "backendSchemaPreviewSchemaid09PostSchema_Preview_Response",
-        "responses": {
-          "200": {
-            "description": "POST 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Schema_Preview_Response"
                 }
               }
             }
@@ -2269,184 +2549,6 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/backend\/user": {
-      "get": {
-        "operationId": "backendUserGetUser_Collection",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/User_Collection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "operationId": "backendUserPostUser",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "POST 201 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        }
-      },
-      "parameters": []
-    },
-    "\/backend\/user\/{user_id}": {
-      "get": {
-        "operationId": "backendUserUserid09GetUser",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/User"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "operationId": "backendUserUserid09PutUser",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "delete": {
-        "operationId": "backendUserUserid09DeleteMessage",
-        "responses": {
-          "200": {
-            "description": "DELETE 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/backend\/dashboard": {
-      "get": {
-        "operationId": "backendDashboardGetDashboard",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Dashboard"
                 }
               }
             }
@@ -3430,14 +3532,187 @@
       },
       "parameters": []
     },
-    "\/backend\/account\/change_password": {
-      "put": {
-        "operationId": "backendAccountChangepasswordPutAccount_Credentials",
+    "\/backend\/transaction": {
+      "get": {
+        "operationId": "backendTransactionGetTransaction_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Transaction_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/transaction\/{transaction_id}": {
+      "get": {
+        "operationId": "backendTransactionTransactionid09GetTransaction",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Transaction"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/user": {
+      "get": {
+        "operationId": "backendUserGetUser_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/User_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendUserPostUser",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Account_Credentials"
+                "$ref": "#\/components\/schemas\/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/user\/{user_id}": {
+      "get": {
+        "operationId": "backendUserUserid09GetUser",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendUserUserid09PutUser",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/User"
               }
             }
           }
@@ -3462,61 +3737,15 @@
           }
         ]
       },
-      "parameters": []
-    },
-    "\/backend\/import\/process": {
-      "post": {
-        "operationId": "backendImportProcessPostAdapter",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Adapter"
-              }
-            }
-          }
-        },
+      "delete": {
+        "operationId": "backendUserUserid09DeleteMessage",
         "responses": {
           "200": {
-            "description": "POST 200 response",
+            "description": "DELETE 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Import_Response"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/backend\/import\/{format}": {
-      "post": {
-        "operationId": "backendImportFormatPostImport",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Import"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Adapter"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3703,6 +3932,31 @@
       },
       "parameters": []
     },
+    "\/consumer\/event": {
+      "get": {
+        "operationId": "consumerEventGetConsumer_Event_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/grant": {
       "get": {
         "operationId": "consumerGrantGetConsumer_Grant_Collection",
@@ -3742,16 +3996,16 @@
       },
       "parameters": []
     },
-    "\/consumer\/scope": {
+    "\/consumer\/plan\/": {
       "get": {
-        "operationId": "consumerScopeGetConsumer_Scope_Collection",
+        "operationId": "consumerPlanGetConsumer_Plan_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Collection"
                 }
               }
             }
@@ -3767,16 +4021,41 @@
       },
       "parameters": []
     },
-    "\/consumer\/event": {
+    "\/consumer\/plan\/{plan_id}": {
       "get": {
-        "operationId": "consumerEventGetConsumer_Event_Collection",
+        "operationId": "consumerPlanPlanid09GetConsumer_Plan",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Event_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/scope": {
+      "get": {
+        "operationId": "consumerScopeGetConsumer_Scope_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
                 }
               }
             }
@@ -3926,14 +4205,70 @@
       },
       "parameters": []
     },
-    "\/consumer\/token": {
-      "post": {
-        "operationId": "consumerTokenPostAuthorization",
+    "\/consumer\/account": {
+      "get": {
+        "operationId": "consumerAccountGetConsumer_User_Account",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_User_Account"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "consumerAccountPutConsumer_User_Account",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Authorization"
+                "$ref": "#\/components\/schemas\/Consumer_User_Account"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/activate": {
+      "post": {
+        "operationId": "consumerActivatePostConsumer_User_Activate",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Activate"
               }
             }
           }
@@ -3944,17 +4279,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Access_token"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "POST 400 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Error"
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
                 }
               }
             }
@@ -4037,6 +4362,40 @@
       },
       "parameters": []
     },
+    "\/consumer\/account\/change_password": {
+      "put": {
+        "operationId": "consumerAccountChangepasswordPutConsumer_User_Credentials",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Credentials"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/login": {
       "post": {
         "operationId": "consumerLoginPostConsumer_User_Login",
@@ -4045,6 +4404,33 @@
             "application\/json": {
               "schema": {
                 "$ref": "#\/components\/schemas\/Consumer_User_Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/consumer\/provider\/{provider}": {
+      "post": {
+        "operationId": "consumerProviderProviderPostConsumer_User_Provider",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Provider"
               }
             }
           }
@@ -4091,14 +4477,14 @@
       },
       "parameters": []
     },
-    "\/consumer\/provider\/{provider}": {
+    "\/consumer\/token": {
       "post": {
-        "operationId": "consumerProviderProviderPostConsumer_User_Provider",
+        "operationId": "consumerTokenPostAuthorization",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Provider"
+                "$ref": "#\/components\/schemas\/Authorization"
               }
             }
           }
@@ -4109,129 +4495,22 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                  "$ref": "#\/components\/schemas\/Access_token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Error"
                 }
               }
             }
           }
         }
-      },
-      "parameters": []
-    },
-    "\/consumer\/activate": {
-      "post": {
-        "operationId": "consumerActivatePostConsumer_User_Activate",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Activate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Message"
-                }
-              }
-            }
-          }
-        }
-      },
-      "parameters": []
-    },
-    "\/consumer\/account": {
-      "get": {
-        "operationId": "consumerAccountGetConsumer_User_Account",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_User_Account"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "consumer": [
-              "consumer"
-            ]
-          }
-        ]
-      },
-      "put": {
-        "operationId": "consumerAccountPutConsumer_User_Account",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Account"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "consumer": [
-              "consumer"
-            ]
-          }
-        ]
-      },
-      "parameters": []
-    },
-    "\/consumer\/account\/change_password": {
-      "put": {
-        "operationId": "consumerAccountChangepasswordPutConsumer_User_Credentials",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Credentials"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "PUT 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "consumer": [
-              "consumer"
-            ]
-          }
-        ]
       },
       "parameters": []
     },
@@ -4365,6 +4644,44 @@
   },
   "components": {
     "schemas": {
+      "Account_Credentials": {
+        "type": "object",
+        "title": "Account Credentials",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "verifyPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "oldPassword",
+          "newPassword",
+          "verifyPassword"
+        ]
+      },
+      "Message": {
+        "type": "object",
+        "title": "Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
       "Action": {
         "type": "object",
         "title": "Action",
@@ -4446,18 +4763,6 @@
             "items": {
               "$ref": "#\/components\/schemas\/Action"
             }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
           }
         }
       },
@@ -5044,486 +5349,6 @@
           }
         }
       },
-      "Event": {
-        "type": "object",
-        "title": "Event",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Event_Collection": {
-        "type": "object",
-        "title": "Event Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Event"
-            }
-          }
-        }
-      },
-      "Log_Error": {
-        "type": "object",
-        "title": "Log Error",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
-        }
-      },
-      "Log_Error_Collection": {
-        "type": "object",
-        "title": "Log Error Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Log_Error"
-            }
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "title": "Log",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Log_Error"
-            }
-          }
-        }
-      },
-      "Log_Collection": {
-        "type": "object",
-        "title": "Log Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Log"
-            }
-          }
-        }
-      },
-      "Rate": {
-        "type": "object",
-        "title": "Rate",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "rateLimit": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "timespan": {
-            "type": "string",
-            "format": "duration"
-          },
-          "allocation": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Rate_Allocation"
-            }
-          }
-        }
-      },
-      "Rate_Allocation": {
-        "type": "object",
-        "title": "Rate Allocation",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "authenticated": {
-            "type": "boolean"
-          },
-          "parameters": {
-            "type": "string"
-          }
-        }
-      },
-      "Rate_Collection": {
-        "type": "object",
-        "title": "Rate Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Rate"
-            }
-          }
-        }
-      },
-      "Routes": {
-        "type": "object",
-        "title": "Routes",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer"
-          },
-          "path": {
-            "type": "string"
-          },
-          "controller": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "config": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Routes_Version"
-            }
-          }
-        }
-      },
-      "Routes_Version": {
-        "type": "object",
-        "title": "Routes Version",
-        "properties": {
-          "version": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "methods": {
-            "$ref": "#\/components\/schemas\/Routes_Methods"
-          }
-        }
-      },
-      "Routes_Methods": {
-        "type": "object",
-        "title": "Routes Methods",
-        "patternProperties": {
-          "^(GET|POST|PUT|PATCH|DELETE)$": {
-            "$ref": "#\/components\/schemas\/Routes_Method"
-          }
-        }
-      },
-      "Routes_Method": {
-        "type": "object",
-        "title": "Routes Method",
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "version": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "active": {
-            "type": "boolean"
-          },
-          "public": {
-            "type": "boolean"
-          },
-          "description": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "request": {
-            "type": "string"
-          },
-          "response": {
-            "type": "string"
-          },
-          "responses": {
-            "$ref": "#\/components\/schemas\/Routes_Method_Responses"
-          },
-          "action": {
-            "type": "string"
-          }
-        }
-      },
-      "Routes_Method_Responses": {
-        "type": "object",
-        "title": "Routes Method Responses",
-        "patternProperties": {
-          "^([0-9]{3})$": {
-            "type": "string"
-          }
-        }
-      },
-      "Routes_Collection": {
-        "type": "object",
-        "title": "Routes Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Routes"
-            }
-          }
-        }
-      },
-      "Schema": {
-        "type": "object",
-        "title": "Schema",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "source": {
-            "$ref": "#\/components\/schemas\/Schema_Source"
-          }
-        }
-      },
-      "Schema_Source": {
-        "type": "object",
-        "title": "Schema Source",
-        "additionalProperties": true
-      },
-      "Schema_Collection": {
-        "type": "object",
-        "title": "Schema Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Schema"
-            }
-          }
-        }
-      },
-      "Schema_Form": {
-        "type": "object",
-        "title": "Schema Form",
-        "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
-        "additionalProperties": true
-      },
-      "Schema_Preview_Response": {
-        "type": "object",
-        "title": "Schema Preview Response",
-        "properties": {
-          "preview": {
-            "type": "string"
-          }
-        }
-      },
-      "Scope": {
-        "type": "object",
-        "title": "Scope",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          },
-          "routes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Scope_Route"
-            }
-          }
-        }
-      },
-      "Scope_Route": {
-        "type": "object",
-        "title": "Scope Route",
-        "properties": {
-          "routeId": {
-            "type": "integer"
-          },
-          "allow": {
-            "type": "boolean"
-          },
-          "methods": {
-            "type": "string"
-          }
-        }
-      },
-      "Scope_Collection": {
-        "type": "object",
-        "title": "Scope Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Scope"
-            }
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "title": "User",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-          },
-          "email": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "apps": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/App"
-            }
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "User_Collection": {
-        "type": "object",
-        "title": "User Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/User"
-            }
-          }
-        }
-      },
       "Statistic_Chart": {
         "type": "object",
         "title": "Statistic Chart",
@@ -5628,48 +5453,168 @@
           }
         }
       },
-      "Statistic_Count": {
+      "Event": {
         "type": "object",
-        "title": "Statistic Count",
+        "title": "Event",
         "properties": {
-          "count": {
+          "id": {
             "type": "integer"
           },
-          "from": {
+          "name": {
             "type": "string",
-            "format": "date-time"
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
           },
-          "to": {
-            "type": "string",
-            "format": "date-time"
+          "description": {
+            "type": "string"
           }
         }
       },
-      "Account_Credentials": {
+      "Event_Collection": {
         "type": "object",
-        "title": "Account Credentials",
+        "title": "Event Collection",
         "properties": {
-          "oldPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
+          "totalResults": {
+            "type": "integer"
           },
-          "newPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
+          "startIndex": {
+            "type": "integer"
           },
-          "verifyPassword": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 128
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Event"
+            }
+          }
+        }
+      },
+      "Routes": {
+        "type": "object",
+        "title": "Routes",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "path": {
+            "type": "string"
+          },
+          "controller": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes_Version"
+            }
           }
         },
         "required": [
-          "oldPassword",
-          "newPassword",
-          "verifyPassword"
+          "config"
         ]
+      },
+      "Routes_Version": {
+        "type": "object",
+        "title": "Routes Version",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Routes_Methods"
+          }
+        }
+      },
+      "Routes_Methods": {
+        "type": "object",
+        "title": "Routes Methods",
+        "patternProperties": {
+          "^(GET|POST|PUT|PATCH|DELETE)$": {
+            "$ref": "#\/components\/schemas\/Routes_Method"
+          }
+        }
+      },
+      "Routes_Method": {
+        "type": "object",
+        "title": "Routes Method",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "integer"
+          },
+          "request": {
+            "type": "integer"
+          },
+          "response": {
+            "type": "integer"
+          },
+          "responses": {
+            "$ref": "#\/components\/schemas\/Routes_Method_Responses"
+          },
+          "action": {
+            "type": "integer"
+          }
+        }
+      },
+      "Routes_Method_Responses": {
+        "type": "object",
+        "title": "Routes Method Responses",
+        "patternProperties": {
+          "^([0-9]{3})$": {
+            "type": "integer"
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "title": "Schema",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "source": {
+            "$ref": "#\/components\/schemas\/Schema_Source"
+          }
+        }
+      },
+      "Schema_Source": {
+        "type": "object",
+        "title": "Schema Source",
+        "additionalProperties": true
       },
       "Adapter": {
         "type": "object",
@@ -5734,6 +5679,426 @@
         "properties": {
           "schema": {
             "type": "string"
+          }
+        }
+      },
+      "Log_Error": {
+        "type": "object",
+        "title": "Log Error",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "trace": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          }
+        }
+      },
+      "Log_Error_Collection": {
+        "type": "object",
+        "title": "Log Error Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "title": "Log",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log_Collection": {
+        "type": "object",
+        "title": "Log Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log"
+            }
+          }
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "title": "Plan",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "Plan_Collection": {
+        "type": "object",
+        "title": "Plan Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Plan"
+            }
+          }
+        }
+      },
+      "Rate": {
+        "type": "object",
+        "title": "Rate",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "rateLimit": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "timespan": {
+            "type": "string",
+            "format": "duration"
+          },
+          "allocation": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Rate_Allocation"
+            }
+          }
+        }
+      },
+      "Rate_Allocation": {
+        "type": "object",
+        "title": "Rate Allocation",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "authenticated": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "string"
+          }
+        }
+      },
+      "Rate_Collection": {
+        "type": "object",
+        "title": "Rate Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Rate"
+            }
+          }
+        }
+      },
+      "Routes_Collection": {
+        "type": "object",
+        "title": "Routes Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes"
+            }
+          }
+        }
+      },
+      "Schema_Collection": {
+        "type": "object",
+        "title": "Schema Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          }
+        }
+      },
+      "Schema_Preview_Response": {
+        "type": "object",
+        "title": "Schema Preview Response",
+        "properties": {
+          "preview": {
+            "type": "string"
+          }
+        }
+      },
+      "Schema_Form": {
+        "type": "object",
+        "title": "Schema Form",
+        "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
+        "additionalProperties": true
+      },
+      "Scope": {
+        "type": "object",
+        "title": "Scope",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope_Route"
+            }
+          }
+        }
+      },
+      "Scope_Route": {
+        "type": "object",
+        "title": "Scope Route",
+        "properties": {
+          "routeId": {
+            "type": "integer"
+          },
+          "allow": {
+            "type": "boolean"
+          },
+          "methods": {
+            "type": "string"
+          }
+        }
+      },
+      "Scope_Collection": {
+        "type": "object",
+        "title": "Scope Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope"
+            }
+          }
+        }
+      },
+      "Statistic_Count": {
+        "type": "object",
+        "title": "Statistic Count",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "title": "Transaction",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Transaction_Collection": {
+        "type": "object",
+        "title": "Transaction Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Transaction"
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "title": "User",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          },
+          "email": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
+            }
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User_Collection": {
+        "type": "object",
+        "title": "User Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/User"
+            }
           }
         }
       },
@@ -5946,6 +6311,40 @@
           }
         }
       },
+      "Consumer_Event": {
+        "type": "object",
+        "title": "Consumer Event",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Event_Collection": {
+        "type": "object",
+        "title": "Consumer Event Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Event"
+            }
+          }
+        }
+      },
       "Consumer_App_Grant": {
         "type": "object",
         "title": "Consumer App Grant",
@@ -5970,6 +6369,45 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_App_Grant"
+            }
+          }
+        }
+      },
+      "Consumer_Plan": {
+        "type": "object",
+        "title": "Consumer Plan",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "Consumer_Plan_Collection": {
+        "type": "object",
+        "title": "Consumer Plan Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Plan"
             }
           }
         }
@@ -6004,40 +6442,6 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_Scope"
-            }
-          }
-        }
-      },
-      "Consumer_Event": {
-        "type": "object",
-        "title": "Consumer Event",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Consumer_Event_Collection": {
-        "type": "object",
-        "title": "Consumer Event Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Consumer_Event"
             }
           }
         }
@@ -6103,6 +6507,30 @@
             }
           }
         }
+      },
+      "Consumer_User_Account": {
+        "type": "object",
+        "title": "Consumer User Account",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Activate": {
+        "type": "object",
+        "title": "Consumer User Activate",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
       },
       "Consumer_Authorize_Meta": {
         "type": "object",
@@ -6188,6 +6616,21 @@
           }
         }
       },
+      "Consumer_User_Credentials": {
+        "type": "object",
+        "title": "Consumer User Credentials",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "verifyPassword": {
+            "type": "string"
+          }
+        }
+      },
       "Consumer_User_Login": {
         "type": "object",
         "title": "Consumer User Login",
@@ -6215,6 +6658,22 @@
           }
         }
       },
+      "Consumer_User_Provider": {
+        "type": "object",
+        "title": "Consumer User Provider",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
       "Consumer_User_Register": {
         "type": "object",
         "title": "Consumer User Register",
@@ -6237,61 +6696,6 @@
           "email",
           "password"
         ]
-      },
-      "Consumer_User_Provider": {
-        "type": "object",
-        "title": "Consumer User Provider",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "clientId": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": true
-      },
-      "Consumer_User_Activate": {
-        "type": "object",
-        "title": "Consumer User Activate",
-        "properties": {
-          "token": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "token"
-        ]
-      },
-      "Consumer_User_Account": {
-        "type": "object",
-        "title": "Consumer User Account",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          }
-        }
-      },
-      "Consumer_User_Credentials": {
-        "type": "object",
-        "title": "Consumer User Credentials",
-        "properties": {
-          "oldPassword": {
-            "type": "string"
-          },
-          "newPassword": {
-            "type": "string"
-          },
-          "verifyPassword": {
-            "type": "string"
-          }
-        }
       },
       "Documentation_Route": {
         "type": "object",
