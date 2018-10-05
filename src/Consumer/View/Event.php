@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Impl\Table;
+use PSX\Sql\Condition;
+use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -34,14 +37,20 @@ class Event extends ViewAbstract
 {
     public function getCollection($userId, $startIndex = 0)
     {
-        $sql = '    SELECT id,
-                           name,
-                           description
-                      FROM fusio_event
-                  ORDER BY name ASC';
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        $count = 16;
+
+        $condition = new Condition();
+        $condition->equals('status', Table\Event::STATUS_ACTIVE);
 
         $definition = [
-            'entry' => $this->doCollection($sql, [], [
+            'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
                 'id' => 'id',
                 'name' => 'name',
                 'description' => 'description',

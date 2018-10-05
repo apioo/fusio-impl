@@ -35,21 +35,16 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection($userId, $startIndex = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
         }
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
+        $count = 16;
 
         $condition = new Condition();
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
+        $condition->equals('user_id', $userId);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
@@ -69,9 +64,9 @@ class Transaction extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity($userId, $transactionId)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'get'], [$transactionId], [
             'id' => 'id',
             'status' => 'status',
             'provider' => 'provider',
