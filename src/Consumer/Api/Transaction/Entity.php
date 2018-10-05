@@ -24,6 +24,7 @@ namespace Fusio\Impl\Consumer\Api\Transaction;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 
@@ -45,7 +46,7 @@ class Entity extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Payment\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction::class))
         );
 
         return $resource;
@@ -56,9 +57,9 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Plan\Payment::class)->getCollection(
+        return $this->tableManager->getTable(View\Transaction::class)->getEntity(
             $this->context->getUserId(),
-            (int) $context->getParameter('startIndex')
+            (int) $context->getUriFragment('transaction_id')
         );
     }
 }
