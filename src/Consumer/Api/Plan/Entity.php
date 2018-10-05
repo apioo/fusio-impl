@@ -59,7 +59,7 @@ class Entity extends ConsumerApiAbstract
     {
         return $this->tableManager->getTable(View\Plan::class)->getEntity(
             $this->context->getUserId(),
-            (int) $context->getParameter('startIndex')
+            (int) $context->getUriFragment('plan_id')
         );
     }
 }
