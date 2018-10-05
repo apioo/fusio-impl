@@ -112,6 +112,12 @@ class NewInstallation
             ],
             'fusio_audit' => [
             ],
+            'fusio_plan' => [
+            ],
+            'fusio_plan_usage' => [
+            ],
+            'fusio_transaction' => [
+            ],
             'fusio_scope' => [
                 ['name' => 'backend', 'description' => 'Access to the backend API'],
                 ['name' => 'consumer', 'description' => 'Consumer API endpoint'],
