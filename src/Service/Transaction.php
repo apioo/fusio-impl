@@ -72,7 +72,7 @@ class Transaction
     protected $planTable;
 
     /**
-     * @var \Fusio\Impl\Table\Plan\Transaction
+     * @var \Fusio\Impl\Table\Transaction
      */
     protected $transactionTable;
 
@@ -82,9 +82,9 @@ class Transaction
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
      * @param \PSX\Framework\Config\Config $config
      * @param \Fusio\Impl\Table\Plan $planTable
-     * @param \Fusio\Impl\Table\Plan\Transaction $transactionTable
+     * @param \Fusio\Impl\Table\Transaction $transactionTable
      */
-    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Config $config, Table\Plan $planTable, Table\Plan\Transaction $transactionTable)
+    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Config $config, Table\Plan $planTable, Table\Transaction $transactionTable)
     {
         $this->connector = $connector;
         $this->payerService = $payerService;
@@ -103,8 +103,12 @@ class Transaction
      */
     public function prepare($name, $planId, $returnUrl, UserContext $context)
     {
-        /** @var ProviderInterface $provider */
-        $provider   = $this->providerFactory->factory($name);
+        $provider = $this->providerFactory->factory($name);
+
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provider is not available');
+        }
+
         $product    = $this->createProduct($planId);
         $connection = $this->connector->getConnection($name);
 
@@ -160,9 +164,12 @@ class Transaction
     public function execute($transactionId, array $parameters)
     {
         $transaction = $this->createTransaction($transactionId);
+        $provider    = $this->providerFactory->factory($transaction->getProvider());
 
-        /** @var ProviderInterface $provider */
-        $provider   = $this->providerFactory->factory($transaction->getProvider());
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provider is not available');
+        }
+
         $connection = $this->connector->getConnection($transaction->getProvider());
 
         $this->transactionTable->beginTransaction();
