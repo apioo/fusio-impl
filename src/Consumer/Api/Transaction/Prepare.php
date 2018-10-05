@@ -38,9 +38,9 @@ class Prepare extends ConsumerApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan\Payment
+     * @var \Fusio\Impl\Service\Transaction
      */
-    protected $planPayment;
+    protected $transactionService;
 
     /**
      * @inheritdoc
@@ -63,7 +63,7 @@ class Prepare extends ConsumerApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $approvalUrl = $this->planPayment->prepare(
+        $approvalUrl = $this->transactionService->prepare(
             $context->getUriFragment('provider'),
             $record->planId,
             $record->returnUrl,

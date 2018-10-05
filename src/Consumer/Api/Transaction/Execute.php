@@ -37,9 +37,9 @@ class Execute extends SchemaApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan\Payment
+     * @var \Fusio\Impl\Service\Transaction
      */
-    protected $planPayment;
+    protected $transactionService;
 
     /**
      * @inheritdoc
@@ -60,7 +60,7 @@ class Execute extends SchemaApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        $returnUrl = $this->planPayment->execute(
+        $returnUrl = $this->transactionService->execute(
             $context->getUriFragment('transaction_id'),
             $context->getParameters()
         );
