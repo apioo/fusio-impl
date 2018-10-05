@@ -30,7 +30,6 @@ use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use PSX\Api\Resource;
-use PSX\Framework\Util\Uuid;
 use PSX\Schema\Parser\JsonSchema;
 
 /**
