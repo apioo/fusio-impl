@@ -4205,6 +4205,56 @@
       },
       "parameters": []
     },
+    "\/consumer\/transaction": {
+      "get": {
+        "operationId": "consumerTransactionGetConsumer_Transaction_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/transaction\/{transaction_id}": {
+      "get": {
+        "operationId": "consumerTransactionTransactionid09GetConsumer_Transaction",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/account": {
       "get": {
         "operationId": "consumerAccountGetConsumer_User_Account",
@@ -6504,6 +6554,50 @@
             "type": "array",
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_Subscription"
+            }
+          }
+        }
+      },
+      "Consumer_Transaction": {
+        "type": "object",
+        "title": "Consumer Transaction",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Consumer_Transaction_Collection": {
+        "type": "object",
+        "title": "Consumer Transaction Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Transaction"
             }
           }
         }
