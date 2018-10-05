@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -33,23 +34,29 @@ use PSX\Sql\ViewAbstract;
  */
 class Grant extends ViewAbstract
 {
-    public function getCollection($userId)
+    public function getCollection($userId, $startIndex = null)
     {
-        $sql = '    SELECT user_grant.id,
-                           user_grant.date,
-                           user_grant.app_id,
-                           app.name AS app_name,
-                           app.url AS app_url
-                      FROM fusio_user_grant user_grant
-                INNER JOIN fusio_app app
-                        ON user_grant.app_id = app.id
-                     WHERE user_grant.allow = 1
-                       AND user_grant.user_id = :user_id
-                       AND app.status = :status';
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        $count = 16;
+
+        $condition = new Condition();
+        $condition->equals('user_grant.user_id', $userId);
+        $condition->equals('app.status', Table\App::STATUS_ACTIVE);
+
+        $countSql = $this->getBaseQuery(['COUNT(user_grant.id) AS cnt'], $condition);
+        $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition);
+        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['user_id' => $userId, 'status' => Table\App::STATUS_ACTIVE], [
+            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection($querySql, $condition->getValues(), [
                 'id' => 'id',
+                'allow' => 'allow',
                 'createDate' => $this->fieldDateTime('date'),
                 'app' => [
                     'id' => 'app_id',
@@ -60,5 +67,25 @@ class Grant extends ViewAbstract
         ];
 
         return $this->build($definition);
+    }
+
+    /**
+     * @param array $fields
+     * @param \PSX\Sql\Condition $condition
+     * @return string
+     */
+    private function getBaseQuery(array $fields, Condition $condition)
+    {
+        $fields = implode(',', $fields);
+        $where  = $condition->getExpression($this->connection->getDatabasePlatform());
+
+        return <<<SQL
+    SELECT {$fields}
+      FROM fusio_user_grant user_grant
+INNER JOIN fusio_app app
+        ON user_grant.app_id = app.id
+     WHERE {$where}
+  ORDER BY user_grant.id DESC
+SQL;
     }
 }

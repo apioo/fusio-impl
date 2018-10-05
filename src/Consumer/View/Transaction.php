@@ -66,7 +66,11 @@ class Transaction extends ViewAbstract
 
     public function getEntity($userId, $transactionId)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'get'], [$transactionId], [
+        $condition = new Condition();
+        $condition->equals('id', $transactionId);
+        $condition->equals('user_id', $userId);
+
+        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'getOneBy'], [$condition], [
             'id' => 'id',
             'status' => 'status',
             'provider' => 'provider',

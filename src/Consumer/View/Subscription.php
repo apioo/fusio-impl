@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
+use PSX\Sql\Condition;
 use PSX\Sql\Reference;
 use PSX\Sql\ViewAbstract;
 
@@ -36,17 +37,24 @@ class Subscription extends ViewAbstract
 {
     public function getCollection($userId, $startIndex = 0)
     {
-        $sql = '    SELECT event_subscription.id,
-                           event_subscription.status,
-                           event_subscription.endpoint,
-                           event.name
-                      FROM fusio_event_subscription event_subscription
-                INNER JOIN fusio_event event
-                        ON event_subscription.event_id = event.id
-                     WHERE event_subscription.user_id = :user_id';
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        $count = 16;
+
+        $condition = new Condition();
+        $condition->equals('event_subscription.user_id', $userId);
+
+        $countSql = $this->getBaseQuery(['COUNT(event_subscription.id) AS cnt'], $condition);
+        $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
+        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['user_id' => $userId], [
+            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection($querySql, $condition->getValues(), [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'event' => 'name',
@@ -59,17 +67,13 @@ class Subscription extends ViewAbstract
 
     public function getEntity($userId, $subscriptionId)
     {
-        $sql = '    SELECT event_subscription.id,
-                           event_subscription.status,
-                           event_subscription.endpoint,
-                           event.name
-                      FROM fusio_event_subscription event_subscription
-                INNER JOIN fusio_event event
-                        ON event_subscription.event_id = event.id
-                     WHERE event_subscription.id = :id
-                       AND event_subscription.user_id = :user_id';
+        $condition = new Condition();
+        $condition->equals('event_subscription.id', $subscriptionId);
+        $condition->equals('event_subscription.user_id', $userId);
 
-        $definition = $this->doEntity($sql, ['user_id' => $userId, 'id' => $subscriptionId], [
+        $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
+
+        $definition = $this->doEntity($querySql, $condition->getValues(), [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'event' => 'name',
@@ -83,5 +87,25 @@ class Subscription extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    /**
+     * @param array $fields
+     * @param \PSX\Sql\Condition $condition
+     * @return string
+     */
+    private function getBaseQuery(array $fields, Condition $condition)
+    {
+        $fields = implode(',', $fields);
+        $where  = $condition->getExpression($this->connection->getDatabasePlatform());
+
+        return <<<SQL
+    SELECT {$fields}
+      FROM fusio_event_subscription event_subscription
+INNER JOIN fusio_event event
+        ON event_subscription.event_id = event.id
+     WHERE {$where}
+  ORDER BY event_subscription.id DESC
+SQL;
     }
 }

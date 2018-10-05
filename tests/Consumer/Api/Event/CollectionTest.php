@@ -133,9 +133,12 @@ JSON;
 
         $expect = <<<'JSON'
 {
+    "totalResults": 1,
+    "startIndex": 0,
+    "itemsPerPage": 16,
     "entry": [
         {
-            "id": "1",
+            "id": 1,
             "name": "foo-event",
             "description": "Foo event description"
         }

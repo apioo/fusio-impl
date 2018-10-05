@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use PSX\Sql\Condition;
 use PSX\Sql\ViewAbstract;
 
 /**
@@ -34,17 +35,24 @@ class Scope extends ViewAbstract
 {
     public function getCollection($userId, $startIndex = 0)
     {
-        $sql = '    SELECT scope.id,
-                           scope.name,
-                           scope.description
-                      FROM fusio_user_scope user_scope
-                INNER JOIN fusio_scope scope
-                        ON user_scope.scope_id = scope.id
-                     WHERE user_scope.user_id = :user_id
-                  ORDER BY scope.id ASC';
+        if (empty($startIndex) || $startIndex < 0) {
+            $startIndex = 0;
+        }
+
+        $count = 16;
+
+        $condition = new Condition();
+        $condition->equals('user_id', $userId);
+
+        $countSql = $this->getBaseQuery(['COUNT(scope.id) AS cnt'], $condition);
+        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description'], $condition);
+        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['user_id' => $userId], [
+            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'startIndex' => $startIndex,
+            'itemsPerPage' => $count,
+            'entry' => $this->doCollection($querySql, $condition->getValues(), [
                 'id' => 'id',
                 'name' => 'name',
                 'description' => 'description',
@@ -52,5 +60,25 @@ class Scope extends ViewAbstract
         ];
 
         return $this->build($definition);
+    }
+
+    /**
+     * @param array $fields
+     * @param \PSX\Sql\Condition $condition
+     * @return string
+     */
+    private function getBaseQuery(array $fields, Condition $condition)
+    {
+        $fields = implode(',', $fields);
+        $where  = $condition->getExpression($this->connection->getDatabasePlatform());
+
+        return <<<SQL
+    SELECT {$fields}
+      FROM fusio_user_scope user_scope
+INNER JOIN fusio_scope scope
+        ON user_scope.scope_id = scope.id
+     WHERE {$where}
+  ORDER BY scope.id ASC
+SQL;
     }
 }
