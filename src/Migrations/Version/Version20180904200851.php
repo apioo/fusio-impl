@@ -32,7 +32,6 @@ class Version20180904200851 extends AbstractMigration
         $planUsageTable->addColumn('route_id', 'integer');
         $planUsageTable->addColumn('user_id', 'integer');
         $planUsageTable->addColumn('app_id', 'integer');
-        $planUsageTable->addColumn('action_id', 'integer');
         $planUsageTable->addColumn('points', 'integer');
         $planUsageTable->addColumn('insert_date', 'datetime');
         $planUsageTable->setPrimaryKey(['id']);
@@ -55,10 +54,14 @@ class Version20180904200851 extends AbstractMigration
         $planTransactionTable->addUniqueIndex(['transaction_id']);
 
         $userTable = $schema->getTable('fusio_user');
-        $userTable->addColumn('points', 'integer', ['notnull' => false]);
+        if (!$userTable->hasColumn('points')) {
+            $userTable->addColumn('points', 'integer', ['notnull' => false]);
+        }
 
         $routesTable = $schema->getTable('fusio_routes_method');
-        $routesTable->addColumn('costs', 'integer', ['notnull' => false]);
+        if (!$routesTable->hasColumn('costs')) {
+            $routesTable->addColumn('costs', 'integer', ['notnull' => false]);
+        }
 
         $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_transaction_plan_id');
         $planTransactionTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_transaction_user_id');
