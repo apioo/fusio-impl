@@ -29,6 +29,7 @@ use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Service;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
+use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Resource;
 use PSX\Schema\Parser\JsonSchema;
 
@@ -96,6 +97,7 @@ class Fixture
             ],
             'fusio_connection' => [
                 ['status' => 1, 'name' => 'Test', 'class' => Native::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
+                ['status' => 1, 'name' => 'paypal', 'class' => PaypalConnection::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_cronjob' => [
                 ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 3, 'execute_date' => '2015-02-27 19:59:15', 'exit_code' => 0],

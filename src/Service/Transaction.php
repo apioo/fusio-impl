@@ -112,6 +112,11 @@ class Transaction
         $product    = $this->createProduct($planId);
         $connection = $this->connector->getConnection($name);
 
+        // validate return url
+        if (empty($returnUrl) || !filter_var($returnUrl, FILTER_VALIDATE_URL)) {
+            throw new StatusCode\BadRequestException('Invalid return url');
+        }
+
         // create transaction
         $transaction = new TransactionModel();
         $transaction->setPlanId($product->getId());
@@ -134,6 +139,9 @@ class Transaction
                 'return_url' => $transaction->getReturnUrl(),
                 'insert_date' => new \DateTime(),
             ]);
+
+            // set transaction id
+            $transaction->setId($this->transactionTable->getLastInsertId());
 
             // prepare payment
             $approvalUrl = $provider->prepare(
@@ -228,7 +236,7 @@ class Transaction
         $condition = new Condition();
         $condition->equals('transaction_id', $transactionId);
 
-        $result = $this->transactionTable->getBy($condition);
+        $result = $this->transactionTable->getOneBy($condition);
 
         if (empty($result)) {
             throw new StatusCode\BadRequestException('Invalid transaction id');
