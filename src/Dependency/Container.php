@@ -168,7 +168,7 @@ class Container extends DefaultContainer
 
         $providerFile = $this->get('config')->get('fusio_provider');
         if (!empty($providerFile)) {
-            $config->merge(ProviderConfig::fromFile($providerFile));
+            $config = $config->merge(ProviderConfig::fromFile($providerFile));
         }
 
         return $config;
