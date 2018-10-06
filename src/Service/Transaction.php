@@ -269,6 +269,7 @@ class Transaction
         $transaction->setId($result['id']);
         $transaction->setPlanId($result['plan_id']);
         $transaction->setUserId($result['user_id']);
+        $transaction->setAppId($result['app_id']);
         $transaction->setStatus($result['status']);
         $transaction->setProvider($result['provider']);
         $transaction->setTransactionId($result['transaction_id']);

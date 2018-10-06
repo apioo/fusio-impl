@@ -166,7 +166,7 @@ class Fixture
             'fusio_plan_usage' => [
             ],
             'fusio_transaction' => [
-                ['plan_id' => 1, 'user_id' => 1, 'status' => 1, 'provider' => 'paypal', 'transaction_id' => '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'remote_id' => 'PAY-1B56960729604235TKQQIYVY', 'amount' => 39.99, 'return_url' => 'http://myapp.com', 'update_date' => null, 'insert_date' => '2018-10-05 18:18:00'],
+                ['plan_id' => 1, 'user_id' => 1, 'app_id' => 2, 'status' => 1, 'provider' => 'paypal', 'transaction_id' => '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'remote_id' => 'PAY-1B56960729604235TKQQIYVY', 'amount' => 39.99, 'return_url' => 'http://myapp.com', 'update_date' => null, 'insert_date' => '2018-10-05 18:18:00'],
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => Service\Schema::serializeCache($schemaCollection)],
