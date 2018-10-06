@@ -47,5 +47,9 @@ class Paypal implements ProviderInterface
 
     public function execute($connection, ProductInterface $product, TransactionInterface $transaction, array $parameters)
     {
+        // here the payment provider needs to execute the transaction and set
+        // the transaction to approved
+
+        $transaction->setStatus(TransactionInterface::STATUS_APPROVED);
     }
 }
