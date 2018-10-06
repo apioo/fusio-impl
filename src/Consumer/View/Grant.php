@@ -46,7 +46,7 @@ class Grant extends ViewAbstract
         $condition->equals('user_grant.user_id', $userId);
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
-        $countSql = $this->getBaseQuery(['COUNT(user_grant.id) AS cnt'], $condition);
+        $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition);
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 

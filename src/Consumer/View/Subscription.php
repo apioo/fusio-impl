@@ -46,7 +46,7 @@ class Subscription extends ViewAbstract
         $condition = new Condition();
         $condition->equals('event_subscription.user_id', $userId);
 
-        $countSql = $this->getBaseQuery(['COUNT(event_subscription.id) AS cnt'], $condition);
+        $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['event_subscription.id', 'event_subscription.status', 'event_subscription.endpoint', 'event.name'], $condition);
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
