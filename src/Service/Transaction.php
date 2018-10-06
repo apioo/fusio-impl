@@ -29,7 +29,8 @@ use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Engine\Payment\RedirectUrls;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Transaction\CreatedEvent;
+use Fusio\Impl\Event\Transaction\ExecutedEvent;
+use Fusio\Impl\Event\Transaction\PreparedEvent;
 use Fusio\Impl\Event\TransactionEvents;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Plan\Payer;
@@ -165,7 +166,7 @@ class Transaction
             $this->updateTransaction($product, $transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(TransactionEvents::CREATE, new CreatedEvent($transaction, $context));
+            $this->eventDispatcher->dispatch(TransactionEvents::PREPARE, new PreparedEvent($transaction));
 
             $this->transactionTable->commit();
 
@@ -180,10 +181,9 @@ class Transaction
     /**
      * @param integer $transactionId
      * @param array $parameters
-     * @param \Fusio\Impl\Authorization\UserContext $context
      * @return string
      */
-    public function execute($transactionId, array $parameters, UserContext $context)
+    public function execute($transactionId, array $parameters)
     {
         $transaction = $this->createTransaction($transactionId);
         $provider    = $this->providerFactory->factory($transaction->getProvider());
@@ -207,7 +207,7 @@ class Transaction
             $this->updateTransaction($product, $transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(TransactionEvents::CREATE, new CreatedEvent($transaction, $context));
+            $this->eventDispatcher->dispatch(TransactionEvents::EXECUTE, new ExecutedEvent($transaction));
 
             $this->transactionTable->commit();
 

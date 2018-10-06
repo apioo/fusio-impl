@@ -458,13 +458,13 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onTransactionCreate(Event\Transaction\CreatedEvent $event)
+    public function onTransactionPrepare(Event\Transaction\PreparedEvent $event)
     {
         $this->log(
             $event->getContext(),
             $event->getTransaction()->getId(),
-            'transaction.create',
-            sprintf('Created transaction %s', $event->getTransaction()->getTransactionId()),
+            'transaction.prepare',
+            sprintf('Prepared transaction %s', $event->getTransaction()->getTransactionId()),
             [
                 'plan_id' => $event->getTransaction()->getPlanId(),
                 'user_id' => $event->getTransaction()->getUserId(),
@@ -478,13 +478,13 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onTransactionUpdate(Event\Transaction\UpdatedEvent $event)
+    public function onTransactionExecute(Event\Transaction\ExecutedEvent $event)
     {
         $this->log(
             $event->getContext(),
             $event->getTransaction()->getId(),
-            'transaction.update',
-            sprintf('Updated transaction %s', $event->getTransaction()->getTransactionId()),
+            'transaction.execute',
+            sprintf('Executed transaction %s', $event->getTransaction()->getTransactionId()),
             [
                 'plan_id' => $event->getTransaction()->getPlanId(),
                 'user_id' => $event->getTransaction()->getUserId(),
@@ -637,8 +637,8 @@ class AuditListener implements EventSubscriberInterface
             Event\ScopeEvents::DELETE         => 'onScopeDelete',
             Event\ScopeEvents::UPDATE         => 'onScopeUpdate',
 
-            Event\TransactionEvents::CREATE   => 'onTransactionCreate',
-            Event\TransactionEvents::UPDATE   => 'onTransactionUpdate',
+            Event\TransactionEvents::PREPARE  => 'onTransactionPrepare',
+            Event\TransactionEvents::EXECUTE  => 'onTransactionExecute',
 
             Event\UserEvents::CHANGE_PASSWORD => 'onUserChangePassword',
             Event\UserEvents::CHANGE_STATUS   => 'onUserChangeStatus',

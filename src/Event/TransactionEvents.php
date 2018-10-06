@@ -30,6 +30,6 @@ namespace Fusio\Impl\Event;
  */
 class TransactionEvents
 {
-    const CREATE = 'transaction.create';
-    const UPDATE = 'transaction.update';
+    const PREPARE = 'transaction.prepare';
+    const EXECUTE = 'transaction.execute';
 }
