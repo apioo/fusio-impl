@@ -302,7 +302,10 @@ class Transaction
 
         // if approved add points to user
         if ($transaction->getStatus() == TransactionInterface::STATUS_APPROVED) {
-            $this->payerService->credit($transaction->getUserId(), $product->getPoints());
+            $this->payerService->credit(
+                $product->getPoints(),
+                UserContext::newContext($transaction->getUserId(), $transaction->getAppId())
+            );
         }
     }
 
