@@ -47,7 +47,7 @@ class Grant extends ViewAbstract
         $condition->equals('app.status', Table\App::STATUS_ACTIVE);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition);
+        $querySql = $this->getBaseQuery(['user_grant.id', 'user_grant.allow', 'user_grant.date', 'user_grant.app_id', 'app.name AS app_name', 'app.url AS app_url'], $condition, 'user_grant.id DESC');
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
@@ -72,20 +72,22 @@ class Grant extends ViewAbstract
     /**
      * @param array $fields
      * @param \PSX\Sql\Condition $condition
+     * @param string $orderBy
      * @return string
      */
-    private function getBaseQuery(array $fields, Condition $condition)
+    private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
     {
-        $fields = implode(',', $fields);
-        $where  = $condition->getExpression($this->connection->getDatabasePlatform());
+        $fields  = implode(',', $fields);
+        $where   = $condition->getStatment($this->connection->getDatabasePlatform());
+        $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
 
         return <<<SQL
     SELECT {$fields}
       FROM fusio_user_grant user_grant
 INNER JOIN fusio_app app
         ON user_grant.app_id = app.id
-     WHERE {$where}
-  ORDER BY user_grant.id DESC
+           {$where}
+           {$orderBy}
 SQL;
     }
 }

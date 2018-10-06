@@ -42,10 +42,10 @@ class Scope extends ViewAbstract
         $count = 16;
 
         $condition = new Condition();
-        $condition->equals('user_id', $userId);
+        $condition->equals('user_scope.user_id', $userId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description'], $condition);
+        $querySql = $this->getBaseQuery(['scope.id', 'scope.name', 'scope.description'], $condition, 'user_scope.id ASC');
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
 
         $definition = [
@@ -65,20 +65,22 @@ class Scope extends ViewAbstract
     /**
      * @param array $fields
      * @param \PSX\Sql\Condition $condition
+     * @param string $orderBy
      * @return string
      */
-    private function getBaseQuery(array $fields, Condition $condition)
+    private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
     {
-        $fields = implode(',', $fields);
-        $where  = $condition->getExpression($this->connection->getDatabasePlatform());
+        $fields  = implode(',', $fields);
+        $where   = $condition->getStatment($this->connection->getDatabasePlatform());
+        $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
 
         return <<<SQL
     SELECT {$fields}
       FROM fusio_user_scope user_scope
 INNER JOIN fusio_scope scope
         ON user_scope.scope_id = scope.id
-     WHERE {$where}
-  ORDER BY scope.id ASC
+           {$where}
+           {$orderBy}
 SQL;
     }
 }
