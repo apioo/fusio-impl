@@ -42,6 +42,7 @@ class Version20180904200851 extends AbstractMigration
         $planTransactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $planTransactionTable->addColumn('plan_id', 'integer');
         $planTransactionTable->addColumn('user_id', 'integer');
+        $planTransactionTable->addColumn('app_id', 'integer');
         $planTransactionTable->addColumn('status', 'integer');
         $planTransactionTable->addColumn('provider', 'string');
         $planTransactionTable->addColumn('transaction_id', 'string');

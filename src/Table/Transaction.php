@@ -43,6 +43,7 @@ class Transaction extends TableAbstract
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'plan_id' => self::TYPE_INT,
             'user_id' => self::TYPE_INT,
+            'app_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'provider' => self::TYPE_VARCHAR,
             'transaction_id' => self::TYPE_VARCHAR,

@@ -132,6 +132,7 @@ class Transaction
         $transaction = new TransactionModel();
         $transaction->setPlanId($product->getId());
         $transaction->setUserId($context->getUserId());
+        $transaction->setAppId($context->getAppId());
         $transaction->setProvider($name);
         $transaction->setTransactionId(Uuid::pseudoRandom());
         $transaction->setReturnUrl($returnUrl);
@@ -143,6 +144,7 @@ class Transaction
             $this->transactionTable->create([
                 'plan_id' => $transaction->getPlanId(),
                 'user_id' => $transaction->getUserId(),
+                'app_id' => $transaction->getAppId(),
                 'status' => TransactionModel::STATUS_CREATED,
                 'provider' => $transaction->getProvider(),
                 'transaction_id' => $transaction->getTransactionId(),
