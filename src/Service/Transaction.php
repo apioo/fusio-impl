@@ -29,6 +29,8 @@ use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Engine\Payment\RedirectUrls;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\Transaction\CreatedEvent;
+use Fusio\Impl\Event\TransactionEvents;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Plan\Payer;
 use Fusio\Impl\Table;
@@ -36,6 +38,7 @@ use PSX\Framework\Config\Config;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Transaction
@@ -77,14 +80,20 @@ class Transaction
     protected $transactionTable;
 
     /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param \Fusio\Engine\ConnectorInterface $connector
      * @param \Fusio\Impl\Service\Plan\Payer $payerService
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
      * @param \PSX\Framework\Config\Config $config
      * @param \Fusio\Impl\Table\Plan $planTable
      * @param \Fusio\Impl\Table\Transaction $transactionTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Config $config, Table\Plan $planTable, Table\Transaction $transactionTable)
+    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Config $config, Table\Plan $planTable, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
         $this->payerService = $payerService;
@@ -92,6 +101,7 @@ class Transaction
         $this->config = $config;
         $this->planTable = $planTable;
         $this->transactionTable = $transactionTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -154,6 +164,9 @@ class Transaction
             // update transaction
             $this->updateTransaction($product, $transaction);
 
+            // trigger event
+            $this->eventDispatcher->dispatch(TransactionEvents::CREATE, new CreatedEvent($transaction, $context));
+
             $this->transactionTable->commit();
 
             return $approvalUrl;
@@ -167,9 +180,10 @@ class Transaction
     /**
      * @param integer $transactionId
      * @param array $parameters
+     * @param \Fusio\Impl\Authorization\UserContext $context
      * @return string
      */
-    public function execute($transactionId, array $parameters)
+    public function execute($transactionId, array $parameters, UserContext $context)
     {
         $transaction = $this->createTransaction($transactionId);
         $provider    = $this->providerFactory->factory($transaction->getProvider());
@@ -191,6 +205,9 @@ class Transaction
 
             // update transaction
             $this->updateTransaction($product, $transaction);
+
+            // trigger event
+            $this->eventDispatcher->dispatch(TransactionEvents::CREATE, new CreatedEvent($transaction, $context));
 
             $this->transactionTable->commit();
 

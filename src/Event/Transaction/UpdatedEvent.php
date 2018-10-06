@@ -19,17 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Plan;
+namespace Fusio\Impl\Event\Transaction;
 
+use Fusio\Engine\Model\Transaction;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * PurchasedEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PurchasedEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
+    /**
+     * @var \Fusio\Engine\Model\Transaction
+     */
+    protected $transaction;
+
+    /**
+     * @param \Fusio\Engine\Model\Transaction $transaction
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct(Transaction $transaction, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->transaction = $transaction;
+    }
+
+    public function getTransaction()
+    {
+        return $this->transaction;
+    }
 }

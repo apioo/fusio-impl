@@ -19,43 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Migration\DBAL;
+namespace Fusio\Impl\Event\Transaction;
+
+use Fusio\Engine\Model\Transaction;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * QueryBucket
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryBucket
+class CreatedEvent extends EventAbstract
 {
     /**
-     * @var array
+     * @var \Fusio\Engine\Model\Transaction
      */
-    private $sql;
+    protected $transaction;
 
-    public function __construct()
+    /**
+     * @param \Fusio\Engine\Model\Transaction $transaction
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct(Transaction $transaction, UserContext $context)
     {
-        $this->sql = [];
+        parent::__construct($context);
+
+        $this->transaction = $transaction;
     }
 
-    public function addSql($sql, array $params = [], array $types = [])
+    public function getTransaction()
     {
-        $this->sql[] = [
-            $sql,
-            $params,
-            $types,
-        ];
-    }
-
-    public function getQueries()
-    {
-        return $this->sql;
-    }
-
-    public function hasQueries()
-    {
-        return count($this->sql) > 0;
+        return $this->transaction;
     }
 }

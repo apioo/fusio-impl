@@ -408,7 +408,8 @@ trait Services
             new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
             $this->get('config'),
             $this->get('table_manager')->getTable(Table\Plan::class),
-            $this->get('table_manager')->getTable(Table\Transaction::class)
+            $this->get('table_manager')->getTable(Table\Transaction::class),
+            $this->get('event_dispatcher')
         );
     }
 
