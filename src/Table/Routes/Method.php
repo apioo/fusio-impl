@@ -52,6 +52,7 @@ class Method extends TableAbstract
             'parameters' => self::TYPE_INT,
             'request' => self::TYPE_INT,
             'action' => self::TYPE_INT,
+            'costs' => self::TYPE_INT,
             'schema_cache' => self::TYPE_TEXT,
             'action_cache' => self::TYPE_TEXT,
         );

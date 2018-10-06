@@ -260,7 +260,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
                 throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
             }
 
-            $this->planPayerService->pay($context, $costs);
+            $this->planPayerService->pay($costs, $context);
         }
 
         if ($actionId > 0) {

@@ -73,7 +73,9 @@ class UserDatabase implements Repository\UserInterface
 
         $sql = 'SELECT id,
                        status,
-                       name
+                       name,
+                       email,
+                       points
                   FROM fusio_user
                  WHERE id = :userId';
 
@@ -92,6 +94,8 @@ class UserDatabase implements Repository\UserInterface
         $user->setId($row['id']);
         $user->setStatus($row['status']);
         $user->setName($row['name']);
+        $user->setEmail($row['email']);
+        $user->setPoints($row['points']);
 
         return $user;
     }

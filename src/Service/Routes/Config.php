@@ -189,6 +189,7 @@ class Config
         $parameters  = isset($config['parameters'])  ? $config['parameters']  : null;
         $request     = isset($config['request'])     ? $config['request']     : null;
         $action      = isset($config['action'])      ? $config['action']      : null;
+        $costs       = isset($config['costs'])       ? $config['costs']       : null;
 
         // create method
         $data = [
@@ -202,6 +203,7 @@ class Config
             'parameters'  => $parameters,
             'request'     => $request,
             'action'      => $action,
+            'costs'       => $costs,
         ];
 
         $this->methodTable->create($data);
