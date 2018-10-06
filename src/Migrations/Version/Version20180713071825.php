@@ -245,6 +245,7 @@ class Version20180713071825 extends AbstractMigration
             $routesMethodTable->addColumn('parameters', 'integer', ['notnull' => false]);
             $routesMethodTable->addColumn('request', 'integer', ['notnull' => false]);
             $routesMethodTable->addColumn('action', 'integer', ['notnull' => false]);
+            $routesMethodTable->addColumn('costs', 'integer', ['notnull' => false]);
             $routesMethodTable->addColumn('schema_cache', 'text', ['notnull' => false]);
             $routesMethodTable->addColumn('action_cache', 'text', ['notnull' => false]);
             $routesMethodTable->setPrimaryKey(['id']);
@@ -312,6 +313,7 @@ class Version20180713071825 extends AbstractMigration
             $userTable->addColumn('name', 'string', ['length' => 64]);
             $userTable->addColumn('email', 'string', ['length' => 128, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $userTable->addColumn('points', 'integer', ['notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
             $userTable->addUniqueIndex(['provider', 'remote_id']);
