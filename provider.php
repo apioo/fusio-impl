@@ -40,6 +40,7 @@ return [
         \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
     ],
     'payment' => [
+        \Fusio\Impl\Tests\Adapter\Test\Paypal::class,
     ],
     'user' => [
         \Fusio\Impl\Provider\User\Facebook::class,
