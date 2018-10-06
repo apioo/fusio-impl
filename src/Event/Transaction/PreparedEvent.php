@@ -26,13 +26,13 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * CreatedEvent
+ * PreparedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreatedEvent extends EventAbstract
+class PreparedEvent extends EventAbstract
 {
     /**
      * @var \Fusio\Engine\Model\Transaction
@@ -41,11 +41,10 @@ class CreatedEvent extends EventAbstract
 
     /**
      * @param \Fusio\Engine\Model\Transaction $transaction
-     * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct(Transaction $transaction, UserContext $context)
+    public function __construct(Transaction $transaction)
     {
-        parent::__construct($context);
+        parent::__construct(UserContext::newContext($transaction->getUserId()));
 
         $this->transaction = $transaction;
     }
