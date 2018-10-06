@@ -59,7 +59,7 @@ class AddCommandTest extends ControllerDbTestCase
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, name, class, config FROM fusio_connection ORDER BY id DESC');
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(4, $connection['id']);
         $this->assertEquals('foobar', $connection['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\SqlAdvanced', $connection['class']);
         $this->assertNotEmpty($connection['config']);

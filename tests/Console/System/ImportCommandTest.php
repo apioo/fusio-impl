@@ -63,7 +63,7 @@ class ImportCommandTest extends ControllerDbTestCase
             'name' => 'New-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(4, $connection['id']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $connection['class']);
         $this->assertNotEmpty($connection['config']);
 

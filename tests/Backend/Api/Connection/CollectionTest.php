@@ -221,10 +221,15 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 3,
+            "status": 1,
+            "name": "paypal"
+        },
         {
             "id": 2,
             "status": 1,
@@ -280,10 +285,15 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 3,
+            "status": 1,
+            "name": "paypal"
+        },
         {
             "id": 2,
             "status": 1,
@@ -341,7 +351,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo', $row['name']);
         $this->assertEquals('Fusio\Adapter\Sql\Connection\Sql', $row['class']);
         $this->assertNotEmpty($row['config']);

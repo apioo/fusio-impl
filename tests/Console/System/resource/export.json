@@ -24,6 +24,12 @@
   "connection": [
     {
       "status": 1,
+      "name": "paypal",
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
+      "config": {}
+    },
+    {
+      "status": 1,
       "name": "Test",
       "class": "Fusio\\Impl\\Connection\\Native",
       "config": {}

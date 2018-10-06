@@ -70,7 +70,7 @@ class DeployCommandTest extends ControllerDbTestCase
             'name' => 'New-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(4, $connection['id']);
         $this->assertEquals(SqlAdvanced::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 

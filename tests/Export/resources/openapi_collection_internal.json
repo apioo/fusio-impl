@@ -4230,6 +4230,48 @@
       },
       "parameters": []
     },
+    "\/consumer\/transaction\/execute\/{transaction_id}": {
+      "get": {
+        "description": "Executes the payment on the remote provider and redirects the user to the app using the provided return url",
+        "operationId": "consumerTransactionExecuteTransactionid",
+        "responses": {}
+      },
+      "parameters": []
+    },
+    "\/consumer\/transaction\/prepare\/{provider}": {
+      "post": {
+        "operationId": "consumerTransactionPrepareProviderPostConsumer_Transaction_Prepare_Request",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/transaction\/{transaction_id}": {
       "get": {
         "operationId": "consumerTransactionTransactionid09GetConsumer_Transaction",
@@ -6599,6 +6641,31 @@
             "items": {
               "$ref": "#\/components\/schemas\/Consumer_Transaction"
             }
+          }
+        }
+      },
+      "Consumer_Transaction_Prepare_Request": {
+        "type": "object",
+        "title": "Consumer Transaction Prepare Request",
+        "properties": {
+          "planId": {
+            "type": "integer"
+          },
+          "returnUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "planId",
+          "returnUrl"
+        ]
+      },
+      "Consumer_Transaction_Prepare_Response": {
+        "type": "object",
+        "title": "Consumer Transaction Prepare Response",
+        "properties": {
+          "approvalUrl": {
+            "type": "string"
           }
         }
       },

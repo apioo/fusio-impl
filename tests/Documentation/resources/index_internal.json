@@ -727,7 +727,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/transaction\/execute",
+      "path": "\/consumer\/transaction\/execute\/:transaction_id",
       "methods": [
         "GET",
         "POST",

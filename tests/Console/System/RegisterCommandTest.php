@@ -71,7 +71,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $file   = Environment::getService('config')->get('fusio_provider');
         $config = ProviderConfig::fromFile($file);
 
-        $actual = $config->get(ProviderConfig::TYPE_ACTION);
+        $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             \Fusio\Adapter\File\Action\FileProcessor::class,
             \Fusio\Adapter\Http\Action\HttpProcessor::class,
@@ -86,7 +86,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertEquals($actual, $expect);
 
         // check connection class
-        $actual = $config->get(ProviderConfig::TYPE_CONNECTION);
+        $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
             \Fusio\Adapter\Http\Connection\Http::class,
             \Fusio\Adapter\Sql\Connection\Sql::class,
@@ -101,7 +101,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             'name' => 'Adapter-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(4, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 
@@ -141,7 +141,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 3], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -199,7 +199,7 @@ JSON;
         $file   = Environment::getService('config')->get('fusio_provider');
         $config = ProviderConfig::fromFile($file);
 
-        $actual = $config->get(ProviderConfig::TYPE_ACTION);
+        $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             \Fusio\Adapter\File\Action\FileProcessor::class,
             \Fusio\Adapter\Http\Action\HttpProcessor::class,
@@ -214,7 +214,7 @@ JSON;
         $this->assertEquals($actual, $expect);
 
         // check connection class
-        $actual = $config->get(ProviderConfig::TYPE_CONNECTION);
+        $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
             \Fusio\Adapter\Http\Connection\Http::class,
             \Fusio\Adapter\Sql\Connection\Sql::class,
@@ -229,7 +229,7 @@ JSON;
             'name' => 'Adapter-Connection',
         ]);
 
-        $this->assertEquals(3, $connection['id']);
+        $this->assertEquals(4, $connection['id']);
         $this->assertEquals(VoidConnection::class, $connection['class']);
         $this->assertNotEmpty($connection['config']);
 
@@ -268,7 +268,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 3], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
