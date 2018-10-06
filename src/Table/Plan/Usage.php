@@ -44,7 +44,6 @@ class Usage extends TableAbstract
             'route_id' => self::TYPE_INT,
             'user_id' => self::TYPE_INT,
             'app_id' => self::TYPE_INT,
-            'action_id' => self::TYPE_INT,
             'points' => self::TYPE_INT,
             'insert_date' => self::TYPE_DATETIME,
         );
