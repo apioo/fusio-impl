@@ -380,6 +380,56 @@ JSON;
     /**
      * @dataProvider providerDebugStatus
      */
+    public function testCosts($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        $response = null;
+        for ($i = 0; $i < 15; $i++) {
+            $response = $this->sendRequest('/foo', 'POST', array(
+                'User-Agent'    => 'Fusio TestCase',
+                'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f',
+                'Content-Type'  => 'application/json',
+            ), \json_encode([
+                'title' => 'foo',
+                'content' => 'bar',
+                'date' => date('Y-m-d\TH:i:s\Z'),
+            ]));
+
+            $body = (string) $response->getBody();
+            $data = Parser::decode($body);
+
+            if ($i < 9) {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => [16 - $i],
+                ];
+
+                $this->assertEquals(201, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
+            } else {
+                $headers = [
+                    'vary' => ['Accept'],
+                    'content-type' => ['application/json'],
+                    'warning' => ['199 PSX "Resource is in development"'],
+                    'x-ratelimit-limit' => ['16'],
+                    'x-ratelimit-remaining' => [16 - $i],
+                ];
+
+                $this->assertEquals(429, $response->getStatusCode(), $body);
+                $this->assertEquals($headers, $response->getHeaders(), $body);
+                $this->assertEquals(false, $data->success, $body);
+                $this->assertEquals('Your account has not enough points to call this action. Please purchase new points in order to execute this action', substr($data->message, 0, 114), $body);
+            }
+        }
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
     public function testPut($debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
