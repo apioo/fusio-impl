@@ -120,7 +120,10 @@ class AuditListener implements EventSubscriberInterface
             $event->getAppId(),
             'app.remove_token',
             sprintf('Removed token from app'),
-            ['appId' => $event->getAppId(), 'tokenId' => $event->getTokenId()]
+            [
+                'appId' => $event->getAppId(),
+                'tokenId' => $event->getTokenId()
+            ]
         );
     }
 
@@ -263,6 +266,60 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
+    public function onPlanCreate(Event\Plan\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getPlanId(),
+            'plan.create',
+            sprintf('Created plan %s', $event->getRecord()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onPlanCredit(Event\Plan\CreditedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            null,
+            'plan.credit',
+            sprintf('Credited points %s', $event->getPoints()),
+            null
+        );
+    }
+
+    public function onPlanDelete(Event\Plan\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getPlanId(),
+            'plan.delete',
+            sprintf('Deleted plan %s', $event->getPlan()['name'])
+        );
+    }
+
+    public function onPlanPay(Event\Plan\PayedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            null,
+            'plan.pay',
+            sprintf('Payed points %s', $event->getPoints()),
+            null
+        );
+    }
+
+    public function onPlanUpdate(Event\Plan\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getPlanId(),
+            'plan.update',
+            sprintf('Updated plan %s', $event->getPlan()['name']),
+            $event->getRecord()
+        );
+    }
+
     public function onRateCreate(Event\Rate\CreatedEvent $event)
     {
         $this->log(
@@ -401,6 +458,46 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
+    public function onTransactionCreate(Event\Transaction\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getTransaction()->getId(),
+            'transaction.create',
+            sprintf('Created transaction %s', $event->getTransaction()->getTransactionId()),
+            [
+                'plan_id' => $event->getTransaction()->getPlanId(),
+                'user_id' => $event->getTransaction()->getUserId(),
+                'transaction_id' => $event->getTransaction()->getTransactionId(),
+                'provider' => $event->getTransaction()->getProvider(),
+                'status' => $event->getTransaction()->getStatus(),
+                'remote_id' => $event->getTransaction()->getRemoteId(),
+                'amount' => $event->getTransaction()->getAmount(),
+                'return_url' => $event->getTransaction()->getReturnUrl(),
+            ]
+        );
+    }
+
+    public function onTransactionUpdate(Event\Transaction\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getTransaction()->getId(),
+            'transaction.update',
+            sprintf('Updated transaction %s', $event->getTransaction()->getTransactionId()),
+            [
+                'plan_id' => $event->getTransaction()->getPlanId(),
+                'user_id' => $event->getTransaction()->getUserId(),
+                'transaction_id' => $event->getTransaction()->getTransactionId(),
+                'provider' => $event->getTransaction()->getProvider(),
+                'status' => $event->getTransaction()->getStatus(),
+                'remote_id' => $event->getTransaction()->getRemoteId(),
+                'amount' => $event->getTransaction()->getAmount(),
+                'return_url' => $event->getTransaction()->getReturnUrl(),
+            ]
+        );
+    }
+
     public function onUserChangePassword(Event\User\ChangedPasswordEvent $event)
     {
         $this->log(
@@ -517,6 +614,12 @@ class AuditListener implements EventSubscriberInterface
             Event\EventEvents::UNSUBSCRIBE    => 'onEventUnsubscribe',
             Event\EventEvents::UPDATE         => 'onEventUpdate',
 
+            Event\PlanEvents::CREATE          => 'onPlanCreate',
+            Event\PlanEvents::CREDIT          => 'onPlanCredit',
+            Event\PlanEvents::DELETE          => 'onPlanDelete',
+            Event\PlanEvents::PAY             => 'onPlanPay',
+            Event\PlanEvents::UPDATE          => 'onPlanUpdate',
+
             Event\RateEvents::CREATE          => 'onRateCreate',
             Event\RateEvents::DELETE          => 'onRateDelete',
             Event\RateEvents::UPDATE          => 'onRateUpdate',
@@ -533,6 +636,9 @@ class AuditListener implements EventSubscriberInterface
             Event\ScopeEvents::CREATE         => 'onScopeCreate',
             Event\ScopeEvents::DELETE         => 'onScopeDelete',
             Event\ScopeEvents::UPDATE         => 'onScopeUpdate',
+
+            Event\TransactionEvents::CREATE   => 'onTransactionCreate',
+            Event\TransactionEvents::UPDATE   => 'onTransactionUpdate',
 
             Event\UserEvents::CHANGE_PASSWORD => 'onUserChangePassword',
             Event\UserEvents::CHANGE_STATUS   => 'onUserChangeStatus',
