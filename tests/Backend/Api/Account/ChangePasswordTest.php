@@ -135,7 +135,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account/change_password', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
         ));
 
         $body = (string) $response->getBody();
@@ -147,7 +147,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account/change_password', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -161,7 +161,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account/change_password', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
         ), json_encode([
             'oldPassword'    => 'qf2vX10Ec3wFZHx0K1eL',
             'newPassword'    => 'qf2vX10Ec4wFZHx0K1eL!',
@@ -194,7 +194,7 @@ JSON;
     {
         $response = $this->sendRequest('/backend/account/change_password', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f'
+            'Authorization' => 'Bearer bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a'
         ), json_encode([
             'foo' => 'bar',
         ]));

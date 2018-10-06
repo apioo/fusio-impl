@@ -215,13 +215,24 @@ JSON;
     "parameters": "",
     "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
     "appSecret": "342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d",
-    "date": "[datetime]",
     "scopes": [
         "authorization",
         "foo",
         "bar"
     ],
     "tokens": [
+        {
+            "id": 4,
+            "userId": 4,
+            "status": 1,
+            "token": "e4a4d21e8ca88b215572b4d8635c492d8877fd8d3de6b98ba7c08d282adfb94f",
+            "scope": [
+                "bar"
+            ],
+            "ip": "127.0.0.1",
+            "expire": "[datetime]",
+            "date": "[datetime]"
+        },
         {
             "id": 3,
             "userId": 2,
@@ -234,7 +245,8 @@ JSON;
             "expire": "[datetime]",
             "date": "[datetime]"
         }
-    ]
+    ],
+    "date": "[datetime]"
 }
 JSON;
 

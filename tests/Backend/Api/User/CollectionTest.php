@@ -460,11 +460,11 @@ JSON;
         $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
 
         $this->assertEquals([[
-            'id'       => 15,
+            'id'       => 17,
             'user_id'  => 6,
             'scope_id' => 4,
         ], [
-            'id'       => 14,
+            'id'       => 16,
             'user_id'  => 6,
             'scope_id' => 5,
         ]], $routes);

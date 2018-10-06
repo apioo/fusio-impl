@@ -182,10 +182,21 @@ JSON;
 
         $expect = <<<JSON
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 6,
+            "appId": 1,
+            "userId": 4,
+            "status": 1,
+            "scope": [
+                "backend"
+            ],
+            "ip": "127.0.0.1",
+            "date": "2015-06-25T22:49:09Z"
+        },
         {
             "id": 5,
             "appId": 2,
@@ -199,11 +210,11 @@ JSON;
         },
         {
             "id": 4,
-            "appId": 1,
+            "appId": 3,
             "userId": 4,
             "status": 1,
             "scope": [
-                "backend"
+                "bar"
             ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
@@ -267,7 +278,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 6,
             "appId": 1,
             "userId": 4,
             "status": 1,
@@ -308,10 +319,21 @@ JSON;
 
         $expect = <<<JSON
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 6,
+            "appId": 1,
+            "userId": 4,
+            "status": 1,
+            "scope": [
+                "backend"
+            ],
+            "ip": "127.0.0.1",
+            "date": "2015-06-25T22:49:09Z"
+        },
         {
             "id": 5,
             "appId": 2,
@@ -325,11 +347,11 @@ JSON;
         },
         {
             "id": 4,
-            "appId": 1,
+            "appId": 3,
             "userId": 4,
             "status": 1,
             "scope": [
-                "backend"
+                "bar"
             ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"

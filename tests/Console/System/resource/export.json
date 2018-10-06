@@ -340,7 +340,9 @@
       "scopes": [
         "backend",
         "consumer",
-        "authorization"
+        "authorization",
+        "foo",
+        "bar"
       ],
       "date": "[datetime]"
     },
