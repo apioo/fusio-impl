@@ -38,9 +38,9 @@ class PayedEvent extends EventAbstract
      */
     protected $points;
 
-    public function __construct($userId, $points)
+    public function __construct($points, UserContext $context)
     {
-        parent::__construct(UserContext::newContext($userId));
+        parent::__construct($context);
 
         $this->points = $points;
     }

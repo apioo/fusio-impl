@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Plan\CreditedEvent;
 use Fusio\Impl\Event\Plan\PayedEvent;
 use Fusio\Impl\Event\PlanEvents;
@@ -68,44 +69,46 @@ class Payer
      * Method which is called in case a user visits a route which cost a
      * specific amount of points. This method decreases the points from the
      * user account
-     * 
-     * @param \Fusio\Engine\ContextInterface $context
+     *
      * @param integer $points
+     * @param \Fusio\Engine\ContextInterface $context
      */
-    public function pay(ContextInterface $context, $points)
+    public function pay($points, ContextInterface $context)
     {
-        $userId = $context->getUser()->getId();
-
         // decrease user points
-        $this->userTable->payPoints($userId, $points);
+        $this->userTable->payPoints($context->getUser()->getId(), $points);
 
         // add usage entry
         $this->usageTable->create([
             'route_id' => $context->getRouteId(),
             'user_id' => $context->getUser()->getId(),
             'app_id' => $context->getApp()->getId(),
-            'action_id' => $context->getAction()->getId(),
             'points' => $points,
             'insert_date' => new \DateTime(),
         ]);
 
         // dispatch payed event
-        $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($userId, $points));
+        $userContext = UserContext::newContext(
+            $context->getUser()->getId(),
+            $context->getApp()->getId()
+        );
+
+        $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($points, $userContext));
     }
 
     /**
      * Method which is called in case the user has bought new points. It adds
      * the points to the user account
-     * 
-     * @param integer $userId
+     *
      * @param integer $points
+     * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function credit($userId, $points)
+    public function credit($points, UserContext $context)
     {
         // credit points
-        $this->userTable->creditPoints($userId, $points);
+        $this->userTable->creditPoints($context->getUserId(), $points);
 
         // dispatch credited event
-        $this->eventDispatcher->dispatch(PlanEvents::CREDIT, new CreditedEvent($userId, $points));
+        $this->eventDispatcher->dispatch(PlanEvents::CREDIT, new CreditedEvent($points, $context));
     }
 }
