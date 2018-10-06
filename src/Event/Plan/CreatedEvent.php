@@ -44,11 +44,6 @@ class CreatedEvent extends EventAbstract
     protected $record;
 
     /**
-     * @var array
-     */
-    protected $allocations;
-
-    /**
      * @param integer $planId
      * @param array $record
      * @param \Fusio\Impl\Authorization\UserContext $context
@@ -58,7 +53,7 @@ class CreatedEvent extends EventAbstract
         parent::__construct($context);
 
         $this->planId = $planId;
-        $this->record  = $record;
+        $this->record = $record;
     }
 
     public function getPlanId()
