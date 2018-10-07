@@ -52,13 +52,14 @@ class ClassCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
         $expect = <<<TEXT
-+----------------+------------------------------------------+
-| Name           | Class                                    |
-+----------------+------------------------------------------+
-| HTTP           | Fusio\Adapter\Http\Connection\Http       |
-| SQL            | Fusio\Adapter\Sql\Connection\Sql         |
-| SQL (advanced) | Fusio\Adapter\Sql\Connection\SqlAdvanced |
-+----------------+------------------------------------------+
++-----------------+----------------------------------------------+
+| Name            | Class                                        |
++-----------------+----------------------------------------------+
+| HTTP            | Fusio\Adapter\Http\Connection\Http           |
+| SQL             | Fusio\Adapter\Sql\Connection\Sql             |
+| SQL (advanced)  | Fusio\Adapter\Sql\Connection\SqlAdvanced     |
+| Void-Connection | Fusio\Impl\Tests\Adapter\Test\VoidConnection |
++-----------------+----------------------------------------------+
 
 TEXT;
 

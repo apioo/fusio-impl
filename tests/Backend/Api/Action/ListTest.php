@@ -150,6 +150,10 @@ JSON;
         {
             "name": "V8-Processor",
             "class": "Fusio\\Adapter\\V8\\Action\\V8Processor"
+        },
+        {
+            "name": "Void-Action",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidAction"
         }
     ]
 }

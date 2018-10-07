@@ -33,11 +33,13 @@ return [
         \Fusio\Adapter\Sql\Action\SqlTable::class,
         \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
         \Fusio\Adapter\V8\Action\V8Processor::class,
+        \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
     ],
     'connection' => [
         \Fusio\Adapter\Http\Connection\Http::class,
         \Fusio\Adapter\Sql\Connection\Sql::class,
         \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
+        \Fusio\Impl\Tests\Adapter\Test\VoidConnection::class,
     ],
     'payment' => [
         \Fusio\Impl\Tests\Adapter\Test\Paypal::class,

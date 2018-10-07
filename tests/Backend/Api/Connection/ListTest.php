@@ -134,6 +134,10 @@ JSON;
         {
             "name": "SQL (advanced)",
             "class": "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
+        },
+        {
+            "name": "Void-Connection",
+            "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection"
         }
     ]
 }
