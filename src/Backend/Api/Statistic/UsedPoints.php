@@ -30,13 +30,13 @@ use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 
 /**
- * CountRequests
+ * UsedPoints
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CountRequests extends BackendApiAbstract
+class UsedPoints extends BackendApiAbstract
 {
     /**
      * @Inject
@@ -58,14 +58,8 @@ class CountRequests extends BackendApiAbstract
             ->addQueryParameter('routeId', Property::getInteger())
             ->addQueryParameter('appId', Property::getInteger())
             ->addQueryParameter('userId', Property::getInteger())
-            ->addQueryParameter('ip', Property::getString())
-            ->addQueryParameter('userAgent', Property::getString())
-            ->addQueryParameter('method', Property::getString())
-            ->addQueryParameter('path', Property::getString())
-            ->addQueryParameter('header', Property::getString())
-            ->addQueryParameter('body', Property::getString())
             ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Count::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
         );
 
         return $resource;
@@ -76,8 +70,8 @@ class CountRequests extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic\CountRequests::class)->getView(
-            View\Log\QueryFilter::create($context->getParameters())
+        return $this->tableManager->getTable(View\Statistic\UsedPoints::class)->getView(
+            View\Plan\Usage\QueryFilter::create($context->getParameters())
         );
     }
 }

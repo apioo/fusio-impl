@@ -76,7 +76,7 @@ class MostUsedApps extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getMostUsedApps(
+        return $this->tableManager->getTable(View\Statistic\MostUsedApps::class)->getView(
             View\Log\QueryFilter::create($context->getParameters())
         );
     }

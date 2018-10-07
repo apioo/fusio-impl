@@ -56,10 +56,15 @@ abstract class QueryFilterAbstract
     {
         $alias     = $alias !== null ? $alias . '.' : '';
         $condition = new Condition();
-        $condition->greaterThen($alias . 'date', $this->from->format('Y-m-d 00:00:00'));
-        $condition->lowerThen($alias . 'date', $this->to->format('Y-m-d 23:59:59'));
+        $condition->greaterThen($alias . $this->getDateColumn(), $this->from->format('Y-m-d 00:00:00'));
+        $condition->lowerThen($alias . $this->getDateColumn(), $this->to->format('Y-m-d 23:59:59'));
 
         return $condition;
+    }
+
+    protected function getDateColumn()
+    {
+        return 'date';
     }
 
     public static function create(array $parameters)

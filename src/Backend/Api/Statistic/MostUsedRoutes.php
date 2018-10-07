@@ -76,7 +76,7 @@ class MostUsedRoutes extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getMostUsedRoutes(
+        return $this->tableManager->getTable(View\Statistic\MostUsedRoutes::class)->getView(
             View\Log\QueryFilter::create($context->getParameters())
         );
     }

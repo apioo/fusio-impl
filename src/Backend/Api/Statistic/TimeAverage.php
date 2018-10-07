@@ -76,7 +76,7 @@ class TimeAverage extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getTimeAverage(
+        return $this->tableManager->getTable(View\Statistic\TimeAverage::class)->getView(
             View\Log\QueryFilter::create($context->getParameters())
         );
     }

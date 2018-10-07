@@ -72,7 +72,7 @@ class IssuedTokens extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getIssuedTokens(
+        return $this->tableManager->getTable(View\Statistic\IssuedTokens::class)->getView(
             View\App\Token\QueryFilter::create($context->getParameters())
         );
     }

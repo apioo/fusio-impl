@@ -76,7 +76,7 @@ class ErrorsPerRoute extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getErrorsPerRoute(
+        return $this->tableManager->getTable(View\Statistic\ErrorsPerRoute::class)->getView(
             View\Log\QueryFilter::create($context->getParameters())
         );
     }

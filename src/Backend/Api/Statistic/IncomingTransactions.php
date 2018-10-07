@@ -30,13 +30,13 @@ use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 
 /**
- * CountRequests
+ * IncomingTransactions
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CountRequests extends BackendApiAbstract
+class IncomingTransactions extends BackendApiAbstract
 {
     /**
      * @Inject
@@ -55,17 +55,13 @@ class CountRequests extends BackendApiAbstract
             ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addQueryParameter('from', Property::getDateTime())
             ->addQueryParameter('to', Property::getDateTime())
-            ->addQueryParameter('routeId', Property::getInteger())
-            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('planId', Property::getInteger())
             ->addQueryParameter('userId', Property::getInteger())
-            ->addQueryParameter('ip', Property::getString())
-            ->addQueryParameter('userAgent', Property::getString())
-            ->addQueryParameter('method', Property::getString())
-            ->addQueryParameter('path', Property::getString())
-            ->addQueryParameter('header', Property::getString())
-            ->addQueryParameter('body', Property::getString())
+            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('status', Property::getInteger())
+            ->addQueryParameter('provider', Property::getString())
             ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Count::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
         );
 
         return $resource;
@@ -76,8 +72,8 @@ class CountRequests extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic\CountRequests::class)->getView(
-            View\Log\QueryFilter::create($context->getParameters())
+        return $this->tableManager->getTable(View\Statistic\IncomingTransactions::class)->getView(
+            View\Transaction\QueryFilter::create($context->getParameters())
         );
     }
 }

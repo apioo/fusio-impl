@@ -76,7 +76,7 @@ class IncomingRequests extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Statistic::class)->getIncomingRequests(
+        return $this->tableManager->getTable(View\Statistic\IncomingRequests::class)->getView(
             View\Log\QueryFilter::create($context->getParameters())
         );
     }
