@@ -136,11 +136,79 @@ class DashboardTest extends ControllerDbTestCase
                     }
                 }
             },
+            "Dashboard_Users": {
+                "type": "object",
+                "title": "Dashboard Users",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Dashboard_User"
+                        }
+                    }
+                }
+            },
+            "Dashboard_User": {
+                "type": "object",
+                "title": "Dashboard User",
+                "properties": {
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "Dashboard_Transactions": {
+                "type": "object",
+                "title": "Dashboard Transactions",
+                "properties": {
+                    "entry": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/definitions\/Dashboard_Transaction"
+                        }
+                    }
+                }
+            },
+            "Dashboard_Transaction": {
+                "type": "object",
+                "title": "Dashboard Transaction",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "provider": {
+                        "type": "string"
+                    },
+                    "transactionId": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
             "Dashboard": {
                 "type": "object",
                 "title": "Dashboard",
                 "properties": {
+                    "errorsPerRoute": {
+                        "$ref": "#\/definitions\/Statistic_Chart"
+                    },
                     "incomingRequests": {
+                        "$ref": "#\/definitions\/Statistic_Chart"
+                    },
+                    "incomingTransactions": {
                         "$ref": "#\/definitions\/Statistic_Chart"
                     },
                     "mostUsedRoutes": {
@@ -155,8 +223,11 @@ class DashboardTest extends ControllerDbTestCase
                     "latestRequests": {
                         "$ref": "#\/definitions\/Dashboard_Requests"
                     },
-                    "errorsPerRoute": {
-                        "$ref": "#\/definitions\/Statistic_Chart"
+                    "latestUsers": {
+                        "$ref": "#\/definitions\/Dashboard_Users"
+                    },
+                    "latestTransactions": {
+                        "$ref": "#\/definitions\/Dashboard_Transactions"
                     }
                 }
             },
@@ -203,6 +274,77 @@ JSON;
         $actual = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $actual);
         $expect = <<<JSON
 {
+    "errorsPerRoute": {
+        "labels": [
+            "2015-06-01",
+            "2015-06-02",
+            "2015-06-03",
+            "2015-06-04",
+            "2015-06-05",
+            "2015-06-06",
+            "2015-06-07",
+            "2015-06-08",
+            "2015-06-09",
+            "2015-06-10",
+            "2015-06-11",
+            "2015-06-12",
+            "2015-06-13",
+            "2015-06-14",
+            "2015-06-15",
+            "2015-06-16",
+            "2015-06-17",
+            "2015-06-18",
+            "2015-06-19",
+            "2015-06-20",
+            "2015-06-21",
+            "2015-06-22",
+            "2015-06-23",
+            "2015-06-24",
+            "2015-06-25",
+            "2015-06-26",
+            "2015-06-27",
+            "2015-06-28",
+            "2015-06-29",
+            "2015-06-30"
+        ],
+        "data": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        "series": [
+            "\/backend\/account\/change_password"
+        ]
+    },
     "incomingRequests": {
         "labels": [
             "2015-06-01",
@@ -272,6 +414,77 @@ JSON;
         ],
         "series": [
             "Requests"
+        ]
+    },
+    "incomingTransactions": {
+        "labels": [
+            "2015-06-01",
+            "2015-06-02",
+            "2015-06-03",
+            "2015-06-04",
+            "2015-06-05",
+            "2015-06-06",
+            "2015-06-07",
+            "2015-06-08",
+            "2015-06-09",
+            "2015-06-10",
+            "2015-06-11",
+            "2015-06-12",
+            "2015-06-13",
+            "2015-06-14",
+            "2015-06-15",
+            "2015-06-16",
+            "2015-06-17",
+            "2015-06-18",
+            "2015-06-19",
+            "2015-06-20",
+            "2015-06-21",
+            "2015-06-22",
+            "2015-06-23",
+            "2015-06-24",
+            "2015-06-25",
+            "2015-06-26",
+            "2015-06-27",
+            "2015-06-28",
+            "2015-06-29",
+            "2015-06-30"
+        ],
+        "data": [
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ]
+        ],
+        "series": [
+            "Amount"
         ]
     },
     "mostUsedRoutes": {
@@ -454,75 +667,44 @@ JSON;
             }
         ]
     },
-    "errorsPerRoute": {
-        "labels": [
-            "2015-06-01",
-            "2015-06-02",
-            "2015-06-03",
-            "2015-06-04",
-            "2015-06-05",
-            "2015-06-06",
-            "2015-06-07",
-            "2015-06-08",
-            "2015-06-09",
-            "2015-06-10",
-            "2015-06-11",
-            "2015-06-12",
-            "2015-06-13",
-            "2015-06-14",
-            "2015-06-15",
-            "2015-06-16",
-            "2015-06-17",
-            "2015-06-18",
-            "2015-06-19",
-            "2015-06-20",
-            "2015-06-21",
-            "2015-06-22",
-            "2015-06-23",
-            "2015-06-24",
-            "2015-06-25",
-            "2015-06-26",
-            "2015-06-27",
-            "2015-06-28",
-            "2015-06-29",
-            "2015-06-30"
-        ],
-        "data": [
-            [
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                0
-            ]
-        ],
-        "series": [
-            "\/backend\/account\/change_password"
+    "latestUsers": {
+        "entry": [
+            {
+                "status": "1",
+                "name": "Administrator",
+                "date": "[datetime]"
+            },
+            {
+                "status": "0",
+                "name": "Consumer",
+                "date": "[datetime]"
+            },
+            {
+                "status": "2",
+                "name": "Disabled",
+                "date": "[datetime]"
+            },
+            {
+                "status": "1",
+                "name": "Developer",
+                "date": "[datetime]"
+            },
+            {
+                "status": "3",
+                "name": "Deleted",
+                "date": "[datetime]"
+            }
+        ]
+    },
+    "latestTransactions": {
+        "entry": [
+            {
+                "status": "1",
+                "provider": "paypal",
+                "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",
+                "amount": "39.99",
+                "date": "[datetime]"
+            }
         ]
     }
 }
