@@ -5691,11 +5691,79 @@
           }
         }
       },
+      "Dashboard_Users": {
+        "type": "object",
+        "title": "Dashboard Users",
+        "properties": {
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Dashboard_User"
+            }
+          }
+        }
+      },
+      "Dashboard_User": {
+        "type": "object",
+        "title": "Dashboard User",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Dashboard_Transactions": {
+        "type": "object",
+        "title": "Dashboard Transactions",
+        "properties": {
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Dashboard_Transaction"
+            }
+          }
+        }
+      },
+      "Dashboard_Transaction": {
+        "type": "object",
+        "title": "Dashboard Transaction",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "Dashboard": {
         "type": "object",
         "title": "Dashboard",
         "properties": {
+          "errorsPerRoute": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
           "incomingRequests": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "incomingTransactions": {
             "$ref": "#\/components\/schemas\/Statistic_Chart"
           },
           "mostUsedRoutes": {
@@ -5710,8 +5778,11 @@
           "latestRequests": {
             "$ref": "#\/components\/schemas\/Dashboard_Requests"
           },
-          "errorsPerRoute": {
-            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          "latestUsers": {
+            "$ref": "#\/components\/schemas\/Dashboard_Users"
+          },
+          "latestTransactions": {
+            "$ref": "#\/components\/schemas\/Dashboard_Transactions"
           }
         }
       },
