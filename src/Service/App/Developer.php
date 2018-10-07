@@ -47,6 +47,11 @@ class Developer
     protected $appTable;
 
     /**
+     * @var \Fusio\Impl\Table\Scope
+     */
+    protected $scopeTable;
+
+    /**
      * @var \Fusio\Impl\Table\User\Scope
      */
     protected $userScopeTable;

@@ -47,6 +47,26 @@ class Cronjob
     protected $cronjobTable;
 
     /**
+     * @var \Fusio\Impl\Table\Cronjob\Error
+     */
+    protected $errorTable;
+
+    /**
+     * @var \Fusio\Impl\Service\Action\Executor
+     */
+    protected $executorService;
+
+    /**
+     * @var string
+     */
+    protected $cronFile;
+
+    /**
+     * @var string
+     */
+    protected $cronExec;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
