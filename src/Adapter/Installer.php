@@ -51,7 +51,7 @@ class Installer
     /**
      * @param array $instructions
      * @param string|null $basePath
-     * @return array
+     * @return \Fusio\Impl\Service\System\Import\Result
      */
     public function install(array $instructions, $basePath = null)
     {

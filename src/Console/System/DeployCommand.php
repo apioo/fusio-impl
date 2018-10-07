@@ -25,11 +25,11 @@ use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service\System\Deploy;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -57,7 +57,7 @@ class DeployCommand extends Command
     protected $connection;
 
     /**
-     * @var \Monolog\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -97,11 +97,13 @@ class DeployCommand extends Command
             throw new \RuntimeException('File does not exists');
         }
 
-        $verbose = $output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL;
-        if ($verbose) {
-            $this->logger->pushHandler(new StreamHandler(STDOUT));
-        } else {
-            $this->logger->pushHandler(new NullHandler());
+        if ($this->logger instanceof Logger) {
+            $verbose = $output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL;
+            if ($verbose) {
+                $this->logger->pushHandler(new StreamHandler(STDOUT));
+            } else {
+                $this->logger->pushHandler(new NullHandler());
+            }
         }
 
         try {
@@ -146,7 +148,9 @@ class DeployCommand extends Command
             $return = 1;
         }
 
-        $this->logger->popHandler();
+        if ($this->logger instanceof Logger) {
+            $this->logger->popHandler();
+        }
 
         return $return;
     }

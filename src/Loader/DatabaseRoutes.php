@@ -40,7 +40,7 @@ class DatabaseRoutes implements RoutingParserInterface
     protected $connection;
 
     /**
-     * @var array
+     * @var \PSX\Framework\Loader\RoutingCollection
      */
     private $collection;
 

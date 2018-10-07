@@ -178,7 +178,7 @@ class Rate
      * @param string $ip
      * @param integer $routeId
      * @param \Fusio\Engine\Model\AppInterface $app
-     * @param \PSX\Http\RequestInterface $response
+     * @param \PSX\Http\ResponseInterface $response
      * @return boolean
      */
     public function assertLimit($ip, $routeId, Model\AppInterface $app, ResponseInterface $response)
@@ -189,7 +189,7 @@ class Rate
             return false;
         }
 
-        $count     = (int) $this->getRequestCount($ip, $rate['timespan'], $app);
+        $count     = $this->getRequestCount($ip, $rate['timespan'], $app);
         $rateLimit = (int) $rate['rate_limit'];
 
         $response->setHeader('X-RateLimit-Limit', $rateLimit);

@@ -116,7 +116,6 @@ class Logger implements FilterInterface
     }
 
     /**
-     * @param integer $logId
      * @param \Throwable $exception
      */
     public function appendError(\Throwable $exception)

@@ -176,11 +176,11 @@ class Routes
 
             // assign scopes
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($route->id, $scopes, $context);
+                $this->scopeService->createFromRoute($route['id'], $scopes, $context);
             }
 
             // handle config
-            $this->configService->handleConfig($route->id, $route->path, $config, $context);
+            $this->configService->handleConfig($route['id'], $route['path'], $config, $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -205,7 +205,7 @@ class Routes
         }
 
         // check whether route has a production version
-        if ($this->methodTable->hasProductionVersion($route->id)) {
+        if ($this->methodTable->hasProductionVersion($route['id'])) {
             throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
         }
 

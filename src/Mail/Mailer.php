@@ -44,7 +44,7 @@ class Mailer implements MailerInterface
     protected $logger;
 
     /**
-     * @var \Swift_Mailer
+     * @var \Swift_Transport
      */
     protected $mailer;
 

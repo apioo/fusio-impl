@@ -70,7 +70,7 @@ class Dispatcher implements DispatcherInterface
         }
 
         $this->triggerTable->create([
-            'event_id' => $event->id,
+            'event_id' => $event['id'],
             'status' => Table\Event\Trigger::STATUS_PENDING,
             'payload' => json_encode($payload),
             'insert_date' => new \DateTime(),

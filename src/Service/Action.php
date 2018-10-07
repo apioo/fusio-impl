@@ -195,7 +195,7 @@ class Action
         }
 
         $this->actionTable->update([
-            'id'     => $action->id,
+            'id'     => $action['id'],
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
@@ -244,7 +244,7 @@ class Action
 
     /**
      * @param string $data
-     * @return array
+     * @return array|null
      */
     public static function unserializeConfig($data)
     {

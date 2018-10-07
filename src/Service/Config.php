@@ -66,7 +66,7 @@ class Config
         }
 
         $record = [
-            'id'    => $config->id,
+            'id'    => $config['id'],
             'value' => $value,
         ];
 

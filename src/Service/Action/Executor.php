@@ -100,7 +100,7 @@ class Executor
             $context = new Context($actionId, '/', $app, $user);
             $request = new Request($httpContext, $body);
 
-            return $this->processor->execute($action->id, $request, $context);
+            return $this->processor->execute($action['id'], $request, $context);
         } else {
             return null;
         }

@@ -27,6 +27,7 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Base;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Request;
@@ -91,11 +92,15 @@ class ApiExecutor
         $response = new Response();
         $response->setBody(new Stream(fopen('php://memory', 'r+')));
 
-        $this->logger->pushHandler($verbose ? new StreamHandler(STDOUT) : new NullHandler());
+        if ($this->logger instanceof Logger) {
+            $this->logger->pushHandler($verbose ? new StreamHandler(STDOUT) : new NullHandler());
+        }
 
         $this->dispatch->route($request, $response);
 
-        $this->logger->popHandler();
+        if ($this->logger instanceof Logger) {
+            $this->logger->popHandler();
+        }
 
         $body = (string) $response->getBody();
         $data = Parser::decode($body, false);

@@ -33,7 +33,7 @@ interface GeneratorInterface
     /**
      * @param \Fusio\Impl\Service\System\WebServer\Configuration $configuration
      * @param string $file
-     * @return integer
+     * @return integer|false
      */
     public function generate(Configuration $configuration, $file);
 }

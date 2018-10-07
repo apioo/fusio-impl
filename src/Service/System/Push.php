@@ -50,7 +50,9 @@ class Push
     protected $zipUpload;
 
     /**
-     * @param string $cacheDir
+     * @param \PSX\Framework\Config\Config $config
+     * @param \Fusio\Impl\Service\System\Push\ZipBuilder $zipBuilder
+     * @param \Fusio\Impl\Service\System\Push\ZipUpload $zipUpload
      */
     public function __construct(Config $config, ZipBuilder $zipBuilder, ZipUpload $zipUpload)
     {
@@ -60,7 +62,6 @@ class Push
     }
 
     /**
-     * @param string $data
      * @param string $basePath
      * @return \Generator
      */

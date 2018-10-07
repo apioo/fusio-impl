@@ -201,7 +201,7 @@ class Schema
 
     /**
      * @param \PSX\Schema\SchemaInterface|null $schema
-     * @return string
+     * @return string|null
      */
     public static function serializeCache(SchemaInterface $schema = null)
     {
@@ -213,7 +213,7 @@ class Schema
     }
 
     /**
-     * @param string $data
+     * @param string|null $data
      * @return \PSX\Schema\SchemaInterface|null
      */
     public static function unserializeCache($data)
