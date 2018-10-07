@@ -63,7 +63,7 @@ class IncomingTransactions extends ViewAbstract
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {
-                $data[$row['date']] = (int) $row['cnt'];
+                $data[$row['date']] = (int) $row['amount'];
             }
         }
 

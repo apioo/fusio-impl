@@ -198,7 +198,7 @@ JSON;
             0,
             0,
             0,
-            1,
+            39,
             0,
             0,
             0,
@@ -228,7 +228,7 @@ JSON;
         ]
     ],
     "series": [
-        "Requests"
+        "Amount"
     ]
 }
 JSON;
