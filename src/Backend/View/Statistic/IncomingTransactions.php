@@ -53,7 +53,7 @@ class IncomingTransactions extends ViewAbstract
         }
 
         // fill values
-        $sql = '  SELECT COUNT(trans.id) AS cnt,
+        $sql = '  SELECT SUM(trans.amount) AS amount,
                          DATE(trans.insert_date) AS date
                     FROM fusio_transaction trans
                    WHERE ' . $expression . '
@@ -70,7 +70,7 @@ class IncomingTransactions extends ViewAbstract
         return [
             'labels' => $labels,
             'data'   => [array_values($data)],
-            'series' => ['Requests'],
+            'series' => ['Amount'],
         ];
     }
 }
