@@ -256,7 +256,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             // in case the method has assigned costs check whether the user has
             // enough points
             $remaining = $this->context->getUser()->getPoints() - $costs;
-            if ($remaining <= 0) {
+            if ($remaining < 0) {
                 throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
             }
 

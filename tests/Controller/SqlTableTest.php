@@ -384,6 +384,13 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = Environment::getService('connection');
+
+        // check user points
+        $points = $connection->fetchColumn('SELECT points FROM fusio_user WHERE id = 4');
+        $this->assertEquals(10, $points);
+
         $response = null;
         for ($i = 0; $i < 15; $i++) {
             $response = $this->sendRequest('/foo', 'POST', array(
@@ -399,7 +406,7 @@ JSON;
             $body = (string) $response->getBody();
             $data = Parser::decode($body);
 
-            if ($i < 9) {
+            if ($i < 10) {
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
@@ -410,6 +417,10 @@ JSON;
 
                 $this->assertEquals(201, $response->getStatusCode(), $body);
                 $this->assertEquals($headers, $response->getHeaders(), $body);
+
+                // check user points
+                $points = $connection->fetchColumn('SELECT points FROM fusio_user WHERE id = 4');
+                $this->assertEquals(10 - ($i + 1), $points);
             } else {
                 $headers = [
                     'vary' => ['Accept'],
@@ -423,6 +434,10 @@ JSON;
                 $this->assertEquals($headers, $response->getHeaders(), $body);
                 $this->assertEquals(false, $data->success, $body);
                 $this->assertEquals('Your account has not enough points to call this action. Please purchase new points in order to execute this action', substr($data->message, 0, 114), $body);
+
+                // check user points
+                $points = $connection->fetchColumn('SELECT points FROM fusio_user WHERE id = 4');
+                $this->assertEquals(0, $points);
             }
         }
     }
