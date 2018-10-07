@@ -63,15 +63,19 @@ class Dashboard extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        $filter = View\Log\QueryFilter::create($context->getParameters());
+        $logFilter = View\Log\QueryFilter::create($context->getParameters());
+        $transactionFilter = View\Transaction\QueryFilter::create($context->getParameters());
 
         return [
-            'incomingRequests' => $this->tableManager->getTable(View\Statistic::class)->getIncomingRequests($filter),
-            'mostUsedRoutes' => $this->tableManager->getTable(View\Statistic::class)->getMostUsedRoutes($filter),
-            'timePerRoute' => $this->tableManager->getTable(View\Statistic::class)->getTimePerRoute($filter),
-            'latestApps' => $this->tableManager->getTable(View\Dashboard::class)->getLatestApps(),
-            'latestRequests' => $this->tableManager->getTable(View\Dashboard::class)->getLatestRequests(),
-            'errorsPerRoute' => $this->tableManager->getTable(View\Statistic::class)->getErrorsPerRoute($filter),
+            'errorsPerRoute' => $this->tableManager->getTable(View\Statistic\ErrorsPerRoute::class)->getView($logFilter),
+            'incomingRequests' => $this->tableManager->getTable(View\Statistic\IncomingRequests::class)->getView($logFilter),
+            'incomingTransactions' => $this->tableManager->getTable(View\Statistic\IncomingTransactions::class)->getView($transactionFilter),
+            'mostUsedRoutes' => $this->tableManager->getTable(View\Statistic\MostUsedRoutes::class)->getView($logFilter),
+            'timePerRoute' => $this->tableManager->getTable(View\Statistic\TimePerRoute::class)->getView($logFilter),
+            'latestApps' => $this->tableManager->getTable(View\Dashboard\LatestApps::class)->getView(),
+            'latestRequests' => $this->tableManager->getTable(View\Dashboard\LatestRequests::class)->getView(),
+            'latestUsers' => $this->tableManager->getTable(View\Dashboard\LatestUsers::class)->getView(),
+            'latestTransactions' => $this->tableManager->getTable(View\Dashboard\LatestTransactions::class)->getView(),
         ];
     }
 }

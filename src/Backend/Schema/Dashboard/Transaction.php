@@ -21,30 +21,32 @@
 
 namespace Fusio\Impl\Backend\Schema\Dashboard;
 
-use Fusio\Impl\Backend\Schema;
+use PSX\Schema\PropertyType;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Dashboard
+ * Transaction
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Dashboard extends SchemaAbstract
+class Transaction extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Dashboard');
-        $sb->objectType('errorsPerRoute', $this->getSchema(Schema\Statistic\Chart::class));
-        $sb->objectType('incomingRequests', $this->getSchema(Schema\Statistic\Chart::class));
-        $sb->objectType('incomingTransactions', $this->getSchema(Schema\Statistic\Chart::class));
-        $sb->objectType('mostUsedRoutes', $this->getSchema(Schema\Statistic\Chart::class));
-        $sb->objectType('timePerRoute', $this->getSchema(Schema\Statistic\Chart::class));
-        $sb->objectType('latestApps', $this->getSchema(App::class));
-        $sb->objectType('latestRequests', $this->getSchema(Request::class));
-        $sb->objectType('latestUsers', $this->getSchema(User::class));
-        $sb->objectType('latestTransactions', $this->getSchema(Transaction::class));
+        $sb = $this->getSchemaBuilder('Dashboard Transaction');
+        $sb->string('status');
+        $sb->string('provider');
+        $sb->string('transactionId');
+        $sb->number('amount');
+        $sb->string('date')
+            ->setFormat(PropertyType::FORMAT_DATETIME);
+        $app = $sb->getProperty();
+
+        $sb = $this->getSchemaBuilder('Dashboard Transactions');
+        $sb->arrayType('entry')
+            ->setItems($app);
 
         return $sb->getProperty();
     }
