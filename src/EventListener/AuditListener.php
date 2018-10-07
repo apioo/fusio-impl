@@ -514,7 +514,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getContext(),
             null,
             'user.change_status',
-            sprintf('Changed user status from %i to %i', $event->getOldStatus(), $event->getNewStatus())
+            sprintf('Changed user status from %s to %s', $event->getOldStatus(), $event->getNewStatus())
         );
     }
 
