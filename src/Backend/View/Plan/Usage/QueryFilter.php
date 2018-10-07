@@ -35,7 +35,7 @@ class QueryFilter extends QueryFilterAbstract
     /**
      * @var integer
      */
-    protected $planId;
+    protected $routeId;
 
     /**
      * @var integer
@@ -49,7 +49,7 @@ class QueryFilter extends QueryFilterAbstract
 
     public function getRouteId()
     {
-        return $this->planId;
+        return $this->routeId;
     }
 
     public function getUserId()
@@ -89,11 +89,11 @@ class QueryFilter extends QueryFilterAbstract
 
     public static function create(array $parameters)
     {
-        $filter    = parent::create($parameters);
-        $routeId   = isset($parameters['routeId']) ? $parameters['routeId'] : null;
-        $userId    = isset($parameters['userId']) ? $parameters['userId'] : null;
-        $appId     = isset($parameters['appId']) ? $parameters['appId'] : null;
-        $search    = isset($parameters['search']) ? $parameters['search'] : null;
+        $filter  = parent::create($parameters);
+        $routeId = isset($parameters['routeId']) ? $parameters['routeId'] : null;
+        $userId  = isset($parameters['userId']) ? $parameters['userId'] : null;
+        $appId   = isset($parameters['appId']) ? $parameters['appId'] : null;
+        $search  = isset($parameters['search']) ? $parameters['search'] : null;
 
         // parse search if available
         if (!empty($search)) {
