@@ -19,20 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\View;
+namespace Fusio\Impl\Backend\View\Dashboard;
 
 use PSX\Sql\ViewAbstract;
 
 /**
- * Dashboard
+ * LatestApps
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Dashboard extends ViewAbstract
+class LatestApps extends ViewAbstract
 {
-    public function getLatestApps()
+    public function getView()
     {
         $sql = '  SELECT app.name,
                          app.date
@@ -44,27 +44,6 @@ class Dashboard extends ViewAbstract
         $definition = [
             'entry' => $this->doCollection($sql, [], [
                 'name' => 'name',
-                'date' => $this->fieldDateTime('date'),
-            ]),
-        ];
-
-        return $this->build($definition);
-    }
-
-    public function getLatestRequests()
-    {
-        $sql = '  SELECT log.path,
-                         log.ip,
-                         log.date
-                    FROM fusio_log log
-                ORDER BY log.date DESC';
-
-        $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
-
-        $definition = [
-            'entry' => $this->doCollection($sql, [], [
-                'path' => 'path',
-                'ip'   => 'ip',
                 'date' => $this->fieldDateTime('date'),
             ]),
         ];
