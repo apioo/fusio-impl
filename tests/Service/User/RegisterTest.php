@@ -172,7 +172,7 @@ class RegisterTest extends ControllerDbTestCase
     {
         /** @var Config $config */
         $config = Environment::getService('config_service');
-        $config->update(20, $reCaptchaSecret, UserContext::newAnonymousContext()); // recaptcha_secret
+        $config->update(19, $reCaptchaSecret, UserContext::newAnonymousContext()); // recaptcha_secret
         $config->update(23, $userApproval, UserContext::newAnonymousContext()); // user_approval
 
         return $config;
