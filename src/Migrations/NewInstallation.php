@@ -95,7 +95,7 @@ class NewInstallation
                 ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
 
                 ['name' => 'scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => 'If a user registers through the consumer API the following scopes are assigned', 'value' => 'authorization,consumer'],
-                ['name' => 'points_default', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The default amount of points which a user receives if he registers', 'value' => '0'],
+                ['name' => 'points_default', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The default amount of points which a user receives if he registers', 'value' => 0],
 
                 ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
                 ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
