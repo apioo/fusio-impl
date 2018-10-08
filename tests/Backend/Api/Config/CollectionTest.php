@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 22,
+    "totalResults": 23,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -276,11 +276,11 @@ JSON;
             "value": ""
         },
         {
-            "id": 16,
-            "type": 1,
-            "name": "provider_facebook_secret",
-            "description": "Facebook app secret",
-            "value": ""
+            "id": 21,
+            "type": 3,
+            "name": "points_default",
+            "description": "The default amount of points which a user receives if he registers",
+            "value": "0"
         }
     ]
 }
@@ -329,7 +329,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 22,
+    "totalResults": 23,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -439,6 +439,13 @@ JSON;
             "value": ""
         },
         {
+            "id": 21,
+            "type": 3,
+            "name": "points_default",
+            "description": "The default amount of points which a user receives if he registers",
+            "value": "0"
+        },
+        {
             "id": 16,
             "type": 1,
             "name": "provider_facebook_secret",
@@ -474,14 +481,14 @@ JSON;
             "value": "authorization,consumer"
         },
         {
-            "id": 22,
+            "id": 23,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 21,
+            "id": 22,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
