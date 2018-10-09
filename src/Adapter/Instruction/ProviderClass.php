@@ -24,22 +24,31 @@ namespace Fusio\Impl\Adapter\Instruction;
 use Fusio\Impl\Adapter\InstructionAbstract;
 
 /**
- * ConnectionClass
+ * ProviderClass
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ConnectionClass extends InstructionAbstract
+class ProviderClass extends InstructionAbstract
 {
+    protected $type;
+
+    public function __construct($payload, $type)
+    {
+        parent::__construct($payload);
+
+        $this->type = $type;
+    }
+
     public function getName()
     {
-        return 'Connection Class';
+        return ucfirst($this->type) . ' Class';
     }
 
     public function getKey()
     {
-        return 'connectionClass';
+        return $this->type . 'Class';
     }
 
     public function getDescription()

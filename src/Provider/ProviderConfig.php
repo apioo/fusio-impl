@@ -87,4 +87,17 @@ class ProviderConfig extends Config
 
         return $result;
     }
+
+    /**
+     * @return array
+     */
+    public static function getTypes()
+    {
+        return [
+            self::TYPE_ACTION,
+            self::TYPE_CONNECTION,
+            self::TYPE_PAYMENT,
+            self::TYPE_USER,
+        ];
+    }
 }

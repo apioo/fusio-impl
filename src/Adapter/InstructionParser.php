@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Adapter;
 
+use Fusio\Impl\Provider\ProviderConfig;
 use stdClass;
 
 /**
@@ -36,17 +37,14 @@ class InstructionParser
     {
         $instructions = array();
 
-        // get action class
-        if (isset($definition->actionClass) && is_array($definition->actionClass)) {
-            foreach ($definition->actionClass as $actionClass) {
-                $instructions[] = new Instruction\ActionClass($actionClass);
-            }
-        }
-
-        // get connection class
-        if (isset($definition->connectionClass) && is_array($definition->connectionClass)) {
-            foreach ($definition->connectionClass as $connectionClass) {
-                $instructions[] = new Instruction\ConnectionClass($connectionClass);
+        // get provider classes
+        $types = ProviderConfig::getTypes();
+        foreach ($types as $type) {
+            $key = $type . 'Class';
+            if (isset($definition->{$key}) && is_array($definition->{$key})) {
+                foreach ($definition->{$key} as $class) {
+                    $instructions[] = new Instruction\ProviderClass($class, $type);
+                }
             }
         }
 
