@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Migration;
 
 use Fusio\Impl\Backend;
 use Fusio\Impl\Migrations\MigrationUtil;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -42,20 +43,28 @@ class MigrationUtilTest extends ControllerDbTestCase
 
     public function testSyncRoute()
     {
-        // update path route so that we update this route
-        $this->connection->executeUpdate('UPDATE fusio_routes SET priority = :priority WHERE path = :path', ['priority' => 0x10000000, 'path' => '/backend/action']);
+        $data   = NewInstallation::getData();
+        $routes = $data['fusio_routes'];
 
-        // delete path route so that we create this route
-        $this->connection->executeUpdate('DELETE FROM fusio_routes WHERE path = :path', ['path' => '/backend/schema']);
+        // update route
+        $routes[1]['priority'] = 268435476;
+        $routes[1]['controller'] = \stdClass::class;
 
+        // delete route
+        unset($routes[2]);
+
+        // add route
+        $routes[] = ['status' => 1, 'priority' => 0x10000000 | 80, 'methods' => 'ANY', 'path' => '/backend/foo', 'controller' => \stdClass::class];
+
+        // expected queries
         $queries = [
             [
-                'UPDATE fusio_routes SET priority = :priority WHERE id = :id',
-                ['priority' => 268435511, 'id' => 2],
+                'UPDATE fusio_routes SET priority = :priority, controller = :controller WHERE id = :id',
+                ['priority' => 268435476, 'controller' => \stdClass::class, 'id' => 2],
             ],
             [
                 'INSERT INTO fusio_routes (status, priority, methods, path, controller) VALUES (?, ?, ?, ?, ?)',
-                [1, 268435476, 'ANY', '/backend/schema', Backend\Api\Schema\Collection::class],
+                [1, 268435536, 'ANY', '/backend/foo', \stdClass::class],
             ],
             [
                 'INSERT INTO fusio_scope_routes (scope_id, route_id, allow, methods) VALUES (?, ?, ?, ?)',
@@ -63,7 +72,7 @@ class MigrationUtilTest extends ControllerDbTestCase
             ]
         ];
 
-        MigrationUtil::syncRoutes($this->connection, function($sql, $params) use ($queries){
+        MigrationUtil::syncRoutes($this->connection, $routes, function($sql, $params) use ($queries){
             static $index = 0;
             list($expectSql, $expectParams) = $queries[$index];
 

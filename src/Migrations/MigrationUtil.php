@@ -37,15 +37,15 @@ class MigrationUtil
      * defined in the new installation class
      * 
      * @param \Doctrine\DBAL\Connection $connection
+     * @param array $routes
      * @param \Closure $callback
      */
-    public static function syncRoutes(Connection $connection, \Closure $callback)
+    public static function syncRoutes(Connection $connection, array $routes, \Closure $callback)
     {
-        $data   = NewInstallation::getData();
         $scopes = [];
         $maxId  = (int) $connection->fetchColumn('SELECT MAX(id) AS max_id FROM fusio_routes');
 
-        foreach ($data['fusio_routes'] as $row) {
+        foreach ($routes as $row) {
             $route = $connection->fetchAssoc('SELECT id, status, priority, methods, controller FROM fusio_routes WHERE path = :path', [
                 'path' => $row['path']
             ]);
@@ -114,8 +114,7 @@ class MigrationUtil
      */
     public static function updateRow($tableName, array $row, array $existing, array $columns, \Closure $callback)
     {
-        $sql = 'UPDATE ' . $tableName . ' SET ';
-
+        $parts  = [];
         $params = [];
         foreach ($columns as $column) {
             if (!isset($row[$column])) {
@@ -127,13 +126,13 @@ class MigrationUtil
             }
 
             if ($row[$column] != $existing[$column]) {
-                $sql.= $column . ' = :' . $column;
+                $parts[] = $column . ' = :' . $column;
                 $params[$column] = $row[$column];
             }
         }
 
         if (!empty($params)) {
-            $sql.= ' WHERE id = :id';
+            $sql = 'UPDATE ' . $tableName . ' SET ' . implode(', ', $parts). ' WHERE id = :id';
             $params['id'] = $existing['id'];
 
             $callback($sql, $params);

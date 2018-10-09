@@ -7,6 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Migrations\MigrationUtil;
+use Fusio\Impl\Migrations\NewInstallation;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -77,7 +78,8 @@ class Version20180904200851 extends AbstractMigration
         }
 
         // sync routes
-        MigrationUtil::syncRoutes($this->connection, function($sql, $params){
+        $data = NewInstallation::getData();
+        MigrationUtil::syncRoutes($this->connection, $data['fusio_routes'], function($sql, $params){
             $this->addSql($sql, $params);
         });
     }
