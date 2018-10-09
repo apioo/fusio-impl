@@ -128,7 +128,7 @@ class MigrationUtil
 
             if ($row[$column] != $existing[$column]) {
                 $sql.= $column . ' = :' . $column;
-                $params[$column] = $column;
+                $params[$column] = $row[$column];
             }
         }
 
