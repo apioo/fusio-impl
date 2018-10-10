@@ -185,11 +185,18 @@ class RegisterCommand extends Command
                     try {
                         $this->connection->beginTransaction();
 
-                        $this->installer->install($instructions, $basePath);
+                        $result = $this->installer->install($instructions, $basePath);
 
                         $this->connection->commit();
 
-                        $output->writeln('Registration successful');
+                        $output->writeln('Registration successful!');
+                        $output->writeln('');
+
+                        $logs = $result->getLogs();
+                        foreach ($logs as $message) {
+                            $output->writeln('- ' . $message);
+                        }
+
                         return 0;
                     } catch (\Throwable $e) {
                         $this->connection->rollback();

@@ -103,10 +103,10 @@ class ImportCommand extends Command
             $this->connection->commit();
 
             $output->writeln('Import successful!');
-            $output->writeln('The following actions were done:');
             $output->writeln('');
 
-            foreach ($result as $message) {
+            $logs = $result->getLogs();
+            foreach ($logs as $message) {
                 $output->writeln('- ' . $message);
             }
 
