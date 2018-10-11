@@ -273,6 +273,7 @@ class Transaction
         $transaction->setStatus($result['status']);
         $transaction->setProvider($result['provider']);
         $transaction->setTransactionId($result['transaction_id']);
+        $transaction->setRemoteId($result['remote_id']);
         $transaction->setAmount($result['amount']);
         $transaction->setReturnUrl($result['return_url']);
 
