@@ -127,6 +127,13 @@ JSON;
         $expect = <<<'JSON'
 {
     "id": 1,
+    "plan": {
+        "id": 1,
+        "name": "Plan A",
+        "description": "",
+        "price": 39.99,
+        "points": 500
+    },
     "status": 1,
     "provider": "paypal",
     "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",

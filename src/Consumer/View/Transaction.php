@@ -23,6 +23,7 @@ namespace Fusio\Impl\Consumer\View;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -72,6 +73,13 @@ class Transaction extends ViewAbstract
 
         $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'getOneBy'], [$condition], [
             'id' => 'id',
+            'plan' => $this->doEntity([$this->getTable(Plan::class), 'getEntity'], [$userId, new Reference('plan_id')], [
+                'id' => 'id',
+                'name' => 'name',
+                'description' => 'description',
+                'price' => 'price',
+                'points' => 'points',
+            ]),
             'status' => 'status',
             'provider' => 'provider',
             'transactionId' => 'transaction_id',
