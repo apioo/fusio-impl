@@ -84,7 +84,7 @@ class User extends TableAbstract
      */
     public function payPoints($userId, $points)
     {
-        $this->connection->executeUpdate('UPDATE fusio_user SET points = points - :points WHERE id = :id', [
+        $this->connection->executeUpdate('UPDATE fusio_user SET points = COALESCE(points, 0) - :points WHERE id = :id', [
             'id' => $userId,
             'points' => $points,
         ]);
@@ -96,7 +96,7 @@ class User extends TableAbstract
      */
     public function creditPoints($userId, $points)
     {
-        $this->connection->executeUpdate('UPDATE fusio_user SET points = points + :points WHERE id = :id', [
+        $this->connection->executeUpdate('UPDATE fusio_user SET points = COALESCE(points, 0) + :points WHERE id = :id', [
             'id' => $userId,
             'points' => $points,
         ]);
