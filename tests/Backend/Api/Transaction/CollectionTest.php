@@ -67,6 +67,29 @@ class CollectionTest extends ControllerDbTestCase
                     "count": {
                         "type": "integer"
                     },
+                    "from": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "to": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "planId": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "appId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "provider": {
+                        "type": "string"
+                    },
                     "search": {
                         "type": "string"
                     }
