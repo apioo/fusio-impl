@@ -318,8 +318,8 @@ class Transaction
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
 
         $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($baseUrl . 'consumer/plan/payment/execute/' . $transaction->getTransactionId());
-        $redirectUrls->setCancelUrl($baseUrl . 'consumer/plan/payment/execute/' . $transaction->getTransactionId());
+        $redirectUrls->setReturnUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
+        $redirectUrls->setCancelUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
 
         return $redirectUrls;
     }
