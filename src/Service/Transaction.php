@@ -26,8 +26,9 @@ use Fusio\Engine\Model\Product;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Model\Transaction as TransactionModel;
 use Fusio\Engine\Model\TransactionInterface;
+use Fusio\Engine\Parameters;
+use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
-use Fusio\Engine\Payment\RedirectUrls;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\Transaction\ExecutedEvent;
 use Fusio\Impl\Event\Transaction\PreparedEvent;
@@ -161,7 +162,7 @@ class Transaction
                 $connection,
                 $product,
                 $transaction,
-                $this->buildRedirectUrls($transaction)
+                $this->buildPrepareContext($transaction)
             );
 
             // update transaction
@@ -203,7 +204,7 @@ class Transaction
             $product = $this->createProduct($transaction->getPlanId());
 
             // execute transaction
-            $provider->execute($connection, $product, $transaction, $parameters);
+            $provider->execute($connection, $product, $transaction, new Parameters($parameters));
 
             // update transaction
             $this->updateTransaction($product, $transaction);
@@ -312,17 +313,18 @@ class Transaction
 
     /**
      * @param \Fusio\Engine\Model\TransactionInterface $transaction
-     * @return \Fusio\Engine\Payment\RedirectUrls
+     * @return \Fusio\Engine\Payment\PrepareContext
      */
-    private function buildRedirectUrls(TransactionInterface $transaction)
+    private function buildPrepareContext(TransactionInterface $transaction)
     {
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
 
-        $redirectUrls = new RedirectUrls();
-        $redirectUrls->setReturnUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
-        $redirectUrls->setCancelUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
+        $context = new PrepareContext();
+        $context->setReturnUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
+        $context->setCancelUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
+        $context->setCurrency($this->config->get('fusio_payment_currency'));
 
-        return $redirectUrls;
+        return $context;
     }
 
     /**
