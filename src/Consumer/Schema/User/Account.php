@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Consumer\Schema\User;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
@@ -35,8 +36,15 @@ class Account extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('Consumer User Account');
+        $sb->integer('id');
+        $sb->integer('status');
         $sb->string('name');
         $sb->string('email');
+        $sb->integer('points');
+        $sb->arrayType('scopes')
+            ->setItems(Property::getString());
+        $sb->string('date')
+            ->setFormat('date-time');
 
         return $sb->getProperty();
     }

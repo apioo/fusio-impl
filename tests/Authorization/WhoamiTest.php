@@ -54,6 +54,7 @@ class WhoamiTest extends ControllerDbTestCase
     "status": 1,
     "name": "Administrator",
     "email": "admin@localhost.com",
+    "points": 0,
     "scopes": [
         "backend",
         "consumer",

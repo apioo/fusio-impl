@@ -61,11 +61,30 @@ class AccountTest extends ControllerDbTestCase
                 "type": "object",
                 "title": "Consumer User Account",
                 "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
                     "name": {
                         "type": "string"
                     },
                     "email": {
                         "type": "string"
+                    },
+                    "points": {
+                        "type": "integer"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 }
             },
@@ -141,6 +160,7 @@ JSON;
     "status": 1,
     "name": "Administrator",
     "email": "admin@localhost.com",
+    "points": 0,
     "scopes": [
         "backend",
         "consumer",

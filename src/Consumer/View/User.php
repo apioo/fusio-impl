@@ -41,6 +41,7 @@ class User extends ViewAbstract
             'status' => 'status',
             'name' => 'name',
             'email' => 'email',
+            'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'date' => $this->fieldDateTime('date'),
         ]);
