@@ -49,6 +49,13 @@ class Collection extends BackendApiAbstract
             ->setSecurity(Authorization::BACKEND, ['backend'])
             ->addQueryParameter('startIndex', Property::getInteger())
             ->addQueryParameter('count', Property::getInteger())
+            ->addQueryParameter('from', Property::getDateTime())
+            ->addQueryParameter('to', Property::getDateTime())
+            ->addQueryParameter('planId', Property::getInteger())
+            ->addQueryParameter('userId', Property::getInteger())
+            ->addQueryParameter('appId', Property::getInteger())
+            ->addQueryParameter('status', Property::getInteger())
+            ->addQueryParameter('provider', Property::getString())
             ->addQueryParameter('search', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Collection::class))
         );
@@ -64,7 +71,7 @@ class Collection extends BackendApiAbstract
         return $this->tableManager->getTable(View\Transaction::class)->getCollection(
             (int) $context->getParameter('startIndex'),
             (int) $context->getParameter('count'),
-            $context->getParameter('search')
+            View\Transaction\QueryFilter::create($context->getParameters())
         );
     }
 }

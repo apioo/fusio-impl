@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Impl\Backend\View\Transaction\QueryFilter;
 use Fusio\Impl\Table;
-use PSX\Sql\Condition;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection($startIndex = null, $count = null, QueryFilter $filter)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -45,11 +45,7 @@ class Transaction extends ViewAbstract
             $count = 16;
         }
 
-        $condition = new Condition();
-
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
+        $condition = $filter->getCondition();
 
         $definition = [
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
