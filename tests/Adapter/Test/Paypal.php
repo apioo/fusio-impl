@@ -23,8 +23,9 @@ namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Model\TransactionInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
-use Fusio\Engine\Payment\RedirectUrls;
 
 /**
  * Paypal
@@ -35,7 +36,7 @@ use Fusio\Engine\Payment\RedirectUrls;
  */
 class Paypal implements ProviderInterface
 {
-    public function prepare($connection, ProductInterface $product, TransactionInterface $transaction, RedirectUrls $redirectUrls)
+    public function prepare($connection, ProductInterface $product, TransactionInterface $transaction, PrepareContext $context)
     {
         // here the payment provider needs to create the transaction using the
         // remote connection and return an approval url
@@ -45,7 +46,7 @@ class Paypal implements ProviderInterface
         return $approvalUrl;
     }
 
-    public function execute($connection, ProductInterface $product, TransactionInterface $transaction, array $parameters)
+    public function execute($connection, ProductInterface $product, TransactionInterface $transaction, ParametersInterface $parameters)
     {
         // here the payment provider needs to execute the transaction and set
         // the transaction to approved
