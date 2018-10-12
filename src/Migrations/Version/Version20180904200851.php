@@ -78,9 +78,8 @@ class Version20180904200851 extends AbstractMigration
             $schema->dropTable('fusio_connection_class');
         }
 
-        // sync routes
-        $data = NewInstallation::getData();
-        MigrationUtil::syncRoutes($this->connection, $data['fusio_routes'], function($sql, $params){
+        // sync
+        MigrationUtil::sync($this->connection, function($sql, $params){
             $this->addSql($sql, $params);
         });
     }

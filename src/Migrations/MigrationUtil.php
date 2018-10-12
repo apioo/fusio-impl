@@ -33,8 +33,39 @@ use Doctrine\DBAL\Connection;
 class MigrationUtil
 {
     /**
-     * Helper method to sync all routes of an existing system with the routes
-     * defined in the new installation class
+     * @param Connection $connection
+     * @param \Closure $callback
+     */
+    public static function sync(Connection $connection, \Closure $callback)
+    {
+        $data = NewInstallation::getData();
+
+        self::syncConfig($connection, $data['fusio_config'], $callback);
+        self::syncRoutes($connection, $data['fusio_routes'], $callback);
+    }
+
+    /**
+     * Helper method to sync all config values of an existing system
+     *
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param array $configs
+     * @param \Closure $callback
+     */
+    public static function syncConfig(Connection $connection, array $configs, \Closure $callback)
+    {
+        foreach ($configs as $row) {
+            $config = $connection->fetchAssoc('SELECT id, name FROM fusio_config WHERE name = :name', [
+                'name' => $row['name']
+            ]);
+
+            if (empty($config)) {
+                self::insertRow('fusio_config', $row, $callback);
+            }
+        }
+    }
+
+    /**
+     * Helper method to sync all routes of an existing system
      * 
      * @param \Doctrine\DBAL\Connection $connection
      * @param array $routes
