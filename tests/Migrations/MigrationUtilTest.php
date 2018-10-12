@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Migration;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Migrations\MigrationUtil;
 use Fusio\Impl\Migrations\NewInstallation;
+use Fusio\Impl\Table\Config;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -39,6 +40,33 @@ class MigrationUtilTest extends ControllerDbTestCase
     public function getDataSet()
     {
         return Fixture::getDataSet();
+    }
+
+    public function testSyncConfig()
+    {
+        $data   = NewInstallation::getData();
+        $config = $data['fusio_config'];
+
+        // add config
+        $config[] = ['name' => 'foo_bar', 'type' => Config::FORM_STRING, 'description' => 'foobar', 'value' => 'test'];
+
+        // expected queries
+        $queries = [
+            [
+                'INSERT INTO fusio_config (name, type, description, value) VALUES (?, ?, ?, ?)',
+                ['foo_bar', Config::FORM_STRING, 'foobar', 'test'],
+            ],
+        ];
+
+        MigrationUtil::syncConfig($this->connection, $config, function($sql, $params) use ($queries){
+            static $index = 0;
+            list($expectSql, $expectParams) = $queries[$index];
+
+            $this->assertEquals($expectSql, $sql);
+            $this->assertEquals($expectParams, $params);
+
+            $index++;
+        });
     }
 
     public function testSyncRoute()
