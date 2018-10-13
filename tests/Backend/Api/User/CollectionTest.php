@@ -89,6 +89,9 @@ class CollectionTest extends ControllerDbTestCase
                     "email": {
                         "type": "string"
                     },
+                    "points": {
+                        "type": "integer"
+                    },
                     "scopes": {
                         "type": "array",
                         "items": {

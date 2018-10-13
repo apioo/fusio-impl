@@ -337,6 +337,7 @@
       "status": 1,
       "name": "Developer",
       "email": "developer@localhost.com",
+      "points": 10,
       "scopes": [
         "backend",
         "consumer",
@@ -361,6 +362,7 @@
       "status": 0,
       "name": "Consumer",
       "email": "consumer@localhost.com",
+      "points": 100,
       "scopes": [
         "consumer",
         "authorization",

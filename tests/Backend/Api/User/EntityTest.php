@@ -148,6 +148,9 @@ class EntityTest extends ControllerDbTestCase
                     "email": {
                         "type": "string"
                     },
+                    "points": {
+                        "type": "integer"
+                    },
                     "scopes": {
                         "type": "array",
                         "items": {
@@ -247,7 +250,7 @@ JSON;
     "status": 0,
     "name": "Consumer",
     "email": "consumer@localhost.com",
-    "date": "[datetime]",
+    "points": 100,
     "scopes": [
         "consumer",
         "authorization",
@@ -279,7 +282,8 @@ JSON;
             "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
             "date": "[datetime]"
         }
-    ]
+    ],
+    "date": "[datetime]"
 }
 JSON;
 

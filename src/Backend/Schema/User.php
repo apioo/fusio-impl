@@ -43,6 +43,7 @@ class User extends SchemaAbstract
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);
         $sb->string('email');
+        $sb->integer('points');
         $sb->arrayType('scopes')
             ->setItems(Property::getString());
         $sb->arrayType('apps')
