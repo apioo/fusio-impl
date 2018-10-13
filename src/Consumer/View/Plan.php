@@ -50,7 +50,7 @@ class Plan extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'getAll'], [$startIndex, $count, 'price', Sql::SORT_ASC, $condition], [
                 'id' => 'id',
                 'name' => 'name',
                 'description' => 'description',
