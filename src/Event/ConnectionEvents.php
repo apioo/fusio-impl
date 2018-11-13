@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class ConnectionEvents
 {
     const CREATE = 'connection.create';
-    const UPDATE = 'connection.update';
     const DELETE = 'connection.delete';
+    const UPDATE = 'connection.update';
 }

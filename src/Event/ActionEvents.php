@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class ActionEvents
 {
     const CREATE = 'action.create';
-    const UPDATE = 'action.update';
     const DELETE = 'action.delete';
+    const UPDATE = 'action.update';
 }

@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class SchemaEvents
 {
     const CREATE = 'schema.create';
-    const UPDATE = 'schema.update';
     const DELETE = 'schema.delete';
+    const UPDATE = 'schema.update';
 }

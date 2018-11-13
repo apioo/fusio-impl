@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class CronjobEvents
 {
     const CREATE = 'cronjob.create';
-    const UPDATE = 'cronjob.update';
     const DELETE = 'cronjob.delete';
+    const UPDATE = 'cronjob.update';
 }

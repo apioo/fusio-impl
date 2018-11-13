@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class ScopeEvents
 {
     const CREATE = 'scope.create';
-    const UPDATE = 'scope.update';
     const DELETE = 'scope.delete';
+    const UPDATE = 'scope.update';
 }

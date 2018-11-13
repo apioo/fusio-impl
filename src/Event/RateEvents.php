@@ -31,6 +31,6 @@ namespace Fusio\Impl\Event;
 class RateEvents
 {
     const CREATE = 'rate.create';
-    const UPDATE = 'rate.update';
     const DELETE = 'rate.delete';
+    const UPDATE = 'rate.update';
 }
