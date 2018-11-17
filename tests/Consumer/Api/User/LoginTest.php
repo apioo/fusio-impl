@@ -160,13 +160,13 @@ JSON;
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->sub);
+        $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
         $this->assertEquals('consumer,authorization,foo,bar', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
@@ -201,13 +201,13 @@ JSON;
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->sub);
+        $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
         $this->assertEquals('foo,bar', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);

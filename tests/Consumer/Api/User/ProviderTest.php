@@ -300,9 +300,9 @@ JSON;
         $this->assertEquals(405, $response->getStatusCode(), $body);
     }
     
-    protected function assertToken($token, $provider)
+    protected function assertToken($jwt, $provider)
     {
-        $token = JWT::decode($token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+        $token = JWT::decode($jwt, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
 
         $this->assertNotEmpty($token->sub);
         $this->assertNotEmpty($token->iat);
@@ -316,13 +316,13 @@ JSON;
             ->where('token = :token')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $token->sub]);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $jwt]);
 
         $this->assertEquals(2, $row['app_id']);
         $this->assertEquals(6, $row['user_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
-        $this->assertEquals($row['token'], $token->sub);
+        $this->assertEquals('eb9a3e30-9c88-5525-b229-903113421324', $token->sub);
         $this->assertEquals('authorization,consumer', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
