@@ -51,6 +51,7 @@ class Method extends SchemaAbstract
         $sb->integer('response');
         $sb->objectType('responses', $responses);
         $sb->integer('action');
+        $sb->integer('costs');
 
         return $sb->getProperty();
     }
