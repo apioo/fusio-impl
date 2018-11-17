@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\Config;
 
 /**
  * Login
@@ -39,18 +40,20 @@ class Login
     protected $userService;
 
     /**
-     * @var \Fusio\Impl\Service\User\TokenIssuer
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $tokenIssuer;
+    protected $appTokenService;
 
     /**
      * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
+     * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Service\User $userService, TokenIssuer $tokenIssuer)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, Config $config)
     {
-        $this->userService = $userService;
-        $this->tokenIssuer = $tokenIssuer;
+        $this->userService     = $userService;
+        $this->appTokenService = $appTokenService;
+        $this->config          = $config;
     }
 
     public function login($name, $password, array $scopes = null)
@@ -63,7 +66,19 @@ class Login
                 $scopes = $this->userService->getValidScopes($userId, $scopes);
             }
 
-            return $this->tokenIssuer->createToken($userId, $scopes);
+            // @TODO this is the consumer app. Probably we need a better way to
+            // define this id
+            $appId = 2;
+
+            $token = $this->appTokenService->generateAccessToken(
+                $appId,
+                $userId,
+                $scopes,
+                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+                new \DateInterval($this->config->get('fusio_expire_consumer'))
+            );
+
+            return $token->getAccessToken();
         }
 
         return null;

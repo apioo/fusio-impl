@@ -22,9 +22,11 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Engine\Model\User;
+use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
+use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -42,9 +44,9 @@ class Provider
     protected $userService;
 
     /**
-     * @var \Fusio\Impl\Service\Config
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $configService;
+    protected $appTokenService;
 
     /**
      * @var \Fusio\Impl\Provider\ProviderFactory
@@ -52,22 +54,22 @@ class Provider
     protected $providerFactory;
 
     /**
-     * @var \Fusio\Impl\Service\User\TokenIssuer
+     * @var \PSX\Framework\Config\Config
      */
-    protected $tokenIssuer;
+    protected $config;
 
     /**
      * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\Config $configService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
-     * @param \Fusio\Impl\Service\User\TokenIssuer $tokenIssuer
+     * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Service\User $userService, Service\Config $configService, ProviderFactory $providerFactory, TokenIssuer $tokenIssuer)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Config $config)
     {
         $this->userService     = $userService;
-        $this->configService   = $configService;
+        $this->appTokenService = $appTokenService;
         $this->providerFactory = $providerFactory;
-        $this->tokenIssuer     = $tokenIssuer;
+        $this->config          = $config;
     }
 
     /**
@@ -80,11 +82,13 @@ class Provider
      */
     public function provider($providerName, $code, $clientId, $redirectUri)
     {
+        /** @var ProviderInterface $provider */
         $provider = $this->providerFactory->factory($providerName);
         $user     = $provider->requestUser($code, $clientId, $redirectUri);
 
         if ($user instanceof User) {
             $scopes = $this->userService->getDefaultScopes();
+
             $userId = $this->userService->createRemote(
                 $provider->getId(),
                 $user->getId(),
@@ -94,7 +98,19 @@ class Provider
                 UserContext::newAnonymousContext()
             );
 
-            return $this->tokenIssuer->createToken($userId, $scopes);
+            // @TODO this is the consumer app. Probably we need a better way to
+            // define this id
+            $appId = 2;
+
+            $token = $this->appTokenService->generateAccessToken(
+                $appId,
+                $userId,
+                $scopes,
+                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+                new \DateInterval($this->config->get('fusio_expire_consumer'))
+            );
+
+            return $token->getAccessToken();
         } else {
             throw new StatusCode\BadRequestException('Could not request user information');
         }

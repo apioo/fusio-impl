@@ -39,9 +39,9 @@ use PSX\Uri\Url;
 class Authorize
 {
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
@@ -54,6 +54,11 @@ class Authorize
     protected $appCodeService;
 
     /**
+     * @var \Fusio\Impl\Table\App
+     */
+    protected $appTable;
+
+    /**
      * @var \Fusio\Impl\Table\User\Grant
      */
     protected $userGrantTable;
@@ -64,19 +69,21 @@ class Authorize
     protected $config;
 
     /**
-     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\App\Code $appCodeService
+     * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\User\Grant $userGrantTable
      * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Service\App $appService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\User\Grant $userGrantTable, Config $config)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Config $config)
     {
-        $this->appService     = $appService;
-        $this->scopeService   = $scopeService;
-        $this->appCodeService = $appCodeService;
-        $this->userGrantTable = $userGrantTable;
-        $this->config         = $config;
+        $this->appTokenService = $appTokenService;
+        $this->scopeService    = $scopeService;
+        $this->appCodeService  = $appCodeService;
+        $this->appTable        = $appTable;
+        $this->userGrantTable  = $userGrantTable;
+        $this->config          = $config;
     }
 
     public function authorize($userId, $responseType, $clientId, $redirectUri, $scope, $state, $allow)
@@ -87,10 +94,7 @@ class Authorize
         }
 
         // client id
-        $app = $this->appService->getByAppKey($clientId);
-        if (empty($app)) {
-            throw new StatusCode\BadRequestException('Unknown client id');
-        }
+        $app = $this->getApp($clientId);
 
         // redirect uri
         if (!empty($redirectUri)) {
@@ -140,7 +144,7 @@ class Authorize
                 }
 
                 // generate access token
-                $accessToken = $this->appService->generateAccessToken(
+                $accessToken = $this->appTokenService->generateAccessToken(
                     $app['id'],
                     $userId,
                     $scopes,
@@ -238,5 +242,19 @@ class Authorize
                 'date'    => new \DateTime(),
             ]);
         }
+    }
+    
+    private function getApp($clientId)
+    {
+        $condition = new Condition();
+        $condition->equals('app_key', $clientId);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $app = $this->appTable->getOneBy($condition);
+        if (empty($app)) {
+            throw new StatusCode\BadRequestException('Unknown client id');
+        }
+
+        return $app;
     }
 }
