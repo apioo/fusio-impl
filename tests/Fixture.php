@@ -90,7 +90,7 @@ class Fixture
                 ['user_id' => 2, 'status' => 3, 'name' => 'Deactivated', 'url' => 'http://google.com', 'parameters' => '', 'app_key' => 'f46af464-f7eb-4d04-8661-13063a30826b', 'app_secret' => '17b882987298831a3af9c852f9cd0219d349ba61fcf3fc655ac0f07eece951f9', 'date' => '2015-02-22 22:19:07'],
             ],
             'fusio_app_code' => [
-                ['app_id' => 3, 'user_id' => 3, 'code' => 'GHMbtJi0ZuAUnp80', 'redirect_uri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
+                ['app_id' => 3, 'user_id' => 4, 'code' => 'GHMbtJi0ZuAUnp80', 'redirect_uri' => '', 'scope' => 'authorization', 'date' => date('Y-m-d H:i:s')],
             ],
             'fusio_audit' => [
                 ['app_id' => 1, 'user_id' => 1, 'ref_id' => 1, 'event' => 'app.update', 'ip' => '127.0.0.1', 'message' => 'Created schema foo', 'content' => null, 'date' => '2015-06-25 22:49:09'],

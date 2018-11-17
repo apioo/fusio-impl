@@ -69,7 +69,7 @@ class AuthorizationCodeTest extends ControllerDbTestCase
         $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, refresh, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(3, $row['app_id']);
-        $this->assertEquals(3, $row['user_id']);
+        $this->assertEquals(4, $row['user_id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($data['refresh_token'], $row['refresh']);
