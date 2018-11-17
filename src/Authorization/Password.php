@@ -22,12 +22,13 @@
 namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Service;
-use Fusio\Impl\Table\User;
+use Fusio\Impl\Table;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
 use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\Sql\Condition;
 
 /**
  * Password
@@ -39,9 +40,9 @@ use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 class Password extends PasswordAbstract
 {
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
@@ -54,22 +55,29 @@ class Password extends PasswordAbstract
     protected $userService;
 
     /**
+     * @var \Fusio\Impl\Table\App
+     */
+    protected $appTable;
+
+    /**
      * @var string
      */
     protected $expireApp;
 
     /**
-     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Table\App $appTable
      * @param string $expireApp
      */
-    public function __construct(Service\App $appService, Service\Scope $scopeService, Service\User $userService, $expireApp)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, $expireApp)
     {
-        $this->appService   = $appService;
-        $this->scopeService = $scopeService;
-        $this->userService  = $userService;
-        $this->expireApp    = $expireApp;
+        $this->appTokenService = $appTokenService;
+        $this->scopeService    = $scopeService;
+        $this->userService     = $userService;
+        $this->appTable        = $appTable;
+        $this->expireApp       = $expireApp;
     }
 
     /**
@@ -81,17 +89,19 @@ class Password extends PasswordAbstract
      */
     protected function generate(Credentials $credentials, $username, $password, $scope)
     {
-        $app = $this->appService->getByAppKeyAndSecret(
-            $credentials->getClientId(),
-            $credentials->getClientSecret()
-        );
+        $condition = new Condition();
+        $condition->equals('app_key', $credentials->getClientId());
+        $condition->equals('app_secret', $credentials->getClientSecret());
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $app = $this->appTable->getOneBy($condition);
 
         if (!empty($app)) {
             // check user
             $userId = $this->userService->authenticateUser(
                 $username,
                 $password,
-                [User::STATUS_ADMINISTRATOR, User::STATUS_CONSUMER]
+                [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]
             );
 
             // check whether user is valid
@@ -106,7 +116,7 @@ class Password extends PasswordAbstract
             }
 
             // generate access token
-            return $this->appService->generateAccessToken(
+            return $this->appTokenService->generateAccessToken(
                 $app['id'],
                 $userId,
                 $scopes,

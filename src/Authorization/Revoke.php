@@ -47,9 +47,9 @@ class Revoke extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @inheritdoc
@@ -77,7 +77,7 @@ class Revoke extends SchemaApiAbstract
 
             // the token must be assigned to the user
             if (!empty($row) && $row['app_id'] == $this->context->getAppId() && $row['user_id'] == $this->context->getUserId()) {
-                $this->appService->removeToken($row['app_id'], $row['id'], $this->context->getUserContext());
+                $this->appTokenService->removeToken($row['app_id'], $row['id'], $this->context->getUserContext());
 
                 return [
                     'success' => true

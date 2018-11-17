@@ -22,9 +22,11 @@
 namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\RefreshTokenAbstract;
 use PSX\Oauth2\Authorization\Exception\ServerErrorException;
+use PSX\Sql\Condition;
 
 /**
  * RefreshToken
@@ -36,9 +38,14 @@ use PSX\Oauth2\Authorization\Exception\ServerErrorException;
 class RefreshToken extends RefreshTokenAbstract
 {
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
+
+    /**
+     * @var \Fusio\Impl\Table\App
+     */
+    protected $appTable;
 
     /**
      * @var string
@@ -51,33 +58,37 @@ class RefreshToken extends RefreshTokenAbstract
     protected $expireRefresh;
 
     /**
-     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
+     * @param \Fusio\Impl\Table\App $appTable
      * @param string $expireApp
      * @param string $expireRefresh
      */
-    public function __construct(Service\App $appService, $expireApp, $expireRefresh = null)
+    public function __construct(Service\App\Token $appTokenService, Table\App $appTable, $expireApp, $expireRefresh = null)
     {
-        $this->appService    = $appService;
-        $this->expireApp     = $expireApp;
-        $this->expireRefresh = $expireRefresh ?: 'P3D';
+        $this->appTokenService = $appTokenService;
+        $this->appTable        = $appTable;
+        $this->expireApp       = $expireApp;
+        $this->expireRefresh   = $expireRefresh ?: 'P3D';
     }
 
     /**
      * @param \PSX\Framework\Oauth2\Credentials $credentials
      * @param string $refreshToken
      * @param string $scope
-     * @return \PSX\Oauth2\AccessToken|\PSX\Record\Record
+     * @return \PSX\Oauth2\AccessToken
      */
     protected function generate(Credentials $credentials, $refreshToken, $scope)
     {
-        $app = $this->appService->getByAppKeyAndSecret(
-            $credentials->getClientId(),
-            $credentials->getClientSecret()
-        );
+        $condition = new Condition();
+        $condition->equals('app_key', $credentials->getClientId());
+        $condition->equals('app_secret', $credentials->getClientSecret());
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $app = $this->appTable->getOneBy($condition);
 
         if (!empty($app)) {
             // refresh access token
-            return $this->appService->refreshAccessToken(
+            return $this->appTokenService->refreshAccessToken(
                 $app['id'],
                 $refreshToken,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',

@@ -44,9 +44,9 @@ class ClientCredentials extends ClientCredentialsAbstract
     protected $userService;
 
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @var string
@@ -55,14 +55,14 @@ class ClientCredentials extends ClientCredentialsAbstract
 
     /**
      * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param string $expireBackend
      */
-    public function __construct(Service\User $userService, Service\App $appService, $expireBackend)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, $expireBackend)
     {
-        $this->userService   = $userService;
-        $this->appService    = $appService;
-        $this->expireBackend = $expireBackend;
+        $this->userService     = $userService;
+        $this->appTokenService = $appTokenService;
+        $this->expireBackend   = $expireBackend;
     }
 
     /**
@@ -88,7 +88,7 @@ class ClientCredentials extends ClientCredentialsAbstract
             }
 
             // generate access token
-            return $this->appService->generateAccessToken(
+            return $this->appTokenService->generateAccessToken(
                 App::BACKEND,
                 $userId,
                 $scopes,

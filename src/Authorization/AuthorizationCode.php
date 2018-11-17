@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
@@ -48,9 +49,14 @@ class AuthorizationCode extends AuthorizationCodeAbstract
     protected $scopeService;
 
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
+
+    /**
+     * @var \Fusio\Impl\Table\App\Code
+     */
+    protected $appCodeTable;
 
     /**
      * @var string
@@ -59,16 +65,18 @@ class AuthorizationCode extends AuthorizationCodeAbstract
 
     /**
      * @param \Fusio\Impl\Service\App\Code $appCodeService
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Table\App\Code $appCodeTable
      * @param string $expireApp
      */
-    public function __construct(Service\App\Code $appCodeService, Service\Scope $scopeService, Service\App $appService, $expireApp)
+    public function __construct(Service\App\Code $appCodeService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, $expireApp)
     {
-        $this->appCodeService = $appCodeService;
-        $this->scopeService   = $scopeService;
-        $this->appService     = $appService;
-        $this->expireApp      = $expireApp;
+        $this->appCodeService  = $appCodeService;
+        $this->appTokenService = $appTokenService;
+        $this->scopeService    = $scopeService;
+        $this->appCodeTable    = $appCodeTable;
+        $this->expireApp       = $expireApp;
     }
 
     /**
@@ -80,7 +88,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
      */
     protected function generate(Credentials $credentials, $code, $redirectUri, $clientId)
     {
-        $code = $this->appCodeService->getCode(
+        $code = $this->appCodeTable->getCodeByRequest(
             $credentials->getClientId(),
             $credentials->getClientSecret(),
             $code,
@@ -101,7 +109,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             }
 
             // generate access token
-            return $this->appService->generateAccessToken(
+            return $this->appTokenService->generateAccessToken(
                 $code['app_id'],
                 $code['user_id'],
                 $scopes,
