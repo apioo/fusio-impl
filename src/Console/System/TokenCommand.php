@@ -41,9 +41,9 @@ use Symfony\Component\Yaml\Yaml;
 class TokenCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
@@ -60,14 +60,20 @@ class TokenCommand extends Command
      */
     protected $userTable;
 
-    public function __construct(Service\App $appService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)
+    /**
+     * @param \Fusio\Impl\Service\App\Token $appTokenService
+     * @param \Fusio\Impl\Service\Scope $scopeService
+     * @param \Fusio\Impl\Table\App $appTable
+     * @param \Fusio\Impl\Table\User $userTable
+     */
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, Table\User $userTable)
     {
         parent::__construct();
 
-        $this->appService   = $appService;
-        $this->scopeService = $scopeService;
-        $this->appTable     = $appTable;
-        $this->userTable    = $userTable;
+        $this->appTokenService = $appTokenService;
+        $this->scopeService    = $scopeService;
+        $this->appTable        = $appTable;
+        $this->userTable       = $userTable;
     }
 
     protected function configure()
@@ -112,7 +118,7 @@ class TokenCommand extends Command
         $ip     = '127.0.0.1';
         $expire = new DateInterval($expire);
 
-        $accessToken = $this->appService->generateAccessToken($app['id'], $user['id'], $scopes, $ip, $expire);
+        $accessToken = $this->appTokenService->generateAccessToken($app['id'], $user['id'], $scopes, $ip, $expire);
 
         $response = [
             'App'     => $app['name'],
