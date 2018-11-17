@@ -155,6 +155,9 @@ class OpenAPITest extends ControllerDbTestCase
                     },
                     "action": {
                         "type": "string"
+                    },
+                    "costs": {
+                        "type": "integer"
                     }
                 }
             },

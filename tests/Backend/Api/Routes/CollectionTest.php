@@ -167,6 +167,9 @@ class CollectionTest extends ControllerDbTestCase
                     },
                     "action": {
                         "type": "integer"
+                    },
+                    "costs": {
+                        "type": "integer"
                     }
                 }
             },

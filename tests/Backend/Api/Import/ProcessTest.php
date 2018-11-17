@@ -147,6 +147,9 @@ class ProcessTest extends ControllerDbTestCase
                     },
                     "action": {
                         "type": "string"
+                    },
+                    "costs": {
+                        "type": "integer"
                     }
                 }
             },

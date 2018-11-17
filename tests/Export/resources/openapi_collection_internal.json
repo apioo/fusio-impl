@@ -5971,6 +5971,9 @@
           },
           "action": {
             "type": "integer"
+          },
+          "costs": {
+            "type": "integer"
           }
         }
       },
