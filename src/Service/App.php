@@ -21,19 +21,15 @@
 
 namespace Fusio\Impl\Service;
 
-use DateInterval;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
-use Fusio\Impl\Event\App\GeneratedTokenEvent;
-use Fusio\Impl\Event\App\RemovedTokenEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Event\AppEvents;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
-use PSX\Oauth2\AccessToken;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -92,25 +88,6 @@ class App
         $this->appTokenTable   = $appTokenTable;
         $this->tokenSecret     = $tokenSecret;
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-    public function getByAppKey($appKey)
-    {
-        $condition = new Condition();
-        $condition->equals('app_key', $appKey);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        return $this->appTable->getOneBy($condition);
-    }
-
-    public function getByAppKeyAndSecret($appKey, $appSecret)
-    {
-        $condition = new Condition();
-        $condition->equals('app_key', $appKey);
-        $condition->equals('app_secret', $appSecret);
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        return $this->appTable->getOneBy($condition);
     }
 
     public function create($userId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)
@@ -241,133 +218,7 @@ class App
         $this->eventDispatcher->dispatch(AppEvents::DELETE, new DeletedEvent($appId, $app, $context));
     }
 
-    public function removeToken($appId, $tokenId, UserContext $context)
-    {
-        $app = $this->appTable->get($appId);
-
-        if (empty($app)) {
-            throw new StatusCode\NotFoundException('Invalid app');
-        }
-
-        $this->appTokenTable->removeTokenFromApp($appId, $tokenId);
-
-        $this->eventDispatcher->dispatch(AppEvents::REMOVE_TOKEN, new RemovedTokenEvent($appId, $tokenId, $context));
-    }
-
-    public function generateAccessToken($appId, $userId, array $scopes, $ip, DateInterval $expire)
-    {
-        if (empty($scopes)) {
-            throw new StatusCode\BadRequestException('No scopes provided');
-        }
-
-        $expires = new \DateTime();
-        $expires->add($expire);
-        $now     = new \DateTime();
-
-        // generate access token
-        $accessToken  = TokenGenerator::generateToken();
-        $refreshToken = TokenGenerator::generateToken();
-
-        $this->appTokenTable->create([
-            'app_id'  => $appId,
-            'user_id' => $userId,
-            'status'  => Table\App\Token::STATUS_ACTIVE,
-            'token'   => $accessToken,
-            'refresh' => $refreshToken,
-            'scope'   => implode(',', $scopes),
-            'ip'      => $ip,
-            'expire'  => $expires,
-            'date'    => $now,
-        ]);
-
-        $tokenId = $this->appTokenTable->getLastInsertId();
-
-        // dispatch event
-        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
-            $appId, 
-            $tokenId, 
-            $accessToken, 
-            $scopes, 
-            $expires, 
-            $now, 
-            new UserContext($appId, $userId, $ip)
-        ));
-
-        $token = new AccessToken();
-        $token->setAccessToken($accessToken);
-        $token->setTokenType('bearer');
-        $token->setExpiresIn($expires->getTimestamp());
-        $token->setRefreshToken($refreshToken);
-        $token->setScope(implode(',', $scopes));
-
-        return $token;
-    }
-
-    public function refreshAccessToken($appId, $refreshToken, $ip, DateInterval $expireApp, DateInterval $expireRefresh)
-    {
-        $token = $this->appTokenTable->getTokenByRefreshToken($appId, $refreshToken);
-        $now   = new \DateTime();
-
-        if (empty($token)) {
-            throw new StatusCode\BadRequestException('Invalid refresh token');
-        }
-
-        // check expire date
-        $date = $token['date'];
-        if ($date instanceof \DateTime) {
-            $expires = clone $date;
-            $expires->add($expireRefresh);
-
-            if ($expires < $now) {
-                throw new StatusCode\BadRequestException('Refresh token is expired');
-            }
-        }
-
-        // check whether the refresh was requested from the same app
-        if ($token['app_id'] != $appId) {
-            throw new StatusCode\BadRequestException('Token was requested from another app');
-        }
-
-        $scopes  = explode(',', $token['scope']);
-        $expires = new \DateTime();
-        $expires->add($expireApp);
-
-        // generate access token
-        $accessToken  = TokenGenerator::generateToken();
-        $refreshToken = TokenGenerator::generateToken();
-
-        $this->appTokenTable->update([
-            'id'      => $token['id'],
-            'status'  => Table\App\Token::STATUS_ACTIVE,
-            'token'   => $accessToken,
-            'refresh' => $refreshToken,
-            'ip'      => $ip,
-            'expire'  => $expires,
-            'date'    => $now,
-        ]);
-
-        // dispatch event
-        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
-            $appId,
-            $token['id'],
-            $accessToken,
-            $scopes,
-            $expires,
-            $now,
-            new UserContext($appId, $token['user_id'], $ip)
-        ));
-
-        $token = new AccessToken();
-        $token->setAccessToken($accessToken);
-        $token->setTokenType('bearer');
-        $token->setExpiresIn($expires->getTimestamp());
-        $token->setRefreshToken($refreshToken);
-        $token->setScope(implode(',', $scopes));
-
-        return $token;
-    }
-
-    public function insertScopes($appId, $scopes)
+    protected function insertScopes($appId, $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);
