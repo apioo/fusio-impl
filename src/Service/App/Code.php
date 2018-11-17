@@ -46,11 +46,6 @@ class Code
         $this->appCodeTable = $appCodeTable;
     }
 
-    public function getCode($appKey, $appSecret, $code, $redirectUri)
-    {
-        return $this->appCodeTable->getCodeByRequest($appKey, $appSecret, $code, $redirectUri);
-    }
-
     public function generateCode($appId, $userId, $redirectUri, array $scopes)
     {
         $code = TokenGenerator::generateCode();
