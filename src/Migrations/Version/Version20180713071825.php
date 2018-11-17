@@ -70,7 +70,6 @@ class Version20180713071825 extends AbstractMigration
             $appTokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
             $appTokenTable->addColumn('date', 'datetime');
             $appTokenTable->setPrimaryKey(['id']);
-            $appTokenTable->addUniqueIndex(['token']);
         }
 
         if (!$schema->hasTable('fusio_app_code')) {

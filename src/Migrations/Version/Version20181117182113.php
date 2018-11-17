@@ -17,8 +17,11 @@ class Version20181117182113 extends AbstractMigration
     {
         $appTokenTable = $schema->getTable('fusio_app_token');
 
-        // increase token size
-        $appTokenTable->changeColumn('token', ['length' => 512]);
+        if ($appTokenTable->hasIndex('token')) {
+            // increase token size and remove index
+            $appTokenTable->changeColumn('token', ['length' => 512]);
+            $appTokenTable->dropIndex('token');
+        }
     }
 
     /**
