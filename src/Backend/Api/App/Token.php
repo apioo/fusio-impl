@@ -38,9 +38,9 @@ class Token extends BackendApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\App
+     * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appService;
+    protected $appTokenService;
 
     /**
      * @inheritdoc
@@ -62,7 +62,7 @@ class Token extends BackendApiAbstract
      */
     protected function doDelete($record, HttpContextInterface $context)
     {
-        $this->appService->removeToken(
+        $this->appTokenService->removeToken(
             $context->getUriFragment('app_id'),
             $context->getUriFragment('token_id'),
             $this->context->getUserContext()
