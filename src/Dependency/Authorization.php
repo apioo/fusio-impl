@@ -24,6 +24,7 @@ namespace Fusio\Impl\Dependency;
 use Fusio\Impl\Authorization as ApiAuthorization;
 use Fusio\Impl\Backend\Authorization as BackendAuthorization;
 use Fusio\Impl\Consumer\Authorization as ConsumerAuthorization;
+use Fusio\Impl\Table;
 use PSX\Framework\Oauth2\GrantTypeFactory;
 
 /**
@@ -43,28 +44,31 @@ trait Authorization
         $factory = new GrantTypeFactory();
 
         $factory->add(new ApiAuthorization\Password(
-            $this->get('app_service'),
+            $this->get('app_token_service'),
             $this->get('scope_service'),
             $this->get('user_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('config')->get('fusio_expire_app')
         ));
 
         $factory->add(new ApiAuthorization\AuthorizationCode(
             $this->get('app_code_service'),
+            $this->get('app_token_service'),
             $this->get('scope_service'),
-            $this->get('app_service'),
+            $this->get('table_manager')->getTable(Table\App\Code::class),
             $this->get('config')->get('fusio_expire_app')
         ));
 
         $factory->add(new ApiAuthorization\ClientCredentials(
-            $this->get('app_service'),
+            $this->get('app_token_service'),
             $this->get('scope_service'),
-            $this->get('user_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('config')->get('fusio_expire_app')
         ));
 
         $factory->add(new ApiAuthorization\RefreshToken(
-            $this->get('app_service'),
+            $this->get('app_token_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('config')->get('fusio_expire_app'),
             $this->get('config')->get('fusio_expire_refresh')
         ));
@@ -81,7 +85,7 @@ trait Authorization
 
         $factory->add(new BackendAuthorization\ClientCredentials(
             $this->get('user_service'),
-            $this->get('app_service'),
+            $this->get('app_token_service'),
             $this->get('config')->get('fusio_expire_backend')
         ));
 
@@ -97,7 +101,7 @@ trait Authorization
 
         $factory->add(new ConsumerAuthorization\ClientCredentials(
             $this->get('user_service'),
-            $this->get('app_service'),
+            $this->get('app_token_service'),
             $this->get('config')->get('fusio_expire_consumer')
         ));
 

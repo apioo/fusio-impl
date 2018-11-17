@@ -171,6 +171,20 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\App\Token
+     */
+    public function getAppTokenService()
+    {
+        return new Service\App\Token(
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('table_manager')->getTable(Table\App\Token::class),
+            $this->get('config'),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Config
      */
     public function getConfigService()
@@ -425,25 +439,14 @@ trait Services
     }
 
     /**
-     * @return \Fusio\Impl\Service\User\TokenIssuer
-     */
-    public function getUserTokenIssuerService()
-    {
-        return new Service\User\TokenIssuer(
-            $this->get('app_service'),
-            $this->get('table_manager')->getTable(Table\User::class),
-            $this->get('config')
-        );
-    }
-
-    /**
      * @return \Fusio\Impl\Service\User\Login
      */
     public function getUserLoginService()
     {
         return new Service\User\Login(
             $this->get('user_service'),
-            $this->get('user_token_issuer_service')
+            $this->get('app_token_service'),
+            $this->get('config')
         );
     }
 
@@ -454,9 +457,9 @@ trait Services
     {
         return new Service\User\Provider(
             $this->get('user_service'),
-            $this->get('config_service'),
+            $this->get('app_token_service'),
             new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_USER, User\ProviderInterface::class),
-            $this->get('user_token_issuer_service')
+            $this->get('config')
         );
     }
 
@@ -480,9 +483,10 @@ trait Services
     public function getUserAuthorizeService()
     {
         return new Service\User\Authorize(
-            $this->get('app_service'),
+            $this->get('app_token_service'),
             $this->get('scope_service'),
             $this->get('app_code_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\User\Grant::class),
             $this->get('config')
         );
