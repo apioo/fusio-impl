@@ -243,12 +243,11 @@ class Token
      */
     private function generateJWT($user, DateTime $now, DateTime $expires)
     {
-        $iss = $this->config->get('psx_url');
+        $baseUrl = $this->config->get('psx_url');
 
         $payload = [
-            'iss'  => $iss,
-            'sub'  => Uuid::nameBased($iss . '-' . $user['id']),
-            'aud'  => $iss,
+            'iss'  => $baseUrl,
+            'sub'  => Uuid::nameBased($baseUrl . '-' . $user['id']),
             'iat'  => $now->getTimestamp(),
             'exp'  => $expires->getTimestamp(),
             'name' => $user['name']
