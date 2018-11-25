@@ -52,7 +52,7 @@ class MailerTest extends ControllerDbTestCase
         $sender->expects($this->once())
             ->method('accept')
             ->with($this->callback(function($dispatcher){
-                $this->assertInstanceOf(\Swift_NullTransport::class, $dispatcher);
+                $this->assertInstanceOf(\Swift_Mailer::class, $dispatcher);
 
                 return true;
             }))
@@ -61,7 +61,7 @@ class MailerTest extends ControllerDbTestCase
         $sender->expects($this->once())
             ->method('send')
             ->with($this->callback(function($dispatcher){
-                $this->assertInstanceOf(\Swift_NullTransport::class, $dispatcher);
+                $this->assertInstanceOf(\Swift_Mailer::class, $dispatcher);
 
                 return true;
             }), $this->callback(function($message){

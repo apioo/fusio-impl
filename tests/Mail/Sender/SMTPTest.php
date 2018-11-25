@@ -37,13 +37,14 @@ class SMTPTest extends \PHPUnit_Framework_TestCase
     {
         $sender = new SMTP();
 
-        $this->assertTrue($sender->accept(\Swift_NullTransport::newInstance()));
+        $this->assertTrue($sender->accept(new \Swift_Mailer(new \Swift_NullTransport())));
         $this->assertFalse($sender->accept(new \stdClass()));
     }
 
     public function testSend()
     {
-        $dispatcher = $this->getMockBuilder(\Swift_NullTransport::class)
+        $dispatcher = $this->getMockBuilder(\Swift_Mailer::class)
+            ->setConstructorArgs([new \Swift_NullTransport()])
             ->setMethods(['send'])
             ->getMock();
 
