@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Service\User;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Service\Config;
@@ -172,8 +173,9 @@ class RegisterTest extends ControllerDbTestCase
     {
         /** @var Config $config */
         $config = Environment::getService('config_service');
-        $config->update(19, $reCaptchaSecret, UserContext::newAnonymousContext()); // recaptcha_secret
-        $config->update(23, $userApproval, UserContext::newAnonymousContext()); // user_approval
+
+        $config->update($this->getConfigId('recaptcha_secret'), $reCaptchaSecret, UserContext::newAnonymousContext()); 
+        $config->update($this->getConfigId('user_approval'), $userApproval, UserContext::newAnonymousContext()); 
 
         return $config;
     }
@@ -198,5 +200,18 @@ class RegisterTest extends ControllerDbTestCase
         }
 
         return $mailer;
+    }
+
+    /**
+     * @param string $name
+     * @return integer
+     */
+    private function getConfigId($name)
+    {
+        /** @var Connection $connection */
+        $connection = Environment::getService('connection');
+        $configId   = $connection->fetchColumn('SELECT id FROM fusio_config WHERE name = :name', ['name' => $name]);
+
+        return $configId;
     }
 }
