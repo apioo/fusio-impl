@@ -21,12 +21,9 @@
 
 namespace Fusio\Impl\Service\Event;
 
-use Fusio\Impl\Base;
+use Fusio\Impl\Service\Connection\Resolver;
 use Fusio\Impl\Table;
 use PSX\Http\Client\ClientInterface;
-use PSX\Http\Request;
-use PSX\Uri\Url;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Executor
@@ -60,24 +57,31 @@ class Executor
     protected $httpClient;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Fusio\Impl\Service\Connection\Resolver
      */
-    protected $eventDispatcher;
+    protected $resolver;
+
+    /**
+     * @var \Fusio\Impl\Service\Event\SenderFactory
+     */
+    protected $senderFactory;
 
     /**
      * @param \Fusio\Impl\Table\Event\Trigger $triggerTable
      * @param \Fusio\Impl\Table\Event\Subscription $subscriptionTable
      * @param \Fusio\Impl\Table\Event\Response $responseTable
      * @param \PSX\Http\Client\ClientInterface $httpClient
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Fusio\Impl\Service\Connection\Resolver $resolver
+     * @param \Fusio\Impl\Service\Event\SenderFactory $senderFactory
      */
-    public function __construct(Table\Event\Trigger $triggerTable, Table\Event\Subscription $subscriptionTable, Table\Event\Response $responseTable, ClientInterface $httpClient, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Event\Trigger $triggerTable, Table\Event\Subscription $subscriptionTable, Table\Event\Response $responseTable, ClientInterface $httpClient, Resolver $resolver, SenderFactory $senderFactory)
     {
-        $this->triggerTable      = $triggerTable;
-        $this->subscriptionTable = $subscriptionTable;
-        $this->responseTable     = $responseTable;
-        $this->httpClient        = $httpClient;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->triggerTable       = $triggerTable;
+        $this->subscriptionTable  = $subscriptionTable;
+        $this->responseTable      = $responseTable;
+        $this->httpClient         = $httpClient;
+        $this->resolver           = $resolver;
+        $this->senderFactory      = $senderFactory;
     }
 
     public function execute()
@@ -111,19 +115,22 @@ class Executor
 
     private function executePendingResponses()
     {
-        $responses = $this->responseTable->getAllPending();
+        $dispatcher = $this->resolver->get(Resolver::TYPE_DISPATCHER);
+        if (!$dispatcher) {
+            $dispatcher = $this->httpClient;
+        }
 
+        $sender = $this->senderFactory->factory($dispatcher);
+        if (!$sender instanceof SenderInterface) {
+            throw new \RuntimeException('Could not find sender for dispatcher');
+        }
+
+        $responses = $this->responseTable->getAllPending();
         foreach ($responses as $resp) {
             try {
-                $headers = [
-                    'Content-Type' => 'application/json',
-                    'User-Agent'   => Base::getUserAgent(),
-                ];
+                $code = $sender->send($dispatcher, new Message($resp['endpoint'], $resp['payload']));
 
-                $request  = new Request(new Url($resp['endpoint']), 'POST', $headers, $resp['payload']);
-                $response = $this->httpClient->request($request);
-
-                $this->responseTable->setResponse($resp['id'], $response->getStatusCode(), $resp['attempts'], self::MAX_ATTEMPTS);
+                $this->responseTable->setResponse($resp['id'], $code, $resp['attempts'], self::MAX_ATTEMPTS);
             } catch (\Exception $e) {
                 $this->responseTable->setResponse($resp['id'], null, $resp['attempts'], self::MAX_ATTEMPTS);
             }
