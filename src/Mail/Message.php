@@ -22,19 +22,77 @@
 namespace Fusio\Impl\Mail;
 
 /**
- * MailerInterface
+ * Message
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface MailerInterface
+class Message
 {
     /**
-     * @param string $subject
-     * @param array $to
-     * @param string $body
-     * @return void
+     * @var string
      */
-    public function send($subject, array $to, $body);
+    private $from;
+
+    /**
+     * @var array
+     */
+    private $to;
+
+    /**
+     * @var string
+     */
+    private $subject;
+
+    /**
+     * @var string
+     */
+    private $body;
+
+    /**
+     * @param string $from
+     * @param array $to
+     * @param string $subject
+     * @param string $body
+     */
+    public function __construct($from, array $to, $subject, $body)
+    {
+        $this->from    = $from;
+        $this->to      = $to;
+        $this->subject = $subject;
+        $this->body    = $body;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
 }

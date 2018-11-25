@@ -19,22 +19,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Mail;
+namespace Fusio\Impl\Mail\Sender;
+
+use Fusio\Impl\Mail\Message;
+use Fusio\Impl\Mail\SenderInterface;
 
 /**
- * MailerInterface
+ * SMTP
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface MailerInterface
+class SMTP implements SenderInterface
 {
     /**
-     * @param string $subject
-     * @param array $to
-     * @param string $body
+     * @inheritdoc
+     */
+    public function accept($dispatcher)
+    {
+        return $dispatcher instanceof \Swift_Transport;
+    }
+
+    /**
+     * @param \Swift_Transport $dispatcher
+     * @param \Fusio\Impl\Mail\Message $message
      * @return void
      */
-    public function send($subject, array $to, $body);
+    public function send($dispatcher, Message $message)
+    {
+        $msg = \Swift_Message::newInstance();
+        $msg->setFrom([$message->getFrom()]);
+        $msg->setTo($message->getTo());
+        $msg->setSubject($message->getSubject());
+        $msg->setBody($message->getBody());
+
+        $dispatcher->send($msg);
+    }
 }

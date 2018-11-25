@@ -21,20 +21,49 @@
 
 namespace Fusio\Impl\Mail;
 
+use PSX\Data\Util\PriorityQueue;
+
 /**
- * MailerInterface
+ * SenderFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface MailerInterface
+class SenderFactory
 {
     /**
-     * @param string $subject
-     * @param array $to
-     * @param string $body
-     * @return void
+     * @var \Fusio\Impl\Mail\SenderInterface[]
      */
-    public function send($subject, array $to, $body);
+    private $senders;
+
+    public function __construct()
+    {
+        $this->senders = new PriorityQueue();
+    }
+
+    /**
+     * @param \Fusio\Impl\Mail\SenderInterface $sender
+     * @param integer $priority
+     */
+    public function add(SenderInterface $sender, $priority)
+    {
+        $this->senders->insert($sender, $priority);
+    }
+
+    /**
+     * @param mixed $dispatcher
+     * @return \Fusio\Impl\Mail\SenderInterface|null
+     */
+    public function factory($dispatcher)
+    {
+        foreach ($this->senders as $sender) {
+            if ($sender->accept($dispatcher)) {
+                return $sender;
+            }
+        }
+
+        return null;
+    }
 }
+

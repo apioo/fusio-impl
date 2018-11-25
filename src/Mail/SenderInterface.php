@@ -22,19 +22,28 @@
 namespace Fusio\Impl\Mail;
 
 /**
- * MailerInterface
+ * SenderInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface MailerInterface
+interface SenderInterface
 {
     /**
-     * @param string $subject
-     * @param array $to
-     * @param string $body
+     * Returns whether the sender supports this dispatcher instance
+     *
+     * @param object $dispatcher
+     * @return boolean
+     */
+    public function accept($dispatcher);
+
+    /**
+     * Sends a message using the dispatcher
+     *
+     * @param object $dispatcher
+     * @param Message $message
      * @return void
      */
-    public function send($subject, array $to, $body);
+    public function send($dispatcher, Message $message);
 }

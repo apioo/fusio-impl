@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Mail;
 
 use Fusio\Impl\Service\Config;
+use Fusio\Impl\Service\Connection\Resolver;
 use Psr\Log\LoggerInterface;
+use PSX\Framework\Config\Config as FrameworkConfig;
 
 /**
  * Mailer
@@ -36,6 +38,21 @@ class Mailer implements MailerInterface
     /**
      * @var \Fusio\Impl\Service\Config
      */
+    protected $configService;
+
+    /**
+     * @var \Fusio\Impl\Service\Connection\Resolver
+     */
+    protected $resolver;
+
+    /**
+     * @var \Fusio\Impl\Mail\SenderFactory
+     */
+    protected $senderFactory;
+
+    /**
+     * @var \PSX\Framework\Config\Config
+     */
     protected $config;
 
     /**
@@ -44,35 +61,94 @@ class Mailer implements MailerInterface
     protected $logger;
 
     /**
-     * @var \Swift_Transport
+     * @param \Fusio\Impl\Service\Config $configService
+     * @param \Fusio\Impl\Service\Connection\Resolver $resolver
+     * @param \Fusio\Impl\Mail\SenderFactory $senderFactory
+     * @param \PSX\Framework\Config\Config $config
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    protected $mailer;
-
-    public function __construct(Config $config, LoggerInterface $logger, \Swift_Transport $transport)
+    public function __construct(Config $configService, Resolver $resolver, SenderFactory $senderFactory, FrameworkConfig $config, LoggerInterface $logger)
     {
-        $this->config = $config;
-        $this->logger = $logger;
-        $this->mailer = $transport;
+        $this->configService = $configService;
+        $this->resolver      = $resolver;
+        $this->senderFactory = $senderFactory;
+        $this->config        = $config;
+        $this->logger        = $logger;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function send($subject, array $to, $body)
     {
-        $message = \Swift_Message::newInstance();
-        $message->setSubject($subject);
-
-        $sender = $this->config->getValue('mail_sender');
-        if (!empty($sender)) {
-            $message->setFrom([$sender]);
+        $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
+        if (!$dispatcher) {
+            $dispatcher = $this->createTransport();
         }
 
-        $message->setTo($to);
-        $message->setBody($body);
+        $from = $this->configService->getValue('mail_sender');
+        if (empty($from)) {
+            $from = 'registration@' . $this->getHostname();
+        }
+
+        $sender = $this->senderFactory->factory($dispatcher);
+        if (!$sender instanceof SenderInterface) {
+            throw new \RuntimeException('Could not find sender for dispatcher');
+        }
+
+        $sender->send($dispatcher, new Message(
+            $from,
+            $to,
+            $subject,
+            $body
+        ));
 
         $this->logger->info('Send registration mail', [
+            'to'      => implode(', ', $to),
             'subject' => $subject,
             'body'    => $body,
         ]);
+    }
 
-        $this->mailer->send($message);
+    /**
+     * Tries to determine the current hostname 
+     * 
+     * @return string
+     */
+    private function getHostname()
+    {
+        $host = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
+        if (empty($host)) {
+            $host = $_SERVER['SERVER_NAME'];
+        }
+
+        return $host;
+    }
+
+    /**
+     * @return \Swift_Transport
+     */
+    private function createTransport()
+    {
+        if ($this->config['psx_debug'] === false) {
+            $mailer = $this->config['fusio_mailer'];
+            if (!empty($mailer)) {
+                if ($mailer['transport'] == 'smtp') {
+                    $transport = \Swift_SmtpTransport::newInstance($mailer['host'], $mailer['port']);
+                    if (isset($mailer['encryption'])) {
+                        $transport->setEncryption($mailer['encryption']);
+                    }
+                    if (isset($mailer['username'])) {
+                        $transport->setUsername($mailer['username']);
+                        $transport->setPassword($mailer['password']);
+                    }
+                    return $transport;
+                }
+            }
+
+            return \Swift_MailTransport::newInstance();
+        } else {
+            return \Swift_NullTransport::newInstance();
+        }
     }
 }
