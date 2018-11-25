@@ -83,7 +83,7 @@ class Mailer implements MailerInterface
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
         if (!$dispatcher) {
-            $dispatcher = $this->createTransport();
+            $dispatcher = \Swift_Mailer::newInstance($this->createTransport());
         }
 
         $from = $this->configService->getValue('mail_sender');

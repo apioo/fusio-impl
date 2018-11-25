@@ -38,11 +38,11 @@ class SMTP implements SenderInterface
      */
     public function accept($dispatcher)
     {
-        return $dispatcher instanceof \Swift_Transport;
+        return $dispatcher instanceof \Swift_Mailer;
     }
 
     /**
-     * @param \Swift_Transport $dispatcher
+     * @param \Swift_Mailer $dispatcher
      * @param \Fusio\Impl\Mail\Message $message
      * @return void
      */
