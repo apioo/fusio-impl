@@ -290,7 +290,8 @@ class ExecutorTest extends ControllerDbTestCase
             Environment::getService('table_manager')->getTable(Table\Event\Subscription::class),
             Environment::getService('table_manager')->getTable(Table\Event\Response::class),
             $httpClient,
-            Environment::getService('event_dispatcher')
+            Environment::getService('connection_resolver_service'),
+            Environment::getService('event_sender_factory_service')
         );
     }
 
