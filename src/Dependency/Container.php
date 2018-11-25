@@ -34,8 +34,7 @@ use Fusio\Impl\Loader\Filter\InternalFilter;
 use Fusio\Impl\Loader\GeneratorFactory;
 use Fusio\Impl\Loader\ResourceListing;
 use Fusio\Impl\Loader\RoutingParser;
-use Fusio\Impl\Mail\Mailer;
-use Fusio\Impl\Mail\TransportFactory;
+use Fusio\Impl\Mail;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderWriter;
 use Fusio\Impl\Table;
@@ -152,11 +151,24 @@ class Container extends DefaultContainer
      */
     public function getMailer()
     {
-        return new Mailer(
+        return new Mail\Mailer(
             $this->get('config_service'),
-            $this->get('logger'),
-            TransportFactory::createTransport($this->get('config'))
+            $this->get('connection_resolver_service'),
+            $this->get('mailer_sender_factory'),
+            $this->get('config'),
+            $this->get('logger')
         );
+    }
+
+    /**
+     * @return \Fusio\Impl\Mail\SenderFactory
+     */
+    public function getMailerSenderFactory()
+    {
+        $factory = new Mail\SenderFactory();
+        $factory->add(new Mail\Sender\SMTP(), 8);
+
+        return $factory;
     }
 
     /**

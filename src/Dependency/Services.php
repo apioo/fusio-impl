@@ -209,6 +209,17 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Connection\Resolver
+     */
+    public function getConnectionResolverService()
+    {
+        return new Service\Connection\Resolver(
+            $this->get('connector'),
+            $this->get('config_service')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Cronjob
      */
     public function getCronjobService()
@@ -244,8 +255,23 @@ trait Services
             $this->get('table_manager')->getTable(Table\Event\Subscription::class),
             $this->get('table_manager')->getTable(Table\Event\Response::class),
             $this->get('http_client'),
-            $this->get('event_dispatcher')
+            $this->get('connection_resolver_service'),
+            $this->get('event_sender_factory_service')
         );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Event\SenderFactory
+     */
+    public function getEventSenderFactoryService()
+    {
+        $factory = new Service\Event\SenderFactory();
+        $factory->add(new Service\Event\Sender\HTTP(), 24);
+        $factory->add(new Service\Event\Sender\Guzzle(), 16);
+        $factory->add(new Service\Event\Sender\AMQP('fusio_events', 'fusio_events_exchange'), 8);
+        $factory->add(new Service\Event\Sender\Noop(), -32);
+
+        return $factory;
     }
 
     /**
