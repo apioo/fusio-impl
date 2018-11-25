@@ -166,7 +166,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 23,
+    "totalResults": 25,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -329,7 +329,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 23,
+    "totalResults": 25,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -482,13 +482,27 @@ JSON;
         },
         {
             "id": 23,
+            "type": 1,
+            "name": "system_dispatcher",
+            "description": "Optional a HTTP or message queue connection which is used to dispatch events",
+            "value": ""
+        },
+        {
+            "id": 22,
+            "type": 1,
+            "name": "system_mailer",
+            "description": "Optional a SMTP connection which is used as mailer",
+            "value": ""
+        },
+        {
+            "id": 25,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 22,
+            "id": 24,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
