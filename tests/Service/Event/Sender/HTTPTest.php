@@ -63,8 +63,9 @@ class HTTPTest extends \PHPUnit_Framework_TestCase
         $message = new Message('http://google.com', \json_encode(['foo' => 'bar']));
 
         $sender = new HTTP();
-        $sender->send($dispatcher, $message);
+        $code   = $sender->send($dispatcher, $message);
 
+        $this->assertEquals(200, $code);
         $this->assertEquals(1, count($container));
         $this->assertEquals('POST', $container[0]['request']->getMethod());
         $this->assertEquals('http://google.com', $container[0]['request']->getUri());
