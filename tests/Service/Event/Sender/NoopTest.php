@@ -22,13 +22,7 @@
 namespace Fusio\Impl\Tests\Mail\Sender;
 
 use Fusio\Impl\Service\Event\Message;
-use Fusio\Impl\Service\Event\Sender\HTTP;
 use Fusio\Impl\Service\Event\Sender\Noop;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
-use PSX\Http\Client\Client;
 
 /**
  * NoopTest
