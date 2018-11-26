@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Mail\Sender;
+namespace Fusio\Impl\Tests\Service\Event\Sender;
 
 use Fusio\Impl\Service\Event\Message;
 use Fusio\Impl\Service\Event\Sender\Guzzle;
