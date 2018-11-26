@@ -268,7 +268,6 @@ trait Services
         $factory = new Service\Event\SenderFactory();
         $factory->add(new Service\Event\Sender\HTTP(), 24);
         $factory->add(new Service\Event\Sender\Guzzle(), 16);
-        $factory->add(new Service\Event\Sender\AMQP('fusio_events', 'fusio_events_exchange'), 8);
         $factory->add(new Service\Event\Sender\Noop(), -32);
 
         return $factory;
