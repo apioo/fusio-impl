@@ -140,11 +140,10 @@ class Authentication implements FilterInterface
 
     protected function getToken($token, $requestMethod)
     {
-        // if a user sends a JWT which was obtained through the consumer login
-        // we extract the access token
+        // @TODO in the latest version we only issue JWTs so in the next major
+        // release we can always decode the token
         if (strpos($token, '.') !== false) {
-            $jwt   = JWT::decode($token, $this->projectKey, ['HS256']);
-            $token = isset($jwt->sub) ? $jwt->sub : null;
+            JWT::decode($token, $this->projectKey, ['HS256']);
         }
 
         $now = new \DateTime();
