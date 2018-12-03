@@ -74,6 +74,31 @@ class AuthenticationTest extends DbTestCase
     }
 
     /**
+     * @expectedException \DomainException
+     */
+    public function testHandleInvalidJWTFormat()
+    {
+        $context  = $this->newContext();
+        $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foo.bar.baz']]);
+        $response = new Response();
+
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setMethods(['handle'])
+            ->getMock();
+
+        $filterChain->expects($this->never())
+            ->method('handle')
+            ->with($this->equalTo($request), $this->equalTo($response));
+
+        $appRepository  = Environment::getService('app_repository');
+        $userRepository = Environment::getService('user_repository');
+        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+
+        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication->handle($request, $response, $filterChain);
+    }
+
+    /**
      * @expectedException \PSX\Http\Exception\UnauthorizedException
      */
     public function testHandleInvalidToken()
