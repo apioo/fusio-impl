@@ -58,8 +58,6 @@ class TokenTest extends ControllerDbTestCase
 
         $jwt = JWT::decode($token->getAccessToken(), $projectKey, ['HS256']);
 
-        // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjEiLCJzdWIiOiJiMjQ5M2VhNC1jOTliLTVjYzktODAwNC00ZmRiZTkwZjY3NGIiLCJpYXQiOjE1NDM4Njc0MDEsImV4cCI6MTU0Mzk1MzgwMSwibmFtZSI6IkFkbWluaXN0cmF0b3IifQ.xqGd4tXG9p1npoHGfULXgCi68MZg7Ruum38ATeTQaus
-        
         $this->assertEquals('http://127.0.0.1', $jwt->iss);
         $this->assertEquals('b2493ea4-c99b-5cc9-8004-4fdbe90f674b', $jwt->sub);
         $this->assertEquals('Administrator', $jwt->name);
