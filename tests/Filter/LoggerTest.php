@@ -41,7 +41,7 @@ use PSX\Uri\Uri;
  */
 class LoggerTest extends DbTestCase
 {
-    public function testLog()
+    public function testHandle()
     {
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
@@ -71,7 +71,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
-    public function testLogLongPath()
+    public function testHandleLongPath()
     {
         $request  = new Request(new Uri('/foo?param=' . str_repeat('a', 1024)), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
@@ -101,7 +101,7 @@ class LoggerTest extends DbTestCase
         $this->assertEquals('', $log['body']);
     }
 
-    public function testLogPost()
+    public function testHandlePost()
     {
         $body     = new StringStream('foobar');
         $request  = new Request(new Uri('/foo'), 'POST', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']], $body);
