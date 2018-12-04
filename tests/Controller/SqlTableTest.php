@@ -247,52 +247,6 @@ JSON;
     /**
      * @dataProvider providerDebugStatus
      */
-    public function testGetAccessTokenJWT($debug)
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', $debug);
-
-        $body = <<<'JSON'
-{
-    "title": "foo",
-    "content": "bar",
-    "date": "2015-07-04T13:03:00Z"
-}
-JSON;
-
-        $key  = Environment::getContainer()->get('config')->get('fusio_project_key');
-        $data = ['sub' => 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'];
-        $jwt  = JWT::encode($data, $key);
-
-        $response = $this->sendRequest('/foo', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer ' . $jwt
-        ), $body);
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": true,
-    "message": "Entry successful created",
-    "id": "3"
-}
-JSON;
-
-        $headers = [
-            'vary' => ['Accept'],
-            'content-type' => ['application/json'],
-            'warning' => ['199 PSX "Resource is in development"'],
-            'x-ratelimit-limit' => ['16'],
-            'x-ratelimit-remaining' => ['16'],
-        ];
-
-        $this->assertEquals(201, $response->getStatusCode(), $body);
-        $this->assertEquals($headers, $response->getHeaders(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    /**
-     * @dataProvider providerDebugStatus
-     */
     public function testRateLimit($debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
