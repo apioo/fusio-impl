@@ -26,7 +26,7 @@ use Fusio\Impl\Migrations\MigrationUtil;
 use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Table\Config;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\DbTestCase;
 
 /**
  * MigrationUtilTest
@@ -35,7 +35,7 @@ use PSX\Framework\Test\ControllerDbTestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MigrationUtilTest extends ControllerDbTestCase
+class MigrationUtilTest extends DbTestCase
 {
     public function getDataSet()
     {
