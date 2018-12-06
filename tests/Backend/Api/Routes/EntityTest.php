@@ -270,7 +270,8 @@ JSON;
                     "responses": {
                         "201": 1
                     },
-                    "action": 3
+                    "action": 3,
+                    "costs": 1
                 }
             }
         }
@@ -338,6 +339,7 @@ JSON;
                         'responses'  => [
                             '200'    => 1
                         ],
+                        'costs'      => 16,
                     ],
                     'POST' => [
                         'active'     => true,
@@ -382,7 +384,7 @@ JSON;
 
         // check methods
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action')
+            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action', 'costs')
             ->from('fusio_routes_method')
             ->where('route_id = :route_id')
             ->orderBy('id', 'ASC')
@@ -401,6 +403,7 @@ JSON;
         $this->assertEquals(2, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
         $this->assertEquals(3, $methods[0]['action']);
+        $this->assertEquals(16, $methods[0]['costs']);
 
         // check responses
         $sql = Environment::getService('connection')->createQueryBuilder()

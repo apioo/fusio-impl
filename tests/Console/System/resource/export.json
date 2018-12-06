@@ -239,7 +239,8 @@
               "responses": {
                 "201": "Passthru"
               },
-              "action": "Sql-Table"
+              "action": "Sql-Table",
+              "costs": 1
             }
           }
         }

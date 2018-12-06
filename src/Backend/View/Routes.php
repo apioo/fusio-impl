@@ -94,7 +94,8 @@ class Routes extends ViewAbstract
                     'code' => 'code',
                     'response' => 'response',
                 ]),
-                'action'  => 'action',
+                'action' => 'action',
+                'costs' => 'costs',
             ], null, function (array $result) {
                 $data = [];
                 foreach ($result as $row) {
@@ -132,6 +133,10 @@ class Routes extends ViewAbstract
 
                     if (!empty($row['action'])) {
                         $method->action = (int) $row['action'];
+                    }
+
+                    if (!empty($row['costs'])) {
+                        $method->costs = (int) $row['costs'];
                     }
 
                     $data[$row['version']]['methods']->{$row['method']} = $method;
