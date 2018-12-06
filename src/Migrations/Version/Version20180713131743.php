@@ -44,10 +44,5 @@ class Version20180713131743 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $inserts = NewInstallation::getData();
-
-        foreach ($inserts as $tableName => $rows) {
-            $this->addSql('DELETE FROM ' . $tableName . ' WHERE 1=1');
-        }
     }
 }

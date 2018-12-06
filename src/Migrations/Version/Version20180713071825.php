@@ -418,7 +418,6 @@ class Version20180713071825 extends AbstractMigration
     public function down(Schema $schema)
     {
         $schema->dropTable('fusio_action');
-        $schema->dropTable('fusio_action_class');
         $schema->dropTable('fusio_app');
         $schema->dropTable('fusio_app_code');
         $schema->dropTable('fusio_app_scope');
@@ -426,7 +425,6 @@ class Version20180713071825 extends AbstractMigration
         $schema->dropTable('fusio_audit');
         $schema->dropTable('fusio_config');
         $schema->dropTable('fusio_connection');
-        $schema->dropTable('fusio_connection_class');
         $schema->dropTable('fusio_cronjob');
         $schema->dropTable('fusio_cronjob_error');
         $schema->dropTable('fusio_event');
