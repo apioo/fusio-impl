@@ -91,6 +91,7 @@ class Logger implements FilterInterface
             throw $e;
         }
 
+        // @TODO use hrtime if we require PHP >= 7.3
         $endTime = microtime();
 
         $this->setExecutionTime($startTime, $endTime);
