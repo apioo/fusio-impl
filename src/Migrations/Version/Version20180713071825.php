@@ -9,6 +9,7 @@ use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Export;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Table;
 
 /**
@@ -417,32 +418,24 @@ class Version20180713071825 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $schema->dropTable('fusio_action');
-        $schema->dropTable('fusio_app');
-        $schema->dropTable('fusio_app_code');
-        $schema->dropTable('fusio_app_scope');
-        $schema->dropTable('fusio_app_token');
-        $schema->dropTable('fusio_audit');
-        $schema->dropTable('fusio_config');
-        $schema->dropTable('fusio_connection');
-        $schema->dropTable('fusio_cronjob');
-        $schema->dropTable('fusio_cronjob_error');
-        $schema->dropTable('fusio_event');
-        $schema->dropTable('fusio_event_response');
-        $schema->dropTable('fusio_event_subscription');
-        $schema->dropTable('fusio_event_trigger');
-        $schema->dropTable('fusio_log');
-        $schema->dropTable('fusio_log_error');
-        $schema->dropTable('fusio_rate');
-        $schema->dropTable('fusio_rate_allocation');
-        $schema->dropTable('fusio_routes');
-        $schema->dropTable('fusio_routes_method');
-        $schema->dropTable('fusio_routes_response');
-        $schema->dropTable('fusio_schema');
-        $schema->dropTable('fusio_scope');
-        $schema->dropTable('fusio_scope_routes');
-        $schema->dropTable('fusio_user');
-        $schema->dropTable('fusio_user_grant');
-        $schema->dropTable('fusio_user_scope');
+        $tableNames = $schema->getTableNames();
+
+        $inserts = array_keys(NewInstallation::getData());
+        $inserts = array_reverse($inserts);
+
+        foreach ($inserts as $tableName) {
+            // check whether table exists
+            $found = false;
+            foreach ($tableNames as $name) {
+                if (strpos($name, $tableName) !== false) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found) {
+                $schema->dropTable($tableName);
+            }
+        }
     }
 }
