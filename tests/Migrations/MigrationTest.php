@@ -22,9 +22,11 @@
 namespace Fusio\Impl\Tests\Migration;
 
 use Fusio\Impl\Backend;
+use Fusio\Impl\Console\Migration\ExecuteCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\DbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -43,8 +45,6 @@ class MigrationTest extends DbTestCase
 
     public function testMigrate()
     {
-        $app = Environment::getService('console');
-
         // keep current schema which we restore at the end
         $schema = $this->connection->getSchemaManager()->createSchema();
 
@@ -56,29 +56,29 @@ class MigrationTest extends DbTestCase
 
         // migrate all versions up
         $versions = $this->getVersions();
-        $command  = $app->find('migration:execute');
+        $command  = $this->newExecuteCommand();
 
         foreach ($versions as $version) {
             $commandTester = new CommandTester($command);
             $commandTester->execute([
-                'command'      => $command->getName(),
-                'version'      => $version,
-                '--up'         => null,
+                'version' => $version,
+                '--up'    => null,
             ], [
-                'interactive'  => false
+                'interactive' => false
             ]);
         }
 
         // migrate all versions down
         $versions = array_reverse($versions);
+        $command  = $this->newExecuteCommand();
+
         foreach ($versions as $version) {
             $commandTester = new CommandTester($command);
             $commandTester->execute([
-                'command'      => $command->getName(),
-                'version'      => $version,
-                '--down'       => null,
+                'version' => $version,
+                '--down'  => null,
             ], [
-                'interactive'  => false
+                'interactive' => false
             ]);
         }
 
@@ -94,6 +94,18 @@ class MigrationTest extends DbTestCase
         foreach ($queries as $query) {
             $this->connection->executeQuery($query);
         }
+    }
+
+    private function newExecuteCommand()
+    {
+        $command = new ExecuteCommand(
+            $this->connection,
+            Environment::getService('connector')
+        );
+
+        $command->setHelperSet(new HelperSet([]));
+
+        return $command;
     }
 
     private function getVersions()
