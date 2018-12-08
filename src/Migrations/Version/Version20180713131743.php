@@ -44,5 +44,24 @@ class Version20180713131743 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
+        $tableNames = $schema->getTableNames();
+
+        $inserts = array_keys(NewInstallation::getData());
+        $inserts = array_reverse($inserts);
+
+        foreach ($inserts as $tableName) {
+            // check whether table exists
+            $found = false;
+            foreach ($tableNames as $name) {
+                if (strpos($name, $tableName) !== false) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if ($found) {
+                $this->addSql('DELETE FROM ' . $tableName . ' WHERE 1=1');
+            }
+        }
     }
 }
