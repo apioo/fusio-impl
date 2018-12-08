@@ -89,8 +89,8 @@ class Version20180904200851 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
+        $schema->dropTable('fusio_transaction');
         $schema->dropTable('fusio_plan_usage');
         $schema->dropTable('fusio_plan');
-        $schema->dropTable('fusio_transaction');
     }
 }
