@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Migration;
 
 use Fusio\Impl\Backend;
 use Fusio\Impl\Console\Migration\ExecuteCommand;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\DbTestCase;
 use PSX\Framework\Test\Environment;
@@ -45,28 +46,7 @@ class MigrationTest extends DbTestCase
 
     public function testMigrate()
     {
-        // keep current schema which we restore at the end
-        $schema = $this->connection->getSchemaManager()->createSchema();
-
-        // drop all tables
-        $tables = $this->connection->getSchemaManager()->listTableNames();
-        foreach ($tables as $tableName) {
-            $this->connection->executeQuery('DROP TABLE ' . $tableName);
-        }
-
-        // migrate all versions up
         $versions = $this->getVersions();
-        $command  = $this->newExecuteCommand();
-
-        foreach ($versions as $version) {
-            $commandTester = new CommandTester($command);
-            $commandTester->execute([
-                'version' => $version,
-                '--up'    => null,
-            ], [
-                'interactive' => false
-            ]);
-        }
 
         // migrate all versions down
         $versions = array_reverse($versions);
@@ -87,13 +67,28 @@ class MigrationTest extends DbTestCase
 
         $this->assertEquals(['fusio_migration_versions'], $tables);
 
-        // revert schema
-        $fromSchema = $this->connection->getSchemaManager()->createSchema();
-        $queries    = $fromSchema->getMigrateToSql($schema, $this->connection->getDatabasePlatform());
+        // migrate all versions up
+        $versions = array_reverse($versions);
+        $command  = $this->newExecuteCommand();
 
-        foreach ($queries as $query) {
-            $this->connection->executeQuery($query);
+        foreach ($versions as $version) {
+            $commandTester = new CommandTester($command);
+            $commandTester->execute([
+                'version' => $version,
+                '--up'    => null,
+            ], [
+                'interactive' => false
+            ]);
         }
+
+        // now we should have basically the tables from the beginning
+        $tables = $this->connection->getSchemaManager()->listTableNames();
+        $expect = array_merge(['fusio_migration_versions', 'app_news'], array_keys(NewInstallation::getData()));
+
+        sort($expect);
+        sort($tables);
+
+        $this->assertEquals($expect, $tables);
     }
 
     private function newExecuteCommand()
