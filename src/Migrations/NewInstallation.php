@@ -63,9 +63,14 @@ class NewInstallation
             'fusio_user' => [
                 ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'points' => null, 'date' => $now->format('Y-m-d H:i:s')],
             ],
+            'fusio_action' => [
+                ['status' => 1, 'name' => 'Welcome', 'class' => Welcome::class, 'engine' => PhpClass::class, 'config' => null, 'date' => $now->format('Y-m-d H:i:s')],
+            ],
             'fusio_app' => [
                 ['user_id' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $backendAppKey, 'app_secret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
                 ['user_id' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $consumerAppKey, 'app_secret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
+            ],
+            'fusio_audit' => [
             ],
             'fusio_config' => [
                 ['name' => 'app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', 'value' => 0],
@@ -106,32 +111,13 @@ class NewInstallation
             'fusio_connection' => [
                 ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => null],
             ],
+            'fusio_cronjob' => [
+            ],
             'fusio_event' => [
             ],
-            'fusio_event_subscription' => [
-            ],
-            'fusio_event_trigger' => [
-            ],
-            'fusio_event_response' => [
-            ],
-            'fusio_audit' => [
+            'fusio_log' => [
             ],
             'fusio_plan' => [
-            ],
-            'fusio_plan_usage' => [
-            ],
-            'fusio_transaction' => [
-            ],
-            'fusio_scope' => [
-                ['name' => 'backend', 'description' => 'Access to the backend API'],
-                ['name' => 'consumer', 'description' => 'Consumer API endpoint'],
-                ['name' => 'authorization', 'description' => 'Authorization API endpoint'],
-            ],
-            'fusio_action' => [
-                ['status' => 1, 'name' => 'Welcome', 'class' => Welcome::class, 'engine' => PhpClass::class, 'config' => null, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_schema' => [
-                ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rate_limit' => 720, 'timespan' => 'PT1H'],
@@ -234,13 +220,18 @@ class NewInstallation
 
                 ['status' => 1, 'priority' => 0,               'methods' => 'ANY', 'path' => '/',                                            'controller' => SchemaApiController::class],
             ],
-            'fusio_routes_method' => [
+            'fusio_schema' => [
+                ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
             ],
-            'fusio_routes_response' => [
+            'fusio_scope' => [
+                ['name' => 'backend', 'description' => 'Access to the backend API'],
+                ['name' => 'consumer', 'description' => 'Consumer API endpoint'],
+                ['name' => 'authorization', 'description' => 'Authorization API endpoint'],
             ],
-            'fusio_rate_allocation' => [
-                ['rate_id' => 1, 'route_id' => null, 'app_id' => null, 'authenticated' => null, 'parameters' => null],
-                ['rate_id' => 2, 'route_id' => null, 'app_id' => null, 'authenticated' => 0, 'parameters' => null],
+            'fusio_transaction' => [
+            ],
+
+            'fusio_app_code' => [
             ],
             'fusio_app_scope' => [
                 ['app_id' => 1, 'scope_id' => 1],
@@ -248,12 +239,36 @@ class NewInstallation
                 ['app_id' => 2, 'scope_id' => 2],
                 ['app_id' => 2, 'scope_id' => 3],
             ],
+            'fusio_app_token' => [
+            ],
+            'fusio_cronjob_error' => [
+            ],
+            'fusio_event_subscription' => [
+            ],
+            'fusio_event_trigger' => [
+            ],
+            'fusio_event_response' => [
+            ],
+            'fusio_log_error' => [
+            ],
+            'fusio_plan_usage' => [
+            ],
+            'fusio_rate_allocation' => [
+                ['rate_id' => 1, 'route_id' => null, 'app_id' => null, 'authenticated' => null, 'parameters' => null],
+                ['rate_id' => 2, 'route_id' => null, 'app_id' => null, 'authenticated' => 0, 'parameters' => null],
+            ],
+            'fusio_routes_method' => [
+            ],
+            'fusio_routes_response' => [
+            ],
+            'fusio_scope_routes' => [
+            ],
+            'fusio_user_grant' => [
+            ],
             'fusio_user_scope' => [
                 ['user_id' => 1, 'scope_id' => 1],
                 ['user_id' => 1, 'scope_id' => 2],
                 ['user_id' => 1, 'scope_id' => 3],
-            ],
-            'fusio_scope_routes' => [
             ],
         ];
 
