@@ -67,8 +67,9 @@ class ListCommand extends Command
     {
         $result = $this->userView->getCollection($input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
         $rows   = [];
+        $entry  = $result->entry ?? [];
 
-        foreach ($result->entry as $row) {
+        foreach ($entry as $row) {
             $rows[] = [$row->id, $row->name];
         }
 
