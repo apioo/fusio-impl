@@ -77,7 +77,7 @@ class ExecutorTest extends ControllerDbTestCase
         $this->assertEquals(500, $container[1]['response']->getStatusCode());
 
         // check database
-        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC, trigger_id ASC, subscription_id ASC');
+        $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY id ASC');
 
         $this->assertEquals(3, count($responses));
         $this->assertEquals(1, $responses[0]['trigger_id']);
