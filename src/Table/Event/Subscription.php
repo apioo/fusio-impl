@@ -56,7 +56,8 @@ class Subscription extends TableAbstract
         $sql = 'SELECT id
                   FROM fusio_event_subscription
                  WHERE event_id = :event_id
-                   AND status = :status';
+                   AND status = :status
+              ORDER BY id ASC';
 
         return $this->connection->fetchAll($sql, [
             'event_id' => $eventId,
