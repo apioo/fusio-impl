@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\View\App\Token;
 
 use Fusio\Impl\Backend\View\App\Token\QueryFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * QueryFilterTest
@@ -30,7 +31,7 @@ use Fusio\Impl\Backend\View\App\Token\QueryFilter;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilterTest extends \PHPUnit_Framework_TestCase
+class QueryFilterTest extends TestCase
 {
     public function testCreate()
     {

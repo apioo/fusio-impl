@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Connection;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\Memory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MemoryTest
@@ -32,7 +33,7 @@ use Fusio\Impl\Connection\Memory;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MemoryTest extends \PHPUnit_Framework_TestCase
+class MemoryTest extends TestCase
 {
     public function testConnection()
     {

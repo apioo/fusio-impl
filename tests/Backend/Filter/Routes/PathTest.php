@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Filter\Routes;
 
 use Fusio\Impl\Backend\Filter\Routes\Path;
+use PHPUnit\Framework\TestCase;
 
 /**
  * PathTest
@@ -30,7 +31,7 @@ use Fusio\Impl\Backend\Filter\Routes\Path;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends TestCase
 {
     /**
      * @dataProvider pathProvider

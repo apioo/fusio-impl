@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Service\User;
 
 use Fusio\Impl\Service\User\PasswordComplexity;
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\BadRequestException;
 
 /**
@@ -31,46 +32,54 @@ use PSX\Http\Exception\BadRequestException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PasswordComplexityTest extends \PHPUnit_Framework_TestCase
+class PasswordComplexityTest extends TestCase
 {
     /**
      * @dataProvider assertProvider
      */
-    public function testAssert($password, $minLength, $minAlpha, $minNumeric, $minSpecial, $exceptionMessage)
+    public function testAssert($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
     {
-        try {
-            PasswordComplexity::assert($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        $result = PasswordComplexity::assert($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
 
-            if ($exceptionMessage !== true) {
-                $this->fail('Should throw an exception');
-            }
-        } catch (BadRequestException $e) {
-            $this->assertEquals($exceptionMessage, $e->getMessage());
-        }
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * @dataProvider assertProviderFail
+     */
+    public function testAssertFail($password, $minLength, $minAlpha, $minNumeric, $minSpecial, $exceptionMessage)
+    {
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        PasswordComplexity::assert($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
     }
 
     public function assertProvider()
     {
         return [
-            ['', null, null, null, null, 'Password must not be empty'],
-            ['a', null, null, null, null, 'Password must have at least 8 characters'],
             ['aaaaaaaa', null, null, null, null, true],
             ['aaaaaaa1', null, null, null, null, true],
             ['00000000', null, null, null, null, true],
-            ["\0" . 'aaaaa!1', null, null, null, null, 'Password must contain only printable ascii characters (0x21-0x7E)'],
             ['aaaaaa!1', null, null, null, null, true],
-
-            ['aaaaaa', 4, null, null, null, 'Password must have at least 8 characters'], // if length < 8 we use 8
-            ['aaaaaa', 12, null, null, null, 'Password must have at least 12 characters'],
-
             ['aaaaaaaa', null, 0, 0, 0, true],
             ['aaaaaaa1', null, 0, 0, 0, true],
             ['00000000', null, 0, 0, 0, true],
+            ['aaaa#_11', null, 2, 2, 2, true],
+        ];
+    }
 
+    public function assertProviderFail()
+    {
+        return [
+            ['', null, null, null, null, 'Password must not be empty'],
+            ['a', null, null, null, null, 'Password must have at least 8 characters'],
+            ["\0" . 'aaaaa!1', null, null, null, null, 'Password must contain only printable ascii characters (0x21-0x7E)'],
+            ['aaaaaa', 4, null, null, null, 'Password must have at least 8 characters'], // if length < 8 we use 8
+            ['aaaaaa', 12, null, null, null, 'Password must have at least 12 characters'],
             ['aaaaaaaa', null, 2, 2, 2, 'Password must have at least 2 numeric character (0-9)'],
             ['aaaaaa11', null, 2, 2, 2, 'Password must have at least 2 special character i.e. (!#$%&*@_~)'],
             ['00000000', null, 2, 2, 2, 'Password must have at least 2 alphabetic character (a-z, A-Z)'],
-            ['aaaa#_11', null, 2, 2, 2, true],
         ];
     }
 }

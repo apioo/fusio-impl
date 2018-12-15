@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Mail\Sender;
 
 use Fusio\Impl\Mail\Message;
 use Fusio\Impl\Mail\Sender\SMTP;
+use PHPUnit\Framework\TestCase;
 
 /**
  * SMTPTest
@@ -31,7 +32,7 @@ use Fusio\Impl\Mail\Sender\SMTP;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class SMTPTest extends \PHPUnit_Framework_TestCase
+class SMTPTest extends TestCase
 {
     public function testAccept()
     {

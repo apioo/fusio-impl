@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Service\System;
 
 use Fusio\Impl\Service\System\WebServer;
+use PHPUnit\Framework\TestCase;
 use PSX\Framework\Config\Config;
 
 /**
@@ -31,7 +32,7 @@ use PSX\Framework\Config\Config;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class WebServerTest extends \PHPUnit_Framework_TestCase
+class WebServerTest extends TestCase
 {
     public function setUp()
     {

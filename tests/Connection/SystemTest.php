@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Connection;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Connection\System;
+use PHPUnit\Framework\TestCase;
 use PSX\Dependency\Container;
 use PSX\Framework\Config\Config;
 
@@ -34,7 +35,7 @@ use PSX\Framework\Config\Config;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SystemTest extends \PHPUnit_Framework_TestCase
+class SystemTest extends TestCase
 {
     public function testConnection()
     {

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Service\Event\Sender;
 
 use Fusio\Impl\Service\Event\Message;
 use Fusio\Impl\Service\Event\Sender\Noop;
+use PHPUnit\Framework\TestCase;
 
 /**
  * NoopTest
@@ -31,7 +32,7 @@ use Fusio\Impl\Service\Event\Sender\Noop;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class NoopTest extends \PHPUnit_Framework_TestCase
+class NoopTest extends TestCase
 {
     public function testAccept()
     {

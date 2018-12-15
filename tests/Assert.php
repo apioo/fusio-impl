@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Tests;
 
-use SebastianBergmann\Comparator\ComparisonFailure;
-
 /**
  * Assert
  *
@@ -37,8 +35,6 @@ class Assert
         $expectString = str_replace(["\r\n", "\n", "\r"], "\n", $expect);
         $actualString = str_replace(["\r\n", "\n", "\r"], "\n", $actual);
 
-        if ($expectString != $actualString) {
-            throw new \PHPUnit_Framework_ExpectationFailedException('Failed asserting that', new ComparisonFailure($expect, $actual, $expectString, $actualString, false, $actualString));
-        }
+        \PHPUnit\Framework\Assert::assertEquals($expectString, $actualString);
     }
 }

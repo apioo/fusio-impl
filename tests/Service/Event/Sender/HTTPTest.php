@@ -27,6 +27,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Client\Client;
 
 /**
@@ -36,7 +37,7 @@ use PSX\Http\Client\Client;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HTTPTest extends \PHPUnit_Framework_TestCase
+class HTTPTest extends TestCase
 {
     public function testAccept()
     {

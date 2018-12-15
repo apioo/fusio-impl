@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Provider;
 
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderWriter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ProviderWriterTest
@@ -31,7 +32,7 @@ use Fusio\Impl\Provider\ProviderWriter;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class ProviderWriterTest extends \PHPUnit_Framework_TestCase
+class ProviderWriterTest extends TestCase
 {
     public function testWrite()
     {

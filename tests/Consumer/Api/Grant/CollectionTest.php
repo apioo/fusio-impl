@@ -172,7 +172,7 @@ JSON;
     "entry": [
         {
             "id": "1",
-            "allow": 1,
+            "allow": "1",
             "createDate": "2015-02-27T19:59:15Z",
             "app": {
                 "id": "1",

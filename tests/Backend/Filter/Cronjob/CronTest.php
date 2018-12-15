@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Filter\Cronjob;
 
 use Fusio\Impl\Backend\Filter\Cronjob\Cron;
+use PHPUnit\Framework\TestCase;
 
 /**
  * CronTest
@@ -30,7 +31,7 @@ use Fusio\Impl\Backend\Filter\Cronjob\Cron;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends TestCase
 {
     /**
      * @dataProvider pathProvider

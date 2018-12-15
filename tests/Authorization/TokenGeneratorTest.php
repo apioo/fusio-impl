@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Authorization;
 
 use Fusio\Impl\Authorization\TokenGenerator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * TokenGeneratorTest
@@ -30,7 +31,7 @@ use Fusio\Impl\Authorization\TokenGenerator;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class TokenGeneratorTest extends \PHPUnit_Framework_TestCase
+class TokenGeneratorTest extends TestCase
 {
     public function testGenerateToken()
     {

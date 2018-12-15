@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Factory;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Factory\Resolver;
+use PHPUnit\Framework\TestCase;
 
 /**
  * EngineDetectorTest
@@ -32,7 +33,7 @@ use Fusio\Impl\Factory\Resolver;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class EngineDetectorTest extends \PHPUnit_Framework_TestCase
+class EngineDetectorTest extends TestCase
 {
     /**
      * @dataProvider dataProviderGetEngine
