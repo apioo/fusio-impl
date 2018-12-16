@@ -34,9 +34,10 @@ class EnvProperties
 {
     /**
      * @param string $data
+     * @param array $env
      * @return string
      */
-    public static function replace($data)
+    public static function replace($data, array $env = null)
     {
         $vars = [];
 
@@ -49,8 +50,12 @@ class EnvProperties
         ];
 
         // env properties
+        if ($env === null) {
+            $env = $_SERVER;
+        }
+
         $vars['env'] = [];
-        foreach ($_SERVER as $key => $value) {
+        foreach ($env as $key => $value) {
             if (is_scalar($value)) {
                 $vars['env'][strtolower($key)] = $value;
             }
