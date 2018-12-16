@@ -85,5 +85,7 @@ class PasswordComplexity
         if ($special < $minSpecial) {
             throw new StatusCode\BadRequestException('Password must have at least ' . $minSpecial . ' special character i.e. (!#$%&*@_~)');
         }
+
+        return true;
     }
 }
