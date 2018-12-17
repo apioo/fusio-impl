@@ -157,7 +157,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": "1",
+            "id": 1,
             "message": "Syntax error, malformed JSON",
             "path": "\/bar",
             "date": "[datetime]"
@@ -187,7 +187,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": "1",
+            "id": 1,
             "message": "Syntax error, malformed JSON",
             "path": "\/bar",
             "date": "[datetime]"
@@ -217,7 +217,7 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": "1",
+            "id": 1,
             "message": "Syntax error, malformed JSON",
             "path": "\/bar",
             "date": "[datetime]"

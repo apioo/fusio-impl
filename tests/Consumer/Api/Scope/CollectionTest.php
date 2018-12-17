@@ -138,27 +138,27 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": "1",
+            "id": 1,
             "name": "backend",
             "description": "Access to the backend API"
         },
         {
-            "id": "2",
+            "id": 2,
             "name": "consumer",
             "description": "Consumer API endpoint"
         },
         {
-            "id": "3",
+            "id": 3,
             "name": "authorization",
             "description": "Authorization API endpoint"
         },
         {
-            "id": "4",
+            "id": 4,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": "5",
+            "id": 5,
             "name": "bar",
             "description": "Bar access"
         }

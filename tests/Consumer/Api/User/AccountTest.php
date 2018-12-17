@@ -160,7 +160,6 @@ JSON;
     "status": 1,
     "name": "Administrator",
     "email": "admin@localhost.com",
-    "points": 0,
     "scopes": [
         "backend",
         "consumer",
