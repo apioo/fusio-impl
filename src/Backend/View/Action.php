@@ -59,8 +59,8 @@ class Action extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['class', 'config'])], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'date' => $this->fieldDateTime('date'),
             ]),
@@ -72,8 +72,8 @@ class Action extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Action::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'class' => 'class',
             'engine' => 'engine',

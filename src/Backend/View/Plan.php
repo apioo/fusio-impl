@@ -57,7 +57,7 @@ class Plan extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'getAll'], [$startIndex, $count, 'price', Sql::SORT_ASC, $condition], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
                 'price' => 'price',
@@ -71,7 +71,7 @@ class Plan extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [$id], [
-            'id' => 'id',
+            'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
             'price' => 'price',

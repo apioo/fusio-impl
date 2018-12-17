@@ -53,7 +53,7 @@ class Audit extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'event' => 'event',
                 'ip' => 'ip',
                 'message' => 'message',
@@ -67,15 +67,15 @@ class Audit extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'get'], [$id], [
-            'id' => 'id',
+            'id' => $this->fieldInteger('id'),
             'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('app_id')], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
             ]),
             'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
             ]),
             'refId' => 'ref_id',

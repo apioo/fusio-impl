@@ -58,8 +58,8 @@ class Schema extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['propertyName', 'source', 'cache'])], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
             ]),
         ];
@@ -70,8 +70,8 @@ class Schema extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'source' => 'source',
         ]);
@@ -88,8 +88,8 @@ class Schema extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'cache' => 'cache',
             'form' => 'form',

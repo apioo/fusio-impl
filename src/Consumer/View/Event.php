@@ -51,7 +51,7 @@ class Event extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
             ]),

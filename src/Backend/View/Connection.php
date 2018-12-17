@@ -61,8 +61,8 @@ class Connection extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['class', 'config'])], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
             ]),
         ];
@@ -73,8 +73,8 @@ class Connection extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'class' => 'class',
         ]);
@@ -85,8 +85,8 @@ class Connection extends ViewAbstract
     public function getEntityWithConfig($id, $secretKey, ParserInterface $connectionParser)
     {
         $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'class' => 'class',
             'config' => $this->fieldCallback('config', function ($config, $row) use ($secretKey, $connectionParser) {

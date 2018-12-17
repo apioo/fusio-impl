@@ -37,8 +37,8 @@ class User extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'email' => 'email',
             'points' => $this->fieldInteger('points'),

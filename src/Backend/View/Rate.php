@@ -58,9 +58,9 @@ class Rate extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Rate::class), 'getAll'], [$startIndex, $count, 'priority', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
-                'status' => 'status',
-                'priority' => 'priority',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
+                'priority' => $this->fieldInteger('priority'),
                 'name' => 'name',
                 'rateLimit' => 'rate_limit',
                 'timespan' => 'timespan',
@@ -73,17 +73,17 @@ class Rate extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Rate::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
-            'priority' => 'priority',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
+            'priority' => $this->fieldInteger('priority'),
             'name' => 'name',
             'rateLimit' => 'rate_limit',
             'timespan' => 'timespan',
             'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'getByRate_id'], [new Reference('id')], [
-                'id' => 'id',
-                'rateId' => 'rate_id',
-                'routeId' => 'route_id',
-                'appId' => 'app_id',
+                'id' => $this->fieldInteger('id'),
+                'rateId' => $this->fieldInteger('rate_id'),
+                'routeId' => $this->fieldInteger('route_id'),
+                'appId' => $this->fieldInteger('app_id'),
                 'authenticated' => 'authenticated',
                 'parameters' => 'parameters',
             ]),

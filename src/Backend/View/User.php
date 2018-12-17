@@ -59,9 +59,9 @@ class User extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\User::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['password'])], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'provider' => 'provider',
-                'status' => 'status',
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'email' => 'email',
                 'date' => $this->fieldDateTime('date'),
@@ -74,16 +74,16 @@ class User extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
-            'id' => 'id',
-            'provider' => 'provider',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'provider' => $this->fieldInteger('provider'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'email' => 'email',
-            'points' => 'points',
+            'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUser_id'], [new Reference('id'), Fields::blacklist(['userId', 'parameters', 'appSecret'])], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'url' => 'url',
                 'appKey' => 'app_key',

@@ -53,7 +53,7 @@ class Scope extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
             ]),

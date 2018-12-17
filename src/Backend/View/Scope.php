@@ -57,7 +57,7 @@ class Scope extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
             ]),
@@ -69,14 +69,14 @@ class Scope extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'get'], [$id], [
-            'id' => 'id',
+            'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
             'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'getByScope_id'], [new Reference('id'), null, 0, 1024], [
-                'id' => 'id',
-                'scopeId' => 'scope_id',
-                'routeId' => 'route_id',
-                'allow' => 'allow',
+                'id' => $this->fieldInteger('id'),
+                'scopeId' => $this->fieldInteger('scope_id'),
+                'routeId' => $this->fieldInteger('route_id'),
+                'allow' => $this->fieldInteger('allow'),
                 'methods' => 'methods',
             ]),
         ]);

@@ -63,8 +63,8 @@ class Routes extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Routes::class), 'getAll'], [$startIndex, $count, 'priority', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'path' => 'path',
                 'controller' => 'controller',
             ]),
@@ -76,8 +76,8 @@ class Routes extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Routes::class), 'get'], [$id], [
-            'id' => 'id',
-            'status' => 'status',
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'path' => 'path',
             'controller' => 'controller',
             'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),

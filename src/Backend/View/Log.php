@@ -54,9 +54,9 @@ class Log extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['header', 'body'])], [
-                'id' => 'id',
-                'appId' => 'app_id',
-                'routeId' => 'route_id',
+                'id' => $this->fieldInteger('id'),
+                'appId' => $this->fieldInteger('app_id'),
+                'routeId' => $this->fieldInteger('route_id'),
                 'ip' => 'ip',
                 'userAgent' => 'user_agent',
                 'method' => 'method',
@@ -71,9 +71,9 @@ class Log extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Log::class), 'get'], [$id], [
-            'id' => 'id',
-            'appId' => 'app_id',
-            'routeId' => 'route_id',
+            'id' => $this->fieldInteger('id'),
+            'appId' => $this->fieldInteger('app_id'),
+            'routeId' => $this->fieldInteger('route_id'),
             'ip' => 'ip',
             'userAgent' => 'user_agent',
             'method' => 'method',

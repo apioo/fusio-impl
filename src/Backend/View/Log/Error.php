@@ -68,7 +68,7 @@ class Error extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'message' => 'message',
                 'path' => 'path',
                 'date' => $this->fieldDateTime('date'),

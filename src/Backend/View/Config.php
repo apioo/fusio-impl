@@ -56,8 +56,8 @@ class Config extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
-                'id' => 'id',
-                'type' => 'type',
+                'id' => $this->fieldInteger('id'),
+                'type' => $this->fieldInteger('type'),
                 'name' => 'name',
                 'description' => 'description',
                 'value' => 'value',
@@ -70,8 +70,8 @@ class Config extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Config::class), 'get'], [$id], [
-            'id' => 'id',
-            'type' => 'type',
+            'id' => $this->fieldInteger('id'),
+            'type' => $this->fieldInteger('type'),
             'name' => 'name',
             'description' => 'description',
             'value' => 'value',

@@ -52,13 +52,13 @@ class Transaction extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
-                'status' => 'status',
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'provider' => 'provider',
                 'transactionId' => 'transaction_id',
-                'amount' => 'amount',
-                'updateDate' => 'update_date',
-                'insertDate' => 'insert_date',
+                'amount' => $this->fieldNumber('amount'),
+                'updateDate' => $this->fieldDateTime('update_date'),
+                'insertDate' => $this->fieldDateTime('insert_date'),
             ]),
         ];
 
@@ -72,20 +72,20 @@ class Transaction extends ViewAbstract
         $condition->equals('user_id', $userId);
 
         $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'getOneBy'], [$condition], [
-            'id' => 'id',
+            'id' => $this->fieldInteger('id'),
             'plan' => $this->doEntity([$this->getTable(Plan::class), 'getEntity'], [$userId, new Reference('plan_id')], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
-                'price' => 'price',
-                'points' => 'points',
+                'price' => $this->fieldNumber('price'),
+                'points' => $this->fieldInteger('points'),
             ]),
-            'status' => 'status',
+            'status' => $this->fieldInteger('status'),
             'provider' => 'provider',
             'transactionId' => 'transaction_id',
-            'amount' => 'amount',
-            'updateDate' => 'update_date',
-            'insertDate' => 'insert_date',
+            'amount' => $this->fieldNumber('amount'),
+            'updateDate' => $this->fieldDateTime('update_date'),
+            'insertDate' => $this->fieldDateTime('insert_date'),
         ]);
 
         return $this->build($definition);

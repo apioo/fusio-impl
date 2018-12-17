@@ -55,11 +55,11 @@ class Grant extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => 'id',
-                'allow' => 'allow',
+                'id' => $this->fieldInteger('id'),
+                'allow' => $this->fieldInteger('allow'),
                 'createDate' => $this->fieldDateTime('date'),
                 'app' => [
-                    'id' => 'app_id',
+                    'id' => $this->fieldInteger('app_id'),
                     'name' => 'app_name',
                     'url' => 'app_url',
                 ],

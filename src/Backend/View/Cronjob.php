@@ -58,7 +58,7 @@ class Cronjob extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
-                'id' => 'id',
+                'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'cron' => 'cron',
                 'executeDate' => $this->fieldDateTime('execute_date'),
