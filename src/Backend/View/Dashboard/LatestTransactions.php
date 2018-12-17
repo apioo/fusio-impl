@@ -46,10 +46,10 @@ class LatestTransactions extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
-                'status' => 'status',
+                'status' => $this->fieldInteger('status'),
                 'provider' => 'provider',
                 'transactionId' => 'transaction_id',
-                'amount' => 'amount',
+                'amount' => $this->fieldNumber('amount'),
                 'date' => $this->fieldDateTime('insert_date'),
             ]),
         ];

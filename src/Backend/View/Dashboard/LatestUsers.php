@@ -44,7 +44,7 @@ class LatestUsers extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
-                'status' => 'status',
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'date' => $this->fieldDateTime('date'),
             ]),

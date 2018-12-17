@@ -670,27 +670,27 @@ JSON;
     "latestUsers": {
         "entry": [
             {
-                "status": "1",
+                "status": 1,
                 "name": "Administrator",
                 "date": "[datetime]"
             },
             {
-                "status": "0",
+                "status": 0,
                 "name": "Consumer",
                 "date": "[datetime]"
             },
             {
-                "status": "2",
+                "status": 2,
                 "name": "Disabled",
                 "date": "[datetime]"
             },
             {
-                "status": "1",
+                "status": 1,
                 "name": "Developer",
                 "date": "[datetime]"
             },
             {
-                "status": "3",
+                "status": 3,
                 "name": "Deleted",
                 "date": "[datetime]"
             }
@@ -699,10 +699,10 @@ JSON;
     "latestTransactions": {
         "entry": [
             {
-                "status": "1",
+                "status": 1,
                 "provider": "paypal",
                 "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",
-                "amount": "39.99",
+                "amount": 39.99,
                 "date": "[datetime]"
             }
         ]
