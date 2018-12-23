@@ -1,7 +1,4 @@
 .idea/
 cache/
 vendor/
-tests/Service/System/Resource/apache2.conf
-tests/Service/System/Resource/nginx.conf
-tests/Service/System/apps/
 composer.lock
