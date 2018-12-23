@@ -10,6 +10,7 @@ services:
 before_install:
   - phpenv config-add tests/config.ini
   - if [ $TRAVIS_PHP_VERSION != '7.3' ]; then phpenv config-rm xdebug.ini; fi;
+  - composer clear-cache
 install:
   - composer install
 before_script:
