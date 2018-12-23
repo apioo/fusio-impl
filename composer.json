@@ -21,8 +21,7 @@
     "fusio/adapter-http": "^3.0",
     "fusio/adapter-php": "^3.0",
     "fusio/adapter-file": "^3.0",
-    "paragonie/random_compat": "^2.0",
-    "firebase/php-jwt": "^3.0",
+    "firebase/php-jwt": "^5.0",
     "swiftmailer/swiftmailer": "^5.4",
     "doctrine/migrations": "^1.5",
     "ocramius/package-versions": "^1.2"
