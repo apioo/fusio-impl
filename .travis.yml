@@ -12,6 +12,7 @@ before_install:
   - if [ $TRAVIS_PHP_VERSION != '7.3' ]; then phpenv config-rm xdebug.ini; fi;
 install:
   - composer install
+  - composer update psx/sql
 before_script:
   - mysql -e 'create database fusio;'
   - psql -c 'create database fusio;' -U postgres
