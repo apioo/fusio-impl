@@ -55,7 +55,7 @@ class Fixture
             self::getTestInserts()
         );
 
-        return self::$dataSet = new \PHPUnit_Extensions_Database_DataSet_ArrayDataSet($dataSet);
+        return self::$dataSet = $dataSet;
     }
 
     protected static function getTestInserts()
