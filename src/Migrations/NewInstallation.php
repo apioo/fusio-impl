@@ -119,6 +119,8 @@ class NewInstallation
             ],
             'fusio_plan' => [
             ],
+            'fusio_provider' => [
+            ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rate_limit' => 720, 'timespan' => 'PT1H'],
                 ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rate_limit' => 60, 'timespan' => 'PT1H'],
