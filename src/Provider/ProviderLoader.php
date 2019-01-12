@@ -34,6 +34,16 @@ use Fusio\Adapter;
 class ProviderLoader
 {
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
+     * @var string
+     */
+    private $file;
+
+    /**
      * @var \Fusio\Impl\Provider\ProviderConfig
      */
     private $config;
