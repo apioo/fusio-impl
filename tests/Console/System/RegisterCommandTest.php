@@ -79,7 +79,6 @@ class RegisterCommandTest extends ControllerDbTestCase
             \Fusio\Adapter\Php\Action\PhpSandbox::class,
             \Fusio\Adapter\Sql\Action\SqlTable::class,
             \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
-            \Fusio\Adapter\V8\Action\V8Processor::class,
             \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
         ];
 
@@ -207,7 +206,6 @@ JSON;
             \Fusio\Adapter\Php\Action\PhpSandbox::class,
             \Fusio\Adapter\Sql\Action\SqlTable::class,
             \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
-            \Fusio\Adapter\V8\Action\V8Processor::class,
             \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
         ];
 
