@@ -58,6 +58,10 @@ class ClassCommandTest extends ControllerDbTestCase
 | HTTP            | Fusio\Adapter\Http\Connection\Http           |
 | SQL             | Fusio\Adapter\Sql\Connection\Sql             |
 | SQL (advanced)  | Fusio\Adapter\Sql\Connection\SqlAdvanced     |
+| FTP             | Fusio\Adapter\File\Connection\Ftp            |
+| GraphQL         | Fusio\Adapter\GraphQL\Connection\GraphQL     |
+| SMTP            | Fusio\Adapter\Smtp\Connection\Smtp           |
+| SOAP            | Fusio\Adapter\Soap\Connection\Soap           |
 | Void-Connection | Fusio\Impl\Tests\Adapter\Test\VoidConnection |
 +-----------------+----------------------------------------------+
 

@@ -136,6 +136,22 @@ JSON;
             "class": "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
         },
         {
+            "name": "FTP",
+            "class": "Fusio\\Adapter\\File\\Connection\\Ftp"
+        },
+        {
+            "name": "GraphQL",
+            "class": "Fusio\\Adapter\\GraphQL\\Connection\\GraphQL"
+        },
+        {
+            "name": "SMTP",
+            "class": "Fusio\\Adapter\\Smtp\\Connection\\Smtp"
+        },
+        {
+            "name": "SOAP",
+            "class": "Fusio\\Adapter\\Soap\\Connection\\Soap"
+        },
+        {
             "name": "Void-Connection",
             "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\VoidConnection"
         }

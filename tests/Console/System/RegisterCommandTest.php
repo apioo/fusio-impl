@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Adapter;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Provider\ProviderConfig;
@@ -73,13 +74,13 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
-            \Fusio\Adapter\File\Action\FileProcessor::class,
-            \Fusio\Adapter\Http\Action\HttpProcessor::class,
-            \Fusio\Adapter\Php\Action\PhpProcessor::class,
-            \Fusio\Adapter\Php\Action\PhpSandbox::class,
-            \Fusio\Adapter\Sql\Action\SqlTable::class,
-            \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
-            \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
+            Adapter\File\Action\FileProcessor::class,
+            Adapter\Http\Action\HttpProcessor::class,
+            Adapter\Php\Action\PhpProcessor::class,
+            Adapter\Php\Action\PhpSandbox::class,
+            Adapter\Sql\Action\SqlTable::class,
+            Adapter\Util\Action\UtilStaticResponse::class,
+            VoidAction::class,
         ];
 
         $this->assertEquals($actual, $expect);
@@ -87,10 +88,14 @@ class RegisterCommandTest extends ControllerDbTestCase
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
-            \Fusio\Adapter\Http\Connection\Http::class,
-            \Fusio\Adapter\Sql\Connection\Sql::class,
-            \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
-            \Fusio\Impl\Tests\Adapter\Test\VoidConnection::class,
+            Adapter\File\Connection\Ftp::class,
+            Adapter\GraphQL\Connection\GraphQL::class,
+            Adapter\Http\Connection\Http::class,
+            Adapter\Smtp\Connection\Smtp::class,
+            Adapter\Soap\Connection\Soap::class,
+            Adapter\Sql\Connection\Sql::class,
+            Adapter\Sql\Connection\SqlAdvanced::class,
+            VoidConnection::class,
         ];
 
         $this->assertEquals($actual, $expect);
@@ -200,13 +205,13 @@ JSON;
 
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
-            \Fusio\Adapter\File\Action\FileProcessor::class,
-            \Fusio\Adapter\Http\Action\HttpProcessor::class,
-            \Fusio\Adapter\Php\Action\PhpProcessor::class,
-            \Fusio\Adapter\Php\Action\PhpSandbox::class,
-            \Fusio\Adapter\Sql\Action\SqlTable::class,
-            \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
-            \Fusio\Impl\Tests\Adapter\Test\VoidAction::class,
+            Adapter\File\Action\FileProcessor::class,
+            Adapter\Http\Action\HttpProcessor::class,
+            Adapter\Php\Action\PhpProcessor::class,
+            Adapter\Php\Action\PhpSandbox::class,
+            Adapter\Sql\Action\SqlTable::class,
+            Adapter\Util\Action\UtilStaticResponse::class,
+            VoidAction::class,
         ];
 
         $this->assertEquals($actual, $expect);
@@ -214,10 +219,14 @@ JSON;
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
-            \Fusio\Adapter\Http\Connection\Http::class,
-            \Fusio\Adapter\Sql\Connection\Sql::class,
-            \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
-            \Fusio\Impl\Tests\Adapter\Test\VoidConnection::class,
+            Adapter\File\Connection\Ftp::class,
+            Adapter\GraphQL\Connection\GraphQL::class,
+            Adapter\Http\Connection\Http::class,
+            Adapter\Smtp\Connection\Smtp::class,
+            Adapter\Soap\Connection\Soap::class,
+            Adapter\Sql\Connection\Sql::class,
+            Adapter\Sql\Connection\SqlAdvanced::class,
+            VoidConnection::class,
         ];
 
         $this->assertEquals($actual, $expect);
