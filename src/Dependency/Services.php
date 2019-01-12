@@ -444,7 +444,7 @@ trait Services
         return new Service\Transaction(
             $this->get('connector'),
             $this->get('plan_payer_service'),
-            new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
+            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
             $this->get('config'),
             $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('table_manager')->getTable(Table\Transaction::class),
@@ -483,7 +483,7 @@ trait Services
         return new Service\User\Provider(
             $this->get('user_service'),
             $this->get('app_token_service'),
-            new ProviderFactory($this->get('provider_config'), $this, ProviderConfig::TYPE_USER, User\ProviderInterface::class),
+            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_USER, User\ProviderInterface::class),
             $this->get('config')
         );
     }

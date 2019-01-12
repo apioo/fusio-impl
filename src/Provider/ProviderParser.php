@@ -35,9 +35,9 @@ use Fusio\Engine\Parser\ParserAbstract;
 class ProviderParser extends ParserAbstract
 {
     /**
-     * @var \Fusio\Impl\Provider\ProviderConfig
+     * @var \Fusio\Impl\Provider\ProviderLoader
      */
-    protected $providerConfig;
+    protected $providerLoader;
 
     /**
      * @var string
@@ -52,15 +52,15 @@ class ProviderParser extends ParserAbstract
     /**
      * @param \Fusio\Engine\Factory\FactoryInterface $factory
      * @param \Fusio\Engine\Form\ElementFactoryInterface $elementFactory
-     * @param \Fusio\Impl\Provider\ProviderConfig $providerConfig
+     * @param \Fusio\Impl\Provider\ProviderLoader $providerLoader
      * @param string $type
      * @param string $instanceOf
      */
-    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderConfig $providerConfig, $type, $instanceOf)
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader, $type, $instanceOf)
     {
         parent::__construct($factory, $elementFactory);
 
-        $this->providerConfig = $providerConfig;
+        $this->providerLoader = $providerLoader;
         $this->type           = $type;
         $this->instanceOf     = $instanceOf;
     }
@@ -70,7 +70,7 @@ class ProviderParser extends ParserAbstract
      */
     public function getClasses()
     {
-        $classes = $this->providerConfig->getClasses($this->type);
+        $classes = $this->providerLoader->getConfig()->getClasses($this->type);
         $result  = array();
 
         foreach ($classes as $name => $class) {

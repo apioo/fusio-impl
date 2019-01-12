@@ -61,7 +61,7 @@ trait Engine
         return new ProviderParser(
             $this->get('action_factory'),
             $this->get('form_element_factory'),
-            $this->get('provider_config'),
+            $this->get('provider_loader'),
             ProviderConfig::TYPE_ACTION,
             ActionInterface::class
         );
@@ -147,7 +147,7 @@ trait Engine
         return new ProviderParser(
             $this->get('connection_factory'),
             $this->get('form_element_factory'),
-            $this->get('provider_config'),
+            $this->get('provider_loader'),
             ProviderConfig::TYPE_CONNECTION,
             ConnectionInterface::class
         );

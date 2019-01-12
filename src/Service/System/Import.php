@@ -205,14 +205,15 @@ class Import extends SystemAbstract
             $name    = $providerType . 'Class';
             $classes = isset($data->{$name}) ? $data->{$name} : null;
             if (!empty($classes) && is_array($classes)) {
-                $providerConfig[$providerType] = $classes;
-
+                $classes    = array_filter($classes, 'class_exists');
                 $newClasses = array_merge($newClasses, $classes);
+
+                $providerConfig[$providerType] = $classes;
             }
         }
 
-        $bytes = $this->providerWriter->write($providerConfig);
-        if ($bytes > 0) {
+        $count = $this->providerWriter->write($providerConfig);
+        if ($count > 0) {
             foreach ($newClasses as $newClass) {
                 $result->add('class', Result::ACTION_REGISTERED, $newClass);
             }

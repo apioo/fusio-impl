@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Provider;
 
-use Fusio\Engine;
+use Doctrine\DBAL\Connection;
 
 /**
  * ProviderWriter
@@ -33,23 +33,16 @@ use Fusio\Engine;
 class ProviderWriter
 {
     /**
-     * @var \Fusio\Impl\Provider\ProviderConfig 
+     * @var \Doctrine\DBAL\Connection
      */
-    protected $config;
+    protected $connection;
 
     /**
-     * @var string
+     * @param \Doctrine\DBAL\Connection $connection
      */
-    protected $file;
-
-    /**
-     * @param \Fusio\Impl\Provider\ProviderConfig $config
-     * @param string $file
-     */
-    public function __construct(ProviderConfig $config, $file)
+    public function __construct(Connection $connection)
     {
-        $this->config = $config;
-        $this->file   = $file;
+        $this->connection = $connection;
     }
 
     /**
@@ -57,123 +50,55 @@ class ProviderWriter
      */
     public function getAvailableTypes()
     {
-        return array_keys($this->config->getArrayCopy());
+        return [
+            ProviderConfig::TYPE_ACTION,
+            ProviderConfig::TYPE_CONNECTION,
+            ProviderConfig::TYPE_PAYMENT,
+            ProviderConfig::TYPE_USER,
+        ];
     }
 
     /**
-     * @param array $newConfig
-     * @return integer|boolean
+     * @inheritdoc
      */
     public function write(array $newConfig)
     {
-        if (empty($newConfig) || empty($this->file)) {
-            return false;
-        }
+        $types    = $this->getAvailableTypes();
+        $existing = $this->getExistingClasses();
+        $count    = 0;
 
-        if (!is_file($this->file)) {
-            return false;
-        }
-
-        if (!is_writable($this->file)) {
-            return false;
-        }
-
-        $existingConfig = $this->config->getArrayCopy();
-        $hasChanged     = false;
-        $resultConfig   = [];
-
-        foreach ($existingConfig as $type => $classes) {
-            $result = array_values($classes);
-            if (isset($newConfig[$type]) && is_array($newConfig[$type])) {
-                $newClasses = $this->parseClasses($newConfig[$type]);
-
-                if (!empty($newClasses)) {
-                    $result = array_merge($result, $newClasses);
-                    $result = array_unique(array_values($result));
-                }
-            }
-
-            if (count($classes) !== count($result) || count(array_diff($result, $classes)) > 0) {
-                $hasChanged = true;
-            }
-
-            $resultConfig[$type] = $result;
-        }
-
-        if ($hasChanged) {
-            return file_put_contents($this->file, $this->generateCode($resultConfig));
-        }
-
-        return false;
-    }
-
-    private function parseClasses(array $classes)
-    {
-        $result = [];
-        foreach ($classes as $class) {
-            try {
-                $result[] = (new \ReflectionClass($class))->getName();
-            } catch (\ReflectionException $e) {
-                // class does not exist
-            }
-        }
-
-        return $result;
-    }
-
-    private function generateCode(array $config)
-    {
-        $code = '<?php' . "\n";
-        $code.= '' . "\n";
-        $code.= '/*' . "\n";
-        $code.= $this->getHelpDoc() . "\n";
-        $code.= '*/' . "\n";
-        $code.= '' . "\n";
-        $code.= 'return [' . "\n";
-
-        foreach ($config as $type => $classes) {
-            $code.= '    \'' . $type . '\' => [' . "\n";
+        foreach ($newConfig as $type => $classes) {
             foreach ($classes as $class) {
-                $code.= '        \\' . ltrim($class, '\\') . '::class,' . "\n";
+                if (!class_exists($class)) {
+                    continue;
+                }
+
+                if (in_array($class, $existing)) {
+                    continue;
+                }
+
+                if (!in_array($type, $types)) {
+                    continue;
+                }
+
+                $count+= $this->connection->insert('fusio_provider', [
+                    'type'  => $type,
+                    'class' => $class,
+                ]);
             }
-            $code.= '    ],' . "\n";
         }
 
-        $code.= '];' . "\n";
-        $code.= '' . "\n";
-
-        return $code;
+        return $count;
     }
 
-    private function getHelpDoc()
+    private function getExistingClasses()
     {
-        $actionInterface     = Engine\ActionInterface::class;
-        $connectionInterface = Engine\ConnectionInterface::class;
-        $paymentInterface    = Engine\Payment\ProviderInterface::class;
-        $userInterface       = Engine\User\ProviderInterface::class;
+        $classes = [];
+        $result  = $this->connection->fetchAll('SELECT class FROM fusio_provider ORDER BY class ASC');
+        foreach ($result as $row) {
+            $classes[] = $row['class'];
+        }
 
-        return <<<TEXT
-This file contains classes which extend the functionality of Fusio. If you
-register a new adapter and this adapter provides such a class, Fusio will
-automatically add the class to this file. You can also manually add a new
-class. The following list contains an explanation of each extension point:
-
-- action
-  Contains all action classes which are available at the backend. If a class is
-  registered here the user can select this action. The class must implement the
-  interface: {$actionInterface}
-- connection
-  Contains all connection classes which are available at the backend. If a class
-  is registered here the user can select this connection. The class must
-  implement the interface: {$connectionInterface}
-- payment
-  Contains all available payment provider. Through a payment provider it is
-  possible to charge for points which can be required for specific routes. The
-  class must implement the interface: {$paymentInterface}
-- user
-  Contains all available user provider. Through a user provider a user can
-  authenticate with a remote provider i.e. Google. The class must implement the
-  interface: {$userInterface}
-TEXT;
+        return $classes;
     }
 }

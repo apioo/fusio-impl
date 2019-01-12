@@ -32,19 +32,22 @@ return [
         \Fusio\Adapter\Php\Action\PhpSandbox::class,
         \Fusio\Adapter\Sql\Action\SqlTable::class,
         \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
-        \Fusio\Adapter\V8\Action\V8Processor::class,
+        \stdClass::class,
     ],
     'connection' => [
         \Fusio\Adapter\Http\Connection\Http::class,
         \Fusio\Adapter\Sql\Connection\Sql::class,
         \Fusio\Adapter\Sql\Connection\SqlAdvanced::class,
+        \stdClass::class,
     ],
     'payment' => [
+        \stdClass::class,
     ],
     'user' => [
         \Fusio\Impl\Provider\User\Facebook::class,
         \Fusio\Impl\Provider\User\Github::class,
         \Fusio\Impl\Provider\User\Google::class,
+        \stdClass::class,
     ],
 ];
 

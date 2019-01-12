@@ -34,9 +34,9 @@ use Psr\Container\ContainerInterface;
 class ProviderFactory
 {
     /**
-     * @var \Fusio\Impl\Provider\ProviderConfig
+     * @var \Fusio\Impl\Provider\ProviderLoader
      */
-    protected $config;
+    protected $loader;
 
     /**
      * @var \Psr\Container\ContainerInterface
@@ -54,16 +54,16 @@ class ProviderFactory
     protected $instanceOf;
 
     /**
-     * @param \Fusio\Impl\Provider\ProviderConfig $config
+     * @param \Fusio\Impl\Provider\ProviderLoader $loader
      * @param \Psr\Container\ContainerInterface $container
      * @param string $type
      * @param string $instanceOf
      */
-    public function __construct(ProviderConfig $config, ContainerInterface $container, $type, $instanceOf)
+    public function __construct(ProviderLoader $loader, ContainerInterface $container, $type, $instanceOf)
     {
-        $this->config = $config;
-        $this->container = $container;
-        $this->type = $type;
+        $this->loader     = $loader;
+        $this->container  = $container;
+        $this->type       = $type;
         $this->instanceOf = $instanceOf;
     }
 
@@ -74,7 +74,7 @@ class ProviderFactory
     public function factory($provider)
     {
         $provider = strtolower($provider);
-        $class    = $this->config->getClass($this->type, $provider);
+        $class    = $this->loader->getConfig()->getClass($this->type, $provider);
 
         if ($class !== null) {
             return $this->newInstance($class, $provider);
