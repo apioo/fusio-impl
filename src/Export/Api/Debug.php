@@ -117,11 +117,24 @@ class Debug extends SchemaApiAbstract
      */
     protected function mirror($record, HttpContextInterface $context)
     {
-        return [
+        $data = [
             'method' => $context->getMethod(),
-            'headers' => $context->getHeaders(),
-            'parameters' => $context->getParameters(),
-            'body' => $record
         ];
+
+        $headers = $context->getHeaders();
+        if (!empty($headers)) {
+            $data['headers'] = $headers;
+        }
+
+        $parameters = $context->getParameters();
+        if (!empty($parameters)) {
+            $data['parameters'] = $parameters;
+        }
+
+        if ($record !== null) {
+            $data['body'] = $record;
+        }
+
+        return $data;
     }
 }

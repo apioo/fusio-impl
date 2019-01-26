@@ -172,7 +172,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/debug', 'GET', array(
+        $response = $this->sendRequest('/export/debug?foo=bar', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -185,8 +185,9 @@ JSON;
             "Fusio TestCase"
         ]
     },
-    "parameters": [],
-    "body": null
+    "parameters": {
+        "foo": "bar"
+    }
 }
 JSON;
 
@@ -211,7 +212,6 @@ JSON;
             "Fusio TestCase"
         ]
     },
-    "parameters": [],
     "body": {
         "foo": "bar"
     }
@@ -239,7 +239,6 @@ JSON;
             "Fusio TestCase"
         ]
     },
-    "parameters": [],
     "body": {
         "foo": "bar"
     }
@@ -267,7 +266,6 @@ JSON;
             "Fusio TestCase"
         ]
     },
-    "parameters": [],
     "body": {
         "foo": "bar"
     }
@@ -295,7 +293,6 @@ JSON;
             "Fusio TestCase"
         ]
     },
-    "parameters": [],
     "body": {
         "foo": "bar"
     }
