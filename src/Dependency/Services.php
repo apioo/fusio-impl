@@ -516,4 +516,18 @@ trait Services
             $this->get('config')
         );
     }
+
+    /**
+     * @return \Fusio\Impl\Service\Health
+     */
+    public function getHealthService()
+    {
+        return new Service\Health(
+            $this->get('connection_service'),
+            $this->get('table_manager')->getTable(Table\Connection::class),
+            $this->get('connection_factory'),
+            $this->get('config')->get('fusio_project_key')
+        );
+    }
+
 }
