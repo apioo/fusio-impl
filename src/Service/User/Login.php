@@ -45,6 +45,11 @@ class Login
     protected $appTokenService;
 
     /**
+     * @var \PSX\Framework\Config\Config
+     */
+    protected $config;
+
+    /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \PSX\Framework\Config\Config $config
