@@ -214,6 +214,8 @@ class NewInstallation
                 ['status' => 1, 'priority' => 0x2000000 | 1,   'methods' => 'GET', 'path' => '/doc',                                         'controller' => Tool\Documentation\IndexController::class],
                 ['status' => 1, 'priority' => 0x2000000 | 0,   'methods' => 'GET', 'path' => '/doc/:version/*path',                          'controller' => Tool\Documentation\DetailController::class],
 
+                ['status' => 1, 'priority' => 0x1000000 | 6,   'methods' => 'ANY', 'path' => '/export/health',                               'controller' => Export\Api\Health::class],
+                ['status' => 1, 'priority' => 0x1000000 | 5,   'methods' => 'ANY', 'path' => '/export/debug',                                'controller' => Export\Api\Debug::class],
                 ['status' => 1, 'priority' => 0x1000000 | 4,   'methods' => 'ANY', 'path' => '/export/schema/:name',                         'controller' => Export\Api\Schema::class],
                 ['status' => 1, 'priority' => 0x1000000 | 3,   'methods' => 'GET', 'path' => '/export/openapi/:version/*path',               'controller' => Generator\OpenAPIController::class],
                 ['status' => 1, 'priority' => 0x1000000 | 2,   'methods' => 'GET', 'path' => '/export/raml/:version/*path',                  'controller' => Generator\RamlController::class],
