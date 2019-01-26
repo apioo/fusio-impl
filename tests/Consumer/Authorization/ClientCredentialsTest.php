@@ -124,12 +124,12 @@ JSON;
 
         $expireDate = strtotime('+1 hour');
 
-        $this->arrayHasKey('access_token', $data);
-        $this->arrayHasKey('token_type', $data);
+        $this->assertArrayHasKey('access_token', $data);
+        $this->assertArrayHasKey('token_type', $data);
         $this->assertEquals('bearer', $data['token_type']);
-        $this->arrayHasKey('expires_in', $data);
+        $this->assertArrayHasKey('expires_in', $data);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
-        $this->arrayHasKey('scope', $data);
+        $this->assertArrayHasKey('scope', $data);
         $this->assertEquals('consumer,authorization', $data['scope']);
 
         // check whether the token was created
