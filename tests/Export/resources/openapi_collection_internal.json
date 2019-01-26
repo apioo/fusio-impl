@@ -4943,6 +4943,138 @@
       },
       "parameters": []
     },
+    "\/export\/health": {
+      "get": {
+        "operationId": "exportHealthGetExport_Health",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Health"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/export\/debug": {
+      "get": {
+        "operationId": "exportDebugGetExport_Debug",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "exportDebugPutPassthru",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "exportDebugPostPassthru",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "exportDebugDeletePassthru",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "exportDebugPatchPassthru",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PATCH 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/export\/schema\/{name}": {
       "get": {
         "operationId": "exportSchemaNameGetExport_Schema",
@@ -7295,6 +7427,72 @@
             }
           }
         }
+      },
+      "Export_Health_Checks": {
+        "type": "object",
+        "title": "Export Health Checks",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Export_Health_Check"
+        }
+      },
+      "Export_Health_Check": {
+        "type": "object",
+        "title": "Export Health Check",
+        "properties": {
+          "healthy": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "Export_Health": {
+        "type": "object",
+        "title": "Export Health",
+        "properties": {
+          "healthy": {
+            "type": "boolean"
+          },
+          "checks": {
+            "$ref": "#\/components\/schemas\/Export_Health_Checks"
+          }
+        }
+      },
+      "Export_Debug_Headers": {
+        "type": "object",
+        "title": "Export Debug Headers"
+      },
+      "Export_Debug_Parameters": {
+        "type": "object",
+        "title": "Export Debug Parameters"
+      },
+      "Export_Debug_Request": {
+        "type": "object",
+        "title": "Export Debug Request"
+      },
+      "Export_Debug": {
+        "type": "object",
+        "title": "Export Debug",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "headers": {
+            "$ref": "#\/components\/schemas\/Export_Debug_Headers"
+          },
+          "parameters": {
+            "$ref": "#\/components\/schemas\/Export_Debug_Parameters"
+          },
+          "body": {
+            "$ref": "#\/components\/schemas\/Export_Debug_Request"
+          }
+        }
+      },
+      "Passthru": {
+        "type": "object",
+        "title": "passthru",
+        "description": "No schema information available"
       },
       "Export_Schema_JsonSchema": {
         "type": "object",

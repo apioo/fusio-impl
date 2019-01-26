@@ -917,6 +917,28 @@
       "version": "*"
     },
     {
+      "path": "\/export\/health",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/export\/debug",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/export\/schema\/:name",
       "methods": [
         "GET",
