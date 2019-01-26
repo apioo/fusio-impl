@@ -83,7 +83,6 @@ trait Engine
 
         $factory = new Factory\Action($this, $services);
         $factory->addResolver(new Resolver\HttpUrl());
-        $factory->addResolver(new Resolver\JavascriptFile());
         $factory->addResolver(new Resolver\PhpFile());
         $factory->addResolver(new Resolver\StaticFile());
 

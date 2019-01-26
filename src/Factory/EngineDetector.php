@@ -87,9 +87,6 @@ class EngineDetector
             case 'php':
                 return Resolver\PhpFile::class;
 
-            case 'js':
-                return Resolver\JavascriptFile::class;
-
             default:
                 return Resolver\StaticFile::class;
         }
@@ -107,9 +104,6 @@ class EngineDetector
 
             case 'PhpFile':
                 return Resolver\PhpFile::class;
-
-            case 'JavascriptFile':
-                return Resolver\JavascriptFile::class;
 
             case 'HttpUrl':
                 return Resolver\HttpUrl::class;

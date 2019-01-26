@@ -52,12 +52,10 @@ class EngineDetectorTest extends TestCase
             [self::class, self::class, PhpClass::class],
 
             [__DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
-            [__DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
             [__DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\StaticFile::class],
             [__DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', PhpClass::class],
 
             ['file://' . __DIR__ . '/resources/file.php', __DIR__ . '/resources/file.php', Resolver\PhpFile::class],
-            ['file://' . __DIR__ . '/resources/file.js', __DIR__ . '/resources/file.js', Resolver\JavascriptFile::class],
             ['file://' . __DIR__ . '/resources/file.json', __DIR__ . '/resources/file.json', Resolver\StaticFile::class],
             ['file://' . __DIR__ . '/resources/file.foo', __DIR__ . '/resources/file.foo', Resolver\StaticFile::class],
 
@@ -66,7 +64,6 @@ class EngineDetectorTest extends TestCase
 
             ['PhpClass://foobar', 'foobar', PhpClass::class],
             ['PhpFile://foobar', 'foobar', Resolver\PhpFile::class],
-            ['JavascriptFile://foobar', 'foobar', Resolver\JavascriptFile::class],
             ['HttpUrl://foobar', 'foobar', Resolver\HttpUrl::class],
             ['StaticFile://foobar', 'foobar', Resolver\StaticFile::class],
         ];
