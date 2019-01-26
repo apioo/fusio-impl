@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Connection;
 
+use Doctrine\DBAL\Connection;
+use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory\ContainerAwareInterface;
 use Fusio\Engine\Form\BuilderInterface;
@@ -35,7 +37,7 @@ use Psr\Container\ContainerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Native implements ConnectionInterface, ContainerAwareInterface
+class Native implements ConnectionInterface, ContainerAwareInterface, PingableInterface
 {
     /**
      * @var \Psr\Container\ContainerInterface
@@ -63,5 +65,14 @@ class Native implements ConnectionInterface, ContainerAwareInterface
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function ping($connection)
+    {
+        if ($connection instanceof Connection) {
+            return $connection->ping();
+        }
+
+        return false;
     }
 }
