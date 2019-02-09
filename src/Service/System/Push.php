@@ -75,8 +75,8 @@ class Push
             throw new \RuntimeException('Looks like path is not a valid Fusio folder');
         }
 
-        $host  = $this->config->get('fusio_provider_host');
-        $key   = $this->config->get('fusio_provider_key');
+        $host = $this->config->get('fusio_provider_host');
+        $key  = $this->config->get('fusio_provider_key');
 
         if (!empty($host) && !empty($key)) {
             // create zip
