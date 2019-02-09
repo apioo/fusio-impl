@@ -51,6 +51,7 @@ class ZipBuilder
         'composer.lock',
         'configuration.php',
         'container.php',
+        'provider.php',
     ];
 
     /**
