@@ -78,6 +78,8 @@ class ZipUpload
     /**
      * @param string $providerHost
      * @param string $providerKey
+     * @param string $hash
+     * @param integer $size
      * @return \Fusio\Impl\Service\System\Push\Provider
      */
     private function discoverProvider($providerHost, $providerKey, $hash, $size)
