@@ -99,7 +99,7 @@
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "type": "object",
-        "title": "query",
+        "title": "GetQuery",
         "properties": {
           "tags": {
             "type": "array",

@@ -59,7 +59,7 @@ class CollectionTest extends ControllerDbTestCase
         "definitions": {
             "GET-query": {
                 "type": "object",
-                "title": "query",
+                "title": "GetQuery",
                 "properties": {
                     "startIndex": {
                         "type": "integer"

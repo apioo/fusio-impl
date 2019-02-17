@@ -58,7 +58,7 @@ class IssuedTokensTest extends ControllerDbTestCase
         "definitions": {
             "GET-query": {
                 "type": "object",
-                "title": "query",
+                "title": "GetQuery",
                 "properties": {
                     "from": {
                         "type": "string",

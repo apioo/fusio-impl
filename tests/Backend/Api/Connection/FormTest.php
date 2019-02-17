@@ -59,7 +59,7 @@ class FormTest extends ControllerDbTestCase
         "definitions": {
             "GET-query": {
                 "type": "object",
-                "title": "query",
+                "title": "GetQuery",
                 "properties": {
                     "class": {
                         "type": "string"

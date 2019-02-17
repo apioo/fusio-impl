@@ -59,7 +59,7 @@ class AuthorizeTest extends ControllerDbTestCase
         "definitions": {
             "GET-query": {
                 "type": "object",
-                "title": "query",
+                "title": "GetQuery",
                 "properties": {
                     "client_id": {
                         "type": "string"
