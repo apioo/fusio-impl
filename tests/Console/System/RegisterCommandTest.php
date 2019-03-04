@@ -53,12 +53,10 @@ class RegisterCommandTest extends ControllerDbTestCase
     public function testCommand()
     {
         $command = Environment::getService('console')->find('system:register');
-
         $answers = ['y', '/import', '1'];
-        $helper  = $command->getHelper('question');
-        $helper->setInputStream($this->getInputStream(implode("\n", $answers) . "\n"));
 
         $commandTester = new CommandTester($command);
+        $commandTester->setInputs($answers);
         $commandTester->execute([
             'command' => $command->getName(),
             'class'   => TestAdapter::class,
@@ -311,14 +309,5 @@ JSON;
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
         $this->assertEquals(1, $responses[0]['response']);
-    }
-
-    protected function getInputStream($input)
-    {
-        $stream = fopen('php://memory', 'r+', false);
-        fputs($stream, $input);
-        rewind($stream);
-
-        return $stream;
     }
 }
