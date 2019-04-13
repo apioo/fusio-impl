@@ -109,12 +109,13 @@ class Authentication implements FilterInterface
             if ($type == 'Bearer' && !empty($accessToken)) {
                 $token = $this->getToken($accessToken, $requestMethod);
 
-                if (!empty($token)) {
-                    $app  = $this->appRepository->get($token['app_id']);
-                    $user = $this->userRepository->get($token['user_id']);
+                if ($token instanceof Model\Token) {
+                    $app  = $this->appRepository->get($token->getAppId());
+                    $user = $this->userRepository->get($token->getUserId());
 
                     $this->context->setApp($app);
                     $this->context->setUser($user);
+                    $this->context->setToken($token);
 
                     $filterChain->handle($request, $response);
                 } else {
@@ -131,13 +132,23 @@ class Authentication implements FilterInterface
             $user = new Model\User();
             $user->setAnonymous(true);
 
+            $token = new Model\Token();
+            $token->setScopes([]);
+
             $this->context->setApp($app);
             $this->context->setUser($user);
+            $this->context->setToken($token);
 
             $filterChain->handle($request, $response);
         }
     }
 
+    /**
+     * @param string $token
+     * @param string $requestMethod
+     * @return \Fusio\Engine\Model\Token|null
+     * @throws \Exception
+     */
     protected function getToken($token, $requestMethod)
     {
         // @TODO in the latest version we only issue JWTs so in the next major
@@ -147,7 +158,8 @@ class Authentication implements FilterInterface
         }
 
         $now = new \DateTime();
-        $sql = 'SELECT app_token.app_id,
+        $sql = 'SELECT app_token.id,
+                       app_token.app_id,
                        app_token.user_id,
                        app_token.token,
                        app_token.scope,
@@ -194,7 +206,15 @@ class Authentication implements FilterInterface
             }
 
             if ($isAllowed) {
-                return $accessToken;
+                $return = new Model\Token();
+                $return->setId($accessToken['id']);
+                $return->setAppId($accessToken['app_id']);
+                $return->setUserId($accessToken['user_id']);
+                $return->setScopes($entitledScopes);
+                $return->setExpire($accessToken['expire']);
+                $return->setDate($accessToken['date']);
+
+                return $return;
             } else {
                 throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
             }

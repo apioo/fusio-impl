@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Loader;
 
 use Fusio\Engine\Model\AppInterface;
+use Fusio\Engine\Model\TokenInterface;
 use Fusio\Engine\Model\UserInterface;
 use Fusio\Impl\Authorization\UserContext;
 
@@ -48,6 +49,11 @@ class Context extends \PSX\Framework\Loader\Context
      * @var \Fusio\Engine\Model\UserInterface
      */
     protected $user;
+
+    /**
+     * @var \Fusio\Engine\Model\TokenInterface
+     */
+    protected $token;
 
     /**
      * @var integer
@@ -126,6 +132,22 @@ class Context extends \PSX\Framework\Loader\Context
     public function setUser(UserInterface $user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return \Fusio\Engine\Model\TokenInterface
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param \Fusio\Engine\Model\TokenInterface $token
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
     }
 
     /**
