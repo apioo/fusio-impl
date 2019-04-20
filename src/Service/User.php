@@ -77,14 +77,14 @@ class User
     protected $configService;
 
     /**
-     * @var array
-     */
-    protected $userAttributes;
-
-    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
+
+    /**
+     * @var array|null
+     */
+    protected $userAttributes;
 
     /**
      * @param \Fusio\Impl\Table\User $userTable
@@ -92,18 +92,18 @@ class User
      * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
      * @param \Fusio\Impl\Service\Config $configService
-     * @param array $userAttributes
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param array|null $userAttributes
      */
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, array $userAttributes, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, array $userAttributes = null)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
         $this->appTable        = $appTable;
         $this->userScopeTable  = $userScopeTable;
         $this->configService   = $configService;
-        $this->userAttributes  = $userAttributes;
         $this->eventDispatcher = $eventDispatcher;
+        $this->userAttributes  = $userAttributes;
     }
 
     /**
@@ -468,6 +468,11 @@ class User
 
     protected function updateAttributes($userId, $attributes)
     {
+        if (empty($this->userAttributes)) {
+            // in case we have no attributes defined
+            return;
+        }
+
         if (!empty($attributes)) {
             foreach ($attributes as $name => $value) {
                 if (in_array($name, $this->userAttributes)) {
