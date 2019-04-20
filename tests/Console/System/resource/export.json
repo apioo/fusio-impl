@@ -384,6 +384,10 @@
         "foo",
         "bar"
       ],
+      "attributes": {
+        "first_name": "Johann",
+        "last_name": "Bach"
+      },
       "date": "[datetime]"
     }
   ],
