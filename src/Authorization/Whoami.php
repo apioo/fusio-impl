@@ -60,6 +60,9 @@ class Whoami extends SchemaApiAbstract
 
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
+        return $this->tableManager->getTable(View\User::class)->getEntity(
+            $this->context->getUserId(),
+            $this->config->get('fusio_user_attributes')
+        );
     }
 }

@@ -77,6 +77,11 @@ class User
     protected $configService;
 
     /**
+     * @var array
+     */
+    protected $userAttributes;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
@@ -87,15 +92,17 @@ class User
      * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
      * @param \Fusio\Impl\Service\Config $configService
+     * @param array $userAttributes
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, array $userAttributes, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
         $this->appTable        = $appTable;
         $this->userScopeTable  = $userScopeTable;
         $this->configService   = $configService;
+        $this->userAttributes  = $userAttributes;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -266,7 +273,7 @@ class User
         return $userId;
     }
 
-    public function update($userId, $status, $name, $email, array $scopes = null, UserContext $context)
+    public function update($userId, $status, $name, $email, array $scopes = null, $attributes = null, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -297,6 +304,9 @@ class User
             // add scopes
             $this->insertScopes($user['id'], $scopes);
 
+            // update attributes
+            $this->updateAttributes($user['id'], $attributes);
+
             $this->userTable->commit();
         } catch (\Throwable $e) {
             $this->userTable->rollBack();
@@ -307,7 +317,7 @@ class User
         $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user, $context));
     }
 
-    public function updateMeta($userId, $email, UserContext $context)
+    public function updateMeta($userId, $email, $attributes = null, UserContext $context)
     {
         $user = $this->userTable->get($userId);
 
@@ -318,12 +328,25 @@ class User
         // check values
         $this->assertEmail($email);
 
-        $record = [
-            'id'    => $user['id'],
-            'email' => $email,
-        ];
+        try {
+            $this->userTable->beginTransaction();
 
-        $this->userTable->update($record);
+            $record = [
+                'id'    => $user['id'],
+                'email' => $email,
+            ];
+
+            $this->userTable->update($record);
+
+            // update attributes
+            $this->updateAttributes($user['id'], $attributes);
+
+            $this->userTable->commit();
+        } catch (\Throwable $e) {
+            $this->userTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, [], $user, $context));
     }
@@ -439,6 +462,17 @@ class User
                     'user_id'  => $userId,
                     'scope_id' => $scope['id'],
                 ));
+            }
+        }
+    }
+
+    protected function updateAttributes($userId, $attributes)
+    {
+        if (!empty($attributes)) {
+            foreach ($attributes as $name => $value) {
+                if (in_array($name, $this->userAttributes)) {
+                    $this->userTable->setAttribute($userId, $name, $value);
+                }
             }
         }
     }

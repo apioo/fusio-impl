@@ -48,6 +48,9 @@ class User extends SchemaAbstract
             ->setItems(Property::getString());
         $sb->arrayType('apps')
             ->setItems($this->getSchema(App::class));
+        $sb->objectType('attributes')
+            ->setTitle('User Attributes')
+            ->setAdditionalProperties(Property::getString());
         $sb->dateTime('date');
 
         return $sb->getProperty();

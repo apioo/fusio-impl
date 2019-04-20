@@ -69,7 +69,10 @@ class Account extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\User::class)->getEntity($this->context->getUserId());
+        return $this->tableManager->getTable(View\User::class)->getEntity(
+            $this->context->getUserId(),
+            $this->config->get('fusio_user_attributes')
+        );
     }
 
     /**
@@ -80,6 +83,7 @@ class Account extends ConsumerApiAbstract
         $this->userService->updateMeta(
             $this->context->getUserId(),
             $record->email,
+            $record->attributes,
             $this->context->getUserContext()
         );
 

@@ -43,6 +43,9 @@ class Account extends SchemaAbstract
         $sb->integer('points');
         $sb->arrayType('scopes')
             ->setItems(Property::getString());
+        $sb->objectType('attributes')
+            ->setTitle('Consumer User Attributes')
+            ->setAdditionalProperties(Property::getString());
         $sb->string('date')
             ->setFormat('date-time');
 

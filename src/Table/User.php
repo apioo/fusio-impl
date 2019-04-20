@@ -101,4 +101,32 @@ class User extends TableAbstract
             'points' => $points,
         ]);
     }
+
+    /**
+     * Sets a specific user attribute
+     * 
+     * @param integer $userId
+     * @param string $name
+     * @param string $value
+     */
+    public function setAttribute($userId, $name, $value)
+    {
+        $row = $this->connection->fetchAssoc('SELECT id FROM fusio_user_attribute WHERE name = :name', ['name' => $name]);
+
+        if (empty($row)) {
+            $this->connection->insert('fusio_user_attribute', [
+                'user_id' => $userId,
+                'name' => $name,
+                'value' => $value,
+            ]);
+        } else {
+            $this->connection->update('fusio_user_attribute', [
+                'user_id' => $userId,
+                'name' => $name,
+                'value' => $value,
+            ], [
+                'id' => $row['id']
+            ]);
+        }
+    }
 }

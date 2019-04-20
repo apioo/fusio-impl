@@ -6607,10 +6607,20 @@
               "$ref": "#\/components\/schemas\/App"
             }
           },
+          "attributes": {
+            "$ref": "#\/components\/schemas\/User_Attributes"
+          },
           "date": {
             "type": "string",
             "format": "date-time"
           }
+        }
+      },
+      "User_Attributes": {
+        "type": "object",
+        "title": "User Attributes",
+        "additionalProperties": {
+          "type": "string"
         }
       },
       "User_Collection": {
@@ -7106,6 +7116,13 @@
           }
         }
       },
+      "Consumer_User_Attributes": {
+        "type": "object",
+        "title": "Consumer User Attributes",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
       "Consumer_User_Account": {
         "type": "object",
         "title": "Consumer User Account",
@@ -7130,6 +7147,9 @@
             "items": {
               "type": "string"
             }
+          },
+          "attributes": {
+            "$ref": "#\/components\/schemas\/Consumer_User_Attributes"
           },
           "date": {
             "type": "string",

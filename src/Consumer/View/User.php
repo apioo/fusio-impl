@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity($id)
+    public function getEntity($id, array $userAttributes = null)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
@@ -43,6 +43,24 @@ class User extends ViewAbstract
             'email' => 'email',
             'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'getByUser_id'], [new Reference('id')], [
+                'name' => 'name',
+                'value' => 'value',
+            ], null, function(array $result) use ($userAttributes){
+                $values = [];
+                foreach ($result as $row) {
+                    $values[$row['name']] = $row['value'];
+                }
+
+                $data = [];
+                if (!empty($userAttributes)) {
+                    foreach ($userAttributes as $name) {
+                        $data[$name] = $values[$name] ?? null;
+                    }
+                }
+
+                return $data ?: null;
+            }),
             'date' => $this->fieldDateTime('date'),
         ]);
 

@@ -104,6 +104,9 @@ class CollectionTest extends ControllerDbTestCase
                             "$ref": "#\/definitions\/App"
                         }
                     },
+                    "attributes": {
+                        "$ref": "#\/definitions\/User_Attributes"
+                    },
                     "date": {
                         "type": "string",
                         "format": "date-time"
@@ -190,6 +193,13 @@ class CollectionTest extends ControllerDbTestCase
                         "type": "string",
                         "format": "date-time"
                     }
+                }
+            },
+            "User_Attributes": {
+                "type": "object",
+                "title": "User Attributes",
+                "additionalProperties": {
+                    "type": "string"
                 }
             },
             "User_Collection": {

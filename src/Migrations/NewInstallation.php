@@ -274,6 +274,8 @@ class NewInstallation
                 ['user_id' => 1, 'scope_id' => 2],
                 ['user_id' => 1, 'scope_id' => 3],
             ],
+            'fusio_user_attribute' => [
+            ],
         ];
 
         // routes method

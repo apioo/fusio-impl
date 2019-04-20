@@ -131,6 +131,13 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
+            "User_Attributes": {
+                "type": "object",
+                "title": "User Attributes",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
             "User": {
                 "type": "object",
                 "title": "User",
@@ -162,6 +169,9 @@ class EntityTest extends ControllerDbTestCase
                         "items": {
                             "$ref": "#\/definitions\/App"
                         }
+                    },
+                    "attributes": {
+                        "$ref": "#\/definitions\/User_Attributes"
                     },
                     "date": {
                         "type": "string",
@@ -379,6 +389,81 @@ JSON;
             'user_id'  => 4,
             'scope_id' => 5,
         ]], $scopes);
+    }
+
+    public function testPutAttributes()
+    {
+        $response = $this->sendRequest('/backend/user/4', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'status' => 1,
+            'name'   => 'bar',
+            'email'  => 'bar@bar.com',
+            'scopes' => ['bar'],
+            'attributes' => [
+                'first_name' => 'Foo',
+                'last_name' => 'Bar',
+            ],
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "User successful updated"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status', 'name', 'email')
+            ->from('fusio_user')
+            ->where('id = 4')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals('bar', $row['name']);
+        $this->assertEquals('bar@bar.com', $row['email']);
+
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('user_id', 'scope_id')
+            ->from('fusio_user_scope')
+            ->where('user_id = :user_id')
+            ->orderBy('id', 'DESC')
+            ->getSQL();
+
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
+
+        $this->assertEquals([[
+            'user_id'  => 4,
+            'scope_id' => 5,
+        ]], $scopes);
+
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('name', 'value')
+            ->from('fusio_user_attribute')
+            ->where('user_id = :user_id')
+            ->orderBy('id', 'DESC')
+            ->getSQL();
+
+        $attributes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
+
+        $this->assertEquals([[
+            'name'  => 'last_name',
+            'value' => 'Bar',
+        ], [
+            'name'  => 'first_name',
+            'value' => 'Foo',
+        ]], $attributes);
     }
 
     public function testDelete()

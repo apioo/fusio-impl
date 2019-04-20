@@ -212,6 +212,10 @@ class Fixture
             'fusio_user_grant' => [
                 ['user_id' => 1, 'app_id' => 1, 'allow' => 1, 'date' => '2015-02-27 19:59:15'],
             ],
+            'fusio_user_attribute' => [
+                ['user_id' => 1, 'name' => 'first_name', 'value' => 'Johann'],
+                ['user_id' => 1, 'name' => 'last_name', 'value' => 'Bach'],
+            ],
             'app_news' => [
                 ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],
                 ['title' => 'bar', 'content' => 'foo', 'date' => '2015-02-27 19:59:15'],

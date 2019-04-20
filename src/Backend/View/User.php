@@ -58,7 +58,7 @@ class User extends ViewAbstract
             'totalResults' => $this->getTable(Table\User::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['password'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'provider' => 'provider',
                 'status' => $this->fieldInteger('status'),
@@ -71,7 +71,7 @@ class User extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity($id, array $userAttributes = null)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
@@ -81,7 +81,7 @@ class User extends ViewAbstract
             'email' => 'email',
             'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUser_id'], [new Reference('id'), Fields::blacklist(['userId', 'parameters', 'appSecret'])], [
+            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUser_id'], [new Reference('id')], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -89,6 +89,24 @@ class User extends ViewAbstract
                 'appKey' => 'app_key',
                 'date' => 'date',
             ]),
+            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'getByUser_id'], [new Reference('id')], [
+                'name' => 'name',
+                'value' => 'value',
+            ], null, function(array $result) use ($userAttributes){
+                $values = [];
+                foreach ($result as $row) {
+                    $values[$row['name']] = $row['value'];
+                }
+
+                $data = [];
+                if (!empty($userAttributes)) {
+                    foreach ($userAttributes as $name) {
+                        $data[$name] = $values[$name] ?? null;
+                    }
+                }
+
+                return $data ?: null;
+            }),
             'date' => $this->fieldDateTime('date'),
         ]);
 

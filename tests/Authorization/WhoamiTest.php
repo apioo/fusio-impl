@@ -61,6 +61,10 @@ class WhoamiTest extends ControllerDbTestCase
         "foo",
         "bar"
     ],
+    "attributes": {
+        "last_name": "Bach",
+        "first_name": "Johann"
+    },
     "date": "[datetime]"
 }
 JSON;

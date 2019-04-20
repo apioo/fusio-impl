@@ -79,7 +79,8 @@ class Entity extends BackendApiAbstract
     protected function doGet(HttpContextInterface $context)
     {
         $user = $this->tableManager->getTable(View\User::class)->getEntity(
-            (int) $context->getUriFragment('user_id')
+            (int) $context->getUriFragment('user_id'),
+            $this->config->get('fusio_user_attributes')
         );
 
         if (!empty($user)) {
@@ -104,6 +105,7 @@ class Entity extends BackendApiAbstract
             $record->name,
             $record->email,
             $record->scopes,
+            $record->attributes,
             $this->context->getUserContext()
         );
 

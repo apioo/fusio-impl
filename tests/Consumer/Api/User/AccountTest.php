@@ -57,6 +57,13 @@ class AccountTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "Consumer_User_Attributes": {
+                "type": "object",
+                "title": "Consumer User Attributes",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
             "Consumer_User_Account": {
                 "type": "object",
                 "title": "Consumer User Account",
@@ -81,6 +88,9 @@ class AccountTest extends ControllerDbTestCase
                         "items": {
                             "type": "string"
                         }
+                    },
+                    "attributes": {
+                        "$ref": "#\/definitions\/Consumer_User_Attributes"
                     },
                     "date": {
                         "type": "string",
@@ -139,6 +149,7 @@ class AccountTest extends ControllerDbTestCase
         }
     ]
 }
+
 JSON;
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
@@ -167,6 +178,10 @@ JSON;
         "foo",
         "bar"
     ],
+    "attributes": {
+        "first_name": "Johann",
+        "last_name": "Bach"
+    },
     "date": "[datetime]"
 }
 JSON;
