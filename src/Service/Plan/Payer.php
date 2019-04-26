@@ -23,7 +23,6 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Plan\CreditedEvent;
 use Fusio\Impl\Event\Plan\PayedEvent;
 use Fusio\Impl\Event\PlanEvents;
 use Fusio\Impl\Table;
@@ -94,21 +93,5 @@ class Payer
         );
 
         $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($points, $userContext));
-    }
-
-    /**
-     * Method which is called in case the user has bought new points. It adds
-     * the points to the user account
-     *
-     * @param integer $points
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function credit($points, UserContext $context)
-    {
-        // credit points
-        $this->userTable->creditPoints($context->getUserId(), $points);
-
-        // dispatch credited event
-        $this->eventDispatcher->dispatch(PlanEvents::CREDIT, new CreditedEvent($points, $context));
     }
 }

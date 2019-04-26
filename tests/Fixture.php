@@ -161,7 +161,7 @@ class Fixture
                 ['log_id' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_plan' => [
-                ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500],
+                ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500, 'interval' => 'P1M'],
             ],
             'fusio_plan_usage' => [
                 ['route_id' => 1, 'user_id' => 1, 'app_id' => 1, 'points' => 1, 'insert_date' => '2018-10-05 18:18:00'],

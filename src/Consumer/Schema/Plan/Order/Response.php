@@ -19,42 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Consumer\Schema\Plan\Order;
 
-use PSX\Sql\TableAbstract;
+use PSX\Schema\SchemaAbstract;
 
 /**
- * Plan
+ * Response
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends TableAbstract
+class Response extends SchemaAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    const INTERVAL_1MONTH = 1;
-    const INTERVAL_3MONTH = 2;
-    const INTERVAL_6MONTH = 3;
-    const INTERVAL_12MONTH = 4;
-
-    public function getName()
+    public function getDefinition()
     {
-        return 'fusio_plan';
-    }
+        $sb = $this->getSchemaBuilder('Consumer Plan Order Response');
+        $sb->integer('invoiceId');
 
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'description' => self::TYPE_VARCHAR,
-            'price' => self::TYPE_FLOAT,
-            'points' => self::TYPE_INT,
-            'interval' => self::TYPE_INT,
-        );
+        return $sb->getProperty();
     }
 }

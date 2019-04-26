@@ -35,9 +35,9 @@ class Request extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('Consumer Transaction Prepare Request');
-        $sb->integer('planId');
+        $sb->integer('invoiceId');
         $sb->string('returnUrl');
-        $sb->setRequired(['planId', 'returnUrl']);
+        $sb->setRequired(['invoiceId', 'returnUrl']);
 
         return $sb->getProperty();
     }

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Transaction;
+namespace Fusio\Impl\Consumer\Api\Plan;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
@@ -28,19 +28,18 @@ use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * Prepare
+ * Order
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Prepare extends ConsumerApiAbstract
+class Order extends ConsumerApiAbstract
 {
     /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Transaction
+     * @var \Fusio\Impl\Service\Plan\Order
      */
-    protected $transactionService;
+    protected $planOrderService;
 
     /**
      * @inheritdoc
@@ -51,8 +50,8 @@ class Prepare extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Transaction\Prepare\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Prepare\Response::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Order\Request::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Order\Response::class))
         );
 
         return $resource;
@@ -63,15 +62,9 @@ class Prepare extends ConsumerApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $approvalUrl = $this->transactionService->prepare(
-            $context->getUriFragment('provider'),
-            $record->invoiceId,
-            $record->returnUrl,
+        return $this->planOrderService->order(
+            $record->planId,
             $this->context->getUserContext()
         );
-        
-        return [
-            'approvalUrl' => $approvalUrl,
-        ];
     }
 }

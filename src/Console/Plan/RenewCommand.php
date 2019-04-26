@@ -19,42 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Console\Plan;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Service;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Plan
+ * RenewCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends TableAbstract
+class RenewCommand extends Command
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    /**
+     * @var \Fusio\Impl\Service\Event\Executor
+     */
+    protected $eventExecutorService;
 
-    const INTERVAL_1MONTH = 1;
-    const INTERVAL_3MONTH = 2;
-    const INTERVAL_6MONTH = 3;
-    const INTERVAL_12MONTH = 4;
-
-    public function getName()
+    public function __construct(Service\Event\Executor $eventExecutorService)
     {
-        return 'fusio_plan';
+        parent::__construct();
+
+        $this->eventExecutorService = $eventExecutorService;
     }
 
-    public function getColumns()
+    protected function configure()
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'description' => self::TYPE_VARCHAR,
-            'price' => self::TYPE_FLOAT,
-            'points' => self::TYPE_INT,
-            'interval' => self::TYPE_INT,
-        );
+        $this
+            ->setName('plan:renew')
+            ->setDescription('Executes all pending events');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->eventExecutorService->execute();
+
+        $output->writeln('Execution successful');
     }
 }

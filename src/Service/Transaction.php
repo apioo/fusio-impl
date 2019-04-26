@@ -23,7 +23,6 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Model\Product;
-use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Model\Transaction as TransactionModel;
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Engine\Parameters;
@@ -34,7 +33,6 @@ use Fusio\Impl\Event\Transaction\ExecutedEvent;
 use Fusio\Impl\Event\Transaction\PreparedEvent;
 use Fusio\Impl\Event\TransactionEvents;
 use Fusio\Impl\Provider\ProviderFactory;
-use Fusio\Impl\Service\Plan\Payer;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Framework\Util\Uuid;
@@ -57,9 +55,9 @@ class Transaction
     protected $connector;
 
     /**
-     * @var \Fusio\Impl\Service\Plan\Payer
+     * @var \Fusio\Impl\Service\Plan\Invoice
      */
-    protected $payerService;
+    protected $invoiceService;
 
     /**
      * @var \Fusio\Impl\Provider\ProviderFactory
@@ -72,9 +70,9 @@ class Transaction
     protected $config;
 
     /**
-     * @var \Fusio\Impl\Table\Plan
+     * @var \Fusio\Impl\Table\Plan\Invoice
      */
-    protected $planTable;
+    protected $invoiceTable;
 
     /**
      * @var \Fusio\Impl\Table\Transaction
@@ -88,32 +86,32 @@ class Transaction
 
     /**
      * @param \Fusio\Engine\ConnectorInterface $connector
-     * @param \Fusio\Impl\Service\Plan\Payer $payerService
+     * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
      * @param \PSX\Framework\Config\Config $config
-     * @param \Fusio\Impl\Table\Plan $planTable
+     * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
      * @param \Fusio\Impl\Table\Transaction $transactionTable
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(ConnectorInterface $connector, Payer $payerService, ProviderFactory $providerFactory, Config $config, Table\Plan $planTable, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, Plan\Invoice $invoiceService, ProviderFactory $providerFactory, Config $config, Table\Plan\Invoice $invoiceTable, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
-        $this->payerService = $payerService;
+        $this->invoiceService = $invoiceService;
         $this->providerFactory = $providerFactory;
         $this->config = $config;
-        $this->planTable = $planTable;
+        $this->invoiceTable = $invoiceTable;
         $this->transactionTable = $transactionTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
      * @param string $name
-     * @param integer $planId
+     * @param integer $invoiceId
      * @param string $returnUrl
      * @param \Fusio\Impl\Authorization\UserContext $context
      * @return string
      */
-    public function prepare($name, $planId, $returnUrl, UserContext $context)
+    public function prepare($name, $invoiceId, $returnUrl, UserContext $context)
     {
         $provider = $this->providerFactory->factory($name);
 
@@ -121,7 +119,7 @@ class Transaction
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $product    = $this->createProduct($planId);
+        $product    = $this->getProduct($invoiceId);
         $connection = $this->connector->getConnection($name);
 
         // validate return url
@@ -131,9 +129,7 @@ class Transaction
 
         // create transaction
         $transaction = new TransactionModel();
-        $transaction->setPlanId($product->getId());
-        $transaction->setUserId($context->getUserId());
-        $transaction->setAppId($context->getAppId());
+        $transaction->setInvoiceId($invoiceId);
         $transaction->setProvider($name);
         $transaction->setTransactionId(Uuid::pseudoRandom());
         $transaction->setReturnUrl($returnUrl);
@@ -143,9 +139,7 @@ class Transaction
         try {
             // create transaction
             $this->transactionTable->create([
-                'plan_id' => $transaction->getPlanId(),
-                'user_id' => $transaction->getUserId(),
-                'app_id' => $transaction->getAppId(),
+                'invoice_id' => $transaction->getInvoiceId(),
                 'status' => TransactionModel::STATUS_CREATED,
                 'provider' => $transaction->getProvider(),
                 'transaction_id' => $transaction->getTransactionId(),
@@ -166,7 +160,7 @@ class Transaction
             );
 
             // update transaction
-            $this->updateTransaction($product, $transaction);
+            $this->updateTransaction($transaction);
 
             // trigger event
             $this->eventDispatcher->dispatch(TransactionEvents::PREPARE, new PreparedEvent($transaction));
@@ -201,13 +195,13 @@ class Transaction
 
         try {
             // create product
-            $product = $this->createProduct($transaction->getPlanId());
+            $product = $this->getProduct($transaction->getInvoiceId());
 
             // execute transaction
             $provider->execute($connection, $product, $transaction, new Parameters($parameters));
 
             // update transaction
-            $this->updateTransaction($product, $transaction);
+            $this->updateTransaction($transaction);
 
             // trigger event
             $this->eventDispatcher->dispatch(TransactionEvents::EXECUTE, new ExecutedEvent($transaction));
@@ -223,26 +217,22 @@ class Transaction
     }
 
     /**
-     * @param integer $planId
+     * @param integer $invoiceId
      * @return \Fusio\Engine\Model\ProductInterface
      */
-    private function createProduct($planId)
+    private function getProduct($invoiceId)
     {
-        $plan = $this->planTable->get($planId);
-
+        $plan = $this->invoiceTable->getPlanByInvoiceId($invoiceId);
         if (empty($plan)) {
-            throw new StatusCode\BadRequestException('Invalid plan id');
-        }
-
-        if ($plan['status'] != Table\Plan::STATUS_ACTIVE) {
-            throw new StatusCode\BadRequestException('Invalid plan status');
+            throw new StatusCode\BadRequestException('Invalid invoice id');
         }
 
         $product = new Product();
         $product->setId($plan['id']);
         $product->setName($plan['name']);
-        $product->setPrice($plan['price']);
+        $product->setPrice($plan['amount']);
         $product->setPoints($plan['points']);
+        $product->setInterval($plan['interval']);
 
         return $product;
     }
@@ -268,9 +258,7 @@ class Transaction
 
         $transaction = new TransactionModel();
         $transaction->setId($result['id']);
-        $transaction->setPlanId($result['plan_id']);
-        $transaction->setUserId($result['user_id']);
-        $transaction->setAppId($result['app_id']);
+        $transaction->setInvoiceId($result['invoice_id']);
         $transaction->setStatus($result['status']);
         $transaction->setProvider($result['provider']);
         $transaction->setTransactionId($result['transaction_id']);
@@ -289,10 +277,11 @@ class Transaction
     }
 
     /**
-     * @param \Fusio\Engine\Model\ProductInterface $product
+     * Updates the status of the transaction
+     * 
      * @param \Fusio\Engine\Model\TransactionInterface $transaction
      */
-    private function updateTransaction(ProductInterface $product, TransactionInterface $transaction)
+    private function updateTransaction(TransactionInterface $transaction)
     {
         // update transaction
         $this->transactionTable->update([
@@ -304,10 +293,7 @@ class Transaction
 
         // if approved add points to user
         if ($transaction->getStatus() == TransactionInterface::STATUS_APPROVED) {
-            $this->payerService->credit(
-                $product->getPoints(),
-                UserContext::newContext($transaction->getUserId(), $transaction->getAppId())
-            );
+            $this->invoiceService->pay($transaction);
         }
     }
 

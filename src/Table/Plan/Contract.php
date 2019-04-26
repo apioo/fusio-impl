@@ -19,42 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Table\Plan;
 
+use PSX\Sql\Condition;
 use PSX\Sql\TableAbstract;
 
 /**
- * Plan
+ * Contract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Plan extends TableAbstract
+class Contract extends TableAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    const INTERVAL_1MONTH = 1;
-    const INTERVAL_3MONTH = 2;
-    const INTERVAL_6MONTH = 3;
-    const INTERVAL_12MONTH = 4;
+    const STATUS_ACTIVE = 1;
+    const STATUS_CANCELLED = 2;
+    const STATUS_CLOSED = 3;
+    const STATUS_ONETIME = 4;
 
     public function getName()
     {
-        return 'fusio_plan';
+        return 'fusio_plan_contract';
     }
 
     public function getColumns()
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'user_id' => self::TYPE_INT,
+            'plan_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'description' => self::TYPE_VARCHAR,
-            'price' => self::TYPE_FLOAT,
+            'amount' => self::TYPE_FLOAT,
             'points' => self::TYPE_INT,
-            'interval' => self::TYPE_INT,
+            'insert_date' => self::TYPE_DATETIME,
         );
+    }
+    
+    public function getActiveContracts()
+    {
+        return $this->getBy(new Condition(['status' => self::STATUS_ACTIVE]));
     }
 }

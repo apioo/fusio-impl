@@ -19,29 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Transaction;
+namespace Fusio\Impl\Consumer\Api\Plan\Contract;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * Prepare
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Prepare extends ConsumerApiAbstract
+class Collection extends ConsumerApiAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Transaction
-     */
-    protected $transactionService;
-
     /**
      * @inheritdoc
      */
@@ -49,10 +44,9 @@ class Prepare extends ConsumerApiAbstract
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
+        $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Transaction\Prepare\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Prepare\Response::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Collection::class))
         );
 
         return $resource;
@@ -61,17 +55,11 @@ class Prepare extends ConsumerApiAbstract
     /**
      * @inheritdoc
      */
-    protected function doPost($record, HttpContextInterface $context)
+    protected function doGet(HttpContextInterface $context)
     {
-        $approvalUrl = $this->transactionService->prepare(
-            $context->getUriFragment('provider'),
-            $record->invoiceId,
-            $record->returnUrl,
-            $this->context->getUserContext()
+        return $this->tableManager->getTable(View\Plan\Contract::class)->getCollection(
+            $this->context->getUserId(),
+            (int) $context->getParameter('startIndex')
         );
-        
-        return [
-            'approvalUrl' => $approvalUrl,
-        ];
     }
 }
