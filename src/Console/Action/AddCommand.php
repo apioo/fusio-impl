@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console\Action;
 
+use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -64,10 +65,17 @@ class AddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $class  = $input->getArgument('class');
+        $engine = $input->getArgument('engine');
+
+        if (empty($engine)) {
+            $engine = EngineDetector::getEngine($class);
+        }
+
         $response = $this->apiExecutor->request('POST', 'action', [
             'name' => $input->getArgument('name'),
-            'class' => $input->getArgument('class'),
-            'engine' => $input->getArgument('engine'),
+            'class' => $class,
+            'engine' => $engine,
             'config' => $this->parseConfig($input->getArgument('config')),
         ]);
 
@@ -78,9 +86,13 @@ class AddCommand extends Command
 
     protected function parseConfig($config)
     {
+        if (empty($config)) {
+            return new \stdClass();
+        }
+
         $data = [];
         parse_str($config, $data);
 
-        return $data;
+        return (object) $data;
     }
 }
