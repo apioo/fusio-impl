@@ -69,4 +69,30 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals('{"response":"{\"foo\":\"bar\"}"}', $action['config']);
     }
+
+    public function testCommandWithoutEngine()
+    {
+        $command = Environment::getService('console')->find('action:add');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name'    => 'foobar',
+            'class'   => UtilStaticResponse::class,
+        ]);
+
+        $actual = $commandTester->getDisplay();
+
+        $this->assertEquals('Action successful created', trim($actual));
+
+        // check action
+        $action = $this->connection->fetchAssoc('SELECT id, status, name, class, engine, config FROM fusio_action ORDER BY id DESC');
+
+        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(1, $action['status']);
+        $this->assertEquals('foobar', $action['name']);
+        $this->assertEquals(UtilStaticResponse::class, $action['class']);
+        $this->assertEquals(PhpClass::class, $action['engine']);
+        $this->assertNull($action['config']);
+    }
 }
