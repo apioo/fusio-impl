@@ -46,7 +46,7 @@ class Entity extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract::class))
         );
 
         return $resource;
@@ -57,9 +57,9 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Plan::class)->getEntity(
+        return $this->tableManager->getTable(View\Plan\Contract::class)->getEntity(
             $this->context->getUserId(),
-            (int) $context->getUriFragment('plan_id')
+            (int) $context->getUriFragment('contract_id')
         );
     }
 }

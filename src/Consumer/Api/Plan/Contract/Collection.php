@@ -46,7 +46,7 @@ class Collection extends ConsumerApiAbstract
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract\Collection::class))
         );
 
         return $resource;

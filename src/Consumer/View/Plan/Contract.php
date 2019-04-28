@@ -68,4 +68,34 @@ class Contract extends ViewAbstract
 
         return $this->build($definition);
     }
+
+    public function getEntity($userId, $contractId)
+    {
+        $condition = new Condition();
+        $condition->equals('id', $contractId);
+        $condition->equals('user_id', $userId);
+
+        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'getOneBy'], [$condition], [
+            'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
+            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('id')], [
+                'id' => $this->fieldInteger('id'),
+                'name' => 'name',
+                'description' => 'description',
+            ]),
+            'amount' => $this->fieldNumber('amount'),
+            'points' => $this->fieldInteger('points'),
+            'invoices' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getByContract_id'], [new Reference('id'), null, 0, 16, 'insert_date', Sql::SORT_DESC], [
+                'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
+                'amount' => $this->fieldNumber('amount'),
+                'points' => $this->fieldInteger('points'),
+                'payDate' => $this->fieldDateTime('pay_date'),
+                'insertDate' => $this->fieldDateTime('insert_date'),
+            ]),
+            'insertDate' => $this->fieldDateTime('insert_date'),
+        ]);
+
+        return $this->build($definition);
+    }
 }
