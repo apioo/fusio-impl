@@ -52,8 +52,8 @@ class Invoice extends TableAbstract
             'status' => self::TYPE_INT,
             'amount' => self::TYPE_FLOAT,
             'points' => self::TYPE_INT,
-            'from_date' => self::TYPE_DATETIME,
-            'to_date' => self::TYPE_DATETIME,
+            'from_date' => self::TYPE_DATE,
+            'to_date' => self::TYPE_DATE,
             'pay_date' => self::TYPE_DATETIME,
             'insert_date' => self::TYPE_DATETIME,
         );
