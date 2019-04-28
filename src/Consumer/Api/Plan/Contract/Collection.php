@@ -38,6 +38,11 @@ use PSX\Http\Environment\HttpContextInterface;
 class Collection extends ConsumerApiAbstract
 {
     /**
+     * @var \Fusio\Impl\Service\Plan\Order
+     */
+    protected $planOrderService;
+
+    /**
      * @inheritdoc
      */
     public function getDocumentation($version = null)
@@ -47,6 +52,12 @@ class Collection extends ConsumerApiAbstract
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract\Collection::class))
+        );
+
+        $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Order\Request::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Order\Response::class))
         );
 
         return $resource;
@@ -60,6 +71,17 @@ class Collection extends ConsumerApiAbstract
         return $this->tableManager->getTable(View\Plan\Contract::class)->getCollection(
             $this->context->getUserId(),
             (int) $context->getParameter('startIndex')
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doPost($record, HttpContextInterface $context)
+    {
+        return $this->planOrderService->order(
+            $record->planId,
+            $this->context->getUserContext()
         );
     }
 }
