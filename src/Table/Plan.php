@@ -21,7 +21,9 @@
 
 namespace Fusio\Impl\Table;
 
+use Fusio\Engine\Model\Product;
 use PSX\Sql\TableAbstract;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Plan
@@ -56,5 +58,31 @@ class Plan extends TableAbstract
             'points' => self::TYPE_INT,
             'interval' => self::TYPE_INT,
         );
+    }
+
+    /**
+     * @param integer $planId
+     * @return \Fusio\Engine\Model\ProductInterface
+     */
+    public function getProduct($planId)
+    {
+        $plan = $this->get($planId);
+
+        if (empty($plan)) {
+            throw new StatusCode\BadRequestException('Invalid plan id');
+        }
+
+        if ($plan['status'] != self::STATUS_ACTIVE) {
+            throw new StatusCode\BadRequestException('Invalid plan status');
+        }
+
+        $product = new Product();
+        $product->setId($plan['id']);
+        $product->setName($plan['name']);
+        $product->setPrice($plan['price']);
+        $product->setPoints($plan['points']);
+        $product->setInterval($plan['interval']);
+
+        return $product;
     }
 }

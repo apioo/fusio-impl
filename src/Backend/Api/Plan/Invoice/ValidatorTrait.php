@@ -19,25 +19,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\Plan\Order;
+namespace Fusio\Impl\Backend\Api\Plan\Invoice;
 
-use PSX\Schema\SchemaAbstract;
+use Fusio\Impl\Backend\Filter\PrimaryKey;
+use Fusio\Impl\Table;
+use PSX\Api\Resource\MethodAbstract;
+use PSX\Schema\Validation\Field;
+use PSX\Schema\Validation\Validator;
 
 /**
- * Response
+ * ValidatorTrait
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Response extends SchemaAbstract
+trait ValidatorTrait
 {
-    public function getDefinition()
+    protected function getValidator(MethodAbstract $method)
     {
-        $sb = $this->getSchemaBuilder('Consumer Plan Order Response');
-        $sb->integer('contractId');
-        $sb->integer('invoiceId');
-
-        return $sb->getProperty();
+        return new Validator(array(
+            new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Plan\Invoice::class))]),
+        ));
     }
 }

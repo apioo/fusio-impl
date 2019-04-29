@@ -69,39 +69,14 @@ class Order
      */
     public function order($planId, UserContext $context)
     {
-        $product = $this->getProduct($planId);
+        $product = $this->planTable->getProduct($planId);
 
         $contractId = $this->contractService->create($context->getUserId(), $product);
         $invoiceId  = $this->invoiceService->create($contractId, new \DateTime());
 
         return [
-            'invoiceId' => $invoiceId
+            'contractId' => $contractId,
+            'invoiceId' => $invoiceId,
         ];
-    }
-
-    /**
-     * @param integer $planId
-     * @return \Fusio\Engine\Model\ProductInterface
-     */
-    private function getProduct($planId)
-    {
-        $plan = $this->planTable->get($planId);
-
-        if (empty($plan)) {
-            throw new StatusCode\BadRequestException('Invalid plan id');
-        }
-
-        if ($plan['status'] != Table\Plan::STATUS_ACTIVE) {
-            throw new StatusCode\BadRequestException('Invalid plan status');
-        }
-
-        $product = new Product();
-        $product->setId($plan['id']);
-        $product->setName($plan['name']);
-        $product->setPrice($plan['price']);
-        $product->setPoints($plan['points']);
-        $product->setInterval($plan['interval']);
-
-        return $product;
     }
 }
