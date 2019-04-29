@@ -163,6 +163,7 @@ class Fixture
             ],
             'fusio_plan' => [
                 ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500, 'interval' => 'P1M'],
+                ['status' => 1, 'name' => 'Plan B', 'description' => '', 'price' => 49.99, 'points' => 1000, 'interval' => null],
             ],
             'fusio_plan_contract' => [
                 ['user_id' => 1, 'plan_id' => 1, 'status' => 1, 'amount' => 1, 'points' => 50, 'insert_date' => '2018-10-05 18:18:00'],
