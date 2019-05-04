@@ -426,6 +426,31 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Plan\Contract
+     */
+    public function getPlanContractService()
+    {
+        return new Service\Plan\Contract(
+            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
+            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Plan\Invoice
+     */
+    public function getPlanInvoiceService()
+    {
+        return new Service\Plan\Invoice(
+            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
+            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Plan\Payer
      */
     public function getPlanPayerService()
