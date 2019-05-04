@@ -36,7 +36,7 @@ class Create extends SchemaAbstract
     public function getDefinition()
     {
         $schema = $this->getSchema(Schema\Plan\Contract::class);
-        $schema->setRequired(['userId', 'planId', 'status', 'amount', 'points']);
+        $schema->setRequired(['userId', 'planId']);
 
         return $schema;
     }

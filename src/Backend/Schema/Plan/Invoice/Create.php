@@ -35,9 +35,11 @@ class Create extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Schema\Plan\Invoice::class);
-        $schema->setRequired(['contractId', 'status', 'amount', 'points', 'fromDate', 'toDate']);
+        $sb = $this->getSchemaBuilder('Plan Invoice Create');
+        $sb->integer('contractId');
+        $sb->dateTime('startDate');
+        $sb->setRequired(['contractId', 'startDate']);
 
-        return $schema;
+        return $sb->getProperty();
     }
 }
