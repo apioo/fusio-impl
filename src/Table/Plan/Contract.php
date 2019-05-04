@@ -37,6 +37,7 @@ class Contract extends TableAbstract
     const STATUS_CANCELLED = 2;
     const STATUS_CLOSED = 3;
     const STATUS_ONETIME = 4;
+    const STATUS_DELETED = 5;
 
     public function getName()
     {
@@ -52,6 +53,7 @@ class Contract extends TableAbstract
             'status' => self::TYPE_INT,
             'amount' => self::TYPE_FLOAT,
             'points' => self::TYPE_INT,
+            'interval' => self::TYPE_INT,
             'insert_date' => self::TYPE_DATETIME,
         );
     }
