@@ -19,37 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Plan;
+namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * PayedEvent
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PayedEvent extends EventAbstract
+class CreatedEvent extends EventAbstract
 {
     /**
      * @var integer
      */
-    protected $points;
+    protected $invoiceId;
 
-    public function __construct($points, UserContext $context)
+    /**
+     * @var array
+     */
+    protected $record;
+
+    /**
+     * @param integer $invoiceId
+     * @param array $record
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct($invoiceId, array $record, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->points = $points;
+        $this->invoiceId = $invoiceId;
+        $this->record     = $record;
     }
 
-    /**
-     * @return int
-     */
-    public function getPoints()
+    public function getInvoiceId()
     {
-        return $this->points;
+        return $this->invoiceId;
+    }
+
+    public function getRecord()
+    {
+        return $this->record;
     }
 }

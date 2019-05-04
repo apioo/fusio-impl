@@ -19,38 +19,63 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Plan;
+namespace Fusio\Impl\Event\Plan\Invoice;
 
-use Fusio\Engine\ContextInterface;
+use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * CreditedEvent
+ * PayedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CreditedEvent extends EventAbstract
+class PayedEvent extends EventAbstract
 {
     /**
      * @var integer
      */
-    protected $points;
+    protected $invoiceId;
 
-    public function __construct($points, UserContext $context)
+    /**
+     * @var array
+     */
+    protected $invoice;
+
+    /**
+     * @var \Fusio\Engine\Model\TransactionInterface
+     */
+    protected $transaction;
+
+    /**
+     * @param integer $invoiceId
+     * @param array $invoice
+     * @param \Fusio\Engine\Model\TransactionInterface $transaction
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct($invoiceId, $invoice, TransactionInterface $transaction, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->points = $points;
+        $this->invoiceId   = $invoiceId;
+        $this->invoice     = $invoice;
+        $this->transaction = $transaction;
     }
 
-    /**
-     * @return int
-     */
-    public function getPoints()
+    public function getInvoiceId()
     {
-        return $this->points;
+        return $this->invoiceId;
+    }
+
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    public function getTransaction()
+    {
+        return $this->transaction;
     }
 }
