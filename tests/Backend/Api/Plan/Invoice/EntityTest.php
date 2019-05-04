@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Plan;
+namespace Fusio\Impl\Tests\Backend\Api\Plan\Invoice;
 
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Table;
@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/plan/1', 'GET', array(
+        $response = $this->sendRequest('/doc/*/backend/plan/invoice/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +50,7 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/backend\/plan\/$plan_id<[0-9]+>",
+    "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
     "version": "*",
     "status": 1,
     "description": null,
@@ -58,27 +58,46 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Plan": {
+            "Plan_Invoice": {
                 "type": "object",
-                "title": "Plan",
+                "title": "Plan Invoice",
                 "properties": {
                     "id": {
                         "type": "integer"
                     },
-                    "name": {
-                        "type": "string"
+                    "contractId": {
+                        "type": "integer"
                     },
-                    "description": {
-                        "type": "string"
+                    "transactionId": {
+                        "type": "integer"
                     },
-                    "price": {
+                    "prevId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "amount": {
                         "type": "number"
                     },
                     "points": {
                         "type": "integer"
                     },
-                    "interval": {
-                        "type": "integer"
+                    "fromDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "toDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "payDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "insertDate": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 }
             },
@@ -95,10 +114,10 @@ class EntityTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Plan"
+                "$ref": "#\/definitions\/Plan_Invoice"
             },
             "PUT-request": {
-                "$ref": "#\/definitions\/Plan"
+                "$ref": "#\/definitions\/Plan_Invoice"
             },
             "PUT-200-response": {
                 "$ref": "#\/definitions\/Message"
@@ -129,15 +148,15 @@ class EntityTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/plan\/$plan_id<[0-9]+>"
+            "href": "\/export\/openapi\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/plan\/$plan_id<[0-9]+>"
+            "href": "\/export\/swagger\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/plan\/$plan_id<[0-9]+>"
+            "href": "\/export\/raml\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
         }
     ]
 }
@@ -148,7 +167,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/plan/1', 'GET', array(
+        $response = $this->sendRequest('/backend/plan/invoice/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -157,11 +176,15 @@ JSON;
         $expect = <<<JSON
 {
     "id": 1,
-    "name": "Plan A",
-    "description": "",
-    "price": 39.99,
-    "points": 500,
-    "interval": 1
+    "contractId": 1,
+    "transactionId": 1,
+    "status": 1,
+    "amount": 19.99,
+    "points": 100,
+    "fromDate": "2019-04-27T00:00:00Z",
+    "toDate": "2019-04-27T00:00:00Z",
+    "payDate": "2019-04-27T20:57:00Z",
+    "insertDate": "2019-04-27T20:57:00Z"
 }
 JSON;
 
@@ -173,7 +196,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/plan/10', 'GET', array(
+        $response = $this->sendRequest('/backend/plan/invoice/10', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -183,7 +206,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "Could not find plan"
+    "message": "Could not find invoice"
 }
 JSON;
 
@@ -193,7 +216,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/plan/1', 'POST', array(
+        $response = $this->sendRequest('/backend/plan/invoice/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -207,21 +230,18 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/plan/1', 'PUT', array(
+        $response = $this->sendRequest('/backend/plan/invoice/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'New-Test',
-            'description' => 'Test new description',
-            'price'       => 49.99,
-            'points'      => 4000,
+            'status' => Table\Plan\Invoice::STATUS_OPEN,
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Plan successful updated"
+    "message": "Invoice successful updated"
 }
 JSON;
 
@@ -230,24 +250,28 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'interval')
-            ->from('fusio_plan')
+            ->select('id', 'contract_id', 'transaction_id', 'prev_id', 'status', 'amount', 'points', 'from_date', 'to_date', 'pay_date')
+            ->from('fusio_plan_invoice')
             ->where('id = 1')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals('New-Test', $row['name']);
-        $this->assertEquals('Test new description', $row['description']);
-        $this->assertEquals(49.99, $row['price']);
-        $this->assertEquals(4000, $row['points']);
-        $this->assertEquals(1, $row['interval']);
+        $this->assertEquals(1, $row['contract_id']);
+        $this->assertEquals(1, $row['transaction_id']);
+        $this->assertNull($row['prev_id']);
+        $this->assertEquals(Table\Plan\Invoice::STATUS_OPEN, $row['status']);
+        $this->assertEquals(19.99, $row['amount']);
+        $this->assertEquals(100, $row['points']);
+        $this->assertEquals('2019-04-27', $row['from_date']);
+        $this->assertEquals('2019-04-27', $row['to_date']);
+        $this->assertEquals('2019-04-27 20:57:00', $row['pay_date']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/plan/1', 'DELETE', array(
+        $response = $this->sendRequest('/backend/plan/invoice/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -256,7 +280,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Plan successful deleted"
+    "message": "Invoice successful deleted"
 }
 JSON;
 
@@ -266,13 +290,13 @@ JSON;
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
-            ->from('fusio_plan')
+            ->from('fusio_plan_invoice')
             ->where('id = 1')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(1, $row['id']);
-        $this->assertEquals(Table\Plan::STATUS_DELETED, $row['status']);
+        $this->assertEquals(Table\Plan\Invoice::STATUS_DELETED, $row['status']);
     }
 }

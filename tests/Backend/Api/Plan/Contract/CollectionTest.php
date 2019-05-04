@@ -19,9 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Plan;
+namespace Fusio\Impl\Tests\Backend\Api\Plan\Contract;
 
 use Fusio\Impl\Tests\Fixture;
+use Fusio\Impl\Table;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
@@ -41,7 +42,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/plan', 'GET', array(
+        $response = $this->sendRequest('/doc/*/backend/plan/contract', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -49,7 +50,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/backend\/plan",
+    "path": "\/backend\/plan\/contract",
     "version": "*",
     "status": 1,
     "description": null,
@@ -72,37 +73,41 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Plan": {
+            "Plan_Contract": {
                 "type": "object",
-                "title": "Plan",
+                "title": "Plan Contract",
                 "properties": {
                     "id": {
                         "type": "integer"
                     },
-                    "name": {
-                        "type": "string"
+                    "userId": {
+                        "type": "integer"
                     },
-                    "description": {
-                        "type": "string"
+                    "planId": {
+                        "type": "integer"
                     },
-                    "price": {
+                    "status": {
+                        "type": "integer"
+                    },
+                    "amount": {
                         "type": "number"
                     },
                     "points": {
                         "type": "integer"
                     },
-                    "interval": {
-                        "type": "integer"
+                    "insertDate": {
+                        "type": "string",
+                        "format": "date-time"
                     }
                 },
                 "required": [
-                    "name",
-                    "price"
+                    "userId",
+                    "planId"
                 ]
             },
-            "Plan_Collection": {
+            "Plan_Contract_Collection": {
                 "type": "object",
-                "title": "Plan Collection",
+                "title": "Plan Contract Collection",
                 "properties": {
                     "totalResults": {
                         "type": "integer"
@@ -113,7 +118,7 @@ class CollectionTest extends ControllerDbTestCase
                     "entry": {
                         "type": "array",
                         "items": {
-                            "$ref": "#\/definitions\/Plan"
+                            "$ref": "#\/definitions\/Plan_Contract"
                         }
                     }
                 }
@@ -131,10 +136,10 @@ class CollectionTest extends ControllerDbTestCase
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Plan_Collection"
+                "$ref": "#\/definitions\/Plan_Contract_Collection"
             },
             "POST-request": {
-                "$ref": "#\/definitions\/Plan"
+                "$ref": "#\/definitions\/Plan_Contract"
             },
             "POST-201-response": {
                 "$ref": "#\/definitions\/Message"
@@ -158,15 +163,15 @@ class CollectionTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/plan"
+            "href": "\/export\/openapi\/*\/backend\/plan\/contract"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/plan"
+            "href": "\/export\/swagger\/*\/backend\/plan\/contract"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/plan"
+            "href": "\/export\/raml\/*\/backend\/plan\/contract"
         }
     ]
 }
@@ -177,7 +182,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/plan', 'GET', array(
+        $response = $this->sendRequest('/backend/plan/contract', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -185,24 +190,19 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 1,
-            "name": "Plan A",
-            "description": "",
-            "price": 39.99,
-            "points": 500,
-            "interval": 1
-        },
-        {
-            "id": 2,
-            "name": "Plan B",
-            "description": "",
-            "price": 49.99,
-            "points": 1000
+            "userId": 1,
+            "planId": 1,
+            "status": 1,
+            "amount": 19.99,
+            "points": 50,
+            "interval": 1,
+            "insertDate": "2018-10-05T18:18:00Z"
         }
     ]
 }
@@ -214,22 +214,19 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/plan', 'POST', array(
+        $response = $this->sendRequest('/backend/plan/contract', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'        => 'Plan D',
-            'description' => 'Test description',
-            'price'       => 59.99,
-            'points'      => 1000,
-            'interval'    => 2,
+            'planId' => 1,
+            'userId' => 1,
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Plan successful created"
+    "message": "Contract successful created"
 }
 JSON;
 
@@ -238,8 +235,8 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'price', 'points', 'interval')
-            ->from('fusio_plan')
+            ->select('id', 'user_id', 'plan_id', 'status', 'amount', 'points', 'interval')
+            ->from('fusio_plan_contract')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
             ->setMaxResults(1)
@@ -247,18 +244,18 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('Plan D', $row['name']);
-        $this->assertEquals('Test description', $row['description']);
-        $this->assertEquals(59.99, $row['price']);
-        $this->assertEquals(1000, $row['points']);
-        $this->assertEquals(2, $row['interval']);
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(1, $row['plan_id']);
+        $this->assertEquals(Table\Plan\Contract::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals(39.99, $row['amount']);
+        $this->assertEquals(500, $row['points']);
+        $this->assertEquals(1, $row['interval']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/plan', 'PUT', array(
+        $response = $this->sendRequest('/backend/plan/contract', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -272,7 +269,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/plan', 'DELETE', array(
+        $response = $this->sendRequest('/backend/plan/contract', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
