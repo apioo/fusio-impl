@@ -69,10 +69,9 @@ class Order
      */
     public function order($planId, UserContext $context)
     {
-        $product = $this->planTable->getProduct($planId);
-
-        $contractId = $this->contractService->create($context->getUserId(), $product);
-        $invoiceId  = $this->invoiceService->create($contractId, new \DateTime());
+        $product    = $this->planTable->getProduct($planId);
+        $contractId = $this->contractService->create($context->getUserId(), $product, $context);
+        $invoiceId  = $this->invoiceService->create($contractId, new \DateTime(), $context);
 
         return [
             'contractId' => $contractId,
