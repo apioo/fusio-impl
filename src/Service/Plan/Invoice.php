@@ -161,7 +161,7 @@ class Invoice
      * 
      * @param \Fusio\Engine\Model\TransactionInterface $transaction
      */
-    public function pay(TransactionInterface $transaction, UserContext $context)
+    public function pay(TransactionInterface $transaction)
     {
         $invoice = $this->invoiceTable->get($transaction->getInvoiceId());
         if (empty($invoice)) {
@@ -188,6 +188,7 @@ class Invoice
         $this->userTable->creditPoints($invoice['user_id'], $invoice['points']);
 
         // dispatch payed event
+        $context = UserContext::newContext($invoice['user_id']);
         $this->eventDispatcher->dispatch(InvoiceEvents::PAYED, new PayedEvent($invoice['id'], $invoice, $transaction, $context));
     }
 }
