@@ -97,7 +97,7 @@ class Collection extends BackendApiAbstract
 
         return array(
             'success' => true,
-            'message' => 'Plan successful created',
+            'message' => 'Contract successful created',
         );
     }
 }

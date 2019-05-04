@@ -95,9 +95,9 @@ class Entity extends BackendApiAbstract
     {
         $this->planContractService->update(
             (int) $context->getUriFragment('contract_id'),
-            $record->name,
-            $record->description,
-            $record->price,
+            $record->planId,
+            $record->status,
+            $record->amount,
             $record->points,
             $this->context->getUserContext()
         );

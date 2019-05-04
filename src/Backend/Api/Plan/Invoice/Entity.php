@@ -42,9 +42,9 @@ class Entity extends BackendApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan
+     * @var \Fusio\Impl\Service\Plan\Invoice
      */
-    protected $planService;
+    protected $planInvoiceService;
 
     /**
      * @inheritdoc
@@ -93,18 +93,15 @@ class Entity extends BackendApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
-        $this->planService->update(
+        $this->planInvoiceService->update(
             (int) $context->getUriFragment('invoice_id'),
-            $record->name,
-            $record->description,
-            $record->price,
-            $record->points,
+            $record->status,
             $this->context->getUserContext()
         );
 
         return array(
             'success' => true,
-            'message' => 'Contract successful updated',
+            'message' => 'Invoice successful updated',
         );
     }
 
@@ -113,14 +110,14 @@ class Entity extends BackendApiAbstract
      */
     protected function doDelete($record, HttpContextInterface $context)
     {
-        $this->planService->delete(
-            (int) $context->getUriFragment('contract_id'),
+        $this->planInvoiceService->delete(
+            (int) $context->getUriFragment('invoice_id'),
             $this->context->getUserContext()
         );
 
         return array(
             'success' => true,
-            'message' => 'Contract successful deleted',
+            'message' => 'Invoice successful deleted',
         );
     }
 }

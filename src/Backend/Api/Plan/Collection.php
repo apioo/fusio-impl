@@ -91,6 +91,7 @@ class Collection extends BackendApiAbstract
             $record->description,
             $record->price,
             $record->points,
+            $record->interval,
             $this->context->getUserContext()
         );
 

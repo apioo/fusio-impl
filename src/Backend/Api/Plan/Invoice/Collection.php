@@ -43,9 +43,9 @@ class Collection extends BackendApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan\Contract
+     * @var \Fusio\Impl\Service\Plan\Invoice
      */
-    protected $planContractService;
+    protected $planInvoiceService;
 
     /**
      * @inheritdoc
@@ -59,11 +59,11 @@ class Collection extends BackendApiAbstract
             ->addQueryParameter('startIndex', Property::getInteger())
             ->addQueryParameter('count', Property::getInteger())
             ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Invoice\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Contract\Create::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Invoice\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
@@ -75,7 +75,7 @@ class Collection extends BackendApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Plan\Contract::class)->getCollection(
+        return $this->tableManager->getTable(View\Plan\Invoice::class)->getCollection(
             (int) $context->getParameter('startIndex'),
             (int) $context->getParameter('count'),
             $context->getParameter('search')
@@ -87,17 +87,15 @@ class Collection extends BackendApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $product = $this->tableManager->getTable(Table\Plan::class)->getProduct($record->planId);
-
-        $this->planContractService->create(
-            $record->userId,
-            $product,
+        $this->planInvoiceService->create(
+            $record->contractId,
+            $record->startDate,
             $this->context->getUserContext()
         );
 
         return array(
             'success' => true,
-            'message' => 'Plan successful created',
+            'message' => 'Invoice successful created',
         );
     }
 }
