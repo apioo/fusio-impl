@@ -277,17 +277,6 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onPlanCredit(Event\Plan\CreditedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            null,
-            'plan.credit',
-            sprintf('Credited points %s', $event->getPoints()),
-            null
-        );
-    }
-
     public function onPlanDelete(Event\Plan\DeletedEvent $event)
     {
         $this->log(
@@ -295,17 +284,6 @@ class AuditListener implements EventSubscriberInterface
             $event->getPlanId(),
             'plan.delete',
             sprintf('Deleted plan %s', $event->getPlan()['name'])
-        );
-    }
-
-    public function onPlanPay(Event\Plan\PayedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            null,
-            'plan.pay',
-            sprintf('Payed points %s', $event->getPoints()),
-            null
         );
     }
 
