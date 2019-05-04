@@ -22,7 +22,15 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\TransactionInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\Plan\Invoice\CreatedEvent;
+use Fusio\Impl\Event\Plan\Invoice\DeletedEvent;
+use Fusio\Impl\Event\Plan\Invoice\PayedEvent;
+use Fusio\Impl\Event\Plan\Invoice\UpdatedEvent;
+use Fusio\Impl\Event\Plan\InvoiceEvents;
 use Fusio\Impl\Table;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Invoice
@@ -49,15 +57,22 @@ class Invoice
     private $userTable;
 
     /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param \Fusio\Impl\Table\Plan\Contract $contractTable
      * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
      * @param \Fusio\Impl\Table\User $userTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, Table\User $userTable)
+    public function __construct(Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, Table\User $userTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->contractTable = $contractTable;
         $this->invoiceTable = $invoiceTable;
         $this->userTable = $userTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -65,8 +80,9 @@ class Invoice
      * 
      * @param integer $contractId
      * @param \DateTime $startDate
+     * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function create($contractId, \DateTime $startDate)
+    public function create($contractId, \DateTime $startDate, UserContext $context)
     {
         $contract = $this->contractTable->get($contractId);
         if (empty($contract)) {
@@ -76,23 +92,67 @@ class Invoice
         $from = (clone $startDate)->setTime(0, 0, 0);
         $to   = (new DateCalculator())->calculate($from, $contract['interval']);
 
-        $this->invoiceTable->create([
+        $record = [
             'contract_id' => $contract['id'],
             'transaction_id' => null,
+            'prev_id' => null,
             'status' => Table\Plan\Invoice::STATUS_OPEN,
-            'interval' => $contract['interval'],
-            'amount' => $contract['price'],
+            'amount' => $contract['amount'],
             'points' => $contract['points'],
             'from_date' => $from,
             'to_date' => $to,
             'pay_date' => null,
             'insert_date' => new \DateTime(),
-        ]);
+        ];
+
+        $this->invoiceTable->create($record);
 
         $invoiceId = $this->invoiceTable->getLastInsertId();
-        
-        
+
+        $this->eventDispatcher->dispatch(InvoiceEvents::CREATE, new CreatedEvent($contractId, $record, $context));
+
         return $invoiceId;
+    }
+
+    public function update($invoiceId, $status, UserContext $context)
+    {
+        $invoice = $this->invoiceTable->get($invoiceId);
+
+        if (empty($invoice)) {
+            throw new StatusCode\NotFoundException('Could not find invoice');
+        }
+
+        if ($invoice['status'] == Table\Plan\Invoice::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Invoice was deleted');
+        }
+
+        // update invoice
+        $record = [
+            'id'     => $invoice['id'],
+            'status' => $status,
+        ];
+
+        $this->invoiceTable->update($record);
+
+        $this->eventDispatcher->dispatch(InvoiceEvents::UPDATE, new UpdatedEvent($invoiceId, $record, $invoice, $context));
+    }
+
+    public function delete($invoiceId, UserContext $context)
+    {
+        $invoice = $this->invoiceTable->get($invoiceId);
+
+        if (empty($invoice)) {
+            throw new StatusCode\NotFoundException('Could not find invoice');
+        }
+
+        $record = [
+            'id'     => $invoice['id'],
+            'status' => Table\Plan\Invoice::STATUS_DELETED,
+        ];
+
+        $this->invoiceTable->update($record);
+
+        $this->eventDispatcher->dispatch(InvoiceEvents::DELETE, new DeletedEvent($invoiceId, $invoice, $context));
     }
 
     /**
@@ -101,7 +161,7 @@ class Invoice
      * 
      * @param \Fusio\Engine\Model\TransactionInterface $transaction
      */
-    public function pay(TransactionInterface $transaction)
+    public function pay(TransactionInterface $transaction, UserContext $context)
     {
         $invoice = $this->invoiceTable->get($transaction->getInvoiceId());
         if (empty($invoice)) {
@@ -127,7 +187,7 @@ class Invoice
         // credit points
         $this->userTable->creditPoints($invoice['user_id'], $invoice['points']);
 
-        // dispatch credited event
-        //$this->eventDispatcher->dispatch(PlanEvents::CREDIT, new CreditedEvent($points, $context));
+        // dispatch payed event
+        $this->eventDispatcher->dispatch(InvoiceEvents::PAYED, new PayedEvent($invoice['id'], $invoice, $transaction, $context));
     }
 }
