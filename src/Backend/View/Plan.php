@@ -60,8 +60,9 @@ class Plan extends ViewAbstract
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
-                'price' => 'price',
-                'points' => 'points',
+                'price' => $this->fieldNumber('price'),
+                'points' => $this->fieldInteger('points'),
+                'interval' => $this->fieldInteger('interval'),
             ]),
         ];
 
@@ -74,8 +75,9 @@ class Plan extends ViewAbstract
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
-            'price' => 'price',
-            'points' => 'points',
+            'price' => $this->fieldNumber('price'),
+            'points' => $this->fieldInteger('points'),
+            'interval' => $this->fieldInteger('interval'),
         ]);
 
         return $this->build($definition);
