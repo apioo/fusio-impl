@@ -22,9 +22,6 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Plan\PayedEvent;
-use Fusio\Impl\Event\PlanEvents;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -85,13 +82,5 @@ class Payer
             'points' => $points,
             'insert_date' => new \DateTime(),
         ]);
-
-        // dispatch payed event
-        $userContext = UserContext::newContext(
-            $context->getUser()->getId(),
-            $context->getApp()->getId()
-        );
-
-        $this->eventDispatcher->dispatch(PlanEvents::PAY, new PayedEvent($points, $userContext));
     }
 }
