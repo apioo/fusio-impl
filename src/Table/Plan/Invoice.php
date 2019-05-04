@@ -36,6 +36,7 @@ class Invoice extends TableAbstract
 {
     const STATUS_OPEN = 0;
     const STATUS_PAYED = 1;
+    const STATUS_DELETED = 2;
 
     public function getName()
     {
