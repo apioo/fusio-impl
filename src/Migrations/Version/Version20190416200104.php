@@ -35,6 +35,7 @@ class Version20190416200104 extends AbstractMigration
         $planContractTable->addColumn('status', 'integer');
         $planContractTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
         $planContractTable->addColumn('points', 'integer');
+        $planContractTable->addColumn('interval', 'integer', ['notnull' => false]);
         $planContractTable->addColumn('insert_date', 'datetime');
         $planContractTable->setPrimaryKey(['id']);
 
