@@ -21,6 +21,14 @@ class Version20190416200104 extends AbstractMigration
             $planTable->addColumn('interval', 'integer', ['notnull' => false]);
         }
 
+        $transactionTable = $schema->getTable('fusio_transaction');
+        if (!$transactionTable->hasColumn('invoice_id')) {
+            $transactionTable->addColumn('invoice_id', 'integer');
+            $transactionTable->dropColumn('plan_id');
+            $transactionTable->dropColumn('user_id');
+            $transactionTable->dropColumn('app_id');
+        }
+
         $userAttributeTable = $schema->createTable('fusio_user_attribute');
         $userAttributeTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $userAttributeTable->addColumn('user_id', 'integer');
