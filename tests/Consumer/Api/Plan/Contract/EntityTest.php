@@ -185,7 +185,7 @@ JSON;
         "name": "Plan A",
         "description": ""
     },
-    "amount": 1,
+    "amount": 19.99,
     "points": 50,
     "invoices": [
         {

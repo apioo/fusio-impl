@@ -21,8 +21,10 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Plan\Contract;
 
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * CollectionTest
@@ -152,8 +154,38 @@ class CollectionTest extends ControllerDbTestCase
                     }
                 }
             },
+            "Consumer_Plan_Order_Request": {
+                "type": "object",
+                "title": "Consumer Plan Order Request",
+                "properties": {
+                    "planId": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "planId"
+                ]
+            },
+            "Consumer_Plan_Order_Response": {
+                "type": "object",
+                "title": "Consumer Plan Order Response",
+                "properties": {
+                    "contractId": {
+                        "type": "integer"
+                    },
+                    "invoiceId": {
+                        "type": "integer"
+                    }
+                }
+            },
             "GET-200-response": {
                 "$ref": "#\/definitions\/Consumer_Plan_Contract_Collection"
+            },
+            "POST-request": {
+                "$ref": "#\/definitions\/Consumer_Plan_Order_Request"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Consumer_Plan_Order_Response"
             }
         }
     },
@@ -161,6 +193,12 @@ class CollectionTest extends ControllerDbTestCase
         "GET": {
             "responses": {
                 "200": "#\/definitions\/GET-200-response"
+            }
+        },
+        "POST": {
+            "request": "#\/definitions\/POST-request",
+            "responses": {
+                "201": "#\/definitions\/POST-201-response"
             }
         }
     },
@@ -207,7 +245,7 @@ JSON;
                 "name": "Plan A",
                 "description": ""
             },
-            "amount": 1,
+            "amount": 19.99,
             "points": 50,
             "insertDate": "2018-10-05T18:18:00Z"
         }
@@ -225,12 +263,38 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'foo' => 'bar',
+            'planId' => 1,
         ]));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "contractId": "2",
+    "invoiceId": "3"
+}
+JSON;
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'user_id', 'plan_id', 'status', 'amount', 'points', 'interval')
+            ->from('fusio_plan_contract')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(2, $row['id']);
+        $this->assertEquals(1, $row['user_id']);
+        $this->assertEquals(1, $row['plan_id']);
+        $this->assertEquals(Table\Plan\Contract::STATUS_ACTIVE, $row['status']);
+        $this->assertEquals(39.99, $row['amount']);
+        $this->assertEquals(500, $row['points']);
+        $this->assertEquals(1, $row['interval']);
     }
 
     public function testPut()

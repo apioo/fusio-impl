@@ -50,7 +50,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/app\/",
+    "path": "\/consumer\/app",
     "version": "*",
     "status": 1,
     "description": null,
@@ -159,15 +159,15 @@ class CollectionTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/app\/"
+            "href": "\/export\/openapi\/*\/consumer\/app"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/app\/"
+            "href": "\/export\/swagger\/*\/consumer\/app"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/app\/"
+            "href": "\/export\/raml\/*\/consumer\/app"
         }
     ]
 }

@@ -48,7 +48,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/plan\/",
+    "path": "\/consumer\/plan",
     "version": "*",
     "status": 1,
     "description": null,
@@ -110,15 +110,15 @@ class CollectionTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/plan\/"
+            "href": "\/export\/openapi\/*\/consumer\/plan"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/plan\/"
+            "href": "\/export\/swagger\/*\/consumer\/plan"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/plan\/"
+            "href": "\/export\/raml\/*\/consumer\/plan"
         }
     ]
 }
@@ -138,7 +138,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -148,6 +148,13 @@ JSON;
             "description": "",
             "price": 39.99,
             "points": 500
+        },
+        {
+            "id": 2,
+            "name": "Plan B",
+            "description": "",
+            "price": 49.99,
+            "points": 1000
         }
     ]
 }
