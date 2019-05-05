@@ -61,7 +61,7 @@ class PrepareTest extends ControllerDbTestCase
                 "type": "object",
                 "title": "Consumer Transaction Prepare Request",
                 "properties": {
-                    "planId": {
+                    "invoiceId": {
                         "type": "integer"
                     },
                     "returnUrl": {
@@ -69,7 +69,7 @@ class PrepareTest extends ControllerDbTestCase
                     }
                 },
                 "required": [
-                    "planId",
+                    "invoiceId",
                     "returnUrl"
                 ]
             },
@@ -136,7 +136,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'planId' => 1,
+            'invoiceId' => 1,
             'returnUrl' => 'http://myapp.com',
         ]));
 
@@ -167,7 +167,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "\/ the following properties are required: planId, returnUrl"
+    "message": "\/ the following properties are required: invoiceId, returnUrl"
 }
 JSON;
 
@@ -175,7 +175,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPostInvalidPlan()
+    public function testPostInvalidInvoice()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
@@ -183,7 +183,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'planId' => 10,
+            'invoiceId' => 10,
             'returnUrl' => 'http://myapp.com',
         ]));
 
@@ -192,7 +192,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "Invalid plan id"
+    "message": "Invalid invoice id"
 }
 JSON;
 
@@ -208,7 +208,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'planId' => 1,
+            'invoiceId' => 2,
             'returnUrl' => 'foobar',
         ]));
 

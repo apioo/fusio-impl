@@ -36,31 +36,25 @@ class QueryFilterTest extends TestCase
     public function testCreate()
     {
         $filter = QueryFilter::create([
-            'from'     => '2015-08-20',
-            'to'       => '2015-08-30',
-            'planId'   => 1,
-            'userId'   => 1,
-            'appId'    => 1,
-            'status'   => 1,
-            'provider' => 'paypal',
+            'from'      => '2015-08-20',
+            'to'        => '2015-08-30',
+            'invoiceId' => 1,
+            'status'    => 1,
+            'provider'  => 'paypal',
         ]);
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
-        $this->assertEquals(1, $filter->getPlanId());
-        $this->assertEquals(1, $filter->getUserId());
-        $this->assertEquals(1, $filter->getAppId());
+        $this->assertEquals(1, $filter->getInvoiceId());
         $this->assertEquals(1, $filter->getStatus());
         $this->assertEquals('paypal', $filter->getProvider());
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND plan_id = ? AND user_id = ? AND app_id = ? AND status = ? AND provider LIKE ?)', $condition->getStatment());
+        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND invoice_id = ? AND status = ? AND provider LIKE ?)', $condition->getStatment());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',
-            1,
-            1,
             1,
             1,
             'paypal',
