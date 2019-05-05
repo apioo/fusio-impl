@@ -451,6 +451,19 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Plan\Order
+     */
+    public function getPlanOrderService()
+    {
+        return new Service\Plan\Order(
+            $this->get('plan_contract_service'),
+            $this->get('plan_invoice_service'),
+            $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Plan\Payer
      */
     public function getPlanPayerService()
@@ -469,10 +482,10 @@ trait Services
     {
         return new Service\Transaction(
             $this->get('connector'),
-            $this->get('plan_payer_service'),
+            $this->get('plan_invoice_service'),
             new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
             $this->get('config'),
-            $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
             $this->get('table_manager')->getTable(Table\Transaction::class),
             $this->get('event_dispatcher')
         );
