@@ -119,6 +119,10 @@ class NewInstallation
             ],
             'fusio_plan' => [
             ],
+            'fusio_plan_contract' => [
+            ],
+            'fusio_plan_invoice' => [
+            ],
             'fusio_provider' => [
             ],
             'fusio_rate' => [
