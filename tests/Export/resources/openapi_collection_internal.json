@@ -1719,6 +1719,312 @@
       },
       "parameters": []
     },
+    "\/backend\/plan\/contract": {
+      "get": {
+        "operationId": "backendPlanContractGetPlan_Contract_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendPlanContractPostPlan_Contract",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan_Contract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/plan\/contract\/{contract_id}": {
+      "get": {
+        "operationId": "backendPlanContractContractid09GetPlan_Contract",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan_Contract"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendPlanContractContractid09PutPlan_Contract",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan_Contract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "backendPlanContractContractid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/plan\/invoice": {
+      "get": {
+        "operationId": "backendPlanInvoiceGetPlan_Invoice_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendPlanInvoicePostPlan_Invoice_Create",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan_Invoice_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
+    "\/backend\/plan\/invoice\/{invoice_id}": {
+      "get": {
+        "operationId": "backendPlanInvoiceInvoiceid09GetPlan_Invoice",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Plan_Invoice"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendPlanInvoiceInvoiceid09PutPlan_Invoice",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Plan_Invoice"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "backendPlanInvoiceInvoiceid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/plan": {
       "get": {
         "operationId": "backendPlanGetPlan_Collection",
@@ -4026,7 +4332,7 @@
       },
       "parameters": []
     },
-    "\/consumer\/app\/": {
+    "\/consumer\/app": {
       "get": {
         "operationId": "consumerAppGetConsumer_App_Collection",
         "responses": {
@@ -4224,7 +4530,88 @@
       },
       "parameters": []
     },
-    "\/consumer\/plan\/": {
+    "\/consumer\/plan\/contract": {
+      "get": {
+        "operationId": "consumerPlanContractGetConsumer_Plan_Contract_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "consumerPlanContractPostConsumer_Plan_Order_Request",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/plan\/contract\/{contract_id}": {
+      "get": {
+        "operationId": "consumerPlanContractContractid09GetConsumer_Plan_Contract",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/plan": {
       "get": {
         "operationId": "consumerPlanGetConsumer_Plan_Collection",
         "responses": {
@@ -6299,6 +6686,130 @@
           }
         }
       },
+      "Plan_Contract": {
+        "type": "object",
+        "title": "Plan Contract",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "planId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Plan_Contract_Collection": {
+        "type": "object",
+        "title": "Plan Contract Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Plan_Contract"
+            }
+          }
+        }
+      },
+      "Plan_Invoice": {
+        "type": "object",
+        "title": "Plan Invoice",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "contractId": {
+            "type": "integer"
+          },
+          "transactionId": {
+            "type": "integer"
+          },
+          "prevId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "fromDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "toDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "payDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Plan_Invoice_Collection": {
+        "type": "object",
+        "title": "Plan Invoice Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Plan_Invoice"
+            }
+          }
+        }
+      },
+      "Plan_Invoice_Create": {
+        "type": "object",
+        "title": "Plan Invoice Create",
+        "properties": {
+          "contractId": {
+            "type": "integer"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "contractId",
+          "startDate"
+        ]
+      },
       "Plan": {
         "type": "object",
         "title": "Plan",
@@ -6316,6 +6827,9 @@
             "type": "number"
           },
           "points": {
+            "type": "integer"
+          },
+          "interval": {
             "type": "integer"
           }
         }
@@ -6912,6 +7426,37 @@
           }
         }
       },
+      "Consumer_Plan_Contract": {
+        "type": "object",
+        "title": "Consumer Plan Contract",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "plan": {
+            "$ref": "#\/components\/schemas\/Consumer_Plan"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "invoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice"
+            }
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "Consumer_Plan": {
         "type": "object",
         "title": "Consumer Plan",
@@ -6929,6 +7474,74 @@
             "type": "number"
           },
           "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "Consumer_Plan_Invoice": {
+        "type": "object",
+        "title": "Consumer Plan Invoice",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "payDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Consumer_Plan_Contract_Collection": {
+        "type": "object",
+        "title": "Consumer Plan Contract Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Plan_Contract"
+            }
+          }
+        }
+      },
+      "Consumer_Plan_Order_Request": {
+        "type": "object",
+        "title": "Consumer Plan Order Request",
+        "properties": {
+          "planId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "planId"
+        ]
+      },
+      "Consumer_Plan_Order_Response": {
+        "type": "object",
+        "title": "Consumer Plan Order Response",
+        "properties": {
+          "contractId": {
+            "type": "integer"
+          },
+          "invoiceId": {
             "type": "integer"
           }
         }
@@ -7095,7 +7708,7 @@
         "type": "object",
         "title": "Consumer Transaction Prepare Request",
         "properties": {
-          "planId": {
+          "invoiceId": {
             "type": "integer"
           },
           "returnUrl": {
@@ -7103,7 +7716,7 @@
           }
         },
         "required": [
-          "planId",
+          "invoiceId",
           "returnUrl"
         ]
       },
