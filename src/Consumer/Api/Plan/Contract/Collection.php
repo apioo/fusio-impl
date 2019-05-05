@@ -38,6 +38,7 @@ use PSX\Http\Environment\HttpContextInterface;
 class Collection extends ConsumerApiAbstract
 {
     /**
+     * @Inject
      * @var \Fusio\Impl\Service\Plan\Order
      */
     protected $planOrderService;
@@ -57,7 +58,7 @@ class Collection extends ConsumerApiAbstract
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
             ->setRequest($this->schemaManager->getSchema(Schema\Plan\Order\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Order\Response::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Plan\Order\Response::class))
         );
 
         return $resource;
