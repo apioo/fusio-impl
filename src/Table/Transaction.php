@@ -41,9 +41,7 @@ class Transaction extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'plan_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'app_id' => self::TYPE_INT,
+            'invoice_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'provider' => self::TYPE_VARCHAR,
             'transaction_id' => self::TYPE_VARCHAR,
@@ -53,16 +51,5 @@ class Transaction extends TableAbstract
             'update_date' => self::TYPE_DATETIME,
             'insert_date' => self::TYPE_DATETIME,
         );
-    }
-    
-    public function getTransactionWithPlan()
-    {
-        $sql = 'SELECT * 
-                  FROM fusio_transaction trans
-            INNER JOIN fusio_plan plan 
-                    ON trans.plan_id = plan.id
-                 WHERE plan.interval IS NOT NULL';
-
-        $this->connection->fetchAll($sql);
     }
 }
