@@ -21,10 +21,9 @@
 
 namespace Fusio\Impl\Service\Plan;
 
-use Fusio\Engine\Model\Product;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Order
@@ -51,15 +50,22 @@ class Order
     protected $planTable;
 
     /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param \Fusio\Impl\Service\Plan\Contract $contractService
      * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
      * @param \Fusio\Impl\Table\Plan $planTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Contract $contractService, Invoice $invoiceService, Table\Plan $planTable)
+    public function __construct(Contract $contractService, Invoice $invoiceService, Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->contractService = $contractService;
         $this->invoiceService = $invoiceService;
         $this->planTable = $planTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
