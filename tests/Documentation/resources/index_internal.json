@@ -331,6 +331,50 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/plan\/contract",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/plan\/invoice",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/plan",
       "methods": [
         "GET",
@@ -628,7 +672,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/",
+      "path": "\/consumer\/app",
       "methods": [
         "GET",
         "POST",
@@ -683,7 +727,29 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/",
+      "path": "\/consumer\/plan\/contract",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/plan\/contract\/$contract_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/plan",
       "methods": [
         "GET",
         "POST",
