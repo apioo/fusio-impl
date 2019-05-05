@@ -44,7 +44,7 @@ class PreparedEvent extends EventAbstract
      */
     public function __construct(Transaction $transaction)
     {
-        parent::__construct(UserContext::newContext($transaction->getUserId(), $transaction->getAppId()));
+        parent::__construct(UserContext::newAnonymousContext());
 
         $this->transaction = $transaction;
     }
