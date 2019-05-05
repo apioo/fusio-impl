@@ -35,17 +35,7 @@ class QueryFilter extends QueryFilterAbstract
     /**
      * @var integer
      */
-    protected $planId;
-
-    /**
-     * @var integer
-     */
-    protected $userId;
-
-    /**
-     * @var integer
-     */
-    protected $appId;
+    protected $invoiceId;
 
     /**
      * @var integer
@@ -57,19 +47,9 @@ class QueryFilter extends QueryFilterAbstract
      */
     protected $provider;
 
-    public function getPlanId()
+    public function getInvoiceId()
     {
-        return $this->planId;
-    }
-
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    public function getAppId()
-    {
-        return $this->appId;
+        return $this->invoiceId;
     }
 
     public function getStatus()
@@ -87,16 +67,8 @@ class QueryFilter extends QueryFilterAbstract
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
 
-        if (!empty($this->planId)) {
-            $condition->equals($alias . 'plan_id', $this->planId);
-        }
-
-        if (!empty($this->userId)) {
-            $condition->equals($alias . 'user_id', $this->userId);
-        }
-
-        if (!empty($this->appId)) {
-            $condition->equals($alias . 'app_id', $this->appId);
+        if (!empty($this->invoiceId)) {
+            $condition->equals($alias . 'invoice_id', $this->invoiceId);
         }
 
         if (!empty($this->status)) {
@@ -117,13 +89,11 @@ class QueryFilter extends QueryFilterAbstract
 
     public static function create(array $parameters)
     {
-        $filter   = parent::create($parameters);
-        $planId   = isset($parameters['planId']) ? $parameters['planId'] : null;
-        $userId   = isset($parameters['userId']) ? $parameters['userId'] : null;
-        $appId    = isset($parameters['appId']) ? $parameters['appId'] : null;
-        $status   = isset($parameters['status']) ? $parameters['status'] : null;
-        $provider = isset($parameters['provider']) ? $parameters['provider'] : null;
-        $search   = isset($parameters['search']) ? $parameters['search'] : null;
+        $filter    = parent::create($parameters);
+        $invoiceId = isset($parameters['invoiceId']) ? $parameters['invoiceId'] : null;
+        $status    = isset($parameters['status']) ? $parameters['status'] : null;
+        $provider  = isset($parameters['provider']) ? $parameters['provider'] : null;
+        $search    = isset($parameters['search']) ? $parameters['search'] : null;
 
         // parse search if available
         if (!empty($search)) {
@@ -138,11 +108,9 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        $filter->planId   = $planId;
-        $filter->userId   = $userId;
-        $filter->appId    = $appId;
-        $filter->status   = $status;
-        $filter->provider = $provider;
+        $filter->invoiceId = $invoiceId;
+        $filter->status    = $status;
+        $filter->provider  = $provider;
 
         return $filter;
     }
