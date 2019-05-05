@@ -24,6 +24,19 @@ class Version20190416200104 extends AbstractMigration
         $transactionTable = $schema->getTable('fusio_transaction');
         if (!$transactionTable->hasColumn('invoice_id')) {
             $transactionTable->addColumn('invoice_id', 'integer');
+
+            $fks = [
+                'plan_transaction_plan_id',
+                'plan_transaction_user_id',
+                'plan_transaction_app_id',
+            ];
+
+            foreach ($fks as $fk) {
+                if ($transactionTable->hasForeignKey($fk)) {
+                    $transactionTable->removeForeignKey($fk);
+                }
+            }
+
             $transactionTable->dropColumn('plan_id');
             $transactionTable->dropColumn('user_id');
             $transactionTable->dropColumn('app_id');
