@@ -444,8 +444,7 @@ class AuditListener implements EventSubscriberInterface
             'transaction.prepare',
             sprintf('Prepared transaction %s', $event->getTransaction()->getTransactionId()),
             [
-                'plan_id' => $event->getTransaction()->getPlanId(),
-                'user_id' => $event->getTransaction()->getUserId(),
+                'invoice_id' => $event->getTransaction()->getInvoiceId(),
                 'transaction_id' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
                 'status' => $event->getTransaction()->getStatus(),
@@ -464,8 +463,7 @@ class AuditListener implements EventSubscriberInterface
             'transaction.execute',
             sprintf('Executed transaction %s', $event->getTransaction()->getTransactionId()),
             [
-                'plan_id' => $event->getTransaction()->getPlanId(),
-                'user_id' => $event->getTransaction()->getUserId(),
+                'invoice_id' => $event->getTransaction()->getInvoiceId(),
                 'transaction_id' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
                 'status' => $event->getTransaction()->getStatus(),
