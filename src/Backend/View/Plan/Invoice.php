@@ -59,7 +59,6 @@ class Invoice extends ViewAbstract
             'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'contractId' => $this->fieldInteger('contract_id'),
-                'transactionId' => $this->fieldInteger('transaction_id'),
                 'prevId' => $this->fieldInteger('prev_id'),
                 'status' => $this->fieldInteger('status'),
                 'amount' => $this->fieldNumber('amount'),
@@ -79,7 +78,6 @@ class Invoice extends ViewAbstract
         $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'contractId' => $this->fieldInteger('contract_id'),
-            'transactionId' => $this->fieldInteger('transaction_id'),
             'prevId' => $this->fieldInteger('prev_id'),
             'status' => $this->fieldInteger('status'),
             'amount' => $this->fieldNumber('amount'),

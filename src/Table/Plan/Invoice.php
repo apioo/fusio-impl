@@ -48,7 +48,6 @@ class Invoice extends TableAbstract
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'contract_id' => self::TYPE_INT,
-            'transaction_id' => self::TYPE_INT,
             'prev_id' => self::TYPE_INT, // id of the previous invoice
             'status' => self::TYPE_INT,
             'amount' => self::TYPE_FLOAT,

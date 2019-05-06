@@ -264,7 +264,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'contract_id', 'transaction_id', 'prev_id', 'status', 'amount', 'points', 'from_date', 'to_date', 'pay_date')
+            ->select('id', 'contract_id', 'prev_id', 'status', 'amount', 'points', 'from_date', 'to_date', 'pay_date')
             ->from('fusio_plan_invoice')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -275,7 +275,6 @@ JSON;
 
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(1, $row['contract_id']);
-        $this->assertNull($row['transaction_id']);
         $this->assertNull($row['prev_id']);
         $this->assertEquals(Table\Plan\Invoice::STATUS_OPEN, $row['status']);
         $this->assertEquals(19.99, $row['amount']);

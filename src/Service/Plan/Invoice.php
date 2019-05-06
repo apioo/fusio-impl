@@ -179,7 +179,6 @@ class Invoice
         // mark invoice as payed
         $this->invoiceTable->update([
             'id' => $invoice['id'],
-            'transaction_id' => $transaction->getId(),
             'status' => Table\Plan\Invoice::STATUS_PAYED,
             'pay_date' => new \DateTime(),
         ]);
