@@ -168,15 +168,15 @@ class Fixture
             'fusio_plan_contract' => [
                 ['user_id' => 1, 'plan_id' => 1, 'status' => 1, 'amount' => 19.99, 'points' => 50, 'period' => 1, 'insert_date' => '2018-10-05 18:18:00'],
             ],
+            'fusio_plan_invoice' => [
+                ['contract_id' => 1, 'transaction_id' => null, 'prev_id' => null, 'status' => Invoice::STATUS_PAYED, 'amount' => 19.99, 'points' => 100, 'from_date' => '2019-04-27', 'to_date' => '2019-04-27', 'pay_date' => '2019-04-27 20:57:00', 'insert_date' => '2019-04-27 20:57:00'],
+                ['contract_id' => 1, 'transaction_id' => null, 'prev_id' => 1, 'status' => Invoice::STATUS_OPEN, 'amount' => 19.99, 'points' => 100, 'from_date' => '2019-04-27', 'to_date' => '2019-04-27', 'pay_date' => null, 'insert_date' => '2019-04-27 20:57:00'],
+            ],
             'fusio_plan_usage' => [
                 ['route_id' => 1, 'user_id' => 1, 'app_id' => 1, 'points' => 1, 'insert_date' => '2018-10-05 18:18:00'],
             ],
             'fusio_transaction' => [
                 ['invoice_id' => 2, 'status' => 1, 'provider' => 'paypal', 'transaction_id' => '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'remote_id' => 'PAY-1B56960729604235TKQQIYVY', 'amount' => 39.99, 'return_url' => 'http://myapp.com', 'update_date' => null, 'insert_date' => '2018-10-05 18:18:00'],
-            ],
-            'fusio_plan_invoice' => [
-                ['contract_id' => 1, 'transaction_id' => 1, 'prev_id' => null, 'status' => Invoice::STATUS_PAYED, 'amount' => 19.99, 'points' => 100, 'from_date' => '2019-04-27', 'to_date' => '2019-04-27', 'pay_date' => '2019-04-27 20:57:00', 'insert_date' => '2019-04-27 20:57:00'],
-                ['contract_id' => 1, 'transaction_id' => null, 'prev_id' => 1, 'status' => Invoice::STATUS_OPEN, 'amount' => 19.99, 'points' => 100, 'from_date' => '2019-04-27', 'to_date' => '2019-04-27', 'pay_date' => null, 'insert_date' => '2019-04-27 20:57:00'],
             ],
             'fusio_schema' => [
                 ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => Service\Schema::serializeCache($schemaCollection)],

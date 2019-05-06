@@ -177,7 +177,6 @@ JSON;
 {
     "id": 1,
     "contractId": 1,
-    "transactionId": 1,
     "status": 1,
     "amount": 19.99,
     "points": 100,
@@ -259,7 +258,7 @@ JSON;
 
         $this->assertEquals(1, $row['id']);
         $this->assertEquals(1, $row['contract_id']);
-        $this->assertEquals(1, $row['transaction_id']);
+        $this->assertNull($row['transaction_id']);
         $this->assertNull($row['prev_id']);
         $this->assertEquals(Table\Plan\Invoice::STATUS_OPEN, $row['status']);
         $this->assertEquals(19.99, $row['amount']);

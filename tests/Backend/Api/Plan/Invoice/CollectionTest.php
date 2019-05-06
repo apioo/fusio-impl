@@ -225,7 +225,6 @@ JSON;
         {
             "id": 1,
             "contractId": 1,
-            "transactionId": 1,
             "status": 1,
             "amount": 19.99,
             "points": 100,
