@@ -91,7 +91,7 @@ class CollectionTest extends ControllerDbTestCase
                     "points": {
                         "type": "integer"
                     },
-                    "interval": {
+                    "period": {
                         "type": "integer"
                     }
                 },
@@ -195,7 +195,7 @@ JSON;
             "description": "",
             "price": 39.99,
             "points": 500,
-            "interval": 1
+            "period": 1
         },
         {
             "id": 2,
@@ -222,7 +222,7 @@ JSON;
             'description' => 'Test description',
             'price'       => 59.99,
             'points'      => 1000,
-            'interval'    => 2,
+            'period'      => 2,
         ]));
 
         $body   = (string) $response->getBody();
@@ -238,7 +238,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'price', 'points', 'interval')
+            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period')
             ->from('fusio_plan')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -253,7 +253,7 @@ JSON;
         $this->assertEquals('Test description', $row['description']);
         $this->assertEquals(59.99, $row['price']);
         $this->assertEquals(1000, $row['points']);
-        $this->assertEquals(2, $row['interval']);
+        $this->assertEquals(2, $row['period']);
     }
 
     public function testPut()

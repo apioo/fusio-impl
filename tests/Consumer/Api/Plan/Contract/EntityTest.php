@@ -124,6 +124,9 @@ class EntityTest extends ControllerDbTestCase
                     "points": {
                         "type": "integer"
                     },
+                    "period": {
+                        "type": "integer"
+                    },
                     "invoices": {
                         "type": "array",
                         "items": {
@@ -187,6 +190,7 @@ JSON;
     },
     "amount": 19.99,
     "points": 50,
+    "period": 1,
     "invoices": [
         {
             "id": 1,

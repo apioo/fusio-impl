@@ -77,7 +77,7 @@ class EntityTest extends ControllerDbTestCase
                     "points": {
                         "type": "integer"
                     },
-                    "interval": {
+                    "period": {
                         "type": "integer"
                     }
                 }
@@ -161,7 +161,7 @@ JSON;
     "description": "",
     "price": 39.99,
     "points": 500,
-    "interval": 1
+    "period": 1
 }
 JSON;
 
@@ -230,7 +230,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'interval')
+            ->select('id', 'name', 'description', 'price', 'points', 'period')
             ->from('fusio_plan')
             ->where('id = 1')
             ->getSQL();
@@ -242,7 +242,7 @@ JSON;
         $this->assertEquals('Test new description', $row['description']);
         $this->assertEquals(49.99, $row['price']);
         $this->assertEquals(4000, $row['points']);
-        $this->assertEquals(1, $row['interval']);
+        $this->assertEquals(1, $row['period']);
     }
 
     public function testDelete()

@@ -162,11 +162,11 @@ class Fixture
                 ['log_id' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_plan' => [
-                ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500, 'interval' => 1],
-                ['status' => 1, 'name' => 'Plan B', 'description' => '', 'price' => 49.99, 'points' => 1000, 'interval' => null],
+                ['status' => 1, 'name' => 'Plan A', 'description' => '', 'price' => 39.99, 'points' => 500, 'period' => 1],
+                ['status' => 1, 'name' => 'Plan B', 'description' => '', 'price' => 49.99, 'points' => 1000, 'period' => null],
             ],
             'fusio_plan_contract' => [
-                ['user_id' => 1, 'plan_id' => 1, 'status' => 1, 'amount' => 19.99, 'points' => 50, 'interval' => 1, 'insert_date' => '2018-10-05 18:18:00'],
+                ['user_id' => 1, 'plan_id' => 1, 'status' => 1, 'amount' => 19.99, 'points' => 50, 'period' => 1, 'insert_date' => '2018-10-05 18:18:00'],
             ],
             'fusio_plan_invoice' => [
                 ['contract_id' => 1, 'transaction_id' => 1, 'prev_id' => null, 'status' => Invoice::STATUS_PAYED, 'amount' => 19.99, 'points' => 100, 'from_date' => '2019-04-27', 'to_date' => '2019-04-27', 'pay_date' => '2019-04-27 20:57:00', 'insert_date' => '2019-04-27 20:57:00'],

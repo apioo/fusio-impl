@@ -6708,6 +6708,9 @@
           "points": {
             "type": "integer"
           },
+          "period": {
+            "type": "integer"
+          },
           "insertDate": {
             "type": "string",
             "format": "date-time"
@@ -6829,7 +6832,7 @@
           "points": {
             "type": "integer"
           },
-          "interval": {
+          "period": {
             "type": "integer"
           }
         }
@@ -7443,6 +7446,9 @@
             "type": "number"
           },
           "points": {
+            "type": "integer"
+          },
+          "period": {
             "type": "integer"
           },
           "invoices": {

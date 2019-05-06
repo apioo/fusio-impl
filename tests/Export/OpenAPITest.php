@@ -85,9 +85,12 @@ class OpenAPITest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/openapi_collection_internal.json');
+        $expect = __DIR__ . '/resources/openapi_collection_internal.json';
+        $actual = __DIR__ . '/resources/openapi_collection_internal_actual.json';
 
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        file_put_contents($actual, $body);
+
+        $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
     public function providerDebugStatus()

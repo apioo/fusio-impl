@@ -77,6 +77,9 @@ class CollectionTest extends ControllerDbTestCase
                     "points": {
                         "type": "integer"
                     },
+                    "period": {
+                        "type": "integer"
+                    },
                     "invoices": {
                         "type": "array",
                         "items": {
@@ -247,6 +250,7 @@ JSON;
             },
             "amount": 19.99,
             "points": 50,
+            "period": 1,
             "insertDate": "2018-10-05T18:18:00Z"
         }
     ]
@@ -279,7 +283,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'user_id', 'plan_id', 'status', 'amount', 'points', 'interval')
+            ->select('id', 'user_id', 'plan_id', 'status', 'amount', 'points', 'period')
             ->from('fusio_plan_contract')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -294,7 +298,7 @@ JSON;
         $this->assertEquals(Table\Plan\Contract::STATUS_ACTIVE, $row['status']);
         $this->assertEquals(39.99, $row['amount']);
         $this->assertEquals(500, $row['points']);
-        $this->assertEquals(1, $row['interval']);
+        $this->assertEquals(1, $row['period']);
     }
 
     public function testPut()
