@@ -41,6 +41,7 @@ class Contract extends SchemaAbstract
         $sb->objectType('plan', $this->getSchema(Schema\Plan::class));
         $sb->number('amount');
         $sb->integer('points');
+        $sb->integer('period');
         $sb->arrayType('invoices')
             ->setItems($this->getSchema(Schema\Plan\Invoice::class));
         $sb->dateTime('insertDate');

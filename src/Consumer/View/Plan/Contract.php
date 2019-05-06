@@ -62,6 +62,7 @@ class Contract extends ViewAbstract
                 ]),
                 'amount' => $this->fieldNumber('amount'),
                 'points' => $this->fieldInteger('points'),
+                'period' => $this->fieldInteger('period'),
                 'insertDate' => $this->fieldDateTime('insert_date'),
             ]),
         ];
@@ -85,6 +86,7 @@ class Contract extends ViewAbstract
             ]),
             'amount' => $this->fieldNumber('amount'),
             'points' => $this->fieldInteger('points'),
+            'period' => $this->fieldInteger('period'),
             'invoices' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getByContract_id'], [new Reference('id'), null, 0, 16, 'insert_date', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),

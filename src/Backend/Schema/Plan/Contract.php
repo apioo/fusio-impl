@@ -41,6 +41,7 @@ class Contract extends SchemaAbstract
         $sb->integer('status');
         $sb->number('amount');
         $sb->integer('points');
+        $sb->integer('period');
         $sb->dateTime('insertDate');
 
         return $sb->getProperty();

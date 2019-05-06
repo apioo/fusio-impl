@@ -60,7 +60,7 @@ class Plan
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($name, $description, $price, $points, $interval, UserContext $context)
+    public function create($name, $description, $price, $points, $period, UserContext $context)
     {
         // check whether plan exists
         $condition  = new Condition();
@@ -80,7 +80,7 @@ class Plan
             'description' => $description,
             'price'       => $price,
             'points'      => $points,
-            'interval'    => $interval,
+            'period'      => $period,
         ];
 
         $this->planTable->create($record);
@@ -91,7 +91,7 @@ class Plan
         $this->eventDispatcher->dispatch(PlanEvents::CREATE, new CreatedEvent($planId, $record, $context));
     }
 
-    public function update($planId, $name, $description, $price, $points, UserContext $context)
+    public function update($planId, $name, $description, $price, $points, $period, UserContext $context)
     {
         $plan = $this->planTable->get($planId);
 
@@ -110,6 +110,7 @@ class Plan
             'description' => $description,
             'price'       => $price,
             'points'      => $points,
+            'period'      => $period,
         ];
 
         $this->planTable->update($record);

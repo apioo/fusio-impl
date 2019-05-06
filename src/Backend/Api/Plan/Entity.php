@@ -99,6 +99,7 @@ class Entity extends BackendApiAbstract
             $record->description,
             $record->price,
             $record->points,
+            $record->period,
             $this->context->getUserContext()
         );
 

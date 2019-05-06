@@ -40,7 +40,7 @@ class Plan extends SchemaAbstract
         $sb->string('description');
         $sb->number('price');
         $sb->integer('points');
-        $sb->integer('interval');
+        $sb->integer('period');
 
         return $sb->getProperty();
     }

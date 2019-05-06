@@ -90,7 +90,7 @@ class Contract
             'status' => $status,
             'amount' => $product->getPrice(),
             'points' => $product->getPoints(),
-            'interval' => $product->getInterval(),
+            'period' => $product->getInterval(),
             'insert_date' => new \DateTime(),
         ];
 

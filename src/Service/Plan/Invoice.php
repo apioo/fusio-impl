@@ -90,7 +90,7 @@ class Invoice
         }
 
         $from = (clone $startDate)->setTime(0, 0, 0);
-        $to   = (new DateCalculator())->calculate($from, $contract['interval']);
+        $to   = (new DateCalculator())->calculate($from, $contract['period']);
 
         $record = [
             'contract_id' => $contract['id'],

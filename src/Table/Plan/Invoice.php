@@ -72,7 +72,7 @@ class Invoice extends TableAbstract
     {
         $sql = 'SELECT plan.id,
                        plan.name,
-                       plan.interval,
+                       plan.period,
                        invoice.amount,
                        invoice.points
                   FROM fusio_plan_invoice invoice
