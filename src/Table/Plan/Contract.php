@@ -60,6 +60,6 @@ class Contract extends TableAbstract
     
     public function getActiveContracts()
     {
-        return $this->getBy(new Condition(['status' => self::STATUS_ACTIVE]));
+        return $this->getBy(new Condition(['status', '=', self::STATUS_ACTIVE]));
     }
 }
