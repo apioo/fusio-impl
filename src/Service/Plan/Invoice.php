@@ -81,8 +81,9 @@ class Invoice
      * @param integer $contractId
      * @param \DateTime $startDate
      * @param \Fusio\Impl\Authorization\UserContext $context
+     * @param integer $prevId
      */
-    public function create($contractId, \DateTime $startDate, UserContext $context)
+    public function create($contractId, \DateTime $startDate, UserContext $context, $prevId = null)
     {
         $contract = $this->contractTable->get($contractId);
         if (empty($contract)) {
@@ -95,7 +96,7 @@ class Invoice
         $record = [
             'contract_id' => $contract['id'],
             'transaction_id' => null,
-            'prev_id' => null,
+            'prev_id' => $prevId,
             'status' => Table\Plan\Invoice::STATUS_OPEN,
             'amount' => $contract['amount'],
             'points' => $contract['points'],
