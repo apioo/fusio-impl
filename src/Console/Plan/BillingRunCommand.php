@@ -33,30 +33,30 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RenewCommand extends Command
+class BillingRunCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\Event\Executor
+     * @var \Fusio\Impl\Service\Plan\BillingRun
      */
-    protected $eventExecutorService;
+    protected $billingRun;
 
-    public function __construct(Service\Event\Executor $eventExecutorService)
+    public function __construct(Service\Plan\BillingRun $billingRun)
     {
         parent::__construct();
 
-        $this->eventExecutorService = $eventExecutorService;
+        $this->billingRun = $billingRun;
     }
 
     protected function configure()
     {
         $this
-            ->setName('plan:renew')
-            ->setDescription('Executes all pending events');
+            ->setName('plan:billing_run')
+            ->setDescription('Executes the billing run');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventExecutorService->execute();
+        $this->billingRun->run();
 
         $output->writeln('Execution successful');
     }

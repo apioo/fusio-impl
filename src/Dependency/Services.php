@@ -464,6 +464,20 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Plan\BillingRun
+     */
+    public function getPlanBillingRunService()
+    {
+        return new Service\Plan\BillingRun(
+            $this->get('plan_invoice_service'),
+            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
+            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Plan\Payer
      */
     public function getPlanPayerService()

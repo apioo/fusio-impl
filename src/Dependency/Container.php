@@ -228,6 +228,8 @@ class Container extends DefaultContainer
         $application->add(new Console\Migration\UpToDateCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Console\Migration\VersionCommand($this->get('connection'), $this->get('connector')));
 
+        $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
+
         $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));

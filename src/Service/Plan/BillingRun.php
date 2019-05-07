@@ -22,8 +22,10 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\ProductInterface;
+use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * BillingRun
@@ -50,15 +52,29 @@ class BillingRun
     private $invoiceTable;
 
     /**
+     * @var \Fusio\Impl\Table\User
+     */
+    private $userTable;
+
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
      * @param \Fusio\Impl\Table\Plan\Contract $contractTable
      * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
+     * @param \Fusio\Impl\Table\User $userTable
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Service\Plan\Invoice $invoiceService, Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable)
+    public function __construct(Service\Plan\Invoice $invoiceService, Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, Table\User $userTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->invoiceService = $invoiceService;
         $this->contractTable = $contractTable;
         $this->invoiceTable = $invoiceTable;
+        $this->userTable = $userTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -77,14 +93,14 @@ class BillingRun
             // get last invoice of the contract
             $invoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
 
-            $to = new \DateTime($invoice['to_date']);
-            if ($to < $now) {
+            $to = $invoice['to_date'];
+            if ($to instanceof \DateTime && $to < $now) {
                 // if the to date is in the past we generate a new invoice for
-                // the next time period
-                $invoiceId = $this->invoiceService->create($contract['id'], $to);
-                
-                // send mail to the user about the invoice, maybe with a link to
-                // directly pay the invoice?
+                // the next time period. THis creates a new invoice which the
+                // user can pay
+                $this->invoiceService->create($contract['id'], $to, UserContext::newAnonymousContext(), $invoice['id']);
+
+                // @TODO we maybe want to send an invoice email to the user
             }
         }
     }
