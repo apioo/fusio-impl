@@ -63,7 +63,6 @@ class Version20190416200104 extends AbstractMigration
         $planInvoiceTable = $schema->createTable('fusio_plan_invoice');
         $planInvoiceTable->addColumn('id', 'integer', ['autoincrement' => true]);
         $planInvoiceTable->addColumn('contract_id', 'integer');
-        $planInvoiceTable->addColumn('transaction_id', 'integer', ['notnull' => false]);
         $planInvoiceTable->addColumn('prev_id', 'integer', ['notnull' => false]);
         $planInvoiceTable->addColumn('status', 'integer');
         $planInvoiceTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
@@ -80,7 +79,6 @@ class Version20190416200104 extends AbstractMigration
         $planContractTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_contract_plan_id');
 
         $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_contract'), ['contract_id'], ['id'], [], 'plan_invoice_contract_id');
-        $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_transaction'), ['transaction_id'], ['id'], [], 'plan_invoice_transaction_id');
         $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_invoice'), ['prev_id'], ['id'], [], 'plan_invoice_prev_id');
 
         // sync
