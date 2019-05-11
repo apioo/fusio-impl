@@ -37,6 +37,7 @@ class Plan extends TableAbstract
     const STATUS_ACTIVE  = 1;
     const STATUS_DELETED = 0;
 
+    const INTERVAL_NONE = 0;
     const INTERVAL_1MONTH = 1;
     const INTERVAL_3MONTH = 2;
     const INTERVAL_6MONTH = 3;
