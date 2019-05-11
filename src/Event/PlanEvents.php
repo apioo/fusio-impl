@@ -31,8 +31,6 @@ namespace Fusio\Impl\Event;
 class PlanEvents
 {
     const CREATE = 'plan.create';
-    const CREDIT = 'plan.credit';
     const DELETE = 'plan.delete';
-    const PAY = 'plan.pay';
     const UPDATE = 'plan.update';
 }

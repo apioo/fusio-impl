@@ -298,6 +298,84 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
+    public function onPlanContractCreate(Event\Plan\Contract\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getContractId(),
+            'contract.create',
+            'Created contract',
+            $event->getRecord()
+        );
+    }
+
+    public function onPlanContractDelete(Event\Plan\Contract\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getContractId(),
+            'contract.delete',
+            'Deleted contract'
+        );
+    }
+
+    public function onPlanContractUpdate(Event\Plan\Contract\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getContractId(),
+            'contract.update',
+            'Updated contract',
+            $event->getRecord()
+        );
+    }
+
+    public function onPlanInvoiceCreate(Event\Plan\Invoice\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getInvoiceId(),
+            'invoice.create',
+            'Created invoice',
+            $event->getRecord()
+        );
+    }
+
+    public function onPlanInvoiceDelete(Event\Plan\Invoice\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getInvoiceId(),
+            'invoice.delete',
+            'Deleted invoice'
+        );
+    }
+
+    public function onPlanInvoiceUpdate(Event\Plan\Invoice\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getInvoiceId(),
+            'invoice.update',
+            'Updated invoice',
+            $event->getRecord()
+        );
+    }
+
+    public function onPlanInvoicePayed(Event\Plan\Invoice\PayedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getInvoiceId(),
+            'invoice.payed',
+            'Payed invoice',
+            [
+                'transaction_id' => $event->getTransaction()->getId(),
+                'transaction' => $event->getTransaction()->getTransactionId(),
+            ]
+        );
+    }
+
     public function onRateCreate(Event\Rate\CreatedEvent $event)
     {
         $this->log(
@@ -591,10 +669,17 @@ class AuditListener implements EventSubscriberInterface
             Event\EventEvents::UPDATE         => 'onEventUpdate',
 
             Event\PlanEvents::CREATE          => 'onPlanCreate',
-            Event\PlanEvents::CREDIT          => 'onPlanCredit',
             Event\PlanEvents::DELETE          => 'onPlanDelete',
-            Event\PlanEvents::PAY             => 'onPlanPay',
             Event\PlanEvents::UPDATE          => 'onPlanUpdate',
+
+            Event\Plan\ContractEvents::CREATE => 'onPlanContractCreate',
+            Event\Plan\ContractEvents::DELETE => 'onPlanContractDelete',
+            Event\Plan\ContractEvents::UPDATE => 'onPlanContractUpdate',
+
+            Event\Plan\InvoiceEvents::CREATE  => 'onPlanInvoiceCreate',
+            Event\Plan\InvoiceEvents::DELETE  => 'onPlanInvoiceDelete',
+            Event\Plan\InvoiceEvents::UPDATE  => 'onPlanInvoiceUpdate',
+            Event\Plan\InvoiceEvents::PAYED   => 'onPlanInvoicePayed',
 
             Event\RateEvents::CREATE          => 'onRateCreate',
             Event\RateEvents::DELETE          => 'onRateDelete',

@@ -166,7 +166,7 @@ class Invoice
     {
         $invoice = $this->invoiceTable->get($transaction->getInvoiceId());
         if (empty($invoice)) {
-            throw new \InvalidArgumentException('Invalid invoice id');
+            throw new \RuntimeException('Invalid invoice id');
         }
 
         if ($invoice['status'] == Table\Plan\Invoice::STATUS_PAYED) {
@@ -177,6 +177,19 @@ class Invoice
             throw new \InvalidArgumentException('Cant mark invoice as payed since the transaction is not approved');
         }
 
+        $contract = $this->contractTable->get($invoice['contract_id']);
+        if (empty($contract)) {
+            throw new \RuntimeException('Invalid contract id');
+        }
+
+        if ($contract['status'] == Table\Plan\Contract::STATUS_DELETED) {
+            throw new \InvalidArgumentException('Contract was deleted');
+        } elseif ($contract['status'] == Table\Plan\Contract::STATUS_CANCELLED) {
+            throw new \InvalidArgumentException('Contract was cancelled');
+        } elseif ($contract['status'] == Table\Plan\Contract::STATUS_CLOSED) {
+            throw new \InvalidArgumentException('Contract was closed');
+        }
+
         // mark invoice as payed
         $this->invoiceTable->update([
             'id' => $invoice['id'],
@@ -185,10 +198,10 @@ class Invoice
         ]);
 
         // credit points
-        $this->userTable->creditPoints($invoice['user_id'], $invoice['points']);
+        $this->userTable->creditPoints($contract['user_id'], $invoice['points']);
 
         // dispatch payed event
-        $context = UserContext::newContext($invoice['user_id']);
+        $context = UserContext::newContext($contract['user_id'], 2);
         $this->eventDispatcher->dispatch(InvoiceEvents::PAYED, new PayedEvent($invoice['id'], $invoice, $transaction, $context));
     }
 }
