@@ -75,19 +75,10 @@ class Contract
      */
     public function create($userId, ProductInterface $product, UserContext $context)
     {
-        $interval = $product->getInterval();
-        if (empty($interval)) {
-            // in case the product has no interval we have a onetime purchase
-            $status = Table\Plan\Contract::STATUS_ONETIME;
-        } else {
-            // otherwise we have a active subscription in a specific interval
-            $status = Table\Plan\Contract::STATUS_ACTIVE;
-        }
-
         $record = [
             'user_id' => $userId,
             'plan_id' => $product->getId(),
-            'status' => $status,
+            'status' => Table\Plan\Contract::STATUS_ACTIVE,
             'amount' => $product->getPrice(),
             'points' => $product->getPoints(),
             'period' => $product->getInterval(),

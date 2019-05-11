@@ -36,8 +36,7 @@ class Contract extends TableAbstract
     const STATUS_ACTIVE = 1;
     const STATUS_CANCELLED = 2;
     const STATUS_CLOSED = 3;
-    const STATUS_ONETIME = 4;
-    const STATUS_DELETED = 5;
+    const STATUS_DELETED = 4;
 
     public function getName()
     {
