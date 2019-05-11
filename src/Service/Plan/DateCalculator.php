@@ -57,9 +57,13 @@ class DateCalculator
             case Table\Plan::INTERVAL_12MONTH:
                 return $this->addMonth($startDate, 12);
                 break;
+
+            case Table\Plan::INTERVAL_NONE:
+                return $startDate;
+                break;
         }
 
-        return $startDate;
+        throw new \InvalidArgumentException('Provided interval does not exist');
     }
 
     /**
