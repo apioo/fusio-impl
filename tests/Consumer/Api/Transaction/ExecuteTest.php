@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
 
+use Fusio\Engine\Model\Transaction;
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -93,6 +95,25 @@ JSON;
 
         $this->assertEquals(307, $response->getStatusCode(), $body);
         $this->assertEquals('http://myapp.com', $response->getHeader('Location'), $body);
+
+        // check whether the transaction was correct executed
+        $transaction = $this->connection->fetchAssoc('SELECT invoice_id, status, remote_id FROM fusio_transaction WHERE transaction_id = :trans_id', ['trans_id' => '9e239bb3-cfb4-4783-92e0-18ce187041bc']);
+
+        $this->assertEquals(Transaction::STATUS_APPROVED, $transaction['status']);
+        $this->assertEquals('PAY-1B56960729604235TKQQIYVY', $transaction['remote_id']);
+
+        $invoice = $this->connection->fetchAssoc('SELECT contract_id, status, pay_date FROM fusio_plan_invoice WHERE id = :id', ['id' => $transaction['invoice_id']]);
+
+        $this->assertEquals(Table\Plan\Invoice::STATUS_PAYED, $invoice['status']);
+        $this->assertNotEmpty($invoice['pay_date']);
+
+        $contract = $this->connection->fetchAssoc('SELECT user_id, status FROM fusio_plan_contract WHERE id = :id', ['id' => $invoice['contract_id']]);
+
+        $this->assertEquals(Table\Plan\Contract::STATUS_ACTIVE, $contract['status']);
+
+        $user = $this->connection->fetchAssoc('SELECT points FROM fusio_user WHERE id = :id', ['id' => $contract['user_id']]);
+
+        $this->assertEquals(100, $user['points']);
     }
 
     public function testPost()
