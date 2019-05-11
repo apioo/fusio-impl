@@ -88,6 +88,11 @@ class BillingRun
         $now = new \DateTime();
 
         foreach ($contracts as $contract) {
+            // skip contracts which have no interval
+            if ($contract['period'] == Table\Plan::INTERVAL_NONE) {
+                continue;
+            }
+
             // get last invoice of the contract
             $invoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
 
