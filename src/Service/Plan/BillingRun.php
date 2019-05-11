@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\Plan;
 
-use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -78,9 +77,8 @@ class BillingRun
     }
 
     /**
-     * @param integer $userId
-     * @param ProductInterface $product
-     * @return integer
+     * Executes the billing run which creates new invoices if a date border is
+     * reached
      */
     public function run()
     {
