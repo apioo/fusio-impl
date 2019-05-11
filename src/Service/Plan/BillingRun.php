@@ -99,11 +99,19 @@ class BillingRun
             $to = $invoice['to_date'];
             if ($to instanceof \DateTime && $to < $now) {
                 // if the to date is in the past we generate a new invoice for
-                // the next time period. THis creates a new invoice which the
+                // the next time period. This creates a new invoice which the
                 // user can pay
                 $this->invoiceService->create($contract['id'], $to, UserContext::newAnonymousContext(), $invoice['id']);
 
-                // @TODO we maybe want to send an invoice email to the user
+                // @TODO we need a mechanism to reset the points of a user after
+                // a billing period. Currently we have more a pay-per-use
+                // scenario but if you want to charge a user flat every period
+                // we need to reset the points count. The problem here is that
+                // the user can then make no more calls at the beginning of the
+                // month until he has payed the invoice
+
+                // @TODO we maybe want to send an invoice email to the user.
+                // Since we support social logins not every user has an email
             }
         }
     }
