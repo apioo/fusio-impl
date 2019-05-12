@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Plan;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -49,7 +50,7 @@ class Contract extends ViewAbstract
         $condition->equals('status', Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like('user_id', $search);
         }
 
         $definition = [
@@ -58,8 +59,14 @@ class Contract extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
-                'userId' => $this->fieldInteger('user_id'),
-                'planId' => $this->fieldInteger('plan_id'),
+                'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                    'id' => $this->fieldInteger('id'),
+                    'name' => 'name',
+                ]),
+                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
+                    'id' => $this->fieldInteger('id'),
+                    'name' => 'name',
+                ]),
                 'status' => $this->fieldInteger('status'),
                 'amount' => $this->fieldNumber('amount'),
                 'points' => $this->fieldInteger('points'),
@@ -75,8 +82,14 @@ class Contract extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
-            'userId' => $this->fieldInteger('user_id'),
-            'planId' => $this->fieldInteger('plan_id'),
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                'id' => $this->fieldInteger('id'),
+                'name' => 'name',
+            ]),
+            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
+                'id' => $this->fieldInteger('id'),
+                'name' => 'name',
+            ]),
             'status' => $this->fieldInteger('status'),
             'amount' => $this->fieldNumber('amount'),
             'points' => $this->fieldInteger('points'),

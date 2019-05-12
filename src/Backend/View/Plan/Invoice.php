@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Plan;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -49,7 +50,7 @@ class Invoice extends ViewAbstract
         $condition->equals('status', Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like('displayId', '%' . $search . '%');
         }
 
         $definition = [
@@ -59,7 +60,12 @@ class Invoice extends ViewAbstract
             'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'contractId' => $this->fieldInteger('contract_id'),
+                'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                    'id' => $this->fieldInteger('id'),
+                    'name' => 'name',
+                ]),
                 'prevId' => $this->fieldInteger('prev_id'),
+                'displayId' => 'display_id',
                 'status' => $this->fieldInteger('status'),
                 'amount' => $this->fieldNumber('amount'),
                 'points' => $this->fieldInteger('points'),
@@ -78,7 +84,12 @@ class Invoice extends ViewAbstract
         $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'contractId' => $this->fieldInteger('contract_id'),
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                'id' => $this->fieldInteger('id'),
+                'name' => 'name',
+            ]),
             'prevId' => $this->fieldInteger('prev_id'),
+            'displayId' => 'display_id',
             'status' => $this->fieldInteger('status'),
             'amount' => $this->fieldNumber('amount'),
             'points' => $this->fieldInteger('points'),
