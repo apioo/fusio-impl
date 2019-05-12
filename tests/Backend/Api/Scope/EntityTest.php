@@ -173,23 +173,23 @@ JSON;
     "description": "Bar access",
     "routes": [
         {
+            "id": 93,
+            "scopeId": 5,
+            "routeId": 102,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 92,
+            "scopeId": 5,
+            "routeId": 101,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
             "id": 91,
             "scopeId": 5,
             "routeId": 100,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
-        },
-        {
-            "id": 90,
-            "scopeId": 5,
-            "routeId": 99,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
-        },
-        {
-            "id": 89,
-            "scopeId": 5,
-            "routeId": 98,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }

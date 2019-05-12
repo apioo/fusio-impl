@@ -749,6 +749,28 @@
       "version": "*"
     },
     {
+      "path": "\/consumer\/plan\/invoice",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/consumer\/plan",
       "methods": [
         "GET",

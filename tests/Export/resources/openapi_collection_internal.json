@@ -4611,6 +4611,56 @@
       },
       "parameters": []
     },
+    "\/consumer\/plan\/invoice": {
+      "get": {
+        "operationId": "consumerPlanInvoiceGetConsumer_Plan_Invoice_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/consumer\/plan\/invoice\/{invoice_id}": {
+      "get": {
+        "operationId": "consumerPlanInvoiceInvoiceid09GetConsumer_Plan_Invoice",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/plan": {
       "get": {
         "operationId": "consumerPlanGetConsumer_Plan_Collection",
@@ -7567,6 +7617,24 @@
           },
           "invoiceId": {
             "type": "integer"
+          }
+        }
+      },
+      "Consumer_Plan_Invoice_Collection": {
+        "type": "object",
+        "title": "Consumer Plan Invoice Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice"
+            }
           }
         }
       },
