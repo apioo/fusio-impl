@@ -21,29 +21,22 @@
 
 namespace Fusio\Impl\Backend\Schema\Plan;
 
-use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Contract
+ * User
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Contract extends SchemaAbstract
+class User extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Plan Contract');
+        $sb = $this->getSchemaBuilder('Plan User');
         $sb->integer('id');
-        $sb->objectType('user', $this->getSchema(User::class));
-        $sb->objectType('plan', $this->getSchema(Schema\Plan::class));
-        $sb->integer('status');
-        $sb->number('amount');
-        $sb->integer('points');
-        $sb->integer('period');
-        $sb->dateTime('insertDate');
+        $sb->string('name');
 
         return $sb->getProperty();
     }

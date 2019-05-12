@@ -37,8 +37,10 @@ class Invoice extends SchemaAbstract
         $sb = $this->getSchemaBuilder('Plan Invoice');
         $sb->integer('id');
         $sb->integer('contractId');
+        $sb->objectType('user', $this->getSchema(User::class));
         $sb->integer('transactionId');
         $sb->integer('prevId');
+        $sb->string('displayId');
         $sb->integer('status');
         $sb->number('amount');
         $sb->integer('points');
