@@ -93,9 +93,13 @@ class Invoice
         $from = (clone $startDate)->setTime(0, 0, 0);
         $to   = (new DateCalculator())->calculate($from, $contract['period']);
 
+        $displayId = $this->generateInvoiceId($contract['user_id']);
+
         $record = [
             'contract_id' => $contract['id'],
+            'user_id' => $contract['user_id'],
             'transaction_id' => null,
+            'display_id' => $displayId,
             'prev_id' => $prevId,
             'status' => Table\Plan\Invoice::STATUS_OPEN,
             'amount' => $contract['amount'],
@@ -203,5 +207,20 @@ class Invoice
         // dispatch payed event
         $context = UserContext::newContext($contract['user_id'], 2);
         $this->eventDispatcher->dispatch(InvoiceEvents::PAYED, new PayedEvent($invoice['id'], $invoice, $transaction, $context));
+    }
+
+    /**
+     * @param integer $userId
+     * @return string
+     */
+    private function generateInvoiceId($userId)
+    {
+        $parts = [
+            str_pad($userId, 4, '0', STR_PAD_LEFT),
+            date('Y'),
+            str_pad(substr(intval(microtime(true) * 10), -6), 6, '0', STR_PAD_LEFT)
+        ];
+
+        return implode('-', $parts);
     }
 }
