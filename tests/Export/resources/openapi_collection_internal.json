@@ -6693,11 +6693,11 @@
           "id": {
             "type": "integer"
           },
-          "userId": {
-            "type": "integer"
+          "user": {
+            "$ref": "#\/components\/schemas\/Plan_User"
           },
-          "planId": {
-            "type": "integer"
+          "plan": {
+            "$ref": "#\/components\/schemas\/Plan"
           },
           "status": {
             "type": "integer"
@@ -6714,6 +6714,42 @@
           "insertDate": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "Plan_User": {
+        "type": "object",
+        "title": "Plan User",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Plan": {
+        "type": "object",
+        "title": "Plan",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
           }
         }
       },
@@ -6745,11 +6781,17 @@
           "contractId": {
             "type": "integer"
           },
+          "user": {
+            "$ref": "#\/components\/schemas\/Plan_User"
+          },
           "transactionId": {
             "type": "integer"
           },
           "prevId": {
             "type": "integer"
+          },
+          "displayId": {
+            "type": "string"
           },
           "status": {
             "type": "integer"
@@ -6812,30 +6854,6 @@
           "contractId",
           "startDate"
         ]
-      },
-      "Plan": {
-        "type": "object",
-        "title": "Plan",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          }
-        }
       },
       "Plan_Collection": {
         "type": "object",
