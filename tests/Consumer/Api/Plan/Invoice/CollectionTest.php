@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Plan\Contract;
+namespace Fusio\Impl\Tests\Consumer\Api\Plan\Invoice;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * EntityTest
+ * CollectionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EntityTest extends ControllerDbTestCase
+class CollectionTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/plan/contract/1', 'GET', array(
+        $response = $this->sendRequest('/doc/*/consumer/plan/invoice', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +50,7 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/plan\/contract\/$contract_id<[0-9]+>",
+    "path": "\/consumer\/plan\/invoice",
     "version": "*",
     "status": 1,
     "description": null,
@@ -58,27 +58,6 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Consumer_Plan": {
-                "type": "object",
-                "title": "Consumer Plan",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "price": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    }
-                }
-            },
             "Consumer_Plan_Invoice": {
                 "type": "object",
                 "title": "Consumer Plan Invoice",
@@ -105,42 +84,26 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Consumer_Plan_Contract": {
+            "Consumer_Plan_Invoice_Collection": {
                 "type": "object",
-                "title": "Consumer Plan Contract",
+                "title": "Consumer Plan Invoice Collection",
                 "properties": {
-                    "id": {
+                    "totalResults": {
                         "type": "integer"
                     },
-                    "status": {
+                    "startIndex": {
                         "type": "integer"
                     },
-                    "plan": {
-                        "$ref": "#\/definitions\/Consumer_Plan"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "period": {
-                        "type": "integer"
-                    },
-                    "invoices": {
+                    "entry": {
                         "type": "array",
                         "items": {
                             "$ref": "#\/definitions\/Consumer_Plan_Invoice"
                         }
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 }
             },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Plan_Contract"
+                "$ref": "#\/definitions\/Consumer_Plan_Invoice_Collection"
             }
         }
     },
@@ -154,15 +117,15 @@ class EntityTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/openapi\/*\/consumer\/plan\/invoice"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/swagger\/*\/consumer\/plan\/invoice"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/raml\/*\/consumer\/plan\/invoice"
         }
     ]
 }
@@ -173,25 +136,44 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/plan/invoice', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+
         $expect = <<<'JSON'
 {
-    "id": 1,
-    "status": 1,
-    "plan": {
-        "id": 1,
-        "name": "Plan A",
-        "description": ""
-    },
-    "amount": 19.99,
-    "points": 50,
-    "period": 1,
-    "insertDate": "2018-10-05T18:18:00Z"
+    "totalResults": 2,
+    "startIndex": 0,
+    "itemsPerPage": 16,
+    "entry": [
+        {
+            "id": 2,
+            "contractId": 1,
+            "prevId": 1,
+            "displayId": "0001-2019-897635",
+            "status": 0,
+            "amount": 19.99,
+            "points": 100,
+            "fromDate": "2019-04-27T00:00:00Z",
+            "toDate": "2019-04-27T00:00:00Z",
+            "insertDate": "2019-04-27T20:57:00Z"
+        },
+        {
+            "id": 1,
+            "contractId": 1,
+            "displayId": "0001-2019-896280",
+            "status": 1,
+            "amount": 19.99,
+            "points": 100,
+            "fromDate": "2019-04-27T00:00:00Z",
+            "toDate": "2019-04-27T00:00:00Z",
+            "payDate": "2019-04-27T20:57:00Z",
+            "insertDate": "2019-04-27T20:57:00Z"
+        }
+    ]
 }
 JSON;
 
@@ -201,7 +183,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/plan/invoice', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -215,7 +197,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/plan/invoice', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -229,10 +211,12 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/plan/invoice', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ));
+        ), json_encode([
+            'foo' => 'bar',
+        ]));
 
         $body = (string) $response->getBody();
 

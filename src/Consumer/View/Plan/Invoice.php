@@ -28,13 +28,13 @@ use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Contract
+ * Invoice
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Contract extends ViewAbstract
+class Invoice extends ViewAbstract
 {
     public function getCollection($userId, $startIndex = 0)
     {
@@ -46,23 +46,23 @@ class Contract extends ViewAbstract
 
         $condition = new Condition();
         $condition->equals('user_id', $userId);
-        $condition->in('status', [Table\Plan\Contract::STATUS_ACTIVE, Table\Plan\Contract::STATUS_CLOSED, Table\Plan\Contract::STATUS_CANCELLED]);
+        $condition->in('status', [Table\Plan\Invoice::STATUS_OPEN, Table\Plan\Invoice::STATUS_PAYED]);
 
         $definition = [
-            'totalResults' => $this->getTable(Table\Plan\Contract::class)->getCount($condition),
+            'totalResults' => $this->getTable(Table\Plan\Invoice::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'contractId' => $this->fieldInteger('contract_id'),
+                'prevId' => $this->fieldInteger('prev_id'),
+                'displayId' => 'display_id',
                 'status' => $this->fieldInteger('status'),
-                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('id')], [
-                    'id' => $this->fieldInteger('id'),
-                    'name' => 'name',
-                    'description' => 'description',
-                ]),
                 'amount' => $this->fieldNumber('amount'),
                 'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period'),
+                'fromDate' => $this->fieldDateTime('from_date'),
+                'toDate' => $this->fieldDateTime('to_date'),
+                'payDate' => $this->fieldDateTime('pay_date'),
                 'insertDate' => $this->fieldDateTime('insert_date'),
             ]),
         ];
@@ -70,23 +70,23 @@ class Contract extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $contractId)
+    public function getEntity($userId, $invoiceId)
     {
         $condition = new Condition();
-        $condition->equals('id', $contractId);
+        $condition->equals('id', $invoiceId);
         $condition->equals('user_id', $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'getOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
+            'contractId' => $this->fieldInteger('contract_id'),
+            'prevId' => $this->fieldInteger('prev_id'),
+            'displayId' => 'display_id',
             'status' => $this->fieldInteger('status'),
-            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('id')], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
-            ]),
             'amount' => $this->fieldNumber('amount'),
             'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period'),
+            'fromDate' => $this->fieldDateTime('from_date'),
+            'toDate' => $this->fieldDateTime('to_date'),
+            'payDate' => $this->fieldDateTime('pay_date'),
             'insertDate' => $this->fieldDateTime('insert_date'),
         ]);
 

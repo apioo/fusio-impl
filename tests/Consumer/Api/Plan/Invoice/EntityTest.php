@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Plan\Contract;
+namespace Fusio\Impl\Tests\Consumer\Api\Plan\Invoice;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/plan/contract/1', 'GET', array(
+        $response = $this->sendRequest('/doc/*/consumer/plan/invoice/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -50,7 +50,7 @@ class EntityTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/consumer\/plan\/contract\/$contract_id<[0-9]+>",
+    "path": "\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>",
     "version": "*",
     "status": 1,
     "description": null,
@@ -58,27 +58,6 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
-            "Consumer_Plan": {
-                "type": "object",
-                "title": "Consumer Plan",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "price": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    }
-                }
-            },
             "Consumer_Plan_Invoice": {
                 "type": "object",
                 "title": "Consumer Plan Invoice",
@@ -105,42 +84,8 @@ class EntityTest extends ControllerDbTestCase
                     }
                 }
             },
-            "Consumer_Plan_Contract": {
-                "type": "object",
-                "title": "Consumer Plan Contract",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "plan": {
-                        "$ref": "#\/definitions\/Consumer_Plan"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "period": {
-                        "type": "integer"
-                    },
-                    "invoices": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Consumer_Plan_Invoice"
-                        }
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
             "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Plan_Contract"
+                "$ref": "#\/definitions\/Consumer_Plan_Invoice"
             }
         }
     },
@@ -154,15 +99,15 @@ class EntityTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/openapi\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/swagger\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/plan\/contract\/$contract_id<[0-9]+>"
+            "href": "\/export\/raml\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
         }
     ]
 }
@@ -173,7 +118,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'GET', array(
+        $response = $this->sendRequest('/consumer/plan/invoice/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -182,16 +127,15 @@ JSON;
         $expect = <<<'JSON'
 {
     "id": 1,
+    "contractId": 1,
+    "displayId": "0001-2019-896280",
     "status": 1,
-    "plan": {
-        "id": 1,
-        "name": "Plan A",
-        "description": ""
-    },
     "amount": 19.99,
-    "points": 50,
-    "period": 1,
-    "insertDate": "2018-10-05T18:18:00Z"
+    "points": 100,
+    "fromDate": "2019-04-27T00:00:00Z",
+    "toDate": "2019-04-27T00:00:00Z",
+    "payDate": "2019-04-27T20:57:00Z",
+    "insertDate": "2019-04-27T20:57:00Z"
 }
 JSON;
 
@@ -201,7 +145,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'POST', array(
+        $response = $this->sendRequest('/consumer/plan/invoice/1', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -215,7 +159,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'PUT', array(
+        $response = $this->sendRequest('/consumer/plan/invoice/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -229,7 +173,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/plan/contract/1', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/plan/invoice/1', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
