@@ -58,6 +58,42 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "Plan_User": {
+                "type": "object",
+                "title": "Plan User",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Plan": {
+                "type": "object",
+                "title": "Plan",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "points": {
+                        "type": "integer"
+                    },
+                    "period": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Plan_Contract": {
                 "type": "object",
                 "title": "Plan Contract",
@@ -65,11 +101,11 @@ class EntityTest extends ControllerDbTestCase
                     "id": {
                         "type": "integer"
                     },
-                    "userId": {
-                        "type": "integer"
+                    "user": {
+                        "$ref": "#\/definitions\/Plan_User"
                     },
-                    "planId": {
-                        "type": "integer"
+                    "plan": {
+                        "$ref": "#\/definitions\/Plan"
                     },
                     "status": {
                         "type": "integer"
@@ -164,8 +200,14 @@ JSON;
         $expect = <<<JSON
 {
     "id": 1,
-    "userId": 1,
-    "planId": 1,
+    "user": {
+        "id": 1,
+        "name": "Administrator"
+    },
+    "plan": {
+        "id": 1,
+        "name": "Plan A"
+    },
     "status": 1,
     "amount": 19.99,
     "points": 50,

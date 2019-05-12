@@ -83,11 +83,17 @@ class CollectionTest extends ControllerDbTestCase
                     "contractId": {
                         "type": "integer"
                     },
+                    "user": {
+                        "$ref": "#\/definitions\/Plan_User"
+                    },
                     "transactionId": {
                         "type": "integer"
                     },
                     "prevId": {
                         "type": "integer"
+                    },
+                    "displayId": {
+                        "type": "string"
                     },
                     "status": {
                         "type": "integer"
@@ -113,6 +119,18 @@ class CollectionTest extends ControllerDbTestCase
                     "insertDate": {
                         "type": "string",
                         "format": "date-time"
+                    }
+                }
+            },
+            "Plan_User": {
+                "type": "object",
+                "title": "Plan User",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
                     }
                 }
             },
@@ -225,6 +243,11 @@ JSON;
         {
             "id": 1,
             "contractId": 1,
+            "user": {
+                "id": 1,
+                "name": "Administrator"
+            },
+            "displayId": "0001-2019-896280",
             "status": 1,
             "amount": 19.99,
             "points": 100,
