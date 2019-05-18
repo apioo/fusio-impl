@@ -26,6 +26,7 @@ use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\Property;
 
 /**
  * Prepare
@@ -48,6 +49,7 @@ class Prepare extends ConsumerApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('provider', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
