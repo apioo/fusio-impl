@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\Property;
 
 /**
  * Preview
@@ -48,6 +49,7 @@ class Preview extends BackendApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('schema_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])

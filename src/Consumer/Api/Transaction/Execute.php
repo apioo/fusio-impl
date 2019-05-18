@@ -25,6 +25,7 @@ use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Property;
 
 /**
  * Execute
@@ -47,6 +48,7 @@ class Execute extends SchemaApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('transaction_id', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setDescription('Executes the payment on the remote provider and redirects the user to the app using the provided return url')

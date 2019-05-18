@@ -28,6 +28,7 @@ use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Property;
 
 /**
  * Entity
@@ -52,6 +53,7 @@ class Entity extends BackendApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('invoice_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])

@@ -26,6 +26,7 @@ use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Property;
 
 /**
  * Provider
@@ -48,6 +49,7 @@ class Provider extends SchemaApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('provider', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setRequest($this->schemaManager->getSchema(Schema\User\Provider::class))

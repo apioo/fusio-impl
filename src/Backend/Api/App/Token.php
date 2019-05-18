@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\Property;
 
 /**
  * Token
@@ -48,6 +49,8 @@ class Token extends BackendApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('app_id', Property::getInteger());
+        $resource->addPathParameter('token_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
             ->setSecurity(Authorization::BACKEND, ['backend'])

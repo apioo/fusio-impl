@@ -28,6 +28,7 @@ use PSX\Api\Resource;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Schema\Property;
 
 /**
  * Execute
@@ -50,6 +51,7 @@ class Execute extends BackendApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('action_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])

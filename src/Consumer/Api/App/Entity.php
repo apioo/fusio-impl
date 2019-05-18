@@ -28,6 +28,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\Property;
 
 /**
  * Entity
@@ -52,6 +53,7 @@ class Entity extends ConsumerApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('app_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer'])
