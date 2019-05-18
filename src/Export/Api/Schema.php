@@ -30,6 +30,7 @@ use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
+use PSX\Schema\Property;
 use PSX\Schema\SchemaInterface;
 
 /**
@@ -59,6 +60,7 @@ class Schema extends SchemaApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('name', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->addResponse(200, $this->schemaManager->getSchema(ExportSchema\Schema::class))
