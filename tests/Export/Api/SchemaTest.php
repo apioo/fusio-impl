@@ -56,6 +56,15 @@ class SchemaTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
             "Export_Schema_JsonSchema": {
                 "type": "object",
                 "title": "Export Schema JsonSchema",
@@ -83,6 +92,7 @@ class SchemaTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "GET": {
             "responses": {

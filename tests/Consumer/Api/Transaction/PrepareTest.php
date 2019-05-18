@@ -57,6 +57,15 @@ class PrepareTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "provider": {
+                        "type": "string"
+                    }
+                }
+            },
             "Consumer_Transaction_Prepare_Request": {
                 "type": "object",
                 "title": "Consumer Transaction Prepare Request",
@@ -90,6 +99,7 @@ class PrepareTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "POST": {
             "request": "#\/definitions\/POST-request",

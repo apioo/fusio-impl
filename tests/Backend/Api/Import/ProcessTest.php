@@ -365,7 +365,10 @@ class ProcessTest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "result": {
-                        "type": "array"
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     }
                 }
             },
