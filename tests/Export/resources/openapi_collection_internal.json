@@ -5222,7 +5222,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/consumer\/transaction\/{transaction_id}": {
       "get": {
@@ -5683,7 +5692,24 @@
           }
         }
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "version",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "path",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/export\/health": {
       "get": {
@@ -5833,7 +5859,16 @@
           }
         }
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     }
   },
   "components": {
@@ -6937,7 +6972,10 @@
             "type": "string"
           },
           "result": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
