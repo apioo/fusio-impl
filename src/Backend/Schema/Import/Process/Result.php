@@ -38,7 +38,8 @@ class Result extends SchemaAbstract
         $sb = $this->getSchemaBuilder('Import Response');
         $sb->boolean('success');
         $sb->string('message');
-        $sb->arrayType('result', Property::getString());
+        $sb->arrayType('result')
+            ->setItems(Property::getString());
 
         return $sb->getProperty();
     }
