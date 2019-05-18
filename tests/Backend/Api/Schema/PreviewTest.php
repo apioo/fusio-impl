@@ -56,6 +56,15 @@ class PreviewTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "schema_id": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Schema_Preview_Response": {
                 "type": "object",
                 "title": "Schema Preview Response",
@@ -70,6 +79,7 @@ class PreviewTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "POST": {
             "responses": {

@@ -55,8 +55,19 @@ class EntityTest extends ControllerDbTestCase
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
-        "definitions": {}
+        "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "grant_id": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "DELETE": {}
     },

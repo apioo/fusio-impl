@@ -56,6 +56,15 @@ class ExecuteTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "action_id": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Action_Request_Body": {
                 "type": "object",
                 "title": "Action Request Body",
@@ -121,6 +130,7 @@ class ExecuteTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "POST": {
             "request": "#\/definitions\/POST-request",

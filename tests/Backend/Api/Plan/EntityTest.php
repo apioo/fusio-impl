@@ -58,6 +58,15 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "plan_id": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Plan": {
                 "type": "object",
                 "title": "Plan",
@@ -108,6 +117,7 @@ class EntityTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "GET": {
             "responses": {

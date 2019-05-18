@@ -57,6 +57,15 @@ class FormTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "schema_id": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Schema_Form": {
                 "type": "object",
                 "title": "Schema Form",
@@ -83,6 +92,7 @@ class FormTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "PUT": {
             "request": "#\/definitions\/PUT-request",

@@ -57,6 +57,15 @@ class EntityTest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "scope_id": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Scope_Route": {
                 "type": "object",
                 "title": "Scope Route",
@@ -120,6 +129,7 @@ class EntityTest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "GET": {
             "responses": {

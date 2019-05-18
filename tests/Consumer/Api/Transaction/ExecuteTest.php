@@ -57,8 +57,19 @@ class ExecuteTest extends ControllerDbTestCase
     "schema": {
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
-        "definitions": {}
+        "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "transaction_id": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "GET": {
             "description": "Executes the payment on the remote provider and redirects the user to the app using the provided return url"

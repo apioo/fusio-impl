@@ -218,7 +218,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "action_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/action\/{action_id}": {
       "get": {
@@ -296,7 +305,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "action_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/app\/token": {
       "get": {
@@ -430,7 +448,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "token_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/app": {
       "get": {
@@ -590,7 +617,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/app\/{app_id}\/token\/{token_id}": {
       "delete": {
@@ -615,7 +651,24 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "token_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/audit": {
       "get": {
@@ -749,7 +802,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "audit_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/config": {
       "get": {
@@ -856,7 +918,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "config_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/connection": {
       "get": {
@@ -1076,7 +1147,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "connection_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/cronjob": {
       "get": {
@@ -1229,7 +1309,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "cronjob_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/dashboard": {
       "get": {
@@ -1407,7 +1496,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "event_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/import\/process": {
       "post": {
@@ -1475,7 +1573,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "format",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/backend\/log\/error": {
       "get": {
@@ -1551,7 +1658,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "error_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/log": {
       "get": {
@@ -1717,7 +1833,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "log_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/plan\/contract": {
       "get": {
@@ -1870,7 +1995,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "contract_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/plan\/invoice": {
       "get": {
@@ -2023,7 +2157,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "invoice_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/plan": {
       "get": {
@@ -2176,7 +2319,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "plan_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/rate": {
       "get": {
@@ -2329,7 +2481,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "rate_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/routes": {
       "get": {
@@ -2489,7 +2650,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "route_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/schema": {
       "get": {
@@ -2596,7 +2766,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/schema\/form\/{schema_id}": {
       "put": {
@@ -2630,7 +2809,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/schema\/{schema_id}": {
       "get": {
@@ -2708,7 +2896,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/scope": {
       "get": {
@@ -2868,7 +3065,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "scope_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/statistic\/count_requests": {
       "get": {
@@ -4140,7 +4346,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/user": {
       "get": {
@@ -4293,7 +4508,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/backend\/token": {
       "post": {
@@ -4464,7 +4688,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/event": {
       "get": {
@@ -4528,7 +4761,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "grant_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/plan\/contract": {
       "get": {
@@ -4609,7 +4851,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "contract_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/plan\/invoice": {
       "get": {
@@ -4659,7 +4910,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "invoice_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/plan": {
       "get": {
@@ -4709,7 +4969,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "plan_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/scope": {
       "get": {
@@ -4868,7 +5137,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "subscription_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/transaction": {
       "get": {
@@ -4901,7 +5179,16 @@
         "operationId": "consumerTransactionExecuteTransactionid",
         "responses": {}
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/consumer\/transaction\/prepare\/{provider}": {
       "post": {
@@ -4960,7 +5247,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
     },
     "\/consumer\/account": {
       "get": {
@@ -5205,7 +5501,16 @@
           }
         }
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/consumer\/register": {
       "post": {

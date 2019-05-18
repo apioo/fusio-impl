@@ -56,6 +56,15 @@ class OpenAPITest extends ControllerDbTestCase
         "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
         "id": "urn:schema.phpsx.org#",
         "definitions": {
+            "path-template": {
+                "type": "object",
+                "title": "path",
+                "properties": {
+                    "format": {
+                        "type": "string"
+                    }
+                }
+            },
             "Import": {
                 "type": "object",
                 "title": "import",
@@ -370,6 +379,7 @@ class OpenAPITest extends ControllerDbTestCase
             }
         }
     },
+    "pathParameters": "#\/definitions\/path-template",
     "methods": {
         "POST": {
             "request": "#\/definitions\/POST-request",
