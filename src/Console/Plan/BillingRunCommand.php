@@ -56,7 +56,20 @@ class BillingRunCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->billingRun->run();
+        $generator = $this->billingRun->run();
+        $count = 0;
+
+        $output->writeln('Generating invoices');
+
+        foreach ($generator as $invoiceId) {
+            $output->write('.');
+
+            if ($count % 20 === 0) {
+                $output->write("\n");
+            }
+
+            $count++;
+        }
 
         $output->writeln('Execution successful');
     }

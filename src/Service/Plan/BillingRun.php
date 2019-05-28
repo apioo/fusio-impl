@@ -80,7 +80,7 @@ class BillingRun
      * Executes the billing run which creates new invoices if a date border is
      * reached
      */
-    public function run()
+    public function run(): \Generator
     {
         // get all active contracts
         $contracts = $this->contractTable->getActiveContracts();
@@ -94,14 +94,14 @@ class BillingRun
             }
 
             // get last invoice of the contract
-            $invoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
+            $lastInvoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
 
-            $to = $invoice['to_date'];
-            if ($to instanceof \DateTime && $to < $now) {
+            $to = $lastInvoice['to_date'];
+            if ($lastInvoice === null || $to < $now) {
                 // if the to date is in the past we generate a new invoice for
                 // the next time period. This creates a new invoice which the
                 // user can pay
-                $this->invoiceService->create($contract['id'], $to, UserContext::newAnonymousContext(), $invoice['id']);
+                $invoiceId = $this->invoiceService->create($contract['id'], $to, UserContext::newAnonymousContext(), $lastInvoice['id']);
 
                 // @TODO we need a mechanism to reset the points of a user after
                 // a billing period. Currently we have more a pay-per-use
@@ -112,6 +112,8 @@ class BillingRun
 
                 // @TODO we maybe want to send an invoice email to the user.
                 // Since we support social logins not every user has an email
+
+                yield $invoiceId;
             }
         }
     }
