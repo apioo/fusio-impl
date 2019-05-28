@@ -97,7 +97,7 @@ class BillingRun
             $lastInvoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
 
             $to = $lastInvoice['to_date'];
-            if ($lastInvoice === null || $to < $now) {
+            if ($lastInvoice === null || ($to instanceof \DateTime && $to < $now)) {
                 // if the to date is in the past we generate a new invoice for
                 // the next time period. This creates a new invoice which the
                 // user can pay
