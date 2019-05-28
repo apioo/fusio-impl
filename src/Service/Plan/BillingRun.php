@@ -96,12 +96,13 @@ class BillingRun
             // get last invoice of the contract
             $lastInvoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
 
-            $to = $lastInvoice['to_date'];
-            if ($lastInvoice === null || ($to instanceof \DateTime && $to < $now)) {
+            $startDate = $lastInvoice === null ? $contract['insert_date'] : $lastInvoice['to_date'];
+
+            if ($startDate instanceof \DateTime && $startDate < $now) {
                 // if the to date is in the past we generate a new invoice for
                 // the next time period. This creates a new invoice which the
                 // user can pay
-                $invoiceId = $this->invoiceService->create($contract['id'], $to, UserContext::newAnonymousContext(), $lastInvoice['id']);
+                $invoiceId = $this->invoiceService->create($contract['id'], $startDate, UserContext::newAnonymousContext(), $lastInvoice['id']);
 
                 // @TODO we need a mechanism to reset the points of a user after
                 // a billing period. Currently we have more a pay-per-use
