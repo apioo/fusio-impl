@@ -64,13 +64,14 @@ class BillingRunCommand extends Command
         foreach ($generator as $invoiceId) {
             $output->write('.');
 
-            if ($count % 20 === 0) {
-                $output->write("\n");
+            if ($count > 0 && $count % 20 === 0) {
+                $output->writeln('');
             }
 
             $count++;
         }
 
+        $output->writeln('');
         $output->writeln('Execution successful');
     }
 }
