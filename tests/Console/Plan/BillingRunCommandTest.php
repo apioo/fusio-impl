@@ -76,7 +76,7 @@ class BillingRunCommandTest extends ControllerDbTestCase
         $this->assertEquals(null, $result[1]['pay_date']);
 
         $this->assertEquals(1, $result[2]['contract_id']);
-        $this->assertEquals(1, $result[2]['prev_id']);
+        $this->assertEquals(2, $result[2]['prev_id']);
         $this->assertEquals(Invoice::STATUS_OPEN, $result[2]['status']);
         $this->assertEquals(19.99, $result[2]['amount']);
         $this->assertEquals(50, $result[2]['points']);
