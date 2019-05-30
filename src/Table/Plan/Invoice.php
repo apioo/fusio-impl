@@ -64,7 +64,7 @@ class Invoice extends TableAbstract
     public function getLastInvoiceByContract($contractId)
     {
         $condition = new Condition(['contract_id', '=', $contractId]);
-        $result    = $this->getBy($condition, null, 0, 1, 'from_date', Sql::SORT_DESC);
+        $result    = $this->getBy($condition, null, 0, 1, 'id', Sql::SORT_DESC);
 
         return $result[0] ?? null;
     }
