@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Invoice extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getCollection($userId, $startIndex = 0, $contractId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -47,6 +47,10 @@ class Invoice extends ViewAbstract
         $condition = new Condition();
         $condition->equals('user_id', $userId);
         $condition->in('status', [Table\Plan\Invoice::STATUS_OPEN, Table\Plan\Invoice::STATUS_PAYED]);
+
+        if (!empty($contractId)) {
+            $condition->equals('contract_id', $contractId);
+        }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Plan\Invoice::class)->getCount($condition),

@@ -59,7 +59,8 @@ class Collection extends ConsumerApiAbstract
     {
         return $this->tableManager->getTable(View\Plan\Invoice::class)->getCollection(
             $this->context->getUserId(),
-            (int) $context->getParameter('startIndex')
+            (int) $context->getParameter('startIndex'),
+            (int) $context->getParameter('contractId')
         );
     }
 }
