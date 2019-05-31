@@ -47,7 +47,7 @@ class Invoice extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->in('status', [Table\Plan\Invoice::STATUS_OPEN, Table\Plan\Invoice::STATUS_PAYED]);
 
         if (!empty($search)) {
             $condition->like('displayId', '%' . $search . '%');

@@ -47,7 +47,7 @@ class Contract extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->in('status', [Table\Plan\Contract::STATUS_ACTIVE, Table\Plan\Contract::STATUS_CLOSED, Table\Plan\Contract::STATUS_CANCELLED]);
 
         if (!empty($search)) {
             $condition->like('user_id', $search);
