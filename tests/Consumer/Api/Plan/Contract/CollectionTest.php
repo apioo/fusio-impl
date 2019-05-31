@@ -273,8 +273,8 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "contractId": "2",
-    "invoiceId": "3"
+    "contractId": 2,
+    "invoiceId": 3
 }
 JSON;
 
