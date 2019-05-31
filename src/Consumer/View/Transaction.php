@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = null)
+    public function getCollection($userId, $startIndex = null, $invoiceId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -47,12 +47,13 @@ class Transaction extends ViewAbstract
         $condition = new Condition();
         $condition->equals('contract.user_id', $userId);
 
+        if (!empty($invoiceId)) {
+            $condition->equals('transact.invoice_id', $invoiceId);
+        }
+
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
         $querySql = $this->getBaseQuery(['transact.id', 'transact.status', 'transact.provider', 'transact.transaction_id', 'transact.amount', 'transact.update_date', 'transact.insert_date'], $condition);
         $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
-
-        $condition = new Condition();
-        $condition->equals('contract.user_id', $userId);
 
         $definition = [
             'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
