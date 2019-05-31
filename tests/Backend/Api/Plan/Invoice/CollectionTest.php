@@ -236,10 +236,26 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 2,
+            "contractId": 1,
+            "user": {
+                "id": 1,
+                "name": "Administrator"
+            },
+            "prevId": 1,
+            "displayId": "0001-2019-897635",
+            "status": 0,
+            "amount": 19.99,
+            "points": 100,
+            "fromDate": "2019-04-27T00:00:00Z",
+            "toDate": "2019-04-27T00:00:00Z",
+            "insertDate": "2019-04-27T20:57:00Z"
+        },
         {
             "id": 1,
             "contractId": 1,
