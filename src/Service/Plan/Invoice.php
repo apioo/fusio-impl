@@ -116,7 +116,7 @@ class Invoice
 
         $this->eventDispatcher->dispatch(InvoiceEvents::CREATE, new CreatedEvent($contractId, $record, $context));
 
-        return $invoiceId;
+        return (int) $invoiceId;
     }
 
     public function update($invoiceId, $status, UserContext $context)

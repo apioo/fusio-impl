@@ -91,7 +91,7 @@ class Contract
 
         $this->eventDispatcher->dispatch(ContractEvents::CREATE, new CreatedEvent($contractId, $record, $context));
 
-        return $contractId;
+        return (int) $contractId;
     }
 
     /**
