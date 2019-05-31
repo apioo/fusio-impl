@@ -55,7 +55,7 @@ class Contract extends ViewAbstract
             'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
-                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('id')], [
+                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                     'description' => 'description',
