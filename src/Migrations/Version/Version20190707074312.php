@@ -5,7 +5,6 @@ namespace Fusio\Impl\Migrations\Version;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Service\Routes\Config;
-use Fusio\Impl\Table\Routes\Method;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
