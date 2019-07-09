@@ -18,7 +18,10 @@ class Version20190707074312 extends AbstractMigration
     {
         $routesMethodTable = $schema->getTable('fusio_routes_method');
         $routesMethodTable->addColumn('operation_id', 'integer', ['notnull' => false]);
+    }
 
+    public function postUp(Schema $schema)
+    {
         $sql = 'SELECT method.id,
                        method.method,
                        routes.path
@@ -31,7 +34,7 @@ class Version20190707074312 extends AbstractMigration
         foreach ($result as $row) {
             $this->addSql('UPDATE fusio_routes_method SET operation_id = :operation_id WHERE id = :id', [
                 'operation_id' => Config::buildOperationId($row['path'], $row['method']),
-                'id' => $row['id'] 
+                'id' => $row['id']
             ]);
         }
     }
