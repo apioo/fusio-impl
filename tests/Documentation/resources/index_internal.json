@@ -1005,6 +1005,17 @@
       "version": "*"
     },
     {
+      "path": "\/export\/jsonrpc",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/export\/health",
       "methods": [
         "GET",

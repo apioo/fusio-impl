@@ -5711,6 +5711,40 @@
         }
       ]
     },
+    "\/export\/jsonrpc": {
+      "post": {
+        "operationId": "exportJsonrpcPostExport_Rpc_Request",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Export_Rpc_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Rpc_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/export\/health": {
       "get": {
         "operationId": "exportHealthGetExport_Health",
@@ -8499,6 +8533,118 @@
             }
           }
         }
+      },
+      "Export_Rpc_Request_Call": {
+        "type": "object",
+        "title": "Export Rpc Request Call",
+        "properties": {
+          "jsonrpc": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "params": {
+            "title": "Export Rpc Request Params",
+            "description": "Method params"
+          },
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Export_Rpc_Request": {
+        "title": "Export Rpc Request",
+        "oneOf": [
+          {
+            "$ref": "#\/components\/schemas\/Export_Rpc_Request_Call"
+          },
+          {
+            "type": "array",
+            "title": "Export Rpc Request Batch",
+            "items": {
+              "$ref": "#\/components\/schemas\/Export_Rpc_Request_Call"
+            }
+          }
+        ]
+      },
+      "Export_Rpc_Response_Return_Success": {
+        "type": "object",
+        "title": "Export Rpc Response Return Success",
+        "properties": {
+          "jsonrpc": {
+            "type": "string"
+          },
+          "result": {
+            "title": "Export Rpc Response Result",
+            "description": "Method result"
+          },
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Export_Rpc_Response_Return_Error": {
+        "type": "object",
+        "title": "Export Rpc Response Return Error",
+        "properties": {
+          "jsonrpc": {
+            "type": "string"
+          },
+          "error": {
+            "$ref": "#\/components\/schemas\/Export_Rpc_Response_Error"
+          },
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Export_Rpc_Response_Error": {
+        "type": "object",
+        "title": "Export Rpc Response Error",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "title": "Export Rpc Response Error Data",
+            "description": "Error data"
+          }
+        }
+      },
+      "Export_Rpc_Response": {
+        "title": "Export Rpc Response",
+        "oneOf": [
+          {
+            "title": "Export Rpc Response Return",
+            "oneOf": [
+              {
+                "$ref": "#\/components\/schemas\/Export_Rpc_Response_Return_Success"
+              },
+              {
+                "$ref": "#\/components\/schemas\/Export_Rpc_Response_Return_Error"
+              }
+            ]
+          },
+          {
+            "type": "array",
+            "title": "Export Rpc Response Batch",
+            "items": {
+              "title": "Export Rpc Response Return",
+              "oneOf": [
+                {
+                  "$ref": "#\/components\/schemas\/Export_Rpc_Response_Return_Success"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Export_Rpc_Response_Return_Error"
+                }
+              ]
+            }
+          }
+        ]
       },
       "Export_Health_Checks": {
         "type": "object",
