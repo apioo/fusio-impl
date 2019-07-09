@@ -134,7 +134,7 @@ class Config
                     }
 
                     // create method
-                    $methodId = $this->createMethod($routeId, $method, $ver, $status, $config);
+                    $methodId = $this->createMethod($routeId, $method, $ver, $status, $config, $path);
 
                     // create responses
                     $this->createResponses($methodId, $config);
@@ -179,31 +179,38 @@ class Config
      * @param integer $ver
      * @param integer $status
      * @param array $config
+     * @param string $path
      * @return int
      */
-    private function createMethod($routeId, $method, $ver, $status, $config)
+    private function createMethod($routeId, $method, $ver, $status, $config, $path)
     {
-        $active      = isset($config['active'])      ? $config['active']      : false;
-        $public      = isset($config['public'])      ? $config['public']      : false;
-        $description = isset($config['description']) ? $config['description'] : null;
-        $parameters  = isset($config['parameters'])  ? $config['parameters']  : null;
-        $request     = isset($config['request'])     ? $config['request']     : null;
-        $action      = isset($config['action'])      ? $config['action']      : null;
-        $costs       = isset($config['costs'])       ? $config['costs']       : null;
+        $active      = isset($config['active'])       ? $config['active']       : false;
+        $public      = isset($config['public'])       ? $config['public']       : false;
+        $description = isset($config['description'])  ? $config['description']  : null;
+        $operationId = isset($config['operation_id']) ? $config['operation_id'] : null;
+        $parameters  = isset($config['parameters'])   ? $config['parameters']   : null;
+        $request     = isset($config['request'])      ? $config['request']      : null;
+        $action      = isset($config['action'])       ? $config['action']       : null;
+        $costs       = isset($config['costs'])        ? $config['costs']        : null;
+
+        if (empty($operationId)) {
+            $operationId = self::buildOperationId($path, $method);
+        }
 
         // create method
         $data = [
-            'route_id'    => $routeId,
-            'method'      => $method,
-            'version'     => $ver,
-            'status'      => $status,
-            'active'      => $active ? 1 : 0,
-            'public'      => $public ? 1 : 0,
-            'description' => $description,
-            'parameters'  => $parameters,
-            'request'     => $request,
-            'action'      => $action,
-            'costs'       => $costs,
+            'route_id'     => $routeId,
+            'method'       => $method,
+            'version'      => $ver,
+            'status'       => $status,
+            'active'       => $active ? 1 : 0,
+            'public'       => $public ? 1 : 0,
+            'description'  => $description,
+            'operation_id' => $operationId,
+            'parameters'   => $parameters,
+            'request'      => $request,
+            'action'       => $action,
+            'costs'        => $costs,
         ];
 
         $this->methodTable->create($data);
@@ -235,5 +242,22 @@ class Config
                 'response'  => $response,
             ]);
         }
+    }
+
+    public static function buildOperationId(string $path, string $method)
+    {
+        $parts = array_filter(explode('/', $path));
+
+        $parts = array_map(static function(string $part){
+            if ($part[0] === ':') {
+                return substr($part, 1);
+            } elseif ($part[0] === '$') {
+                return substr($part, 1, strpos($part, '<') - 1);
+            } else {
+                return $part;
+            }
+        }, $parts);
+
+        return strtolower($method) . '.' . implode('.', $parts);
     }
 }

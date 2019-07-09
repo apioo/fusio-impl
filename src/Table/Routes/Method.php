@@ -179,6 +179,7 @@ class Method extends TableAbstract
     public function getMethod($routeId, $version, $method)
     {
         $sql = 'SELECT method.public,
+                       method.operation_id,
                        method.action,
                        method.status,
                        method.costs,
@@ -193,6 +194,25 @@ class Method extends TableAbstract
             'route_id' => $routeId,
             'version' => $version,
             'method' => $method,
+            'active' => Resource::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function getMethodByOperationId($operationId)
+    {
+        $sql = 'SELECT method.method,
+                       method.public,
+                       method.operation_id,
+                       method.action,
+                       method.status,
+                       method.costs,
+                       method.action_cache
+                  FROM fusio_routes_method method
+                 WHERE method.operation_id = :operation_id
+                   AND method.active = :active';
+
+        return $this->connection->fetchAssoc($sql, [
+            'operation_id' => $operationId,
             'active' => Resource::STATUS_ACTIVE,
         ]);
     }
