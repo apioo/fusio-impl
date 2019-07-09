@@ -41,14 +41,14 @@ class JsonRpcTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/rpc', 'GET', array(
+        $response = $this->sendRequest('/doc/*/export/jsonrpc', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "path": "\/export\/rpc",
+    "path": "\/export\/jsonrpc",
     "version": "*",
     "status": 1,
     "description": null,
@@ -187,15 +187,15 @@ class JsonRpcTest extends ControllerDbTestCase
     "links": [
         {
             "rel": "openapi",
-            "href": "\/export\/openapi\/*\/export\/rpc"
+            "href": "\/export\/openapi\/*\/export\/jsonrpc"
         },
         {
             "rel": "swagger",
-            "href": "\/export\/swagger\/*\/export\/rpc"
+            "href": "\/export\/swagger\/*\/export\/jsonrpc"
         },
         {
             "rel": "raml",
-            "href": "\/export\/raml\/*\/export\/rpc"
+            "href": "\/export\/raml\/*\/export\/jsonrpc"
         }
     ]
 }
@@ -206,7 +206,7 @@ JSON;
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/rpc', 'GET', array(
+        $response = $this->sendRequest('/export/jsonrpc', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -224,7 +224,7 @@ JSON;
         $client->query(1, 'listFoo', []);
         $message = $client->encode();
 
-        $response = $this->sendRequest('/export/rpc', 'POST', array(
+        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), $message);
@@ -262,7 +262,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/rpc', 'PUT', array(
+        $response = $this->sendRequest('/export/jsonrpc', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -276,7 +276,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/rpc', 'DELETE', array(
+        $response = $this->sendRequest('/export/jsonrpc', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
