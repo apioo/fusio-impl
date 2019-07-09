@@ -69,13 +69,19 @@ class Authentication implements FilterInterface
      */
     protected $userRepository;
 
-    public function __construct(Connection $connection, Context $context, $projectKey, AppInterface $appRepository, UserInterface $userRepository)
+    /**
+     * @var boolean
+     */
+    protected $assertScope;
+
+    public function __construct(Connection $connection, Context $context, $projectKey, AppInterface $appRepository, UserInterface $userRepository, bool $assertScope = true)
     {
         $this->connection     = $connection;
         $this->context        = $context;
         $this->projectKey     = $projectKey;
         $this->appRepository  = $appRepository;
         $this->userRepository = $userRepository;
+        $this->assertScope    = $assertScope;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
@@ -177,32 +183,37 @@ class Authentication implements FilterInterface
         ));
 
         if (!empty($accessToken)) {
-            // these are the scopes which are assigned to the token
-            $entitledScopes = explode(',', $accessToken['scope']);
+            if ($this->assertScope !== false) {
+                // these are the scopes which are assigned to the token
+                $entitledScopes = explode(',', $accessToken['scope']);
 
-            // get all scopes which are assigned to this route
-            $sql = '    SELECT scope.name,
-                               scope_routes.allow,
-                               scope_routes.methods
-                          FROM fusio_scope_routes scope_routes
-                    INNER JOIN fusio_scope scope
-                            ON scope.id = scope_routes.scope_id
-                         WHERE scope_routes.route_id = :route';
+                // get all scopes which are assigned to this route
+                $sql = '    SELECT scope.name,
+                                   scope_routes.allow,
+                                   scope_routes.methods
+                              FROM fusio_scope_routes scope_routes
+                        INNER JOIN fusio_scope scope
+                                ON scope.id = scope_routes.scope_id
+                             WHERE scope_routes.route_id = :route';
 
-            $availableScopes = $this->connection->fetchAll($sql, array('route' => $this->context->getRouteId()));
+                $availableScopes = $this->connection->fetchAll($sql, array('route' => $this->context->getRouteId()));
 
-            // now we check whether the assigned scopes are allowed to
-            // access this route. We must have at least one scope which
-            // explicit allows the request
-            $isAllowed = false;
+                // now we check whether the assigned scopes are allowed to
+                // access this route. We must have at least one scope which
+                // explicit allows the request
+                $isAllowed = false;
 
-            foreach ($entitledScopes as $entitledScope) {
-                foreach ($availableScopes as $scope) {
-                    if ($scope['name'] == $entitledScope && $scope['allow'] == 1 && in_array($requestMethod, explode('|', $scope['methods']))) {
-                        $isAllowed = true;
-                        break 2;
+                foreach ($entitledScopes as $entitledScope) {
+                    foreach ($availableScopes as $scope) {
+                        if ($scope['name'] == $entitledScope && $scope['allow'] == 1 && in_array($requestMethod, explode('|', $scope['methods']))) {
+                            $isAllowed = true;
+                            break 2;
+                        }
                     }
                 }
+            } else {
+                $entitledScopes = [];
+                $isAllowed = true;
             }
 
             if ($isAllowed) {
