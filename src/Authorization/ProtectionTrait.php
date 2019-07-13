@@ -46,15 +46,9 @@ trait ProtectionTrait
 
     /**
      * @Inject
-     * @var \Fusio\Engine\Repository\AppInterface
+     * @var \Fusio\Impl\Service\Security\TokenValidator
      */
-    protected $appRepository;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Repository\UserInterface
-     */
-    protected $userRepository;
+    protected $securityTokenValidator;
 
     public function getPreFilter()
     {
@@ -63,11 +57,8 @@ trait ProtectionTrait
         $filter[] = new UserAgentEnforcer();
 
         $filter[] = new Authentication(
-            $this->connection,
-            $this->context,
-            $this->config->get('fusio_project_key'),
-            $this->appRepository,
-            $this->userRepository
+            $this->securityTokenValidator,
+            $this->context
         );
 
         return $filter;
