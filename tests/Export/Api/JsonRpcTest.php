@@ -226,7 +226,6 @@ JSON;
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), $message);
 
         $body   = (string) $response->getBody();
@@ -254,6 +253,67 @@ JSON;
         ]
     }
 }
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPostBatch()
+    {
+        $client = new Client();
+        $client->query(1, 'listFoo', []);
+        $client->query(2, 'listFoo', ['parameters' => ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1]]);
+        $message = $client->encode();
+
+        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+        ), $message);
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+[
+    {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "totalResults": 2,
+            "itemsPerPage": 16,
+            "startIndex": 0,
+            "entry": [
+                {
+                    "id": 2,
+                    "title": "bar",
+                    "content": "foo",
+                    "date": "2015-02-27T19:59:15+00:00"
+                },
+                {
+                    "id": 1,
+                    "title": "foo",
+                    "content": "bar",
+                    "date": "2015-02-27T19:59:15+00:00"
+                }
+            ]
+        }
+    },
+    {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+            "totalResults": 2,
+            "itemsPerPage": 16,
+            "startIndex": 0,
+            "entry": [
+                {
+                    "id": 1,
+                    "title": "foo",
+                    "content": "bar",
+                    "date": "2015-02-27T19:59:15+00:00"
+                }
+            ]
+        }
+    }
+]
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);

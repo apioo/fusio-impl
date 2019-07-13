@@ -56,11 +56,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $appRepository  = Environment::getService('app_repository');
-        $userRepository = Environment::getService('user_repository');
-        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+        $tokenValidator = Environment::getService('security_token_validator');
 
-        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication = new Authentication($tokenValidator, $context);
         $authentication->handle($request, $response, $filterChain);
 
         $app  = $context->getApp();
@@ -90,11 +88,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $appRepository  = Environment::getService('app_repository');
-        $userRepository = Environment::getService('user_repository');
-        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+        $tokenValidator = Environment::getService('security_token_validator');
 
-        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication = new Authentication($tokenValidator, $context);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -115,11 +111,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $appRepository  = Environment::getService('app_repository');
-        $userRepository = Environment::getService('user_repository');
-        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+        $tokenValidator = Environment::getService('security_token_validator');
 
-        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication = new Authentication($tokenValidator, $context);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -140,11 +134,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $appRepository  = Environment::getService('app_repository');
-        $userRepository = Environment::getService('user_repository');
-        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+        $tokenValidator = Environment::getService('security_token_validator');
 
-        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication = new Authentication($tokenValidator, $context);
         $authentication->handle($request, $response, $filterChain);
     }
 
@@ -165,11 +157,9 @@ class AuthenticationTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $appRepository  = Environment::getService('app_repository');
-        $userRepository = Environment::getService('user_repository');
-        $projectKey     = Environment::getConfig()->get('fusio_project_key');
+        $tokenValidator = Environment::getService('security_token_validator');
 
-        $authentication = new Authentication($this->connection, $context, $projectKey, $appRepository, $userRepository);
+        $authentication = new Authentication($tokenValidator, $context);
         $authentication->handle($request, $response, $filterChain);
     }
 

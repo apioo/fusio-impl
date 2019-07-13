@@ -26,6 +26,7 @@ use Fusio\Engine\Model\User;
 use Fusio\Impl\Filter\Logger;
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Framework\Test\Environment;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
 use PSX\Http\Response;
@@ -54,7 +55,9 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logger = new Logger($this->connection, $this->newContext());
+        $logService = Environment::getService('log_service');
+
+        $logger = new Logger($logService, $this->newContext());
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -84,7 +87,9 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logger = new Logger($this->connection, $this->newContext());
+        $logService = Environment::getService('log_service');
+
+        $logger = new Logger($logService, $this->newContext());
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -115,7 +120,9 @@ class LoggerTest extends DbTestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $logger = new Logger($this->connection, $this->newContext());
+        $logService = Environment::getService('log_service');
+
+        $logger = new Logger($logService, $this->newContext());
         $logger->handle($request, $response, $filterChain);
 
         $log = $this->connection->fetchAssoc('SELECT * FROM fusio_log WHERE id = :id', ['id' => 3]);
@@ -149,7 +156,9 @@ class LoggerTest extends DbTestCase
             });
 
         try {
-            $logger = new Logger($this->connection, $this->newContext());
+            $logService = Environment::getService('log_service');
+
+            $logger = new Logger($logService, $this->newContext());
             $logger->handle($request, $response, $filterChain);
             
             $this->fail('Should throw an exception');
@@ -180,7 +189,9 @@ class LoggerTest extends DbTestCase
             });
 
         try {
-            $logger = new Logger($this->connection, $this->newContext());
+            $logService = Environment::getService('log_service');
+
+            $logger = new Logger($logService, $this->newContext());
             $logger->handle($request, $response, $filterChain);
 
             $this->fail('Should throw an exception');
