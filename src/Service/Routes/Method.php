@@ -144,6 +144,10 @@ class Method
                 // use it
                 $spec = json_decode($schemaCache, true);
 
+                if (isset($spec['operation_id'])) {
+                    $resourceMethod->setOperationId($spec['operation_id']);
+                }
+
                 if (isset($spec['parameters'])) {
                     $property   = $this->getProperty($spec['parameters']);
                     $properties = $property->getProperties();
@@ -165,6 +169,10 @@ class Method
                     }
                 }
             } else {
+                if ($method['operation_id']) {
+                    $resourceMethod->setOperationId($method['operation_id']);
+                }
+
                 if ($method['parameters'] > 0) {
                     $schema     = $this->schemaLoader->getSchema($method['parameters']);
                     $properties = $schema->getDefinition()->getProperties();

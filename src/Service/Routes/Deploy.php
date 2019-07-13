@@ -77,6 +77,11 @@ class Deploy
     public function deploy($method)
     {
         $schema = [];
+
+        if ($method['operation_id']) {
+            $schema['operation_id'] = $method['operation_id']; 
+        }
+
         if ($method['parameters'] > 0) {
             $schema['parameters'] = $this->getSchemaCache($method['parameters']);
         }
