@@ -39,16 +39,30 @@ class RpcContext implements HttpContextInterface
     /**
      * @var array
      */
-    protected $arguments;
+    protected $headers;
+
+    /**
+     * @var array
+     */
+    protected $uriFragments;
+
+    /**
+     * @var array
+     */
+    protected $parameters;
 
     /**
      * @param string $method
-     * @param array $arguments
+     * @param array $headers
+     * @param array $uriFragments
+     * @param array $parameters
      */
-    public function __construct(string $method, array $arguments)
+    public function __construct(string $method, array $headers, array $uriFragments, array $parameters)
     {
-        $this->method    = $method;
-        $this->arguments = $arguments;
+        $this->method       = $method;
+        $this->headers      = $headers;
+        $this->uriFragments = $uriFragments;
+        $this->parameters   = $parameters;
     }
 
     /**
@@ -64,7 +78,7 @@ class RpcContext implements HttpContextInterface
      */
     public function getHeader($name)
     {
-        return $this->arguments[$name] ?? null;
+        return $this->headers[$name] ?? null;
     }
 
     /**
@@ -72,7 +86,7 @@ class RpcContext implements HttpContextInterface
      */
     public function getHeaders()
     {
-        return $this->arguments;
+        return $this->headers;
     }
 
     /**
@@ -80,7 +94,7 @@ class RpcContext implements HttpContextInterface
      */
     public function getUriFragment($name)
     {
-        return $this->arguments[$name] ?? null;
+        return $this->uriFragments[$name] ?? null;
     }
 
     /**
@@ -88,7 +102,7 @@ class RpcContext implements HttpContextInterface
      */
     public function getUriFragments()
     {
-        return $this->arguments;
+        return $this->uriFragments;
     }
 
     /**
@@ -96,7 +110,7 @@ class RpcContext implements HttpContextInterface
      */
     public function getParameter($name)
     {
-        return $this->arguments[$name] ?? null;
+        return $this->parameters[$name] ?? null;
     }
 
     /**
@@ -104,6 +118,6 @@ class RpcContext implements HttpContextInterface
      */
     public function getParameters()
     {
-        return $this->arguments;
+        return $this->parameters;
     }
 }
