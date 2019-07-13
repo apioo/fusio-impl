@@ -89,21 +89,21 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
+     * @var \Fusio\Impl\Service\Log
+     */
+    protected $logService;
+
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\Security\TokenValidator
+     */
+    protected $securityTokenValidator;
+
+    /**
+     * @Inject
      * @var \Fusio\Impl\Service\Plan\Payer
      */
     protected $planPayerService;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Repository\AppInterface
-     */
-    protected $appRepository;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Repository\UserInterface
-     */
-    protected $userRepository;
 
     /**
      * @return array
@@ -122,21 +122,17 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         );
 
         $filter[] = new Authentication(
-            $this->connection,
-            $this->context,
-            $this->config->get('fusio_project_key'),
-            $this->appRepository,
-            $this->userRepository
+            $this->securityTokenValidator,
+            $this->context
         );
 
         $filter[] = new RequestLimit(
             $this->rateService,
-            $this->appRepository,
             $this->context
         );
 
         $filter[] = new Logger(
-            $this->connection,
+            $this->logService,
             $this->context
         );
 
