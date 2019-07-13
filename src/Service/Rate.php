@@ -178,10 +178,10 @@ class Rate
      * @param string $ip
      * @param integer $routeId
      * @param \Fusio\Engine\Model\AppInterface $app
-     * @param \PSX\Http\ResponseInterface $response
+     * @param \PSX\Http\ResponseInterface|null $response
      * @return boolean
      */
-    public function assertLimit($ip, $routeId, Model\AppInterface $app, ResponseInterface $response)
+    public function assertLimit($ip, $routeId, Model\AppInterface $app, ResponseInterface $response = null)
     {
         $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
 
@@ -192,8 +192,10 @@ class Rate
         $count     = $this->getRequestCount($ip, $rate['timespan'], $app);
         $rateLimit = (int) $rate['rate_limit'];
 
-        $response->setHeader('X-RateLimit-Limit', $rateLimit);
-        $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
+        if ($response !== null) {
+            $response->setHeader('X-RateLimit-Limit', $rateLimit);
+            $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
+        }
 
         if ($count >= $rateLimit) {
             throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
