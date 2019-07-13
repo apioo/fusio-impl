@@ -79,6 +79,7 @@ trait Services
             $this->get('schema_loader')
         );
     }
+
     /**
      * @return \Fusio\Impl\Service\Routes\Config
      */
@@ -90,6 +91,19 @@ trait Services
             $this->get('routes_deploy_service'),
             $this->get('resource_listing'),
             $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Security\TokenValidator
+     */
+    public function getSecurityTokenValidator()
+    {
+        return new Service\Security\TokenValidator(
+            $this->get('connection'),
+            $this->get('config')->get('fusio_project_key'),
+            $this->get('app_repository'),
+            $this->get('user_repository')
         );
     }
 
@@ -411,6 +425,16 @@ trait Services
             $this->get('table_manager')->getTable(Table\Rate\Allocation::class),
             $this->get('table_manager')->getTable(Table\Log::class),
             $this->get('event_dispatcher')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Log
+     */
+    public function getLogService()
+    {
+        return new Service\Log(
+            $this->get('connection')
         );
     }
 
