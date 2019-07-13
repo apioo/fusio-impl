@@ -45,24 +45,17 @@ class RequestLimit implements FilterInterface
     protected $rateService;
 
     /**
-     * @var \Fusio\Engine\Repository\AppInterface
-     */
-    protected $appRepository;
-
-    /**
      * @var \Fusio\Impl\Loader\Context
      */
     protected $context;
 
     /**
      * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Engine\Repository\AppInterface $appRepository
      * @param \Fusio\Impl\Loader\Context $context
      */
-    public function __construct(Service\Rate $rateService, AppInterface $appRepository, Context $context)
+    public function __construct(Service\Rate $rateService, Context $context)
     {
         $this->rateService   = $rateService;
-        $this->appRepository = $appRepository;
         $this->context       = $context;
     }
 
