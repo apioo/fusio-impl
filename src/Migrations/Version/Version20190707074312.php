@@ -17,7 +17,7 @@ class Version20190707074312 extends AbstractMigration
     public function up(Schema $schema)
     {
         $routesMethodTable = $schema->getTable('fusio_routes_method');
-        $routesMethodTable->addColumn('operation_id', 'integer', ['notnull' => false]);
+        $routesMethodTable->addColumn('operation_id', 'string', ['notnull' => false, 'length' => 255]);
     }
 
     public function postUp(Schema $schema)
