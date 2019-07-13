@@ -21,20 +21,13 @@
 
 namespace Fusio\Impl\Filter;
 
-use Doctrine\DBAL\Connection;
-use Firebase\JWT\JWT;
-use Fusio\Engine\Model;
-use Fusio\Engine\Repository\AppInterface;
-use Fusio\Engine\Repository\UserInterface;
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Service\Security\TokenValidator;
-use Fusio\Impl\Table\App\Token as AppToken;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
-use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
 /**
  * Authentication
