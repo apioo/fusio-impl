@@ -27,13 +27,19 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Loader\Context;
-use Fusio\Impl\Record\PassthruRecord;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Config\Config;
+use PSX\Http\Exception as StatusCode;
+use PSX\Http\Exception\StatusCodeException;
 use PSX\Http\RequestInterface;
 use PSX\Record\Record;
+use PSX\Record\RecordInterface;
+use PSX\Schema\SchemaInterface;
+use PSX\Schema\SchemaTraverser;
+use PSX\Schema\ValidationException;
+use PSX\Schema\Visitor\TypeVisitor;
 
 /**
  * Evaluator
@@ -44,12 +50,6 @@ use PSX\Record\Record;
  */
 class Evaluator implements \Datto\JsonRpc\Evaluator
 {
-    const ERROR_INVALID_TOKEN = 1;
-    const ERROR_RATE_LIMIT = 2;
-    const ERROR_FORBIDDEN = 4;
-    const ERROR_NOT_ENOUGH_POINTS = 8;
-    const ERROR_NO_ACTION_PROVIDED = 8;
-
     /**
      * @var \Fusio\Engine\Processor
      */
@@ -81,6 +81,11 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
     protected $methodTable;
 
     /**
+     * @var \Fusio\Impl\Table\Schema
+     */
+    protected $schemaTable;
+
+    /**
      * @var \PSX\Framework\Config\Config
      */
     protected $config;
@@ -91,6 +96,11 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
     protected $request;
 
     /**
+     * @var \PSX\Schema\SchemaTraverser
+     */
+    protected $schemaTraverser;
+
+    /**
      * @param \Fusio\Engine\Processor $processor
      * @param \Fusio\Impl\Service\Security\TokenValidator $tokenValidator
      * @param \Fusio\Impl\Service\Rate $rateService
@@ -99,7 +109,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
      * @param \PSX\Framework\Config\Config $config
      * @param \PSX\Http\RequestInterface $request
      */
-    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Log $logService, Service\Plan\Payer $planPayerService, Table\Routes\Method $methodTable, Config $config, RequestInterface $request)
+    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Log $logService, Service\Plan\Payer $planPayerService, Table\Routes\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
     {
         $this->processor        = $processor;
         $this->tokenValidator   = $tokenValidator;
@@ -107,8 +117,10 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         $this->logService       = $logService;
         $this->planPayerService = $planPayerService;
         $this->methodTable      = $methodTable;
+        $this->schemaTable      = $schemaTable;
         $this->config           = $config;
         $this->request          = $request;
+        $this->schemaTraverser  = new SchemaTraverser();
     }
 
     /**
@@ -116,7 +128,20 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
      */
     public function evaluate($method, $arguments)
     {
-        $operationId = $method;
+        try {
+            return $this->execute($method, $arguments);
+        } catch (StatusCodeException $e) {
+            throw new ApplicationException($e->getMessage(), $e->getStatusCode());
+        } catch (ValidationException $e) {
+            throw new ApplicationException($e->getMessage(), 400);
+        } catch (\Throwable $e) {
+            throw new ApplicationException($e->getMessage(), 500);
+        }
+    }
+
+    private function execute($methodName, $arguments)
+    {
+        $operationId = $methodName;
         $remoteIp    = $this->request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1';
 
         $method = $this->methodTable->getMethodByOperationId($operationId);
@@ -136,7 +161,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         );
 
         if (!$success) {
-            throw new ApplicationException('Could not authorize request', self::ERROR_FORBIDDEN);
+            throw new StatusCode\UnauthorizedException('Could not authorize request', 'Bearer');
         }
 
         $success = $this->rateService->assertLimit(
@@ -146,7 +171,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         );
 
         if (!$success) {
-            throw new ApplicationException('Rate limit exceeded', self::ERROR_RATE_LIMIT);
+            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
 
         $this->logService->log(
@@ -158,19 +183,26 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
             $this->request
         );
 
+        // validate schema
+        $body = new Record();
+        if ($method['request'] > 0) {
+            if (!isset($arguments['body'])) {
+                throw new StatusCode\BadRequestException('No body provided');
+            }
+
+            // @TODO en/decode data since we need the JSON data as \stdClass and
+            // not as array
+            $data = \json_decode(\json_encode($arguments['body']));
+
+            $schema = $this->getSchema($method['request']);
+            if ($schema instanceof SchemaInterface) {
+                $body = $this->schemaTraverser->traverse($data, $schema, new TypeVisitor());
+            }
+        }
+
+        // execute action
         try {
-            // @TODO validate schema
-            /*
-            if ($method['parameters']) {
-                $this->validateSchema($method['parameters'], $method);
-            }
-
-            if ($method['request']) {
-                $this->validateSchema($method['request'], $method);
-            }
-            */
-
-            return $this->executeAction($arguments, $method, $context);
+            return $this->executeAction($arguments, $body, $method, $context);
         } catch (\Throwable $e) {
             $this->logService->error($e);
 
@@ -180,9 +212,19 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         }
     }
 
-    private function executeAction(array $arguments, $method, Context $context)
+    private function getSchema($schemaId)
     {
-        $record  = Record::from($arguments['body'] ?? []);
+        $row = $this->schemaTable->get($schemaId);
+
+        if (isset($row['cache'])) {
+            return Service\Schema::unserializeCache($row['cache']);
+        } else {
+            return null;
+        }
+    }
+    
+    private function executeAction(array $arguments, RecordInterface $body, $method, Context $context)
+    {
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $context = new EngineContext($method['route_id'], $baseUrl, $context->getApp(), $context->getUser());
 
@@ -193,7 +235,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
             $arguments['parameters'] ?? []
         );
 
-        $request  = new Request($rpcContext, $record);
+        $request  = new Request($rpcContext, $body);
         $response = null;
         $actionId = $method['action'];
         $costs    = (int) $method['costs'];
@@ -202,14 +244,14 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         if ($costs > 0) {
             // as anonymous user it is not possible to pay
             if ($context->getUser()->isAnonymous()) {
-                throw new ApplicationException('This action costs points because of this you must be authenticated in order to call this action', self::ERROR_FORBIDDEN);
+                throw new StatusCode\ForbiddenException('This action costs points because of this you must be authenticated in order to call this action');
             }
 
             // in case the method has assigned costs check whether the user has
             // enough points
             $remaining = $context->getUser()->getPoints() - $costs;
             if ($remaining < 0) {
-                throw new ApplicationException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', self::ERROR_NOT_ENOUGH_POINTS);
+                throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
             }
 
             $this->planPayerService->pay($costs, $context);
@@ -228,7 +270,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
                 $response = $this->processor->execute($actionId, $request, $context);
             }
         } else {
-            throw new ApplicationException('No action provided', self::ERROR_NO_ACTION_PROVIDED);
+            throw new StatusCode\ServiceUnavailableException('No action provided');
         }
 
         return $response->getBody();
