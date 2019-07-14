@@ -320,6 +320,86 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testPostMissingAuthorization()
+    {
+        $client = new Client();
+        $client->query(1, 'createFoo', []);
+        $message = $client->encode();
+
+        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+        ), $message);
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+        "code": 401,
+        "message": "Missing authorization header"
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPostEmpyBody()
+    {
+        $client = new Client();
+        $client->query(1, 'createFoo', []);
+        $message = $client->encode();
+
+        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ), $message);
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+        "code": 400,
+        "message": "No body provided"
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPostInvalidBody()
+    {
+        $client = new Client();
+        $client->query(1, 'createFoo', ['body' => ['title' => 12]]);
+        $message = $client->encode();
+
+        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
+        ), $message);
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+        "code": 400,
+        "message": "\/title must be of type string"
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPut()
     {
         $response = $this->sendRequest('/export/jsonrpc', 'PUT', array(
