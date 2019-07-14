@@ -139,12 +139,10 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         }
     }
 
-    private function execute($methodName, $arguments)
+    private function execute($operationId, $arguments)
     {
-        $operationId = $methodName;
-        $remoteIp    = $this->request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1';
-
-        $method = $this->methodTable->getMethodByOperationId($operationId);
+        $remoteIp = $this->request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1';
+        $method   = $this->methodTable->getMethodByOperationId($operationId);
 
         if (empty($method)) {
             throw new MethodException();
