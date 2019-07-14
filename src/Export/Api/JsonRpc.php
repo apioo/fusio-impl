@@ -26,7 +26,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Export;
 use Fusio\Impl\Export\Schema;
 use Fusio\Impl\Rpc\Evaluator;
-use Fusio\Impl\Table\Routes\Method;
+use Fusio\Impl\Table;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -142,7 +142,8 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
             $this->rateService,
             $this->logService,
             $this->planPayerService,
-            $this->tableManager->getTable(Method::class),
+            $this->tableManager->getTable(Table\Routes\Method::class),
+            $this->tableManager->getTable(Table\Schema::class),
             $this->config,
             $this->request
         ));
