@@ -85,12 +85,6 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Log
-     */
-    protected $logService;
-
-    /**
-     * @Inject
      * @var \Fusio\Impl\Service\Security\TokenValidator
      */
     protected $securityTokenValidator;
@@ -140,7 +134,6 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
             $this->processor,
             $this->securityTokenValidator,
             $this->rateService,
-            $this->logService,
             $this->planPayerService,
             $this->tableManager->getTable(Table\Routes\Method::class),
             $this->tableManager->getTable(Table\Schema::class),

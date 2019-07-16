@@ -66,11 +66,6 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
     protected $rateService;
 
     /**
-     * @var \Fusio\Impl\Service\Log
-     */
-    protected $logService;
-
-    /**
      * @var \Fusio\Impl\Service\Plan\Payer
      */
     protected $planPayerService;
@@ -104,17 +99,15 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
      * @param \Fusio\Engine\Processor $processor
      * @param \Fusio\Impl\Service\Security\TokenValidator $tokenValidator
      * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Service\Log $logService
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \PSX\Framework\Config\Config $config
      * @param \PSX\Http\RequestInterface $request
      */
-    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Log $logService, Service\Plan\Payer $planPayerService, Table\Routes\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
+    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Plan\Payer $planPayerService, Table\Routes\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
     {
         $this->processor        = $processor;
         $this->tokenValidator   = $tokenValidator;
         $this->rateService      = $rateService;
-        $this->logService       = $logService;
         $this->planPayerService = $planPayerService;
         $this->methodTable      = $methodTable;
         $this->schemaTable      = $schemaTable;
@@ -172,15 +165,6 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
             throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
 
-        $this->logService->log(
-            $remoteIp,
-            $method['method'],
-            $this->request->getRequestTarget(),
-            $this->request->getHeader('User-Agent'),
-            $context,
-            $this->request
-        );
-
         // validate schema
         $body = new Record();
         if ($method['request'] > 0) {
@@ -199,15 +183,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         }
 
         // execute action
-        try {
-            return $this->executeAction($arguments, $body, $method, $context);
-        } catch (\Throwable $e) {
-            $this->logService->error($e);
-
-            throw $e;
-        } finally {
-            $this->logService->finish();
-        }
+        return $this->executeAction($arguments, $body, $method, $context);
     }
 
     private function getSchema($schemaId)
