@@ -121,6 +121,8 @@ class Action
         $actionId = $this->actionTable->getLastInsertId();
 
         $this->eventDispatcher->dispatch(ActionEvents::CREATE, new CreatedEvent($actionId, $record, $context));
+
+        return $actionId;
     }
 
     public function update($actionId, $name, $class, $engine, $config, UserContext $context)

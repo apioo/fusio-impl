@@ -108,6 +108,8 @@ class Schema
         $schemaId = $this->schemaTable->getLastInsertId();
 
         $this->eventDispatcher->dispatch(SchemaEvents::CREATE, new CreatedEvent($schemaId, $record, $context));
+        
+        return $schemaId;
     }
 
     public function update($schemaId, $name, $source, UserContext $context)
