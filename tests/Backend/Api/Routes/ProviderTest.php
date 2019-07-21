@@ -249,11 +249,26 @@ class ProviderTest extends ControllerDbTestCase
                     }
                 }
             },
+            "Message": {
+                "type": "object",
+                "title": "Message",
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
             "GET-200-response": {
                 "$ref": "#\/definitions\/Container"
             },
-            "POST-200-response": {
+            "POST-request": {
                 "$ref": "#\/definitions\/Routes_Provider"
+            },
+            "POST-201-response": {
+                "$ref": "#\/definitions\/Message"
             }
         }
     },
@@ -265,8 +280,9 @@ class ProviderTest extends ControllerDbTestCase
             }
         },
         "POST": {
+            "request": "#\/definitions\/POST-request",
             "responses": {
-                "200": "#\/definitions\/POST-200-response"
+                "201": "#\/definitions\/POST-201-response"
             }
         }
     },
@@ -300,7 +316,14 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "element": []
+    "element": [
+        {
+            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
+            "type": "text",
+            "name": "table",
+            "title": "Table"
+        }
+    ]
 }
 JSON;
 

@@ -64,6 +64,8 @@ class ProviderLoaderTest extends DbTestCase
                 'google' => \Fusio\Impl\Provider\User\Google::class,
                 'stdclass' => \stdClass::class,
             ],
+            'routes' => [
+            ],
         ];
 
         $this->assertEquals($expect, $actual);

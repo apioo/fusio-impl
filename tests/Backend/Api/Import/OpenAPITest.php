@@ -200,13 +200,13 @@ class OpenAPITest extends ControllerDbTestCase
                         "type": "string"
                     },
                     "config": {
-                        "$ref": "#\/definitions\/Config"
+                        "$ref": "#\/definitions\/Action_Config"
                     }
                 }
             },
-            "Config": {
+            "Action_Config": {
                 "type": "object",
-                "title": "config",
+                "title": "Action Config",
                 "additionalProperties": {
                     "oneOf": [
                         {
