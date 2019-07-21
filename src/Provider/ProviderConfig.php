@@ -36,6 +36,7 @@ class ProviderConfig extends Config
     const TYPE_CONNECTION = 'connection';
     const TYPE_PAYMENT = 'payment';
     const TYPE_USER = 'user';
+    const TYPE_ROUTES = 'routes';
 
     /**
      * @param array $config
@@ -98,6 +99,7 @@ class ProviderConfig extends Config
             self::TYPE_CONNECTION,
             self::TYPE_PAYMENT,
             self::TYPE_USER,
+            self::TYPE_ROUTES,
         ];
     }
 }

@@ -55,6 +55,7 @@ class ProviderWriter
             ProviderConfig::TYPE_CONNECTION,
             ProviderConfig::TYPE_PAYMENT,
             ProviderConfig::TYPE_USER,
+            ProviderConfig::TYPE_ROUTES,
         ];
     }
 

@@ -110,7 +110,7 @@ class ProviderLoader
     private function getDefaultConfig()
     {
         return [
-            'action' => [
+            ProviderConfig::TYPE_ACTION => [
                 Adapter\File\Action\FileProcessor::class,
                 Adapter\Http\Action\HttpProcessor::class,
                 Adapter\Php\Action\PhpProcessor::class,
@@ -118,17 +118,19 @@ class ProviderLoader
                 Adapter\Sql\Action\SqlTable::class,
                 Adapter\Util\Action\UtilStaticResponse::class,
             ],
-            'connection' => [
+            ProviderConfig::TYPE_CONNECTION => [
                 Adapter\Http\Connection\Http::class,
                 Adapter\Sql\Connection\Sql::class,
                 Adapter\Sql\Connection\SqlAdvanced::class,
             ],
-            'payment' => [
+            ProviderConfig::TYPE_PAYMENT => [
             ],
-            'user' => [
+            ProviderConfig::TYPE_USER => [
                 User\Facebook::class,
                 User\Github::class,
                 User\Google::class,
+            ],
+            ProviderConfig::TYPE_ROUTES => [
             ],
         ];
     }

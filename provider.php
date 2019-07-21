@@ -52,5 +52,8 @@ return [
         \Fusio\Impl\Provider\User\Github::class,
         \Fusio\Impl\Provider\User\Google::class,
     ],
+    'routes' => [
+        \Fusio\Impl\Tests\Service\Routes\TestProvider::class,
+    ],
 ];
 

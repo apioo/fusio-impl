@@ -94,6 +94,23 @@ trait Services
         );
     }
 
+
+    /**
+     * @return \Fusio\Impl\Service\Routes\Provider
+     */
+    public function getRoutesProviderService()
+    {
+        return new Service\Routes\Provider(
+            $this->get('connection'),
+            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_ROUTES, \Fusio\Engine\Routes\ProviderInterface::class),
+            $this->get('routes_service'),
+            $this->get('schema_service'),
+            $this->get('action_service'),
+            $this->get('form_element_factory'),
+            $this->get('schema_manager')
+        );
+    }
+
     /**
      * @return \Fusio\Impl\Service\Security\TokenValidator
      */
