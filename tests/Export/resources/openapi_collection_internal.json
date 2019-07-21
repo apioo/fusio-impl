@@ -2574,6 +2574,72 @@
       },
       "parameters": []
     },
+    "\/backend\/routes\/provider\/{provider}": {
+      "get": {
+        "operationId": "backendRoutesProviderProviderGetContainer",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Container"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendRoutesProviderProviderPostRoutes_Provider",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Routes_Provider"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/routes\/{route_id}": {
       "get": {
         "operationId": "backendRoutesRouteid09GetRoutes",
@@ -5966,13 +6032,13 @@
             "type": "string"
           },
           "config": {
-            "$ref": "#\/components\/schemas\/Config"
+            "$ref": "#\/components\/schemas\/Action_Config"
           }
         }
       },
-      "Config": {
+      "Action_Config": {
         "type": "object",
-        "title": "config",
+        "title": "Action Config",
         "additionalProperties": {
           "oneOf": [
             {
@@ -6421,6 +6487,40 @@
             "items": {
               "$ref": "#\/components\/schemas\/Audit"
             }
+          }
+        }
+      },
+      "Config": {
+        "type": "object",
+        "title": "Config",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },
@@ -7385,6 +7485,65 @@
             "items": {
               "$ref": "#\/components\/schemas\/Routes"
             }
+          }
+        }
+      },
+      "Routes_Provider_Config": {
+        "type": "object",
+        "title": "Routes Provider Config",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxItems": 16
+            }
+          ]
+        },
+        "maxProperties": 16
+      },
+      "Routes_Provider": {
+        "type": "object",
+        "title": "Routes Provider",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Routes_Provider_Config"
           }
         }
       },
