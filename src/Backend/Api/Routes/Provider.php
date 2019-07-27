@@ -88,6 +88,7 @@ class Provider extends BackendApiAbstract
         $this->routesProviderService->create(
             $context->getUriFragment('provider'),
             $record->path,
+            $record->scopes,
             $record->config,
             $this->context->getUserContext()
         );
