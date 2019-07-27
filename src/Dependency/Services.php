@@ -102,12 +102,25 @@ trait Services
     {
         return new Service\Routes\Provider(
             $this->get('connection'),
-            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_ROUTES, \Fusio\Engine\Routes\ProviderInterface::class),
+            $this->get('routes_provider_factory'),
             $this->get('routes_service'),
             $this->get('schema_service'),
             $this->get('action_service'),
             $this->get('form_element_factory'),
             $this->get('schema_manager')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Provider\ProviderFactory
+     */
+    public function getRoutesProviderFactory()
+    {
+        return new ProviderFactory(
+            $this->get('provider_loader'),
+            $this,
+            ProviderConfig::TYPE_ROUTES,
+            \Fusio\Engine\Routes\ProviderInterface::class
         );
     }
 
