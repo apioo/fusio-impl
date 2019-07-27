@@ -91,7 +91,12 @@ class Provider
      * @var array 
      */
     private $actions;
-    
+
+    /**
+     * @var array
+     */
+    private $routes;
+
     public function __construct(Connection $connection, ProviderFactory $providerFactory, Routes $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
@@ -104,6 +109,7 @@ class Provider
 
         $this->schemas = [];
         $this->actions = [];
+        $this->routes = [];
     }
 
     public function create($provider, $basePath, $config, UserContext $context)
@@ -157,16 +163,19 @@ class Provider
             $data   = \json_decode(\json_encode($data));
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
-            $id = $this->schemaService->create(
-                $record->name,
-                $record->source,
-                $context
-            );
+            $id = $this->schemaService->exists($record->name);
+            if (!$id) {
+                $id = $this->schemaService->create(
+                    $record->name,
+                    $record->source,
+                    $context
+                );
+            }
 
             $this->schemas[$index] = $id;
         }
     }
-    
+
     private function createActions(array $actions, UserContext $context)
     {
         $schema = $this->schemaManager->getSchema(BackendSchema\Action\Create::class);
@@ -175,13 +184,16 @@ class Provider
             $data   = \json_decode(\json_encode($data));
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
-            $id = $this->actionService->create(
-                $record->name,
-                $record->class,
-                $record->engine,
-                $record->config ? $record->config->getProperties() : null,
-                $context
-            );
+            $id = $this->actionService->exists($record->name);
+            if (!$id) {
+                $id = $this->actionService->create(
+                    $record->name,
+                    $record->class,
+                    $record->engine,
+                    $record->config ? $record->config->getProperties() : null,
+                    $context
+                );
+            }
 
             $this->actions[$index] = $id;
         }
@@ -191,21 +203,26 @@ class Provider
     {
         $schema = $this->schemaManager->getSchema(BackendSchema\Routes\Create::class);
 
-        foreach ($routes as $data) {
+        foreach ($routes as $index => $data) {
             $data   = \json_decode(\json_encode($data));
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
             $record->path = $this->buildPath($basePath, $record->path);
             $record->config = $this->buildConfig($record->config);
 
-            $this->routesService->create(
-                $record->priority,
-                $record->path,
-                $record->controller,
-                $record->scopes,
-                $record->config,
-                $context
-            );
+            $id = $this->routesService->exists($record->path);
+            if (!$id) {
+                $id = $this->routesService->create(
+                    $record->priority,
+                    $record->path,
+                    $record->controller,
+                    $record->scopes,
+                    $record->config,
+                    $context
+                );
+            }
+
+            $this->routes[$index] = $id;
         }
     }
 

@@ -85,13 +85,7 @@ class Schema
         }
 
         // check whether schema exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $connection = $this->schemaTable->getOneBy($condition);
-
-        if (!empty($connection)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
@@ -198,6 +192,27 @@ class Schema
             }
         } else {
             throw new StatusCode\NotFoundException('Invalid schema id');
+        }
+    }
+
+    /**
+     * Returns either false ot the id of the existing schema
+     * 
+     * @param string $name
+     * @return integer|false
+     */
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $connection = $this->schemaTable->getOneBy($condition);
+
+        if (!empty($connection)) {
+            return $connection['id'];
+        } else {
+            return false;
         }
     }
 

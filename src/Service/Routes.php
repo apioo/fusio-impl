@@ -86,13 +86,7 @@ class Routes
     public function create($priority, $path, $controller, $scopes, $config, UserContext $context)
     {
         // check whether route exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Routes::STATUS_ACTIVE);
-        $condition->equals('path', $path);
-
-        $route = $this->routesTable->getOneBy($condition);
-
-        if (!empty($route)) {
+        if ($this->exists($path)) {
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
@@ -143,6 +137,8 @@ class Routes
         }
 
         $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config, $context));
+
+        return $routeId;
     }
 
     public function update($routeId, $priority, $scopes, $config, UserContext $context)
@@ -218,5 +214,26 @@ class Routes
         $this->routesTable->update($record);
 
         $this->eventDispatcher->dispatch(RoutesEvents::DELETE, new DeletedEvent($routeId, $route, $context));
+    }
+
+    /**
+     * Checks whether the provided path already exists
+     * 
+     * @param string $path
+     * @return bool|mixed
+     */
+    public function exists(string $path)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Routes::STATUS_ACTIVE);
+        $condition->equals('path', $path);
+
+        $route = $this->routesTable->getOneBy($condition);
+
+        if (!empty($route)) {
+            return $route['id'];
+        } else {
+            return false;
+        }
     }
 }

@@ -83,13 +83,7 @@ class Action
     public function create($name, $class, $engine, $config, UserContext $context)
     {
         // check whether action exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Action::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $action = $this->actionTable->getOneBy($condition);
-
-        if (!empty($action)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
@@ -202,6 +196,21 @@ class Action
         ]);
 
         $this->eventDispatcher->dispatch(ActionEvents::DELETE, new DeletedEvent($actionId, $action, $context));
+    }
+
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Action::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $action = $this->actionTable->getOneBy($condition);
+
+        if (!empty($action)) {
+            return $action['id'];
+        } else {
+            return false;
+        }
     }
 
     /**
