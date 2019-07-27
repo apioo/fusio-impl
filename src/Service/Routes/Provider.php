@@ -112,7 +112,7 @@ class Provider
         $this->routes = [];
     }
 
-    public function create($provider, $basePath, $config, UserContext $context)
+    public function create($provider, $basePath, $scopes, $config, UserContext $context)
     {
         $provider = $this->providerFactory->factory($provider);
 
@@ -130,7 +130,7 @@ class Provider
         try {
             $this->createSchemas($setup->getSchemas(), $context);
             $this->createActions($setup->getActions(), $context);
-            $this->createRoutes($setup->getRoutes(), $basePath, $context);
+            $this->createRoutes($setup->getRoutes(), $basePath, $scopes, $context);
 
             $this->connection->commit();
         } catch (\Throwable $e) {
@@ -199,8 +199,9 @@ class Provider
         }
     }
 
-    private function createRoutes(array $routes, $basePath, UserContext $context)
+    private function createRoutes(array $routes, $scopes, $basePath, UserContext $context)
     {
+        $scopes = $scopes ?: [];
         $schema = $this->schemaManager->getSchema(BackendSchema\Routes\Create::class);
 
         foreach ($routes as $index => $data) {
@@ -210,13 +211,17 @@ class Provider
             $record->path = $this->buildPath($basePath, $record->path);
             $record->config = $this->buildConfig($record->config);
 
+            if (is_array($record->scopes)) {
+                $scopes = array_merge($scopes, $record->scopes);
+            }
+
             $id = $this->routesService->exists($record->path);
             if (!$id) {
                 $id = $this->routesService->create(
                     $record->priority,
                     $record->path,
                     $record->controller,
-                    $record->scopes,
+                    $scopes,
                     $record->config,
                     $context
                 );
