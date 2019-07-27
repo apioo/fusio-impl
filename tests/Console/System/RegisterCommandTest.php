@@ -53,7 +53,7 @@ class RegisterCommandTest extends ControllerDbTestCase
     public function testCommand()
     {
         $command = Environment::getService('console')->find('system:register');
-        $answers = ['y', '/import', '1'];
+        $answers = ['y', '1'];
 
         $commandTester = new CommandTester($command);
         $commandTester->setInputs($answers);
@@ -147,7 +147,7 @@ JSON;
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
-            'path' => '/import/void',
+            'path' => '/void',
         ]);
 
         $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
@@ -189,7 +189,6 @@ JSON;
         $commandTester->execute([
             'command' => $command->getName(),
             'class'   => TestAdapter::class,
-            'path'    => '/import',
             '--yes'   => true,
         ]);
 
@@ -277,7 +276,7 @@ JSON;
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
-            'path' => '/import/void',
+            'path' => '/void',
         ]);
 
         $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);

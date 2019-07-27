@@ -26,7 +26,6 @@ use Fusio\Engine\AdapterInterface;
 use Fusio\Impl\Adapter\Installer;
 use Fusio\Impl\Adapter\Instruction;
 use Fusio\Impl\Adapter\InstructionParser;
-use Fusio\Impl\Backend\Filter\Routes\Path as PathFilter;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Service;
 use PSX\Json\Parser;
@@ -84,7 +83,6 @@ class RegisterCommand extends Command
             ->setName('system:register')
             ->setDescription('Register an adapter to the system')
             ->addArgument('class', InputArgument::REQUIRED, 'The absolute name of the adapter class (Acme\Fusio\Adapter)')
-            ->addArgument('path', InputArgument::OPTIONAL, 'The base path under which new routes are inserted')
             ->addOption('yes', 'y', InputOption::VALUE_NONE, 'Confirm automatically all questions with yes')
         ;
     }
@@ -92,7 +90,6 @@ class RegisterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $class = $input->getArgument('class');
-        $path  = $input->getArgument('path');
 
         if (class_exists($class)) {
             $adapter = new $class();
@@ -108,7 +105,7 @@ class RegisterCommand extends Command
 
                     $result = $this->connectionView->getCollection();
                     foreach ($result->entry as $connection) {
-                        $output->writeln($connection->id . ') ' . $connection->name);
+                        $output->writeln($connection->id . ': ' . $connection->name);
                     }
 
                     $question = new Question('Please specify the connection (i.e. 1): ', '1');
@@ -157,35 +154,10 @@ class RegisterCommand extends Command
                 }
 
                 if ($confirmed) {
-                    if (empty($path)) {
-                        // if the adapter installs new routes ask for a base path
-                        if ($hasRoutes && !$autoConfirm) {
-                            $output->writeLn('');
-                            $output->writeLn('The adapter inserts new routes into the system.');
-                            $output->writeLn('Please specify a base path under which the new routes are inserted.');
-
-                            $filter   = new PathFilter();
-                            $question = new Question('Base path (i.e. /acme/service): ', '/');
-                            $question->setValidator(function ($answer) use ($filter) {
-                                if (!$filter->apply($answer)) {
-                                    throw new \RuntimeException(sprintf($filter->getErrorMessage(), 'Base path'));
-                                }
-
-                                return $answer;
-                            });
-
-                            $basePath = $helper->ask($input, $output, $question);
-                        } else {
-                            $basePath = null;
-                        }
-                    } else {
-                        $basePath = $path;
-                    }
-
                     try {
                         $this->connection->beginTransaction();
 
-                        $result = $this->installer->install($instructions, $basePath);
+                        $result = $this->installer->install($instructions);
 
                         $this->connection->commit();
 
