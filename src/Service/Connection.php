@@ -86,13 +86,7 @@ class Connection
     public function create($name, $class, $config, UserContext $context)
     {
         // check whether connection exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $connection = $this->connectionTable->getOneBy($condition);
-
-        if (!empty($connection)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
@@ -127,6 +121,8 @@ class Connection
         $connectionId = $this->connectionTable->getLastInsertId();
 
         $this->eventDispatcher->dispatch(ConnectionEvents::CREATE, new CreatedEvent($connectionId, $record, $context));
+
+        return $connectionId;
     }
 
     public function update($connectionId, $name, $class, $config, UserContext $context)
@@ -202,6 +198,21 @@ class Connection
         $this->connectionTable->update($record);
 
         $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection, $context));
+    }
+
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $connection = $this->connectionTable->getOneBy($condition);
+
+        if (!empty($connection)) {
+            return $connection['id'];
+        } else {
+            return false;
+        }
     }
 
     protected function testConnection($factory, $connection)

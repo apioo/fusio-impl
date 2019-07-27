@@ -63,13 +63,7 @@ class Event
     public function create($name, $description, UserContext $context)
     {
         // check whether event exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Event::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $event = $this->eventTable->getOneBy($condition);
-
-        if (!empty($event)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Event already exists');
         }
 
@@ -86,6 +80,8 @@ class Event
         $eventId = $this->eventTable->getLastInsertId();
 
         $this->eventDispatcher->dispatch(EventEvents::CREATE, new CreatedEvent($eventId, $record, $context));
+
+        return $eventId;
     }
 
     public function update($eventId, $name, $description, UserContext $context)
@@ -128,5 +124,20 @@ class Event
         $this->eventTable->update($record);
 
         $this->eventDispatcher->dispatch(EventEvents::DELETE, new DeletedEvent($event['id'], $event, $context));
+    }
+
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Event::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $event = $this->eventTable->getOneBy($condition);
+
+        if (!empty($event)) {
+            return $event['id'];
+        } else {
+            return false;
+        }
     }
 }

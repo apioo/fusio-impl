@@ -144,6 +144,8 @@ class App
         }
 
         $this->eventDispatcher->dispatch(AppEvents::CREATE, new CreatedEvent($appId, $record, $scopes, $context));
+
+        return $appId;
     }
 
     public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)

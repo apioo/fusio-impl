@@ -63,13 +63,7 @@ class Plan
     public function create($name, $description, $price, $points, $period, UserContext $context)
     {
         // check whether plan exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Event::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $plan = $this->planTable->getOneBy($condition);
-
-        if (!empty($plan)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Plan already exists');
         }
 
@@ -89,6 +83,8 @@ class Plan
         $planId = $this->planTable->getLastInsertId();
 
         $this->eventDispatcher->dispatch(PlanEvents::CREATE, new CreatedEvent($planId, $record, $context));
+
+        return $planId;
     }
 
     public function update($planId, $name, $description, $price, $points, $period, UserContext $context)
@@ -134,5 +130,20 @@ class Plan
         $this->planTable->update($record);
 
         $this->eventDispatcher->dispatch(PlanEvents::DELETE, new DeletedEvent($plan['id'], $plan, $context));
+    }
+    
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Event::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $plan = $this->planTable->getOneBy($condition);
+
+        if (!empty($plan)) {
+            return $plan['id'];
+        } else {
+            return false;
+        }
     }
 }

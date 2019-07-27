@@ -84,12 +84,7 @@ class Scope
     public function create($name, $description, array $routes = null, UserContext $context)
     {
         // check whether scope exists
-        $condition  = new Condition();
-        $condition->equals('name', $name);
-
-        $scope = $this->scopeTable->getOneBy($condition);
-
-        if (!empty($scope)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }
 
@@ -117,6 +112,8 @@ class Scope
         }
 
         $this->eventDispatcher->dispatch(ScopeEvents::CREATE, new CreatedEvent($scopeId, $record, $routes, $context));
+
+        return $scopeId;
     }
 
     public function createFromRoute($routeId, array $scopeNames, UserContext $context)
@@ -253,6 +250,20 @@ class Scope
         return $scopes;
     }
 
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('name', $name);
+
+        $scope = $this->scopeTable->getOneBy($condition);
+
+        if (!empty($scope)) {
+            return $scope['id'];
+        } else {
+            return false;
+        }
+    }
+    
     protected function insertRoutes($scopeId, $routes)
     {
         if (!empty($routes) && is_array($routes)) {

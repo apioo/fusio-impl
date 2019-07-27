@@ -92,13 +92,7 @@ class Cronjob
     public function create($name, $cron, $action, UserContext $context)
     {
         // check whether cronjob exists
-        $condition  = new Condition();
-        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
-        $condition->equals('name', $name);
-
-        $cronjob = $this->cronjobTable->getOneBy($condition);
-
-        if (!empty($cronjob)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
         }
 
@@ -117,6 +111,8 @@ class Cronjob
         $this->eventDispatcher->dispatch(CronjobEvents::CREATE, new CreatedEvent($cronjobId, $record, $context));
 
         $this->writeCronFile();
+
+        return $cronjobId;
     }
 
     public function update($cronjobId, $name, $cron, $action, UserContext $context)
@@ -218,6 +214,21 @@ class Cronjob
         ];
 
         $this->cronjobTable->update($record);
+    }
+
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
+        $condition->equals('name', $name);
+
+        $cronjob = $this->cronjobTable->getOneBy($condition);
+
+        if (!empty($cronjob)) {
+            return $cronjob['id'];
+        } else {
+            return false;
+        }
     }
 
     /**

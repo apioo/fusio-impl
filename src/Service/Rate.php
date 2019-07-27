@@ -79,13 +79,7 @@ class Rate
     public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
     {
         // check whether rate exists
-        $condition  = new Condition();
-        $condition->notEquals('status', Table\Rate::STATUS_DELETED);
-        $condition->equals('name', $name);
-
-        $app = $this->rateTable->getOneBy($condition);
-
-        if (!empty($app)) {
+        if ($this->exists($name)) {
             throw new StatusCode\BadRequestException('Rate already exists');
         }
 
@@ -116,6 +110,8 @@ class Rate
         }
 
         $this->eventDispatcher->dispatch(RateEvents::CREATE, new CreatedEvent($rateId, $record, $allocations, $context));
+
+        return $rateId;
     }
 
     public function update($rateId, $priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
@@ -202,6 +198,21 @@ class Rate
         }
 
         return true;
+    }
+
+    public function exists(string $name)
+    {
+        $condition  = new Condition();
+        $condition->notEquals('status', Table\Rate::STATUS_DELETED);
+        $condition->equals('name', $name);
+
+        $app = $this->rateTable->getOneBy($condition);
+
+        if (!empty($app)) {
+            return $app['id'];
+        } else {
+            return false;
+        }
     }
 
     /**
