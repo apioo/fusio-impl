@@ -199,7 +199,7 @@ class Provider
         }
     }
 
-    private function createRoutes(array $routes, $scopes, $basePath, UserContext $context)
+    private function createRoutes(array $routes, $basePath, $scopes, UserContext $context)
     {
         $scopes = $scopes ?: [];
         $schema = $this->schemaManager->getSchema(BackendSchema\Routes\Create::class);
