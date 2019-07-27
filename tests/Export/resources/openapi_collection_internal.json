@@ -2574,6 +2574,31 @@
       },
       "parameters": []
     },
+    "\/backend\/routes\/provider": {
+      "get": {
+        "operationId": "backendRoutesProviderGetRoutes_Providers",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Routes_Providers"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/routes\/provider\/{provider}": {
       "get": {
         "operationId": "backendRoutesProviderProviderGetContainer",
@@ -7488,6 +7513,36 @@
           }
         }
       },
+      "Routes_Provider": {
+        "type": "object",
+        "title": "Routes Provider",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Routes_Provider_Config"
+          }
+        }
+      },
+      "Routes_Providers": {
+        "type": "object",
+        "title": "Routes Providers",
+        "properties": {
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Routes_Provider"
+            }
+          }
+        }
+      },
       "Routes_Provider_Config": {
         "type": "object",
         "title": "Routes Provider Config",
@@ -7528,24 +7583,6 @@
           ]
         },
         "maxProperties": 16
-      },
-      "Routes_Provider": {
-        "type": "object",
-        "title": "Routes Provider",
-        "properties": {
-          "path": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "config": {
-            "$ref": "#\/components\/schemas\/Routes_Provider_Config"
-          }
-        }
       },
       "Schema_Collection": {
         "type": "object",
