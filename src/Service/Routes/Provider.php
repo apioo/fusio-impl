@@ -123,7 +123,7 @@ class Provider
         $setup = new Setup();
         $configuration = new Parameters($config->getProperties());
 
-        $provider->setup($setup, $configuration);
+        $provider->setup($setup, $basePath, $configuration);
 
         $this->connection->beginTransaction();
 
