@@ -44,7 +44,7 @@ class TestProvider implements ProviderInterface
         return 'Test-Provider';
     }
 
-    public function setup(SetupInterface $setup, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
     {
         $schemaRequest = $setup->addSchema('Provider_Schema_Request', [
             'type' => 'object',
