@@ -184,14 +184,14 @@ class Config
      */
     private function createMethod($routeId, $method, $ver, $status, $config, $path)
     {
-        $active      = isset($config['active'])       ? $config['active']       : false;
-        $public      = isset($config['public'])       ? $config['public']       : false;
-        $description = isset($config['description'])  ? $config['description']  : null;
-        $operationId = isset($config['operation_id']) ? $config['operation_id'] : null;
-        $parameters  = isset($config['parameters'])   ? $config['parameters']   : null;
-        $request     = isset($config['request'])      ? $config['request']      : null;
-        $action      = isset($config['action'])       ? $config['action']       : null;
-        $costs       = isset($config['costs'])        ? $config['costs']        : null;
+        $active      = isset($config['active'])      ? $config['active']      : false;
+        $public      = isset($config['public'])      ? $config['public']      : false;
+        $description = isset($config['description']) ? $config['description'] : null;
+        $operationId = isset($config['operationId']) ? $config['operationId'] : null;
+        $parameters  = isset($config['parameters'])  ? $config['parameters']  : null;
+        $request     = isset($config['request'])     ? $config['request']     : null;
+        $action      = isset($config['action'])      ? $config['action']      : null;
+        $costs       = isset($config['costs'])       ? $config['costs']       : null;
 
         if (empty($operationId)) {
             $operationId = self::buildOperationId($path, $method);
