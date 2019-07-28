@@ -153,6 +153,9 @@ class CollectionTest extends ControllerDbTestCase
                     "description": {
                         "type": "string"
                     },
+                    "operationId": {
+                        "type": "string"
+                    },
                     "parameters": {
                         "type": "integer"
                     },

@@ -12,7 +12,7 @@
   "paths": {
     "\/foo": {
       "get": {
-        "operationId": "getCollection",
+        "operationId": "listFoo",
         "responses": {
           "200": {
             "description": "GET 200 response",
@@ -27,7 +27,7 @@
         }
       },
       "post": {
-        "operationId": "postEntry",
+        "operationId": "createFoo",
         "requestBody": {
           "content": {
             "application\/json": {

@@ -88,6 +88,7 @@ class Routes extends ViewAbstract
                 'active' => 'active',
                 'public' => 'public',
                 'description' => 'description',
+                'operationId' => 'operation_id',
                 'parameters' => 'parameters',
                 'request' => 'request',
                 'responses' => $this->doCollection([$this->getTable(Table\Routes\Response::class), 'getResponses'], [new Reference('id')], [
@@ -113,6 +114,10 @@ class Routes extends ViewAbstract
 
                     if (!empty($row['description'])) {
                         $method->description = $row['description'];
+                    }
+
+                    if (!empty($row['operationId'])) {
+                        $method->operationId = $row['operationId'];
                     }
 
                     if (!empty($row['parameters'])) {

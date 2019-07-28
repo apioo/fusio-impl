@@ -115,6 +115,9 @@ class EntityTest extends ControllerDbTestCase
                     "description": {
                         "type": "string"
                     },
+                    "operationId": {
+                        "type": "string"
+                    },
                     "parameters": {
                         "type": "integer"
                     },
@@ -268,6 +271,7 @@ JSON;
                 "GET": {
                     "active": true,
                     "public": true,
+                    "operationId": "listFoo",
                     "responses": {
                         "200": 2
                     },
@@ -276,6 +280,7 @@ JSON;
                 "POST": {
                     "active": true,
                     "public": false,
+                    "operationId": "createFoo",
                     "request": 3,
                     "responses": {
                         "201": 1

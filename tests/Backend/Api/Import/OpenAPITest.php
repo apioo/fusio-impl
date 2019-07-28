@@ -150,6 +150,9 @@ class OpenAPITest extends ControllerDbTestCase
                     "description": {
                         "type": "string"
                     },
+                    "operationId": {
+                        "type": "string"
+                    },
                     "parameters": {
                         "type": "string"
                     },

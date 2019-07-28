@@ -46,6 +46,7 @@ class Method extends SchemaAbstract
         $sb->boolean('active');
         $sb->boolean('public');
         $sb->string('description');
+        $sb->string('operationId');
         $sb->integer('parameters');
         $sb->integer('request');
         $sb->integer('response');

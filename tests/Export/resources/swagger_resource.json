@@ -12,7 +12,7 @@
   "paths": {
     "\/foo": {
       "get": {
-        "operationId": "getCollection",
+        "operationId": "listFoo",
         "parameters": [],
         "responses": {
           "200": {
@@ -24,7 +24,7 @@
         }
       },
       "post": {
-        "operationId": "postEntry",
+        "operationId": "createFoo",
         "parameters": [
           {
             "description": "POST request",

@@ -132,7 +132,7 @@
     },
     "\/foo": {
       "get": {
-        "operationId": "fooGetCollection",
+        "operationId": "fooListFoo",
         "parameters": [],
         "responses": {
           "200": {
@@ -144,7 +144,7 @@
         }
       },
       "post": {
-        "operationId": "fooPostEntry",
+        "operationId": "fooCreateFoo",
         "parameters": [
           {
             "description": "POST request",

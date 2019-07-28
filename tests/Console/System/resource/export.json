@@ -227,6 +227,7 @@
             "GET": {
               "active": true,
               "public": true,
+              "operationId": "listFoo",
               "responses": {
                 "200": "Collection-Schema"
               },
@@ -235,6 +236,7 @@
             "POST": {
               "active": true,
               "public": false,
+              "operationId": "createFoo",
               "request": "Entry-Schema",
               "responses": {
                 "201": "Passthru"
