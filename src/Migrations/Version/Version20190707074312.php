@@ -4,6 +4,7 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Fusio\Impl\Migrations\MigrationUtil;
 use Fusio\Impl\Service\Routes\Config;
 
 /**
@@ -18,6 +19,11 @@ class Version20190707074312 extends AbstractMigration
     {
         $routesMethodTable = $schema->getTable('fusio_routes_method');
         $routesMethodTable->addColumn('operation_id', 'string', ['notnull' => false, 'length' => 255]);
+
+        // sync
+        MigrationUtil::sync($this->connection, function($sql, $params){
+            $this->addSql($sql, $params);
+        });
     }
 
     public function postUp(Schema $schema)
