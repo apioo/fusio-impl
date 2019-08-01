@@ -314,16 +314,103 @@ JSON;
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "element": [
-        {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "text",
-            "name": "table",
-            "title": "Table"
-        }
-    ]
+    "form": {
+        "element": [
+            {
+                "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
+                "type": "text",
+                "name": "table",
+                "title": "Table"
+            }
+        ]
+    },
+    "changelog": {
+        "schemas": [
+            {
+                "name": "Provider_Schema_Request",
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "createDate": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "Provider_Schema_Response",
+                "source": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "createDate": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                }
+            }
+        ],
+        "actions": [
+            {
+                "name": "Provider_Action",
+                "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+                "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+                "config": {
+                    "table": null
+                }
+            }
+        ],
+        "routes": [
+            {
+                "priority": 1,
+                "path": "\/table",
+                "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+                "scopes": [
+                    "foo",
+                    "bar"
+                ],
+                "config": [
+                    {
+                        "version": 1,
+                        "status": 1,
+                        "methods": {
+                            "GET": {
+                                "status": 1,
+                                "active": true,
+                                "public": true,
+                                "description": "Returns all entries on the table",
+                                "request": 0,
+                                "responses": {
+                                    "200": 1
+                                },
+                                "action": 0
+                            },
+                            "POST": {
+                                "status": 1,
+                                "active": true,
+                                "public": false,
+                                "description": "Creates a new entry on the table",
+                                "request": 0,
+                                "responses": {
+                                    "200": 1
+                                },
+                                "action": 0
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
 }
 JSON;
 

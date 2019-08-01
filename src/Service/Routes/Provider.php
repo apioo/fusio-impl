@@ -140,9 +140,9 @@ class Provider
         }
     }
 
-    public function getForm($provider)
+    public function getForm(string $providerName)
     {
-        $provider = $this->providerFactory->factory($provider);
+        $provider = $this->providerFactory->factory($providerName);
 
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
@@ -154,7 +154,28 @@ class Provider
 
         return $builder->getForm();
     }
-    
+
+    public function getChangelog(string $providerName)
+    {
+        $provider = $this->providerFactory->factory($providerName);
+        $result = [];
+
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provider is not available');
+        }
+
+        $setup = new Setup();
+        $config = new Parameters([]);
+
+        $provider->setup($setup, '/', $config);
+
+        return [
+            'schemas' => $setup->getSchemas(),
+            'actions' => $setup->getActions(),
+            'routes' => $setup->getRoutes(),
+        ];
+    }
+
     private function createSchemas(array $schemas, UserContext $context)
     {
         $schema = $this->schemaManager->getSchema(BackendSchema\Schema\Create::class);

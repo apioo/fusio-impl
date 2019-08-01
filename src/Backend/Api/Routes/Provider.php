@@ -72,12 +72,12 @@ class Provider extends BackendApiAbstract
     public function doGet(HttpContextInterface $context)
     {
         $form = $this->routesProviderService->getForm($context->getUriFragment('provider'));
+        $changelog = $this->routesProviderService->getChangelog($context->getUriFragment('provider'));
 
-        if ($form instanceof Container) {
-            return $form;
-        } else {
-            return new Container();
-        }
+        return [
+            'form' => $form,
+            'changelog' => $changelog,
+        ];
     }
 
     /**
