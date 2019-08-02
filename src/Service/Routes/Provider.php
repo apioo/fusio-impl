@@ -167,7 +167,7 @@ class Provider
         $setup = new Setup();
         $config = new Parameters([]);
 
-        $provider->setup($setup, '/', $config);
+        $provider->setup($setup, '/[path]', $config);
 
         return [
             'schemas' => $setup->getSchemas(),
