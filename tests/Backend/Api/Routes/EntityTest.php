@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -381,99 +382,37 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'methods', 'path', 'controller')
-            ->from('fusio_routes')
-            ->where('id = ' . (Fixture::getLastRouteId() + 1))
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(Fixture::getLastRouteId() + 1, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('ANY', $row['methods']);
-        $this->assertEquals('/foo', $row['path']);
-        $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $row['controller']);
-
-        // check methods
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action', 'costs')
-            ->from('fusio_routes_method')
-            ->where('route_id = :route_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $methods = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
-
-        $this->assertEquals(2, count($methods));
-
-        $this->assertEquals('GET', $methods[0]['method']);
-        $this->assertEquals(1, $methods[0]['version']);
-        $this->assertEquals(4, $methods[0]['status']);
-        $this->assertEquals(1, $methods[0]['active']);
-        $this->assertEquals(1, $methods[0]['public']);
-        $this->assertEquals(2, $methods[0]['parameters']);
-        $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(3, $methods[0]['action']);
-        $this->assertEquals(16, $methods[0]['costs']);
-
-        // check responses
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'method_id', 'code', 'response')
-            ->from('fusio_routes_response')
-            ->where('method_id = :method_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[0]['id']]);
-
-        $this->assertEquals(1, count($responses));
-        $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
-
-        $this->assertEquals('POST', $methods[1]['method']);
-        $this->assertEquals(1, $methods[1]['version']);
-        $this->assertEquals(4, $methods[1]['status']);
-        $this->assertEquals(1, $methods[1]['active']);
-        $this->assertEquals(0, $methods[1]['public']);
-        $this->assertEquals(null, $methods[1]['parameters']);
-        $this->assertEquals(1, $methods[1]['request']);
-        $this->assertEquals(3, $methods[1]['action']);
-
-        // check responses
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'method_id', 'code', 'response')
-            ->from('fusio_routes_response')
-            ->where('method_id = :method_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[1]['id']]);
-
-        $this->assertEquals(1, count($responses));
-        $this->assertEquals(201, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
-
-        // check scopes
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('s.name')
-            ->from('fusio_scope_routes', 'r')
-            ->innerJoin('r', 'fusio_scope', 's', 's.id = r.scope_id')
-            ->where('r.route_id = :route_id')
-            ->orderBy('s.id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
-
-        $this->assertEquals(2, count($scopes));
-        $this->assertEquals('foo', $scopes[0]['name']);
-        $this->assertEquals('baz', $scopes[1]['name']);
+        Assert::assertRoute('/foo', ['foo', 'baz'], [[
+            'method'       => 'GET',
+            'version'      => 1,
+            'status'       => 4,
+            'active'       => true,
+            'public'       => true,
+            'description'  => '',
+            'operation_id' => 'get.foo',
+            'parameters'   => 'Collection-Schema',
+            'request'      => null,
+            'responses'    => [
+                '200'      => 'Passthru'
+            ],
+            'action'       => 'Sql-Table',
+            'costs'        => 16,
+        ], [
+            'method'       => 'POST',
+            'version'      => 1,
+            'status'       => 4,
+            'active'       => true,
+            'public'       => false,
+            'description'  => '',
+            'operation_id' => 'post.foo',
+            'parameters'   => null,
+            'request'      => 'Passthru',
+            'responses'    => [
+                '201'      => 'Passthru'
+            ],
+            'action'       => 'Sql-Table',
+            'costs'        => 0,
+        ]]);
     }
 
     public function testPutDeploy()
@@ -501,109 +440,76 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'methods', 'path', 'controller')
-            ->from('fusio_routes')
-            ->where('id = ' . (Fixture::getLastRouteId() + 1))
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(Fixture::getLastRouteId() + 1, $row['id']);
-        $this->assertEquals(1, $row['status']);
-        $this->assertEquals('ANY', $row['methods']);
-        $this->assertEquals('/foo', $row['path']);
-        $this->assertEquals(SchemaApiController::class, $row['controller']);
-
-        // check methods
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'route_id', 'method', 'version', 'status', 'active', 'public', 'parameters', 'request', 'action', 'schema_cache', 'action_cache')
-            ->from('fusio_routes_method')
-            ->where('route_id = :route_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $methods = Environment::getService('connection')->fetchAll($sql, ['route_id' => $row['id']]);
-
-        $this->assertEquals(5, count($methods));
-
-        $this->assertEquals('GET', $methods[0]['method']);
-        $this->assertEquals(1, $methods[0]['version']);
-        $this->assertEquals(1, $methods[0]['status']);
-        $this->assertEquals(1, $methods[0]['active']);
-        $this->assertEquals(1, $methods[0]['public']);
-        $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(3, $methods[0]['action']);
-
-        // check responses
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'method_id', 'code', 'response')
-            ->from('fusio_routes_response')
-            ->where('method_id = :method_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[0]['id']]);
-
-        $this->assertEquals(1, count($responses));
-        $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(2, $responses[0]['response']);
-
-        $this->assertEquals('POST', $methods[1]['method']);
-        $this->assertEquals(1, $methods[1]['version']);
-        $this->assertEquals(1, $methods[1]['status']);
-        $this->assertEquals(1, $methods[1]['active']);
-        $this->assertEquals(0, $methods[1]['public']);
-        $this->assertEquals(null, $methods[1]['parameters']);
-        $this->assertEquals(3, $methods[1]['request']);
-        $this->assertEquals(3, $methods[1]['action']);
-
-        // check responses
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'method_id', 'code', 'response')
-            ->from('fusio_routes_response')
-            ->where('method_id = :method_id')
-            ->orderBy('id', 'ASC')
-            ->setFirstResult(0)
-            ->getSQL();
-
-        $responses = Environment::getService('connection')->fetchAll($sql, ['method_id' => $methods[1]['id']]);
-
-        $this->assertEquals(1, count($responses));
-        $this->assertEquals(201, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
-
-        $this->assertEquals('PUT', $methods[2]['method']);
-        $this->assertEquals(1, $methods[2]['version']);
-        $this->assertEquals(1, $methods[2]['status']);
-        $this->assertEquals(0, $methods[2]['active']);
-        $this->assertEquals(0, $methods[2]['public']);
-        $this->assertEquals(null, $methods[2]['parameters']);
-        $this->assertEquals(null, $methods[2]['request']);
-        $this->assertEquals(null, $methods[2]['action']);
-
-        $this->assertEquals('PATCH', $methods[3]['method']);
-        $this->assertEquals(1, $methods[3]['version']);
-        $this->assertEquals(1, $methods[3]['status']);
-        $this->assertEquals(0, $methods[3]['active']);
-        $this->assertEquals(0, $methods[3]['public']);
-        $this->assertEquals(null, $methods[3]['parameters']);
-        $this->assertEquals(null, $methods[3]['request']);
-        $this->assertEquals(null, $methods[3]['action']);
-
-        $this->assertEquals('DELETE', $methods[4]['method']);
-        $this->assertEquals(1, $methods[4]['version']);
-        $this->assertEquals(1, $methods[4]['status']);
-        $this->assertEquals(0, $methods[4]['active']);
-        $this->assertEquals(0, $methods[4]['public']);
-        $this->assertEquals(null, $methods[4]['parameters']);
-        $this->assertEquals(null, $methods[4]['request']);
-        $this->assertEquals(null, $methods[4]['action']);
+        Assert::assertRoute('/foo', ['bar'], [[
+            'method'       => 'GET',
+            'version'      => 1,
+            'status'       => 1,
+            'active'       => true,
+            'public'       => true,
+            'description'  => '',
+            'operation_id' => 'listFoo',
+            'parameters'   => null,
+            'request'      => null,
+            'responses'    => [
+                '200'      => 'Collection-Schema'
+            ],
+            'action'       => 'Sql-Table',
+            'costs'        => 0,
+        ], [
+            'method'       => 'POST',
+            'version'      => 1,
+            'status'       => 1,
+            'active'       => true,
+            'public'       => false,
+            'description'  => '',
+            'operation_id' => 'createFoo',
+            'parameters'   => null,
+            'request'      => 'Entry-Schema',
+            'responses'    => [
+                '201'      => 'Passthru'
+            ],
+            'action'       => 'Sql-Table',
+            'costs'        => 1,
+        ], [
+            'method'       => 'PUT',
+            'version'      => 1,
+            'status'       => 1,
+            'active'       => false,
+            'public'       => false,
+            'description'  => '',
+            'operation_id' => '',
+            'parameters'   => null,
+            'request'      => null,
+            'responses'    => [],
+            'action'       => null,
+            'costs'        => 0,
+        ], [
+            'method'       => 'PATCH',
+            'version'      => 1,
+            'status'       => 1,
+            'active'       => false,
+            'public'       => false,
+            'description'  => '',
+            'operation_id' => '',
+            'parameters'   => null,
+            'request'      => null,
+            'responses'    => [],
+            'action'       => null,
+            'costs'        => 0,
+        ], [
+            'method'       => 'DELETE',
+            'version'      => 1,
+            'status'       => 1,
+            'active'       => false,
+            'public'       => false,
+            'description'  => '',
+            'operation_id' => '',
+            'parameters'   => null,
+            'request'      => null,
+            'responses'    => [],
+            'action'       => null,
+            'costs'        => 0,
+        ]]);
     }
 
     public function testDelete()

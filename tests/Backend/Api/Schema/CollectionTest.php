@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -313,20 +314,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'source', 'cache')
-            ->from('fusio_schema')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(4, $row['id']);
-        $this->assertEquals('Bar-Schema', $row['name']);
-        $this->assertJsonStringEqualsJsonString($schema, $row['source']);
-        $this->assertTrue(!empty($row['cache']));
+        Assert::assertSchema('Bar-Schema', $schema);
     }
 
     public function testPut()

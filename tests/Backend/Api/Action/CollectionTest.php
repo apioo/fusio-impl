@@ -25,6 +25,7 @@ use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Service;
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -400,21 +401,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'class', 'config')
-            ->from('fusio_action')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row    = Environment::getService('connection')->fetchAssoc($sql);
-        $config = json_encode(Service\Action::unserializeConfig($row['config']));
-
-        $this->assertEquals(5, $row['id']);
-        $this->assertEquals('Foo', $row['name']);
-        $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $row['class']);
-        $this->assertJsonStringEqualsJsonString('{"string":"foo","integer":12,"number":12.34,"boolean":true,"array":["foo",12,12.34,true,null]}', $config, $config);
+        Assert::assertAction('Foo', UtilStaticResponse::class, '{"string":"foo","integer":12,"number":12.34,"boolean":true,"array":["foo",12,12.34,true,null]}');
     }
 
     public function testPut()

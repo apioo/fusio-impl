@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -257,18 +258,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'source', 'cache')
-            ->from('fusio_schema')
-            ->where('id = 2')
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(2, $row['id']);
-        $this->assertEquals('Test-Schema', $row['name']);
-        $this->assertJsonStringEqualsJsonString(json_encode($schema), $row['source']);
-        $this->assertTrue(!empty($row['cache']));
+        Assert::assertSchema('Test-Schema', json_encode($schema));
     }
 
     public function testDelete()

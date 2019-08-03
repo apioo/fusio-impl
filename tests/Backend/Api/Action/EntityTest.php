@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -284,20 +286,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'class', 'config')
-            ->from('fusio_action')
-            ->where('id = 3')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getSQL();
-
-        $row = Environment::getService('connection')->fetchAssoc($sql);
-
-        $this->assertEquals(3, $row['id']);
-        $this->assertEquals('Bar', $row['name']);
-        $this->assertEquals('Fusio\Adapter\Sql\Action\SqlTable', $row['class']);
-        $this->assertEquals('{"response":"{\"foo\":\"bar\"}"}', $row['config']);
+        Assert::assertAction('Bar', SqlTable::class, '{"response":"{\"foo\":\"bar\"}"}');
     }
 
     public function testDelete()
