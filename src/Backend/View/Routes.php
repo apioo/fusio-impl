@@ -153,4 +153,37 @@ class Routes extends ViewAbstract
 
         return $this->build($definition);
     }
+
+    public function getPublic()
+    {
+        $builder = $this->connection->createQueryBuilder()
+            ->select(['routes.path', 'method.method', 'action.class'])
+            ->from('fusio_routes', 'routes')
+            ->innerJoin('routes', 'fusio_routes_method', 'method', 'routes.id = method.route_id')
+            ->innerJoin('method', 'fusio_action', 'action', 'method.action = action.id')
+            ->where('(routes.priority IS NULL OR routes.priority < ' . 0x1000000 . ')')
+            ->orderBy('routes.priority', 'DESC');
+
+        $definition = [
+            'routes' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
+                'path' => 'path',
+                'method' => 'method',
+                'class' => 'class',
+            ], null, function (array $result) {
+                $data = [];
+
+                foreach ($result as $row) {
+                    if (!isset($data[$row['path']])) {
+                        $data[$row['path']] = [];
+                    }
+
+                    $data[$row['path']][$row['method']] = $row['class'];
+                }
+
+                return $data;
+            }),
+        ];
+
+        return $this->build($definition);
+    }
 }
