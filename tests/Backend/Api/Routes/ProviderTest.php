@@ -379,10 +379,9 @@ JSON;
                 "config": [
                     {
                         "version": 1,
-                        "status": 1,
+                        "status": 4,
                         "methods": {
                             "GET": {
-                                "status": 1,
                                 "active": true,
                                 "public": true,
                                 "description": "Returns all entries on the table",
@@ -393,7 +392,6 @@ JSON;
                                 "action": 0
                             },
                             "POST": {
-                                "status": 1,
                                 "active": true,
                                 "public": false,
                                 "description": "Creates a new entry on the table",
