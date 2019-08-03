@@ -5802,6 +5802,24 @@
         }
       ]
     },
+    "\/export\/routes": {
+      "get": {
+        "operationId": "exportRoutesGetExport_Routes",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Export_Routes"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/export\/jsonrpc": {
       "post": {
         "operationId": "exportJsonrpcPostExport_Rpc_Request",
@@ -8730,6 +8748,29 @@
             "items": {
               "$ref": "#\/components\/schemas\/Discovery_Link"
             }
+          }
+        }
+      },
+      "Export_Routes_Paths": {
+        "type": "object",
+        "title": "Export Routes Paths",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Export_Routes_Methods"
+        }
+      },
+      "Export_Routes_Methods": {
+        "type": "object",
+        "title": "Export Routes Methods",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Export_Routes": {
+        "type": "object",
+        "title": "Export Routes",
+        "properties": {
+          "routes": {
+            "$ref": "#\/components\/schemas\/Export_Routes_Paths"
           }
         }
       },
