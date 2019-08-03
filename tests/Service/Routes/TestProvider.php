@@ -79,10 +79,9 @@ class TestProvider implements ProviderInterface
         $setup->addRoute(1, '/table', SchemaApiController::class, ['foo', 'bar'], [
             [
                 'version' => 1,
-                'status' => 1,
+                'status' => 4,
                 'methods' => [
                     'GET' => [
-                        'status' => 1,
                         'active' => true,
                         'public' => true,
                         'description' => 'Returns all entries on the table',
@@ -93,7 +92,6 @@ class TestProvider implements ProviderInterface
                         'action' => $action,
                     ],
                     'POST' => [
-                        'status' => 1,
                         'active' => true,
                         'public' => false,
                         'description' => 'Creates a new entry on the table',

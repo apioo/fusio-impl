@@ -33,7 +33,9 @@ use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Routes;
 use Fusio\Impl\Service\Schema;
+use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
+use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaTraverser;
 use PSX\Schema\Visitor\TypeVisitor;
@@ -264,6 +266,9 @@ class Provider
         }
 
         foreach ($config as $key => $version) {
+            // we can create only resources in development mode
+            $config[$key]['status'] = Resource::STATUS_DEVELOPMENT;
+
             if (isset($version['methods']) && is_iterable($version['methods'])) {
                 foreach ($version['methods'] as $methodName => $method) {
                     if (isset($method['request'])) {
@@ -275,9 +280,12 @@ class Provider
                     }
 
                     if (isset($method['responses']) && is_iterable($method['responses'])) {
+                        $responses = [];
                         foreach ($method['responses'] as $code => $response) {
-                            $config[$key]['methods'][$methodName]['responses'][$code] = $this->resolveSchema($response);
+                            $responses[$code] = $this->resolveSchema($response);
                         }
+
+                        $config[$key]['methods'][$methodName]['responses'] = $responses;
                     }
 
                     if (isset($method['action'])) {

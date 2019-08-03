@@ -21,12 +21,10 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
-use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Fixture;
-use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * ProviderTest
@@ -431,7 +429,7 @@ JSON;
             ],
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
@@ -441,8 +439,77 @@ JSON;
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-        
-        // @TODO check routes etc.
+
+        // check schema
+        $schema = <<<JSON
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "createDate": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+JSON;
+
+        Assert::assertSchema('Provider_Schema_Request', $schema);
+
+        $schema = <<<JSON
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "createDate": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+JSON;
+
+        Assert::assertSchema('Provider_Schema_Response', $schema);
+
+        // check action
+        Assert::assertAction('Provider_Action', SqlTable::class, '{"table":"foobar"}');
+
+        // check routes
+        Assert::assertRoute('/foo/table', ['foo', 'foo', 'bar'], [[
+            'method'       => 'GET',
+            'version'      => 1,
+            'status'       => 4,
+            'active'       => true,
+            'public'       => true,
+            'description'  => 'Returns all entries on the table',
+            'operation_id' => 'get.foo.table',
+            'parameters'   => null,
+            'request'      => 'Provider_Schema_Request',
+            'responses'    => [
+                '200'      => 'Provider_Schema_Response'
+            ],
+            'action'       => 'Provider_Action',
+            'costs'        => 0,
+        ], [
+            'method'       => 'POST',
+            'version'      => 1,
+            'status'       => 4,
+            'active'       => true,
+            'public'       => false,
+            'description'  => 'Creates a new entry on the table',
+            'operation_id' => 'post.foo.table',
+            'parameters'   => null,
+            'request'      => 'Provider_Schema_Request',
+            'responses'    => [
+                '200'      => 'Provider_Schema_Response'
+            ],
+            'action'       => 'Provider_Action',
+            'costs'        => 0,
+        ]]);
     }
 
     public function testPut()
