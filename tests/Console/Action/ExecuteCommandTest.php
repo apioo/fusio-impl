@@ -176,7 +176,7 @@ TEXT;
             'command' => $command->getName(),
             'action'  => 3,
             '--method' => 'POST',
-            '--body' => json_encode(['title' => 'bar', 'content' => 'bar', 'date' => date(\DateTime::RFC3339)]),
+            '--body' => json_encode(['title' => 'bar', 'content' => 'bar', 'date' => date('Y-m-d H:i:s')]),
         ]);
 
         $actual = $commandTester->getDisplay();
