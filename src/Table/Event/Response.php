@@ -70,7 +70,7 @@ class Response extends TableAbstract
             INNER JOIN fusio_event_trigger trigg
                     ON trigg.id = response.trigger_id
                  WHERE response.status = :status
-              ORDER BY trigg.insert_date ASC';
+              ORDER BY trigg.insert_date ASC, response.id ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, self::RESPONSE_LIMIT);
 
@@ -91,7 +91,7 @@ class Response extends TableAbstract
                     ON subscription.id = response.subscription_id
                  WHERE subscription.id = :id
                    AND subscription.user_id = :user_id
-              ORDER BY response.execute_date DESC';
+              ORDER BY response.execute_date DESC, response.id ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 8);
 
