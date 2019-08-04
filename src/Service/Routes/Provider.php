@@ -271,6 +271,10 @@ class Provider
 
             if (isset($version['methods']) && is_iterable($version['methods'])) {
                 foreach ($version['methods'] as $methodName => $method) {
+                    if (isset($method['parameters'])) {
+                        $config[$key]['methods'][$methodName]['parameters'] = $this->resolveSchema($method['parameters']);
+                    }
+
                     if (isset($method['request'])) {
                         $config[$key]['methods'][$methodName]['request'] = $this->resolveSchema($method['request']);
                     }
