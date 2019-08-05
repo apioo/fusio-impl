@@ -132,6 +132,7 @@ class ProviderLoader
                 User\Google::class,
             ],
             ProviderConfig::TYPE_ROUTES => [
+                Adapter\Sql\Routes\SqlTable::class,
             ],
         ];
     }
