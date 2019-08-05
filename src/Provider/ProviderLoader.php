@@ -112,6 +112,7 @@ class ProviderLoader
         return [
             ProviderConfig::TYPE_ACTION => [
                 Adapter\File\Action\FileProcessor::class,
+                Adapter\GraphQL\Action\GraphQLProcessor::class,
                 Adapter\Http\Action\HttpProcessor::class,
                 Adapter\Php\Action\PhpProcessor::class,
                 Adapter\Php\Action\PhpSandbox::class,
