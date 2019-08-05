@@ -16,7 +16,7 @@
     "psx/openssl": "^1.0",
     "fusio/engine": "^3.0",
     "fusio/adapter-file": "^3.0",
-    "fusio/adapter-graphql": "^0.1",
+    "fusio/adapter-graphql": "^0.2",
     "fusio/adapter-http": "^3.0",
     "fusio/adapter-php": "^3.0",
     "fusio/adapter-smtp": "^3.0",
