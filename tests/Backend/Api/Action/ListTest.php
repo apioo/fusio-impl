@@ -128,6 +128,10 @@ JSON;
             "class": "Fusio\\Adapter\\File\\Action\\FileProcessor"
         },
         {
+            "name": "GraphQL-Processor",
+            "class": "Fusio\\Adapter\\GraphQL\\Action\\GraphQLProcessor"
+        },
+        {
             "name": "HTTP-Processor",
             "class": "Fusio\\Adapter\\Http\\Action\\HttpProcessor"
         },

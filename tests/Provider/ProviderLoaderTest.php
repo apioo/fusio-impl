@@ -42,6 +42,7 @@ class ProviderLoaderTest extends DbTestCase
         $expect = [
             'action' => [
                 'fileprocessor' => \Fusio\Adapter\File\Action\FileProcessor::class,
+                'graphqlprocessor' => \Fusio\Adapter\GraphQL\Action\GraphQLProcessor::class,
                 'httpprocessor' => \Fusio\Adapter\Http\Action\HttpProcessor::class,
                 'phpprocessor' => \Fusio\Adapter\Php\Action\PhpProcessor::class,
                 'phpsandbox' => \Fusio\Adapter\Php\Action\PhpSandbox::class,
@@ -65,6 +66,7 @@ class ProviderLoaderTest extends DbTestCase
                 'stdclass' => \stdClass::class,
             ],
             'routes' => [
+                'sqltable' => \Fusio\Adapter\Sql\Routes\SqlTable::class
             ],
         ];
 
