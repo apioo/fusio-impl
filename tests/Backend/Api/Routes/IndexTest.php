@@ -124,6 +124,10 @@ JSON;
 {
     "providers": [
         {
+            "name": "SQL-Table",
+            "class": "sqltable"
+        },
+        {
             "name": "Test-Provider",
             "class": "testprovider"
         }
