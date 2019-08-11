@@ -71,6 +71,11 @@ class Export extends SystemAbstract
             foreach ($collection->entry as $entry) {
                 $entity = $this->doRequest('GET', $type. '/' . $entry->id);
 
+                // check whether the API returned an error
+                if (isset($entity->success) && $entity->success === false && isset($entity->message)) {
+                    throw new \RuntimeException('Exporting ' . $type . ' failed, the API responded with: ' . $entity->message);
+                }
+
                 $result[] = $this->transform($type, $entity);
             }
         }
