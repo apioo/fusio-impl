@@ -160,6 +160,8 @@ class NewInstallation
                 ['status' => 1, 'priority' => 0x10000000 | 35, 'methods' => 'ANY', 'path' => '/backend/log/error/$error_id<[0-9]+>',         'controller' => Backend\Api\Log\Error\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 34, 'methods' => 'ANY', 'path' => '/backend/log',                                 'controller' => Backend\Api\Log\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 33, 'methods' => 'ANY', 'path' => '/backend/log/$log_id<[0-9]+>',                 'controller' => Backend\Api\Log\Entity::class],
+                ['status' => 1, 'priority' => 0x10000000 | 34, 'methods' => 'ANY', 'path' => '/backend/marketplace',                         'controller' => Backend\Api\Marketplace\Collection::class],
+                ['status' => 1, 'priority' => 0x10000000 | 33, 'methods' => 'ANY', 'path' => '/backend/marketplace/:app_name',               'controller' => Backend\Api\Marketplace\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 32, 'methods' => 'ANY', 'path' => '/backend/plan/contract',                       'controller' => Backend\Api\Plan\Contract\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 31, 'methods' => 'ANY', 'path' => '/backend/plan/contract/$contract_id<[0-9]+>',  'controller' => Backend\Api\Plan\Contract\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 30, 'methods' => 'ANY', 'path' => '/backend/plan/invoice',                        'controller' => Backend\Api\Plan\Invoice\Collection::class],
