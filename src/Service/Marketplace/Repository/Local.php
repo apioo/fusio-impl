@@ -40,6 +40,11 @@ class Local implements RepositoryInterface
     private $publicPath;
 
     /**
+     * @var array
+     */
+    private $apps;
+
+    /**
      * @param string $publicPath
      */
     public function __construct(string $publicPath)
@@ -50,7 +55,26 @@ class Local implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function fetch(): array
+    public function fetchAll(): array
+    {
+        if (!$this->apps) {
+            $this->apps = $this->scanDir();
+        }
+
+        return $this->apps;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchByName(string $name): ?App
+    {
+        $apps = $this->fetchAll();
+
+        return $apps[$name] ?? null;
+    }
+
+    private function scanDir(): array
     {
         $apps = scandir($this->publicPath);
         $result = [];
@@ -66,15 +90,5 @@ class Local implements RepositoryInterface
         }
 
         return $result;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchByName(string $name): ?App
-    {
-        $apps = $this->fetch();
-
-        return $apps[$name] ?? null;
     }
 }

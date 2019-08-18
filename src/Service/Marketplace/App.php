@@ -53,6 +53,11 @@ class App
     /**
      * @var string
      */
+    private $website;
+
+    /**
+     * @var string
+     */
     private $downloadUrl;
 
     /**
@@ -132,6 +137,22 @@ class App
     /**
      * @return string
      */
+    public function getWebsite(): string
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $website
+     */
+    public function setWebsite(string $website): void
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * @return string
+     */
     public function getDownloadUrl(): string
     {
         return $this->downloadUrl;
@@ -167,6 +188,7 @@ class App
             'version' => $this->version,
             'description' => $this->description,
             'screenshot' => $this->screenshot,
+            'website' => $this->website,
             'downloadUrl' => $this->downloadUrl,
             'sha1Hash' => $this->sha1Hash,
         ];
@@ -186,6 +208,10 @@ class App
 
         if (isset($data['screenshot'])) {
             $app->setScreenshot($data['screenshot']);
+        }
+
+        if (isset($data['website'])) {
+            $app->setWebsite($data['website']);
         }
 
         if (isset($data['downloadUrl'])) {

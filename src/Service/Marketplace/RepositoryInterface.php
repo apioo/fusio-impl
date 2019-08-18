@@ -35,7 +35,7 @@ interface RepositoryInterface
      *
      * @return App[]
      */
-    public function fetch(): array;
+    public function fetchAll(): array;
 
     /**
      * Returns a single app from the repository

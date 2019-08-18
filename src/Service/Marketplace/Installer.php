@@ -21,8 +21,12 @@
 
 namespace Fusio\Impl\Service\Marketplace;
 
+use Fusio\Impl\Authorization\UserContext;
+use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
+use PSX\Http\Client\Options;
+use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -50,108 +54,162 @@ class Installer
     private $httpClient;
 
     /**
-     * @var string
+     * @var Config
      */
-    private $publicPath;
+    private $config;
 
     /**
      * @param \Fusio\Impl\Service\Marketplace\Repository\Local $localRepository
      * @param \Fusio\Impl\Service\Marketplace\Repository\Remote $remoteRepository
      * @param \PSX\Http\Client\ClientInterface $httpClient
-     * @param string $publicPath
+     * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, ClientInterface $httpClient, string $publicPath)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, ClientInterface $httpClient, Config $config)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
         $this->httpClient = $httpClient;
-        $this->publicPath = $publicPath;
+        $this->config = $config;
     }
 
-    /**
-     * Installs or updates an new app
-     * 
-     * @param string $name
-     */
-    public function install(string $name)
+    public function install(string $name, UserContext $context): App
     {
         $remoteApp = $this->remoteRepository->fetchByName($name);
         $localApp = $this->localRepository->fetchByName($name);
-        $localDir = null;
 
         if ($localApp instanceof App) {
-            if (version_compare($remoteApp->getVersion(), $localApp->getVersion()) === 0) {
-                // local and remote have the same version
-                return;
-            }
-
-            if (version_compare($remoteApp->getVersion(), $localApp->getVersion()) === -1) {
-                // this means we have locally a newer version then remote, maybe
-                // if a user has manually changed the version so do nothing
-                return;
-            }
-
-            // if we are here the remote version is newer so we need to update
-            $localDir = $this->publicPath . '/' . $localApp->getName();
+            throw new StatusCode\BadRequestException('App already installed');
         }
 
+        $this->deploy($remoteApp);
+
+        return $remoteApp;
+    }
+
+    public function update(string $name, UserContext $context): App
+    {
+        $remoteApp = $this->remoteRepository->fetchByName($name);
+        $localApp = $this->localRepository->fetchByName($name);
+
+        if (!$localApp instanceof App) {
+            throw new StatusCode\BadRequestException('App is not installed');
+        }
+
+        if (version_compare($remoteApp->getVersion(), $localApp->getVersion()) === 0) {
+            throw new StatusCode\BadRequestException('App is already up-to-date');
+        }
+
+        if (version_compare($remoteApp->getVersion(), $localApp->getVersion()) === -1) {
+            throw new StatusCode\BadRequestException('Local version of the app has a higher version');
+        }
+
+        $this->moveToTrash($localApp);
+
+        $this->deploy($remoteApp);
+
+        return $remoteApp;
+    }
+
+    public function remove(string $name, UserContext $context): App
+    {
+        $localApp = $this->localRepository->fetchByName($name);
+
+        if (!$localApp instanceof App) {
+            throw new StatusCode\BadRequestException('App is not installed');
+        }
+
+        $this->moveToTrash($localApp);
+
+        return $localApp;
+    }
+
+    private function deploy(App $remoteApp)
+    {
         $zipFile = $this->downloadZip($remoteApp);
 
-        $appDir = PSX_PATH_CACHE . '/app-' . $remoteApp->getName();
+        $appDir = $this->config->get('psx_path_cache') . '/app-' . $remoteApp->getName();
         $this->unzipFile($zipFile, $appDir);
 
         $this->writeMetaFile($appDir, $remoteApp);
-
-        if ($localDir !== null) {
-            $this->moveToTrash($localDir, $localApp);
-        }
+        $this->replaceVariables($appDir);
 
         $this->moveToPublic($appDir, $remoteApp);
     }
-
+    
     private function downloadZip(App $app): string
     {
-        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()));
+        $options = new Options();
+        $options->setVerify(false);
 
-        $appFile = PSX_PATH_CACHE . '/app-' . $app->getName() . '.zip';
+        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()), $options);
+
+        $appFile = $this->config->get('psx_path_cache') . '/app-' . $app->getName() . '_' . uniqid() . '.zip';
         file_put_contents($appFile, $response->getBody()->getContents());
 
         // check hash
         if (sha1_file($appFile) != $app->getSha1Hash()) {
-            throw new \RuntimeException('Invalid hash of downloaded app');
+            throw new StatusCode\InternalServerErrorException('Invalid hash of downloaded app');
         }
 
         return $appFile;
     }
 
-    private function unzipFile(string $zipFile, string $appDir): string
+    private function unzipFile(string $zipFile, string $appDir): void
     {
         $zip = new \ZipArchive();
         $handle = $zip->open($zipFile);
 
         if (!$handle) {
-            throw new \RuntimeException('Could not open zip file');
+            throw new StatusCode\InternalServerErrorException('Could not open zip file');
         }
 
         $zip->extractTo($appDir);
     }
 
-    private function writeMetaFile(string $appDir, App $app): string
+    private function writeMetaFile(string $appDir, App $app): void
     {
-        file_put_contents($appDir . '/app.yaml', Yaml::dump($app->toArray()));
+        if (!file_put_contents($appDir . '/app.yaml', Yaml::dump($app->toArray()))) {
+            throw new StatusCode\InternalServerErrorException('Could not write app meta file');
+        }
     }
 
     private function moveToPublic(string $appDir, App $app): void
     {
-        if (!rename($appDir, $this->publicPath . '/' . $app->getName())) {
-            throw new \RuntimeException('Could not move app to public');
+        if (!rename($appDir, $this->config->get('psx_path_public') . '/' . $app->getName())) {
+            throw new StatusCode\InternalServerErrorException('Could not move app to public');
         }
     }
 
-    private function moveToTrash(string $appDir, App $app): void
+    private function moveToTrash(App $app): void
     {
-        if (!rename($appDir, PSX_PATH_CACHE . '/' . $app->getName() . '_' . $app->getVersion())) {
-            throw new \RuntimeException('Could not move existing app to trash');
+        $appDir = $this->config->get('psx_path_public') . '/' . $app->getName();
+
+        if (!rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid())) {
+            throw new StatusCode\InternalServerErrorException('Could not move existing app to trash');
+        }
+    }
+
+    private function replaceVariables(string $appDir)
+    {
+        $apiUrl = $this->config->get('psx_url') . $this->config->get('psx_dispatch');
+        $url = $this->config->get('psx_url');
+        $basePath = parse_url($url, PHP_URL_PATH);
+
+        $env = [
+            'API_URL' => $apiUrl,
+            'URL' => $url,
+            'BASE_PATH' => $basePath,
+        ];
+
+        $file = $appDir . '/index.html';
+        if (is_file($file)) {
+            $content = file_get_contents($file);
+
+            foreach ($env as $key => $value) {
+                $content = str_replace('${' . $key . '}', $value, $content);
+            }
+
+            file_put_contents($file, $content);
         }
     }
 }

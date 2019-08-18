@@ -25,6 +25,7 @@ use Fusio\Impl\Service\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
+use PSX\Http\Client\Options;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -47,6 +48,11 @@ class Remote implements RepositoryInterface
     private $marketplaceUrl;
 
     /**
+     * @var array
+     */
+    private $apps;
+
+    /**
      * @param ClientInterface $httpClient
      * @param string $marketplaceUrl
      */
@@ -59,12 +65,34 @@ class Remote implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function fetch(): array
+    public function fetchAll(): array
     {
-        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl));
+        if (!$this->apps) {
+            $this->apps = $this->request();
+        }
+
+        return $this->apps;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function fetchByName(string $name): ?App
+    {
+        $apps = $this->fetchAll();
+
+        return $apps[$name] ?? null;
+    }
+
+    private function request(): array
+    {
+        $options = new Options();
+        $options->setVerify(false);
+
+        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl), $options);
 
         if ($response->getStatusCode() > 300) {
-            throw new \RuntimeException('Could not fetch repository');
+            throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());
         }
 
         $body = (string) $response->getBody();
@@ -75,16 +103,6 @@ class Remote implements RepositoryInterface
         } else {
             throw new \RuntimeException('Could not parse repository response');
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchByName(string $name): ?App
-    {
-        $apps = $this->fetch();
-
-        return $apps[$name] ?? null;
     }
 
     private function parse(iterable $data): array

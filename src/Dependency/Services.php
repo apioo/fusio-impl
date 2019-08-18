@@ -469,6 +469,42 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Marketplace\RepositoryInterface
+     */
+    public function getMarketplaceRepositoryRemote()
+    {
+        return new Service\Marketplace\Repository\Remote(
+            $this->get('http_client'),
+            $this->get('config')->get('fusio_marketplace_url')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Marketplace\RepositoryInterface
+     */
+    public function getMarketplaceRepositoryLocal()
+    {
+        return new Service\Marketplace\Repository\Local(
+            $this->get('config')->get('psx_path_public')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Marketplace\Installer
+     */
+    public function getMarketplaceInstaller()
+    {
+
+
+        return new Service\Marketplace\Installer(
+            $this->get('marketplace_repository_local'),
+            $this->get('marketplace_repository_remote'),
+            $this->get('http_client'),
+            $this->get('config')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Plan
      */
     public function getPlanService()
