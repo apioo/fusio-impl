@@ -309,7 +309,29 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/marketplace",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/log",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/marketplace\/:app_name",
       "methods": [
         "GET",
         "POST",

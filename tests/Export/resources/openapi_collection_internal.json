@@ -1669,6 +1669,55 @@
         }
       ]
     },
+    "\/backend\/marketplace": {
+      "get": {
+        "operationId": "backendMarketplaceGetMarketplace_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Marketplace_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendMarketplacePostMarketplace_Install",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Marketplace_Install"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/backend\/log": {
       "get": {
         "operationId": "backendLogGetLog_Collection",
@@ -1809,6 +1858,84 @@
         ]
       },
       "parameters": []
+    },
+    "\/backend\/marketplace\/{app_name}": {
+      "get": {
+        "operationId": "backendMarketplaceAppnameGetMarketplace_App_Local",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Marketplace_App_Local"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendMarketplaceAppnamePutMessage",
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "backendMarketplaceAppnameDeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "app_name",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/backend\/log\/{log_id}": {
       "get": {
@@ -7204,6 +7331,82 @@
           }
         }
       },
+      "Marketplace_Collection_Apps": {
+        "type": "object",
+        "title": "Marketplace Collection Apps",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Marketplace_App_Remote"
+        }
+      },
+      "Marketplace_App_Remote": {
+        "type": "object",
+        "title": "Marketplace App Remote",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "screenshot": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "sha1Hash": {
+            "type": "string"
+          },
+          "local": {
+            "$ref": "#\/components\/schemas\/Marketplace_App"
+          }
+        }
+      },
+      "Marketplace_App": {
+        "type": "object",
+        "title": "Marketplace App",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "screenshot": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "sha1Hash": {
+            "type": "string"
+          }
+        }
+      },
+      "Marketplace_Collection": {
+        "type": "object",
+        "title": "Marketplace Collection",
+        "properties": {
+          "apps": {
+            "$ref": "#\/components\/schemas\/Marketplace_Collection_Apps"
+          }
+        }
+      },
+      "Marketplace_Install": {
+        "type": "object",
+        "title": "Marketplace Install",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "Log": {
         "type": "object",
         "title": "Log",
@@ -7256,6 +7459,33 @@
             "items": {
               "$ref": "#\/components\/schemas\/Log"
             }
+          }
+        }
+      },
+      "Marketplace_App_Local": {
+        "type": "object",
+        "title": "Marketplace App Local",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "screenshot": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "sha1Hash": {
+            "type": "string"
+          },
+          "remote": {
+            "$ref": "#\/components\/schemas\/Marketplace_App"
           }
         }
       },

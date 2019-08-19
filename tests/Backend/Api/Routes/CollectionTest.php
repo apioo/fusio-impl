@@ -276,19 +276,19 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 106,
+            "id": 108,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 105,
+            "id": 107,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 104,
+            "id": 106,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -316,7 +316,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 106,
+            "id": 108,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -344,19 +344,19 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 106,
+            "id": 108,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 105,
+            "id": 107,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 104,
+            "id": 106,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
