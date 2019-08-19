@@ -475,7 +475,7 @@ trait Services
     {
         return new Service\Marketplace\Repository\Remote(
             $this->get('http_client'),
-            $this->get('config')->get('fusio_marketplace_url')
+            $this->get('config')->get('fusio_marketplace_url') ?: ''
         );
     }
 
@@ -494,8 +494,6 @@ trait Services
      */
     public function getMarketplaceInstaller()
     {
-
-
         return new Service\Marketplace\Installer(
             $this->get('marketplace_repository_local'),
             $this->get('marketplace_repository_remote'),
