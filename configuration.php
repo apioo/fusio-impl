@@ -139,7 +139,7 @@ function getConnectionParams($db)
     switch ($db) {
         case 'mysql':
             return [
-                'dbname'   => 'fusio_test',
+                'dbname'   => 'fusio',
                 'user'     => 'root',
                 'password' => '',
                 'host'     => 'localhost',
