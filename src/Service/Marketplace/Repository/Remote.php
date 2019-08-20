@@ -86,10 +86,7 @@ class Remote implements RepositoryInterface
 
     private function request(): array
     {
-        $options = new Options();
-        $options->setVerify(false);
-
-        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl), $options);
+        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl));
 
         if ($response->getStatusCode() > 300) {
             throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());

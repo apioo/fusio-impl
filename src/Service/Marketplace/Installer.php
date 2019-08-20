@@ -138,10 +138,7 @@ class Installer
     
     private function downloadZip(App $app): string
     {
-        $options = new Options();
-        $options->setVerify(false);
-
-        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()), $options);
+        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()));
 
         $appFile = $this->config->get('psx_path_cache') . '/app-' . $app->getName() . '_' . uniqid() . '.zip';
         file_put_contents($appFile, $response->getBody()->getContents());
