@@ -188,7 +188,7 @@ class Installer
 
     private function replaceVariables(string $appDir)
     {
-        $apiUrl = $this->config->get('psx_url') . $this->config->get('psx_dispatch');
+        $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $url = $this->config->get('psx_url');
         $basePath = parse_url($url, PHP_URL_PATH);
 
