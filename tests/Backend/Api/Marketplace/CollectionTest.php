@@ -213,7 +213,6 @@ JSON;
             $this->assertNotEmpty($app['website']);
             $this->assertNotEmpty($app['downloadUrl']);
             $this->assertNotEmpty($app['sha1Hash']);
-            $this->assertNotEmpty($app['startUrl']);
 
             // @TODO maybe check whether the download url actual exists
         }
