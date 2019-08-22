@@ -186,28 +186,18 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
-        $expect = <<<JSON
-{
-    "version": "0.6",
-    "description": "The backend app to administrator and configure the system.",
-    "screenshot": "https:\/\/github.com\/apioo\/fusio\/raw\/master\/doc\/_static\/backend.png",
-    "website": "https:\/\/github.com\/apioo\/fusio-backend",
-    "downloadUrl": "https:\/\/www.fusio-project.org\/marketplace\/fusio.zip",
-    "sha1Hash": "de93335ba3b8f5b171aff8214249b5bcbf796a2b",
-    "remote": {
-        "version": "0.6",
-        "description": "The backend app to administrator and configure the system.",
-        "screenshot": "https:\/\/github.com\/apioo\/fusio\/raw\/master\/doc\/_static\/backend.png",
-        "website": "https:\/\/github.com\/apioo\/fusio-backend",
-        "downloadUrl": "https:\/\/www.fusio-project.org\/marketplace\/fusio.zip",
-        "sha1Hash": "de93335ba3b8f5b171aff8214249b5bcbf796a2b"
-    }
-}
-JSON;
+        $body = (string) $response->getBody();
+        $data = \json_decode($body, true);
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertNotEmpty($data['version']);
+        $this->assertSame(version_compare($data['version'], '0.0'), 1);
+        $this->assertNotEmpty($data['description']);
+        $this->assertNotEmpty($data['screenshot']);
+        $this->assertNotEmpty($data['website']);
+        $this->assertNotEmpty($data['downloadUrl']);
+        $this->assertNotEmpty($data['sha1Hash']);
+        $this->assertNotEmpty($data['remote']);
     }
 
     public function testGetNotFound()
