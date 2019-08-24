@@ -138,6 +138,9 @@ class Installer
     
     private function downloadZip(App $app): string
     {
+        // increase timeout to handle download
+        set_time_limit(300);
+
         $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()));
 
         $appFile = $this->config->get('psx_path_cache') . '/app-' . $app->getName() . '_' . uniqid() . '.zip';
