@@ -245,6 +245,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
+        $application->add(new Console\System\LogRotateCommand($this->get('connection')));
         $application->add(new Console\System\PushCommand($this->get('system_push_service'), $this->get('config')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
