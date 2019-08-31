@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Fusio\Impl\Console\System\LogRotateCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -42,6 +43,7 @@ class LogRotateCommandTest extends ControllerDbTestCase
 
     public function testCommandLogRotate()
     {
+        /** @var LogRotateCommand $command */
         $command = Environment::getService('console')->find('system:log_rotate');
 
         $commandTester = new CommandTester($command);
@@ -55,5 +57,19 @@ class LogRotateCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/Created log table fusio_log_/', $display, $display);
         $this->assertRegExp('/Copied 2 entries to archive table/', $display, $display);
         $this->assertRegExp('/Truncated log table/', $display, $display);
+
+        preg_match('/fusio_log_(\d+)/', $display, $matches);
+        $tableName = $matches[0];
+
+        $schemaManager = $this->connection->getSchemaManager();
+        $schema = $schemaManager->createSchema();
+
+        $this->assertTrue($schema->hasTable($tableName));
+
+        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+
+        $this->assertEquals(2, $row['cnt']);
+
+        $schemaManager->dropTable($tableName);
     }
 }
