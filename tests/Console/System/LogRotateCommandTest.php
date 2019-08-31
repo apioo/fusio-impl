@@ -67,8 +67,10 @@ class LogRotateCommandTest extends ControllerDbTestCase
         $this->assertTrue($schema->hasTable($tableName));
 
         $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM ' . $tableName);
-
         $this->assertEquals(2, $row['cnt']);
+
+        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM fusio_log');
+        $this->assertEquals(0, $row['cnt']);
 
         $schemaManager->dropTable($tableName);
     }
