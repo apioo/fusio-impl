@@ -50,6 +50,7 @@ class Provider extends BackendApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('provider', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::BACKEND, ['backend'])
