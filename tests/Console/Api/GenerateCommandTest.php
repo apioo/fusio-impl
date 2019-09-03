@@ -54,7 +54,7 @@ class GenerateCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertEquals('Successful!', trim($actual));
+        $this->assertRegExp('/Successful!/', trim($actual));
 
         // check files
         $files = scandir(__DIR__ . '/output');
