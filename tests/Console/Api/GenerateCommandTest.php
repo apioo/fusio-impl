@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Console\Api;
 
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\GeneratorFactoryInterface;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -48,7 +49,7 @@ class GenerateCommandTest extends ControllerDbTestCase
         $commandTester->execute([
             'command' => $command->getName(),
             '-i'      => 'internal',
-            '-f'      => 'client.php',
+            '-f'      => GeneratorFactoryInterface::CLIENT_PHP,
             'dir'     => __DIR__ . '/output',
         ]);
 
