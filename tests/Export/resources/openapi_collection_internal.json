@@ -1669,55 +1669,6 @@
         }
       ]
     },
-    "\/backend\/marketplace": {
-      "get": {
-        "operationId": "backendMarketplaceGetMarketplace_Collection",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Marketplace_Collection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "operationId": "backendMarketplacePostMarketplace_Install",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Marketplace_Install"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "POST 201 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        }
-      },
-      "parameters": []
-    },
     "\/backend\/log": {
       "get": {
         "operationId": "backendLogGetLog_Collection",
@@ -1859,6 +1810,89 @@
       },
       "parameters": []
     },
+    "\/backend\/log\/{log_id}": {
+      "get": {
+        "operationId": "backendLogLogid09GetLog",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Log"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "log_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
+    },
+    "\/backend\/marketplace": {
+      "get": {
+        "operationId": "backendMarketplaceGetMarketplace_Collection",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Marketplace_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendMarketplacePostMarketplace_Install",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Marketplace_Install"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/backend\/marketplace\/{app_name}": {
       "get": {
         "operationId": "backendMarketplaceAppnameGetMarketplace_App_Local",
@@ -1933,40 +1967,6 @@
           "required": true,
           "schema": {
             "type": "string"
-          }
-        }
-      ]
-    },
-    "\/backend\/log\/{log_id}": {
-      "get": {
-        "operationId": "backendLogLogid09GetLog",
-        "responses": {
-          "200": {
-            "description": "GET 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Log"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "log_id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "integer"
           }
         }
       ]
@@ -2790,7 +2790,16 @@
           }
         ]
       },
-      "parameters": []
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/backend\/routes\/{route_id}": {
       "get": {
@@ -7331,6 +7340,61 @@
           }
         }
       },
+      "Log": {
+        "type": "object",
+        "title": "Log",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log_Collection": {
+        "type": "object",
+        "title": "Log Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log"
+            }
+          }
+        }
+      },
       "Marketplace_Collection_Apps": {
         "type": "object",
         "title": "Marketplace Collection Apps",
@@ -7404,61 +7468,6 @@
         "properties": {
           "name": {
             "type": "string"
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "title": "Log",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Log_Error"
-            }
-          }
-        }
-      },
-      "Log_Collection": {
-        "type": "object",
-        "title": "Log Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Log"
-            }
           }
         }
       },
