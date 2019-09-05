@@ -65,11 +65,13 @@
   },
   "methods": {
     "GET": {
+      "operationId": "listFoo",
       "responses": {
         "200": "#\/definitions\/GET-200-response"
       }
     },
     "POST": {
+      "operationId": "createFoo",
       "request": "#\/definitions\/POST-request",
       "responses": {
         "201": "#\/definitions\/POST-201-response"
@@ -78,16 +80,40 @@
   },
   "links": [
     {
-      "rel": "openapi",
-      "href": "\/export\/openapi\/*\/foo"
+      "rel": "client.php",
+      "href": "\/export\/client.php\/*\/foo"
     },
     {
-      "rel": "swagger",
-      "href": "\/export\/swagger\/*\/foo"
+      "rel": "client.typescript",
+      "href": "\/export\/client.typescript\/*\/foo"
     },
     {
-      "rel": "raml",
-      "href": "\/export\/raml\/*\/foo"
+      "rel": "markup.html",
+      "href": "\/export\/markup.html\/*\/foo"
+    },
+    {
+      "rel": "markup.markdown",
+      "href": "\/export\/markup.markdown\/*\/foo"
+    },
+    {
+      "rel": "server.php",
+      "href": "\/export\/server.php\/*\/foo"
+    },
+    {
+      "rel": "spec.jsonschema",
+      "href": "\/export\/spec.jsonschema\/*\/foo"
+    },
+    {
+      "rel": "spec.openapi",
+      "href": "\/export\/spec.openapi\/*\/foo"
+    },
+    {
+      "rel": "spec.raml",
+      "href": "\/export\/spec.raml\/*\/foo"
+    },
+    {
+      "rel": "spec.swagger",
+      "href": "\/export\/spec.swagger\/*\/foo"
     }
   ]
 }
