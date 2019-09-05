@@ -180,6 +180,7 @@ class NewInstallation
                 ['status' => 1, 'priority' => 0x10000000 | 17, 'methods' => 'ANY', 'path' => '/backend/schema/$schema_id<[0-9]+>',           'controller' => Backend\Api\Schema\Entity::class],
                 ['status' => 1, 'priority' => 0x10000000 | 16, 'methods' => 'ANY', 'path' => '/backend/scope',                               'controller' => Backend\Api\Scope\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 15, 'methods' => 'ANY', 'path' => '/backend/scope/$scope_id<[0-9]+>',             'controller' => Backend\Api\Scope\Entity::class],
+                ['status' => 1, 'priority' => 0x10000000 | 15, 'methods' => 'ANY', 'path' => '/backend/sdk',                                 'controller' => Backend\Api\Sdk\Generate::class],
                 ['status' => 1, 'priority' => 0x10000000 | 14, 'methods' => 'ANY', 'path' => '/backend/statistic/count_requests',            'controller' => Backend\Api\Statistic\CountRequests::class],
                 ['status' => 1, 'priority' => 0x10000000 | 13, 'methods' => 'ANY', 'path' => '/backend/statistic/errors_per_route',          'controller' => Backend\Api\Statistic\ErrorsPerRoute::class],
                 ['status' => 1, 'priority' => 0x10000000 | 12, 'methods' => 'ANY', 'path' => '/backend/statistic/incoming_requests',         'controller' => Backend\Api\Statistic\IncomingRequests::class],

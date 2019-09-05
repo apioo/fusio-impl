@@ -1,0 +1,65 @@
+{
+  "path": "\/backend\/sdk",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Sdk_Types": {
+        "type": "object",
+        "title": "Sdk Types",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Sdk_Generate": {
+        "type": "object",
+        "title": "Sdk Generate",
+        "properties": {
+          "format": {
+            "type": "string"
+          },
+          "config": {
+            "type": "string"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "title": "Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Sdk_Types"
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Sdk_Generate"
+      },
+      "POST-200-response": {
+        "$ref": "#\/definitions\/Message"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "200": "#\/definitions\/POST-200-response"
+      }
+    }
+  }
+}
