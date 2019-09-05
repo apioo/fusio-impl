@@ -92,6 +92,7 @@ class LogRotateCommand extends Command
         $output->writeln('Copied ' . count($result) . ' entries to archive table');
 
         // truncate table
+        $this->connection->executeUpdate('DELETE FROM fusio_log_error WHERE 1=1');
         $this->connection->executeUpdate('DELETE FROM fusio_log WHERE 1=1');
 
         $output->writeln('Truncated log table');
