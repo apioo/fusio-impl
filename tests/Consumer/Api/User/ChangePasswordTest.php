@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,76 +47,8 @@ class ChangePasswordTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/account\/change_password",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_User_Credentials": {
-                "type": "object",
-                "title": "Consumer User Credentials",
-                "properties": {
-                    "oldPassword": {
-                        "type": "string"
-                    },
-                    "newPassword": {
-                        "type": "string"
-                    },
-                    "verifyPassword": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Consumer_Message": {
-                "type": "object",
-                "title": "Consumer Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Consumer_User_Credentials"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Consumer_Message"
-            }
-        }
-    },
-    "methods": {
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/account\/change_password"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/account\/change_password"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/account\/change_password"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/change_password.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

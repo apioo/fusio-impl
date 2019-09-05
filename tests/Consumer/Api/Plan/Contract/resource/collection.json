@@ -1,0 +1,157 @@
+{
+  "path": "\/consumer\/plan\/contract",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Consumer_Plan_Contract": {
+        "type": "object",
+        "title": "Consumer Plan Contract",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "plan": {
+            "$ref": "#\/definitions\/Consumer_Plan"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
+          },
+          "invoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/Consumer_Plan_Invoice"
+            }
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Consumer_Plan": {
+        "type": "object",
+        "title": "Consumer Plan",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "Consumer_Plan_Invoice": {
+        "type": "object",
+        "title": "Consumer Plan Invoice",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "payDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "insertDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Consumer_Plan_Contract_Collection": {
+        "type": "object",
+        "title": "Consumer Plan Contract Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/Consumer_Plan_Contract"
+            }
+          }
+        }
+      },
+      "Consumer_Plan_Order_Request": {
+        "type": "object",
+        "title": "Consumer Plan Order Request",
+        "properties": {
+          "planId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "planId"
+        ]
+      },
+      "Consumer_Plan_Order_Response": {
+        "type": "object",
+        "title": "Consumer Plan Order Response",
+        "properties": {
+          "contractId": {
+            "type": "integer"
+          },
+          "invoiceId": {
+            "type": "integer"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Consumer_Plan_Contract_Collection"
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Consumer_Plan_Order_Request"
+      },
+      "POST-201-response": {
+        "$ref": "#\/definitions\/Consumer_Plan_Order_Response"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "201": "#\/definitions\/POST-201-response"
+      }
+    }
+  }
+}

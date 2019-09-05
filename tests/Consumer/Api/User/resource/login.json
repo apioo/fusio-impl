@@ -1,0 +1,53 @@
+{
+  "path": "\/consumer\/login",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Consumer_User_Login": {
+        "type": "object",
+        "title": "Consumer User Login",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Consumer_User_JWT": {
+        "type": "object",
+        "title": "Consumer User JWT",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Consumer_User_Login"
+      },
+      "POST-200-response": {
+        "$ref": "#\/definitions\/Consumer_User_JWT"
+      }
+    }
+  },
+  "methods": {
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "200": "#\/definitions\/POST-200-response"
+      }
+    }
+  }
+}

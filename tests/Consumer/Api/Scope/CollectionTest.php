@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Scope;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,79 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/scope",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_Scope": {
-                "type": "object",
-                "title": "Consumer Scope",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-                    },
-                    "description": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Consumer_Scope_Collection": {
-                "type": "object",
-                "title": "Consumer Scope Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Consumer_Scope"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Scope_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/scope"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/scope"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/scope"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

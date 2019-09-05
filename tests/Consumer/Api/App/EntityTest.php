@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\App;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,131 +48,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/app\/$app_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "app_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Consumer_App": {
-                "type": "object",
-                "title": "Consumer App",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-                    },
-                    "url": {
-                        "type": "string",
-                        "minLength": 8
-                    },
-                    "appKey": {
-                        "type": "string"
-                    },
-                    "appSecret": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                },
-                "required": [
-                    "name",
-                    "url",
-                    "scopes"
-                ]
-            },
-            "Consumer_Message": {
-                "type": "object",
-                "title": "Consumer Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_App"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Consumer_App"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Consumer_Message"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Consumer_Message"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/app\/$app_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/app\/$app_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/app\/$app_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

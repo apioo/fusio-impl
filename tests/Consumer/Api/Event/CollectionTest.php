@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Event;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,79 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/event",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_Event": {
-                "type": "object",
-                "title": "Consumer Event",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-                    },
-                    "description": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Consumer_Event_Collection": {
-                "type": "object",
-                "title": "Consumer Event Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Consumer_Event"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Event_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/event"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/event"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/event"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

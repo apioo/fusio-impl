@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,73 +48,8 @@ class ActivateTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/activate",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_User_Activate": {
-                "type": "object",
-                "title": "Consumer User Activate",
-                "properties": {
-                    "token": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "token"
-                ]
-            },
-            "Consumer_Message": {
-                "type": "object",
-                "title": "Consumer Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Consumer_User_Activate"
-            },
-            "POST-200-response": {
-                "$ref": "#\/definitions\/Consumer_Message"
-            }
-        }
-    },
-    "methods": {
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "200": "#\/definitions\/POST-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/activate"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/activate"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/activate"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/activate.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

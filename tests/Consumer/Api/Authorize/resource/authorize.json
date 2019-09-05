@@ -1,0 +1,147 @@
+{
+  "path": "\/consumer\/authorize",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "GET-query": {
+        "type": "object",
+        "title": "GetQuery",
+        "properties": {
+          "client_id": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Scope": {
+        "type": "object",
+        "title": "Consumer Scope",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Authorize_Meta": {
+        "type": "object",
+        "title": "Consumer Authorize Meta",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/Consumer_Scope"
+            }
+          }
+        }
+      },
+      "Consumer_Authorize_Request": {
+        "type": "object",
+        "title": "Consumer Authorize Request",
+        "properties": {
+          "responseType": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "allow": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "responseType",
+          "clientId",
+          "scope",
+          "allow"
+        ]
+      },
+      "Consumer_Authorize_Token": {
+        "type": "object",
+        "title": "Consumer Authorize Token",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Authorize_Response": {
+        "type": "object",
+        "title": "Consumer Authorize Response",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "token": {
+            "$ref": "#\/definitions\/Consumer_Authorize_Token"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Consumer_Authorize_Meta"
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Consumer_Authorize_Request"
+      },
+      "POST-200-response": {
+        "$ref": "#\/definitions\/Consumer_Authorize_Response"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "queryParameters": "#\/definitions\/GET-query",
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "200": "#\/definitions\/POST-200-response"
+      }
+    }
+  }
+}

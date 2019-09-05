@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Plan;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,76 +48,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/plan\/$plan_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "plan_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Consumer_Plan": {
-                "type": "object",
-                "title": "Consumer Plan",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "price": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Plan"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/plan\/$plan_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/plan\/$plan_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/plan\/$plan_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

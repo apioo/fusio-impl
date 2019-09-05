@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Grant;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,112 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/grant",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_App_Grant": {
-                "type": "object",
-                "title": "Consumer App Grant",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "app": {
-                        "$ref": "#\/definitions\/Consumer_App"
-                    },
-                    "createDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "Consumer_App": {
-                "type": "object",
-                "title": "Consumer App",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-                    },
-                    "url": {
-                        "type": "string",
-                        "minLength": 8
-                    },
-                    "appKey": {
-                        "type": "string"
-                    },
-                    "appSecret": {
-                        "type": "string"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "Consumer_Grant_Collection": {
-                "type": "object",
-                "title": "Consumer Grant Collection",
-                "properties": {
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Consumer_App_Grant"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Grant_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/grant"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/grant"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/grant"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

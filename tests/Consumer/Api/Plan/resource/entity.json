@@ -1,0 +1,53 @@
+{
+  "path": "\/consumer\/plan\/$plan_id<[0-9]+>",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "path-template": {
+        "type": "object",
+        "title": "path",
+        "properties": {
+          "plan_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Consumer_Plan": {
+        "type": "object",
+        "title": "Consumer Plan",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Consumer_Plan"
+      }
+    }
+  },
+  "pathParameters": "#\/definitions\/path-template",
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    }
+  }
+}

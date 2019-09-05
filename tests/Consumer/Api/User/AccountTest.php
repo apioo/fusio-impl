@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,111 +47,8 @@ class AccountTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/account",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_User_Attributes": {
-                "type": "object",
-                "title": "Consumer User Attributes",
-                "additionalProperties": {
-                    "type": "string"
-                }
-            },
-            "Consumer_User_Account": {
-                "type": "object",
-                "title": "Consumer User Account",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "scopes": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "attributes": {
-                        "$ref": "#\/definitions\/Consumer_User_Attributes"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "Consumer_Message": {
-                "type": "object",
-                "title": "Consumer Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_User_Account"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Consumer_User_Account"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Consumer_Message"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/account"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/account"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/account"
-        }
-    ]
-}
-
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/account.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Subscription;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -37,6 +38,19 @@ class CollectionTest extends ControllerDbTestCase
     public function getDataSet()
     {
         return Fixture::getDataSet();
+    }
+
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('/doc/*/consumer/subscription', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()

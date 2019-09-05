@@ -1,0 +1,61 @@
+{
+  "path": "\/consumer\/register",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Consumer_User_Register": {
+        "type": "object",
+        "title": "Consumer User Register",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "Consumer_Message": {
+        "type": "object",
+        "title": "Consumer Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "POST-request": {
+        "$ref": "#\/definitions\/Consumer_User_Register"
+      },
+      "POST-200-response": {
+        "$ref": "#\/definitions\/Consumer_Message"
+      }
+    }
+  },
+  "methods": {
+    "POST": {
+      "request": "#\/definitions\/POST-request",
+      "responses": {
+        "200": "#\/definitions\/POST-200-response"
+      }
+    }
+  }
+}

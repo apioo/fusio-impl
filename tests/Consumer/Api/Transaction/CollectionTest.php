@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,89 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/transaction",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Consumer_Transaction": {
-                "type": "object",
-                "title": "Consumer Transaction",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "transactionId": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "updateDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "Consumer_Transaction_Collection": {
-                "type": "object",
-                "title": "Consumer Transaction Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Consumer_Transaction"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Transaction_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/transaction"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/transaction"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/transaction"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

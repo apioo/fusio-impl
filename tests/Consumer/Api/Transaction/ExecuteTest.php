@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
 
 use Fusio\Engine\Model\Transaction;
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -47,50 +48,8 @@ class ExecuteTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/transaction\/execute\/:transaction_id",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "transaction_id": {
-                        "type": "string"
-                    }
-                }
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "description": "Executes the payment on the remote provider and redirects the user to the app using the provided return url"
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/transaction\/execute\/:transaction_id"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/transaction\/execute\/:transaction_id"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/transaction\/execute\/:transaction_id"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/execute.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

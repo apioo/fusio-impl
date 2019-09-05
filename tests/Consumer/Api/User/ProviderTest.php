@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Consumer\Api\User;
 use Firebase\JWT\JWT;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Table\User;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -54,84 +55,8 @@ class ProviderTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/provider\/:provider",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "provider": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Consumer_User_Provider": {
-                "type": "object",
-                "title": "Consumer User Provider",
-                "properties": {
-                    "code": {
-                        "type": "string"
-                    },
-                    "clientId": {
-                        "type": "string"
-                    },
-                    "redirectUri": {
-                        "type": "string"
-                    }
-                },
-                "additionalProperties": true
-            },
-            "Consumer_User_JWT": {
-                "type": "object",
-                "title": "Consumer User JWT",
-                "properties": {
-                    "token": {
-                        "type": "string"
-                    }
-                }
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Consumer_User_Provider"
-            },
-            "POST-200-response": {
-                "$ref": "#\/definitions\/Consumer_User_JWT"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "200": "#\/definitions\/POST-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/provider\/:provider"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/provider\/:provider"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/provider\/:provider"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/provider.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

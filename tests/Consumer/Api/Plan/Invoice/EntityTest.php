@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\Plan\Invoice;
 
 use Fusio\Impl\Table;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,81 +48,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "invoice_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Consumer_Plan_Invoice": {
-                "type": "object",
-                "title": "Consumer Plan Invoice",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "payDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Consumer_Plan_Invoice"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
