@@ -540,6 +540,17 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/sdk",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/scope\/$scope_id<[0-9]+>",
       "methods": [
         "GET",

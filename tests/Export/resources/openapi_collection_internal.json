@@ -3216,6 +3216,62 @@
       },
       "parameters": []
     },
+    "\/backend\/sdk": {
+      "get": {
+        "operationId": "backendSdkGetSdk_Types",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Sdk_Types"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendSdkPostSdk_Generate",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Sdk_Generate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/backend\/scope\/{scope_id}": {
       "get": {
         "operationId": "backendScopeScopeid09GetScope",
@@ -7929,6 +7985,25 @@
             "items": {
               "$ref": "#\/components\/schemas\/Scope"
             }
+          }
+        }
+      },
+      "Sdk_Types": {
+        "type": "object",
+        "title": "Sdk Types",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Sdk_Generate": {
+        "type": "object",
+        "title": "Sdk Generate",
+        "properties": {
+          "format": {
+            "type": "string"
+          },
+          "config": {
+            "type": "string"
           }
         }
       },

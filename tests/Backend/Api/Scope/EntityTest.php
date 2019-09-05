@@ -68,6 +68,13 @@ class EntityTest extends ControllerDbTestCase
     "description": "Bar access",
     "routes": [
         {
+            "id": 98,
+            "scopeId": 5,
+            "routeId": 106,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
             "id": 97,
             "scopeId": 5,
             "routeId": 105,
@@ -78,13 +85,6 @@ class EntityTest extends ControllerDbTestCase
             "id": 96,
             "scopeId": 5,
             "routeId": 104,
-            "allow": 1,
-            "methods": "GET|POST|PUT|PATCH|DELETE"
-        },
-        {
-            "id": 95,
-            "scopeId": 5,
-            "routeId": 103,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
