@@ -196,7 +196,7 @@ class Container extends DefaultContainer
 
         $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
         $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
-        $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('generator_factory')));
+        $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('generator_factory'), $this->get('listing_filter_factory')));
 
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
