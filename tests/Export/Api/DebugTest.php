@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Export\Api;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -44,128 +45,8 @@ class DebugTest extends ControllerDbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/export\/debug",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Export_Debug_Headers": {
-                "type": "object",
-                "title": "Export Debug Headers"
-            },
-            "Export_Debug_Parameters": {
-                "type": "object",
-                "title": "Export Debug Parameters"
-            },
-            "Export_Debug_Request": {
-                "type": "object",
-                "title": "Export Debug Request"
-            },
-            "Export_Debug": {
-                "type": "object",
-                "title": "Export Debug",
-                "properties": {
-                    "method": {
-                        "type": "string"
-                    },
-                    "headers": {
-                        "$ref": "#\/definitions\/Export_Debug_Headers"
-                    },
-                    "parameters": {
-                        "$ref": "#\/definitions\/Export_Debug_Parameters"
-                    },
-                    "body": {
-                        "$ref": "#\/definitions\/Export_Debug_Request"
-                    }
-                }
-            },
-            "Passthru": {
-                "type": "object",
-                "title": "passthru",
-                "description": "No schema information available"
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Export_Debug"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Passthru"
-            },
-            "POST-200-response": {
-                "$ref": "#\/definitions\/Export_Debug"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Passthru"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Export_Debug"
-            },
-            "DELETE-request": {
-                "$ref": "#\/definitions\/Passthru"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Export_Debug"
-            },
-            "PATCH-request": {
-                "$ref": "#\/definitions\/Passthru"
-            },
-            "PATCH-200-response": {
-                "$ref": "#\/definitions\/Export_Debug"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "200": "#\/definitions\/POST-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "request": "#\/definitions\/DELETE-request",
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
-            }
-        },
-        "PATCH": {
-            "request": "#\/definitions\/PATCH-request",
-            "responses": {
-                "200": "#\/definitions\/PATCH-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/export\/debug"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/export\/debug"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/export\/debug"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/debug.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

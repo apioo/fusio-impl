@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Export\Api;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -44,76 +45,8 @@ class HealthTest extends ControllerDbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/export\/health",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Export_Health_Checks": {
-                "type": "object",
-                "title": "Export Health Checks",
-                "additionalProperties": {
-                    "$ref": "#\/definitions\/Export_Health_Check"
-                }
-            },
-            "Export_Health_Check": {
-                "type": "object",
-                "title": "Export Health Check",
-                "properties": {
-                    "healthy": {
-                        "type": "boolean"
-                    },
-                    "error": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Export_Health": {
-                "type": "object",
-                "title": "Export Health",
-                "properties": {
-                    "healthy": {
-                        "type": "boolean"
-                    },
-                    "checks": {
-                        "$ref": "#\/definitions\/Export_Health_Checks"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Export_Health"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/export\/health"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/export\/health"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/export\/health"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/health.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

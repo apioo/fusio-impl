@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Export\Api;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -44,68 +45,8 @@ class RoutesTest extends ControllerDbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/export\/routes",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Export_Routes_Paths": {
-                "type": "object",
-                "title": "Export Routes Paths",
-                "additionalProperties": {
-                    "$ref": "#\/definitions\/Export_Routes_Methods"
-                }
-            },
-            "Export_Routes_Methods": {
-                "type": "object",
-                "title": "Export Routes Methods",
-                "additionalProperties": {
-                    "type": "string"
-                }
-            },
-            "Export_Routes": {
-                "type": "object",
-                "title": "Export Routes",
-                "properties": {
-                    "routes": {
-                        "$ref": "#\/definitions\/Export_Routes_Paths"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Export_Routes"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/export\/routes"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/export\/routes"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/export\/routes"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/routes.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

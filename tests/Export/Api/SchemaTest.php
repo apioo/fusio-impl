@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Export\Api;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -45,77 +46,8 @@ class SchemaTest extends ControllerDbTestCase
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/export\/schema\/:name",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Export_Schema_JsonSchema": {
-                "type": "object",
-                "title": "Export Schema JsonSchema",
-                "description": "Contains a JsonSchema"
-            },
-            "Export_Schema_Form": {
-                "type": "object",
-                "title": "Export Schema Form",
-                "description": "Contains a ui vocabulary to augment the request JsonSchema"
-            },
-            "Export_Schema": {
-                "type": "object",
-                "title": "Export Schema",
-                "properties": {
-                    "schema": {
-                        "$ref": "#\/definitions\/Export_Schema_JsonSchema"
-                    },
-                    "form": {
-                        "$ref": "#\/definitions\/Export_Schema_Form"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Export_Schema"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/export\/schema\/:name"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/export\/schema\/:name"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/export\/schema\/:name"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/schema.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
