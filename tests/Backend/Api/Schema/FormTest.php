@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,77 +47,8 @@ class FormTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "schema_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Schema_Form": {
-                "type": "object",
-                "title": "Schema Form",
-                "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
-                "additionalProperties": true
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Schema_Form"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/schema\/form\/$schema_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/schema\/form\/$schema_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/schema\/form\/$schema_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/form.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

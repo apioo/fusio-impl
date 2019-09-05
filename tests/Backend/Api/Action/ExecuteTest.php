@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,116 +46,8 @@ class ExecuteTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "action_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Action_Request_Body": {
-                "type": "object",
-                "title": "Action Request Body",
-                "additionalProperties": true
-            },
-            "Action_Request": {
-                "type": "object",
-                "title": "Action Request",
-                "properties": {
-                    "method": {
-                        "type": "string",
-                        "pattern": "GET|POST|PUT|PATCH|DELETE"
-                    },
-                    "uriFragments": {
-                        "type": "string"
-                    },
-                    "parameters": {
-                        "type": "string"
-                    },
-                    "headers": {
-                        "type": "string"
-                    },
-                    "body": {
-                        "$ref": "#\/definitions\/Action_Request_Body"
-                    }
-                },
-                "required": [
-                    "method"
-                ]
-            },
-            "Action_Response_Headers": {
-                "type": "object",
-                "title": "Action Response Headers",
-                "additionalProperties": {
-                    "type": "string"
-                }
-            },
-            "Action_Response_Body": {
-                "type": "object",
-                "title": "Action Response Body",
-                "additionalProperties": true
-            },
-            "Action_Response": {
-                "type": "object",
-                "title": "Action Response",
-                "properties": {
-                    "statusCode": {
-                        "type": "integer"
-                    },
-                    "headers": {
-                        "$ref": "#\/definitions\/Action_Response_Headers"
-                    },
-                    "body": {
-                        "$ref": "#\/definitions\/Action_Response_Body"
-                    }
-                }
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Action_Request"
-            },
-            "POST-200-response": {
-                "$ref": "#\/definitions\/Action_Response"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "200": "#\/definitions\/POST-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/action\/execute\/$action_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/action\/execute\/$action_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/action\/execute\/$action_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/execute.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

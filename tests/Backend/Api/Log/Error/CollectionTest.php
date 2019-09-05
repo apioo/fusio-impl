@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Log\Error;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,97 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/log\/error",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Log_Error": {
-                "type": "object",
-                "title": "Log Error",
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    },
-                    "trace": {
-                        "type": "string"
-                    },
-                    "file": {
-                        "type": "string"
-                    },
-                    "line": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Log_Error_Collection": {
-                "type": "object",
-                "title": "Log Error Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Log_Error"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Log_Error_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/log\/error"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/log\/error"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/log\/error"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

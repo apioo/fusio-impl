@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Marketplace;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,145 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/marketplace",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Marketplace_Collection_Apps": {
-                "type": "object",
-                "title": "Marketplace Collection Apps",
-                "additionalProperties": {
-                    "$ref": "#\/definitions\/Marketplace_App_Remote"
-                }
-            },
-            "Marketplace_App_Remote": {
-                "type": "object",
-                "title": "Marketplace App Remote",
-                "properties": {
-                    "version": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "screenshot": {
-                        "type": "string"
-                    },
-                    "website": {
-                        "type": "string"
-                    },
-                    "downloadUrl": {
-                        "type": "string"
-                    },
-                    "sha1Hash": {
-                        "type": "string"
-                    },
-                    "local": {
-                        "$ref": "#\/definitions\/Marketplace_App"
-                    }
-                }
-            },
-            "Marketplace_App": {
-                "type": "object",
-                "title": "Marketplace App",
-                "properties": {
-                    "version": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "screenshot": {
-                        "type": "string"
-                    },
-                    "website": {
-                        "type": "string"
-                    },
-                    "downloadUrl": {
-                        "type": "string"
-                    },
-                    "sha1Hash": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Marketplace_Collection": {
-                "type": "object",
-                "title": "Marketplace Collection",
-                "properties": {
-                    "apps": {
-                        "$ref": "#\/definitions\/Marketplace_Collection_Apps"
-                    }
-                }
-            },
-            "Marketplace_Install": {
-                "type": "object",
-                "title": "Marketplace Install",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Marketplace_Collection"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Marketplace_Install"
-            },
-            "POST-201-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "201": "#\/definitions\/POST-201-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/marketplace"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/marketplace"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/marketplace"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

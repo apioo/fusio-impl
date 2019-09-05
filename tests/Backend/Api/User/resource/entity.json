@@ -1,0 +1,185 @@
+{
+  "path": "\/backend\/user\/$user_id<[0-9]+>",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "path-template": {
+        "type": "object",
+        "title": "path",
+        "properties": {
+          "user_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "App": {
+        "type": "object",
+        "title": "App",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/App_Token"
+            }
+          }
+        }
+      },
+      "App_Token": {
+        "type": "object",
+        "title": "App Token",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "expire": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User_Attributes": {
+        "type": "object",
+        "title": "User Attributes",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "User": {
+        "type": "object",
+        "title": "User",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          },
+          "email": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/App"
+            }
+          },
+          "attributes": {
+            "$ref": "#\/definitions\/User_Attributes"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "title": "Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/User"
+      },
+      "PUT-request": {
+        "$ref": "#\/definitions\/User"
+      },
+      "PUT-200-response": {
+        "$ref": "#\/definitions\/Message"
+      },
+      "DELETE-200-response": {
+        "$ref": "#\/definitions\/Message"
+      }
+    }
+  },
+  "pathParameters": "#\/definitions\/path-template",
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "PUT": {
+      "request": "#\/definitions\/PUT-request",
+      "responses": {
+        "200": "#\/definitions\/PUT-200-response"
+      }
+    },
+    "DELETE": {
+      "responses": {
+        "200": "#\/definitions\/DELETE-200-response"
+      }
+    }
+  }
+}

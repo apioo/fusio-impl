@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Audit;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,121 +46,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/audit\/$audit_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "audit_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Audit_App": {
-                "type": "object",
-                "title": "Audit App",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Audit_User": {
-                "type": "object",
-                "title": "Audit User",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Audit_Object": {
-                "type": "object",
-                "title": "Audit Object",
-                "description": "A key value object containing the changes"
-            },
-            "Audit": {
-                "type": "object",
-                "title": "Audit",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "app": {
-                        "$ref": "#\/definitions\/Audit_App"
-                    },
-                    "user": {
-                        "$ref": "#\/definitions\/Audit_User"
-                    },
-                    "event": {
-                        "type": "string"
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "$ref": "#\/definitions\/Audit_Object"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Audit"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/audit\/$audit_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/audit\/$audit_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/audit\/$audit_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

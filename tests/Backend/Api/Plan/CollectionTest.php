@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Plan;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,131 +47,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/plan",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Plan": {
-                "type": "object",
-                "title": "Plan",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    },
-                    "price": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "period": {
-                        "type": "integer"
-                    }
-                },
-                "required": [
-                    "name",
-                    "price"
-                ]
-            },
-            "Plan_Collection": {
-                "type": "object",
-                "title": "Plan Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Plan"
-                        }
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Plan_Collection"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Plan"
-            },
-            "POST-201-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "201": "#\/definitions\/POST-201-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/plan"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/plan"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/plan"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

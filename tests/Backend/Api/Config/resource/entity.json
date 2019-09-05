@@ -1,0 +1,90 @@
+{
+  "path": "\/backend\/config\/$config_id<[0-9]+>",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "path-template": {
+        "type": "object",
+        "title": "path",
+        "properties": {
+          "config_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Config": {
+        "type": "object",
+        "title": "Config",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "title": "Message",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Config"
+      },
+      "PUT-request": {
+        "$ref": "#\/definitions\/Config"
+      },
+      "PUT-200-response": {
+        "$ref": "#\/definitions\/Message"
+      }
+    }
+  },
+  "pathParameters": "#\/definitions\/path-template",
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    },
+    "PUT": {
+      "request": "#\/definitions\/PUT-request",
+      "responses": {
+        "200": "#\/definitions\/PUT-200-response"
+      }
+    }
+  }
+}

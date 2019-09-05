@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Transaction;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,128 +47,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/transaction",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "to": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "planId": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "appId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "provider": {
-                        "type": "string"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Transaction": {
-                "type": "object",
-                "title": "Transaction",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "transactionId": {
-                        "type": "string"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "updateDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "Transaction_Collection": {
-                "type": "object",
-                "title": "Transaction Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Transaction"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Transaction_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/transaction"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/transaction"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/transaction"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,69 +46,8 @@ class ListTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/action\/list",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Action_Action": {
-                "type": "object",
-                "title": "Action Action",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "class": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Action_Index": {
-                "type": "object",
-                "title": "Action Index",
-                "properties": {
-                    "actions": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Action_Action"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Action_Index"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/action\/list"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/action\/list"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/action\/list"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/list.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

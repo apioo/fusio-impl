@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\App\Token;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,128 +46,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/app\/token",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "to": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "appId": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "scope": {
-                        "type": "string"
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "App_Token": {
-                "type": "object",
-                "title": "App Token",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "token": {
-                        "type": "string"
-                    },
-                    "scope": {
-                        "type": "string"
-                    },
-                    "ip": {
-                        "type": "string"
-                    },
-                    "expire": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "date": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "App_Token_Collection": {
-                "type": "object",
-                "title": "App Token Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/App_Token"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/App_Token_Collection"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/app\/token"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/app\/token"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/app\/token"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Routes;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,69 +46,8 @@ class IndexTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/routes\/provider",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "Routes_Provider": {
-                "type": "object",
-                "title": "Routes Provider",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "class": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Routes_Providers": {
-                "type": "object",
-                "title": "Routes Providers",
-                "properties": {
-                    "providers": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Routes_Provider"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Routes_Providers"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/routes\/provider"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/routes\/provider"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/routes\/provider"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/index.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

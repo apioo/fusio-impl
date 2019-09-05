@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Cronjob;
 
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -48,137 +49,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "cronjob_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Cronjob_Error": {
-                "type": "object",
-                "title": "Cronjob Error",
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    },
-                    "trace": {
-                        "type": "string"
-                    },
-                    "file": {
-                        "type": "string"
-                    },
-                    "line": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Cronjob": {
-                "type": "object",
-                "title": "Cronjob",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-                    },
-                    "cron": {
-                        "type": "string"
-                    },
-                    "action": {
-                        "type": "integer"
-                    },
-                    "executeDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "exitCode": {
-                        "type": "integer"
-                    },
-                    "errors": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Cronjob_Error"
-                        }
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Cronjob"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Cronjob"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Message"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/cronjob\/$cronjob_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/cronjob\/$cronjob_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/cronjob\/$cronjob_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

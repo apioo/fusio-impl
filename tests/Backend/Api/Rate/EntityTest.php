@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Rate;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -46,139 +47,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/rate\/$rate_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "rate_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Rate_Allocation": {
-                "type": "object",
-                "title": "Rate Allocation",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "routeId": {
-                        "type": "integer"
-                    },
-                    "appId": {
-                        "type": "integer"
-                    },
-                    "authenticated": {
-                        "type": "boolean"
-                    },
-                    "parameters": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Rate": {
-                "type": "object",
-                "title": "Rate",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "priority": {
-                        "type": "integer",
-                        "minimum": 0
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-                    },
-                    "rateLimit": {
-                        "type": "integer",
-                        "minimum": 0
-                    },
-                    "timespan": {
-                        "type": "string",
-                        "format": "duration"
-                    },
-                    "allocation": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Rate_Allocation"
-                        }
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Rate"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Rate"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Message"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/rate\/$rate_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/rate\/$rate_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/rate\/$rate_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

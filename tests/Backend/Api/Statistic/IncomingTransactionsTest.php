@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Statistic;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,105 +46,8 @@ class IncomingTransactionsTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/statistic\/incoming_transactions",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "from": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "to": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "planId": {
-                        "type": "integer"
-                    },
-                    "userId": {
-                        "type": "integer"
-                    },
-                    "appId": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "provider": {
-                        "type": "string"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Statistic_Chart": {
-                "type": "object",
-                "title": "Statistic Chart",
-                "properties": {
-                    "labels": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "type": "array",
-                            "items": {
-                                "type": "number"
-                            }
-                        }
-                    },
-                    "series": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Statistic_Chart"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/statistic\/incoming_transactions"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/statistic\/incoming_transactions"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/statistic\/incoming_transactions"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/incoming_transactions.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

@@ -1,0 +1,46 @@
+{
+  "path": "\/backend\/connection\/list",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "Connection_Connection": {
+        "type": "object",
+        "title": "Connection Connection",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Connection_Index": {
+        "type": "object",
+        "title": "Connection Index",
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/definitions\/Connection_Connection"
+            }
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Connection_Index"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    }
+  }
+}

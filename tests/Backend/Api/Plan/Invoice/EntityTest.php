@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Plan\Invoice;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use Fusio\Impl\Table;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -47,148 +48,8 @@ class EntityTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "invoice_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Plan_User": {
-                "type": "object",
-                "title": "Plan User",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Plan_Invoice": {
-                "type": "object",
-                "title": "Plan Invoice",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "contractId": {
-                        "type": "integer"
-                    },
-                    "user": {
-                        "$ref": "#\/definitions\/Plan_User"
-                    },
-                    "transactionId": {
-                        "type": "integer"
-                    },
-                    "prevId": {
-                        "type": "integer"
-                    },
-                    "displayId": {
-                        "type": "string"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "amount": {
-                        "type": "number"
-                    },
-                    "points": {
-                        "type": "integer"
-                    },
-                    "fromDate": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "toDate": {
-                        "type": "string",
-                        "format": "date"
-                    },
-                    "payDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "insertDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Plan_Invoice"
-            },
-            "PUT-request": {
-                "$ref": "#\/definitions\/Plan_Invoice"
-            },
-            "PUT-200-response": {
-                "$ref": "#\/definitions\/Message"
-            },
-            "DELETE-200-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "GET": {
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "PUT": {
-            "request": "#\/definitions\/PUT-request",
-            "responses": {
-                "200": "#\/definitions\/PUT-200-response"
-            }
-        },
-        "DELETE": {
-            "responses": {
-                "200": "#\/definitions\/DELETE-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/plan\/invoice\/$invoice_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/entity.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

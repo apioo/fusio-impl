@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,130 +48,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/schema",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Schema": {
-                "type": "object",
-                "title": "Schema",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-                    },
-                    "source": {
-                        "$ref": "#\/definitions\/Schema_Source"
-                    }
-                },
-                "required": [
-                    "name"
-                ]
-            },
-            "Schema_Source": {
-                "type": "object",
-                "title": "Schema Source",
-                "additionalProperties": true
-            },
-            "Schema_Collection": {
-                "type": "object",
-                "title": "Schema Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Schema"
-                        }
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Schema_Collection"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Schema"
-            },
-            "POST-201-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "201": "#\/definitions\/POST-201-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/schema"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/schema"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/schema"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

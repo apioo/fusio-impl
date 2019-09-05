@@ -1,0 +1,94 @@
+{
+  "path": "\/backend\/statistic\/time_per_route",
+  "version": "*",
+  "status": 1,
+  "description": null,
+  "schema": {
+    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
+    "id": "urn:schema.phpsx.org#",
+    "definitions": {
+      "GET-query": {
+        "type": "object",
+        "title": "GetQuery",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "search": {
+            "type": "string"
+          }
+        }
+      },
+      "Statistic_Chart": {
+        "type": "object",
+        "title": "Statistic Chart",
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GET-200-response": {
+        "$ref": "#\/definitions\/Statistic_Chart"
+      }
+    }
+  },
+  "methods": {
+    "GET": {
+      "queryParameters": "#\/definitions\/GET-query",
+      "responses": {
+        "200": "#\/definitions\/GET-200-response"
+      }
+    }
+  }
+}

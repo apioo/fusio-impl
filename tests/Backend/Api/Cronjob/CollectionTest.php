@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\Api\Cronjob;
 
 use Fusio\Impl\Tests\Assert;
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
@@ -47,158 +48,8 @@ class CollectionTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/cronjob",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "GET-query": {
-                "type": "object",
-                "title": "GetQuery",
-                "properties": {
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "count": {
-                        "type": "integer"
-                    },
-                    "search": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Cronjob": {
-                "type": "object",
-                "title": "Cronjob",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string",
-                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-                    },
-                    "cron": {
-                        "type": "string"
-                    },
-                    "action": {
-                        "type": "integer"
-                    },
-                    "executeDate": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "exitCode": {
-                        "type": "integer"
-                    },
-                    "errors": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Cronjob_Error"
-                        }
-                    }
-                },
-                "required": [
-                    "name",
-                    "cron",
-                    "action"
-                ]
-            },
-            "Cronjob_Error": {
-                "type": "object",
-                "title": "Cronjob Error",
-                "properties": {
-                    "message": {
-                        "type": "string"
-                    },
-                    "trace": {
-                        "type": "string"
-                    },
-                    "file": {
-                        "type": "string"
-                    },
-                    "line": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Cronjob_Collection": {
-                "type": "object",
-                "title": "Cronjob Collection",
-                "properties": {
-                    "totalResults": {
-                        "type": "integer"
-                    },
-                    "startIndex": {
-                        "type": "integer"
-                    },
-                    "entry": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/definitions\/Cronjob"
-                        }
-                    }
-                }
-            },
-            "Message": {
-                "type": "object",
-                "title": "Message",
-                "properties": {
-                    "success": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-            },
-            "GET-200-response": {
-                "$ref": "#\/definitions\/Cronjob_Collection"
-            },
-            "POST-request": {
-                "$ref": "#\/definitions\/Cronjob"
-            },
-            "POST-201-response": {
-                "$ref": "#\/definitions\/Message"
-            }
-        }
-    },
-    "methods": {
-        "GET": {
-            "queryParameters": "#\/definitions\/GET-query",
-            "responses": {
-                "200": "#\/definitions\/GET-200-response"
-            }
-        },
-        "POST": {
-            "request": "#\/definitions\/POST-request",
-            "responses": {
-                "201": "#\/definitions\/POST-201-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/cronjob"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/cronjob"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/cronjob"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }

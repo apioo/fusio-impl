@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
@@ -45,64 +46,8 @@ class PreviewTest extends ControllerDbTestCase
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $actual = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
-    "version": "*",
-    "status": 1,
-    "description": null,
-    "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "definitions": {
-            "path-template": {
-                "type": "object",
-                "title": "path",
-                "properties": {
-                    "schema_id": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Schema_Preview_Response": {
-                "type": "object",
-                "title": "Schema Preview Response",
-                "properties": {
-                    "preview": {
-                        "type": "string"
-                    }
-                }
-            },
-            "POST-200-response": {
-                "$ref": "#\/definitions\/Schema_Preview_Response"
-            }
-        }
-    },
-    "pathParameters": "#\/definitions\/path-template",
-    "methods": {
-        "POST": {
-            "responses": {
-                "200": "#\/definitions\/POST-200-response"
-            }
-        }
-    },
-    "links": [
-        {
-            "rel": "openapi",
-            "href": "\/export\/openapi\/*\/backend\/schema\/preview\/$schema_id<[0-9]+>"
-        },
-        {
-            "rel": "swagger",
-            "href": "\/export\/swagger\/*\/backend\/schema\/preview\/$schema_id<[0-9]+>"
-        },
-        {
-            "rel": "raml",
-            "href": "\/export\/raml\/*\/backend\/schema\/preview\/$schema_id<[0-9]+>"
-        }
-    ]
-}
-JSON;
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/preview.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
