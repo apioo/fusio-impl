@@ -80,40 +80,36 @@
   },
   "links": [
     {
-      "rel": "client.php",
-      "href": "\/export\/client.php\/*\/foo"
+      "rel": "client-php",
+      "href": "\/export\/client-php\/*\/foo"
     },
     {
-      "rel": "client.typescript",
-      "href": "\/export\/client.typescript\/*\/foo"
+      "rel": "client-typescript",
+      "href": "\/export\/client-typescript\/*\/foo"
     },
     {
-      "rel": "markup.html",
-      "href": "\/export\/markup.html\/*\/foo"
+      "rel": "markup-html",
+      "href": "\/export\/markup-html\/*\/foo"
     },
     {
-      "rel": "markup.markdown",
-      "href": "\/export\/markup.markdown\/*\/foo"
+      "rel": "markup-markdown",
+      "href": "\/export\/markup-markdown\/*\/foo"
     },
     {
-      "rel": "server.php",
-      "href": "\/export\/server.php\/*\/foo"
+      "rel": "spec-jsonschema",
+      "href": "\/export\/spec-jsonschema\/*\/foo"
     },
     {
-      "rel": "spec.jsonschema",
-      "href": "\/export\/spec.jsonschema\/*\/foo"
+      "rel": "spec-openapi",
+      "href": "\/export\/spec-openapi\/*\/foo"
     },
     {
-      "rel": "spec.openapi",
-      "href": "\/export\/spec.openapi\/*\/foo"
+      "rel": "spec-raml",
+      "href": "\/export\/spec-raml\/*\/foo"
     },
     {
-      "rel": "spec.raml",
-      "href": "\/export\/spec.raml\/*\/foo"
-    },
-    {
-      "rel": "spec.swagger",
-      "href": "\/export\/spec.swagger\/*\/foo"
+      "rel": "spec-swagger",
+      "href": "\/export\/spec-swagger\/*\/foo"
     }
   ]
 }
