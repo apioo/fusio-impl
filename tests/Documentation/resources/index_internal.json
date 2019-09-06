@@ -540,7 +540,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/sdk",
+      "path": "\/backend\/scope\/$scope_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -551,7 +551,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/scope\/$scope_id<[0-9]+>",
+      "path": "\/backend\/sdk",
       "methods": [
         "GET",
         "POST",
