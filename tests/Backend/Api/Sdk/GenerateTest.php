@@ -65,15 +65,14 @@ class GenerateTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "types": {
-        "client.php": null,
-        "client.typescript": null,
-        "markup.html": null,
-        "markup.markdown": null,
-        "server.php": null,
-        "spec.jsonschema": null,
-        "spec.openapi": null,
-        "spec.raml": null,
-        "spec.swagger": null
+        "client-php": null,
+        "client-typescript": null,
+        "markup-html": null,
+        "markup-markdown": null,
+        "spec-jsonschema": null,
+        "spec-openapi": null,
+        "spec-raml": null,
+        "spec-swagger": null
     }
 }
 JSON;
@@ -88,7 +87,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'format' => 'client.php',
+            'format' => 'client-php',
         ]));
 
         $body = (string) $response->getBody();
@@ -97,7 +96,7 @@ JSON;
 {
     "success": true,
     "message": "SDK successfully generated",
-    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client.php.zip"
+    "link": "http:\/\/127.0.0.1\/sdk\/sdk-client-php.zip"
 }
 JSON;
 
