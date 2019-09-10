@@ -30,6 +30,7 @@ use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as Statuscode;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Generate
@@ -175,7 +176,7 @@ class Generate extends BackendApiAbstract
 
     private function moveToTrash($dir, $folderName)
     {
-        rename($dir, $this->config->get('psx_path_cache') . '/' . $folderName . '-' . uniqid());
+        (new Filesystem())->rename($dir, $this->config->get('psx_path_cache') . '/' . $folderName . '-' . uniqid());
     }
 
     private function getSdkDir()

@@ -27,6 +27,7 @@ use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\Options;
 use PSX\Http\Exception as StatusCode;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -59,6 +60,11 @@ class Installer
     private $config;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param \Fusio\Impl\Service\Marketplace\Repository\Local $localRepository
      * @param \Fusio\Impl\Service\Marketplace\Repository\Remote $remoteRepository
      * @param \PSX\Http\Client\ClientInterface $httpClient
@@ -70,6 +76,7 @@ class Installer
         $this->remoteRepository = $remoteRepository;
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->filesystem = new Filesystem();
     }
 
     public function install(string $name, UserContext $context): App
@@ -175,18 +182,14 @@ class Installer
 
     private function moveToPublic(string $appDir, App $app): void
     {
-        if (!rename($appDir, $this->config->get('psx_path_public') . '/' . $app->getName())) {
-            throw new StatusCode\InternalServerErrorException('Could not move app to public');
-        }
+        $this->filesystem->rename($appDir, $this->config->get('psx_path_public') . '/' . $app->getName());
     }
 
     private function moveToTrash(App $app): void
     {
         $appDir = $this->config->get('psx_path_public') . '/' . $app->getName();
 
-        if (!rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid())) {
-            throw new StatusCode\InternalServerErrorException('Could not move existing app to trash');
-        }
+        $this->filesystem->rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid());
     }
 
     private function replaceVariables(string $appDir)
