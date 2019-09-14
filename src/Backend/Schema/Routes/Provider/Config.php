@@ -19,28 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Schema\Routes;
+namespace Fusio\Impl\Backend\Schema\Routes\Provider;
 
 use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Provider
+ * Config
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Provider extends SchemaAbstract
+class Config extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Routes Provider');
-        $sb->string('path');
-        $sb->arrayType('scopes')
-            ->setItems(Property::getString());
-        $sb->objectType('config', $this->getSchema(Provider\Config::class));
+        $scalar = [Property::getString(), Property::getNumber(), Property::getBoolean(), Property::getNull()];
+        $value  = array_merge($scalar, [Property::getArray()->setItems(Property::get()->setOneOf($scalar))->setMaxItems(16)]);
 
+        $sb = $this->getSchemaBuilder('Routes Provider Config');
+        $sb->setAdditionalProperties(Property::get()->setOneOf($value));
+        $sb->setMaxProperties(16);
         return $sb->getProperty();
     }
 }
