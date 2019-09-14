@@ -64,99 +64,14 @@ class ProviderTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "form": {
-        "element": [
-            {
-                "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-                "type": "text",
-                "name": "table",
-                "title": "Table"
-            }
-        ]
-    },
-    "changelog": {
-        "schemas": [
-            {
-                "name": "Provider_Schema_Request",
-                "source": {
-                    "type": "object",
-                    "properties": {
-                        "title": {
-                            "type": "string"
-                        },
-                        "createDate": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "Provider_Schema_Response",
-                "source": {
-                    "type": "object",
-                    "properties": {
-                        "title": {
-                            "type": "string"
-                        },
-                        "createDate": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
-                    }
-                }
-            }
-        ],
-        "actions": [
-            {
-                "name": "Provider_Action",
-                "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-                "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-                "config": {
-                    "table": null
-                }
-            }
-        ],
-        "routes": [
-            {
-                "priority": 1,
-                "path": "\/table",
-                "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-                "scopes": [
-                    "foo",
-                    "bar"
-                ],
-                "config": [
-                    {
-                        "version": 1,
-                        "status": 4,
-                        "methods": {
-                            "GET": {
-                                "active": true,
-                                "public": true,
-                                "description": "Returns all entries on the table",
-                                "request": 0,
-                                "responses": {
-                                    "200": 1
-                                },
-                                "action": 0
-                            },
-                            "POST": {
-                                "active": true,
-                                "public": false,
-                                "description": "Creates a new entry on the table",
-                                "request": 0,
-                                "responses": {
-                                    "200": 1
-                                },
-                                "action": 0
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+    "element": [
+        {
+            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
+            "type": "text",
+            "name": "table",
+            "title": "Table"
+        }
+    ]
 }
 JSON;
 
@@ -266,12 +181,98 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'foo' => 'bar',
+            'table' => 'foobar'
         ]));
 
-        $body = (string) $response->getBody();
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "schemas": [
+        {
+            "name": "Provider_Schema_Request",
+            "source": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "createDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Provider_Schema_Response",
+            "source": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "createDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        }
+    ],
+    "actions": [
+        {
+            "name": "Provider_Action",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+            "config": {
+                "table": "foobar"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "priority": 1,
+            "path": "\/table",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+            "scopes": [
+                "foo",
+                "bar"
+            ],
+            "config": [
+                {
+                    "version": 1,
+                    "status": 4,
+                    "methods": {
+                        "GET": {
+                            "active": true,
+                            "public": true,
+                            "description": "Returns all entries on the table",
+                            "request": 0,
+                            "responses": {
+                                "200": 1
+                            },
+                            "action": 0
+                        },
+                        "POST": {
+                            "active": true,
+                            "public": false,
+                            "description": "Creates a new entry on the table",
+                            "request": 0,
+                            "responses": {
+                                "200": 1
+                            },
+                            "action": 0
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+JSON;
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testDelete()
