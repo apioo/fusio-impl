@@ -73,9 +73,11 @@ class RegisterCommandTest extends ControllerDbTestCase
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
+            Adapter\Graphql\Action\GraphqlProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
+            Adapter\Sql\Action\SqlSelect::class,
             Adapter\Sql\Action\SqlTable::class,
             Adapter\Util\Action\UtilStaticResponse::class,
             VoidAction::class,
@@ -203,9 +205,11 @@ JSON;
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
+            Adapter\Graphql\Action\GraphqlProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
+            Adapter\Sql\Action\SqlSelect::class,
             Adapter\Sql\Action\SqlTable::class,
             Adapter\Util\Action\UtilStaticResponse::class,
             VoidAction::class,
