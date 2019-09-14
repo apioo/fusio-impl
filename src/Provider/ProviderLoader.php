@@ -116,6 +116,7 @@ class ProviderLoader
                 Adapter\Http\Action\HttpProcessor::class,
                 Adapter\Php\Action\PhpProcessor::class,
                 Adapter\Php\Action\PhpSandbox::class,
+                Adapter\Sql\Action\SqlSelect::class,
                 Adapter\Sql\Action\SqlTable::class,
                 Adapter\Util\Action\UtilStaticResponse::class,
             ],
