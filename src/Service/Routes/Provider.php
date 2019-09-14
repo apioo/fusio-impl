@@ -157,19 +157,17 @@ class Provider
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName)
+    public function getChangelog(string $providerName, array $config)
     {
         $provider = $this->providerFactory->factory($providerName);
-        $result = [];
 
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
         $setup = new Setup();
-        $config = new Parameters([]);
 
-        $provider->setup($setup, '/[path]', $config);
+        $provider->setup($setup, '/[path]', new Parameters($config));
 
         return [
             'schemas' => $setup->getSchemas(),

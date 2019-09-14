@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Api\Routes;
 
-use Fusio\Engine\Form\Container;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
@@ -58,6 +57,12 @@ class Provider extends BackendApiAbstract
             ->addQueryParameter('class', Property::getString())
         );
 
+        $resource->addMethod(Resource\Factory::getMethod('PUT')
+            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider\Config::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes\Provider\Changelog::class))
+        );
+
         $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::BACKEND, ['backend'])
             ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider::class))
@@ -72,13 +77,18 @@ class Provider extends BackendApiAbstract
      */
     public function doGet(HttpContextInterface $context)
     {
-        $form = $this->routesProviderService->getForm($context->getUriFragment('provider'));
-        $changelog = $this->routesProviderService->getChangelog($context->getUriFragment('provider'));
+        return $this->routesProviderService->getForm($context->getUriFragment('provider'));
+    }
 
-        return [
-            'form' => $form,
-            'changelog' => $changelog,
-        ];
+    /**
+     * @inheritdoc
+     */
+    public function doPut($record, HttpContextInterface $context)
+    {
+        return $this->routesProviderService->getChangelog(
+            $context->getUriFragment('provider'),
+            $record->getProperties()
+        );
     }
 
     /**
