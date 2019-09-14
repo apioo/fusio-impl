@@ -84,6 +84,10 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
+            "name": "SQL-Select",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelect"
+        },
+        {
             "name": "SQL-Table",
             "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
         },

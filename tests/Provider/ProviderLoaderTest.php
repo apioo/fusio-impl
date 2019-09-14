@@ -46,6 +46,7 @@ class ProviderLoaderTest extends DbTestCase
                 'httpprocessor' => \Fusio\Adapter\Http\Action\HttpProcessor::class,
                 'phpprocessor' => \Fusio\Adapter\Php\Action\PhpProcessor::class,
                 'phpsandbox' => \Fusio\Adapter\Php\Action\PhpSandbox::class,
+                'sqlselect' => \Fusio\Adapter\Sql\Action\SqlSelect::class,
                 'sqltable' => \Fusio\Adapter\Sql\Action\SqlTable::class,
                 'utilstaticresponse' => \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
                 'stdclass' => \stdClass::class,

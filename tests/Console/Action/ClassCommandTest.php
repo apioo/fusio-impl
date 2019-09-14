@@ -55,10 +55,11 @@ class ClassCommandTest extends ControllerDbTestCase
 | Name                 | Class                                         |
 +----------------------+-----------------------------------------------+
 | File-Processor       | Fusio\Adapter\File\Action\FileProcessor       |
-| GraphQL-Processor    | Fusio\Adapter\GraphQL\Action\GraphQLProcessor |
+| GraphQL-Processor    | Fusio\Adapter\Graphql\Action\GraphqlProcessor |
 | HTTP-Processor       | Fusio\Adapter\Http\Action\HttpProcessor       |
 | PHP-Processor        | Fusio\Adapter\Php\Action\PhpProcessor         |
 | PHP-Sandbox          | Fusio\Adapter\Php\Action\PhpSandbox           |
+| SQL-Select           | Fusio\Adapter\Sql\Action\SqlSelect            |
 | SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable             |
 | Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse  |
 | Void-Action          | Fusio\Impl\Tests\Adapter\Test\VoidAction      |
