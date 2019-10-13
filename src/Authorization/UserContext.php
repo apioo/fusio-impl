@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Fusio\Engine\ContextInterface;
+
 /**
  * UserContext
  *
@@ -69,5 +71,10 @@ class UserContext
     public static function newCommandContext()
     {
         return self::newContext(1, 1);
+    }
+
+    public static function newActionContext(ContextInterface $context)
+    {
+        return self::newContext($context->getUser()->getId(), $context->getApp()->getId());
     }
 }
