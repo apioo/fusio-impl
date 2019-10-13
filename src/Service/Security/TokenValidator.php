@@ -100,7 +100,13 @@ class TokenValidator
             );
 
             if ($type == 'Bearer' && !empty($accessToken)) {
-                $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
+                $token = null;
+
+                try {
+                    $token = $this->getToken($accessToken, $context->getRouteId(), $requestMethod);
+                } catch (\UnexpectedValueException $e) {
+                    throw new UnauthorizedException($e->getMessage(), 'Bearer', $params);
+                }
 
                 if ($token instanceof Model\Token) {
                     $app  = $this->appRepository->get($token->getAppId());
