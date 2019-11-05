@@ -353,12 +353,12 @@ class NewInstallation
     public static function getScopeIdFromPath($path, array $scopes = null)
     {
         if (!empty($scopes)) {
-            $parts = array_filter(explode('/', $path));
+            $parts = array_values(array_filter(explode('/', $path)));
 
             $id = null;
             if (count($parts) > 1) {
                 $id = self::findScope($scopes, $parts[0] . '.' . $parts[1]);
-            } else {
+            } elseif (count($parts) > 0) {
                 $id = self::findScope($scopes, $parts[0]);
             }
 
