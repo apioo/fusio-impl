@@ -139,6 +139,10 @@ class Method
                 }
             }
 
+            if (isset($scopes[$method['method']])) {
+                $resourceMethod->setTags($scopes[$method['method']]);
+            }
+
             if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($schemaCache)) {
                 // if we are not in development mode and a cache is available
                 // use it
