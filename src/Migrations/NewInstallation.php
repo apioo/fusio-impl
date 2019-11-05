@@ -244,9 +244,38 @@ class NewInstallation
                 ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
             ],
             'fusio_scope' => [
-                ['name' => 'backend', 'description' => 'Access to the backend API'],
-                ['name' => 'consumer', 'description' => 'Consumer API endpoint'],
+                ['name' => 'backend', 'description' => 'Global access to the backend API'],
+                ['name' => 'consumer', 'description' => 'Global access to the consumer API'],
                 ['name' => 'authorization', 'description' => 'Authorization API endpoint'],
+                ['name' => 'backend.account', 'description' => ''],
+                ['name' => 'backend.action', 'description' => ''],
+                ['name' => 'backend.app', 'description' => ''],
+                ['name' => 'backend.audit', 'description' => ''],
+                ['name' => 'backend.config', 'description' => ''],
+                ['name' => 'backend.connection', 'description' => ''],
+                ['name' => 'backend.cronjob', 'description' => ''],
+                ['name' => 'backend.dashboard', 'description' => ''],
+                ['name' => 'backend.event', 'description' => ''],
+                ['name' => 'backend.import', 'description' => ''],
+                ['name' => 'backend.log', 'description' => ''],
+                ['name' => 'backend.marketplace', 'description' => ''],
+                ['name' => 'backend.plan', 'description' => ''],
+                ['name' => 'backend.rate', 'description' => ''],
+                ['name' => 'backend.routes', 'description' => ''],
+                ['name' => 'backend.schema', 'description' => ''],
+                ['name' => 'backend.scope', 'description' => ''],
+                ['name' => 'backend.sdk', 'description' => ''],
+                ['name' => 'backend.statistic', 'description' => ''],
+                ['name' => 'backend.transaction', 'description' => ''],
+                ['name' => 'backend.user', 'description' => ''],
+                ['name' => 'consumer.app', 'description' => ''],
+                ['name' => 'consumer.event', 'description' => ''],
+                ['name' => 'consumer.grant', 'description' => ''],
+                ['name' => 'consumer.plan', 'description' => ''],
+                ['name' => 'consumer.scope', 'description' => ''],
+                ['name' => 'consumer.subscription', 'description' => ''],
+                ['name' => 'consumer.transaction', 'description' => ''],
+                ['name' => 'consumer.user', 'description' => ''],
             ],
             'fusio_transaction' => [
             ],
@@ -301,7 +330,7 @@ class NewInstallation
 
         // scope routes
         foreach ($data['fusio_routes'] as $index => $row) {
-            $scopeId = self::getScopeIdFromPath($row['path']);
+            $scopeId = self::getScopeIdFromPath($row['path'], $data['fusio_scope']);
             if ($scopeId !== null) {
                 $data['fusio_scope_routes'][] = ['scope_id' => $scopeId, 'route_id' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
             }
@@ -321,14 +350,40 @@ class NewInstallation
         ], JSON_PRETTY_PRINT);
     }
 
-    public static function getScopeIdFromPath($path)
+    public static function getScopeIdFromPath($path, array $scopes = null)
     {
+        if (!empty($scopes)) {
+            $parts = array_filter(explode('/', $path));
+
+            $id = null;
+            if (count($parts) > 1) {
+                $id = self::findScope($scopes, $parts[0] . '.' . $parts[1]);
+            } else {
+                $id = self::findScope($scopes, $parts[0]);
+            }
+
+            if ($id !== null) {
+                return $id;
+            }
+        }
+
         if (strpos($path, '/backend') === 0) {
             return 1;
         } elseif (strpos($path, '/consumer') === 0) {
             return 2;
         } elseif (strpos($path, '/authorization') === 0) {
             return 3;
+        }
+
+        return null;
+    }
+
+    private static function findScope(array $scopes, string $name)
+    {
+        foreach ($scopes as $index => $scope) {
+            if ($scope['name'] == $name) {
+                return $index + 1;
+            }
         }
 
         return null;
