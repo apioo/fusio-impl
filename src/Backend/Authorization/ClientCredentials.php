@@ -80,11 +80,21 @@ class ClientCredentials extends ClientCredentialsAbstract
 
         if (!empty($userId)) {
             $scopes = ['backend', 'authorization'];
+            $scopes = array_merge($scopes, self::getScopes());
 
             // scopes
             $scopes = $this->userService->getValidScopes($userId, $scopes);
             if (empty($scopes)) {
                 throw new InvalidScopeException('No valid scope given');
+            }
+
+            $index = array_search('backend', $scopes);
+            if ($index !== false) {
+                // in this case the user has the global backend scope so he has
+                // the right to access every backend endpoint
+                unset($scopes[$index]);
+
+                $scopes = array_unique(array_merge($scopes, self::getScopes()));
             }
 
             // generate access token
@@ -98,5 +108,32 @@ class ClientCredentials extends ClientCredentialsAbstract
         } else {
             throw new InvalidClientException('Unknown credentials');
         }
+    }
+
+    private static function getScopes()
+    {
+        return [
+            'backend.account',
+            'backend.action',
+            'backend.app',
+            'backend.audit',
+            'backend.config',
+            'backend.connection',
+            'backend.cronjob',
+            'backend.dashboard',
+            'backend.event',
+            'backend.import',
+            'backend.log',
+            'backend.marketplace',
+            'backend.plan',
+            'backend.rate',
+            'backend.routes',
+            'backend.schema',
+            'backend.scope',
+            'backend.sdk',
+            'backend.statistic',
+            'backend.transaction',
+            'backend.user',
+        ];
     }
 }
