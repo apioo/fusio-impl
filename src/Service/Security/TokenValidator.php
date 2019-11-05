@@ -178,6 +178,10 @@ class TokenValidator
             // these are the scopes which are assigned to the token
             $entitledScopes = explode(',', $accessToken['scope']);
 
+            // if the user has a global scope like backend or consumer replace
+            // them with all sub scopes
+            $entitledScopes = $this->substituteGlobalScopes($entitledScopes);
+
             // get all scopes which are assigned to this route
             $sql = '    SELECT scope.name,
                                scope_routes.allow,
@@ -219,5 +223,29 @@ class TokenValidator
         }
 
         return null;
+    }
+
+    /**
+     * If the user has as entitled scope a global scope like backend or consumer
+     * he has the right to access every sub scope, so we add them to the
+     * entitled scopes
+     * 
+     * @param array $entitledScopes
+     * @return array
+     */
+    private function substituteGlobalScopes(array $entitledScopes): array
+    {
+        $globalScopes = ['backend', 'consumer'];
+        foreach ($globalScopes as $scope) {
+            $index = array_search($scope, $entitledScopes);
+            if ($index !== false) {
+                $result = $this->connection->fetchAll('SELECT * FROM fusio_scope WHERE name LIKE :name', ['name' => $scope . '.%']);
+                foreach ($result as $row) {
+                    $entitledScopes[] = $row['name'];
+                }
+            }
+        }
+
+        return array_unique($entitledScopes);
     }
 }
