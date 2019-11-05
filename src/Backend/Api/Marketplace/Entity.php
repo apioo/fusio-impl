@@ -67,17 +67,17 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('app_name', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Marketplace\LocalApp::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

@@ -54,7 +54,7 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.scope'])
             ->addQueryParameter('startIndex', Property::getInteger())
             ->addQueryParameter('count', Property::getInteger())
             ->addQueryParameter('search', Property::getString())
@@ -62,7 +62,7 @@ class Collection extends BackendApiAbstract
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.scope'])
             ->setRequest($this->schemaManager->getSchema(Schema\Scope\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );

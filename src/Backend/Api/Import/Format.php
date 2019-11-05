@@ -47,7 +47,7 @@ class Format extends BackendApiAbstract
         $resource->addPathParameter('format', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.import'])
             ->setRequest($this->schemaManager->getSchema(Schema\Import\Format\Schema::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Adapter\Extern::class))
         );

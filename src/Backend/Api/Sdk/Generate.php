@@ -55,12 +55,12 @@ class Generate extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.sdk'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Sdk\Types::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.sdk'])
             ->setRequest($this->schemaManager->getSchema(Schema\Sdk\Generate::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

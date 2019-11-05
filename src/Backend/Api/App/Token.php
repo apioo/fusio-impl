@@ -53,7 +53,7 @@ class Token extends BackendApiAbstract
         $resource->addPathParameter('token_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.app'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

@@ -54,7 +54,7 @@ class Execute extends BackendApiAbstract
         $resource->addPathParameter('action_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.action'])
             ->setRequest($this->schemaManager->getSchema(Schema\Action\Execute\Request::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Execute\Response::class))
         );

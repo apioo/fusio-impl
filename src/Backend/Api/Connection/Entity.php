@@ -64,18 +64,18 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('connection_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Connection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
             ->setRequest($this->schemaManager->getSchema(Schema\Connection\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

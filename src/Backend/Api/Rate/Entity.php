@@ -57,18 +57,18 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('rate_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Rate::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
             ->setRequest($this->schemaManager->getSchema(Schema\Rate\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

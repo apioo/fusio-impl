@@ -52,7 +52,7 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.config'])
             ->addQueryParameter('startIndex', Property::getInteger())
             ->addQueryParameter('count', Property::getInteger())
             ->addQueryParameter('search', Property::getString())

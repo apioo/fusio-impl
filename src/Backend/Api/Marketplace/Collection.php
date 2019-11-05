@@ -63,11 +63,12 @@ class Collection extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Marketplace\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
+            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
             ->setRequest($this->schemaManager->getSchema(Schema\Marketplace\Install::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );

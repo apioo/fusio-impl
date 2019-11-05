@@ -48,7 +48,7 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('audit_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.audit'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Audit::class))
         );
 

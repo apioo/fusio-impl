@@ -52,19 +52,19 @@ class Provider extends BackendApiAbstract
         $resource->addPathParameter('provider', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Form\Container::class))
             ->addQueryParameter('class', Property::getString())
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
             ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider\Config::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes\Provider\Changelog::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
             ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );

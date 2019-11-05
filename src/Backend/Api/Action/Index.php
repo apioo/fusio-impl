@@ -50,7 +50,7 @@ class Index extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.action'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Index::class))
         );
 

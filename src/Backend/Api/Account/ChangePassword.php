@@ -50,7 +50,7 @@ class ChangePassword extends BackendApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.account'])
             ->setRequest($this->schemaManager->getSchema(Schema\Account\ChangePassword::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

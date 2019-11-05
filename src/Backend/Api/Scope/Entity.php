@@ -56,18 +56,18 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('scope_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.scope'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Scope::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.scope'])
             ->setRequest($this->schemaManager->getSchema(Schema\Scope\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.scope'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

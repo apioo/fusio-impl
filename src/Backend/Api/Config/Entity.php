@@ -54,12 +54,12 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('config_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.config'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Config::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.config'])
             ->setRequest($this->schemaManager->getSchema(Schema\Config\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

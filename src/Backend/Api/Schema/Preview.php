@@ -52,7 +52,7 @@ class Preview extends BackendApiAbstract
         $resource->addPathParameter('schema_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.schema'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Schema\Preview\Response::class))
         );
 

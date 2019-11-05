@@ -56,12 +56,12 @@ class Entity extends BackendApiAbstract
         $resource->addPathParameter('invoice_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.plan'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Invoice::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
+            ->setSecurity(Authorization::BACKEND, ['backend.plan'])
             ->setRequest($this->schemaManager->getSchema(Schema\Plan\Invoice\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
