@@ -40,6 +40,7 @@ use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 use PSX\Record\Record;
+use PSX\Record\RecordInterface;
 
 /**
  * SchemaApiController
@@ -235,6 +236,14 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     {
         $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->context->getApp(), $this->context->getUser());
+
+        if (!$record instanceof RecordInterface) {
+            // in case the record is not an RecordInterface, this means the
+            // schema traverser has produced a different instance we put the
+            // result into the passthru record so the action can access the raw
+            // request object
+            $record = new PassthruRecord($record);
+        }
 
         $request  = new Request($httpContext, $record);
         $response = null;
