@@ -63,6 +63,8 @@ class PassthruRecord extends Record
             return $payload;
         } elseif ($payload instanceof \stdClass) {
             return (array) $payload;
+        } elseif ($payload instanceof \ArrayObject) {
+            return $payload->getArrayCopy();
         } else {
             return [];
         }
