@@ -52,7 +52,7 @@ class Prepare extends ConsumerApiAbstract
         $resource->addPathParameter('provider', Property::getString());
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.transaction'])
             ->setRequest($this->schemaManager->getSchema(Schema\Transaction\Prepare\Request::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Prepare\Response::class))
         );

@@ -47,7 +47,7 @@ class Entity extends ConsumerApiAbstract
         $resource->addPathParameter('plan_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.plan'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan::class))
         );
 

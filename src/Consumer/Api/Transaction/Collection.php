@@ -45,7 +45,7 @@ class Collection extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.transaction'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Collection::class))
         );
 

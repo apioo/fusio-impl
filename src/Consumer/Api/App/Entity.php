@@ -56,18 +56,18 @@ class Entity extends ConsumerApiAbstract
         $resource->addPathParameter('app_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.app'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\App::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.app'])
             ->setRequest($this->schemaManager->getSchema(Schema\App\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.app'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

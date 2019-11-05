@@ -51,12 +51,12 @@ class Account extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\User\Account::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
             ->setRequest($this->schemaManager->getSchema(Schema\User\Account::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

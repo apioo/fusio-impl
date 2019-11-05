@@ -54,12 +54,12 @@ class Collection extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.app'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Collection::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.app'])
             ->setRequest($this->schemaManager->getSchema(Schema\App\Create::class))
             ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );

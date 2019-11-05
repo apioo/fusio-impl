@@ -53,18 +53,18 @@ class Entity extends ConsumerApiAbstract
         $resource->addPathParameter('subscription_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Subscription::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
             ->setRequest($this->schemaManager->getSchema(Schema\Subscription\Update::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 

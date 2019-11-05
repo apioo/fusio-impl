@@ -50,7 +50,7 @@ class ChangePassword extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
             ->setRequest($this->schemaManager->getSchema(Schema\User\ChangePassword::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );

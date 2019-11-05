@@ -54,7 +54,7 @@ class Entity extends ConsumerApiAbstract
         $resource->addPathParameter('grant_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer']));
+            ->setSecurity(Authorization::CONSUMER, ['consumer.grant']));
 
         return $resource;
     }

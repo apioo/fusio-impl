@@ -47,7 +47,7 @@ class Entity extends ConsumerApiAbstract
         $resource->addPathParameter('transaction_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.transaction'])
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction::class))
         );
 

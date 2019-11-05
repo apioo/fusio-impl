@@ -54,14 +54,14 @@ class Authorize extends ConsumerApiAbstract
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
             ->addQueryParameter('client_id', Property::getString())
             ->addQueryParameter('scope', Property::getString())
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Meta::class))
         );
 
         $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer'])
+            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
             ->setRequest($this->schemaManager->getSchema(Schema\Authorize\Request::class))
             ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Response::class))
         );
