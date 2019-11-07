@@ -12,7 +12,7 @@ final class Version20191022185247 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
-        $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_scope WHERE name = :name', ['backend.account']);
+        $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_scope WHERE name = :name', ['name' => 'backend.account']);
         $this->skipIf($count > 0, 'Scopes already available');
 
         $scopes = [
