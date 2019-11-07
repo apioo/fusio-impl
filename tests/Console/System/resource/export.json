@@ -10,119 +10,119 @@
     },
     {
       "name": "consumer.user",
-      "description": ""
+      "description": "Edit your account settings"
     },
     {
       "name": "consumer.transaction",
-      "description": ""
+      "description": "Execute transactions"
     },
     {
       "name": "consumer.subscription",
-      "description": ""
+      "description": "View and manage your subscriptions"
     },
     {
       "name": "consumer.scope",
-      "description": ""
+      "description": "View available scopes"
     },
     {
       "name": "consumer.plan",
-      "description": ""
+      "description": "View available plans"
     },
     {
       "name": "consumer.grant",
-      "description": ""
+      "description": "View and manage your grants"
     },
     {
       "name": "consumer.event",
-      "description": ""
+      "description": "View and manage your events"
     },
     {
       "name": "consumer.app",
-      "description": ""
+      "description": "View and manage your apps"
     },
     {
       "name": "backend.user",
-      "description": ""
+      "description": "View and manage users"
     },
     {
       "name": "backend.transaction",
-      "description": ""
+      "description": "View transactions"
     },
     {
       "name": "backend.statistic",
-      "description": ""
+      "description": "View statistics"
     },
     {
       "name": "backend.sdk",
-      "description": ""
+      "description": "Generate client SDKs"
     },
     {
       "name": "backend.scope",
-      "description": ""
+      "description": "View and manage scopes"
     },
     {
       "name": "backend.schema",
-      "description": ""
+      "description": "View and manage schemas"
     },
     {
       "name": "backend.routes",
-      "description": ""
+      "description": "View and manage routes"
     },
     {
       "name": "backend.rate",
-      "description": ""
+      "description": "View and manage rates"
     },
     {
       "name": "backend.plan",
-      "description": ""
+      "description": "View and manage plans"
     },
     {
       "name": "backend.marketplace",
-      "description": ""
+      "description": "View and manage apps from the marketplace"
     },
     {
       "name": "backend.log",
-      "description": ""
+      "description": "View logs"
     },
     {
       "name": "backend.import",
-      "description": ""
+      "description": "Execute import"
     },
     {
       "name": "backend.event",
-      "description": ""
+      "description": "View and manage events"
     },
     {
       "name": "backend.dashboard",
-      "description": ""
+      "description": "View dashboard statistic"
     },
     {
       "name": "backend.cronjob",
-      "description": ""
+      "description": "View and manage cronjob entries"
     },
     {
       "name": "backend.connection",
-      "description": ""
+      "description": "View and manage connections"
     },
     {
       "name": "backend.config",
-      "description": ""
+      "description": "View and edit config entries"
     },
     {
       "name": "backend.audit",
-      "description": ""
+      "description": "View audits"
     },
     {
       "name": "backend.app",
-      "description": ""
+      "description": "View and manage apps"
     },
     {
       "name": "backend.action",
-      "description": ""
+      "description": "View and manage actions"
     },
     {
       "name": "backend.account",
-      "description": ""
+      "description": "Option to change the password of your account"
     },
     {
       "name": "authorization",

@@ -80,72 +80,72 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 32,
             "name": "consumer.user",
-            "description": ""
+            "description": "Edit your account settings"
         },
         {
             "id": 31,
             "name": "consumer.transaction",
-            "description": ""
+            "description": "Execute transactions"
         },
         {
             "id": 30,
             "name": "consumer.subscription",
-            "description": ""
+            "description": "View and manage your subscriptions"
         },
         {
             "id": 29,
             "name": "consumer.scope",
-            "description": ""
+            "description": "View available scopes"
         },
         {
             "id": 28,
             "name": "consumer.plan",
-            "description": ""
+            "description": "View available plans"
         },
         {
             "id": 27,
             "name": "consumer.grant",
-            "description": ""
+            "description": "View and manage your grants"
         },
         {
             "id": 26,
             "name": "consumer.event",
-            "description": ""
+            "description": "View and manage your events"
         },
         {
             "id": 25,
             "name": "consumer.app",
-            "description": ""
+            "description": "View and manage your apps"
         },
         {
             "id": 24,
             "name": "backend.user",
-            "description": ""
+            "description": "View and manage users"
         },
         {
             "id": 23,
             "name": "backend.transaction",
-            "description": ""
+            "description": "View transactions"
         },
         {
             "id": 22,
             "name": "backend.statistic",
-            "description": ""
+            "description": "View statistics"
         },
         {
             "id": 21,
             "name": "backend.sdk",
-            "description": ""
+            "description": "Generate client SDKs"
         },
         {
             "id": 20,
             "name": "backend.scope",
-            "description": ""
+            "description": "View and manage scopes"
         },
         {
             "id": 19,
             "name": "backend.schema",
-            "description": ""
+            "description": "View and manage schemas"
         }
     ]
 }
@@ -209,147 +209,147 @@ JSON;
         {
             "id": 32,
             "name": "consumer.user",
-            "description": ""
+            "description": "Edit your account settings"
         },
         {
             "id": 31,
             "name": "consumer.transaction",
-            "description": ""
+            "description": "Execute transactions"
         },
         {
             "id": 30,
             "name": "consumer.subscription",
-            "description": ""
+            "description": "View and manage your subscriptions"
         },
         {
             "id": 29,
             "name": "consumer.scope",
-            "description": ""
+            "description": "View available scopes"
         },
         {
             "id": 28,
             "name": "consumer.plan",
-            "description": ""
+            "description": "View available plans"
         },
         {
             "id": 27,
             "name": "consumer.grant",
-            "description": ""
+            "description": "View and manage your grants"
         },
         {
             "id": 26,
             "name": "consumer.event",
-            "description": ""
+            "description": "View and manage your events"
         },
         {
             "id": 25,
             "name": "consumer.app",
-            "description": ""
+            "description": "View and manage your apps"
         },
         {
             "id": 24,
             "name": "backend.user",
-            "description": ""
+            "description": "View and manage users"
         },
         {
             "id": 23,
             "name": "backend.transaction",
-            "description": ""
+            "description": "View transactions"
         },
         {
             "id": 22,
             "name": "backend.statistic",
-            "description": ""
+            "description": "View statistics"
         },
         {
             "id": 21,
             "name": "backend.sdk",
-            "description": ""
+            "description": "Generate client SDKs"
         },
         {
             "id": 20,
             "name": "backend.scope",
-            "description": ""
+            "description": "View and manage scopes"
         },
         {
             "id": 19,
             "name": "backend.schema",
-            "description": ""
+            "description": "View and manage schemas"
         },
         {
             "id": 18,
             "name": "backend.routes",
-            "description": ""
+            "description": "View and manage routes"
         },
         {
             "id": 17,
             "name": "backend.rate",
-            "description": ""
+            "description": "View and manage rates"
         },
         {
             "id": 16,
             "name": "backend.plan",
-            "description": ""
+            "description": "View and manage plans"
         },
         {
             "id": 15,
             "name": "backend.marketplace",
-            "description": ""
+            "description": "View and manage apps from the marketplace"
         },
         {
             "id": 14,
             "name": "backend.log",
-            "description": ""
+            "description": "View logs"
         },
         {
             "id": 13,
             "name": "backend.import",
-            "description": ""
+            "description": "Execute import"
         },
         {
             "id": 12,
             "name": "backend.event",
-            "description": ""
+            "description": "View and manage events"
         },
         {
             "id": 11,
             "name": "backend.dashboard",
-            "description": ""
+            "description": "View dashboard statistic"
         },
         {
             "id": 10,
             "name": "backend.cronjob",
-            "description": ""
+            "description": "View and manage cronjob entries"
         },
         {
             "id": 9,
             "name": "backend.connection",
-            "description": ""
+            "description": "View and manage connections"
         },
         {
             "id": 8,
             "name": "backend.config",
-            "description": ""
+            "description": "View and edit config entries"
         },
         {
             "id": 7,
             "name": "backend.audit",
-            "description": ""
+            "description": "View audits"
         },
         {
             "id": 6,
             "name": "backend.app",
-            "description": ""
+            "description": "View and manage apps"
         },
         {
             "id": 5,
             "name": "backend.action",
-            "description": ""
+            "description": "View and manage actions"
         },
         {
             "id": 4,
             "name": "backend.account",
-            "description": ""
+            "description": "Option to change the password of your account"
         },
         {
             "id": 3,
