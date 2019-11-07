@@ -63,34 +63,89 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 34,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 5,
+            "id": 34,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 4,
+            "id": 33,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 3,
-            "name": "authorization",
-            "description": "Authorization API endpoint"
+            "id": 32,
+            "name": "consumer.user",
+            "description": ""
         },
         {
-            "id": 2,
-            "name": "consumer",
-            "description": "Consumer API endpoint"
+            "id": 31,
+            "name": "consumer.transaction",
+            "description": ""
         },
         {
-            "id": 1,
-            "name": "backend",
-            "description": "Access to the backend API"
+            "id": 30,
+            "name": "consumer.subscription",
+            "description": ""
+        },
+        {
+            "id": 29,
+            "name": "consumer.scope",
+            "description": ""
+        },
+        {
+            "id": 28,
+            "name": "consumer.plan",
+            "description": ""
+        },
+        {
+            "id": 27,
+            "name": "consumer.grant",
+            "description": ""
+        },
+        {
+            "id": 26,
+            "name": "consumer.event",
+            "description": ""
+        },
+        {
+            "id": 25,
+            "name": "consumer.app",
+            "description": ""
+        },
+        {
+            "id": 24,
+            "name": "backend.user",
+            "description": ""
+        },
+        {
+            "id": 23,
+            "name": "backend.transaction",
+            "description": ""
+        },
+        {
+            "id": 22,
+            "name": "backend.statistic",
+            "description": ""
+        },
+        {
+            "id": 21,
+            "name": "backend.sdk",
+            "description": ""
+        },
+        {
+            "id": 20,
+            "name": "backend.scope",
+            "description": ""
+        },
+        {
+            "id": 19,
+            "name": "backend.schema",
+            "description": ""
         }
     ]
 }
@@ -115,7 +170,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 33,
             "name": "foo",
             "description": "Foo access"
         }
@@ -137,19 +192,164 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 34,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 5,
+            "id": 34,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 4,
+            "id": 33,
             "name": "foo",
             "description": "Foo access"
+        },
+        {
+            "id": 32,
+            "name": "consumer.user",
+            "description": ""
+        },
+        {
+            "id": 31,
+            "name": "consumer.transaction",
+            "description": ""
+        },
+        {
+            "id": 30,
+            "name": "consumer.subscription",
+            "description": ""
+        },
+        {
+            "id": 29,
+            "name": "consumer.scope",
+            "description": ""
+        },
+        {
+            "id": 28,
+            "name": "consumer.plan",
+            "description": ""
+        },
+        {
+            "id": 27,
+            "name": "consumer.grant",
+            "description": ""
+        },
+        {
+            "id": 26,
+            "name": "consumer.event",
+            "description": ""
+        },
+        {
+            "id": 25,
+            "name": "consumer.app",
+            "description": ""
+        },
+        {
+            "id": 24,
+            "name": "backend.user",
+            "description": ""
+        },
+        {
+            "id": 23,
+            "name": "backend.transaction",
+            "description": ""
+        },
+        {
+            "id": 22,
+            "name": "backend.statistic",
+            "description": ""
+        },
+        {
+            "id": 21,
+            "name": "backend.sdk",
+            "description": ""
+        },
+        {
+            "id": 20,
+            "name": "backend.scope",
+            "description": ""
+        },
+        {
+            "id": 19,
+            "name": "backend.schema",
+            "description": ""
+        },
+        {
+            "id": 18,
+            "name": "backend.routes",
+            "description": ""
+        },
+        {
+            "id": 17,
+            "name": "backend.rate",
+            "description": ""
+        },
+        {
+            "id": 16,
+            "name": "backend.plan",
+            "description": ""
+        },
+        {
+            "id": 15,
+            "name": "backend.marketplace",
+            "description": ""
+        },
+        {
+            "id": 14,
+            "name": "backend.log",
+            "description": ""
+        },
+        {
+            "id": 13,
+            "name": "backend.import",
+            "description": ""
+        },
+        {
+            "id": 12,
+            "name": "backend.event",
+            "description": ""
+        },
+        {
+            "id": 11,
+            "name": "backend.dashboard",
+            "description": ""
+        },
+        {
+            "id": 10,
+            "name": "backend.cronjob",
+            "description": ""
+        },
+        {
+            "id": 9,
+            "name": "backend.connection",
+            "description": ""
+        },
+        {
+            "id": 8,
+            "name": "backend.config",
+            "description": ""
+        },
+        {
+            "id": 7,
+            "name": "backend.audit",
+            "description": ""
+        },
+        {
+            "id": 6,
+            "name": "backend.app",
+            "description": ""
+        },
+        {
+            "id": 5,
+            "name": "backend.action",
+            "description": ""
+        },
+        {
+            "id": 4,
+            "name": "backend.account",
+            "description": ""
         },
         {
             "id": 3,
@@ -159,12 +359,12 @@ JSON;
         {
             "id": 2,
             "name": "consumer",
-            "description": "Consumer API endpoint"
+            "description": "Global access to the consumer API"
         },
         {
             "id": 1,
             "name": "backend",
-            "description": "Access to the backend API"
+            "description": "Global access to the backend API"
         }
     ]
 }
@@ -215,7 +415,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(6, $row['id']);
+        $this->assertEquals(35, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 
@@ -226,17 +426,17 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 6]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 35]);
 
         $this->assertEquals([[
             'id'       => 100,
-            'scope_id' => 6,
+            'scope_id' => 35,
             'route_id' => 2,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
             'id'       => 99,
-            'scope_id' => 6,
+            'scope_id' => 35,
             'route_id' => 1,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',

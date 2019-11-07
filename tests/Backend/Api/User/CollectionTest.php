@@ -251,11 +251,11 @@ JSON;
         $this->assertEquals([[
             'id'       => 17,
             'user_id'  => 6,
-            'scope_id' => 4,
+            'scope_id' => 33,
         ], [
             'id'       => 16,
             'user_id'  => 6,
-            'scope_id' => 5,
+            'scope_id' => 34,
         ]], $routes);
     }
 

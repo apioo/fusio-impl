@@ -55,7 +55,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/scope/5', 'GET', array(
+        $response = $this->sendRequest('/backend/scope/34', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -63,27 +63,27 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 5,
+    "id": 34,
     "name": "bar",
     "description": "Bar access",
     "routes": [
         {
             "id": 98,
-            "scopeId": 5,
+            "scopeId": 34,
             "routeId": 106,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 97,
-            "scopeId": 5,
+            "scopeId": 34,
             "routeId": 105,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 96,
-            "scopeId": 5,
+            "scopeId": 34,
             "routeId": 104,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
@@ -100,7 +100,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/scope/10', 'GET', array(
+        $response = $this->sendRequest('/backend/scope/100', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -134,7 +134,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/scope/5', 'PUT', array(
+        $response = $this->sendRequest('/backend/scope/34', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -163,17 +163,17 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(34, $row['id']);
         $this->assertEquals('Test', $row['name']);
     }
 
     public function testDelete()
     {
         // delete all scope references to successful delete an scope
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 34]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 34]);
 
-        $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/34', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -200,14 +200,14 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(4, $row['id']);
+        $this->assertEquals(33, $row['id']);
     }
 
     public function testDeleteAppScopeAssigned()
     {
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => 34]);
 
-        $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/34', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -228,14 +228,14 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(34, $row['id']);
     }
 
     public function testDeleteUserScopeAssigned()
     {
-        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 5]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => 34]);
 
-        $response = $this->sendRequest('/backend/scope/5', 'DELETE', array(
+        $response = $this->sendRequest('/backend/scope/34', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -256,6 +256,6 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(34, $row['id']);
     }
 }
