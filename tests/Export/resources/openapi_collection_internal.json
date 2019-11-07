@@ -37,7 +37,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.account"
             ]
           }
         ]
@@ -88,7 +88,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -119,7 +119,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -144,7 +144,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -179,7 +179,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -213,7 +213,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -247,7 +247,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -278,7 +278,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -300,7 +300,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.action"
             ]
           }
         ]
@@ -418,7 +418,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -443,7 +443,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -503,7 +503,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -534,7 +534,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -559,7 +559,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -590,7 +590,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -612,7 +612,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -646,7 +646,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.app"
             ]
           }
         ]
@@ -772,7 +772,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.audit"
             ]
           }
         ]
@@ -797,7 +797,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.audit"
             ]
           }
         ]
@@ -857,7 +857,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.config"
             ]
           }
         ]
@@ -882,7 +882,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.config"
             ]
           }
         ]
@@ -913,7 +913,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.config"
             ]
           }
         ]
@@ -973,7 +973,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1004,7 +1004,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1029,7 +1029,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1064,7 +1064,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1089,7 +1089,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1120,7 +1120,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1142,7 +1142,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.connection"
             ]
           }
         ]
@@ -1202,7 +1202,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.cronjob"
             ]
           }
         ]
@@ -1229,7 +1229,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.cronjob"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1251,7 +1258,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.cronjob"
             ]
           }
         ]
@@ -1282,7 +1289,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.cronjob"
             ]
           }
         ]
@@ -1304,7 +1311,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.cronjob"
             ]
           }
         ]
@@ -1338,7 +1345,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.dashboard"
             ]
           }
         ]
@@ -1389,7 +1396,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.event"
             ]
           }
         ]
@@ -1416,7 +1423,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.event"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1438,7 +1452,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.event"
             ]
           }
         ]
@@ -1469,7 +1483,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.event"
             ]
           }
         ]
@@ -1491,7 +1505,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.event"
             ]
           }
         ]
@@ -1534,7 +1548,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.import"
             ]
           }
         ]
@@ -1568,7 +1582,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.import"
             ]
           }
         ]
@@ -1628,7 +1642,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.log"
             ]
           }
         ]
@@ -1653,7 +1667,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.log"
             ]
           }
         ]
@@ -1803,7 +1817,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.log"
             ]
           }
         ]
@@ -1828,7 +1842,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.log"
             ]
           }
         ]
@@ -1862,7 +1876,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.marketplace"
             ]
           }
         ]
@@ -1889,7 +1903,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.marketplace"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -1911,7 +1932,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.marketplace"
             ]
           }
         ]
@@ -1933,7 +1954,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.marketplace"
             ]
           }
         ]
@@ -1955,7 +1976,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.marketplace"
             ]
           }
         ]
@@ -2015,7 +2036,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2042,7 +2063,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.plan"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2064,7 +2092,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2095,7 +2123,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2117,7 +2145,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2177,7 +2205,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2204,7 +2232,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.plan"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2226,7 +2261,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2257,7 +2292,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2339,7 +2374,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2366,7 +2401,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.plan"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2388,7 +2430,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2419,7 +2461,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2441,7 +2483,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.plan"
             ]
           }
         ]
@@ -2501,7 +2543,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.rate"
             ]
           }
         ]
@@ -2528,7 +2570,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.rate"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -2550,7 +2599,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.rate"
             ]
           }
         ]
@@ -2581,7 +2630,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.rate"
             ]
           }
         ]
@@ -2603,7 +2652,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.rate"
             ]
           }
         ]
@@ -2663,7 +2712,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2694,7 +2743,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2719,7 +2768,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2754,7 +2803,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2785,7 +2834,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2816,7 +2865,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2850,7 +2899,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2881,7 +2930,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2903,7 +2952,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.routes"
             ]
           }
         ]
@@ -2963,7 +3012,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -2994,7 +3043,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3019,7 +3068,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3062,7 +3111,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3096,7 +3145,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3127,7 +3176,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3149,7 +3198,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.schema"
             ]
           }
         ]
@@ -3209,7 +3258,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.scope"
             ]
           }
         ]
@@ -3240,7 +3289,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.scope"
             ]
           }
         ]
@@ -3265,7 +3314,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.scope"
             ]
           }
         ]
@@ -3296,7 +3345,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.scope"
             ]
           }
         ]
@@ -3318,7 +3367,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.scope"
             ]
           }
         ]
@@ -3352,7 +3401,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.sdk"
             ]
           }
         ]
@@ -3383,7 +3432,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.sdk"
             ]
           }
         ]
@@ -3508,7 +3557,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -3633,7 +3682,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -3758,7 +3807,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -3851,7 +3900,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -3944,7 +3993,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4069,7 +4118,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4194,7 +4243,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4319,7 +4368,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4444,7 +4493,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4521,7 +4570,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.statistic"
             ]
           }
         ]
@@ -4630,7 +4679,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.transaction"
             ]
           }
         ]
@@ -4655,7 +4704,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.transaction"
             ]
           }
         ]
@@ -4715,7 +4764,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.user"
             ]
           }
         ]
@@ -4742,7 +4791,14 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.user"
+            ]
+          }
+        ]
       },
       "parameters": []
     },
@@ -4764,7 +4820,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.user"
             ]
           }
         ]
@@ -4795,7 +4851,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.user"
             ]
           }
         ]
@@ -4817,7 +4873,7 @@
         "security": [
           {
             "backend": [
-              "backend"
+              "backend.user"
             ]
           }
         ]
@@ -4888,7 +4944,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.app"
             ]
           }
         ]
@@ -4919,7 +4975,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.app"
             ]
           }
         ]
@@ -4944,7 +5000,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.app"
             ]
           }
         ]
@@ -4975,7 +5031,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.app"
             ]
           }
         ]
@@ -4997,7 +5053,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.app"
             ]
           }
         ]
@@ -5031,7 +5087,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.event"
             ]
           }
         ]
@@ -5056,7 +5112,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.grant"
             ]
           }
         ]
@@ -5070,7 +5126,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.grant"
             ]
           }
         ]
@@ -5104,7 +5160,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5135,7 +5191,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5160,7 +5216,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5194,7 +5250,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5219,7 +5275,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5253,7 +5309,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5278,7 +5334,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.plan"
             ]
           }
         ]
@@ -5312,7 +5368,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.scope"
             ]
           }
         ]
@@ -5337,7 +5393,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.subscription"
             ]
           }
         ]
@@ -5368,7 +5424,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.subscription"
             ]
           }
         ]
@@ -5393,7 +5449,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.subscription"
             ]
           }
         ]
@@ -5424,7 +5480,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.subscription"
             ]
           }
         ]
@@ -5446,7 +5502,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.subscription"
             ]
           }
         ]
@@ -5480,7 +5536,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.transaction"
             ]
           }
         ]
@@ -5531,7 +5587,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.transaction"
             ]
           }
         ]
@@ -5565,7 +5621,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.transaction"
             ]
           }
         ]
@@ -5599,7 +5655,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.user"
             ]
           }
         ]
@@ -5630,7 +5686,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.user"
             ]
           }
         ]
@@ -5700,7 +5756,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.user"
             ]
           }
         ]
@@ -5731,7 +5787,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.user"
             ]
           }
         ]
@@ -5765,7 +5821,7 @@
         "security": [
           {
             "consumer": [
-              "consumer"
+              "consumer.user"
             ]
           }
         ]
@@ -9385,7 +9441,28 @@
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "backend": "Access to the backend API"
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.routes": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": "Global access to the backend API"
             }
           }
         }
@@ -9397,7 +9474,15 @@
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "consumer": "Consumer API endpoint"
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": "Global access to the consumer API"
             }
           }
         }

@@ -9,16 +9,132 @@
       "description": "Foo access"
     },
     {
+      "name": "consumer.user",
+      "description": ""
+    },
+    {
+      "name": "consumer.transaction",
+      "description": ""
+    },
+    {
+      "name": "consumer.subscription",
+      "description": ""
+    },
+    {
+      "name": "consumer.scope",
+      "description": ""
+    },
+    {
+      "name": "consumer.plan",
+      "description": ""
+    },
+    {
+      "name": "consumer.grant",
+      "description": ""
+    },
+    {
+      "name": "consumer.event",
+      "description": ""
+    },
+    {
+      "name": "consumer.app",
+      "description": ""
+    },
+    {
+      "name": "backend.user",
+      "description": ""
+    },
+    {
+      "name": "backend.transaction",
+      "description": ""
+    },
+    {
+      "name": "backend.statistic",
+      "description": ""
+    },
+    {
+      "name": "backend.sdk",
+      "description": ""
+    },
+    {
+      "name": "backend.scope",
+      "description": ""
+    },
+    {
+      "name": "backend.schema",
+      "description": ""
+    },
+    {
+      "name": "backend.routes",
+      "description": ""
+    },
+    {
+      "name": "backend.rate",
+      "description": ""
+    },
+    {
+      "name": "backend.plan",
+      "description": ""
+    },
+    {
+      "name": "backend.marketplace",
+      "description": ""
+    },
+    {
+      "name": "backend.log",
+      "description": ""
+    },
+    {
+      "name": "backend.import",
+      "description": ""
+    },
+    {
+      "name": "backend.event",
+      "description": ""
+    },
+    {
+      "name": "backend.dashboard",
+      "description": ""
+    },
+    {
+      "name": "backend.cronjob",
+      "description": ""
+    },
+    {
+      "name": "backend.connection",
+      "description": ""
+    },
+    {
+      "name": "backend.config",
+      "description": ""
+    },
+    {
+      "name": "backend.audit",
+      "description": ""
+    },
+    {
+      "name": "backend.app",
+      "description": ""
+    },
+    {
+      "name": "backend.action",
+      "description": ""
+    },
+    {
+      "name": "backend.account",
+      "description": ""
+    },
+    {
       "name": "authorization",
       "description": "Authorization API endpoint"
     },
     {
       "name": "consumer",
-      "description": "Consumer API endpoint"
+      "description": "Global access to the consumer API"
     },
     {
       "name": "backend",
-      "description": "Access to the backend API"
+      "description": "Global access to the backend API"
     }
   ],
   "connection": [

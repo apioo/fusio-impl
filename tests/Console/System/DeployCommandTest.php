@@ -200,12 +200,12 @@ JSON;
         ]);
 
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(4, $responses[0]['id']);
+        $this->assertEquals(33, $responses[0]['id']);
         $this->assertEquals('foo', $responses[0]['name']);
         $this->assertEquals('Foo access', $responses[0]['description']);
         $this->assertEquals(1, $responses[0]['allow']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[0]['methods']);
-        $this->assertEquals(5, $responses[1]['id']);
+        $this->assertEquals(34, $responses[1]['id']);
         $this->assertEquals('bar', $responses[1]['name']);
         $this->assertEquals('Bar access', $responses[1]['description']);
         $this->assertEquals(1, $responses[1]['allow']);
@@ -628,7 +628,7 @@ JSON;
             'name' => 'Foo-Scope',
         ]);
 
-        $this->assertEquals(6, $scope['id']);
+        $this->assertEquals(35, $scope['id']);
         $this->assertEquals('Foo-Scope', $scope['name']);
         $this->assertEquals('Foo scope', $scope['description']);
     }

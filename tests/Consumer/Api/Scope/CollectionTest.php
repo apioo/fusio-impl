@@ -70,12 +70,12 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "name": "backend",
-            "description": "Access to the backend API"
+            "description": "Global access to the backend API"
         },
         {
             "id": 2,
             "name": "consumer",
-            "description": "Consumer API endpoint"
+            "description": "Global access to the consumer API"
         },
         {
             "id": 3,
@@ -83,12 +83,12 @@ class CollectionTest extends ControllerDbTestCase
             "description": "Authorization API endpoint"
         },
         {
-            "id": 4,
+            "id": 33,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 5,
+            "id": 34,
             "name": "bar",
             "description": "Bar access"
         }

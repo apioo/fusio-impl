@@ -12,6 +12,9 @@
   "paths": {
     "\/foo": {
       "get": {
+        "tags": [
+          "bar"
+        ],
         "operationId": "listFoo",
         "responses": {
           "200": {
@@ -27,6 +30,9 @@
         }
       },
       "post": {
+        "tags": [
+          "bar"
+        ],
         "operationId": "createFoo",
         "requestBody": {
           "content": {
@@ -149,7 +155,28 @@
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "backend": "Access to the backend API"
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.routes": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": "Global access to the backend API"
             }
           }
         }
@@ -161,7 +188,15 @@
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "consumer": "Consumer API endpoint"
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": "Global access to the consumer API"
             }
           }
         }
