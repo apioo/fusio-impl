@@ -69,7 +69,9 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
             $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
-            list($appScopes, $backendScopes, $consumerScopes) = $this->getScopes();
+            $appScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_APP);
+            $backendScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_BACKEND);
+            $consumerScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_CONSUMER);
 
             $authUrl  = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
             $tokenUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
@@ -86,25 +88,5 @@ class GeneratorFactory extends \PSX\Api\GeneratorFactory
         } elseif ($generator instanceof Generator\Spec\Raml) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
         }
-    }
-
-    private function getScopes()
-    {
-        $app = [];
-        $backend = [];
-        $consumer = [];
-
-        $scopes = $this->scopeTable->getAll(0, 1024);
-        foreach ($scopes as $scope) {
-            if ($scope['name'] == 'backend') {
-                $backend[$scope['name']] = $scope['description'];
-            } elseif ($scope['name'] == 'consumer') {
-                $consumer[$scope['name']] = $scope['description'];
-            } else {
-                $app[$scope['name']] = $scope['description'];
-            }
-        }
-
-        return [$app, $backend, $consumer];
     }
 }

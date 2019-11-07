@@ -33,6 +33,10 @@ use PSX\Sql\TableAbstract;
  */
 class Scope extends TableAbstract
 {
+    const TYPE_BACKEND = 'backend';
+    const TYPE_CONSUMER = 'consumer';
+    const TYPE_APP = 'app';
+
     public function getName()
     {
         return 'fusio_scope';
@@ -56,6 +60,31 @@ class Scope extends TableAbstract
         } else {
             return [];
         }
+    }
+
+    public function getScopesForType(string $type)
+    {
+        if ($type === self::TYPE_BACKEND) {
+            $condition = new Condition();
+            $condition->like('name', 'backend%');
+            $result = $this->getAll(0, 1024, null, null, $condition);
+        } elseif ($type === self::TYPE_CONSUMER) {
+            $condition = new Condition();
+            $condition->like('name', 'consumer%');
+            $result = $this->getAll(0, 1024, null, null, $condition);
+        } else {
+            $condition = new Condition();
+            $condition->notLike('name', 'backend%');
+            $condition->notLike('name', 'consumer%');
+            $result = $this->getAll(0, 1024, null, null, $condition);
+        }
+
+        $scopes = [];
+        foreach ($result as $row) {
+            $scopes[$row['name']] = $row['description'];
+        }
+
+        return $scopes;
     }
 
     public static function getNames(array $result)
