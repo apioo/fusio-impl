@@ -83,7 +83,26 @@ class Scope extends TableAbstract
                         ON scope.id = user_scope.scope_id
                      WHERE user_scope.user_id = :user_id
                   ORDER BY scope.id ASC';
+        $assignedScopes = $this->connection->fetchAll($sql, array('user_id' => $userId)) ?: [];
 
-        return $this->connection->fetchAll($sql, array('user_id' => $userId)) ?: [];
+        $scopes = [];
+        foreach ($assignedScopes as $assignedScope) {
+            $scopes[$assignedScope['name']] = $assignedScope;
+
+            if (strpos($assignedScope['name'], '.') === false) {
+                // load all sub scopes
+                $sql = 'SELECT scope.id,
+                               scope.name,
+                               scope.description
+                          FROM fusio_scope scope
+                         WHERE scope.name LIKE :name';
+                $subScopes = $this->connection->fetchAll($sql, ['name' => $assignedScope['name'] . '.%']);
+                foreach ($subScopes as $subScope) {
+                    $scopes[$subScope['name']] = $subScope;
+                }
+            }
+        }
+
+        return array_values($scopes);
     }
 }

@@ -235,17 +235,19 @@ class TokenValidator
      */
     private function substituteGlobalScopes(array $entitledScopes): array
     {
-        $globalScopes = ['backend', 'consumer'];
-        foreach ($globalScopes as $scope) {
-            $index = array_search($scope, $entitledScopes);
-            if ($index !== false) {
-                $result = $this->connection->fetchAll('SELECT * FROM fusio_scope WHERE name LIKE :name', ['name' => $scope . '.%']);
+        $scopes = $entitledScopes;
+        foreach ($entitledScopes as $scope) {
+            if (strpos($scope, '.') === false) {
+                $sql = 'SELECT scope.name
+                          FROM fusio_scope scope
+                         WHERE scope.name LIKE :name';
+                $result = $this->connection->fetchAll($sql, ['name' => $scope . '.%']);
                 foreach ($result as $row) {
-                    $entitledScopes[] = $row['name'];
+                    $scopes[] = $row['name'];
                 }
             }
         }
 
-        return array_unique($entitledScopes);
+        return array_unique($scopes);
     }
 }
