@@ -100,7 +100,7 @@ class LoginTest extends ControllerDbTestCase
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
-        $this->assertEquals('consumer,authorization,foo,bar', $row['scope']);
+        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
     }

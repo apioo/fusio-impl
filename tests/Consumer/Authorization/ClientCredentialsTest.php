@@ -43,51 +43,62 @@ class ClientCredentialsTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $body     = 'grant_type=client_credentials&scope=authorization';
+        $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/consumer/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 4);
+        $this->assertAccessToken($response, 4, 'consumer,authorization');
     }
 
+    public function testPostSpecificScope()
+    {
+        $body     = 'grant_type=client_credentials&scope=consumer.user';
+        $response = $this->sendRequest('/consumer/token', 'POST', [
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Basic ' . base64_encode('Developer:qf2vX10Ec3wFZHx0K1eL'),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
+        ], $body);
+
+        $this->assertAccessToken($response, 4, 'consumer.user');
+    }
 
     public function testPostEmail()
     {
-        $body     = 'grant_type=client_credentials&scope=authorization';
+        $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/consumer/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('developer@localhost.com:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 4);
+        $this->assertAccessToken($response, 4, 'consumer,authorization');
     }
 
     public function testPostConsumer()
     {
-        $body     = 'grant_type=client_credentials&scope=authorization';
+        $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/consumer/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Consumer:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 2);
+        $this->assertAccessToken($response, 2, 'consumer,authorization');
     }
 
     public function testPostConsumerEmail()
     {
-        $body     = 'grant_type=client_credentials&scope=authorization';
+        $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/consumer/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('consumer@localhost.com:qf2vX10Ec3wFZHx0K1eL'),
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 2);
+        $this->assertAccessToken($response, 2, 'consumer,authorization');
     }
 
     /**
@@ -95,7 +106,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
      */
     public function testPostDisabled()
     {
-        $body     = 'grant_type=client_credentials&scope=authorization';
+        $body     = 'grant_type=client_credentials';
         $response = $this->sendRequest('/consumer/token', 'POST', [
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Basic ' . base64_encode('Disabled:qf2vX10Ec3wFZHx0K1eL'),
@@ -115,7 +126,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    private function assertAccessToken(ResponseInterface $response, $userId)
+    private function assertAccessToken(ResponseInterface $response, int $userId, string $scope)
     {
         $body = (string) $response->getBody();
         $data = Parser::decode($body, true);
@@ -130,7 +141,7 @@ JSON;
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', $data['expires_in']));
         $this->assertArrayHasKey('scope', $data);
-        $this->assertEquals('consumer,authorization', $data['scope']);
+        $this->assertEquals($scope, $data['scope']);
 
         // check whether the token was created
         $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
@@ -139,7 +150,7 @@ JSON;
         $this->assertEquals($userId, $row['user_id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
-        $this->assertEquals('consumer,authorization', $row['scope']);
+        $this->assertEquals($scope, $row['scope']);
         $this->assertEquals(date('Y-m-d H:i', $expireDate), date('Y-m-d H:i', strtotime($row['expire'])));
         $this->assertEquals(date('Y-m-d H:i'), substr($row['date'], 0, 16));
     }

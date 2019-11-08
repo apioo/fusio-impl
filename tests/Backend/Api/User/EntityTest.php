@@ -74,6 +74,14 @@ class EntityTest extends ControllerDbTestCase
     "points": 100,
     "scopes": [
         "consumer",
+        "consumer.app",
+        "consumer.event",
+        "consumer.grant",
+        "consumer.plan",
+        "consumer.scope",
+        "consumer.subscription",
+        "consumer.transaction",
+        "consumer.user",
         "authorization",
         "foo",
         "bar"
@@ -83,7 +91,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 5,
             "status": 3,
             "name": "Deactivated",
-            "url": "http:\/\/google.com",
+            "url": "http://google.com",
             "appKey": "f46af464-f7eb-4d04-8661-13063a30826b",
             "date": "[datetime]"
         },
@@ -91,7 +99,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 4,
             "status": 2,
             "name": "Pending",
-            "url": "http:\/\/google.com",
+            "url": "http://google.com",
             "appKey": "7c14809c-544b-43bd-9002-23e1c2de6067",
             "date": "[datetime]"
         },
@@ -99,7 +107,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 3,
             "status": 1,
             "name": "Foo-App",
-            "url": "http:\/\/google.com",
+            "url": "http://google.com",
             "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
             "date": "[datetime]"
         }
