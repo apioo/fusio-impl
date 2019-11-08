@@ -79,7 +79,11 @@ class ClientCredentials extends ClientCredentialsAbstract
         );
 
         if (!empty($userId)) {
-            $scopes = ['backend', 'authorization'];
+            if (empty($scope)) {
+                $scopes = ['backend', 'authorization'];
+            } else {
+                $scopes = Service\Scope::split($scope);
+            }
 
             // scopes
             $scopes = $this->userService->getValidScopes($userId, $scopes);
