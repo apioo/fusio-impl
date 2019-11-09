@@ -54,18 +54,13 @@ class Scope extends TableAbstract
         $this->connection->executeQuery($sql, array('id' => $userId));
     }
 
-    public function getValidScopes($userId, array $scopes, array $exclude = array())
+    public function getValidScopes($userId, array $scopes)
     {
         $result = $this->getAvailableScopes($userId);
         $data   = array();
 
         foreach ($result as $scope) {
             if (in_array($scope['name'], $scopes)) {
-                // is the scope excluded
-                if (in_array($scope['name'], $exclude)) {
-                    continue;
-                }
-
                 $data[] = $scope;
             }
         }

@@ -122,7 +122,7 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope, ['backend']);
+        $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }

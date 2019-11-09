@@ -98,7 +98,7 @@ class ClientCredentials extends ClientCredentialsAbstract
             }
 
             // validate scopes
-            $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope, ['backend']);
+            $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope);
             if (empty($scopes)) {
                 throw new InvalidScopeException('No valid scope given');
             }

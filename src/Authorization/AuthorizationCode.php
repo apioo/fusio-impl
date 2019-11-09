@@ -103,7 +103,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             }
 
             // scopes
-            $scopes = $this->scopeService->getValidScopes($code['app_id'], $code['user_id'], $code['scope'], ['backend']);
+            $scopes = $this->scopeService->getValidScopes($code['app_id'], $code['user_id'], $code['scope']);
             if (empty($scopes)) {
                 throw new InvalidScopeException('No valid scope given');
             }

@@ -425,9 +425,9 @@ class User
         }
     }
 
-    public function getValidScopes($userId, array $scopes, array $exclude = array())
+    public function getValidScopes($userId, array $scopes)
     {
-        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes, $exclude));
+        return Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
     }
 
     public function getAvailableScopes($userId)
