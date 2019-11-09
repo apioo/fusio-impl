@@ -21,11 +21,10 @@
 
 namespace Fusio\Impl\Console\System;
 
+use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * CleanCommand
@@ -36,143 +35,31 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class CleanCommand extends Command
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    public function __construct(Connection $connection)
+    {
+        parent::__construct();
+
+        $this->connection = $connection;
+    }
+
     protected function configure()
     {
         $this
             ->setName('system:clean')
-            ->setDescription('Removes all demo files from the Fusio directory')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Removes all files without asking the user');
+            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $baseDir = realpath(PSX_PATH_SRC . '/../');
-        $confirm = !$input->getOption('force');
+        $now = $this->connection->getDatabasePlatform()->getNowExpression();
 
-        if ($baseDir === false) {
-            throw new \RuntimeException('Could not determine base dir');
-        }
+        $this->connection->executeUpdate('DELETE FROM fusio_app_token WHERE expire < ' . $now);
 
-        $files = [
-            'build',
-            'doc',
-            'public/install.php',
-            'resources/routes/todo',
-            'resources/schema/todo',
-            'src/Todo',
-            'tests/Api/Todo',
-            '.travis.yml',
-            'CHANGELOG.md',
-            'README.md',
-        ];
-
-        $deleteFiles = [];
-        foreach ($files as $file) {
-            $path = realpath($baseDir . '/' . $file);
-            if ($path !== false) {
-                if (is_dir($path)) {
-                    $deleteFiles[] = $path;
-                } elseif (is_file($path)) {
-                    $deleteFiles[] = $path;
-                }
-            }
-        }
-
-        if ($confirm) {
-            $output->writeln('This command removes the following files and directories:');
-            $output->writeln('');
-            foreach ($deleteFiles as $file) {
-                $output->writeln('- ' . $file);
-            }
-            $output->writeln('');
-
-            $helper   = $this->getHelper('question');
-            $question = new ConfirmationQuestion('Are you sure you want to proceed? (y/n): ', false);
-
-            if (!$helper->ask($input, $output, $question)) {
-                // we dont want to delete any files
-                return;
-            }
-        }
-
-        $this->cleanFiles($deleteFiles);
-        $this->commentFiles($baseDir);
-    }
-
-    /**
-     * @param array $files
-     */
-    private function cleanFiles(array $files)
-    {
-        foreach ($files as $file) {
-            if (is_dir($file)) {
-                $this->rmdir($file);
-            } elseif (is_file($file)) {
-                unlink($file);
-            }
-        }
-    }
-
-    /**
-     * Removes all files inside a directory recursively
-     * 
-     * @param string $dir
-     */
-    private function rmdir($dir)
-    {
-        // remove all files
-        $files = scandir($dir);
-        foreach ($files as $file) {
-            if ($file == '.' || $file == '..') {
-                continue;
-            }
-
-            $path = $dir . '/' . $file;
-            if (is_dir($path)) {
-                $this->rmdir($path);
-            } elseif (is_file($path)) {
-                unlink($path);
-            }
-        }
-
-        rmdir($dir);
-    }
-
-    /**
-     * @param string $baseDir
-     */
-    private function commentFiles($baseDir)
-    {
-        $files = [
-            'resources/routes.yaml',
-            'resources/schemas.yaml',
-        ];
-
-        foreach ($files as $file) {
-            $path = $baseDir . '/' . $file;
-            if (is_file($path)) {
-                $this->commentFile($path, 'todo/');
-            }
-        }
-    }
-
-    /**
-     * @param string $file
-     * @param string $needle
-     */
-    private function commentFile($file, $needle)
-    {
-        $lines  = file($file);
-        $return = '';
-
-        foreach ($lines as $line) {
-            if (strpos($line, $needle) !== false && $line[0] !== '#') {
-                $return.= '#' . $line;
-            } else {
-                $return.= $line;
-            }
-        }
-
-        file_put_contents($file, $return);
+        $output->writeln('Clean up successful!');
     }
 }

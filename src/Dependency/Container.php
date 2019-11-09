@@ -250,7 +250,7 @@ class Container extends DefaultContainer
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
 
         $application->add(new Console\System\CheckCommand($this->get('connection')));
-        $application->add(new Console\System\CleanCommand());
+        $application->add(new Console\System\CleanCommand($this->get('connection')));
         $application->add(new Console\System\ClearCacheCommand($this->get('cache'), $this->get('engine_cache')));
         $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
