@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Dependency;
 
 use Doctrine\DBAL;
+use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
@@ -128,7 +129,16 @@ class Container extends DefaultContainer
     {
         $params = $this->get('config')->get('psx_connection');
         $config = new DBAL\Configuration();
-        $config->setFilterSchemaAssetsExpression("~^fusio_~");
+        $config->setSchemaAssetsFilter(static function($assetName) {
+            if ($assetName instanceof AbstractAsset) {
+                $assetName = $assetName->getName();
+            }
+            if (preg_match('~^fusio_log_(\d{8})$~', $assetName)) {
+                // ignore archive log tables
+                return false;
+            }
+            return preg_match('~^fusio_~', $assetName);
+        });
 
         return DBAL\DriverManager::getConnection($params, $config);
     }

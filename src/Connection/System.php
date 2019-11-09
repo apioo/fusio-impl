@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Connection;
 
 use Doctrine\DBAL;
+use Doctrine\DBAL\Schema\AbstractAsset;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory\ContainerAwareInterface;
@@ -57,7 +58,12 @@ class System implements ConnectionInterface, ContainerAwareInterface, PingableIn
     {
         $params = $this->container->get('config')->get('psx_connection');
         $config = new DBAL\Configuration();
-        $config->setFilterSchemaAssetsExpression("~^(?!fusio_)~");
+        $config->setSchemaAssetsFilter(static function($assetName) {
+            if ($assetName instanceof AbstractAsset) {
+                $assetName = $assetName->getName();
+            }
+            return preg_match('~^(?!fusio_)~', $assetName);
+        });
 
         return DBAL\DriverManager::getConnection($params, $config);
     }
