@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Console\System\LogRotateCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -54,15 +56,39 @@ class LogRotateCommandTest extends ControllerDbTestCase
         $display = $commandTester->getDisplay();
 
         $this->assertSame(0, $commandTester->getStatusCode());
-        $this->assertRegExp('/Created log table fusio_log_/', $display, $display);
-        $this->assertRegExp('/Copied 2 entries to archive table/', $display, $display);
+
+        $schemaManager = $this->connection->getSchemaManager();
+        $schema = $schemaManager->createSchema();
+
+        $this->assertAuditTable($display, $schemaManager, $schema);
+        $this->assertLogTable($display, $schemaManager, $schema);
+    }
+
+    private function assertAuditTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
+    {
+        $this->assertRegExp('/Created audit archive table fusio_audit_/', $display, $display);
+        $this->assertRegExp('/Copied 1 entries to audit archive table/', $display, $display);
+        $this->assertRegExp('/Truncated audit table/', $display, $display);
+
+        preg_match('/fusio_audit_(\d+)/', $display, $matches);
+        $tableName = $matches[0];
+
+        $this->assertTrue($schema->hasTable($tableName));
+
+        $row = $this->connection->fetchAssoc('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+        $this->assertEquals(1, $row['cnt']);
+
+        $schemaManager->dropTable($tableName);
+    }
+    
+    private function assertLogTable(string $display, AbstractSchemaManager $schemaManager, Schema $schema)
+    {
+        $this->assertRegExp('/Created log archive table fusio_log_/', $display, $display);
+        $this->assertRegExp('/Copied 2 entries to log archive table/', $display, $display);
         $this->assertRegExp('/Truncated log table/', $display, $display);
 
         preg_match('/fusio_log_(\d+)/', $display, $matches);
         $tableName = $matches[0];
-
-        $schemaManager = $this->connection->getSchemaManager();
-        $schema = $schemaManager->createSchema();
 
         $this->assertTrue($schema->hasTable($tableName));
 

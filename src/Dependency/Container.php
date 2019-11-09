@@ -133,8 +133,8 @@ class Container extends DefaultContainer
             if ($assetName instanceof AbstractAsset) {
                 $assetName = $assetName->getName();
             }
-            if (preg_match('~^fusio_log_(\d{8})$~', $assetName)) {
-                // ignore archive log tables
+            if (preg_match('~^fusio_log_(\d{8})$~', $assetName) || preg_match('~^fusio_audit_(\d{8})$~', $assetName)) {
+                // ignore archive tables
                 return false;
             }
             return preg_match('~^fusio_~', $assetName);
