@@ -50,6 +50,21 @@ final class Version20191022185247 extends AbstractMigration
         foreach ($scopes as $scope) {
             $this->addSql('INSERT INTO fusio_scope (name, description) VALUES (:name, :description)', ['name' => $scope['name'], 'description' => $scope['description']]);
         }
+
+        // assign scopes to routes
+        foreach (['backend', 'consumer'] as $type) {
+            $result = $this->connection->fetchAll('SELECT id, path FROM fusio_routes WHERE path LIKE :path', ['path' => '/' . $type . '/%']);
+            foreach ($result as $row) {
+                $parts = array_values(array_filter(explode('/', $row['path'])));
+                if (count($parts) > 1) {
+                    $name  = $parts[0] . '.' . $parts[1];
+                    $scope = $this->connection->fetchAssoc('SELECT id FROM fusio_scope WHERE name = :name', ['name' => $name]);
+                    if (!empty($scope)) {
+                        $this->addSql('UPDATE fusio_scope_routes SET scope_id = :scope_id WHERE route_id = :route_id', ['scope_id' => $scope['id'], 'route_id' => $row['id']]);
+                    }
+                }
+            }
+        }
     }
 
     public function down(Schema $schema) : void
