@@ -63,43 +63,10 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<JSON
 {
-    "totalResults": 6,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
-        {
-            "id": 6,
-            "appId": 1,
-            "userId": 4,
-            "status": 1,
-            "scope": [
-                "backend"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 5,
-            "appId": 2,
-            "userId": 2,
-            "status": 1,
-            "scope": [
-                "consumer"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 4,
-            "appId": 3,
-            "userId": 4,
-            "status": 1,
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
         {
             "id": 3,
             "appId": 3,
@@ -107,30 +74,6 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "scope": [
                 "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 2,
-            "appId": 2,
-            "userId": 1,
-            "status": 1,
-            "scope": [
-                "consumer",
-                "authorization"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 1,
-            "appId": 1,
-            "userId": 1,
-            "status": 1,
-            "scope": [
-                "backend",
-                "authorization"
             ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
@@ -145,7 +88,7 @@ JSON;
 
     public function testGetSearch()
     {
-        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=backe', 'GET', array(
+        $response = $this->sendRequest('/backend/app/token?from=2015-06-25T00:00:00&to=2015-06-25T23:59:59&search=bar', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -154,29 +97,17 @@ JSON;
 
         $expect = <<<JSON
 {
-    "totalResults": 2,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 6,
-            "appId": 1,
-            "userId": 4,
+            "id": 3,
+            "appId": 3,
+            "userId": 2,
             "status": 1,
             "scope": [
-                "backend"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 1,
-            "appId": 1,
-            "userId": 1,
-            "status": 1,
-            "scope": [
-                "backend",
-                "authorization"
+                "bar"
             ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"
@@ -200,43 +131,10 @@ JSON;
 
         $expect = <<<JSON
 {
-    "totalResults": 6,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
-        {
-            "id": 6,
-            "appId": 1,
-            "userId": 4,
-            "status": 1,
-            "scope": [
-                "backend"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 5,
-            "appId": 2,
-            "userId": 2,
-            "status": 1,
-            "scope": [
-                "consumer"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 4,
-            "appId": 3,
-            "userId": 4,
-            "status": 1,
-            "scope": [
-                "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
         {
             "id": 3,
             "appId": 3,
@@ -244,30 +142,6 @@ JSON;
             "status": 1,
             "scope": [
                 "bar"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 2,
-            "appId": 2,
-            "userId": 1,
-            "status": 1,
-            "scope": [
-                "consumer",
-                "authorization"
-            ],
-            "ip": "127.0.0.1",
-            "date": "2015-06-25T22:49:09Z"
-        },
-        {
-            "id": 1,
-            "appId": 1,
-            "userId": 1,
-            "status": 1,
-            "scope": [
-                "backend",
-                "authorization"
             ],
             "ip": "127.0.0.1",
             "date": "2015-06-25T22:49:09Z"

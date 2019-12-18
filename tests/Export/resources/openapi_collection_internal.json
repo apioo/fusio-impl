@@ -5829,6 +5829,30 @@
       "parameters": []
     },
     "\/consumer\/login": {
+      "put": {
+        "operationId": "consumerLoginPutConsumer_User_Refresh",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Refresh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "operationId": "consumerLoginPostConsumer_User_Login",
         "requestBody": {
@@ -9015,6 +9039,21 @@
         "title": "Consumer User JWT",
         "properties": {
           "token": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Refresh": {
+        "type": "object",
+        "title": "Consumer User Refresh",
+        "properties": {
+          "refresh_token": {
             "type": "string"
           }
         }

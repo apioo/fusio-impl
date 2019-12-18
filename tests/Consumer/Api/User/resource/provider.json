@@ -38,6 +38,12 @@
         "properties": {
           "token": {
             "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
           }
         }
       },
