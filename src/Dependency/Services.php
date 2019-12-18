@@ -94,7 +94,6 @@ trait Services
         );
     }
 
-
     /**
      * @return \Fusio\Impl\Service\Routes\Provider
      */
@@ -103,6 +102,7 @@ trait Services
         return new Service\Routes\Provider(
             $this->get('connection'),
             $this->get('routes_provider_factory'),
+            $this,
             $this->get('routes_service'),
             $this->get('schema_service'),
             $this->get('action_service'),

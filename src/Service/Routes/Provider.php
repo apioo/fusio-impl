@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Routes;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Engine\Factory\ContainerAwareInterface;
 use Fusio\Engine\Form;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Parameters;
@@ -33,9 +34,9 @@ use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Routes;
 use Fusio\Impl\Service\Schema;
+use Psr\Container\ContainerInterface;
 use PSX\Api\Resource;
 use PSX\Http\Exception as StatusCode;
-use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Schema\SchemaTraverser;
 use PSX\Schema\Visitor\TypeVisitor;
@@ -58,6 +59,11 @@ class Provider
      * @var \Fusio\Impl\Provider\ProviderFactory
      */
     private $providerFactory;
+
+    /**
+     * @var \Psr\Container\ContainerInterface
+     */
+    private $container;
 
     /**
      * @var \Fusio\Impl\Service\Routes
@@ -99,10 +105,11 @@ class Provider
      */
     private $routes;
 
-    public function __construct(Connection $connection, ProviderFactory $providerFactory, Routes $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Routes $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
         $this->providerFactory = $providerFactory;
+        $this->container = $container;
         $this->routesService = $routesService;
         $this->schemaService = $schemaService;
         $this->actionService = $actionService;
@@ -120,6 +127,10 @@ class Provider
 
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
+        }
+
+        if ($provider instanceof ContainerAwareInterface) {
+            $provider->setContainer($this->container);
         }
 
         $setup = new Setup();
