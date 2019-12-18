@@ -21,22 +21,21 @@
 
 namespace Fusio\Impl\Consumer\Schema\User;
 
+use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * JWT
+ * Refresh
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class JWT extends SchemaAbstract
+class Refresh extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $sb = $this->getSchemaBuilder('Consumer User JWT');
-        $sb->string('token');
-        $sb->string('expires_in');
+        $sb = $this->getSchemaBuilder('Consumer User Refresh');
         $sb->string('refresh_token');
 
         return $sb->getProperty();

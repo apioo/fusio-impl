@@ -55,6 +55,11 @@ class Login extends SchemaApiAbstract
             ->addResponse(200, $this->schemaManager->getSchema(Schema\User\JWT::class))
         );
 
+        $resource->addMethod(Resource\Factory::getMethod('PUT')
+            ->setRequest($this->schemaManager->getSchema(Schema\User\Refresh::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\JWT::class))
+        );
+
         return $resource;
     }
 
@@ -69,6 +74,23 @@ class Login extends SchemaApiAbstract
             $record->scopes
         );
 
+        return $this->renderToken($token);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doPut($record, HttpContextInterface $context)
+    {
+        $token = $this->userLoginService->refresh(
+            $record->refresh_token
+        );
+
+        return $this->renderToken($token);
+    }
+
+    private function renderToken(?AccessToken $token)
+    {
         if ($token instanceof AccessToken) {
             return [
                 'token' => $token->getAccessToken(),

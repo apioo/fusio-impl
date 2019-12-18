@@ -167,12 +167,53 @@ class LoginTest extends ControllerDbTestCase
         $response = $this->sendRequest('/consumer/login', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
-            'foo' => 'bar',
+            'refresh_token' => 'b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873',
+        ]));
+
+        $body  = (string) $response->getBody();
+        $data  = json_decode($body);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+
+        $token = JWT::decode($data->token, Environment::getConfig()->get('fusio_project_key'), ['HS256']);
+
+        $this->assertNotEmpty($token->sub);
+        $this->assertNotEmpty($token->iat);
+        $this->assertNotEmpty($token->exp);
+        $this->assertEquals('Consumer', $token->name);
+
+        // check database access token
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('app_id', 'user_id', 'status', 'token', 'scope', 'ip', 'expire')
+            ->from('fusio_app_token')
+            ->where('token = :token')
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['token' => $data->token]);
+
+        $this->assertEquals(2, $row['app_id']);
+        $this->assertEquals(2, $row['user_id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertNotEmpty($row['token']);
+        $this->assertEquals('2a11f995-1306-5494-aaa5-51c74d882e07', $token->sub);
+        $this->assertEquals('consumer', $row['scope']);
+        $this->assertEquals('127.0.0.1', $row['ip']);
+        $this->assertNotEmpty($row['expire']);
+    }
+
+    public function testPutInvalidRefreshToken()
+    {
+        $response = $this->sendRequest('/consumer/login', 'PUT', array(
+            'User-Agent' => 'Fusio TestCase',
+        ), json_encode([
+            'refresh_token' => 'foobar',
         ]));
 
         $body = (string) $response->getBody();
+        $data = json_decode($body, true);
 
-        $this->assertEquals(405, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
+        $this->assertEquals('Invalid refresh token', substr($data['message'], 0, 21), $body);
     }
 
     public function testDelete()

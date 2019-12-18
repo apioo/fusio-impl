@@ -71,9 +71,7 @@ class Login
                 $scopes = $this->userService->getValidScopes($userId, $scopes);
             }
 
-            // @TODO this is the consumer app. Probably we need a better way to
-            // define this id
-            $appId = 2;
+            $appId = $this->getAppId();
 
             return $this->appTokenService->generateAccessToken(
                 $appId,
@@ -85,5 +83,27 @@ class Login
         }
 
         return null;
+    }
+
+    public function refresh($refreshToken)
+    {
+        $appId = $this->getAppId();
+
+        return $this->appTokenService->refreshAccessToken(
+            $appId,
+            $refreshToken,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->config->get('fusio_expire_consumer')),
+            new \DateInterval($this->config->get('fusio_expire_refresh'))
+        );
+    }
+
+    private function getAppId(): int
+    {
+        // @TODO this is the consumer app. Probably we need a better way to
+        // define this id
+        $appId = 2;
+
+        return $appId;
     }
 }

@@ -31,6 +31,21 @@
         "properties": {
           "token": {
             "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_User_Refresh": {
+        "type": "object",
+        "title": "Consumer User Refresh",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
           }
         }
       },
@@ -38,6 +53,12 @@
         "$ref": "#\/definitions\/Consumer_User_Login"
       },
       "POST-200-response": {
+        "$ref": "#\/definitions\/Consumer_User_JWT"
+      },
+      "PUT-request": {
+        "$ref": "#\/definitions\/Consumer_User_Refresh"
+      },
+      "PUT-200-response": {
         "$ref": "#\/definitions\/Consumer_User_JWT"
       }
     }
@@ -47,6 +68,12 @@
       "request": "#\/definitions\/POST-request",
       "responses": {
         "200": "#\/definitions\/POST-200-response"
+      }
+    },
+    "PUT": {
+      "request": "#\/definitions\/PUT-request",
+      "responses": {
+        "200": "#\/definitions\/PUT-200-response"
       }
     }
   }
