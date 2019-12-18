@@ -26,6 +26,7 @@ use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
+use PSX\Oauth2\AccessToken;
 
 /**
  * Login
@@ -68,9 +69,11 @@ class Login extends SchemaApiAbstract
             $record->scopes
         );
 
-        if (!empty($token)) {
+        if ($token instanceof AccessToken) {
             return [
-                'token' => $token,
+                'token' => $token->getAccessToken(),
+                'expires_in' => $token->getExpiresIn(),
+                'refresh_token' => $token->getRefreshToken(),
             ];
         } else {
             throw new StatusCode\BadRequestException('Invalid name or password');
