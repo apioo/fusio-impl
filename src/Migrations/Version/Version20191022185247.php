@@ -4,6 +4,7 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Migrations\MigrationUtil;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -12,9 +13,28 @@ final class Version20191022185247 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
+        // add new scopes
         $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_scope WHERE name = :name', ['name' => 'backend.account']);
-        $this->skipIf($count > 0, 'Scopes already available');
+        if (empty($count)) {
+            $this->insertScopes();
+        }
 
+        // add token column
+        $userTable = $schema->getTable('fusio_user');
+        $userTable->addColumn('token', 'string', ['notnull' => false, 'length' => 255]);
+
+        // sync
+        MigrationUtil::sync($this->connection, function($sql, $params){
+            $this->addSql($sql, $params);
+        });
+    }
+
+    public function down(Schema $schema) : void
+    {
+    }
+
+    private function insertScopes()
+    {
         $scopes = [
             ['name' => 'backend.account', 'description' => 'Option to change the password of your account'],
             ['name' => 'backend.action', 'description' => 'View and manage actions'],
@@ -65,9 +85,5 @@ final class Version20191022185247 extends AbstractMigration
                 }
             }
         }
-    }
-
-    public function down(Schema $schema) : void
-    {
     }
 }

@@ -644,6 +644,19 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\User\ResetPassword
+     */
+    public function getUserResetPasswordService()
+    {
+        return new Service\User\ResetPassword(
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('config_service'),
+            $this->get('mailer'),
+            $this->get('config')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\User\Authorize
      */
     public function getUserAuthorizeService()

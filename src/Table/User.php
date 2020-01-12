@@ -53,11 +53,12 @@ class User extends TableAbstract
             'email' => self::TYPE_VARCHAR,
             'password' => self::TYPE_VARCHAR,
             'points' => self::TYPE_INT,
+            'token' => self::TYPE_VARCHAR,
             'date' => self::TYPE_DATETIME,
         );
     }
 
-    public function changePassword($userId, $oldPassword, $newPassword)
+    public function changePassword($userId, $oldPassword, $newPassword, $verifyOld = true)
     {
         $password = $this->connection->fetchColumn('SELECT password FROM fusio_user WHERE id = :id', ['id' => $userId]);
 
@@ -65,7 +66,7 @@ class User extends TableAbstract
             return false;
         }
 
-        if (password_verify($oldPassword, $password)) {
+        if (!$verifyOld || password_verify($oldPassword, $password)) {
             $this->connection->update('fusio_user', [
                 'password' => \password_hash($newPassword, PASSWORD_DEFAULT),
             ], [

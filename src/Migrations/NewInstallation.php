@@ -91,6 +91,8 @@ class NewInstallation
 
                 ['name' => 'mail_register_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the activation mail', 'value' => 'Fusio registration'],
                 ['name' => 'mail_register_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the activation mail', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}'],
+                ['name' => 'mail_pw_reset_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the password reset mail', 'value' => 'Fusio password reset'],
+                ['name' => 'mail_pw_reset_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the password reset mail', 'value' => 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.'],
                 ['name' => 'mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => 'Email address which is used in the "From" header', 'value' => ''],
 
                 ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Facebook app secret', 'value' => ''],
@@ -222,6 +224,7 @@ class NewInstallation
                 ['status' => 1, 'priority' => 0x8000000 | 3,  'methods' => 'ANY', 'path' => '/consumer/login',                               'controller' => Consumer\Api\User\Login::class],
                 ['status' => 1, 'priority' => 0x8000000 | 2,  'methods' => 'ANY', 'path' => '/consumer/provider/:provider',                  'controller' => Consumer\Api\User\Provider::class],
                 ['status' => 1, 'priority' => 0x8000000 | 1,  'methods' => 'ANY', 'path' => '/consumer/register',                            'controller' => Consumer\Api\User\Register::class],
+                ['status' => 1, 'priority' => 0x8000000 | 1,  'methods' => 'ANY', 'path' => '/consumer/password_reset',                      'controller' => Consumer\Api\User\PasswordReset::class],
                 ['status' => 1, 'priority' => 0x8000000 | 0,  'methods' => 'ANY', 'path' => '/consumer/token',                               'controller' => Consumer\Authorization\Token::class],
 
                 ['status' => 1, 'priority' => 0x4000000 | 2,   'methods' => 'ANY', 'path' => '/authorization/revoke',                        'controller' => Authorization\Revoke::class],
