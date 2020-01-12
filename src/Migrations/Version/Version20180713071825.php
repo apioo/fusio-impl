@@ -313,7 +313,7 @@ class Version20180713071825 extends AbstractMigration
             $userTable->addColumn('email', 'string', ['length' => 128, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('points', 'integer', ['notnull' => false]);
-            $userTable->addColumn('token', 'string', ['length' => 255]);
+            $userTable->addColumn('token', 'string', ['length' => 255, 'notnull' => false]);
             $userTable->addColumn('date', 'datetime');
             $userTable->setPrimaryKey(['id']);
             $userTable->addUniqueIndex(['provider', 'remote_id']);

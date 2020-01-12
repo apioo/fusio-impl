@@ -21,7 +21,9 @@ final class Version20191022185247 extends AbstractMigration
 
         // add token column
         $userTable = $schema->getTable('fusio_user');
-        $userTable->addColumn('token', 'string', ['notnull' => false, 'length' => 255]);
+        if (!$userTable->hasColumn('token')) {
+            $userTable->addColumn('token', 'string', ['notnull' => false, 'length' => 255]);
+        }
 
         // sync
         MigrationUtil::sync($this->connection, function($sql, $params){
