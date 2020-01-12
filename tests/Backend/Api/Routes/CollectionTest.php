@@ -70,21 +70,21 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 107,
+            "status": 1,
+            "path": "/inspect/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
             "id": 106,
             "status": 1,
-            "path": "\/inspect\/:foo",
+            "path": "/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
             "id": 105,
             "status": 1,
-            "path": "\/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 104,
-            "status": 1,
-            "path": "\/",
+            "path": "/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
@@ -110,9 +110,9 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 106,
+            "id": 107,
             "status": 1,
-            "path": "\/inspect\/:foo",
+            "path": "/inspect/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
@@ -138,21 +138,21 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
+            "id": 107,
+            "status": 1,
+            "path": "/inspect/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
             "id": 106,
             "status": 1,
-            "path": "\/inspect\/:foo",
+            "path": "/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
             "id": 105,
             "status": 1,
-            "path": "\/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 104,
-            "status": 1,
-            "path": "\/",
+            "path": "/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]

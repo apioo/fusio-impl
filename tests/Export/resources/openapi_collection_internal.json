@@ -5915,6 +5915,71 @@
         }
       ]
     },
+    "\/consumer\/password_reset": {
+      "put": {
+        "operationId": "consumerPasswordresetPutConsumer_User_PasswordReset",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_PasswordReset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer.user"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "consumerPasswordresetPostConsumer_User_Email",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Email"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "consumer": [
+              "consumer.user"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
     "\/consumer\/register": {
       "post": {
         "operationId": "consumerRegisterPostConsumer_User_Register",
@@ -9073,6 +9138,34 @@
           }
         },
         "additionalProperties": true
+      },
+      "Consumer_User_Email": {
+        "type": "object",
+        "title": "Consumer User Email",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "Consumer_User_PasswordReset": {
+        "type": "object",
+        "title": "Consumer User PasswordReset",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ]
       },
       "Consumer_User_Register": {
         "type": "object",

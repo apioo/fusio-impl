@@ -1,7 +1,7 @@
 {
   "routings": [
     {
-      "path": "\/backend\/account\/change_password",
+      "path": "/backend/account/change_password",
       "methods": [
         "GET",
         "POST",
@@ -12,7 +12,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action",
+      "path": "/backend/action",
       "methods": [
         "GET",
         "POST",
@@ -23,7 +23,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action\/list",
+      "path": "/backend/action/list",
       "methods": [
         "GET",
         "POST",
@@ -34,7 +34,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action\/form",
+      "path": "/backend/action/form",
       "methods": [
         "GET",
         "POST",
@@ -45,7 +45,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
+      "path": "/backend/action/execute/$action_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -56,7 +56,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action\/$action_id<[0-9]+>",
+      "path": "/backend/action/$action_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -67,7 +67,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/app\/token",
+      "path": "/backend/app/token",
       "methods": [
         "GET",
         "POST",
@@ -78,7 +78,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
+      "path": "/backend/app/token/$token_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -89,7 +89,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/app",
+      "path": "/backend/app",
       "methods": [
         "GET",
         "POST",
@@ -100,7 +100,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/app\/$app_id<[0-9]+>",
+      "path": "/backend/app/$app_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -111,7 +111,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/app\/$app_id<[0-9]+>\/token\/:token_id",
+      "path": "/backend/app/$app_id<[0-9]+>/token/:token_id",
       "methods": [
         "GET",
         "POST",
@@ -122,7 +122,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/audit",
+      "path": "/backend/audit",
       "methods": [
         "GET",
         "POST",
@@ -133,7 +133,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/audit\/$audit_id<[0-9]+>",
+      "path": "/backend/audit/$audit_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -144,7 +144,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/config",
+      "path": "/backend/config",
       "methods": [
         "GET",
         "POST",
@@ -155,7 +155,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/config\/$config_id<[0-9]+>",
+      "path": "/backend/config/$config_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -166,7 +166,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/connection",
+      "path": "/backend/connection",
       "methods": [
         "GET",
         "POST",
@@ -177,7 +177,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/connection\/list",
+      "path": "/backend/connection/list",
       "methods": [
         "GET",
         "POST",
@@ -188,7 +188,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/connection\/form",
+      "path": "/backend/connection/form",
       "methods": [
         "GET",
         "POST",
@@ -199,7 +199,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/connection\/$connection_id<[0-9]+>",
+      "path": "/backend/connection/$connection_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -210,7 +210,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/cronjob",
+      "path": "/backend/cronjob",
       "methods": [
         "GET",
         "POST",
@@ -221,7 +221,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
+      "path": "/backend/cronjob/$cronjob_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -232,7 +232,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/dashboard",
+      "path": "/backend/dashboard",
       "methods": [
         "GET",
         "POST",
@@ -243,7 +243,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/event",
+      "path": "/backend/event",
       "methods": [
         "GET",
         "POST",
@@ -254,7 +254,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/event\/$event_id<[0-9]+>",
+      "path": "/backend/event/$event_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -265,7 +265,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/import\/process",
+      "path": "/backend/import/process",
       "methods": [
         "GET",
         "POST",
@@ -276,7 +276,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/import\/:format",
+      "path": "/backend/import/:format",
       "methods": [
         "GET",
         "POST",
@@ -287,7 +287,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/log\/error",
+      "path": "/backend/log/error",
       "methods": [
         "GET",
         "POST",
@@ -298,7 +298,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/log\/error\/$error_id<[0-9]+>",
+      "path": "/backend/log/error/$error_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -309,7 +309,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/log",
+      "path": "/backend/log",
       "methods": [
         "GET",
         "POST",
@@ -320,7 +320,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/log\/$log_id<[0-9]+>",
+      "path": "/backend/log/$log_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -331,7 +331,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/marketplace",
+      "path": "/backend/marketplace",
       "methods": [
         "GET",
         "POST",
@@ -342,7 +342,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/marketplace\/:app_name",
+      "path": "/backend/marketplace/:app_name",
       "methods": [
         "GET",
         "POST",
@@ -353,7 +353,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/contract",
+      "path": "/backend/plan/contract",
       "methods": [
         "GET",
         "POST",
@@ -364,7 +364,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
+      "path": "/backend/plan/contract/$contract_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -375,7 +375,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/invoice",
+      "path": "/backend/plan/invoice",
       "methods": [
         "GET",
         "POST",
@@ -386,7 +386,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
+      "path": "/backend/plan/invoice/$invoice_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -397,7 +397,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan",
+      "path": "/backend/plan",
       "methods": [
         "GET",
         "POST",
@@ -408,7 +408,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/$plan_id<[0-9]+>",
+      "path": "/backend/plan/$plan_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -419,7 +419,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/rate",
+      "path": "/backend/rate",
       "methods": [
         "GET",
         "POST",
@@ -430,7 +430,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/rate\/$rate_id<[0-9]+>",
+      "path": "/backend/rate/$rate_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -441,7 +441,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/routes",
+      "path": "/backend/routes",
       "methods": [
         "GET",
         "POST",
@@ -452,7 +452,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/routes\/provider",
+      "path": "/backend/routes/provider",
       "methods": [
         "GET",
         "POST",
@@ -463,7 +463,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/routes\/provider\/:provider",
+      "path": "/backend/routes/provider/:provider",
       "methods": [
         "GET",
         "POST",
@@ -474,7 +474,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/routes\/$route_id<[0-9]+>",
+      "path": "/backend/routes/$route_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -485,7 +485,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema",
+      "path": "/backend/schema",
       "methods": [
         "GET",
         "POST",
@@ -496,7 +496,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+      "path": "/backend/schema/preview/$schema_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -507,7 +507,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
+      "path": "/backend/schema/form/$schema_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -518,7 +518,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/$schema_id<[0-9]+>",
+      "path": "/backend/schema/$schema_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -529,7 +529,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/scope",
+      "path": "/backend/scope",
       "methods": [
         "GET",
         "POST",
@@ -540,7 +540,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/scope\/$scope_id<[0-9]+>",
+      "path": "/backend/scope/$scope_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -551,7 +551,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/sdk",
+      "path": "/backend/sdk",
       "methods": [
         "GET",
         "POST",
@@ -562,7 +562,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/count_requests",
+      "path": "/backend/statistic/count_requests",
       "methods": [
         "GET",
         "POST",
@@ -573,7 +573,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/errors_per_route",
+      "path": "/backend/statistic/errors_per_route",
       "methods": [
         "GET",
         "POST",
@@ -584,7 +584,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/incoming_requests",
+      "path": "/backend/statistic/incoming_requests",
       "methods": [
         "GET",
         "POST",
@@ -595,7 +595,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/incoming_transactions",
+      "path": "/backend/statistic/incoming_transactions",
       "methods": [
         "GET",
         "POST",
@@ -606,7 +606,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/issued_tokens",
+      "path": "/backend/statistic/issued_tokens",
       "methods": [
         "GET",
         "POST",
@@ -617,7 +617,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/most_used_apps",
+      "path": "/backend/statistic/most_used_apps",
       "methods": [
         "GET",
         "POST",
@@ -628,7 +628,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/most_used_routes",
+      "path": "/backend/statistic/most_used_routes",
       "methods": [
         "GET",
         "POST",
@@ -639,7 +639,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/time_average",
+      "path": "/backend/statistic/time_average",
       "methods": [
         "GET",
         "POST",
@@ -650,7 +650,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/time_per_route",
+      "path": "/backend/statistic/time_per_route",
       "methods": [
         "GET",
         "POST",
@@ -661,7 +661,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/statistic\/used_points",
+      "path": "/backend/statistic/used_points",
       "methods": [
         "GET",
         "POST",
@@ -672,7 +672,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/transaction",
+      "path": "/backend/transaction",
       "methods": [
         "GET",
         "POST",
@@ -683,7 +683,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
+      "path": "/backend/transaction/$transaction_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -694,7 +694,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/user",
+      "path": "/backend/user",
       "methods": [
         "GET",
         "POST",
@@ -705,7 +705,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/user\/$user_id<[0-9]+>",
+      "path": "/backend/user/$user_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -716,7 +716,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/token",
+      "path": "/backend/token",
       "methods": [
         "GET",
         "POST",
@@ -727,7 +727,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app",
+      "path": "/consumer/app",
       "methods": [
         "GET",
         "POST",
@@ -738,7 +738,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/app\/$app_id<[0-9]+>",
+      "path": "/consumer/app/$app_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -749,7 +749,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/event",
+      "path": "/consumer/event",
       "methods": [
         "GET",
         "POST",
@@ -760,7 +760,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/grant",
+      "path": "/consumer/grant",
       "methods": [
         "GET",
         "POST",
@@ -771,7 +771,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
+      "path": "/consumer/grant/$grant_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -782,7 +782,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/contract",
+      "path": "/consumer/plan/contract",
       "methods": [
         "GET",
         "POST",
@@ -793,7 +793,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/contract\/$contract_id<[0-9]+>",
+      "path": "/consumer/plan/contract/$contract_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -804,7 +804,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/invoice",
+      "path": "/consumer/plan/invoice",
       "methods": [
         "GET",
         "POST",
@@ -815,7 +815,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/invoice\/$invoice_id<[0-9]+>",
+      "path": "/consumer/plan/invoice/$invoice_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -826,7 +826,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan",
+      "path": "/consumer/plan",
       "methods": [
         "GET",
         "POST",
@@ -837,7 +837,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/plan\/$plan_id<[0-9]+>",
+      "path": "/consumer/plan/$plan_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -848,7 +848,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/scope",
+      "path": "/consumer/scope",
       "methods": [
         "GET",
         "POST",
@@ -859,7 +859,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/subscription",
+      "path": "/consumer/subscription",
       "methods": [
         "GET",
         "POST",
@@ -870,7 +870,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/subscription\/$subscription_id<[0-9]+>",
+      "path": "/consumer/subscription/$subscription_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -881,7 +881,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/transaction",
+      "path": "/consumer/transaction",
       "methods": [
         "GET",
         "POST",
@@ -892,7 +892,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/transaction\/execute\/:transaction_id",
+      "path": "/consumer/transaction/execute/:transaction_id",
       "methods": [
         "GET",
         "POST",
@@ -903,7 +903,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/transaction\/prepare\/:provider",
+      "path": "/consumer/transaction/prepare/:provider",
       "methods": [
         "GET",
         "POST",
@@ -914,7 +914,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/transaction\/$transaction_id<[0-9]+>",
+      "path": "/consumer/transaction/$transaction_id<[0-9]+>",
       "methods": [
         "GET",
         "POST",
@@ -925,7 +925,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/account",
+      "path": "/consumer/account",
       "methods": [
         "GET",
         "POST",
@@ -936,7 +936,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/activate",
+      "path": "/consumer/activate",
       "methods": [
         "GET",
         "POST",
@@ -947,7 +947,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/authorize",
+      "path": "/consumer/authorize",
       "methods": [
         "GET",
         "POST",
@@ -958,7 +958,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/account\/change_password",
+      "path": "/consumer/account/change_password",
       "methods": [
         "GET",
         "POST",
@@ -969,7 +969,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/login",
+      "path": "/consumer/login",
       "methods": [
         "GET",
         "POST",
@@ -980,7 +980,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/provider\/:provider",
+      "path": "/consumer/provider/:provider",
       "methods": [
         "GET",
         "POST",
@@ -991,7 +991,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/register",
+      "path": "/consumer/password_reset",
       "methods": [
         "GET",
         "POST",
@@ -1002,7 +1002,7 @@
       "version": "*"
     },
     {
-      "path": "\/consumer\/token",
+      "path": "/consumer/register",
       "methods": [
         "GET",
         "POST",
@@ -1013,7 +1013,7 @@
       "version": "*"
     },
     {
-      "path": "\/authorization\/revoke",
+      "path": "/consumer/token",
       "methods": [
         "GET",
         "POST",
@@ -1024,7 +1024,7 @@
       "version": "*"
     },
     {
-      "path": "\/authorization\/token",
+      "path": "/authorization/revoke",
       "methods": [
         "GET",
         "POST",
@@ -1035,7 +1035,7 @@
       "version": "*"
     },
     {
-      "path": "\/authorization\/whoami",
+      "path": "/authorization/token",
       "methods": [
         "GET",
         "POST",
@@ -1046,21 +1046,32 @@
       "version": "*"
     },
     {
-      "path": "\/doc",
+      "path": "/authorization/whoami",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "/doc",
       "methods": [
         "GET"
       ],
       "version": "*"
     },
     {
-      "path": "\/doc\/:version\/*path",
+      "path": "/doc/:version/*path",
       "methods": [
         "GET"
       ],
       "version": "*"
     },
     {
-      "path": "\/export\/routes",
+      "path": "/export/routes",
       "methods": [
         "GET",
         "POST",
@@ -1071,7 +1082,7 @@
       "version": "*"
     },
     {
-      "path": "\/export\/jsonrpc",
+      "path": "/export/jsonrpc",
       "methods": [
         "GET",
         "POST",
@@ -1082,7 +1093,7 @@
       "version": "*"
     },
     {
-      "path": "\/export\/health",
+      "path": "/export/health",
       "methods": [
         "GET",
         "POST",
@@ -1093,7 +1104,7 @@
       "version": "*"
     },
     {
-      "path": "\/export\/debug",
+      "path": "/export/debug",
       "methods": [
         "GET",
         "POST",
@@ -1104,7 +1115,7 @@
       "version": "*"
     },
     {
-      "path": "\/export\/schema\/:name",
+      "path": "/export/schema/:name",
       "methods": [
         "GET",
         "POST",
@@ -1118,15 +1129,15 @@
   "links": [
     {
       "rel": "self",
-      "href": "http:\/\/127.0.0.1\/doc"
+      "href": "http://127.0.0.1/doc"
     },
     {
       "rel": "detail",
-      "href": "http:\/\/127.0.0.1\/doc\/{version}\/{path}"
+      "href": "http://127.0.0.1/doc/{version}/{path}"
     },
     {
       "rel": "api",
-      "href": "http:\/\/127.0.0.1\/"
+      "href": "http://127.0.0.1/"
     }
   ]
 }
