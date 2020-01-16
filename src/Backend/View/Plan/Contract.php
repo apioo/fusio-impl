@@ -70,7 +70,7 @@ class Contract extends ViewAbstract
                 'status' => $this->fieldInteger('status'),
                 'amount' => $this->fieldNumber('amount'),
                 'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period'),
+                'period' => $this->fieldInteger('period_type'),
                 'insertDate' => $this->fieldDateTime('insert_date'),
             ]),
         ];
@@ -93,7 +93,7 @@ class Contract extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'amount' => $this->fieldNumber('amount'),
             'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period'),
+            'period' => $this->fieldInteger('period_type'),
             'insertDate' => $this->fieldDateTime('insert_date'),
 
         ]);

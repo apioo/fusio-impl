@@ -91,7 +91,7 @@ class Invoice
         }
 
         $from = (clone $startDate)->setTime(0, 0, 0);
-        $to   = (new DateCalculator())->calculate($from, $contract['period']);
+        $to   = (new DateCalculator())->calculate($from, $contract['period_type']);
 
         $displayId = $this->generateInvoiceId($contract['user_id']);
 

@@ -17,8 +17,8 @@ class Version20190416200104 extends AbstractMigration
     public function up(Schema $schema)
     {
         $planTable = $schema->getTable('fusio_plan');
-        if (!$planTable->hasColumn('period')) {
-            $planTable->addColumn('period', 'integer', ['notnull' => false]);
+        if (!$planTable->hasColumn('period_type')) {
+            $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
         }
 
         $transactionTable = $schema->getTable('fusio_transaction');
@@ -56,7 +56,7 @@ class Version20190416200104 extends AbstractMigration
         $planContractTable->addColumn('status', 'integer');
         $planContractTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
         $planContractTable->addColumn('points', 'integer');
-        $planContractTable->addColumn('period', 'integer', ['notnull' => false]);
+        $planContractTable->addColumn('period_type', 'integer', ['notnull' => false]);
         $planContractTable->addColumn('insert_date', 'datetime');
         $planContractTable->setPrimaryKey(['id']);
 

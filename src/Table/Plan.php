@@ -57,7 +57,7 @@ class Plan extends TableAbstract
             'description' => self::TYPE_VARCHAR,
             'price' => self::TYPE_FLOAT,
             'points' => self::TYPE_INT,
-            'period' => self::TYPE_INT,
+            'period_type' => self::TYPE_INT,
         );
     }
 
@@ -82,7 +82,7 @@ class Plan extends TableAbstract
         $product->setName($plan['name']);
         $product->setPrice($plan['price']);
         $product->setPoints($plan['points']);
-        $product->setInterval($plan['period']);
+        $product->setInterval($plan['period_type']);
 
         return $product;
     }

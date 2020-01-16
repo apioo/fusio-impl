@@ -232,7 +232,7 @@ class Transaction
         $product->setName($plan['name']);
         $product->setPrice($plan['amount']);
         $product->setPoints($plan['points']);
-        $product->setInterval($plan['period']);
+        $product->setInterval($plan['period_type']);
 
         return $product;
     }

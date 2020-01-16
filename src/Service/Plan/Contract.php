@@ -81,7 +81,7 @@ class Contract
             'status' => Table\Plan\Contract::STATUS_ACTIVE,
             'amount' => $product->getPrice(),
             'points' => $product->getPoints(),
-            'period' => $product->getInterval(),
+            'period_type' => $product->getInterval(),
             'insert_date' => new \DateTime(),
         ];
 

@@ -52,7 +52,7 @@ class Contract extends TableAbstract
             'status' => self::TYPE_INT,
             'amount' => self::TYPE_FLOAT,
             'points' => self::TYPE_INT,
-            'period' => self::TYPE_INT,
+            'period_type' => self::TYPE_INT,
             'insert_date' => self::TYPE_DATETIME,
         );
     }

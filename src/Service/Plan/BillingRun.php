@@ -89,7 +89,7 @@ class BillingRun
 
         foreach ($contracts as $contract) {
             // skip contracts which have no interval
-            if ($contract['period'] == Table\Plan::INTERVAL_NONE) {
+            if ($contract['period_type'] == Table\Plan::INTERVAL_NONE) {
                 continue;
             }
 

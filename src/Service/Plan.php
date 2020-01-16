@@ -74,7 +74,7 @@ class Plan
             'description' => $description,
             'price'       => $price,
             'points'      => $points,
-            'period'      => $period,
+            'period_type' => $period,
         ];
 
         $this->planTable->create($record);
@@ -106,7 +106,7 @@ class Plan
             'description' => $description,
             'price'       => $price,
             'points'      => $points,
-            'period'      => $period,
+            'period_type' => $period,
         ];
 
         $this->planTable->update($record);

@@ -138,7 +138,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'period')
+            ->select('id', 'name', 'description', 'price', 'points', 'period_type')
             ->from('fusio_plan')
             ->where('id = 1')
             ->getSQL();
@@ -150,7 +150,7 @@ JSON;
         $this->assertEquals('Test new description', $row['description']);
         $this->assertEquals(49.99, $row['price']);
         $this->assertEquals(4000, $row['points']);
-        $this->assertEquals(1, $row['period']);
+        $this->assertEquals(1, $row['period_type']);
     }
 
     public function testDelete()
