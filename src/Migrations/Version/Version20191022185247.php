@@ -25,6 +25,10 @@ final class Version20191022185247 extends AbstractMigration
             $userTable->addColumn('token', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
         }
 
+        // change config length
+        $configTable = $schema->getTable('fusio_config');
+        $configTable->changeColumn('value', ['length' => 512]);
+
         // sync
         MigrationUtil::sync($this->connection, function($sql, $params){
             $this->addSql($sql, $params);
