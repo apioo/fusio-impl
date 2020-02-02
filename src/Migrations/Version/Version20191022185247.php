@@ -28,7 +28,10 @@ final class Version20191022185247 extends AbstractMigration
         // change config length
         $configTable = $schema->getTable('fusio_config');
         $configTable->changeColumn('value', ['length' => 512]);
+    }
 
+    public function postUp(Schema $schema)
+    {
         // sync
         MigrationUtil::sync($this->connection, function($sql, $params){
             $this->addSql($sql, $params);
