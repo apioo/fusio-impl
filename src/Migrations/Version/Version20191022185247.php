@@ -25,6 +25,17 @@ final class Version20191022185247 extends AbstractMigration
             $userTable->addColumn('token', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
         }
 
+        // add period type column
+        $planTable = $schema->getTable('fusio_plan');
+        if (!$planTable->hasColumn('period_type')) {
+            $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
+        }
+
+        $planContractTable = $schema->getTable('fusio_plan_contract');
+        if (!$planContractTable->hasColumn('period_type')) {
+            $planContractTable->addColumn('period_type', 'integer', ['notnull' => false]);
+        }
+
         // change config length
         $configTable = $schema->getTable('fusio_config');
         $configTable->changeColumn('value', ['length' => 512]);
@@ -32,10 +43,6 @@ final class Version20191022185247 extends AbstractMigration
 
     public function postUp(Schema $schema)
     {
-        // sync
-        MigrationUtil::sync($this->connection, function($sql, $params){
-            $this->addSql($sql, $params);
-        });
     }
 
     public function down(Schema $schema) : void
