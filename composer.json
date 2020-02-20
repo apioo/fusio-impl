@@ -14,6 +14,7 @@
     "php": ">=7.0",
     "psx/framework": "^4.0",
     "psx/openssl": "^1.0",
+    "psx/cloudevents": "^0.1",
     "fusio/engine": "^3.0",
     "fusio/adapter-file": "^3.0",
     "fusio/adapter-graphql": "^0.2",
