@@ -57,9 +57,7 @@ class GenerateCommandTest extends ControllerDbTestCase
 
         $this->assertRegExp('/Successful!/', trim($actual));
 
-        // check files
-        $files = scandir(__DIR__ . '/output');
-
-        $this->assertTrue(count($files) > 40); // simply check whether files are available the exact count is variable
+        // check file
+        $this->assertTrue(is_file(__DIR__ . '/output/sdk-client-php.zip'));
     }
 }
