@@ -46,6 +46,11 @@ class Audit extends SchemaAbstract
         $sb->string('name');
         $user = $sb->getProperty();
 
+        $sb = $this->getSchemaBuilder('Audit Object');
+        $sb->setDescription('A key value object containing the changes');
+        $sb->setAdditionalProperties(true);
+        $content = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('Audit');
         $sb->integer('id');
         $sb->objectType('app', $app);
@@ -53,9 +58,7 @@ class Audit extends SchemaAbstract
         $sb->string('event');
         $sb->string('ip');
         $sb->string('message');
-        $sb->objectType('content')
-            ->setTitle('Audit Object')
-            ->setDescription('A key value object containing the changes');
+        $sb->objectType('content', $content);
         $sb->dateTime('date');
 
         return $sb->getProperty();

@@ -109,7 +109,8 @@
       "Audit_Object": {
         "type": "object",
         "title": "Audit Object",
-        "description": "A key value object containing the changes"
+        "description": "A key value object containing the changes",
+        "additionalProperties": true
       },
       "Audit_Collection": {
         "type": "object",

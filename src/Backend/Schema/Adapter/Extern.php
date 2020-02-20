@@ -41,7 +41,7 @@ class Extern extends SchemaAbstract
             ->getProperty('config')
             ->getItems()
             ->getProperty('methods')
-            ->getPatternProperty('^(GET|POST|PUT|PATCH|DELETE)$');
+            ->getAdditionalProperties();
 
         $method->getProperty('parameters')
             ->setType('string');
@@ -53,7 +53,7 @@ class Extern extends SchemaAbstract
             ->setType('string');
 
         $method->getProperty('responses')
-            ->getPatternProperty('^([0-9]{3})$')
+            ->getAdditionalProperties()
             ->setType('string');
 
         $method->getProperty('action')

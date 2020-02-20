@@ -19,12 +19,14 @@
       "Export_Schema_JsonSchema": {
         "type": "object",
         "title": "Export Schema JsonSchema",
-        "description": "Contains a JsonSchema"
+        "description": "Contains a JsonSchema",
+        "additionalProperties": true
       },
       "Export_Schema_Form": {
         "type": "object",
         "title": "Export Schema Form",
-        "description": "Contains a ui vocabulary to augment the request JsonSchema"
+        "description": "Contains a ui vocabulary to augment the request JsonSchema",
+        "additionalProperties": true
       },
       "Export_Schema": {
         "type": "object",

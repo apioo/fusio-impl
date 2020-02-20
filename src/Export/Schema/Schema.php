@@ -34,13 +34,19 @@ class Schema extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('Export Schema JsonSchema');
+        $sb->setDescription('Contains a JsonSchema');
+        $sb->setAdditionalProperties(true);
+        $schema = $sb->getProperty();
+
+        $sb = $this->getSchemaBuilder('Export Schema Form');
+        $sb->setDescription('Contains a ui vocabulary to augment the request JsonSchema');
+        $sb->setAdditionalProperties(true);
+        $form = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('Export Schema');
-        $sb->objectType('schema')
-            ->setTitle('Export Schema JsonSchema')
-            ->setDescription('Contains a JsonSchema');
-        $sb->objectType('form')
-            ->setTitle('Export Schema Form')
-            ->setDescription('Contains a ui vocabulary to augment the request JsonSchema');
+        $sb->objectType('schema', $schema);
+        $sb->objectType('form', $form);
 
         return $sb->getProperty();
     }

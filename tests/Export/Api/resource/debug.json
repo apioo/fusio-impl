@@ -9,15 +9,18 @@
     "definitions": {
       "Export_Debug_Headers": {
         "type": "object",
-        "title": "Export Debug Headers"
+        "title": "Export Debug Headers",
+        "additionalProperties": true
       },
       "Export_Debug_Parameters": {
         "type": "object",
-        "title": "Export Debug Parameters"
+        "title": "Export Debug Parameters",
+        "additionalProperties": true
       },
       "Export_Debug_Request": {
         "type": "object",
-        "title": "Export Debug Request"
+        "title": "Export Debug Request",
+        "additionalProperties": true
       },
       "Export_Debug": {
         "type": "object",
@@ -40,7 +43,8 @@
       "Passthru": {
         "type": "object",
         "title": "passthru",
-        "description": "No schema information available"
+        "description": "No schema information available",
+        "additionalProperties": true
       },
       "GET-200-response": {
         "$ref": "#\/definitions\/Export_Debug"

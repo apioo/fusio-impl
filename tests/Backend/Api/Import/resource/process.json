@@ -55,10 +55,8 @@
       "Routes_Methods": {
         "type": "object",
         "title": "Routes Methods",
-        "patternProperties": {
-          "^(GET|POST|PUT|PATCH|DELETE)$": {
-            "$ref": "#\/definitions\/Routes_Method"
-          }
+        "additionalProperties": {
+          "$ref": "#\/definitions\/Routes_Method"
         }
       },
       "Routes_Method": {
@@ -109,10 +107,8 @@
       "Routes_Method_Responses": {
         "type": "object",
         "title": "Routes Method Responses",
-        "patternProperties": {
-          "^([0-9]{3})$": {
-            "type": "string"
-          }
+        "additionalProperties": {
+          "type": "string"
         }
       },
       "Action": {

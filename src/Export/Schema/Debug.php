@@ -34,14 +34,23 @@ class Debug extends SchemaAbstract
 {
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('Export Debug Headers');
+        $sb->setAdditionalProperties(true);
+        $headers = $sb->getProperty();
+
+        $sb = $this->getSchemaBuilder('Export Debug Parameters');
+        $sb->setAdditionalProperties(true);
+        $parameters = $sb->getProperty();
+
+        $sb = $this->getSchemaBuilder('Export Debug Request');
+        $sb->setAdditionalProperties(true);
+        $body = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('Export Debug');
         $sb->string('method');
-        $sb->objectType('headers')
-            ->setTitle('Export Debug Headers');
-        $sb->objectType('parameters')
-            ->setTitle('Export Debug Parameters');
-        $sb->objectType('body')
-            ->setTitle('Export Debug Request');
+        $sb->objectType('headers', $headers);
+        $sb->objectType('parameters', $parameters);
+        $sb->objectType('body', $body);
 
         return $sb->getProperty();
     }

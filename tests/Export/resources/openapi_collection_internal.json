@@ -5915,6 +5915,33 @@
         }
       ]
     },
+    "\/consumer\/register": {
+      "post": {
+        "operationId": "consumerRegisterPostConsumer_User_Register",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_User_Register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": []
+    },
     "\/consumer\/password_reset": {
       "put": {
         "operationId": "consumerPasswordresetPutConsumer_User_PasswordReset",
@@ -5977,33 +6004,6 @@
             ]
           }
         ]
-      },
-      "parameters": []
-    },
-    "\/consumer\/register": {
-      "post": {
-        "operationId": "consumerRegisterPostConsumer_User_Register",
-        "requestBody": {
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_User_Register"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Message"
-                }
-              }
-            }
-          }
-        }
       },
       "parameters": []
     },
@@ -6881,7 +6881,8 @@
       "Audit_Object": {
         "type": "object",
         "title": "Audit Object",
-        "description": "A key value object containing the changes"
+        "description": "A key value object containing the changes",
+        "additionalProperties": true
       },
       "Audit_Collection": {
         "type": "object",
@@ -7383,10 +7384,8 @@
       "Routes_Methods": {
         "type": "object",
         "title": "Routes Methods",
-        "patternProperties": {
-          "^(GET|POST|PUT|PATCH|DELETE)$": {
-            "$ref": "#\/components\/schemas\/Routes_Method"
-          }
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Routes_Method"
         }
       },
       "Routes_Method": {
@@ -7437,10 +7436,8 @@
       "Routes_Method_Responses": {
         "type": "object",
         "title": "Routes Method Responses",
-        "patternProperties": {
-          "^([0-9]{3})$": {
-            "type": "integer"
-          }
+        "additionalProperties": {
+          "type": "integer"
         }
       },
       "Schema": {
@@ -9139,6 +9136,29 @@
         },
         "additionalProperties": true
       },
+      "Consumer_User_Register": {
+        "type": "object",
+        "title": "Consumer User Register",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
       "Consumer_User_Email": {
         "type": "object",
         "title": "Consumer User Email",
@@ -9165,29 +9185,6 @@
         "required": [
           "token",
           "newPassword"
-        ]
-      },
-      "Consumer_User_Register": {
-        "type": "object",
-        "title": "Consumer User Register",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "captcha": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "email",
-          "password"
         ]
       },
       "Documentation_Route": {
@@ -9241,7 +9238,8 @@
       "Documentation_Schema": {
         "type": "object",
         "title": "Documentation Schema",
-        "description": "Contains the JSON Schema object"
+        "description": "Contains the JSON Schema object",
+        "additionalProperties": true
       },
       "Documentation_Methods": {
         "type": "object",
@@ -9476,15 +9474,18 @@
       },
       "Export_Debug_Headers": {
         "type": "object",
-        "title": "Export Debug Headers"
+        "title": "Export Debug Headers",
+        "additionalProperties": true
       },
       "Export_Debug_Parameters": {
         "type": "object",
-        "title": "Export Debug Parameters"
+        "title": "Export Debug Parameters",
+        "additionalProperties": true
       },
       "Export_Debug_Request": {
         "type": "object",
-        "title": "Export Debug Request"
+        "title": "Export Debug Request",
+        "additionalProperties": true
       },
       "Export_Debug": {
         "type": "object",
@@ -9507,17 +9508,20 @@
       "Passthru": {
         "type": "object",
         "title": "passthru",
-        "description": "No schema information available"
+        "description": "No schema information available",
+        "additionalProperties": true
       },
       "Export_Schema_JsonSchema": {
         "type": "object",
         "title": "Export Schema JsonSchema",
-        "description": "Contains a JsonSchema"
+        "description": "Contains a JsonSchema",
+        "additionalProperties": true
       },
       "Export_Schema_Form": {
         "type": "object",
         "title": "Export Schema Form",
-        "description": "Contains a ui vocabulary to augment the request JsonSchema"
+        "description": "Contains a ui vocabulary to augment the request JsonSchema",
+        "additionalProperties": true
       },
       "Export_Schema": {
         "type": "object",

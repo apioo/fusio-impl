@@ -36,7 +36,7 @@ class Routes extends SchemaAbstract
     public function getDefinition()
     {
         $sb = $this->getSchemaBuilder('Routes Methods');
-        $sb->addPatternProperty('^(GET|POST|PUT|PATCH|DELETE)$', $this->getSchema(Routes\Method::class));
+        $sb->setAdditionalProperties($this->getSchema(Routes\Method::class));
         $methods = $sb->getProperty();
 
         $sb = $this->getSchemaBuilder('Routes Version');
