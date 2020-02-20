@@ -349,7 +349,7 @@ class NewInstallation
             'title' => 'passthru',
             'type' => 'object',
             'description' => 'No schema was specified.',
-            'properties' => new \stdClass(),
+            'additionalProperties' => true,
         ], JSON_PRETTY_PRINT);
     }
 
