@@ -105,7 +105,7 @@ class AuditListener implements EventSubscriberInterface
             [
                 'appId' => $event->getAppId(),
                 'tokenId' => $event->getTokenId(),
-                'access_token' => $event->getAccessToken(),
+                'accessToken' => $event->getAccessToken(),
                 'scope' => $event->getScopes(),
                 'expires' => $event->getExpires()->format('Y-m-d H:i:s'),
                 'now' => $event->getNow()->format('Y-m-d H:i:s')
@@ -370,7 +370,7 @@ class AuditListener implements EventSubscriberInterface
             'invoice.payed',
             'Payed invoice',
             [
-                'transaction_id' => $event->getTransaction()->getId(),
+                'transactionId' => $event->getTransaction()->getId(),
                 'transaction' => $event->getTransaction()->getTransactionId(),
             ]
         );
@@ -522,13 +522,13 @@ class AuditListener implements EventSubscriberInterface
             'transaction.prepare',
             sprintf('Prepared transaction %s', $event->getTransaction()->getTransactionId()),
             [
-                'invoice_id' => $event->getTransaction()->getInvoiceId(),
-                'transaction_id' => $event->getTransaction()->getTransactionId(),
+                'invoiceId' => $event->getTransaction()->getInvoiceId(),
+                'transactionId' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
                 'status' => $event->getTransaction()->getStatus(),
-                'remote_id' => $event->getTransaction()->getRemoteId(),
+                'remoteId' => $event->getTransaction()->getRemoteId(),
                 'amount' => $event->getTransaction()->getAmount(),
-                'return_url' => $event->getTransaction()->getReturnUrl(),
+                'returnUrl' => $event->getTransaction()->getReturnUrl(),
             ]
         );
     }
@@ -541,13 +541,13 @@ class AuditListener implements EventSubscriberInterface
             'transaction.execute',
             sprintf('Executed transaction %s', $event->getTransaction()->getTransactionId()),
             [
-                'invoice_id' => $event->getTransaction()->getInvoiceId(),
-                'transaction_id' => $event->getTransaction()->getTransactionId(),
+                'invoiceId' => $event->getTransaction()->getInvoiceId(),
+                'transactionId' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
                 'status' => $event->getTransaction()->getStatus(),
-                'remote_id' => $event->getTransaction()->getRemoteId(),
+                'remoteId' => $event->getTransaction()->getRemoteId(),
                 'amount' => $event->getTransaction()->getAmount(),
-                'return_url' => $event->getTransaction()->getReturnUrl(),
+                'returnUrl' => $event->getTransaction()->getReturnUrl(),
             ]
         );
     }
