@@ -97,24 +97,14 @@ class Generate extends BackendApiAbstract
             mkdir($sdkDir);
         }
 
-        $folderName = 'sdk-' . $format;
-        $sdk = $sdkDir . '/' . $folderName;
+        $file = 'sdk-' . $format . '.zip';
 
-        if (!is_dir($sdk)) {
-            mkdir($sdk);
-        }
-
-        $this->generate($sdk, $format, $config);
-
-        $sdkZip = $sdk . '.zip';
-
-        $this->createZip($sdkZip, $sdk);
-        $this->moveToTrash($sdk, $folderName);
+        $this->generate($sdkDir, $format, $config);
 
         return [
             'success' => true,
             'message' => 'SDK successfully generated',
-            'link' => $this->config['psx_url'] . '/sdk/' . $folderName . '.zip',
+            'link' => $this->config['psx_url'] . '/sdk/' . $file,
         ];
     }
 
@@ -151,32 +141,6 @@ class Generate extends BackendApiAbstract
         }
 
         $this->console->run(new ArrayInput($parameters), new NullOutput());
-    }
-
-    private function createZip($zipFile, $sdkDir)
-    {
-        $zip = new \ZipArchive();
-        $zip->open($zipFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
-        $dir = new \RecursiveDirectoryIterator($sdkDir);
-        foreach ($dir as $path => $file) {
-            /** @var \SplFileInfo $file */
-            if ($file->getFilename() == '.' || $file->getFilename() == '..') {
-                continue;
-            }
-
-            if ($file->isFile()) {
-                $relativePath = substr($path, strlen($sdkDir) + 1);
-                $zip->addFile($path, $relativePath);
-            }
-        }
-
-        $zip->close();
-    }
-
-    private function moveToTrash($dir, $folderName)
-    {
-        (new Filesystem())->rename($dir, $this->config->get('psx_path_cache') . '/' . $folderName . '-' . uniqid());
     }
 
     private function getSdkDir()
