@@ -541,6 +541,7 @@ JSON;
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
             'link' => ['<http://127.0.0.1/export/schema/3>; rel="post-schema"'],
+            'access-control-expose-headers' => ['*'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
