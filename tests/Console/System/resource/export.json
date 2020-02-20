@@ -227,7 +227,7 @@
         "title": "passthru",
         "type": "object",
         "description": "No schema was specified.",
-        "properties": {}
+        "additionalProperties": true
       }
     }
   ],
@@ -626,6 +626,138 @@
     {
       "name": "foo-event",
       "description": "Foo event description"
+    },
+    {
+      "name": "fusio.action.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.action.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.action.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.app.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.app.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.app.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.connection.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.connection.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.connection.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.cronjob.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.cronjob.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.cronjob.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.plan.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.plan.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.plan.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.rate.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.rate.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.rate.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.routes.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.routes.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.routes.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.schema.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.schema.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.schema.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.scope.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.scope.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.scope.update",
+      "description": ""
+    },
+    {
+      "name": "fusio.user.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.user.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.user.update",
+      "description": ""
     }
   ]
 }

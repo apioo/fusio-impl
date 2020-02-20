@@ -50,7 +50,8 @@
       "Passthru": {
         "type": "object",
         "title": "passthru",
-        "description": "No schema was specified."
+        "description": "No schema was specified.",
+        "additionalProperties": true
       },
       "GET-200-response": {
         "$ref": "#\/definitions\/Collection"

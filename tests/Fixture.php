@@ -111,11 +111,11 @@ class Fixture
                 ['status' => 1, 'name' => 'foo-event', 'description' => 'Foo event description'],
             ],
             'fusio_event_subscription' => [
-                ['event_id' => 1, 'user_id' => 1, 'status' => 1, 'endpoint' => 'http://www.fusio-project.org/ping'],
-                ['event_id' => 1, 'user_id' => 2, 'status' => 1, 'endpoint' => 'http://www.fusio-project.org/ping'],
+                ['event_id' => 34, 'user_id' => 1, 'status' => 1, 'endpoint' => 'http://www.fusio-project.org/ping'],
+                ['event_id' => 34, 'user_id' => 2, 'status' => 1, 'endpoint' => 'http://www.fusio-project.org/ping'],
             ],
             'fusio_event_trigger' => [
-                ['event_id' => 1, 'status' => 2, 'payload' => '{"foo":"bar"}', 'insert_date' => '2018-06-02 14:24:30'],
+                ['event_id' => 34, 'status' => 2, 'payload' => '{"foo":"bar"}', 'insert_date' => '2018-06-02 14:24:30'],
             ],
             'fusio_event_response' => [
                 ['trigger_id' => 1, 'subscription_id' => 1, 'status' => 2, 'code' => 200, 'attempts' => 1, 'execute_date' => '2018-06-02 14:41:23', 'insert_date' => '2018-06-02 14:41:23'],

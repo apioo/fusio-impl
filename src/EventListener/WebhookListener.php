@@ -463,7 +463,7 @@ class WebhookListener implements EventSubscriberInterface
     {
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
-            ->withSource('/backend/user/' . $event->getUser())
+            ->withSource('/backend/user/' . $event->getUserId())
             ->withType('org.fusio-project.user.update')
             ->withDataContentType('application/json')
             ->withData($event->getRecord())

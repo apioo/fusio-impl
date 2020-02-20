@@ -17,7 +17,8 @@ title: Fusio
               "id": "urn:schema.phpsx.org#",
               "type": "object",
               "title": "passthru",
-              "description": "No schema was specified."
+              "description": "No schema was specified.",
+              "additionalProperties": true
           }
     responses:
       200:
@@ -29,7 +30,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
   post:
     body:
@@ -40,7 +42,8 @@ title: Fusio
               "id": "urn:schema.phpsx.org#",
               "type": "object",
               "title": "passthru",
-              "description": "No schema was specified."
+              "description": "No schema was specified.",
+              "additionalProperties": true
           }
     responses:
       200:
@@ -52,7 +55,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
   put:
     body:
@@ -63,7 +67,8 @@ title: Fusio
               "id": "urn:schema.phpsx.org#",
               "type": "object",
               "title": "passthru",
-              "description": "No schema was specified."
+              "description": "No schema was specified.",
+              "additionalProperties": true
           }
     responses:
       200:
@@ -75,7 +80,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
   patch:
     body:
@@ -86,7 +92,8 @@ title: Fusio
               "id": "urn:schema.phpsx.org#",
               "type": "object",
               "title": "passthru",
-              "description": "No schema was specified."
+              "description": "No schema was specified.",
+              "additionalProperties": true
           }
     responses:
       200:
@@ -98,7 +105,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
   delete:
     body:
@@ -109,7 +117,8 @@ title: Fusio
               "id": "urn:schema.phpsx.org#",
               "type": "object",
               "title": "passthru",
-              "description": "No schema was specified."
+              "description": "No schema was specified.",
+              "additionalProperties": true
           }
     responses:
       200:
@@ -121,7 +130,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
 /foo:
   get:
@@ -209,7 +219,8 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }
 /:
   get:
@@ -223,5 +234,6 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }

@@ -25,8 +25,10 @@ use Fusio\Engine\Connector;
 use Fusio\Impl\Service\Config;
 
 /**
- * The connection resolver is used by for the internal system to get specific
- * configured connections which can also be changed by the user
+ * The connection resolver is used by the internal system to get specific
+ * configured connections which can also be changed by the user through the
+ * config. I.e. by default we send events through HTTP but it would be also
+ * possible to pass those events into a message queue
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0

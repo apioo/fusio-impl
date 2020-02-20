@@ -42,7 +42,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/event/1', 'GET', array(
+        $response = $this->sendRequest('/doc/*/backend/event/34', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -55,7 +55,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/event/1', 'GET', array(
+        $response = $this->sendRequest('/backend/event/34', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -63,7 +63,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 1,
+    "id": 34,
     "name": "foo-event",
     "description": "Foo event description"
 }
@@ -77,7 +77,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/event/10', 'GET', array(
+        $response = $this->sendRequest('/backend/event/340', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -97,7 +97,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/event/1', 'POST', array(
+        $response = $this->sendRequest('/backend/event/34', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -111,7 +111,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/event/1', 'PUT', array(
+        $response = $this->sendRequest('/backend/event/34', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -141,14 +141,14 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(34, $row['id']);
         $this->assertEquals('New-Test', $row['name']);
         $this->assertEquals('Test new description', $row['description']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/event/1', 'DELETE', array(
+        $response = $this->sendRequest('/backend/event/34', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -175,6 +175,6 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(1, $row['id']);
+        $this->assertEquals(34, $row['id']);
     }
 }

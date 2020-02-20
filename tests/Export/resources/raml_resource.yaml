@@ -89,5 +89,6 @@ title: Fusio
                   "id": "urn:schema.phpsx.org#",
                   "type": "object",
                   "title": "passthru",
-                  "description": "No schema was specified."
+                  "description": "No schema was specified.",
+                  "additionalProperties": true
               }

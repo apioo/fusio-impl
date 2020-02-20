@@ -32,8 +32,9 @@ use PSX\Sql\TableAbstract;
  */
 class Event extends TableAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_DELETED  = 0;
+    const STATUS_INTERNAL = 2;
 
     public function getName()
     {
