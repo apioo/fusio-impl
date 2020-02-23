@@ -39,9 +39,9 @@ class Account extends ConsumerApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\User
+     * @var \Fusio\Impl\Service\Consumer\User
      */
-    protected $userService;
+    protected $consumerUserService;
 
     /**
      * @inheritdoc
@@ -80,8 +80,7 @@ class Account extends ConsumerApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
-        $this->userService->updateMeta(
-            $this->context->getUserId(),
+        $this->consumerUserService->update(
             $record->email,
             $record->attributes,
             $this->context->getUserContext()
