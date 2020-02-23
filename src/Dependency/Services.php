@@ -271,10 +271,10 @@ trait Services
     {
         return new Service\Consumer\App(
             $this->get('app_service'),
+            $this->get('config_service'),
             $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\Scope::class),
-            $this->get('table_manager')->getTable(Table\User\Scope::class),
-            $this->get('config_service')
+            $this->get('table_manager')->getTable(Table\User\Scope::class)
         );
     }
 
@@ -284,7 +284,7 @@ trait Services
     public function getConsumerSubscriptionService()
     {
         return new Service\Consumer\Subscription(
-            $this->get('app_service'),
+            $this->get('event_subscription_service'),
             $this->get('config_service'),
             $this->get('table_manager')->getTable(Table\Event\Subscription::class),
             $this->get('table_manager')->getTable(Table\Event::class)
