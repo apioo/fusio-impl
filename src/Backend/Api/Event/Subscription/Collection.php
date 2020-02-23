@@ -88,9 +88,9 @@ class Collection extends BackendApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->eventSubscriptionService->create(
+            $record->eventId,
             $record->userId,
-            $record->name,
-            $record->description,
+            $record->endpoint,
             $this->context->getUserContext()
         );
 

@@ -113,7 +113,7 @@ class Entity extends BackendApiAbstract
     protected function doDelete($record, HttpContextInterface $context)
     {
         $this->eventSubscriptionService->delete(
-            (int) $context->getUriFragment('event_id'),
+            (int) $context->getUriFragment('subscription_id'),
             $this->context->getUserContext()
         );
 
