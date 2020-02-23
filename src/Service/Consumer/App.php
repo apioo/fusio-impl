@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\App;
+namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
@@ -34,12 +34,17 @@ use PSX\Sql\Condition;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Developer
+class App
 {
     /**
      * @var \Fusio\Impl\Service\App
      */
     protected $appService;
+
+    /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
 
     /**
      * @var \Fusio\Impl\Table\App
@@ -57,31 +62,19 @@ class Developer
     protected $userScopeTable;
 
     /**
-     * @var integer
-     */
-    protected $appCount;
-
-    /**
-     * @var boolean
-     */
-    protected $appApproval;
-
-    /**
      * @param \Fusio\Impl\Service\App $appService
+     * @param \Fusio\Impl\Service\Config $configService
      * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\Scope $scopeTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
-     * @param integer $appCount
-     * @param boolean $appApproval
      */
-    public function __construct(Service\App $appService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, $appCount, $appApproval)
+    public function __construct(Service\App $appService, Service\Config $configService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable)
     {
         $this->appService     = $appService;
+        $this->configService  = $configService;
         $this->appTable       = $appTable;
         $this->scopeTable     = $scopeTable;
         $this->userScopeTable = $userScopeTable;
-        $this->appCount       = $appCount;
-        $this->appApproval    = $appApproval;
     }
 
     public function create($name, $url, array $scopes = null, UserContext $context)
@@ -91,24 +84,18 @@ class Developer
         // validate data
         $this->assertName($name);
         $this->assertUrl($url);
-
-        // check limit of apps which an user can create
-        $condition = new Condition();
-        $condition->equals('user_id', $userId);
-        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
-
-        if ($this->appTable->getCount($condition) > $this->appCount) {
-            throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to register a new one');
-        }
+        $this->assertMaxAppCount($userId);
 
         $scopes = $this->getValidUserScopes($userId, $scopes);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
+        $appApproval = $this->configService->getValue('app_approval');
+
         $this->appService->create(
             $userId,
-            $this->appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING,
+            $appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING,
             $name,
             $url,
             null,
@@ -191,19 +178,32 @@ class Developer
         }, $scopes);
     }
 
-    protected function assertName($name)
+    private function assertName($name)
     {
         if (empty($name)) {
             throw new StatusCode\BadRequestException('Invalid name');
         }
     }
 
-    protected function assertUrl($url)
+    private function assertUrl($url)
     {
         if (!empty($url)) {
             if (!filter_var($url, FILTER_VALIDATE_URL)) {
                 throw new StatusCode\BadRequestException('Invalid url format');
             }
+        }
+    }
+
+    private function assertMaxAppCount($userId)
+    {
+        $appCount = $this->configService->getValue('app_consumer');
+
+        $condition = new Condition();
+        $condition->equals('user_id', $userId);
+        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
+
+        if ($this->appTable->getCount($condition) > $appCount) {
+            throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to register a new one');
         }
     }
 }
