@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\View;
+namespace Fusio\Impl\Consumer\View\Event;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
@@ -78,7 +78,7 @@ class Subscription extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'event' => 'name',
             'endpoint' => 'endpoint',
-            'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [$userId, new Reference('id')], [
+            'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
                 'status' => $this->fieldInteger('status'),
                 'code' => $this->fieldInteger('code'),
                 'attempts' => $this->fieldInteger('attempts'),

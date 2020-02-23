@@ -19,25 +19,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Schema\Subscription;
+namespace Fusio\Impl\Consumer\Schema\Event\Subscription;
 
 use Fusio\Impl\Consumer\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Create
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Create extends SchemaAbstract
+class Collection extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Schema\Subscription::class);
-        $schema->setRequired(['event', 'endpoint']);
+        $sb = $this->getSchemaBuilder('Consumer Event Subscription Collection');
+        $sb->integer('totalResults');
+        $sb->integer('startIndex');
+        $sb->arrayType('entry')
+            ->setItems($this->getSchema(Schema\Event\Subscription::class));
 
-        return $schema;
+        return $sb->getProperty();
     }
 }

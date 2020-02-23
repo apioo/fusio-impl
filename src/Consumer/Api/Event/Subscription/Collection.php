@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Subscription;
+namespace Fusio\Impl\Consumer\Api\Event\Subscription;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
@@ -27,22 +27,21 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
- * Entity
+ * Collection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Entity extends ConsumerApiAbstract
+class Collection extends ConsumerApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Event\Subscription
+     * @var \Fusio\Impl\Service\Consumer\Subscription
      */
-    protected $eventSubscriptionService;
+    protected $consumerSubscriptionService;
 
     /**
      * @inheritdoc
@@ -50,22 +49,16 @@ class Entity extends ConsumerApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('subscription_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Subscription::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Event\Subscription\Collection::class))
         );
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
+        $resource->addMethod(Resource\Factory::getMethod('POST')
             ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Subscription\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
-
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Event\Subscription\Create::class))
+            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -76,42 +69,26 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Subscription::class)->getEntity(
+        return $this->tableManager->getTable(View\Event\Subscription::class)->getCollection(
             $this->context->getUserId(),
-            (int) $context->getUriFragment('subscription_id')
+            (int) $context->getParameter('startIndex')
         );
     }
 
     /**
      * @inheritdoc
      */
-    protected function doPut($record, HttpContextInterface $context)
+    protected function doPost($record, HttpContextInterface $context)
     {
-        $this->eventSubscriptionService->update(
-            $context->getUriFragment('subscription_id'),
+        $this->consumerSubscriptionService->create(
+            $record->event,
             $record->endpoint,
             $this->context->getUserContext()
         );
 
         return array(
             'success' => true,
-            'message' => 'Subscription successful updated',
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function doDelete($record, HttpContextInterface $context)
-    {
-        $this->eventSubscriptionService->delete(
-            $context->getUriFragment('subscription_id'),
-            $this->context->getUserContext()
-        );
-
-        return array(
-            'success' => true,
-            'message' => 'Subscription successful deleted',
+            'message' => 'Subscription successful created',
         );
     }
 }

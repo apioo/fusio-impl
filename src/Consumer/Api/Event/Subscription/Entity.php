@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\Subscription;
+namespace Fusio\Impl\Consumer\Api\Event\Subscription;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
@@ -27,21 +27,22 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Schema\Property;
 
 /**
- * Collection
+ * Entity
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Collection extends ConsumerApiAbstract
+class Entity extends ConsumerApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Event\Subscription
+     * @var \Fusio\Impl\Service\Consumer\Subscription
      */
-    protected $eventSubscriptionService;
+    protected $consumerSubscriptionService;
 
     /**
      * @inheritdoc
@@ -49,16 +50,22 @@ class Collection extends ConsumerApiAbstract
     public function getDocumentation($version = null)
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $resource->addPathParameter('subscription_id', Property::getInteger());
 
         $resource->addMethod(Resource\Factory::getMethod('GET')
             ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Subscription\Collection::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Event\Subscription::class))
         );
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
+        $resource->addMethod(Resource\Factory::getMethod('PUT')
             ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Subscription\Create::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
+            ->setRequest($this->schemaManager->getSchema(Schema\Event\Subscription\Update::class))
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
+        );
+
+        $resource->addMethod(Resource\Factory::getMethod('DELETE')
+            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
+            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
         );
 
         return $resource;
@@ -69,26 +76,42 @@ class Collection extends ConsumerApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Subscription::class)->getCollection(
+        return $this->tableManager->getTable(View\Event\Subscription::class)->getEntity(
             $this->context->getUserId(),
-            (int) $context->getParameter('startIndex')
+            (int) $context->getUriFragment('subscription_id')
         );
     }
 
     /**
      * @inheritdoc
      */
-    protected function doPost($record, HttpContextInterface $context)
+    protected function doPut($record, HttpContextInterface $context)
     {
-        $this->eventSubscriptionService->create(
-            $record->event,
+        $this->consumerSubscriptionService->update(
+            $context->getUriFragment('subscription_id'),
             $record->endpoint,
             $this->context->getUserContext()
         );
 
         return array(
             'success' => true,
-            'message' => 'Subscription successful created',
+            'message' => 'Subscription successful updated',
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doDelete($record, HttpContextInterface $context)
+    {
+        $this->consumerSubscriptionService->delete(
+            $context->getUriFragment('subscription_id'),
+            $this->context->getUserContext()
+        );
+
+        return array(
+            'success' => true,
+            'message' => 'Subscription successful deleted',
         );
     }
 }
