@@ -100,7 +100,7 @@ class Subscription
 
         $this->subscriptionTable->update($record);
 
-        $this->eventDispatcher->dispatch(SubscriptionEvents::UPDATE, new UpdatedEvent($subscription['id'], $record. $subscription, $context));
+        $this->eventDispatcher->dispatch(SubscriptionEvents::UPDATE, new UpdatedEvent($subscription['id'], $record, $subscription, $context));
     }
 
     public function delete($subscriptionId, UserContext $context)
