@@ -22,13 +22,12 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Event\SubscribedEvent;
-use Fusio\Impl\Event\Event\UnsubscribedEvent;
-use Fusio\Impl\Event\EventEvents;
-use Fusio\Impl\Service\Config;
+use Fusio\Impl\Event\Event\Subscription\CreatedEvent;
+use Fusio\Impl\Event\Event\Subscription\DeletedEvent;
+use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
+use Fusio\Impl\Event\Event\SubscriptionEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -51,11 +50,6 @@ class Subscription
     protected $subscriptionTable;
 
     /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
-
-    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
@@ -63,40 +57,21 @@ class Subscription
     /**
      * @param \Fusio\Impl\Table\Event $eventTable
      * @param \Fusio\Impl\Table\Event\Subscription $subscriptionTable
-     * @param \Fusio\Impl\Service\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Event $eventTable, Table\Event\Subscription $subscriptionTable, Config $configService, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Event $eventTable, Table\Event\Subscription $subscriptionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->eventTable        = $eventTable;
         $this->subscriptionTable = $subscriptionTable;
-        $this->configService     = $configService;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($event, $endpoint, UserContext $context)
+    public function create($eventId, $userId, $endpoint, UserContext $context)
     {
-        // check whether subscription exists
-        $condition  = new Condition();
-        $condition->equals('name', $event);
-
-        $event = $this->eventTable->getOneBy($condition);
-
-        if (empty($event)) {
-            throw new StatusCode\BadRequestException('Event does not exist');
-        }
-
-        // check max subscription count
-        $count = $this->subscriptionTable->getSubscriptionCount($context->getUserId());
-
-        if ($count > $this->configService->getValue('consumer_subscription')) {
-            throw new StatusCode\BadRequestException('Max subscription count reached');
-        }
-
         // create event
         $record = [
-            'event_id' => $event['id'],
-            'user_id'  => $context->getUserId(),
+            'event_id' => $eventId,
+            'user_id'  => $userId,
             'status'   => Table\Event\Subscription::STATUS_ACTIVE,
             'endpoint' => $endpoint,
         ];
@@ -106,7 +81,7 @@ class Subscription
         // get last insert id
         $subscriptionId = $this->subscriptionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(EventEvents::SUBSCRIBE, new SubscribedEvent($subscriptionId, $record, $context));
+        $this->eventDispatcher->dispatch(SubscriptionEvents::CREATE, new CreatedEvent($subscriptionId, $record, $context));
     }
 
     public function update($subscriptionId, $endpoint, UserContext $context)
@@ -117,10 +92,6 @@ class Subscription
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
-        if ($subscription['user_id'] != $context->getUserId()) {
-            throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
-        }
-
         // update subscription
         $record = [
             'id'       => $subscription['id'],
@@ -128,6 +99,8 @@ class Subscription
         ];
 
         $this->subscriptionTable->update($record);
+
+        $this->eventDispatcher->dispatch(SubscriptionEvents::UPDATE, new UpdatedEvent($subscription['id'], $record. $subscription, $context));
     }
 
     public function delete($subscriptionId, UserContext $context)
@@ -136,10 +109,6 @@ class Subscription
 
         if (empty($subscription)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
-        }
-
-        if ($subscription['user_id'] != $context->getUserId()) {
-            throw new StatusCode\BadRequestException('Subscription is not assigned to this account');
         }
 
         // delete all responses
@@ -152,6 +121,6 @@ class Subscription
 
         $this->subscriptionTable->delete($record);
 
-        $this->eventDispatcher->dispatch(EventEvents::UNSUBSCRIBE, new UnsubscribedEvent($subscription['id'], $subscription, $context));
+        $this->eventDispatcher->dispatch(SubscriptionEvents::DELETE, new DeletedEvent($subscription['id'], $subscription, $context));
     }
 }
