@@ -429,13 +429,13 @@ JSON;
         $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 35]);
 
         $this->assertEquals([[
-            'id'       => 101,
+            'id'       => 103,
             'scope_id' => 35,
             'route_id' => 2,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'id'       => 100,
+            'id'       => 102,
             'scope_id' => 35,
             'route_id' => 1,
             'allow'    => 1,

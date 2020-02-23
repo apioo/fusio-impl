@@ -69,13 +69,13 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
-            "eventId": 34,
+            "eventId": 37,
             "userId": 1,
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         },
         {
             "id": 2,
-            "eventId": 34,
+            "eventId": 37,
             "userId": 2,
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         }

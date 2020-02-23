@@ -70,25 +70,26 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 109,
+            "status": 1,
+            "path": "\/inspect\/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
+            "id": 108,
+            "status": 1,
+            "path": "\/foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
             "id": 107,
             "status": 1,
-            "path": "/inspect/:foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 106,
-            "status": 1,
-            "path": "/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 105,
-            "status": 1,
-            "path": "/",
+            "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
 }
+
 JSON;
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -110,9 +111,9 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 107,
+            "id": 109,
             "status": 1,
-            "path": "/inspect/:foo",
+            "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]
@@ -138,21 +139,21 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
+            "id": 109,
+            "status": 1,
+            "path": "\/inspect\/:foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
+            "id": 108,
+            "status": 1,
+            "path": "\/foo",
+            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
+        },
+        {
             "id": 107,
             "status": 1,
-            "path": "/inspect/:foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 106,
-            "status": 1,
-            "path": "/foo",
-            "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
-        },
-        {
-            "id": 105,
-            "status": 1,
-            "path": "/",
+            "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         }
     ]

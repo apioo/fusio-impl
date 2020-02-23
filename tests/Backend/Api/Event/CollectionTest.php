@@ -63,12 +63,12 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 34,
+    "totalResults": 37,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 34,
+            "id": 37,
             "name": "foo-event",
             "description": "Foo event description"
         },
@@ -143,8 +143,8 @@ class CollectionTest extends ControllerDbTestCase
             "description": ""
         },
         {
-            "id": 15,
-            "name": "fusio.event.update",
+            "id": 16,
+            "name": "fusio.event.subscription.create",
             "description": ""
         }
     ]
@@ -187,7 +187,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(35, $row['id']);
+        $this->assertEquals(38, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);
