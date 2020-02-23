@@ -43,9 +43,9 @@ class Entity extends ConsumerApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\App\Developer
+     * @var \Fusio\Impl\Service\Consumer\App
      */
-    protected $appDeveloperService;
+    protected $consumerAppService;
 
     /**
      * @inheritdoc
@@ -90,7 +90,7 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
-        $this->appDeveloperService->update(
+        $this->consumerAppService->update(
             (int) $context->getUriFragment('app_id'),
             $record->name,
             $record->url,
@@ -109,7 +109,7 @@ class Entity extends ConsumerApiAbstract
      */
     protected function doDelete($record, HttpContextInterface $context)
     {
-        $this->appDeveloperService->delete(
+        $this->consumerAppService->delete(
             (int) $context->getUriFragment('app_id'),
             $this->context->getUserContext()
         );

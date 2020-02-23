@@ -42,9 +42,9 @@ class Collection extends ConsumerApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\App\Developer
+     * @var \Fusio\Impl\Service\Consumer\App
      */
-    protected $appDeveloperService;
+    protected $consumerAppService;
 
     /**
      * @inheritdoc
@@ -84,7 +84,7 @@ class Collection extends ConsumerApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $this->appDeveloperService->create(
+        $this->consumerAppService->create(
             $record->name,
             $record->url,
             $record->scopes,
