@@ -19,18 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Event\Subscription;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * EventEvents
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class EventEvents
+class CreatedEvent extends EventAbstract
 {
-    const CREATE = 'event.create';
-    const DELETE = 'event.delete';
-    const UPDATE = 'event.update';
+    /**
+     * @var integer
+     */
+    protected $subscriptionId;
+
+    /**
+     * @var array
+     */
+    protected $record;
+
+    /**
+     * @param integer $subscriptionId
+     * @param array $record
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct($subscriptionId, array $record, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->subscriptionId = $subscriptionId;
+        $this->record         = $record;
+    }
+
+    public function getSubscriptionId()
+    {
+        return $this->subscriptionId;
+    }
+
+    public function getRecord()
+    {
+        return $this->record;
+    }
 }

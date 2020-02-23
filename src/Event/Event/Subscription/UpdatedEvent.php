@@ -19,19 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Event;
+namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
- * UnsubscribedEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class UnsubscribedEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
     /**
      * @var integer
@@ -41,24 +41,36 @@ class UnsubscribedEvent extends EventAbstract
     /**
      * @var array
      */
+    protected $record;
+
+    /**
+     * @var array
+     */
     protected $subscription;
 
     /**
      * @param integer $subscriptionId
+     * @param array $record
      * @param array $subscription
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($subscriptionId, $subscription, UserContext $context)
+    public function __construct($subscriptionId, array $record, $subscription, UserContext $context)
     {
         parent::__construct($context);
 
         $this->subscriptionId = $subscriptionId;
+        $this->record         = $record;
         $this->subscription   = $subscription;
     }
 
     public function getSubscriptionId()
     {
         return $this->subscriptionId;
+    }
+
+    public function getRecord()
+    {
+        return $this->record;
     }
 
     public function getSubscription()

@@ -21,48 +21,16 @@
 
 namespace Fusio\Impl\Event\Event;
 
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\EventAbstract;
-
 /**
- * SubscribedEvent
+ * SubscriptionEvents
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SubscribedEvent extends EventAbstract
+class SubscriptionEvents
 {
-    /**
-     * @var integer
-     */
-    protected $subscriptionId;
-
-    /**
-     * @var array
-     */
-    protected $record;
-
-    /**
-     * @param integer $subscriptionId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($subscriptionId, array $record, UserContext $context)
-    {
-        parent::__construct($context);
-
-        $this->subscriptionId = $subscriptionId;
-        $this->record         = $record;
-    }
-
-    public function getSubscriptionId()
-    {
-        return $this->subscriptionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
+    const CREATE = 'subscription.create';
+    const DELETE = 'subscription.delete';
+    const UPDATE = 'subscription.update';
 }
