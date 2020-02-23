@@ -189,21 +189,6 @@ trait Services
     }
 
     /**
-     * @return \Fusio\Impl\Service\App\Developer
-     */
-    public function getAppDeveloperService()
-    {
-        return new Service\App\Developer(
-            $this->get('app_service'),
-            $this->get('table_manager')->getTable(Table\App::class),
-            $this->get('table_manager')->getTable(Table\Scope::class),
-            $this->get('table_manager')->getTable(Table\User\Scope::class),
-            $this->get('config')->get('fusio_app_per_consumer'),
-            $this->get('config')->get('fusio_app_approval')
-        );
-    }
-
-    /**
      * @return \Fusio\Impl\Service\App\Grant
      */
     public function getAppGrantService()
@@ -280,6 +265,43 @@ trait Services
     }
 
     /**
+     * @return \Fusio\Impl\Service\Consumer\App
+     */
+    public function getConsumerAppService()
+    {
+        return new Service\Consumer\App(
+            $this->get('app_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('config_service')
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Consumer\Subscription
+     */
+    public function getConsumerSubscriptionService()
+    {
+        return new Service\Consumer\Subscription(
+            $this->get('app_service'),
+            $this->get('config_service'),
+            $this->get('table_manager')->getTable(Table\Event\Subscription::class),
+            $this->get('table_manager')->getTable(Table\Event::class)
+        );
+    }
+
+    /**
+     * @return \Fusio\Impl\Service\Consumer\User
+     */
+    public function getConsumerUserService()
+    {
+        return new Service\Consumer\User(
+            $this->get('user_service')
+        );
+    }
+
+    /**
      * @return \Fusio\Impl\Service\Event
      */
     public function getEventService()
@@ -326,7 +348,6 @@ trait Services
         return new Service\Event\Subscription(
             $this->get('table_manager')->getTable(Table\Event::class),
             $this->get('table_manager')->getTable(Table\Event\Subscription::class),
-            $this->get('config_service'),
             $this->get('event_dispatcher')
         );
     }
