@@ -4,6 +4,7 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Migrations\MigrationUtil;
 use Fusio\Impl\Table;
 
 /**
@@ -60,6 +61,11 @@ final class Version20200220091902 extends AbstractMigration
                 'description' => '',
             ]);
         }
+
+        // sync
+        MigrationUtil::sync($this->connection, function($sql, $params){
+            $this->addSql($sql, $params);
+        });
     }
 
     public function down(Schema $schema) : void
