@@ -7,9 +7,9 @@
     "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
     "id": "urn:schema.phpsx.org#",
     "definitions": {
-      "Consumer_Subscription": {
+      "Consumer_Event_Subscription": {
         "type": "object",
-        "title": "Consumer Subscription",
+        "title": "Consumer Event Subscription",
         "properties": {
           "id": {
             "type": "integer"
@@ -28,7 +28,7 @@
           "responses": {
             "type": "array",
             "items": {
-              "$ref": "#\/definitions\/Consumer_Subscription_Response"
+              "$ref": "#\/definitions\/Consumer_Event_Subscription_Response"
             }
           }
         },
@@ -37,9 +37,9 @@
           "endpoint"
         ]
       },
-      "Consumer_Subscription_Response": {
+      "Consumer_Event_Subscription_Response": {
         "type": "object",
-        "title": "Consumer Subscription Response",
+        "title": "Consumer Event Subscription Response",
         "properties": {
           "status": {
             "type": "integer"
@@ -55,9 +55,9 @@
           }
         }
       },
-      "Consumer_Subscription_Collection": {
+      "Consumer_Event_Subscription_Collection": {
         "type": "object",
-        "title": "Consumer Subscription Collection",
+        "title": "Consumer Event Subscription Collection",
         "properties": {
           "totalResults": {
             "type": "integer"
@@ -68,7 +68,7 @@
           "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/definitions\/Consumer_Subscription"
+              "$ref": "#\/definitions\/Consumer_Event_Subscription"
             }
           }
         }
@@ -86,10 +86,10 @@
         }
       },
       "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Subscription_Collection"
+        "$ref": "#\/definitions\/Consumer_Event_Subscription_Collection"
       },
       "POST-request": {
-        "$ref": "#\/definitions\/Consumer_Subscription"
+        "$ref": "#\/definitions\/Consumer_Event_Subscription"
       },
       "POST-201-response": {
         "$ref": "#\/definitions\/Consumer_Message"

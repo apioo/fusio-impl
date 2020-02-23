@@ -16,9 +16,9 @@
           }
         }
       },
-      "Consumer_Subscription_Response": {
+      "Consumer_Event_Subscription_Response": {
         "type": "object",
-        "title": "Consumer Subscription Response",
+        "title": "Consumer Event Subscription Response",
         "properties": {
           "status": {
             "type": "integer"
@@ -34,9 +34,9 @@
           }
         }
       },
-      "Consumer_Subscription": {
+      "Consumer_Event_Subscription": {
         "type": "object",
-        "title": "Consumer Subscription",
+        "title": "Consumer Event Subscription",
         "properties": {
           "id": {
             "type": "integer"
@@ -55,46 +55,7 @@
           "responses": {
             "type": "array",
             "items": {
-              "$ref": "#\/definitions\/Consumer_Subscription_Response"
-            }
-          }
-        }
-      },
-      "Consumer_App": {
-        "type": "object",
-        "title": "Consumer App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
+              "$ref": "#\/definitions\/Consumer_Event_Subscription_Response"
             }
           }
         },
@@ -116,10 +77,10 @@
         }
       },
       "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Subscription"
+        "$ref": "#\/definitions\/Consumer_Event_Subscription"
       },
       "PUT-request": {
-        "$ref": "#\/definitions\/Consumer_App"
+        "$ref": "#\/definitions\/Consumer_Event_Subscription"
       },
       "PUT-200-response": {
         "$ref": "#\/definitions\/Consumer_Message"
