@@ -406,7 +406,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "routeId": 106,
+          "routeId": 108,
           "authenticated": true
         }
       ]
@@ -420,7 +420,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "routeId": 106
+          "routeId": 108
         }
       ]
     },
@@ -681,6 +681,18 @@
     },
     {
       "name": "fusio.event.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.subscription.create",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.subscription.delete",
+      "description": ""
+    },
+    {
+      "name": "fusio.event.subscription.update",
       "description": ""
     },
     {

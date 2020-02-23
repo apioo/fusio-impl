@@ -240,7 +240,7 @@ JSON;
         // check event
         $event = $this->connection->fetchAssoc('SELECT id, name, description FROM fusio_event WHERE name = :name', ['name' => 'New-Event']);
 
-        $this->assertEquals(35, $event['id']);
+        $this->assertEquals(38, $event['id']);
         $this->assertEquals('New-Event', $event['name']);
         $this->assertEquals('A description of the event', $event['description']);
     }

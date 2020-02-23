@@ -96,7 +96,7 @@ class MigrationUtilTest extends DbTestCase
             ],
             [
                 'INSERT INTO fusio_scope_routes (scope_id, route_id, allow, methods) VALUES (?, ?, ?, ?)',
-                [1, 108, 1, 'GET|POST|PUT|PATCH|DELETE'],
+                [1, 110, 1, 'GET|POST|PUT|PATCH|DELETE'],
             ]
         ];
 

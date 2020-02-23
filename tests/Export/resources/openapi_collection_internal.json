@@ -1352,6 +1352,175 @@
       },
       "parameters": []
     },
+    "\/backend\/event\/subscription": {
+      "get": {
+        "operationId": "backendEventSubscriptionGetEvent_Subscription_Collection",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.subscription"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "operationId": "backendEventSubscriptionPostEvent_Subscription",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Event_Subscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.subscription"
+            ]
+          }
+        ]
+      },
+      "parameters": []
+    },
+    "\/backend\/event\/subscription\/{subscription_id}": {
+      "get": {
+        "operationId": "backendEventSubscriptionSubscriptionid09GetEvent_Subscription",
+        "responses": {
+          "200": {
+            "description": "GET 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Event_Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.subscription"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "operationId": "backendEventSubscriptionSubscriptionid09PutEvent_Subscription",
+        "requestBody": {
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Event_Subscription"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.subscription"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "backendEventSubscriptionSubscriptionid09DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend.subscription"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "subscription_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ]
+    },
     "\/backend\/event": {
       "get": {
         "operationId": "backendEventGetEvent_Collection",
@@ -5377,14 +5546,14 @@
     },
     "\/consumer\/subscription": {
       "get": {
-        "operationId": "consumerSubscriptionGetConsumer_Subscription_Collection",
+        "operationId": "consumerSubscriptionGetConsumer_Event_Subscription_Collection",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Collection"
                 }
               }
             }
@@ -5399,12 +5568,12 @@
         ]
       },
       "post": {
-        "operationId": "consumerSubscriptionPostConsumer_Subscription",
+        "operationId": "consumerSubscriptionPostConsumer_Event_Subscription",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Subscription"
+                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
               }
             }
           }
@@ -5433,14 +5602,14 @@
     },
     "\/consumer\/subscription\/{subscription_id}": {
       "get": {
-        "operationId": "consumerSubscriptionSubscriptionid09GetConsumer_Subscription",
+        "operationId": "consumerSubscriptionSubscriptionid09GetConsumer_Event_Subscription",
         "responses": {
           "200": {
             "description": "GET 200 response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Subscription"
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
                 }
               }
             }
@@ -5455,12 +5624,12 @@
         ]
       },
       "put": {
-        "operationId": "consumerSubscriptionSubscriptionid09PutConsumer_App",
+        "operationId": "consumerSubscriptionSubscriptionid09PutConsumer_Event_Subscription",
         "requestBody": {
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_App"
+                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
               }
             }
           }
@@ -7299,6 +7468,42 @@
           }
         }
       },
+      "Event_Subscription": {
+        "type": "object",
+        "title": "Event Subscription",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "eventId": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Subscription_Collection": {
+        "type": "object",
+        "title": "Event Subscription Collection",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Event_Subscription"
+            }
+          }
+        }
+      },
       "Event": {
         "type": "object",
         "title": "Event",
@@ -8504,11 +8709,7 @@
               "type": "string"
             }
           }
-        },
-        "required": [
-          "event",
-          "endpoint"
-        ]
+        }
       },
       "Consumer_App_Collection": {
         "type": "object",
@@ -8795,9 +8996,9 @@
           }
         }
       },
-      "Consumer_Subscription": {
+      "Consumer_Event_Subscription": {
         "type": "object",
-        "title": "Consumer Subscription",
+        "title": "Consumer Event Subscription",
         "properties": {
           "id": {
             "type": "integer"
@@ -8816,14 +9017,18 @@
           "responses": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Consumer_Subscription_Response"
+              "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Response"
             }
           }
-        }
+        },
+        "required": [
+          "event",
+          "endpoint"
+        ]
       },
-      "Consumer_Subscription_Response": {
+      "Consumer_Event_Subscription_Response": {
         "type": "object",
-        "title": "Consumer Subscription Response",
+        "title": "Consumer Event Subscription Response",
         "properties": {
           "status": {
             "type": "integer"
@@ -8839,9 +9044,9 @@
           }
         }
       },
-      "Consumer_Subscription_Collection": {
+      "Consumer_Event_Subscription_Collection": {
         "type": "object",
-        "title": "Consumer Subscription Collection",
+        "title": "Consumer Event Subscription Collection",
         "properties": {
           "totalResults": {
             "type": "integer"
@@ -8852,7 +9057,7 @@
           "entry": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Consumer_Subscription"
+              "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
             }
           }
         }

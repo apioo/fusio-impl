@@ -239,8 +239,6 @@ class NewInstallation
 
                 ['status' => 1, 'priority' => 0x8000000 | 26, 'methods' => 'ANY', 'path' => '/consumer/app',                                 'controller' => Consumer\Api\App\Collection::class],
                 ['status' => 1, 'priority' => 0x8000000 | 25, 'methods' => 'ANY', 'path' => '/consumer/app/$app_id<[0-9]+>',                 'controller' => Consumer\Api\App\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 14, 'methods' => 'ANY', 'path' => '/consumer/event/subscription',                  'controller' => Consumer\Api\Event\Subscription\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 13, 'methods' => 'ANY', 'path' => '/consumer/event/subscription/$subscription_id<[0-9]+>', 'controller' => Consumer\Api\Event\Subscription\Entity::class],
                 ['status' => 1, 'priority' => 0x8000000 | 24, 'methods' => 'ANY', 'path' => '/consumer/event',                               'controller' => Consumer\Api\Event\Collection::class],
                 ['status' => 1, 'priority' => 0x8000000 | 23, 'methods' => 'ANY', 'path' => '/consumer/grant',                               'controller' => Consumer\Api\Grant\Collection::class],
                 ['status' => 1, 'priority' => 0x8000000 | 22, 'methods' => 'ANY', 'path' => '/consumer/grant/$grant_id<[0-9]+>',             'controller' => Consumer\Api\Grant\Entity::class],
@@ -251,6 +249,8 @@ class NewInstallation
                 ['status' => 1, 'priority' => 0x8000000 | 17, 'methods' => 'ANY', 'path' => '/consumer/plan',                                'controller' => Consumer\Api\Plan\Collection::class],
                 ['status' => 1, 'priority' => 0x8000000 | 16, 'methods' => 'ANY', 'path' => '/consumer/plan/$plan_id<[0-9]+>',               'controller' => Consumer\Api\Plan\Entity::class],
                 ['status' => 1, 'priority' => 0x8000000 | 15, 'methods' => 'ANY', 'path' => '/consumer/scope',                               'controller' => Consumer\Api\Scope\Collection::class],
+                ['status' => 1, 'priority' => 0x8000000 | 14, 'methods' => 'ANY', 'path' => '/consumer/subscription',                        'controller' => Consumer\Api\Event\Subscription\Collection::class],
+                ['status' => 1, 'priority' => 0x8000000 | 13, 'methods' => 'ANY', 'path' => '/consumer/subscription/$subscription_id<[0-9]+>', 'controller' => Consumer\Api\Event\Subscription\Entity::class],
                 ['status' => 1, 'priority' => 0x8000000 | 12, 'methods' => 'ANY', 'path' => '/consumer/transaction',                         'controller' => Consumer\Api\Transaction\Collection::class],
                 ['status' => 1, 'priority' => 0x8000000 | 11, 'methods' => 'ANY', 'path' => '/consumer/transaction/execute/:transaction_id', 'controller' => Consumer\Api\Transaction\Execute::class],
                 ['status' => 1, 'priority' => 0x8000000 | 10,  'methods' => 'ANY', 'path' => '/consumer/transaction/prepare/:provider',       'controller' => Consumer\Api\Transaction\Prepare::class],

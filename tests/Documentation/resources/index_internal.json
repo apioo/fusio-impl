@@ -243,6 +243,28 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/event\/subscription",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/event\/subscription\/$subscription_id<[0-9]+>",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/event",
       "methods": [
         "GET",
