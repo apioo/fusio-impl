@@ -234,27 +234,6 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onEventSubscribe(Event\Event\SubscribedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getSubscriptionId(),
-            'event.subscribe',
-            sprintf('Subscribed event %s', $event->getRecord()['event_id']),
-            $event->getRecord()
-        );
-    }
-
-    public function onEventUnsubscribe(Event\Event\UnsubscribedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getSubscriptionId(),
-            'event.unsubscribe',
-            sprintf('Unsubscribed event %s', $event->getSubscription()['eventId'])
-        );
-    }
-
     public function onEventUpdate(Event\Event\UpdatedEvent $event)
     {
         $this->log(
@@ -262,6 +241,38 @@ class AuditListener implements EventSubscriberInterface
             $event->getEventId(),
             'event.update',
             sprintf('Updated event %s', $event->getEvent()['name']),
+            $event->getRecord()
+        );
+    }
+
+    public function onEventSubscriptionCreate(Event\Event\Subscription\CreatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getSubscriptionId(),
+            'event.subscription.create',
+            sprintf('Created event subscription %s', $event->getRecord()['endpoint']),
+            $event->getRecord()
+        );
+    }
+
+    public function onEventSubscriptionDelete(Event\Event\Subscription\DeletedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getSubscriptionId(),
+            'event.subscription.delete',
+            sprintf('Deleted event subscription %s', $event->getSubscription()['endpoint'])
+        );
+    }
+
+    public function onEventSubscriptionUpdate(Event\Event\Subscription\UpdatedEvent $event)
+    {
+        $this->log(
+            $event->getContext(),
+            $event->getSubscriptionId(),
+            'event.subscription.update',
+            sprintf('Updated event subscription %s', $event->getSubscription()['endpoint']),
             $event->getRecord()
         );
     }
@@ -664,9 +675,11 @@ class AuditListener implements EventSubscriberInterface
 
             Event\EventEvents::CREATE         => 'onEventCreate',
             Event\EventEvents::DELETE         => 'onEventDelete',
-            Event\EventEvents::SUBSCRIBE      => 'onEventSubscribe',
-            Event\EventEvents::UNSUBSCRIBE    => 'onEventUnsubscribe',
             Event\EventEvents::UPDATE         => 'onEventUpdate',
+
+            Event\Event\SubscriptionEvents::CREATE => 'onEventSubscriptionCreate',
+            Event\Event\SubscriptionEvents::DELETE => 'onEventSubscriptionDelete',
+            Event\Event\SubscriptionEvents::UPDATE => 'onEventSubscriptionUpdate',
 
             Event\PlanEvents::CREATE          => 'onPlanCreate',
             Event\PlanEvents::DELETE          => 'onPlanDelete',
