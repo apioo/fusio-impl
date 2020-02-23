@@ -70,7 +70,7 @@ class Subscription extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Event::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Event\Subscription::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'eventId' => $this->fieldInteger('event_id'),
             'userId' => $this->fieldInteger('user_id'),
