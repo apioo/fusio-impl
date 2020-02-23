@@ -281,6 +281,14 @@ class User
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
+        if ($status === null) {
+            $status = $user['status'];
+        }
+
+        if ($name === null) {
+            $name = $user['name'];
+        }
+
         // check values
         $this->assertName($name);
         $this->assertEmail($email);
@@ -298,11 +306,13 @@ class User
 
             $this->userTable->update($record);
 
-            // delete existing scopes
-            $this->userScopeTable->deleteAllFromUser($user['id']);
+            if ($scopes !== null) {
+                // delete existing scopes
+                $this->userScopeTable->deleteAllFromUser($user['id']);
 
-            // add scopes
-            $this->insertScopes($user['id'], $scopes);
+                // add scopes
+                $this->insertScopes($user['id'], $scopes);
+            }
 
             // update attributes
             $this->updateAttributes($user['id'], $attributes);
@@ -315,40 +325,6 @@ class User
         }
 
         $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user, $context));
-    }
-
-    public function updateMeta($userId, $email, $attributes = null, UserContext $context)
-    {
-        $user = $this->userTable->get($userId);
-
-        if (empty($user)) {
-            throw new StatusCode\NotFoundException('Could not find user');
-        }
-
-        // check values
-        $this->assertEmail($email);
-
-        try {
-            $this->userTable->beginTransaction();
-
-            $record = [
-                'id'    => $user['id'],
-                'email' => $email,
-            ];
-
-            $this->userTable->update($record);
-
-            // update attributes
-            $this->updateAttributes($user['id'], $attributes);
-
-            $this->userTable->commit();
-        } catch (\Throwable $e) {
-            $this->userTable->rollBack();
-
-            throw $e;
-        }
-
-        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, [], $user, $context));
     }
 
     public function delete($userId, UserContext $context)
