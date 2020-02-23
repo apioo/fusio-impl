@@ -79,7 +79,7 @@ class Response extends TableAbstract
         ]);
     }
 
-    public function getAllBySubscription($userId, $subscriptionId)
+    public function getAllBySubscription($subscriptionId)
     {
         $sql = 'SELECT response.id,
                        response.status,
@@ -87,17 +87,13 @@ class Response extends TableAbstract
                        response.attempts,
                        response.execute_date
                   FROM fusio_event_response response
-            INNER JOIN fusio_event_subscription subscription
-                    ON subscription.id = response.subscription_id
-                 WHERE subscription.id = :id
-                   AND subscription.user_id = :user_id
+                 WHERE response.subscription_id = :id
               ORDER BY response.execute_date DESC, response.id ASC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 8);
 
         return $this->connection->fetchAll($sql, [
-            'id'      => $subscriptionId,
-            'user_id' => $userId,
+            'id' => $subscriptionId
         ]);
     }
     
