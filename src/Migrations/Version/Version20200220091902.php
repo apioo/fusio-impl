@@ -55,11 +55,14 @@ final class Version20200220091902 extends AbstractMigration
         ];
 
         foreach ($events as $eventName) {
-            $this->addSql('INSERT INTO fusio_event (status, name, description) VALUES (:status, :name, :description)', [
-                'status' => Table\Event::STATUS_INTERNAL,
-                'name' => $eventName,
-                'description' => '',
-            ]);
+            $count = (int) $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM fusio_event WHERE name = :name', ['name' => $eventName]);
+            if ($count === 0) {
+                $this->addSql('INSERT INTO fusio_event (status, name, description) VALUES (:status, :name, :description)', [
+                    'status' => Table\Event::STATUS_INTERNAL,
+                    'name' => $eventName,
+                    'description' => '',
+                ]);
+            }
         }
 
         // sync
