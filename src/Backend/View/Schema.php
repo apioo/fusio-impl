@@ -74,6 +74,7 @@ class Schema extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'source' => 'source',
+            'form' => 'form',
         ]);
 
         return $this->build($definition);
