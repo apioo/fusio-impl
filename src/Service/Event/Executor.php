@@ -130,9 +130,9 @@ class Executor
             try {
                 $code = $sender->send($dispatcher, new Message($resp['endpoint'], $resp['payload']));
 
-                $this->responseTable->setResponse($resp['id'], $code, $resp['attempts'], self::MAX_ATTEMPTS);
+                $this->responseTable->setResponse($resp['id'], $code, $resp['attempts'], null, self::MAX_ATTEMPTS);
             } catch (\Exception $e) {
-                $this->responseTable->setResponse($resp['id'], null, $resp['attempts'], self::MAX_ATTEMPTS);
+                $this->responseTable->setResponse($resp['id'], null, $resp['attempts'], $e->getMessage(), self::MAX_ATTEMPTS);
             }
         }
     }

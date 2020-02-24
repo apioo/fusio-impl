@@ -65,6 +65,10 @@ final class Version20200220091902 extends AbstractMigration
             }
         }
 
+        // add error column
+        $responseTable = $schema->getTable('fusio_event_response');
+        $responseTable->addColumn('error', 'string', ['notnull' => false]);
+
         // sync
         MigrationUtil::sync($this->connection, function($sql, $params){
             $this->addSql($sql, $params);

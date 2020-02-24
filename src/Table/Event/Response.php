@@ -97,7 +97,7 @@ class Response extends TableAbstract
         ]);
     }
     
-    public function setResponse($responseId, $code, $attempts, $maxAttempts)
+    public function setResponse($responseId, $code, $attempts, $error, $maxAttempts)
     {
         $now      = new \DateTime();
         $attempts = $attempts + 1;
@@ -117,6 +117,7 @@ class Response extends TableAbstract
                    SET status = :status,
                        code = :code,
                        attempts = :attempts,
+                       error = :error,
                        execute_date = :now
                  WHERE id = :id';
 
@@ -125,6 +126,7 @@ class Response extends TableAbstract
             'status'   => $status,
             'code'     => $code,
             'attempts' => $attempts,
+            'error'    => $error,
             'now'      => $now->format('Y-m-d H:i:s'),
         ]);
     }
