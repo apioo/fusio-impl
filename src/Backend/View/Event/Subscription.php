@@ -79,6 +79,7 @@ class Subscription extends ViewAbstract
                 'status' => $this->fieldInteger('status'),
                 'code' => $this->fieldInteger('code'),
                 'attempts' => $this->fieldInteger('attempts'),
+                'error' => 'error',
                 'executeDate' => $this->fieldDateTime('execute_date'),
             ]),
         ]);
