@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Impl\Controller\SchemaApiController;
 use PSX\Framework\Test\Environment;
 use Fusio\Impl\Service;
+use PSX\Schema\SchemaInterface;
 
 /**
  * Assert
@@ -63,13 +64,13 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertJsonStringEqualsJsonString($expectConfig, $config, $config);
     }
 
-    public static function assertSchema(string $expectName, string $expectSchema)
+    public static function assertSchema(string $expectName, string $expectSchema, ?string $expectForm = null)
     {
         /** @var Connection $connection */
         $connection = Environment::getService('connection');
 
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'name', 'source', 'cache')
+            ->select('id', 'name', 'source', 'cache', 'form')
             ->from('fusio_schema')
             ->where('name = :name')
             ->getSQL();
@@ -80,6 +81,13 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertEquals($expectName, $row['name']);
         self::assertJsonStringEqualsJsonString($expectSchema, $row['source']);
         self::assertNotEmpty($row['cache']);
+
+        $schema = unserialize(base64_decode($row['cache']));
+        self::assertInstanceOf(SchemaInterface::class, $schema);
+
+        if ($expectForm !== null) {
+            self::assertJsonStringEqualsJsonString($expectForm, $row['form']);
+        }
     }
 
     public static function assertRoute(string $expectPath, array $expectScopes, array $expectConfig)

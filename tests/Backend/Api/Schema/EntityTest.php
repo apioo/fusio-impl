@@ -159,6 +159,56 @@ JSON;
         Assert::assertSchema('Test-Schema', json_encode($schema));
     }
 
+    public function testPutForm()
+    {
+        $schema = [
+            'id' => 'http://phpsx.org#',
+            'title' => 'test',
+            'type' => 'object',
+            'properties' => [
+                'title' => [
+                    'type' => 'string'
+                ],
+                'foo' => [
+                    'type' => 'string'
+                ],
+                'bar' => [
+                    'type' => 'string'
+                ],
+            ],
+        ];
+
+        $form = [
+            'title' => [
+                'ui:autofocus' => true,
+                'ui:emptyValue' => ''
+            ]
+        ];
+
+        $response = $this->sendRequest('/backend/schema/2', 'PUT', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'name'   => 'Form-Schema',
+            'source' => $schema,
+            'form'   => $form,
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Schema successful updated"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        Assert::assertSchema('Form-Schema', json_encode($schema), json_encode($form));
+    }
+
     public function testDelete()
     {
         // remove all responses and methods so that we can delete the schema
