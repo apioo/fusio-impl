@@ -106,7 +106,7 @@ class Schema
         return $schemaId;
     }
 
-    public function update($schemaId, $name, $source, UserContext $context)
+    public function update($schemaId, $name, $source, $form, UserContext $context)
     {
         $schema = $this->schemaTable->get($schemaId);
 
@@ -122,6 +122,7 @@ class Schema
             'id'     => $schema['id'],
             'name'   => $name,
             'source' => $source,
+            'form'   => $form,
             'cache'  => $this->schemaParser->parse(json_encode($source)),
         ];
 

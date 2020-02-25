@@ -36,6 +36,10 @@ class Schema extends SchemaAbstract
 
     public function getDefinition()
     {
+        $sb = $this->getSchemaBuilder('Schema UI');
+        $sb->setAdditionalProperties(true);
+        $form = $sb->getProperty();
+
         $sb = $this->getSchemaBuilder('Schema Source');
         $sb->setAdditionalProperties(true);
         $source = $sb->getProperty();
@@ -46,6 +50,7 @@ class Schema extends SchemaAbstract
         $sb->string('name')
             ->setPattern(self::NAME_PATTERN);
         $sb->objectType('source', $source);
+        $sb->objectType('form', $form);
 
         return $sb->getProperty();
     }

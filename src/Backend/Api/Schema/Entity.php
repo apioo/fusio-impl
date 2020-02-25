@@ -104,6 +104,7 @@ class Entity extends BackendApiAbstract
             (int) $context->getUriFragment('schema_id'),
             $record->name,
             $record->source,
+            $record->form,
             $this->context->getUserContext()
         );
 
