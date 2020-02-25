@@ -21,6 +21,11 @@
         "title": "Schema Source",
         "additionalProperties": true
       },
+      "Schema_UI": {
+        "type": "object",
+        "title": "Schema UI",
+        "additionalProperties": true
+      },
       "Schema": {
         "type": "object",
         "title": "Schema",
@@ -37,6 +42,9 @@
           },
           "source": {
             "$ref": "#\/definitions\/Schema_Source"
+          },
+          "form": {
+            "$ref": "#\/definitions\/Schema_UI"
           }
         }
       },

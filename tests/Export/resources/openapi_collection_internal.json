@@ -7661,12 +7661,20 @@
           },
           "source": {
             "$ref": "#\/components\/schemas\/Schema_Source"
+          },
+          "form": {
+            "$ref": "#\/components\/schemas\/Schema_UI"
           }
         }
       },
       "Schema_Source": {
         "type": "object",
         "title": "Schema Source",
+        "additionalProperties": true
+      },
+      "Schema_UI": {
+        "type": "object",
+        "title": "Schema UI",
         "additionalProperties": true
       },
       "Adapter": {
