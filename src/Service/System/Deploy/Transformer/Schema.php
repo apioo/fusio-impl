@@ -28,6 +28,8 @@ use Fusio\Impl\Service\System\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 use PSX\Json\Parser;
 use PSX\Json\Pointer;
+use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\SchemaManager;
 use PSX\Uri\Uri;
 use RuntimeException;
 
@@ -82,6 +84,11 @@ class Schema implements TransformerInterface
                 } else {
                     throw new RuntimeException('Could not resolve file: ' . $file);
                 }
+            } elseif (class_exists($data)) {
+                $schema = (new SchemaManager())->getSchema($data, SchemaManager::TYPE_ANNOTATION);
+                $result = (new JsonSchema())->generate($schema);
+
+                return \json_decode($result);
             } else {
                 return $this->traverseSchema(Parser::decode($data), $basePath);
             }
