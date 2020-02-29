@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Record;
 
 use PSX\Record\Record;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * This record is used if a route has specified the passthru schema that means
@@ -39,11 +40,17 @@ class PassthruRecord extends Record
      */
     private $payload;
 
+    /**
+     * @var PropertyAccess
+     */
+    private $accessor;
+
     public function __construct($payload)
     {
-        parent::__construct('record', $this->extractProperties($payload));
+        parent::__construct('record', []);
 
-        $this->payload = $payload;
+        $this->payload  = $payload;
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     public function getPayload()
@@ -51,22 +58,22 @@ class PassthruRecord extends Record
         return $this->payload;
     }
 
-    /**
-     * If the payload has a known format extract the properties
-     * 
-     * @param mixed $payload
-     * @return array
-     */
-    private function extractProperties($payload)
+    public function getProperty($name)
     {
-        if (is_array($payload)) {
-            return $payload;
-        } elseif ($payload instanceof \stdClass) {
-            return (array) $payload;
-        } elseif ($payload instanceof \ArrayObject) {
-            return $payload->getArrayCopy();
-        } else {
-            return [];
-        }
+        return $this->accessor->getValue($this->payload, $name);
+    }
+
+    public function setProperty($name, $value)
+    {
+        $this->accessor->setValue($this->payload, $name, $value);
+    }
+
+    public function removeProperty($name)
+    {
+    }
+
+    public function hasProperty($name)
+    {
+        return $this->accessor->isReadable($this->payload, $name);
     }
 }
