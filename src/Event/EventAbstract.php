@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event;
 
 use Fusio\Impl\Authorization\UserContext;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * EventAbstract
