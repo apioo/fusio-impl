@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Schema\Plan\Invoice;
 
-use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**

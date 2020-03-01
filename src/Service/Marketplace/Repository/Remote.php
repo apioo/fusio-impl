@@ -25,7 +25,6 @@ use Fusio\Impl\Service\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\Options;
 use Symfony\Component\Yaml\Yaml;
 
 /**

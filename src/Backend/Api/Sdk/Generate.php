@@ -30,7 +30,6 @@ use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as Statuscode;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Generate

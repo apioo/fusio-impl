@@ -21,6 +21,9 @@
 
 namespace Fusio\Impl\Service\System\WebServer;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 /**
  * GeneratorAbstract
  *
@@ -113,12 +116,12 @@ abstract class GeneratorAbstract implements GeneratorInterface
      * to write to the fs. Also since it is executed through a command
      * performance is not an issue
      * 
-     * @return \Twig_Environment
+     * @return Environment
      */
     private function newTwig()
     {
-        $loader = new \Twig_Loader_Filesystem([__DIR__ . '/Generator/Resource']);
-        $twig   = new \Twig_Environment($loader, [
+        $loader = new FilesystemLoader([__DIR__ . '/Generator/Resource']);
+        $twig   = new Environment($loader, [
             'autoescape' => false,
         ]);
 

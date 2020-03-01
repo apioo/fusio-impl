@@ -24,7 +24,6 @@ namespace Fusio\Impl\Backend\Api\Marketplace;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
-use Fusio\Impl\Backend\View;
 use Fusio\Impl\Service\Marketplace\App;
 use PSX\Api\Resource;
 use PSX\Http\Environment\HttpContextInterface;

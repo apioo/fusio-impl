@@ -99,13 +99,9 @@ class Config
                 return new \DateTime($value);
 
             case Table\Config::FORM_TEXT:
-                return $value;
-
             case Table\Config::FORM_EMAIL:
-                return $value;
-
-            default:
             case Table\Config::FORM_STRING:
+            default:
                 return $value;
         }
     }

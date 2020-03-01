@@ -23,7 +23,6 @@ namespace Fusio\Impl\Consumer\View\Plan;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
-use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Consumer\Schema\User;
 
-use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**

@@ -25,7 +25,6 @@ use Fusio\Impl\Authorization\UserContext;
 use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\Options;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;

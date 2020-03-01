@@ -101,7 +101,6 @@ class Contract
      * @param float $amount
      * @param integer $points
      * @param \Fusio\Impl\Authorization\UserContext $context
-     * @return integer
      */
     public function update($contractId, $planId, $status, $amount, $points, UserContext $context)
     {

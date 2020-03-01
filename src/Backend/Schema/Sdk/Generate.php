@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Schema\Sdk;
 
-use PSX\Schema\Property;
 use PSX\Schema\SchemaAbstract;
 
 /**

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Backend\Schema\Marketplace;
 
-use Fusio\Impl\Backend\Schema;
 use PSX\Schema\SchemaAbstract;
 
 /**
