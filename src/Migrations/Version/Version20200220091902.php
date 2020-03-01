@@ -69,6 +69,10 @@ final class Version20200220091902 extends AbstractMigration
         $responseTable = $schema->getTable('fusio_event_response');
         $responseTable->addColumn('error', 'string', ['notnull' => false]);
 
+        // increase scope length
+        $appTokenTable = $schema->getTable('fusio_app_token');
+        $appTokenTable->changeColumn('scope', ['length' => 1024]);
+
         // sync
         MigrationUtil::sync($this->connection, function($sql, $params){
             $this->addSql($sql, $params);
