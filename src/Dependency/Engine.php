@@ -22,15 +22,22 @@
 namespace Fusio\Impl\Dependency;
 
 use Fusio\Engine\ActionInterface;
+use Fusio\Engine\Cache;
+use Fusio\Engine\CacheInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
+use Fusio\Engine\Logger;
+use Fusio\Engine\LoggerInterface;
+use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
+use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
+use Fusio\Engine\Schema;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderParser;
@@ -38,11 +45,6 @@ use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Schema as ImplSchema;
 use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Table;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
-use Psr\SimpleCache\CacheInterface;
-use PSX\Cache\SimpleCache;
 
 /**
  * Engine
@@ -53,10 +55,7 @@ use PSX\Cache\SimpleCache;
  */
 trait Engine
 {
-    /**
-     * @return \Fusio\Engine\Parser\ParserInterface
-     */
-    public function getActionParser()
+    public function getActionParser(): Parser\ParserInterface
     {
         return new ProviderParser(
             $this->get('action_factory'),
@@ -67,21 +66,10 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\Factory\ActionInterface
-     */
-    public function getActionFactory()
+    public function getActionFactory(): Factory\ActionInterface
     {
-        $services = [
-            ConnectorInterface::class => 'connector',
-            ProcessorInterface::class => 'processor',
-            DispatcherInterface::class => 'engine_dispatcher',
-            Response\FactoryInterface::class => 'engine_response',
-            LoggerInterface::class => 'engine_logger',
-            CacheInterface::class => 'engine_cache',
-        ];
-
-        $factory = new Factory\Action($this, $services);
+        $factory = new Factory\Action($this, $this->get('container_type_resolver'));
+        $factory->addResolver(new Factory\Resolver\PhpClass($this->get('container_autowire_resolver')));
         $factory->addResolver(new Resolver\HttpUrl());
         $factory->addResolver(new Resolver\PhpFile());
         $factory->addResolver(new Resolver\StaticFile());
@@ -89,37 +77,25 @@ trait Engine
         return $factory;
     }
 
-    /**
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function getEngineLogger()
+    public function getEngineLogger(): LoggerInterface
     {
-        $logger = new Logger('action');
-        $logger->pushHandler(new NullHandler());
+        $logger = new Logger('engine');
+        $logger->pushHandler($this->newLoggerHandlerImpl());
 
         return $logger;
     }
 
-    /**
-     * @return \Psr\SimpleCache\CacheInterface
-     */
-    public function getEngineCache()
+    public function getEngineCache(): CacheInterface
     {
-        return new SimpleCache($this->newDoctrineCacheImpl('action'));
+        return new Cache($this->newDoctrineCacheImpl('action'));
     }
 
-    /**
-     * @return \Fusio\Engine\Repository\ActionInterface
-     */
-    public function getActionRepository()
+    public function getActionRepository(): Repository\ActionInterface
     {
         return new ImplRepository\ActionDatabase($this->get('connection'));
     }
 
-    /**
-     * @return \Fusio\Engine\ProcessorInterface
-     */
-    public function getProcessor()
+    public function getProcessor(): ProcessorInterface
     {
         return new Processor(
             $this->get('action_repository'),
@@ -127,10 +103,7 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\DispatcherInterface
-     */
-    public function getEngineDispatcher()
+    public function getEngineDispatcher(): DispatcherInterface
     {
         return new Dispatcher(
             $this->get('table_manager')->getTable(Table\Event::class),
@@ -138,10 +111,7 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\Parser\ParserInterface
-     */
-    public function getConnectionParser()
+    public function getConnectionParser(): Parser\ParserInterface
     {
         return new ProviderParser(
             $this->get('connection_factory'),
@@ -152,26 +122,17 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\Factory\ConnectionInterface
-     */
-    public function getConnectionFactory()
+    public function getConnectionFactory(): Factory\ConnectionInterface
     {
-        return new Factory\Connection($this);
+        return new Factory\Connection($this, $this->get('container_autowire_resolver'));
     }
 
-    /**
-     * @return \Fusio\Engine\Repository\ConnectionInterface
-     */
-    public function getConnectionRepository()
+    public function getConnectionRepository(): Repository\ConnectionInterface
     {
         return new ImplRepository\ConnectionDatabase($this->get('connection'), $this->get('config')->get('fusio_project_key'));
     }
 
-    /**
-     * @return \Fusio\Engine\ConnectorInterface
-     */
-    public function getConnector()
+    public function getConnector(): ConnectorInterface
     {
         return new Connector(
             $this->get('connection_repository'),
@@ -179,42 +140,27 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\Schema\ParserInterface
-     */
-    public function getSchemaParser()
+    public function getSchemaParser(): Schema\ParserInterface
     {
         return new ImplSchema\Parser($this->get('connection'));
     }
 
-    /**
-     * @return \Fusio\Engine\Schema\LoaderInterface
-     */
-    public function getSchemaLoader()
+    public function getSchemaLoader(): Schema\LoaderInterface
     {
         return new ImplSchema\Loader($this->get('connection'));
     }
 
-    /**
-     * @return \Fusio\Engine\Repository\AppInterface
-     */
-    public function getAppRepository()
+    public function getAppRepository(): Repository\AppInterface
     {
         return new ImplRepository\AppDatabase($this->get('connection'));
     }
 
-    /**
-     * @return \Fusio\Engine\Repository\UserInterface
-     */
-    public function getUserRepository()
+    public function getUserRepository(): Repository\UserInterface
     {
         return new ImplRepository\UserDatabase($this->get('connection'));
     }
 
-    /**
-     * @return \Fusio\Engine\Form\ElementFactoryInterface
-     */
-    public function getFormElementFactory()
+    public function getFormElementFactory(): Form\ElementFactoryInterface
     {
         return new Form\ElementFactory(
             $this->get('action_repository'),
@@ -222,10 +168,7 @@ trait Engine
         );
     }
 
-    /**
-     * @return \Fusio\Engine\Response\FactoryInterface
-     */
-    public function getEngineResponse()
+    public function getEngineResponse(): Response\FactoryInterface
     {
         return new Response\Factory();
     }

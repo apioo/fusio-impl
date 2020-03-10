@@ -36,10 +36,7 @@ use PSX\Framework\Oauth2\GrantTypeFactory;
  */
 trait Authorization
 {
-    /**
-     * @return \PSX\Framework\Oauth2\GrantTypeFactory
-     */
-    public function getApiGrantTypeFactory()
+    public function getApiGrantTypeFactory(): GrantTypeFactory
     {
         $factory = new GrantTypeFactory();
 
@@ -76,10 +73,7 @@ trait Authorization
         return $factory;
     }
 
-    /**
-     * @return \PSX\Framework\Oauth2\GrantTypeFactory
-     */
-    public function getBackendGrantTypeFactory()
+    public function getBackendGrantTypeFactory(): GrantTypeFactory
     {
         $factory = new GrantTypeFactory();
 
@@ -92,10 +86,7 @@ trait Authorization
         return $factory;
     }
 
-    /**
-     * @return \PSX\Framework\Oauth2\GrantTypeFactory
-     */
-    public function getConsumerGrantTypeFactory()
+    public function getConsumerGrantTypeFactory(): GrantTypeFactory
     {
         $factory = new GrantTypeFactory();
 

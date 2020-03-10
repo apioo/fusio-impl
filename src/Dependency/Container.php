@@ -41,10 +41,15 @@ use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
+use PSX\Api\GeneratorFactoryInterface;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\Listing\FilterFactory;
+use PSX\Api\Listing\FilterFactoryInterface;
+use PSX\Api\ListingInterface;
 use PSX\Framework\Console as FrameworkConsole;
 use PSX\Framework\Dependency\DefaultContainer;
+use PSX\Framework\Loader\LocationFinderInterface;
+use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Schema\Console as SchemaConsole;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
@@ -65,26 +70,17 @@ class Container extends DefaultContainer
     use Engine;
     use Services;
 
-    /**
-     * @return \PSX\Framework\Loader\RoutingParserInterface
-     */
-    public function getRoutingParser()
+    public function getRoutingParser(): RoutingParserInterface
     {
         return new DatabaseRoutes($this->get('connection'));
     }
 
-    /**
-     * @return \PSX\Framework\Loader\LocationFinderInterface
-     */
-    public function getLoaderLocationFinder()
+    public function getLoaderLocationFinder(): LocationFinderInterface
     {
         return new RoutingParser($this->get('connection'));
     }
 
-    /**
-     * @return \PSX\Api\ListingInterface
-     */
-    public function getResourceListing()
+    public function getResourceListing(): ListingInterface
     {
         $resourceListing = new ResourceListing($this->get('routing_parser'), $this->get('controller_factory'));
 
@@ -95,10 +91,7 @@ class Container extends DefaultContainer
         }
     }
 
-    /**
-     * @return \PSX\Api\Listing\FilterFactoryInterface
-     */
-    public function getListingFilterFactory()
+    public function getListingFilterFactory(): FilterFactoryInterface
     {
         $filter = new FilterFactory();
         $filter->addFilter('internal', new InternalFilter());
@@ -108,25 +101,19 @@ class Container extends DefaultContainer
         return $filter;
     }
 
-    /**
-     * @return \PSX\Api\GeneratorFactoryInterface
-     */
-    public function getGeneratorFactory()
+    public function getGeneratorFactory(): GeneratorFactoryInterface
     {
         return new GeneratorFactory(
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('config_service'),
-            $this->get('annotation_reader'),
+            $this->get('annotation_reader_factory')->factory('PSX\Schema\Parser\Popo\Annotation'),
             $this->get('config')->get('psx_json_namespace'),
             $this->get('config')->get('psx_url'),
             $this->get('config')->get('psx_dispatch')
         );
     }
 
-    /**
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection()
+    public function getConnection(): DBAL\Connection
     {
         $params = $this->get('config')->get('psx_connection');
         $config = new DBAL\Configuration();
@@ -144,10 +131,7 @@ class Container extends DefaultContainer
         return DBAL\DriverManager::getConnection($params, $config);
     }
 
-    /**
-     * @return \Symfony\Component\Console\Application
-     */
-    public function getConsole()
+    public function getConsole(): Application
     {
         $application = new Application('fusio', Base::getVersion());
         $application->setHelperSet(new HelperSet($this->appendConsoleHelpers()));
@@ -157,10 +141,7 @@ class Container extends DefaultContainer
         return $application;
     }
 
-    /**
-     * @return \Fusio\Impl\Mail\MailerInterface
-     */
-    public function getMailer()
+    public function getMailer(): Mail\MailerInterface
     {
         return new Mail\Mailer(
             $this->get('config_service'),
@@ -171,10 +152,7 @@ class Container extends DefaultContainer
         );
     }
 
-    /**
-     * @return \Fusio\Impl\Mail\SenderFactory
-     */
-    public function getMailerSenderFactory()
+    public function getMailerSenderFactory(): Mail\SenderFactory
     {
         $factory = new Mail\SenderFactory();
         $factory->add(new Mail\Sender\SMTP(), 8);
@@ -182,18 +160,12 @@ class Container extends DefaultContainer
         return $factory;
     }
 
-    /**
-     * @return \Fusio\Impl\Provider\ProviderLoader
-     */
-    public function getProviderLoader()
+    public function getProviderLoader(): ProviderLoader
     {
         return new ProviderLoader($this->get('connection'), $this->get('config')->get('fusio_provider'));
     }
 
-    /**
-     * @return \Fusio\Impl\Provider\ProviderWriter
-     */
-    public function getProviderWriter()
+    public function getProviderWriter(): ProviderWriter
     {
         return new ProviderWriter($this->get('connection'));
     }
@@ -201,7 +173,7 @@ class Container extends DefaultContainer
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
-        $application->add(new FrameworkConsole\ContainerCommand($this));
+        $application->add(new FrameworkConsole\ContainerCommand($this->get('container_inspector')));
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
         $application->add(new FrameworkConsole\ServeCommand($this));
 
