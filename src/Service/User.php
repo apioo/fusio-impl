@@ -152,7 +152,7 @@ class User
             if (password_verify($password, $user['password'])) {
                 return $user['id'];
             } else {
-                $this->eventDispatcher->dispatch(UserEvents::FAIL_AUTHENTICATION, new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
+                $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])), UserEvents::FAIL_AUTHENTICATION);
             }
         }
 
@@ -209,7 +209,7 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($userId, $record, $scopes, $context), UserEvents::CREATE);
 
         return $userId;
     }
@@ -268,7 +268,7 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::CREATE, new CreatedEvent($userId, $record, $scopes, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($userId, $record, $scopes, $context), UserEvents::CREATE);
 
         return $userId;
     }
@@ -324,7 +324,7 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(UserEvents::UPDATE, new UpdatedEvent($userId, $record, $scopes, $user, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($userId, $record, $scopes, $user, $context), UserEvents::UPDATE);
     }
 
     public function delete($userId, UserContext $context)
@@ -342,7 +342,7 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(UserEvents::DELETE, new DeletedEvent($userId, $user, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($userId, $user, $context), UserEvents::DELETE);
     }
 
     public function changeStatus($userId, $status, UserContext $context)
@@ -360,7 +360,7 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(UserEvents::CHANGE_STATUS, new ChangedStatusEvent($user['status'], $status, $context));
+        $this->eventDispatcher->dispatch(new ChangedStatusEvent($user['status'], $status, $context), UserEvents::CHANGE_STATUS);
     }
 
     public function changePassword($oldPassword, $newPassword, $verifyPassword, UserContext $context)
@@ -393,7 +393,7 @@ class User
         $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
 
         if ($result) {
-            $this->eventDispatcher->dispatch(UserEvents::CHANGE_PASSWORD, new ChangedPasswordEvent($oldPassword, $newPassword, $context));
+            $this->eventDispatcher->dispatch(new ChangedPasswordEvent($oldPassword, $newPassword, $context), UserEvents::CHANGE_PASSWORD);
 
             return true;
         } else {

@@ -72,7 +72,7 @@ class Config
 
         $this->configTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConfigEvents::UPDATE, new UpdatedEvent($configId, $record, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($configId, $record, $context), ConfigEvents::UPDATE);
     }
 
     public function getValue($name)

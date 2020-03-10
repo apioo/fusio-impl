@@ -108,7 +108,7 @@ class Cronjob
 
         $cronjobId = $this->cronjobTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(CronjobEvents::CREATE, new CreatedEvent($cronjobId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($cronjobId, $record, $context), CronjobEvents::CREATE);
 
         $this->writeCronFile();
 
@@ -136,7 +136,7 @@ class Cronjob
 
         $this->cronjobTable->update($record);
 
-        $this->eventDispatcher->dispatch(CronjobEvents::UPDATE, new UpdatedEvent($cronjobId, $record, $cronjob, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($cronjobId, $record, $cronjob, $context), CronjobEvents::UPDATE);
 
         $this->writeCronFile();
     }
@@ -160,7 +160,7 @@ class Cronjob
 
         $this->cronjobTable->update($record);
 
-        $this->eventDispatcher->dispatch(CronjobEvents::DELETE, new DeletedEvent($cronjobId, $cronjob, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($cronjobId, $cronjob, $context), CronjobEvents::DELETE);
 
         $this->writeCronFile();
     }

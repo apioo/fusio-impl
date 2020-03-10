@@ -147,7 +147,7 @@ class Config
                         $this->deployService->deploy($existingMethod);
 
                         // dispatch event
-                        $this->eventDispatcher->dispatch(RoutesEvents::DEPLOY, new DeployedEvent($routeId, $existingMethod, $context));
+                        $this->eventDispatcher->dispatch(new DeployedEvent($routeId, $existingMethod, $context), RoutesEvents::DEPLOY);
                     } elseif ($existingMethod['status'] != $status) {
                         // we can not transition directly from development to
                         // deprecated or closed

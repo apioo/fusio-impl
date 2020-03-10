@@ -114,7 +114,7 @@ class Action
 
         $actionId = $this->actionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(ActionEvents::CREATE, new CreatedEvent($actionId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($actionId, $record, $context), ActionEvents::CREATE);
 
         return $actionId;
     }
@@ -161,7 +161,7 @@ class Action
 
         $this->actionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ActionEvents::UPDATE, new UpdatedEvent($actionId, $record, $action, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($actionId, $record, $action, $context), ActionEvents::UPDATE);
     }
 
     public function delete($actionId, UserContext $context)
@@ -195,7 +195,7 @@ class Action
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
-        $this->eventDispatcher->dispatch(ActionEvents::DELETE, new DeletedEvent($actionId, $action, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($actionId, $action, $context), ActionEvents::DELETE);
     }
 
     public function exists(string $name)

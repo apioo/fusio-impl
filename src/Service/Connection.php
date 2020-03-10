@@ -120,7 +120,7 @@ class Connection
 
         $connectionId = $this->connectionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::CREATE, new CreatedEvent($connectionId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($connectionId, $record, $context), ConnectionEvents::CREATE);
 
         return $connectionId;
     }
@@ -158,7 +158,7 @@ class Connection
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::UPDATE, new UpdatedEvent($connectionId, $record, $connection, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($connectionId, $record, $connection, $context), ConnectionEvents::UPDATE);
     }
 
     public function delete($connectionId, UserContext $context)
@@ -197,7 +197,7 @@ class Connection
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(ConnectionEvents::DELETE, new DeletedEvent($connectionId, $connection, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($connectionId, $connection, $context), ConnectionEvents::DELETE);
     }
 
     public function exists(string $name)

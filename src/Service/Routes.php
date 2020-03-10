@@ -136,7 +136,7 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RoutesEvents::CREATE, new CreatedEvent($routeId, $record, $config, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($routeId, $record, $config, $context), RoutesEvents::CREATE);
 
         return $routeId;
     }
@@ -185,7 +185,7 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RoutesEvents::UPDATE, new UpdatedEvent($routeId, [], $config, $route, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($routeId, [], $config, $route, $context), RoutesEvents::UPDATE);
     }
 
     public function delete($routeId, UserContext $context)
@@ -213,7 +213,7 @@ class Routes
 
         $this->routesTable->update($record);
 
-        $this->eventDispatcher->dispatch(RoutesEvents::DELETE, new DeletedEvent($routeId, $route, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($routeId, $route, $context), RoutesEvents::DELETE);
     }
 
     /**

@@ -143,7 +143,7 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(AppEvents::CREATE, new CreatedEvent($appId, $record, $scopes, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($appId, $record, $scopes, $context), AppEvents::CREATE);
 
         return $appId;
     }
@@ -195,7 +195,7 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(AppEvents::UPDATE, new UpdatedEvent($appId, $record, $scopes, $app, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($appId, $record, $scopes, $app, $context), AppEvents::UPDATE);
     }
 
     public function delete($appId, UserContext $context)
@@ -217,7 +217,7 @@ class App
 
         $this->appTable->update($record);
 
-        $this->eventDispatcher->dispatch(AppEvents::DELETE, new DeletedEvent($appId, $app, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($appId, $app, $context), AppEvents::DELETE);
     }
 
     protected function insertScopes($appId, $scopes)

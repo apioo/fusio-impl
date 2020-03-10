@@ -109,7 +109,7 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RateEvents::CREATE, new CreatedEvent($rateId, $record, $allocations, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($rateId, $record, $allocations, $context), RateEvents::CREATE);
 
         return $rateId;
     }
@@ -149,7 +149,7 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(RateEvents::UPDATE, new UpdatedEvent($rateId, $record, $allocations, $rate, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($rateId, $record, $allocations, $rate, $context), RateEvents::UPDATE);
     }
 
     public function delete($rateId, UserContext $context)
@@ -167,7 +167,7 @@ class Rate
 
         $this->rateTable->update($record);
 
-        $this->eventDispatcher->dispatch(RateEvents::DELETE, new DeletedEvent($rateId, $rate, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($rateId, $rate, $context), RateEvents::DELETE);
     }
     
     /**

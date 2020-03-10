@@ -81,7 +81,7 @@ class Subscription
         // get last insert id
         $subscriptionId = $this->subscriptionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(SubscriptionEvents::CREATE, new CreatedEvent($subscriptionId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($subscriptionId, $record, $context), SubscriptionEvents::CREATE);
     }
 
     public function update($subscriptionId, $endpoint, UserContext $context)
@@ -100,7 +100,7 @@ class Subscription
 
         $this->subscriptionTable->update($record);
 
-        $this->eventDispatcher->dispatch(SubscriptionEvents::UPDATE, new UpdatedEvent($subscription['id'], $record, $subscription, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($subscription['id'], $record, $subscription, $context), SubscriptionEvents::UPDATE);
     }
 
     public function delete($subscriptionId, UserContext $context)
@@ -121,6 +121,6 @@ class Subscription
 
         $this->subscriptionTable->delete($record);
 
-        $this->eventDispatcher->dispatch(SubscriptionEvents::DELETE, new DeletedEvent($subscription['id'], $subscription, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($subscription['id'], $subscription, $context), SubscriptionEvents::DELETE);
     }
 }

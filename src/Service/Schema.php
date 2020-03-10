@@ -101,7 +101,7 @@ class Schema
 
         $schemaId = $this->schemaTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(SchemaEvents::CREATE, new CreatedEvent($schemaId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($schemaId, $record, $context), SchemaEvents::CREATE);
         
         return $schemaId;
     }
@@ -128,7 +128,7 @@ class Schema
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(SchemaEvents::UPDATE, new UpdatedEvent($schemaId, $record, $schema, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($schemaId, $record, $schema, $context), SchemaEvents::UPDATE);
     }
 
     public function delete($schemaId, UserContext $context)
@@ -155,7 +155,7 @@ class Schema
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(SchemaEvents::DELETE, new DeletedEvent($schemaId, $schema, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($schemaId, $schema, $context), SchemaEvents::DELETE);
     }
 
     public function updateForm($schemaId, $form, UserContext $context)

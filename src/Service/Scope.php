@@ -111,7 +111,7 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::CREATE, new CreatedEvent($scopeId, $record, $routes, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($scopeId, $record, $routes, $context), ScopeEvents::CREATE);
 
         return $scopeId;
     }
@@ -181,7 +181,7 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::UPDATE, new UpdatedEvent($scopeId, $record, $routes, $scope, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($scopeId, $record, $routes, $scope, $context), ScopeEvents::UPDATE);
     }
 
     public function delete($scopeId, UserContext $context)
@@ -227,7 +227,7 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(ScopeEvents::DELETE, new DeletedEvent($scopeId, $scope, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($scopeId, $scope, $context), ScopeEvents::DELETE);
     }
 
     /**

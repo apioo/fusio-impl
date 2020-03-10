@@ -79,7 +79,7 @@ class Event
         // get last insert id
         $eventId = $this->eventTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(EventEvents::CREATE, new CreatedEvent($eventId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($eventId, $record, $context), EventEvents::CREATE);
 
         return $eventId;
     }
@@ -105,7 +105,7 @@ class Event
 
         $this->eventTable->update($record);
 
-        $this->eventDispatcher->dispatch(EventEvents::UPDATE, new UpdatedEvent($event['id'], $record, $event, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($event['id'], $record, $event, $context), EventEvents::UPDATE);
     }
 
     public function delete($eventId, UserContext $context)
@@ -123,7 +123,7 @@ class Event
 
         $this->eventTable->update($record);
 
-        $this->eventDispatcher->dispatch(EventEvents::DELETE, new DeletedEvent($event['id'], $event, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($event['id'], $event, $context), EventEvents::DELETE);
     }
 
     public function exists(string $name)

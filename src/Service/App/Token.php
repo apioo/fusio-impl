@@ -126,7 +126,7 @@ class Token
         $tokenId = $this->appTokenTable->getLastInsertId();
 
         // dispatch event
-        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
+        $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
             $appId,
             $tokenId,
             $accessToken,
@@ -134,7 +134,7 @@ class Token
             $expires,
             $now,
             new UserContext($appId, $userId, $ip)
-        ));
+        ), AppEvents::GENERATE_TOKEN);
 
         $token = new AccessToken();
         $token->setAccessToken($accessToken);
@@ -201,7 +201,7 @@ class Token
         ]);
 
         // dispatch event
-        $this->eventDispatcher->dispatch(AppEvents::GENERATE_TOKEN, new GeneratedTokenEvent(
+        $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
             $app['id'],
             $token['id'],
             $accessToken,
@@ -209,7 +209,7 @@ class Token
             $expires,
             $now,
             new UserContext($app['id'], $token['user_id'], $ip)
-        ));
+        ), AppEvents::GENERATE_TOKEN);
 
         $token = new AccessToken();
         $token->setAccessToken($accessToken);
@@ -232,7 +232,7 @@ class Token
 
         $this->appTokenTable->removeTokenFromApp($app['id'], $tokenId);
 
-        $this->eventDispatcher->dispatch(AppEvents::REMOVE_TOKEN, new RemovedTokenEvent($appId, $tokenId, $context));
+        $this->eventDispatcher->dispatch(new RemovedTokenEvent($appId, $tokenId, $context), AppEvents::REMOVE_TOKEN);
     }
 
     /**
