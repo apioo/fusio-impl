@@ -84,25 +84,21 @@ trait Services
 
     public function getRoutesProviderService(): Service\Routes\Provider
     {
+        $factory = new ProviderFactory(
+            $this->get('provider_loader'),
+            $this->get('container_autowire_resolver'),
+            ProviderConfig::TYPE_ROUTES,
+            \Fusio\Engine\Routes\ProviderInterface::class
+        );
+
         return new Service\Routes\Provider(
             $this->get('connection'),
-            $this->get('routes_provider_factory'),
-            $this,
+            $factory,
             $this->get('routes_service'),
             $this->get('schema_service'),
             $this->get('action_service'),
             $this->get('form_element_factory'),
             $this->get('schema_manager')
-        );
-    }
-
-    public function getRoutesProviderFactory(): ProviderFactory
-    {
-        return new ProviderFactory(
-            $this->get('provider_loader'),
-            $this,
-            ProviderConfig::TYPE_ROUTES,
-            \Fusio\Engine\Routes\ProviderInterface::class
         );
     }
 
@@ -320,15 +316,6 @@ trait Services
         );
     }
 
-    public function getSystemPushService(): Service\System\Push
-    {
-        return new Service\System\Push(
-            $this->get('config'),
-            new Service\System\Push\ZipBuilder(),
-            new Service\System\Push\ZipUpload()
-        );
-    }
-
     public function getSystemWebServerService(): Service\System\WebServer
     {
         return new Service\System\WebServer(
@@ -468,10 +455,17 @@ trait Services
 
     public function getTransactionService(): Service\Transaction
     {
+        $factory = new ProviderFactory(
+            $this->get('provider_loader'),
+            $this->get('container_autowire_resolver'),
+            ProviderConfig::TYPE_PAYMENT,
+            Payment\ProviderInterface::class
+        );
+
         return new Service\Transaction(
             $this->get('connector'),
             $this->get('plan_invoice_service'),
-            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_PAYMENT, Payment\ProviderInterface::class),
+            $factory,
             $this->get('config'),
             $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
             $this->get('table_manager')->getTable(Table\Transaction::class),
@@ -498,10 +492,17 @@ trait Services
 
     public function getUserProviderService(): Service\User\Provider
     {
+        $factory = new ProviderFactory(
+            $this->get('provider_loader'),
+            $this->get('container_autowire_resolver'),
+            ProviderConfig::TYPE_USER,
+            User\ProviderInterface::class
+        );
+
         return new Service\User\Provider(
             $this->get('user_service'),
             $this->get('app_token_service'),
-            new ProviderFactory($this->get('provider_loader'), $this, ProviderConfig::TYPE_USER, User\ProviderInterface::class),
+            $factory,
             $this->get('config')
         );
     }

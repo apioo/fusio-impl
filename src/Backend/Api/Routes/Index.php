@@ -46,9 +46,9 @@ class Index extends BackendApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Provider\ProviderFactory
+     * @var \PSX\Dependency\AutowireResolverInterface
      */
-    protected $routesProviderFactory;
+    protected $containerAutowireResolver;
 
     /**
      * @inheritdoc
@@ -74,7 +74,7 @@ class Index extends BackendApiAbstract
         $result  = [];
 
         foreach ($classes as $name => $class) {
-            $provider = $this->routesProviderFactory->factory($name);
+            $provider = $this->containerAutowireResolver->getObject($class);
             if ($provider instanceof ProviderInterface) {
                 $result[] = [
                     'name' => $provider->getName(),
