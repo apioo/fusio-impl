@@ -22,8 +22,10 @@
 namespace Fusio\Impl\Provider\User;
 
 use Fusio\Engine\Model\User;
-use Fusio\Engine\User\ProviderAbstract;
+use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Base;
+use Fusio\Impl\Service\Config;
+use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Json\Parser;
@@ -37,8 +39,24 @@ use RuntimeException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Google extends ProviderAbstract
+class Google implements ProviderInterface
 {
+    /**
+     * @var \PSX\Http\Client\ClientInterface
+     */
+    protected $httpClient;
+
+    /**
+     * @var string
+     */
+    protected $secret;
+
+    public function __construct(ClientInterface $httpClient, Config $config)
+    {
+        $this->httpClient = $httpClient;
+        $this->secret     = $config->getValue('provider_google_secret');
+    }
+
     /**
      * @inheritdoc
      */
