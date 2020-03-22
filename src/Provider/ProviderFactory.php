@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Provider;
 
-use Fusio\Engine\Factory\ContainerAwareInterface;
-use Psr\Container\ContainerInterface;
+use PSX\Dependency\AutowireResolverInterface;
 
 /**
  * ProviderFactory
@@ -39,9 +38,9 @@ class ProviderFactory
     protected $loader;
 
     /**
-     * @var \Psr\Container\ContainerInterface
+     * @var \PSX\Dependency\AutowireResolverInterface
      */
-    protected $container;
+    protected $resolver;
 
     /**
      * @var string
@@ -55,14 +54,14 @@ class ProviderFactory
 
     /**
      * @param \Fusio\Impl\Provider\ProviderLoader $loader
-     * @param \Psr\Container\ContainerInterface $container
+     * @param \PSX\Dependency\AutowireResolverInterface $resolver
      * @param string $type
      * @param string $instanceOf
      */
-    public function __construct(ProviderLoader $loader, ContainerInterface $container, $type, $instanceOf)
+    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver, $type, $instanceOf)
     {
         $this->loader     = $loader;
-        $this->container  = $container;
+        $this->resolver   = $resolver;
         $this->type       = $type;
         $this->instanceOf = $instanceOf;
     }
@@ -71,13 +70,13 @@ class ProviderFactory
      * @param string $provider
      * @return object|null
      */
-    public function factory($provider)
+    public function factory(string $provider)
     {
         $provider = strtolower($provider);
         $class    = $this->loader->getConfig()->getClass($this->type, $provider);
 
         if ($class !== null) {
-            return $this->newInstance($class, $provider);
+            return $this->newInstance($class);
         }
 
         return null;
@@ -85,19 +84,14 @@ class ProviderFactory
 
     /**
      * @param string $class
-     * @param string $provider
      * @return object
      */
-    protected function newInstance($class, $provider)
+    protected function newInstance(string $class)
     {
-        $instance = new $class($provider);
+        $instance = $this->resolver->getObject($class);
 
         if (!$instance instanceof $this->instanceOf) {
             throw new \RuntimeException('Provided class must be an instance of ' . $this->instanceOf);
-        }
-
-        if ($instance instanceof ContainerAwareInterface) {
-            $instance->setContainer($this->container);
         }
 
         return $instance;
