@@ -19,10 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Console\Push;
 
-use Fusio\Impl\Service\System\Push;
-use PSX\Framework\Config\Config;
+use Fusio\Engine\Push\ProviderInterface;
+use Fusio\Impl\Provider\ProviderFactory;
+use Fusio\Impl\Provider\ProviderLoader;
+use PSX\Dependency\AutowireResolverInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,39 +40,40 @@ use Symfony\Component\Console\Output\OutputInterface;
 class PushCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\System\Push
+     * @var \Fusio\Impl\Provider\ProviderLoader
      */
-    protected $pushService;
+    private $providerLoader;
 
     /**
-     * @var \PSX\Framework\Config\Config
+     * @var \PSX\Dependency\AutowireResolverInterface
      */
-    protected $config;
+    private $autowireResolver;
 
     /**
-     * @param \Fusio\Impl\Service\System\Push $pushService
-     * @param \PSX\Framework\Config\Config $config
+     * @param \Fusio\Impl\Provider\ProviderLoader $providerLoader
+     * @param \PSX\Dependency\AutowireResolverInterface $autowireResolver
      */
-    public function __construct(Push $pushService, Config $config)
+    public function __construct(ProviderLoader $providerLoader, AutowireResolverInterface $autowireResolver)
     {
         parent::__construct();
 
-        $this->pushService = $pushService;
-        $this->config      = $config;
+        $this->providerLoader = $providerLoader;
+        $this->autowireResolver = $autowireResolver;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:push')
-            ->setAliases(['push'])
+            ->setName('push')
             ->setDescription('Pushes this Fusio instance to a cloud provider')
+            ->addArgument('provider', InputArgument::REQUIRED, 'Name of the provider')
             ->addArgument('baseDir', InputArgument::OPTIONAL, 'Path to the Fusio directory');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $baseDir = $input->getArgument('baseDir') ?: getcwd();
+        $provider = $input->getArgument('provider');
+        $baseDir  = $input->getArgument('baseDir') ?: getcwd();
 
         if (!is_dir($baseDir)) {
             throw new \RuntimeException('Invalid base dir');
@@ -79,8 +82,12 @@ class PushCommand extends Command
         try {
             $output->writeln('Pushing ...');
 
-            $generator = $this->pushService->push($baseDir);
+            $provider = $this->getProviderFactory()->factory($provider);
+            if (!$provider instanceof ProviderInterface) {
+                throw new \RuntimeException('Invalid provider');
+            }
 
+            $generator = $provider->push($baseDir);
             foreach ($generator as $line) {
                 $output->writeln($line);
             }
@@ -96,5 +103,15 @@ class PushCommand extends Command
         }
 
         return $return;
+    }
+
+    private function getProviderFactory()
+    {
+        return new ProviderFactory(
+            $this->providerLoader,
+            $this->autowireResolver,
+            'push',
+            ProviderInterface::class
+        );
     }
 }

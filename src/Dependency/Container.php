@@ -173,9 +173,10 @@ class Container extends DefaultContainer
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
-        $application->add(new FrameworkConsole\ContainerCommand($this->get('container_inspector')));
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
         $application->add(new FrameworkConsole\ServeCommand($this));
+        $application->add(new FrameworkConsole\Container\ListCommand($this->get('container_inspector')));
+        $application->add(new FrameworkConsole\Container\BuildCommand($this, $this->get('annotation_reader_factory')->factory('PSX\Dependency\Annotation')));
 
         $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
         $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
@@ -229,7 +230,6 @@ class Container extends DefaultContainer
         $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
         $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
         $application->add(new Console\System\LogRotateCommand($this->get('connection')));
-        $application->add(new Console\System\PushCommand($this->get('system_push_service'), $this->get('config')));
         $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_token_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
