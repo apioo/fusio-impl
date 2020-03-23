@@ -25,11 +25,10 @@ use Doctrine\DBAL;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
-use Fusio\Engine\Factory\ContainerAwareInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
-use Psr\Container\ContainerInterface;
+use PSX\Framework\Config\Config;
 
 /**
  * System
@@ -38,12 +37,17 @@ use Psr\Container\ContainerInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class System implements ConnectionInterface, ContainerAwareInterface, PingableInterface
+class System implements ConnectionInterface, PingableInterface
 {
     /**
-     * @var \Psr\Container\ContainerInterface
+     * @var Config
      */
-    protected $container;
+    private $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
 
     public function getName()
     {
@@ -56,7 +60,7 @@ class System implements ConnectionInterface, ContainerAwareInterface, PingableIn
      */
     public function getConnection(ParametersInterface $config)
     {
-        $params = $this->container->get('config')->get('psx_connection');
+        $params = $this->config->get('psx_connection');
         $config = new DBAL\Configuration();
         $config->setSchemaAssetsFilter(static function($assetName) {
             if ($assetName instanceof AbstractAsset) {
@@ -70,11 +74,6 @@ class System implements ConnectionInterface, ContainerAwareInterface, PingableIn
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
-    }
-
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
     }
 
     public function ping($connection)
