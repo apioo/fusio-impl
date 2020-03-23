@@ -94,6 +94,7 @@ trait Services
         return new Service\Routes\Provider(
             $this->get('connection'),
             $factory,
+            $this,
             $this->get('routes_service'),
             $this->get('schema_service'),
             $this->get('action_service'),
