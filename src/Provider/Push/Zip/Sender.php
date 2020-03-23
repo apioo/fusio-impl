@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Push;
+namespace Fusio\Impl\Provider\Push\Zip;
 
 use GuzzleHttp\Client;
 use PSX\Json\Parser;

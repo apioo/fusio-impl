@@ -19,20 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System;
+namespace Fusio\Impl\Provider\Push;
 
-use Fusio\Impl\Service\System\Push\ZipBuilder;
-use Fusio\Impl\Service\System\Push\ZipUpload;
+use Fusio\Engine\Push\ProviderInterface;
+use Fusio\Impl\Provider\Push\Zip\ZipBuilder;
+use Fusio\Impl\Provider\Push\Zip\ZipUpload;
 use PSX\Framework\Config\Config;
 
 /**
- * Push
+ * Apioo
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Push
+class Apioo implements ProviderInterface
 {
     /**
      * @var \PSX\Framework\Config\Config
@@ -40,32 +41,30 @@ class Push
     protected $config;
 
     /**
-     * @var \Fusio\Impl\Service\System\Push\ZipBuilder
+     * @var \Fusio\Impl\Provider\Push\Zip\ZipBuilder
      */
     protected $zipBuilder;
 
     /**
-     * @var \Fusio\Impl\Service\System\Push\ZipUpload
+     * @var \Fusio\Impl\Provider\Push\Zip\ZipUpload
      */
     protected $zipUpload;
 
     /**
      * @param \PSX\Framework\Config\Config $config
-     * @param \Fusio\Impl\Service\System\Push\ZipBuilder $zipBuilder
-     * @param \Fusio\Impl\Service\System\Push\ZipUpload $zipUpload
      */
-    public function __construct(Config $config, ZipBuilder $zipBuilder, ZipUpload $zipUpload)
+    public function __construct(Config $config)
     {
         $this->config     = $config;
-        $this->zipBuilder = $zipBuilder;
-        $this->zipUpload  = $zipUpload;
+        $this->zipBuilder = new ZipBuilder();
+        $this->zipUpload  = new ZipUpload();
     }
 
     /**
      * @param string $basePath
      * @return \Generator
      */
-    public function push($basePath)
+    public function push(string $basePath)
     {
         if (!is_dir($basePath)) {
             throw new \RuntimeException('Base path is not a folder');

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Push;
+namespace Fusio\Impl\Provider\Push\Zip;
 
 use GuzzleHttp\Client;
 use PSX\Json\Parser;
@@ -80,7 +80,7 @@ class ZipUpload
      * @param string $providerKey
      * @param string $hash
      * @param integer $size
-     * @return \Fusio\Impl\Service\System\Push\Provider
+     * @return \Fusio\Impl\Provider\Push\Zip\Provider
      */
     private function discoverProvider($providerHost, $providerKey, $hash, $size)
     {

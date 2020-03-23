@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Push;
+namespace Fusio\Impl\Provider\Push\Zip;
 
 /**
  * Provider
@@ -116,7 +116,7 @@ class Provider
 
     /**
      * @param array $data
-     * @return \Fusio\Impl\Service\System\Push\Provider
+     * @return \Fusio\Impl\Provider\Push\Zip\Provider
      */
     public static function fromArray(array $data)
     {
