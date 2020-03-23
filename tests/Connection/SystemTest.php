@@ -44,11 +44,7 @@ class SystemTest extends TestCase
             'driver' => 'pdo_sqlite',
         ]]);
 
-        $container = new Container();
-        $container->set('config', $config);
-
-        $connection = new System();
-        $connection->setContainer($container);
+        $connection = new System($config);
 
         $this->assertEquals('System', $connection->getName());
         $this->assertInstanceOf(Connection::class, $connection->getConnection(new Parameters([])));
