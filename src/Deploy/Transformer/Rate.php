@@ -19,38 +19,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy\Transformer;
+namespace Fusio\Impl\Deploy\Transformer;
 
-use Fusio\Impl\Backend;
-use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
- * App
+ * Rate
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class App implements TransformerInterface
+class Rate implements TransformerInterface
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
-        $app = isset($data[SystemAbstract::TYPE_APP]) ? $data[SystemAbstract::TYPE_APP] : [];
+        $rate = isset($data[SystemAbstract::TYPE_RATE]) ? $data[SystemAbstract::TYPE_RATE] : [];
 
-        if (!empty($app) && is_array($app)) {
+        if (!empty($rate) && is_array($rate)) {
             $result = [];
-            foreach ($app as $name => $entry) {
-                $result[] = $this->transformApp($name, $entry, $basePath);
+            foreach ($rate as $name => $entry) {
+                $result[] = $this->transformRate($name, $entry, $basePath);
             }
-            $import->app = $result;
+            $import->rate = $result;
         }
     }
 
-    protected function transformApp($name, $data, $basePath)
+    protected function transformRate($name, $data, $basePath)
     {
-        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_APP);
+        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_RATE);
         $data['name'] = $name;
 
         return $data;

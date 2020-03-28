@@ -19,39 +19,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy\Transformer;
-
-use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
-use Fusio\Impl\Service\System\SystemAbstract;
+namespace Fusio\Impl\Deploy;
 
 /**
- * Rate
+ * TransformerInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Rate implements TransformerInterface
+interface TransformerInterface
 {
-    public function transform(array $data, \stdClass $import, $basePath)
-    {
-        $rate = isset($data[SystemAbstract::TYPE_RATE]) ? $data[SystemAbstract::TYPE_RATE] : [];
-
-        if (!empty($rate) && is_array($rate)) {
-            $result = [];
-            foreach ($rate as $name => $entry) {
-                $result[] = $this->transformRate($name, $entry, $basePath);
-            }
-            $import->rate = $result;
-        }
-    }
-
-    protected function transformRate($name, $data, $basePath)
-    {
-        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_RATE);
-        $data['name'] = $name;
-
-        return $data;
-    }
+    /**
+     * @param array $data
+     * @param \stdClass $import
+     * @param string $basePath
+     * @return void
+     */
+    public function transform(array $data, \stdClass $import, $basePath);
 }

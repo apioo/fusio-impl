@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy\Transformer;
+namespace Fusio\Impl\Deploy\Transformer;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 
 /**

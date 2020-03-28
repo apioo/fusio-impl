@@ -19,11 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy;
+namespace Fusio\Impl\Deploy;
 
 use PSX\Json\Pointer;
 use PSX\Uri\Uri;
 use RuntimeException;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -37,22 +38,26 @@ class IncludeDirective
 {
     public static function resolve($data, $basePath, $type)
     {
-        if (is_string($data) && substr($data, 0, 8) == '!include') {
-            $file = new Uri(substr($data, 9));
-            $path = $basePath . '/' . $file->getPath();
+        if ($data instanceof TaggedValue) {
+            if ($data->getTag() === 'include') {
+                $file = new Uri($data->getValue());
+                $path = $basePath . '/' . $file->getPath();
 
-            if (is_file($path)) {
-                $fragment = $file->getFragment();
-                $data     = Yaml::parse(EnvProperties::replace(file_get_contents($path)));
+                if (is_file($path)) {
+                    $fragment = $file->getFragment();
+                    $data     = Yaml::parse(EnvProperties::replace(file_get_contents($path)));
 
-                if (!empty($fragment)) {
-                    $pointer = new Pointer($fragment);
-                    return $pointer->evaluate($data);
+                    if (!empty($fragment)) {
+                        $pointer = new Pointer($fragment);
+                        return $pointer->evaluate($data);
+                    } else {
+                        return $data;
+                    }
                 } else {
-                    return $data;
+                    throw new RuntimeException('Could not resolve file: ' . $path);
                 }
             } else {
-                throw new RuntimeException('Could not resolve file: ' . $path);
+                throw new RuntimeException('Invalid tag provide: ' . $data->getTag());
             }
         } elseif (is_array($data)) {
             return $data;

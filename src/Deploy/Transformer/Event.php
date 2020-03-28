@@ -19,22 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy;
+namespace Fusio\Impl\Deploy\Transformer;
+
+use Fusio\Impl\Backend;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\TransformerInterface;
+use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
- * TransformerInterface
+ * Event
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-interface TransformerInterface
+class Event implements TransformerInterface
 {
-    /**
-     * @param array $data
-     * @param \stdClass $import
-     * @param string $basePath
-     * @return void
-     */
-    public function transform(array $data, \stdClass $import, $basePath);
+    public function transform(array $data, \stdClass $import, $basePath)
+    {
+        $event = isset($data[SystemAbstract::TYPE_EVENT]) ? $data[SystemAbstract::TYPE_EVENT] : [];
+
+        if (!empty($event) && is_array($event)) {
+            $result = [];
+            foreach ($event as $name => $entry) {
+                $result[] = $this->transformEvent($name, $entry, $basePath);
+            }
+            $import->event = $result;
+        }
+    }
+
+    protected function transformEvent($name, $data, $basePath)
+    {
+        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_EVENT);
+        $data['name'] = $name;
+
+        return $data;
+    }
 }

@@ -19,10 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy;
+namespace Fusio\Impl\Deploy;
 
 use Fusio\Impl\Backend\Schema;
 use RuntimeException;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
  * NameGenerator
@@ -54,16 +55,20 @@ class NameGenerator
 
     public static function getSchemaNameFromSource($source)
     {
-        if (is_string($source)) {
-            if (substr($source, 0, 8) == '!include') {
-                $source = trim(substr($source, 9));
+        if ($source instanceof TaggedValue) {
+            if ($source->getTag() === 'include') {
+                $source = trim($source->getValue());
                 $source = str_replace('\\', '/', $source);
                 $source = str_replace('resources/schema/', '', $source);
                 $source = str_replace('.json', '', $source);
                 $source = str_replace(' ', '-', ucwords(str_replace('/', ' ', $source)));
 
                 return $source;
-            } elseif (preg_match('/' . Schema\Schema::NAME_PATTERN . '/', $source)) {
+            } else {
+                throw new RuntimeException('Invalid tag provide: ' . $source->getTag());
+            }
+        } elseif (is_string($source)) {
+            if (preg_match('/' . Schema\Schema::NAME_PATTERN . '/', $source)) {
                 return $source;
             } else {
                 return self::getNameFromJsonSchema($source);

@@ -19,26 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy\Transformer;
+namespace Fusio\Impl\Deploy\Transformer;
 
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Backend;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
- * Config
+ * App
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Config implements TransformerInterface
+class App implements TransformerInterface
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
-        $config = isset($data[SystemAbstract::TYPE_CONFIG]) ? $data[SystemAbstract::TYPE_CONFIG] : [];
+        $app = isset($data[SystemAbstract::TYPE_APP]) ? $data[SystemAbstract::TYPE_APP] : [];
 
-        if (!empty($config) && is_array($config)) {
-            $import->config = $config;
+        if (!empty($app) && is_array($app)) {
+            $result = [];
+            foreach ($app as $name => $entry) {
+                $result[] = $this->transformApp($name, $entry, $basePath);
+            }
+            $import->app = $result;
         }
+    }
+
+    protected function transformApp($name, $data, $basePath)
+    {
+        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_APP);
+        $data['name'] = $name;
+
+        return $data;
     }
 }

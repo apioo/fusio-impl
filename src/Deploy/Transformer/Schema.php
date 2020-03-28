@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\System\Deploy\Transformer;
+namespace Fusio\Impl\Deploy\Transformer;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\NameGenerator;
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\NameGenerator;
+use Fusio\Impl\Deploy\TransformerInterface;
 use Fusio\Impl\Service\System\SystemAbstract;
 use PSX\Json\Parser;
 use PSX\Json\Pointer;
@@ -32,6 +32,7 @@ use PSX\Schema\Generator\JsonSchema;
 use PSX\Schema\SchemaManager;
 use PSX\Uri\Uri;
 use RuntimeException;
+use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
  * Schema
@@ -75,16 +76,20 @@ class Schema implements TransformerInterface
 
     private function resolveSchema($data, $basePath)
     {
-        if (is_string($data)) {
-            if (substr($data, 0, 8) == '!include') {
-                $file = $basePath . '/' . substr($data, 9);
+        if ($data instanceof TaggedValue) {
+            if ($data->getTag() === 'include') {
+                $file = $basePath . '/' . $data->getValue();
 
                 if (is_file($file)) {
                     return $this->resolveFile($file);
                 } else {
                     throw new RuntimeException('Could not resolve file: ' . $file);
                 }
-            } elseif (class_exists($data)) {
+            } else {
+                throw new RuntimeException('Invalid tag provide: ' . $data->getTag());
+            }
+        } elseif (is_string($data)) {
+            if (class_exists($data)) {
                 $schema = (new SchemaManager())->getSchema($data, SchemaManager::TYPE_ANNOTATION);
                 $result = (new JsonSchema())->generate($schema);
 
