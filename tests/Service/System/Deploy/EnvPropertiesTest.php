@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Service\System\Deploy;
 
-use Fusio\Impl\Service\System\Deploy\EnvProperties;
+use Fusio\Impl\Deploy\EnvProperties;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
