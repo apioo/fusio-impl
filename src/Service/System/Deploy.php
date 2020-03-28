@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Service\System;
 
-use Fusio\Impl\Service\System\Deploy\EnvProperties;
-use Fusio\Impl\Service\System\Deploy\IncludeDirective;
-use Fusio\Impl\Service\System\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\Transformer;
+use Fusio\Impl\Deploy\EnvProperties;
+use Fusio\Impl\Deploy\IncludeDirective;
+use Fusio\Impl\Deploy\TransformerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -66,7 +67,7 @@ class Deploy
      */
     public function deploy($data, $basePath = null)
     {
-        $data   = Yaml::parse(EnvProperties::replace($data));
+        $data   = Yaml::parse(EnvProperties::replace($data), Yaml::PARSE_CUSTOM_TAGS);
         $import = new \stdClass();
 
         if (empty($basePath)) {
@@ -74,22 +75,22 @@ class Deploy
         }
 
         $transformers = [
-            SystemAbstract::TYPE_SCOPE      => new Deploy\Transformer\Scope(),
-            SystemAbstract::TYPE_USER       => new Deploy\Transformer\User(),
-            SystemAbstract::TYPE_APP        => new Deploy\Transformer\App(),
-            SystemAbstract::TYPE_CONFIG     => new Deploy\Transformer\Config(),
-            SystemAbstract::TYPE_CONNECTION => new Deploy\Transformer\Connection(),
-            SystemAbstract::TYPE_SCHEMA     => new Deploy\Transformer\Schema(),
-            SystemAbstract::TYPE_ACTION     => new Deploy\Transformer\Action(),
-            SystemAbstract::TYPE_ROUTES     => new Deploy\Transformer\Routes(),
-            SystemAbstract::TYPE_CRONJOB    => new Deploy\Transformer\Cronjob(),
-            SystemAbstract::TYPE_RATE       => new Deploy\Transformer\Rate(),
-            SystemAbstract::TYPE_EVENT      => new Deploy\Transformer\Event(),
+            SystemAbstract::TYPE_SCOPE      => new Transformer\Scope(),
+            SystemAbstract::TYPE_USER       => new Transformer\User(),
+            SystemAbstract::TYPE_APP        => new Transformer\App(),
+            SystemAbstract::TYPE_CONFIG     => new Transformer\Config(),
+            SystemAbstract::TYPE_CONNECTION => new Transformer\Connection(),
+            SystemAbstract::TYPE_SCHEMA     => new Transformer\Schema(),
+            SystemAbstract::TYPE_ACTION     => new Transformer\Action(),
+            SystemAbstract::TYPE_ROUTES     => new Transformer\Routes(),
+            SystemAbstract::TYPE_CRONJOB    => new Transformer\Cronjob(),
+            SystemAbstract::TYPE_RATE       => new Transformer\Rate(),
+            SystemAbstract::TYPE_EVENT      => new Transformer\Event(),
         ];
 
         // resolve includes
         foreach ($transformers as $type => $transformer) {
-            if (isset($data[$type]) && is_string($data[$type])) {
+            if (isset($data[$type])) {
                 $data[$type] = IncludeDirective::resolve($data[$type], $basePath, $type);
             }
         }
