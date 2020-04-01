@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Service\System\Deploy;
+namespace Fusio\Impl\Tests\Deploy;
 
 use Fusio\Impl\Deploy\EnvProperties;
 use PHPUnit\Framework\TestCase;

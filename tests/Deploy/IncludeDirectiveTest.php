@@ -1,0 +1,57 @@
+<?php
+/*
+ * Fusio
+ * A web-application to create dynamically RESTful APIs
+ *
+ * Copyright (C) 2015-2020 Christoph Kappestein <christoph.kappestein@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace Fusio\Impl\Tests\Deploy;
+
+use Fusio\Impl\Deploy\IncludeDirective;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Tag\TaggedValue;
+
+/**
+ * IncludeDirectiveTest
+ *
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
+ * @license http://www.apache.org/licenses/LICENSE-2.0
+ * @link    http://phpsx.org
+ */
+class IncludeDirectiveTest extends TestCase
+{
+    public function testResolveTaggedValue()
+    {
+        $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml'), __DIR__, '');
+
+        $this->assertEquals(['foo' => ['bar' => 'test']], $data);
+    }
+
+    public function testResolveTaggedValuePointer()
+    {
+        $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml#/foo'), __DIR__, '');
+
+        $this->assertEquals(['bar' => 'test'], $data);
+    }
+
+    public function testResolveArray()
+    {
+        $data = IncludeDirective::resolve(['foo' => 'bar'], __DIR__, '');
+
+        $this->assertEquals(['foo' => 'bar'], $data);
+    }
+}
