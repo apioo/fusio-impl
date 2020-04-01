@@ -38,14 +38,37 @@ class IncludeDirectiveTest extends TestCase
     {
         $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml'), __DIR__, '');
 
-        $this->assertEquals(['foo' => ['bar' => 'test']], $data);
+        $this->assertEquals('my_tag', $data['foo']['bar']->getTag());
+        $this->assertEquals('test', $data['foo']['bar']->getValue());
     }
 
     public function testResolveTaggedValuePointer()
     {
         $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml#/foo'), __DIR__, '');
 
-        $this->assertEquals(['bar' => 'test'], $data);
+        $this->assertEquals('my_tag', $data['bar']->getTag());
+        $this->assertEquals('test', $data['bar']->getValue());
+    }
+
+    public function testResolveTaggedValueInvalidFile()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        IncludeDirective::resolve(new TaggedValue('include', 'Resource/foo.yaml'), __DIR__, '');
+    }
+
+    public function testResolveTaggedValueInvalidTag()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        IncludeDirective::resolve(new TaggedValue('foo', 'Resource/test.yaml'), __DIR__, '');
+    }
+
+    public function testResolveInvalidValue()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        IncludeDirective::resolve('foo', __DIR__, '');
     }
 
     public function testResolveArray()

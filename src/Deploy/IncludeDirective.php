@@ -45,7 +45,7 @@ class IncludeDirective
 
                 if (is_file($path)) {
                     $fragment = $file->getFragment();
-                    $data     = Yaml::parse(EnvProperties::replace(file_get_contents($path)));
+                    $data     = Yaml::parse(EnvProperties::replace(file_get_contents($path)), Yaml::PARSE_CUSTOM_TAGS);
 
                     if (!empty($fragment)) {
                         $pointer = new Pointer($fragment);
