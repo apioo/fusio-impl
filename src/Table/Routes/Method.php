@@ -277,6 +277,6 @@ class Method extends TableAbstract
             'active'     => 1,
         ]);
 
-        return $count > 1;
+        return $count > 0;
     }
 }
