@@ -37,6 +37,7 @@ class Email extends SchemaAbstract
         $sb = $this->getSchemaBuilder('Consumer User Email');
         $sb->setRequired(['email']);
         $sb->string('email');
+        $sb->string('captcha');
 
         return $sb->getProperty();
     }

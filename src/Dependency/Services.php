@@ -513,7 +513,7 @@ trait Services
         return new Service\User\Register(
             $this->get('user_service'),
             $this->get('config_service'),
-            $this->get('http_client'),
+            $this->get('user_captcha_service'),
             $this->get('mailer'),
             $this->get('config')
         );
@@ -524,6 +524,7 @@ trait Services
         return new Service\User\ResetPassword(
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('config_service'),
+            $this->get('user_captcha_service'),
             $this->get('mailer'),
             $this->get('config')
         );
@@ -538,6 +539,14 @@ trait Services
             $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\User\Grant::class),
             $this->get('config')
+        );
+    }
+
+    public function getUserCaptchaService(): Service\User\Captcha
+    {
+        return new Service\User\Captcha(
+            $this->get('config_service'),
+            $this->get('http_client')
         );
     }
 

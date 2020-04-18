@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Service\Config;
+use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
@@ -35,6 +36,7 @@ use GuzzleHttp\Psr7\Response;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use PSX\Http\Client\Client;
+use PSX\Http\Exception\BadRequestException;
 
 /**
  * RegisterTest
@@ -55,7 +57,7 @@ class RegisterTest extends ControllerDbTestCase
         $register = new Register(
             Environment::getService('user_service'),
             $this->newConfig('private_key', true),
-            $this->newHttpClient(true),
+            $this->newCaptchaService(true),
             $this->newMailer(true),
             Environment::getConfig()
         );
@@ -82,7 +84,7 @@ class RegisterTest extends ControllerDbTestCase
         $register = new Register(
             Environment::getService('user_service'),
             $this->newConfig('private_key', false),
-            $this->newHttpClient(true),
+            $this->newCaptchaService(true),
             $this->newMailer(false),
             Environment::getConfig()
         );
@@ -109,7 +111,7 @@ class RegisterTest extends ControllerDbTestCase
         $register = new Register(
             Environment::getService('user_service'),
             $this->newConfig('', true),
-            $this->newHttpClient(true),
+            $this->newCaptchaService(true),
             $this->newMailer(true),
             Environment::getConfig()
         );
@@ -139,7 +141,7 @@ class RegisterTest extends ControllerDbTestCase
         $register = new Register(
             Environment::getService('user_service'),
             $this->newConfig('private_key', true),
-            $this->newHttpClient(false),
+            $this->newCaptchaService(false),
             $this->newMailer(false),
             Environment::getConfig()
         );
@@ -149,21 +151,26 @@ class RegisterTest extends ControllerDbTestCase
 
     /**
      * @param boolean $success
-     * @return \PSX\Http\Client\ClientInterface
+     * @return Captcha
      */
-    private function newHttpClient($success)
+    private function newCaptchaService($success)
     {
-        $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], \json_encode(['success' => $success])),
-        ]);
+        $captcha = $this->getMockBuilder(Captcha::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['assertCaptcha'])
+            ->getMock();
 
-        $container = [];
-        $history   = Middleware::history($container);
+        if ($success) {
+            $captcha->expects($this->once())
+                ->method('assertCaptcha')
+                ->willReturn($this->returnValue(true));
+        } else {
+            $captcha->expects($this->once())
+                ->method('assertCaptcha')
+                ->willThrowException(new BadRequestException('Invalid captcha'));
+        }
 
-        $stack = HandlerStack::create($mock);
-        $stack->push($history);
-
-        return new Client(['handler' => $stack]);
+        return $captcha;
     }
 
     /**

@@ -27,10 +27,6 @@ use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\PostRequest;
-use PSX\Http\Exception as StatusCode;
-use PSX\Json\Parser;
 
 /**
  * Register
@@ -52,9 +48,9 @@ class Register
     protected $configService;
 
     /**
-     * @var \PSX\Http\Client\ClientInterface
+     * @var \Fusio\Impl\Service\User\Captcha
      */
-    protected $httpClient;
+    protected $captchaService;
 
     /**
      * @var \Fusio\Impl\Mail\MailerInterface
@@ -69,26 +65,22 @@ class Register
     /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
-     * @param \PSX\Http\Client\ClientInterface $httpClient
+     * @param \Fusio\Impl\Service\User\Captcha $captchaService
      * @param \Fusio\Impl\Mail\MailerInterface $mailer
      * @param \PSX\Framework\Config\Config $psxConfig
      */
-    public function __construct(Service\User $userService, Service\Config $configService, ClientInterface $httpClient, MailerInterface $mailer, Config $psxConfig)
+    public function __construct(Service\User $userService, Service\Config $configService, Captcha $captchaService, MailerInterface $mailer, Config $psxConfig)
     {
-        $this->userService   = $userService;
-        $this->configService = $configService;
-        $this->httpClient    = $httpClient;
-        $this->mailer        = $mailer;
-        $this->psxConfig     = $psxConfig;
+        $this->userService    = $userService;
+        $this->configService  = $configService;
+        $this->captchaService = $captchaService;
+        $this->mailer         = $mailer;
+        $this->psxConfig      = $psxConfig;
     }
 
     public function register($name, $email, $password, $captcha)
     {
-        // verify captcha if secret is available
-        $secret = $this->configService->getValue('recaptcha_secret');
-        if (!empty($secret)) {
-            $this->verifyCaptcha($captcha, $secret);
-        }
+        $this->captchaService->assertCaptcha($captcha);
 
         // determine initial user status
         $status   = Table\User::STATUS_DISABLED;
@@ -135,25 +127,5 @@ class Register
         }
 
         $this->mailer->send($subject, [$email], $body);
-    }
-
-    protected function verifyCaptcha($captcha, $secret)
-    {
-        $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
-            'secret'   => $secret,
-            'response' => $captcha,
-            'remoteip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-        ]);
-
-        $response = $this->httpClient->request($request);
-
-        if ($response->getStatusCode() == 200) {
-            $data = Parser::decode($response->getBody());
-            if ($data->success === true) {
-                return true;
-            }
-        }
-
-        throw new StatusCode\BadRequestException('Invalid captcha');
     }
 }

@@ -50,6 +50,11 @@ class ResetPassword
     protected $configService;
 
     /**
+     * @var \Fusio\Impl\Service\User\Captcha
+     */
+    protected $captchaService;
+
+    /**
      * @var \Fusio\Impl\Mail\MailerInterface
      */
     protected $mailer;
@@ -62,21 +67,24 @@ class ResetPassword
     /**
      * @param \Fusio\Impl\Table\User $userTable
      * @param \Fusio\Impl\Service\Config $configService
+     * @param \Fusio\Impl\Service\User\Captcha $captchaService
      * @param \Fusio\Impl\Mail\MailerInterface $mailer
      * @param \PSX\Framework\Config\Config $psxConfig
      */
-    public function __construct(Table\User $userTable, Service\Config $configService, MailerInterface $mailer, Config $psxConfig)
+    public function __construct(Table\User $userTable, Service\Config $configService, Captcha $captchaService, MailerInterface $mailer, Config $psxConfig)
     {
-        $this->userTable     = $userTable;
-        $this->configService = $configService;
-        $this->mailer        = $mailer;
-        $this->psxConfig     = $psxConfig;
+        $this->userTable      = $userTable;
+        $this->configService  = $configService;
+        $this->captchaService = $captchaService;
+        $this->mailer         = $mailer;
+        $this->psxConfig      = $psxConfig;
     }
 
-    public function resetPassword(string $email)
+    public function resetPassword(string $email, ?string $captcha)
     {
-        $user = $this->userTable->getOneByEmail($email);
+        $this->captchaService->assertCaptcha($captcha);
 
+        $user = $this->userTable->getOneByEmail($email);
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }

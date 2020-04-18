@@ -9378,6 +9378,9 @@
         "properties": {
           "email": {
             "type": "string"
+          },
+          "captcha": {
+            "type": "string"
           }
         },
         "required": [
