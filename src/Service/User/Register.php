@@ -21,12 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
 
 /**
  * Register
@@ -43,39 +40,39 @@ class Register
     protected $userService;
 
     /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
-
-    /**
      * @var \Fusio\Impl\Service\User\Captcha
      */
     protected $captchaService;
 
     /**
-     * @var \Fusio\Impl\Mail\MailerInterface
+     * @var \Fusio\Impl\Service\User\Token
      */
-    protected $mailer;
+    protected $tokenService;
 
     /**
-     * @var \PSX\Framework\Config\Config
+     * @var \Fusio\Impl\Service\User\Mailer
      */
-    protected $psxConfig;
+    protected $mailerService;
+
+    /**
+     * @var \Fusio\Impl\Service\Config
+     */
+    protected $configService;
 
     /**
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\Config $configService
      * @param \Fusio\Impl\Service\User\Captcha $captchaService
-     * @param \Fusio\Impl\Mail\MailerInterface $mailer
-     * @param \PSX\Framework\Config\Config $psxConfig
+     * @param \Fusio\Impl\Service\User\Token $tokenService
+     * @param \Fusio\Impl\Service\User\Mailer $mailerService
      */
-    public function __construct(Service\User $userService, Service\Config $configService, Captcha $captchaService, MailerInterface $mailer, Config $psxConfig)
+    public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Service\Config $configService)
     {
         $this->userService    = $userService;
-        $this->configService  = $configService;
         $this->captchaService = $captchaService;
-        $this->mailer         = $mailer;
-        $this->psxConfig      = $psxConfig;
+        $this->tokenService   = $tokenService;
+        $this->mailerService  = $mailerService;
+        $this->configService  = $configService;
     }
 
     public function register($name, $email, $password, $captcha)
@@ -101,31 +98,9 @@ class Register
 
         // send activation mail
         if ($approval) {
-            $this->sendActivationMail($userId, $name, $email);
+            $token = $this->tokenService->generateToken($userId);
+
+            $this->mailerService->sendActivationMail($token, $name, $email);
         }
-    }
-
-    protected function sendActivationMail($userId, $name, $email)
-    {
-        $payload = [
-            'sub' => $userId,
-            'exp' => time() + (60 * 60),
-        ];
-
-        $token   = JWT::encode($payload, $this->psxConfig->get('fusio_project_key'));
-        $subject = $this->configService->getValue('mail_register_subject');
-        $body    = $this->configService->getValue('mail_register_body');
-
-        $values = array(
-            'name'  => $name,
-            'email' => $email,
-            'token' => $token,
-        );
-
-        foreach ($values as $key => $value) {
-            $body = str_replace('{' . $key . '}', $value, $body);
-        }
-
-        $this->mailer->send($subject, [$email], $body);
     }
 }

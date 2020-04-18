@@ -85,12 +85,7 @@ class ActivateTest extends ControllerDbTestCase
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);
 
-        $payload = [
-            'sub' => 6,
-            'exp' => time() + (60 * 60),
-        ];
-
-        $token = JWT::encode($payload, Environment::getService('config')->get('fusio_project_key'));
+        $token = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = :id', ['id' => 6]);
 
         $response = $this->sendRequest('/consumer/activate', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -125,7 +120,7 @@ class ActivateTest extends ControllerDbTestCase
     public function testPostExpiredToken()
     {
         $payload = [
-            'sub' => 6,
+            'jit' => 'foo',
             'exp' => time() - 60,
         ];
 
@@ -140,15 +135,15 @@ class ActivateTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
         $data = json_decode($body);
 
-        $this->assertEquals(500, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success);
-        $this->assertEquals('Expired token', substr($data->message, 0, 13));
+        $this->assertEquals('Invalid token provided', substr($data->message, 0, 22));
     }
 
     public function testPostInvalidUserId()
     {
         $payload = [
-            'sub' => 16,
+            'jit' => 'foo',
             'exp' => time() + 60,
         ];
 
@@ -163,7 +158,7 @@ class ActivateTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
         $data = json_decode($body);
 
-        $this->assertEquals(404, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals(false, $data->success);
         $this->assertEquals('Could not find user', substr($data->message, 0, 19));
     }

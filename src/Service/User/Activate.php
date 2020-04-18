@@ -21,11 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -40,30 +38,27 @@ class Activate
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $userService;
+    private $userService;
 
     /**
-     * @var \PSX\Framework\Config\Config
+     * @var Token
      */
-    protected $config;
+    private $tokenService;
 
     /**
      * @param \Fusio\Impl\Service\User $userService
-     * @param \PSX\Framework\Config\Config $config
+     * @param \Fusio\Impl\Service\User\Token $tokenService
      */
-    public function __construct(Service\User $userService, Config $config)
+    public function __construct(Service\User $userService, Service\User\Token $tokenService)
     {
-        $this->userService = $userService;
-        $this->config      = $config;
+        $this->userService  = $userService;
+        $this->tokenService = $tokenService;
     }
 
     public function activate($token)
     {
-        $payload = JWT::decode($token, $this->config->get('fusio_project_key'), ['HS256']);
-        $userId  = isset($payload->sub) ? $payload->sub : null;
-        $expires = isset($payload->exp) ? $payload->exp : null;
-
-        if (time() < $expires) {
+        $userId = $this->tokenService->getUser($token);
+        if (!empty($userId)) {
             $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::newAnonymousContext());
         } else {
             throw new StatusCode\BadRequestException('Token is expired');

@@ -21,13 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Firebase\JWT\JWT;
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Authorization\TokenGenerator;
-use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -40,14 +36,9 @@ use PSX\Http\Exception as StatusCode;
 class ResetPassword
 {
     /**
-     * @var \Fusio\Impl\Table\User
+     * @var \Fusio\Impl\Service\User
      */
-    protected $userTable;
-
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
+    protected $userService;
 
     /**
      * @var \Fusio\Impl\Service\User\Captcha
@@ -55,29 +46,34 @@ class ResetPassword
     protected $captchaService;
 
     /**
-     * @var \Fusio\Impl\Mail\MailerInterface
+     * @var \Fusio\Impl\Service\User\Token
      */
-    protected $mailer;
+    protected $tokenService;
 
     /**
-     * @var \PSX\Framework\Config\Config
+     * @var \Fusio\Impl\Service\User\Mailer
      */
-    protected $psxConfig;
+    protected $mailerService;
 
     /**
-     * @param \Fusio\Impl\Table\User $userTable
-     * @param \Fusio\Impl\Service\Config $configService
+     * @var \Fusio\Impl\Table\User
+     */
+    protected $userTable;
+
+    /**
+     * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\User\Captcha $captchaService
-     * @param \Fusio\Impl\Mail\MailerInterface $mailer
-     * @param \PSX\Framework\Config\Config $psxConfig
+     * @param \Fusio\Impl\Service\User\Token $tokenService
+     * @param \Fusio\Impl\Service\User\Mailer $mailerService
+     * @param \Fusio\Impl\Table\User $userTable
      */
-    public function __construct(Table\User $userTable, Service\Config $configService, Captcha $captchaService, MailerInterface $mailer, Config $psxConfig)
+    public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Table\User $userTable)
     {
-        $this->userTable      = $userTable;
-        $this->configService  = $configService;
+        $this->userService    = $userService;
+        $this->mailerService  = $mailerService;
         $this->captchaService = $captchaService;
-        $this->mailer         = $mailer;
-        $this->psxConfig      = $psxConfig;
+        $this->tokenService   = $tokenService;
+        $this->userTable      = $userTable;
     }
 
     public function resetPassword(string $email, ?string $captcha)
@@ -94,59 +90,22 @@ class ResetPassword
         }
 
         // set onetime token for the user
-        $token = TokenGenerator::generateCode();
-
-        $this->userTable->update([
-            'id'    => $user['id'],
-            'token' => $token
-        ]);
+        $token = $this->tokenService->generateToken($user['id']);
 
         // send reset mail
-        $this->sendResetMail($user['id'], $user['name'], $user['email'], $token);
+        $this->mailerService->sendResetPasswordMail($token, $user['name'], $user['email']);
     }
 
     public function changePassword(string $token, string $newPassword)
     {
-        $user = $this->userTable->getOneByToken($token);
-        if (empty($user)) {
-            throw new StatusCode\NotFoundException('Could not find user');
+        $userId = $this->tokenService->getUser($token);
+        if (empty($userId)) {
+            throw new StatusCode\NotFoundException('Invalid token provided');
         }
 
-        $result = $this->userTable->changePassword($user['id'], null, $newPassword, false);
-
+        $result = $this->userTable->changePassword($userId, null, $newPassword, false);
         if (!$result) {
             throw new StatusCode\BadRequestException('Could not change password');
         }
-
-        // reset token
-        $this->userTable->update([
-            'id'    => $user['id'],
-            'token' => ''
-        ]);
-    }
-
-    protected function sendResetMail($userId, $name, $email, $token)
-    {
-        $payload = [
-            'sub' => $userId,
-            'exp' => time() + (60 * 60),
-            'jti' => $token,
-        ];
-
-        $token   = JWT::encode($payload, $this->psxConfig->get('fusio_project_key'), 'HS256');
-        $subject = $this->configService->getValue('mail_pw_reset_subject');
-        $body    = $this->configService->getValue('mail_pw_reset_body');
-
-        $values = array(
-            'name'  => $name,
-            'email' => $email,
-            'token' => $token,
-        );
-
-        foreach ($values as $key => $value) {
-            $body = str_replace('{' . $key . '}', $value, $body);
-        }
-
-        $this->mailer->send($subject, [$email], $body);
     }
 }

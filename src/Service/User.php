@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;

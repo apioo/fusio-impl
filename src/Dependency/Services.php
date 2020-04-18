@@ -478,7 +478,7 @@ trait Services
     {
         return new Service\User\Activate(
             $this->get('user_service'),
-            $this->get('config')
+            $this->get('user_token_service')
         );
     }
 
@@ -512,21 +512,21 @@ trait Services
     {
         return new Service\User\Register(
             $this->get('user_service'),
-            $this->get('config_service'),
             $this->get('user_captcha_service'),
-            $this->get('mailer'),
-            $this->get('config')
+            $this->get('user_token_service'),
+            $this->get('user_mailer_service'),
+            $this->get('config_service')
         );
     }
 
     public function getUserResetPasswordService(): Service\User\ResetPassword
     {
         return new Service\User\ResetPassword(
-            $this->get('table_manager')->getTable(Table\User::class),
-            $this->get('config_service'),
+            $this->get('user_service'),
             $this->get('user_captcha_service'),
-            $this->get('mailer'),
-            $this->get('config')
+            $this->get('user_token_service'),
+            $this->get('user_mailer_service'),
+            $this->get('table_manager')->getTable(Table\User::class)
         );
     }
 
@@ -547,6 +547,22 @@ trait Services
         return new Service\User\Captcha(
             $this->get('config_service'),
             $this->get('http_client')
+        );
+    }
+
+    public function getUserMailerService(): Service\User\Mailer
+    {
+        return new Service\User\Mailer(
+            $this->get('config_service'),
+            $this->get('mailer')
+        );
+    }
+
+    public function getUserTokenService(): Service\User\Token
+    {
+        return new Service\User\Token(
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('config')
         );
     }
 
