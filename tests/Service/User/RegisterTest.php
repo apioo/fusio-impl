@@ -23,19 +23,14 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Mail\Mailer;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\User\Captcha;
+use Fusio\Impl\Service\User\Mailer;
 use Fusio\Impl\Service\User\Register;
 use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Fixture;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use PSX\Http\Client\Client;
 use PSX\Http\Exception\BadRequestException;
 
 /**
@@ -56,10 +51,10 @@ class RegisterTest extends ControllerDbTestCase
     {
         $register = new Register(
             Environment::getService('user_service'),
-            $this->newConfig('private_key', true),
             $this->newCaptchaService(true),
+            Environment::getService('user_token_service'),
             $this->newMailer(true),
-            Environment::getConfig()
+            $this->newConfig('private_key', true)
         );
 
         $register->register('new_user', 'user@host.com', 'test1234', 'result');
@@ -83,10 +78,10 @@ class RegisterTest extends ControllerDbTestCase
     {
         $register = new Register(
             Environment::getService('user_service'),
-            $this->newConfig('private_key', false),
             $this->newCaptchaService(true),
+            Environment::getService('user_token_service'),
             $this->newMailer(false),
-            Environment::getConfig()
+            $this->newConfig('private_key', false)
         );
 
         $register->register('new_user', 'user@host.com', 'test1234', 'result');
@@ -110,10 +105,10 @@ class RegisterTest extends ControllerDbTestCase
     {
         $register = new Register(
             Environment::getService('user_service'),
-            $this->newConfig('', true),
             $this->newCaptchaService(true),
+            Environment::getService('user_token_service'),
             $this->newMailer(true),
-            Environment::getConfig()
+            $this->newConfig('', true)
         );
 
         $register->register('new_user', 'user@host.com', 'test1234', 'result');
@@ -140,10 +135,10 @@ class RegisterTest extends ControllerDbTestCase
     {
         $register = new Register(
             Environment::getService('user_service'),
-            $this->newConfig('private_key', true),
             $this->newCaptchaService(false),
+            Environment::getService('user_token_service'),
             $this->newMailer(false),
-            Environment::getConfig()
+            $this->newConfig('private_key', true)
         );
 
         $register->register('new_user', 'user@host.com', 'test1234', 'result');
@@ -189,21 +184,21 @@ class RegisterTest extends ControllerDbTestCase
 
     /**
      * @param boolean $send
-     * @return \Fusio\Impl\Mail\MailerInterface
+     * @return \Fusio\Impl\Service\User\Mailer
      */
     private function newMailer($send)
     {
         $mailer = $this->getMockBuilder(Mailer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send'])
+            ->setMethods(['sendActivationMail'])
             ->getMock();
 
         if ($send) {
             $mailer->expects($this->once())
-                ->method('send');
+                ->method('sendActivationMail');
         } else {
             $mailer->expects($this->never())
-                ->method('send');
+                ->method('sendActivationMail');
         }
 
         return $mailer;
