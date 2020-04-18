@@ -124,10 +124,7 @@ JSON;
         // set token
         $this->testPost();
 
-        $key     = Environment::getConfig()->get('fusio_project_key');
-        $jti     = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = :id', ['id' => 2]);
-        $payload = ['sub' => 2, 'jti' => $jti];
-        $token   = JWT::encode($payload, $key, 'HS256');
+        $token = $this->connection->fetchColumn('SELECT token FROM fusio_user WHERE id = :id', ['id' => 2]);
 
         $response = $this->sendRequest('/consumer/password_reset', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',

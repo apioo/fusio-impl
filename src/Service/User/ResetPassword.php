@@ -107,25 +107,9 @@ class ResetPassword
 
     public function changePassword(string $token, string $newPassword)
     {
-        try {
-            $payload = JWT::decode($token, $this->psxConfig->get('fusio_project_key'), ['HS256']);
-        } catch (\UnexpectedValueException $e) {
-            throw new StatusCode\BadRequestException('Invalid token provided');
-        }
-
-        $userId = $payload->sub ?? null;
-        $user   = $this->userTable->get($userId);
-
+        $user = $this->userTable->getOneByToken($token);
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
-        }
-
-        if (empty($user['token'])) {
-            throw new StatusCode\NotFoundException('No reset token available');
-        }
-
-        if ($user['token'] !== $payload->jti) {
-            throw new StatusCode\NotFoundException('Invalid token provided');
         }
 
         $result = $this->userTable->changePassword($user['id'], null, $newPassword, false);
