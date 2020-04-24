@@ -21,9 +21,8 @@
 
 namespace Fusio\Impl\Deploy\Transformer;
 
-use Fusio\Impl\Deploy\IncludeDirective;
 use Fusio\Impl\Deploy\NameGenerator;
-use Fusio\Impl\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\TransformerAbstract;
 use Fusio\Impl\Service\System\SystemAbstract;
 use RuntimeException;
 
@@ -34,7 +33,7 @@ use RuntimeException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Routes implements TransformerInterface
+class Routes extends TransformerAbstract
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
@@ -53,7 +52,7 @@ class Routes implements TransformerInterface
 
     protected function transformRoutes($priority, $path, $data, $basePath)
     {
-        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
+        $data = $this->includeDirective->resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
 
         $scopes = [];
 

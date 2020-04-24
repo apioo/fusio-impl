@@ -22,9 +22,8 @@
 namespace Fusio\Impl\Deploy\Transformer;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Deploy\IncludeDirective;
 use Fusio\Impl\Deploy\NameGenerator;
-use Fusio\Impl\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\TransformerAbstract;
 use Fusio\Impl\Service\System\SystemAbstract;
 use PSX\Json\Parser;
 use PSX\Json\Pointer;
@@ -41,7 +40,7 @@ use Symfony\Component\Yaml\Tag\TaggedValue;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Schema implements TransformerInterface
+class Schema extends TransformerAbstract
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
@@ -180,7 +179,7 @@ class Schema implements TransformerInterface
         if (isset($data[$type]) && is_array($data[$type])) {
             foreach ($data[$type] as $name => $row) {
                 // resolve includes
-                $row = IncludeDirective::resolve($row, $basePath, $type);
+                $row = $this->includeDirective->resolve($row, $basePath, $type);
 
                 if (isset($row['methods']) && is_array($row['methods'])) {
                     foreach ($row['methods'] as $method => $config) {

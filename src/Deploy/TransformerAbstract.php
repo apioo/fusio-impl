@@ -19,26 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Deploy\Transformer;
+namespace Fusio\Impl\Deploy;
 
-use Fusio\Impl\Deploy\TransformerAbstract;
-use Fusio\Impl\Service\System\SystemAbstract;
+use Fusio\Impl\Backend;
 
 /**
- * Config
+ * TransformerAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Config extends TransformerAbstract
+abstract class TransformerAbstract implements TransformerInterface
 {
-    public function transform(array $data, \stdClass $import, $basePath)
-    {
-        $config = isset($data[SystemAbstract::TYPE_CONFIG]) ? $data[SystemAbstract::TYPE_CONFIG] : [];
+    /**
+     * @var IncludeDirective
+     */
+    protected $includeDirective;
 
-        if (!empty($config) && is_array($config)) {
-            $import->config = $config;
-        }
+    public function __construct(IncludeDirective $includeDirective)
+    {
+        $this->includeDirective = $includeDirective;
     }
 }

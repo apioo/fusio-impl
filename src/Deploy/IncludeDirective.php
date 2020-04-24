@@ -24,6 +24,7 @@ namespace Fusio\Impl\Deploy;
 use PSX\Json\Pointer;
 use PSX\Uri\Uri;
 use RuntimeException;
+use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 use Symfony\Component\Yaml\Yaml;
 
@@ -36,7 +37,23 @@ use Symfony\Component\Yaml\Yaml;
  */
 class IncludeDirective
 {
-    public static function resolve($data, $basePath, $type)
+    /**
+     * @var EnvProperties
+     */
+    private $envProperties;
+
+    /**
+     * @var Parser
+     */
+    private $parser;
+
+    public function __construct(EnvProperties $envProperties)
+    {
+        $this->envProperties = $envProperties;
+        $this->parser        = new Parser();
+    }
+
+    public function resolve($data, $basePath, $type)
     {
         if ($data instanceof TaggedValue) {
             if ($data->getTag() === 'include') {
@@ -45,7 +62,7 @@ class IncludeDirective
 
                 if (is_file($path)) {
                     $fragment = $file->getFragment();
-                    $data     = Yaml::parse(EnvProperties::replace(file_get_contents($path)), Yaml::PARSE_CUSTOM_TAGS);
+                    $data     = $this->parser->parse($this->envProperties->replace(file_get_contents($path)), Yaml::PARSE_CUSTOM_TAGS);
 
                     if (!empty($fragment)) {
                         $pointer = new Pointer($fragment);

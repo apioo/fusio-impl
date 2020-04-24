@@ -21,8 +21,10 @@
 
 namespace Fusio\Impl\Tests\Deploy;
 
+use Fusio\Impl\Deploy\EnvProperties;
 use Fusio\Impl\Deploy\IncludeDirective;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Config\Config;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 
 /**
@@ -36,7 +38,8 @@ class IncludeDirectiveTest extends TestCase
 {
     public function testResolveTaggedValue()
     {
-        $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml'), __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $data = $include->resolve(new TaggedValue('include', 'Resource/test.yaml'), __DIR__, '');
 
         $this->assertEquals('my_tag', $data['foo']['bar']->getTag());
         $this->assertEquals('test', $data['foo']['bar']->getValue());
@@ -44,7 +47,8 @@ class IncludeDirectiveTest extends TestCase
 
     public function testResolveTaggedValuePointer()
     {
-        $data = IncludeDirective::resolve(new TaggedValue('include', 'Resource/test.yaml#/foo'), __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $data = $include->resolve(new TaggedValue('include', 'Resource/test.yaml#/foo'), __DIR__, '');
 
         $this->assertEquals('my_tag', $data['bar']->getTag());
         $this->assertEquals('test', $data['bar']->getValue());
@@ -54,27 +58,36 @@ class IncludeDirectiveTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        IncludeDirective::resolve(new TaggedValue('include', 'Resource/foo.yaml'), __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $include->resolve(new TaggedValue('include', 'Resource/foo.yaml'), __DIR__, '');
     }
 
     public function testResolveTaggedValueInvalidTag()
     {
         $this->expectException(\RuntimeException::class);
 
-        IncludeDirective::resolve(new TaggedValue('foo', 'Resource/test.yaml'), __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $include->resolve(new TaggedValue('foo', 'Resource/test.yaml'), __DIR__, '');
     }
 
     public function testResolveInvalidValue()
     {
         $this->expectException(\RuntimeException::class);
 
-        IncludeDirective::resolve('foo', __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $include->resolve('foo', __DIR__, '');
     }
 
     public function testResolveArray()
     {
-        $data = IncludeDirective::resolve(['foo' => 'bar'], __DIR__, '');
+        $include = $this->newIncludeDirective();
+        $data = $include->resolve(['foo' => 'bar'], __DIR__, '');
 
         $this->assertEquals(['foo' => 'bar'], $data);
+    }
+    
+    private function newIncludeDirective()
+    {
+        return new IncludeDirective(new EnvProperties(new Config([])));
     }
 }

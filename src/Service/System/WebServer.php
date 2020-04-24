@@ -65,22 +65,16 @@ class WebServer
 
         if (isset($server['api']) && is_array($server['api'])) {
             $host = VirtualHost::fromArray($server['api'], VirtualHost::HANDLER_API);
-
-            $this->assertHost($host, $result, false);
+            $this->assertHost($host);
 
             $config->addVirtualHost($host);
         }
 
         if (isset($server['apps']) && is_array($server['apps'])) {
-            foreach ($server['apps'] as $app) {
-                if (is_array($app)) {
-                    $host = VirtualHost::fromArray($app, VirtualHost::HANDLER_APP);
+            $host = VirtualHost::fromArray($server['apps'], VirtualHost::HANDLER_APP);
+            $this->assertHost($host);
 
-                    $this->assertHost($host, $result, true);
-
-                    $config->addVirtualHost($host);
-                }
-            }
+            $config->addVirtualHost($host);
         }
 
         $generator = $this->newGenerator();
@@ -116,10 +110,8 @@ class WebServer
 
     /**
      * @param \Fusio\Impl\Service\System\WebServer\VirtualHost $host
-     * @param \Fusio\Impl\Service\System\Import\Result $result
-     * @param boolean $replaceEnv
      */
-    private function assertHost(VirtualHost $host, Result $result, $replaceEnv)
+    private function assertHost(VirtualHost $host)
     {
         $root  = $host->getDocumentRoot();
         $index = $host->getIndex();
@@ -134,51 +126,6 @@ class WebServer
             if (!is_file($indexFile)) {
                 throw new \RuntimeException('Virtual host index file ' . $indexFile . ' does not exist');
             }
-
-            if ($replaceEnv) {
-                $this->replaceFile($indexFile, $result);
-            }
         }
-    }
-
-    /**
-     * @param string $index
-     * @param \Fusio\Impl\Service\System\Import\Result $result
-     */
-    private function replaceFile($index, Result $result)
-    {
-        $content = file_get_contents($index);
-        $content = $this->replaceEnvs($content, $count);
-
-        if ($count > 0) {
-            $bytes = file_put_contents($index, $content);
-
-            if ($bytes) {
-                $result->add(Deploy::TYPE_SERVER, Result::ACTION_REPLACED, 'Environment variables at ' . $index);
-            }
-        }
-    }
-
-    /**
-     * @param string $content
-     * @param integer $replaced
-     * @return string
-     */
-    private function replaceEnvs($content, &$replaced)
-    {
-        $envs = [
-            'FUSIO_URL' => $this->config->get('psx_url'),
-        ];
-
-        $envs = array_merge($envs, $_SERVER);
-
-        foreach ($envs as $key => $value) {
-            if (is_scalar($value)) {
-                $content = str_replace('${' . $key . '}', $value, $content, $count);
-                $replaced+= $count;
-            }
-        }
-
-        return $content;
     }
 }

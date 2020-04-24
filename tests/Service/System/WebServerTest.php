@@ -58,12 +58,10 @@ class WebServerTest extends TestCase
                 'access_log' => '/tmp/access.log',
             ],
             'apps' => [
-                [
-                    'host' => 'test.apioo.de',
-                    'alias' => ['myapp.com', 'foo.com'],
-                    'root' => __DIR__ . '/apps/test-app',
-                    'index' => 'index.html',
-                ],
+                'host' => 'apps.apioo.de',
+                'alias' => ['myapp.com', 'foo.com'],
+                'root' => __DIR__ . '/apps/test-app',
+                'index' => 'index.html',
             ],
         ]);
 
@@ -74,11 +72,9 @@ class WebServerTest extends TestCase
         $actual = preg_replace('/\d{4}-\d{2}-\d{2}/', '0000-00-00', $actual);
 
         $this->assertEquals($expect, $actual, $actual);
-        $this->assertEquals('<b>Url: http://foo.bar</b>', file_get_contents(__DIR__ . '/apps/test-app/index.html'));
 
         $actual = $result->getLogs();
         $expect = [
-            '[REPLACED] server Environment variables at /apps/test-app/index.html',
             '[GENERATED] server Generated web server config file  /Resource/' . $serverType . '.conf',
         ];
 

@@ -22,8 +22,7 @@
 namespace Fusio\Impl\Deploy\Transformer;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Deploy\IncludeDirective;
-use Fusio\Impl\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\TransformerAbstract;
 use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
@@ -33,7 +32,7 @@ use Fusio\Impl\Service\System\SystemAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class User implements TransformerInterface
+class User extends TransformerAbstract
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
@@ -50,7 +49,7 @@ class User implements TransformerInterface
 
     protected function transformUser($name, $data, $basePath)
     {
-        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_USER);
+        $data = $this->includeDirective->resolve($data, $basePath, SystemAbstract::TYPE_USER);
         $data['name'] = $name;
 
         return $data;

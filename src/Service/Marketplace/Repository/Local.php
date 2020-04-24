@@ -37,7 +37,7 @@ class Local implements RepositoryInterface
     /**
      * @var string
      */
-    private $publicPath;
+    private $appsPath;
 
     /**
      * @var array
@@ -45,11 +45,11 @@ class Local implements RepositoryInterface
     private $apps;
 
     /**
-     * @param string $publicPath
+     * @param string $appsPath
      */
-    public function __construct(string $publicPath)
+    public function __construct(string $appsPath)
     {
-        $this->publicPath = $publicPath;
+        $this->appsPath = $appsPath;
     }
 
     /**
@@ -76,11 +76,11 @@ class Local implements RepositoryInterface
 
     private function scanDir(): array
     {
-        $apps = scandir($this->publicPath);
+        $apps = scandir($this->appsPath);
         $result = [];
 
         foreach ($apps as $name) {
-            $path = $this->publicPath . '/' . $name . '/app.yaml';
+            $path = $this->appsPath . '/' . $name . '/app.yaml';
 
             if (is_file($path)) {
                 $data = Yaml::parse(file_get_contents($path));

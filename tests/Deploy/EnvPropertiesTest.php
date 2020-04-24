@@ -23,6 +23,7 @@ namespace Fusio\Impl\Tests\Deploy;
 
 use Fusio\Impl\Deploy\EnvProperties;
 use PHPUnit\Framework\TestCase;
+use PSX\Framework\Config\Config;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -36,8 +37,10 @@ class EnvPropertiesTest extends TestCase
 {
     public function testReplace()
     {
+        $envProperties = $this->newEnvProperties();
+
         $data   = 'dbname: "${env.FOO}"';
-        $actual = EnvProperties::replace($data, [
+        $actual = $envProperties->replace($data, [
             'FOO' => 'bar'
         ]);
         $expect = 'dbname: "bar"';
@@ -47,6 +50,8 @@ class EnvPropertiesTest extends TestCase
 
     public function testReplaceMultiple()
     {
+        $envProperties = $this->newEnvProperties();
+
         $data = <<<'YAML'
 Default-Connection:
   class: Fusio\Adapter\Sql\Connection\Sql
@@ -59,7 +64,7 @@ Default-Connection:
 
 YAML;
 
-        $actual = EnvProperties::replace($data, [
+        $actual = $envProperties->replace($data, [
             'APIOO_DB_NAME' => 'db_name',
             'APIOO_DB_USER' => 'db_user',
             'APIOO_DB_PW'   => 'db_pw',
@@ -76,8 +81,10 @@ YAML;
 
     public function testReplaceCase()
     {
+        $envProperties = $this->newEnvProperties();
+
         $data   = 'dbname: "${env.FOO}"';
-        $actual = EnvProperties::replace($data, [
+        $actual = $envProperties->replace($data, [
             'foo' => 'bar'
         ]);
         $expect = 'dbname: "bar"';
@@ -87,8 +94,10 @@ YAML;
 
     public function testReplaceEscape()
     {
+        $envProperties = $this->newEnvProperties();
+
         $data   = 'dbname: "${env.FOO}"';
-        $actual = EnvProperties::replace($data, [
+        $actual = $envProperties->replace($data, [
             'foo' => 'foo' . "\n" . 'bar"test'
         ]);
         $expect = 'dbname: "foo\nbar\"test"';
@@ -101,7 +110,8 @@ YAML;
      */
     public function testReplaceUnknownType()
     {
-        EnvProperties::replace('dbname: "${foo.FOO}"', []);
+        $envProperties = $this->newEnvProperties();
+        $envProperties->replace('dbname: "${foo.FOO}"', []);
     }
 
     /**
@@ -109,8 +119,14 @@ YAML;
      */
     public function testReplaceUnknownKey()
     {
-        EnvProperties::replace('dbname: "${env.FOO}"', [
+        $envProperties = $this->newEnvProperties();
+        $envProperties->replace('dbname: "${env.FOO}"', [
             'baz' => 'bar'
         ]);
+    }
+
+    private function newEnvProperties()
+    {
+        return new EnvProperties(new Config([]));
     }
 }

@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Deploy\Transformer;
 
-use Fusio\Impl\Deploy\IncludeDirective;
-use Fusio\Impl\Deploy\TransformerInterface;
+use Fusio\Impl\Deploy\TransformerAbstract;
 use Fusio\Impl\Service\System\SystemAbstract;
 
 /**
@@ -32,7 +31,7 @@ use Fusio\Impl\Service\System\SystemAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Connection implements TransformerInterface
+class Connection extends TransformerAbstract
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
@@ -49,7 +48,7 @@ class Connection implements TransformerInterface
 
     protected function transformConnection($name, $data, $basePath)
     {
-        $data = IncludeDirective::resolve($data, $basePath, SystemAbstract::TYPE_CONNECTION);
+        $data = $this->includeDirective->resolve($data, $basePath, SystemAbstract::TYPE_CONNECTION);
         $data['name'] = $name;
 
         return $data;

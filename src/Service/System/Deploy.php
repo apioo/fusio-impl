@@ -51,13 +51,26 @@ class Deploy
     protected $webServerService;
 
     /**
+     * @var EnvProperties
+     */
+    private $envProperties;
+
+    /**
+     * @var IncludeDirective
+     */
+    private $includeDirective;
+
+    /**
      * @param \Fusio\Impl\Service\System\Import $importService
      * @param \Fusio\Impl\Service\System\WebServer $webServerService
+     * @param \Fusio\Impl\Deploy\EnvProperties $envProperties
      */
-    public function __construct(Import $importService, WebServer $webServerService)
+    public function __construct(Import $importService, WebServer $webServerService, EnvProperties $envProperties)
     {
         $this->importService    = $importService;
         $this->webServerService = $webServerService;
+        $this->envProperties    = $envProperties;
+        $this->includeDirective = new IncludeDirective($envProperties);
     }
 
     /**
@@ -67,7 +80,7 @@ class Deploy
      */
     public function deploy($data, $basePath = null)
     {
-        $data   = Yaml::parse(EnvProperties::replace($data), Yaml::PARSE_CUSTOM_TAGS);
+        $data   = Yaml::parse($this->envProperties->replace($data), Yaml::PARSE_CUSTOM_TAGS);
         $import = new \stdClass();
 
         if (empty($basePath)) {
@@ -75,23 +88,23 @@ class Deploy
         }
 
         $transformers = [
-            SystemAbstract::TYPE_SCOPE      => new Transformer\Scope(),
-            SystemAbstract::TYPE_USER       => new Transformer\User(),
-            SystemAbstract::TYPE_APP        => new Transformer\App(),
-            SystemAbstract::TYPE_CONFIG     => new Transformer\Config(),
-            SystemAbstract::TYPE_CONNECTION => new Transformer\Connection(),
-            SystemAbstract::TYPE_SCHEMA     => new Transformer\Schema(),
-            SystemAbstract::TYPE_ACTION     => new Transformer\Action(),
-            SystemAbstract::TYPE_ROUTES     => new Transformer\Routes(),
-            SystemAbstract::TYPE_CRONJOB    => new Transformer\Cronjob(),
-            SystemAbstract::TYPE_RATE       => new Transformer\Rate(),
-            SystemAbstract::TYPE_EVENT      => new Transformer\Event(),
+            SystemAbstract::TYPE_SCOPE      => $this->newTransformer(Transformer\Scope::class),
+            SystemAbstract::TYPE_USER       => $this->newTransformer(Transformer\User::class),
+            SystemAbstract::TYPE_APP        => $this->newTransformer(Transformer\App::class),
+            SystemAbstract::TYPE_CONFIG     => $this->newTransformer(Transformer\Config::class),
+            SystemAbstract::TYPE_CONNECTION => $this->newTransformer(Transformer\Connection::class),
+            SystemAbstract::TYPE_SCHEMA     => $this->newTransformer(Transformer\Schema::class),
+            SystemAbstract::TYPE_ACTION     => $this->newTransformer(Transformer\Action::class),
+            SystemAbstract::TYPE_ROUTES     => $this->newTransformer(Transformer\Routes::class),
+            SystemAbstract::TYPE_CRONJOB    => $this->newTransformer(Transformer\Cronjob::class),
+            SystemAbstract::TYPE_RATE       => $this->newTransformer(Transformer\Rate::class),
+            SystemAbstract::TYPE_EVENT      => $this->newTransformer(Transformer\Event::class),
         ];
 
         // resolve includes
         foreach ($transformers as $type => $transformer) {
             if (isset($data[$type])) {
-                $data[$type] = IncludeDirective::resolve($data[$type], $basePath, $type);
+                $data[$type] = $this->includeDirective->resolve($data[$type], $basePath, $type);
             }
         }
 
@@ -106,12 +119,17 @@ class Deploy
 
         // web server
         $server = isset($data[self::TYPE_SERVER]) ? $data[self::TYPE_SERVER] : [];
-        $server = IncludeDirective::resolve($server, $basePath, self::TYPE_SERVER);
+        $server = $this->includeDirective->resolve($server, $basePath, self::TYPE_SERVER);
 
         if (is_array($server)) {
             $result->merge($this->webServerService->generate($server));
         }
 
         return $result;
+    }
+
+    private function newTransformer(string $class): TransformerInterface
+    {
+        return new $class($this->includeDirective);
     }
 }

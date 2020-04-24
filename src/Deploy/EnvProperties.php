@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Deploy;
 
+use PSX\Framework\Config\Config;
 use RuntimeException;
 
 /**
@@ -33,19 +34,30 @@ use RuntimeException;
 class EnvProperties
 {
     /**
+     * @var Config
+     */
+    private $config;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @param string $data
      * @param array $env
      * @return string
      */
-    public static function replace($data, array $env = null)
+    public function replace($data, array $env = null)
     {
         $vars = [];
 
         // dir properties
         $vars['dir'] = [
-            'cache'  => PSX_PATH_CACHE,
-            'src'    => PSX_PATH_SRC,
-            'public' => PSX_PATH_PUBLIC,
+            'cache'  => $this->config->get('psx_path_cache'),
+            'src'    => $this->config->get('psx_path_src'),
+            'public' => $this->config->get('psx_path_public'),
+            'apps'   => $this->config->get('fusio_apps_dir'),
             'temp'   => sys_get_temp_dir(),
         ];
 

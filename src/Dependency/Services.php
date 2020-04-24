@@ -23,6 +23,7 @@ namespace Fusio\Impl\Dependency;
 
 use Fusio\Engine\Payment;
 use Fusio\Engine\User;
+use Fusio\Impl\Deploy\EnvProperties;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
@@ -313,7 +314,8 @@ trait Services
     {
         return new Service\System\Deploy(
             $this->get('system_import_service'),
-            $this->get('system_web_server_service')
+            $this->get('system_web_server_service'),
+            new EnvProperties($this->get('config'))
         );
     }
 
@@ -383,7 +385,7 @@ trait Services
     public function getMarketplaceRepositoryLocal(): Service\Marketplace\RepositoryInterface
     {
         return new Service\Marketplace\Repository\Local(
-            $this->get('config')->get('psx_path_public')
+            $this->get('config')->get('fusio_apps_dir') ?: $this->get('config')->get('psx_path_public')
         );
     }
 

@@ -368,7 +368,7 @@ JSON;
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Usage of unknown variable key \"foo\", allowed is \(cache, src, public, temp\)/', $display, $display);
+        $this->assertRegExp('/Usage of unknown variable key \"foo\", allowed is \(cache, src, public, apps, temp\)/', $display, $display);
     }
 
     public function testCommandRoutesSchemaInclude()
