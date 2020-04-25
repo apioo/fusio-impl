@@ -25,6 +25,7 @@ use Fusio\Impl\Service\Marketplace\App;
 use Fusio\Impl\Service\Marketplace\RepositoryInterface;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
+use PSX\Http\Client\Options;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -47,6 +48,11 @@ class Remote implements RepositoryInterface
     private $marketplaceUrl;
 
     /**
+     * @var boolean
+     */
+    private $sslVerify;
+
+    /**
      * @var array
      */
     private $apps;
@@ -59,6 +65,15 @@ class Remote implements RepositoryInterface
     {
         $this->httpClient = $httpClient;
         $this->marketplaceUrl = $marketplaceUrl;
+        $this->sslVerify = true;
+    }
+
+    /**
+     * @param bool $sslVerify
+     */
+    public function setSslVerify(bool $sslVerify)
+    {
+        $this->sslVerify = $sslVerify;
     }
 
     /**
@@ -85,7 +100,10 @@ class Remote implements RepositoryInterface
 
     private function request(): array
     {
-        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl));
+        $options = new Options();
+        $options->setVerify($this->sslVerify);
+
+        $response = $this->httpClient->request(new GetRequest($this->marketplaceUrl), $options);
 
         if ($response->getStatusCode() > 300) {
             throw new \RuntimeException('Could not fetch repository, received ' . $response->getStatusCode());

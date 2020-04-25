@@ -26,6 +26,7 @@ use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -43,13 +44,19 @@ class UpdateCommand extends Command
     protected $installer;
 
     /**
+     * @var \Fusio\Impl\Service\Marketplace\Repository\Remote
+     */
+    private $remoteRepository;
+
+    /**
      * @param \Fusio\Impl\Service\Marketplace\Installer $installer
      */
-    public function __construct(Service\Marketplace\Installer $installer)
+    public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository)
     {
         parent::__construct();
 
         $this->installer = $installer;
+        $this->remoteRepository = $remoteRepository;
     }
 
     protected function configure()
@@ -57,11 +64,16 @@ class UpdateCommand extends Command
         $this
             ->setName('marketplace:update')
             ->setDescription('Updates an existing locally installed app')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app');
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
+            ->addOption('no_verify', 'n', InputOption::VALUE_NONE, 'Disable SSL verification', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('no_verify')) {
+            $this->remoteRepository->setSslVerify(false);
+        }
+
         $app = $this->installer->update($input->getArgument('name'), UserContext::newAnonymousContext());
 
         $output->writeln('');

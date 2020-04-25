@@ -205,8 +205,8 @@ class Container extends DefaultContainer
         $application->add(new Console\Event\ExecuteCommand($this->get('event_executor_service')));
 
         $application->add(new Console\Marketplace\ListCommand($this->get('marketplace_repository_remote')));
-        $application->add(new Console\Marketplace\InstallCommand($this->get('marketplace_installer')));
-        $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer')));
+        $application->add(new Console\Marketplace\InstallCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
+        $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
         $application->add(new Console\Marketplace\RemoveCommand($this->get('marketplace_installer')));
 
         $application->add(new Console\Migration\ExecuteCommand($this->get('connection'), $this->get('connector')));
