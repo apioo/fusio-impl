@@ -20,8 +20,6 @@
 
 namespace Fusio\Impl\Rpc;
 
-use Datto\JsonRpc\Exceptions\ApplicationException;
-use Datto\JsonRpc\Exceptions\MethodException;
 use Fusio\Engine\Context as EngineContext;
 use Fusio\Engine\Processor;
 use Fusio\Engine\Repository;
@@ -34,6 +32,8 @@ use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Http\RequestInterface;
+use PSX\Json\Rpc\Exception\MethodNotFoundException;
+use PSX\Json\Rpc\Exception\ServerErrorException;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaInterface;
@@ -42,13 +42,13 @@ use PSX\Schema\ValidationException;
 use PSX\Schema\Visitor\TypeVisitor;
 
 /**
- * Evaluator
+ * Invoker
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class Evaluator implements \Datto\JsonRpc\Evaluator
+class Invoker
 {
     /**
      * @var \Fusio\Engine\Processor
@@ -116,19 +116,16 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         $this->schemaTraverser  = new SchemaTraverser();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function evaluate($method, $arguments)
+    public function __invoke($method, $arguments)
     {
         try {
             return $this->execute($method, $arguments);
         } catch (StatusCodeException $e) {
-            throw new ApplicationException($e->getMessage(), $e->getStatusCode());
+            throw new ServerErrorException($e->getMessage(), $e->getStatusCode());
         } catch (ValidationException $e) {
-            throw new ApplicationException($e->getMessage(), 400);
+            throw new ServerErrorException($e->getMessage(), 400);
         } catch (\Throwable $e) {
-            throw new ApplicationException($e->getMessage(), 500);
+            throw new ServerErrorException($e->getMessage(), 500);
         }
     }
 
@@ -138,7 +135,7 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         $method   = $this->methodTable->getMethodByOperationId($operationId);
 
         if (empty($method)) {
-            throw new MethodException();
+            throw new MethodNotFoundException('Method not found');
         }
 
         $context = new Context();
@@ -165,25 +162,23 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
             throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
 
+        $parameters = Record::from($arguments);
+
         // validate schema
         $body = new Record();
         if ($method['request'] > 0) {
-            if (!isset($arguments['body'])) {
+            if (!$parameters->hasProperty('body')) {
                 throw new StatusCode\BadRequestException('No body provided');
             }
 
-            // @TODO en/decode data since we need the JSON data as \stdClass and
-            // not as array
-            $data = \json_decode(\json_encode($arguments['body']));
-
             $schema = $this->getSchema($method['request']);
             if ($schema instanceof SchemaInterface) {
-                $body = $this->schemaTraverser->traverse($data, $schema, new TypeVisitor());
+                $body = $this->schemaTraverser->traverse($parameters->getProperty('body'), $schema, new TypeVisitor());
             }
         }
 
         // execute action
-        return $this->executeAction($arguments, $body, $method, $context);
+        return $this->executeAction($parameters, $body, $method, $context);
     }
 
     private function getSchema($schemaId)
@@ -197,16 +192,16 @@ class Evaluator implements \Datto\JsonRpc\Evaluator
         }
     }
     
-    private function executeAction(array $arguments, RecordInterface $body, $method, Context $context)
+    private function executeAction(RecordInterface $parameters, RecordInterface $body, $method, Context $context)
     {
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $context = new EngineContext($method['route_id'], $baseUrl, $context->getApp(), $context->getUser());
 
         $rpcContext = new RpcContext(
             $method['method'],
-            $arguments['headers'] ?? [],
-            $arguments['uriFragments'] ?? [],
-            $arguments['parameters'] ?? []
+            (array) $parameters->getProperty('headers'),
+            (array) $parameters->getProperty('uriFragments'),
+            (array) $parameters->getProperty('parameters')
         );
 
         $request  = new Request($rpcContext, $body);

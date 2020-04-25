@@ -21,10 +21,10 @@
 
 namespace Fusio\Impl\Tests\Export\Api;
 
-use Datto\JsonRpc\Client;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Json\Rpc\Builder;
 
 /**
  * JsonRpcTest
@@ -68,13 +68,12 @@ class JsonRpcTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $client = new Client();
-        $client->query(1, 'listFoo', []);
-        $message = $client->encode();
+        $builder = new Builder();
+        $message = $builder->createCall('listFoo', [], 1);
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
-        ), $message);
+        ), \json_encode($message));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -109,14 +108,15 @@ JSON;
 
     public function testPostBatch()
     {
-        $client = new Client();
-        $client->query(1, 'listFoo', []);
-        $client->query(2, 'listFoo', ['parameters' => ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1]]);
-        $message = $client->encode();
+        $builder = new Builder();
+        $message = [
+            $builder->createCall('listFoo', [], 1),
+            $builder->createCall('listFoo', ['parameters' => ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1]], 2),
+        ];
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
-        ), $message);
+        ), \json_encode($message));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -170,13 +170,12 @@ JSON;
 
     public function testPostMissingAuthorization()
     {
-        $client = new Client();
-        $client->query(1, 'createFoo', []);
-        $message = $client->encode();
+        $builder = new Builder();
+        $message = $builder->createCall('createFoo', [], 1);
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
-        ), $message);
+        ), \json_encode($message));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -196,14 +195,13 @@ JSON;
 
     public function testPostEmpyBody()
     {
-        $client = new Client();
-        $client->query(1, 'createFoo', []);
-        $message = $client->encode();
+        $builder = new Builder();
+        $message = $builder->createCall('createFoo', [], 1);
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ), $message);
+        ), \json_encode($message));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
@@ -223,14 +221,13 @@ JSON;
 
     public function testPostInvalidBody()
     {
-        $client = new Client();
-        $client->query(1, 'createFoo', ['body' => ['title' => 12]]);
-        $message = $client->encode();
+        $builder = new Builder();
+        $message = $builder->createCall('createFoo', ['body' => ['title' => 12]], 1);
 
         $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
-        ), $message);
+        ), \json_encode($message));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'

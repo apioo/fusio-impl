@@ -21,17 +21,17 @@
 
 namespace Fusio\Impl\Export\Api;
 
-use Datto\JsonRpc\Server;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Export;
 use Fusio\Impl\Export\Schema;
-use Fusio\Impl\Rpc\Evaluator;
+use Fusio\Impl\Rpc\Invoker;
 use Fusio\Impl\Table;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
+use PSX\Json\Rpc\Server;
 
 /**
  * JsonRpc
@@ -130,7 +130,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $server = new Server(new Evaluator(
+        $server = new Server(new Invoker(
             $this->processor,
             $this->securityTokenValidator,
             $this->rateService,
@@ -141,8 +141,6 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
             $this->request
         ));
 
-        $reply = $server->reply(json_encode($record));
-
-        return \json_decode($reply);
+        return $server->invoke($record);
     }
 }
