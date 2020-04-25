@@ -57,7 +57,7 @@ class EnvProperties
             'cache'  => $this->config->get('psx_path_cache'),
             'src'    => $this->config->get('psx_path_src'),
             'public' => $this->config->get('psx_path_public'),
-            'apps'   => $this->config->get('fusio_apps_dir'),
+            'apps'   => $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public'),
             'temp'   => sys_get_temp_dir(),
         ];
 
