@@ -49,11 +49,6 @@ class Installer
     private $remoteRepository;
 
     /**
-     * @var ClientInterface
-     */
-    private $httpClient;
-
-    /**
      * @var Config
      */
     private $config;
@@ -66,14 +61,12 @@ class Installer
     /**
      * @param \Fusio\Impl\Service\Marketplace\Repository\Local $localRepository
      * @param \Fusio\Impl\Service\Marketplace\Repository\Remote $remoteRepository
-     * @param \PSX\Http\Client\ClientInterface $httpClient
      * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, ClientInterface $httpClient, Config $config)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Config $config)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
-        $this->httpClient = $httpClient;
         $this->config = $config;
         $this->filesystem = new Filesystem();
     }
@@ -141,16 +134,12 @@ class Installer
 
         $this->moveToPublic($appDir, $remoteApp);
     }
-    
+
     private function downloadZip(App $app): string
     {
-        // increase timeout to handle download
-        set_time_limit(300);
-
-        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()));
-
         $appFile = $this->config->get('psx_path_cache') . '/app-' . $app->getName() . '_' . uniqid() . '.zip';
-        file_put_contents($appFile, $response->getBody()->getContents());
+
+        $this->remoteRepository->downloadZip($app, $appFile);
 
         // check hash
         if (sha1_file($appFile) != $app->getSha1Hash()) {

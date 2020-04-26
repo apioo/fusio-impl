@@ -394,7 +394,6 @@ trait Services
         return new Service\Marketplace\Installer(
             $this->get('marketplace_repository_local'),
             $this->get('marketplace_repository_remote'),
-            $this->get('http_client'),
             $this->get('config')
         );
     }

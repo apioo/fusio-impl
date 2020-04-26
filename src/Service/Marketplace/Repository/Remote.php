@@ -98,6 +98,25 @@ class Remote implements RepositoryInterface
         return $apps[$name] ?? null;
     }
 
+    /**
+     * Downloads the provided app to the app file
+     * 
+     * @param App $app
+     * @param string $appFile
+     */
+    public function downloadZip(App $app, string $appFile): void
+    {
+        // increase timeout to handle download
+        set_time_limit(300);
+
+        $options = new Options();
+        $options->setVerify($this->sslVerify);
+
+        $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()));
+
+        file_put_contents($appFile, $response->getBody()->getContents());
+    }
+
     private function request(): array
     {
         $options = new Options();
