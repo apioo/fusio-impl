@@ -65,12 +65,12 @@ class InstallCommand extends Command
             ->setName('marketplace:install')
             ->setDescription('Installs an app from the marketplace')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
-            ->addOption('no_verify', 'n', InputOption::VALUE_NONE, 'Disable SSL verification', false);
+            ->addOption('no_verify', 'n', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('no_verify')) {
+        if ($input->hasOption('no_verify')) {
             $this->remoteRepository->setSslVerify(false);
         }
 
