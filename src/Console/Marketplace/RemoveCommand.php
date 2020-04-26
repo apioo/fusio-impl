@@ -23,6 +23,7 @@ namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service;
+use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,10 +63,16 @@ class RemoveCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $app = $this->installer->remove($input->getArgument('name'), UserContext::newAnonymousContext());
+        try {
+            $app = $this->installer->remove($input->getArgument('name'), UserContext::newAnonymousContext());
 
-        $output->writeln('');
-        $output->writeln('Removed app ' . $app->getName());
-        $output->writeln('');
+            $output->writeln('');
+            $output->writeln('Removed app ' . $app->getName());
+            $output->writeln('');
+        } catch (BadRequestException $e) {
+            $output->writeln('');
+            $output->writeln($e->getMessage());
+            $output->writeln('');
+        }
     }
 }
