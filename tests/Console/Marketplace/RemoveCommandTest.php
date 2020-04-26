@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Console\Marketplace;
 
-use PSX\Framework\Test\Environment;
+use Fusio\Impl\Console\Marketplace\RemoveCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -35,12 +35,10 @@ class RemoveCommandTest extends MarketplaceTestCase
 {
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('marketplace:remove');
+        $command = new RemoveCommand($this->getInstaller());
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'name' => 'fusio',
-        ]);
+        $commandTester->execute([]);
 
         $actual = $commandTester->getDisplay();
 
