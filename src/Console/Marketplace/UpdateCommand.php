@@ -65,12 +65,12 @@ class UpdateCommand extends Command
             ->setName('marketplace:update')
             ->setDescription('Updates an existing locally installed app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
-            ->addOption('no_verify', 'n', InputOption::VALUE_NONE, 'Disable SSL verification');
+            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasOption('no_verify')) {
+        if ($input->hasOption('disable_ssl_verify')) {
             $this->remoteRepository->setSslVerify(false);
         }
 
