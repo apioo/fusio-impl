@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -55,11 +56,16 @@ class ListCommand extends Command
     {
         $this
             ->setName('marketplace:list')
-            ->setDescription('Lists all available apps on the marketplace');
+            ->setDescription('Lists all available apps on the marketplace')
+            ->addOption('disable_ssl_verify', 'd', InputOption::VALUE_NONE, 'Disable SSL verification');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($input->getOption('disable_ssl_verify')) {
+            $this->remoteRepository->setSslVerify(false);
+        }
+
         $apps = $this->remoteRepository->fetchAll();
 
         $rows = [];
