@@ -70,7 +70,7 @@ class UpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->hasOption('disable_ssl_verify')) {
+        if ($input->getOption('disable_ssl_verify')) {
             $this->remoteRepository->setSslVerify(false);
         }
 

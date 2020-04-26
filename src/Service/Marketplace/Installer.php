@@ -170,12 +170,15 @@ class Installer
 
     private function moveToPublic(string $appDir, App $app): void
     {
-        $this->filesystem->rename($appDir, $this->config->get('psx_path_public') . '/' . $app->getName());
+        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+
+        $this->filesystem->rename($appDir, $appsDir . '/' . $app->getName());
     }
 
     private function moveToTrash(App $app): void
     {
-        $appDir = $this->config->get('psx_path_public') . '/' . $app->getName();
+        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+        $appDir = $appsDir . '/' . $app->getName();
 
         $this->filesystem->rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid());
     }

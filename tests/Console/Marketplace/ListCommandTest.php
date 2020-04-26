@@ -21,10 +21,7 @@
 
 namespace Fusio\Impl\Tests\Console\Marketplace;
 
-use Fusio\Impl\Tests\Assert;
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
+use Fusio\Impl\Console\Marketplace\ListCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -34,25 +31,20 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListCommandTest extends ControllerDbTestCase
+class ListCommandTest extends MarketplaceTestCase
 {
-    public function getDataSet()
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('marketplace:list');
+        $command = new ListCommand(
+            $this->getRemoteRepository()
+        );
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-        ]);
+        $commandTester->execute([]);
 
         $actual = $commandTester->getDisplay();
 
-        $apps = ['fusio', 'developer', 'documentation', 'swagger-ui', 'vscode'];
+        $apps = ['fusio'];
         foreach ($apps as $appName) {
             $this->assertTrue(strpos($actual, $appName) !== false, $actual);
         }

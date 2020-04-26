@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Tests\Console\Marketplace;
 
-use Fusio\Impl\Tests\Fixture;
-use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -33,20 +31,14 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RemoveCommandTest extends ControllerDbTestCase
+class RemoveCommandTest extends MarketplaceTestCase
 {
-    public function getDataSet()
-    {
-        return Fixture::getDataSet();
-    }
-
     public function testCommand()
     {
         $command = Environment::getService('console')->find('marketplace:remove');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'command' => $command->getName(),
             'name' => 'fusio',
         ]);
 
