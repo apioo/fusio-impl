@@ -38,7 +38,9 @@ class RemoveCommandTest extends MarketplaceTestCase
         $command = new RemoveCommand($this->getInstaller());
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute([]);
+        $commandTester->execute([
+            'name' => 'fusio',
+        ]);
 
         $actual = $commandTester->getDisplay();
 
