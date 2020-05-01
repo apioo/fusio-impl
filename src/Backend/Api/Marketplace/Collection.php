@@ -90,6 +90,7 @@ class Collection extends BackendApiAbstract
             $localApp = $this->marketplaceRepositoryLocal->fetchByName($remoteApp->getName());
             if ($localApp instanceof App) {
                 $app['local'] = $localApp->toArray();
+                $app['local']['startUrl'] = $this->config->get('fusio_apps_url') . '/' . $localApp->getName();
             }
 
             $result[$remoteApp->getName()] = $app;
