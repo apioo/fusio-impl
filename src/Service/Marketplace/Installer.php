@@ -186,7 +186,7 @@ class Installer
     private function replaceVariables(string $appDir)
     {
         $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $url = $this->config->get('psx_url');
+        $url = $this->config->get('fusio_apps_url');
         $basePath = parse_url($url, PHP_URL_PATH);
 
         $env = [
