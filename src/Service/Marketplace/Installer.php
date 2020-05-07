@@ -127,7 +127,7 @@ class Installer
         $zipFile = $this->downloadZip($remoteApp);
 
         $appDir = $this->config->get('psx_path_cache') . '/app-' . $remoteApp->getName();
-        $this->unzipFile($zipFile, $appDir);
+        $appDir = $this->unzipFile($zipFile, $appDir);
 
         $this->writeMetaFile($appDir, $remoteApp);
         $this->replaceVariables($appDir);
@@ -149,7 +149,7 @@ class Installer
         return $appFile;
     }
 
-    private function unzipFile(string $zipFile, string $appDir): void
+    private function unzipFile(string $zipFile, string $appDir): string
     {
         $zip = new \ZipArchive();
         $handle = $zip->open($zipFile);
@@ -159,6 +159,15 @@ class Installer
         }
 
         $zip->extractTo($appDir);
+        $zip->close();
+
+        // check whether there is only a single folder inside the zip
+        $files = scandir($appDir);
+        if (count($files) === 3 && is_dir($appDir . '/' . $files[2])) {
+            return $appDir . '/' . $files[2];
+        } else {
+            return $appDir;
+        }
     }
 
     private function writeMetaFile(string $appDir, App $app): void
