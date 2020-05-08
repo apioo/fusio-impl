@@ -111,6 +111,7 @@ class Remote implements RepositoryInterface
 
         $options = new Options();
         $options->setVerify($this->sslVerify);
+        $options->setAllowRedirects(true);
 
         $response = $this->httpClient->request(new GetRequest($app->getDownloadUrl()), $options);
 
