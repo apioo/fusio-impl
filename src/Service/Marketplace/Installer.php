@@ -198,11 +198,11 @@ class Installer
         $url = $this->config->get('fusio_apps_url');
         $basePath = parse_url($url, PHP_URL_PATH);
 
-        $env = [
+        $env = array_merge($_ENV, [
             'API_URL' => $apiUrl,
             'URL' => $url,
             'BASE_PATH' => $basePath,
-        ];
+        ]);
 
         $file = $appDir . '/index.html';
         if (is_file($file)) {
