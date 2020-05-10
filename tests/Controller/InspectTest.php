@@ -53,7 +53,8 @@ class InspectTest extends ControllerDbTestCase
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $body   = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
         $expect = <<<'JSON'
 {
     "method": "GET",
@@ -63,6 +64,9 @@ class InspectTest extends ControllerDbTestCase
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -74,8 +78,8 @@ class InspectTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     /**
@@ -135,7 +139,7 @@ JSON;
                 ]],
             ]));
 
-            $body   = (string) $response->getBody();
+            $actual   = (string) $response->getBody();
             $expect = <<<'JSON'
 {
     "success": true,
@@ -143,8 +147,8 @@ JSON;
 }
 JSON;
 
-            $this->assertEquals(200, $response->getStatusCode(), $body);
-            $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+            $this->assertEquals(200, $response->getStatusCode(), $actual);
+            $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
 
             // send request
             $response = $this->sendRequest('/inspect/bar', 'GET', array(
@@ -152,10 +156,11 @@ JSON;
                 'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
             ));
 
-            $body = (string) $response->getBody();
+            $actual = (string) $response->getBody();
+            $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
 
             if ($status === Resource::STATUS_CLOSED) {
-                $data = Parser::decode($body);
+                $data = Parser::decode($actual);
 
                 $headers = [
                     'vary' => ['Accept'],
@@ -164,11 +169,11 @@ JSON;
                     'x-ratelimit-remaining' => [720 - $key],
                 ];
 
-                $this->assertEquals(410, $response->getStatusCode(), $body);
-                $this->assertEquals($headers, $response->getHeaders(), $body);
-                $this->assertEquals(false, $data->success, $body);
-                $this->assertEquals($debug ? 'PSX\\Http\\Exception\\GoneException' : 'Internal Server Error', $data->title, $body);
-                $this->assertEquals('Resource is not longer supported', substr($data->message, 0, 32), $body);
+                $this->assertEquals(410, $response->getStatusCode(), $actual);
+                $this->assertEquals($headers, $response->getHeaders(), $actual);
+                $this->assertEquals(false, $data->success, $actual);
+                $this->assertEquals($debug ? 'PSX\\Http\\Exception\\GoneException' : 'Internal Server Error', $data->title, $actual);
+                $this->assertEquals('Resource is not longer supported', substr($data->message, 0, 32), $actual);
             } else {
                 $expect = <<<'JSON'
 {
@@ -179,6 +184,9 @@ JSON;
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -201,9 +209,9 @@ JSON;
                     $headers['warning'] = ['199 PSX "Resource is deprecated"'];
                 }
 
-                $this->assertEquals(200, $response->getStatusCode(), $body);
-                $this->assertEquals($headers, $response->getHeaders(), $body);
-                $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+                $this->assertEquals(200, $response->getStatusCode(), $actual);
+                $this->assertEquals($headers, $response->getHeaders(), $actual);
+                $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
             }
         }
     }
@@ -315,7 +323,8 @@ JSON;
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $body   = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
         $expect = <<<'JSON'
 {
     "method": "POST",
@@ -325,6 +334,9 @@ JSON;
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -336,8 +348,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     /**
@@ -352,7 +364,8 @@ JSON;
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $body   = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
         $expect = <<<'JSON'
 {
     "method": "PUT",
@@ -362,6 +375,9 @@ JSON;
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -373,8 +389,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     /**
@@ -389,7 +405,8 @@ JSON;
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $body   = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
         $expect = <<<'JSON'
 {
     "method": "PATCH",
@@ -399,6 +416,9 @@ JSON;
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -410,8 +430,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     /**
@@ -426,7 +446,8 @@ JSON;
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
-        $body   = (string) $response->getBody();
+        $actual = (string) $response->getBody();
+        $actual = preg_replace('/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/', '00000000-0000-0000-0000-000000000000', $actual);
         $expect = <<<'JSON'
 {
     "method": "DELETE",
@@ -436,6 +457,9 @@ JSON;
         ],
         "authorization": [
             "Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
     "uri_fragments": {
@@ -447,8 +471,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function providerDebugStatus()

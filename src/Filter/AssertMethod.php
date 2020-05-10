@@ -23,6 +23,7 @@ namespace Fusio\Impl\Filter;
 
 use Fusio\Impl\Loader\Context;
 use Fusio\Impl\Service;
+use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -91,6 +92,9 @@ class AssertMethod implements FilterInterface
         }
 
         $this->context->setMethod($method);
+
+        // add request id
+        $request->setHeader('X-Request-Id', Uuid::pseudoRandom());
 
         $filterChain->handle($request, $response);
     }
