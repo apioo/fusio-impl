@@ -47,7 +47,7 @@ class PassthruRecord extends Record
 
     public function __construct($payload)
     {
-        parent::__construct('record', []);
+        parent::__construct('record', (array) $payload);
 
         $this->payload  = $payload;
         $this->accessor = PropertyAccess::createPropertyAccessor();
