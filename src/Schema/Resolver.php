@@ -23,9 +23,7 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use PSX\Json;
-use PSX\Schema\Parser\JsonSchema\Document;
-use PSX\Schema\Parser\JsonSchema\RefResolver;
-use PSX\Schema\Parser\JsonSchema\ResolverInterface;
+use PSX\Schema\Parser\TypeSchema\ResolverInterface;
 use PSX\Uri\Uri;
 use RuntimeException;
 
@@ -45,23 +43,20 @@ class Resolver implements ResolverInterface
         $this->connection = $connection;
     }
 
-    public function resolve(Uri $uri, Document $source, RefResolver $resolver)
+    public function resolve(Uri $uri, ?string $basePath = null): \stdClass
     {
         $name = ltrim($uri->getPath(), '/');
-        $row  = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE name LIKE :name', array('name' => $name));
 
-        if (!empty($row)) {
-            $data = Json\Parser::decode($row['source'], true);
-
-            if (is_array($data)) {
-                $document = new Document($data, $resolver, null, $uri);
-
-                return $document;
-            } else {
-                throw new RuntimeException(sprintf('Schema %s must be an object', $row['name']));
-            }
-        } else {
+        $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE name LIKE :name', array('name' => $name));
+        if (empty($row)) {
             throw new RuntimeException('Invalid schema reference ' . $name);
         }
+
+        $data = Json\Parser::decode($row['source']);
+        if (!$data instanceof \stdClass) {
+            throw new RuntimeException(sprintf('Schema %s must be an object', $row['name']));
+        }
+
+        return $data;
     }
 }
