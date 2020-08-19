@@ -1,0 +1,746 @@
+{
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Container": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "type": "array",
+          "oneOf": [
+            {
+              "$ref": "Form_Element_Input"
+            },
+            {
+              "$ref": "Form_Element_Select"
+            },
+            {
+              "$ref": "Form_Element_Tag"
+            },
+            {
+              "$ref": "Form_Element_TextArea"
+            }
+          ],
+          "discriminator": {
+            "propertyName": "element",
+            "mapping": {
+              "http://fusio-project.org/ns/2015/form/input": "Form_Element_Input",
+              "http://fusio-project.org/ns/2015/form/select": "Form_Element_Select",
+              "http://fusio-project.org/ns/2015/form/tag": "Form_Element_Tag",
+              "http://fusio-project.org/ns/2015/form/textarea": "Form_Element_TextArea"
+            }
+          }
+        }
+      }
+    },
+    "Form_Element": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "help": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Element_Input": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Element_Select_Option": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Element_Select": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "Form_Element_Select_Option"
+          }
+        }
+      }
+    },
+    "Form_Element_Tag": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Form_Element_TextArea": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string"
+        }
+      }
+    },
+    "Account_Credentials": {
+      "type": "object",
+      "properties": {
+        "oldPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "newPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "verifyPassword": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Action_Config"
+        }
+      }
+    },
+    "Action_Config": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Action_Create": {
+      "$extends": "Action",
+      "type": "object",
+      "properties": {
+      },
+      "required": [
+        "name",
+        "config"
+      ]
+    },
+    "Action_Update": {
+      "$extends": "Action",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Action_Index": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "Action"
+          }
+        }
+      }
+    },
+    "Action_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Action"
+      }
+    },
+    "Action_Execute_Request_Body": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Action_Execute_Request": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "GET|POST|PUT|PATCH|DELETE"
+        },
+        "uriFragments": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "string"
+        },
+        "body": {
+          "$ref": "Action_Execute_Request_Body"
+        }
+      },
+      "required": [
+        "method"
+      ]
+    },
+    "Action_Execute_Response_Headers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Action_Execute_Response_Body": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Action_Execute_Response": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "headers": {
+          "$ref": "Action_Execute_Response_Headers"
+        },
+        "body": {
+          "$ref": "Action_Execute_Response_Body"
+        }
+      }
+    },
+    "Adapter": {
+      "type": "object",
+      "properties": {
+        "actionClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connectionClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Routes"
+          }
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "$ref": "Action"
+          }
+        },
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "Schema"
+          }
+        },
+        "connection": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
+          }
+        }
+      }
+    },
+    "Adapter_Extern": {
+      "$extends": "Adapter",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Adapter_Intern": {
+      "$extends": "Adapter",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "App_Token"
+          }
+        }
+      }
+    },
+    "App_token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "App_Token_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "App_token"
+      }
+    },
+    "App_Create": {
+      "$extends": "App",
+      "type": "object",
+      "properties": {
+      },
+      "required": [
+        "userId",
+        "name",
+        "url",
+        "scopes"
+      ]
+    },
+    "App_Update": {
+      "$extends": "App",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "App_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "App"
+      }
+    },
+    "Audit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "app": {
+          "$ref": "App"
+        },
+        "user": {
+          "$ref": "User"
+        },
+        "event": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "Audit_Object"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Audit_Object": {
+      "description": "A key value object containing the changes",
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Audit_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Audit"
+      }
+    },
+    "Config": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    "Config_Update": {
+      "$extends": "Config",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Config_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Config"
+      }
+    },
+    "Connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Connection_Config"
+        }
+      }
+    },
+    "Connection_Config": {
+      "type": "object",
+      "additionalProperties": true,
+      "maxProperties": 16
+    },
+    "Connection_Create": {
+      "$extends": "Connection",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Connection_Update": {
+      "$extends": "Connection",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Connection_Index": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
+          }
+        }
+      }
+    },
+    "Connection_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Connection"
+      }
+    },
+    "Cronjob": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "cron": {
+          "type": "string"
+        },
+        "action": {
+          "type": "integer"
+        },
+        "executeDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "Cronjob_Error"
+          }
+        }
+      }
+    },
+    "Cronjob_Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "trace": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        }
+      }
+    },
+    "Cronjob_Create": {
+      "$extends": "Cronjob",
+      "type": "object",
+      "properties": {
+      },
+      "required": [
+        "name",
+        "cron",
+        "action"
+      ]
+    },
+    "Cronjob_Update": {
+      "$extends": "Cronjob",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Cronjob_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Cronjob"
+      }
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Subscription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "eventId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Create": {
+      "$extends": "Event",
+      "type": "object",
+      "properties": {
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "Event_Update": {
+      "$extends": "Event",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "Event_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Event"
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "$ref": "App"
+          }
+        },
+        "attributes": {
+          "$ref": "User_Attributes"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "User_Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "User_Create": {
+      "$extends": "User",
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "name",
+        "email",
+        "password"
+      ]
+    },
+    "User_Update": {
+      "$extends": "User",
+      "type": "object",
+      "properties": {
+      }
+    },
+    "User_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "User"
+      }
+    }
+  }
+}
