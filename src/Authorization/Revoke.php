@@ -24,6 +24,7 @@ namespace Fusio\Impl\Authorization;
 use Fusio\Impl\Backend\Schema\Message;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
@@ -54,7 +55,7 @@ class Revoke extends SchemaApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 
