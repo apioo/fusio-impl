@@ -33,6 +33,7 @@ use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
 use PSX\Api\Resource;
 use PSX\Schema\Parser\JsonSchema;
+use PSX\Schema\Parser\TypeSchema;
 
 /**
  * Fixture
@@ -65,8 +66,8 @@ class Fixture
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
-        $schemaEntry = (new JsonSchema())->parse($schemaEntrySource);
-        $schemaCollection = (new JsonSchema())->parse($schemaCollectionSource);
+        $schemaEntry = (new TypeSchema())->parse($schemaEntrySource);
+        $schemaCollection = (new TypeSchema())->parse($schemaCollectionSource);
 
         $now = new \DateTime();
         $expire = new \DateTime();
