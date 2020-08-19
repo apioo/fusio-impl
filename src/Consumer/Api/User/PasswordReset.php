@@ -24,6 +24,7 @@ namespace Fusio\Impl\Consumer\Api\User;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Schema;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 
@@ -45,7 +46,7 @@ class PasswordReset extends SchemaApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 

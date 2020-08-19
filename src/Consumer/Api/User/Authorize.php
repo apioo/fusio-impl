@@ -27,6 +27,7 @@ use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Property;
@@ -49,7 +50,7 @@ class Authorize extends ConsumerApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
 

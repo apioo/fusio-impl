@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Consumer\Api\Transaction;
 
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
@@ -45,7 +46,7 @@ class Execute extends SchemaApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
         $resource->addPathParameter('transaction_id', Property::getString());

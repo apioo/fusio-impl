@@ -26,6 +26,7 @@ use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Schema\Property;
 
@@ -47,7 +48,7 @@ class Entity extends ConsumerApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
         $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
         $resource->addPathParameter('subscription_id', Property::getInteger());
