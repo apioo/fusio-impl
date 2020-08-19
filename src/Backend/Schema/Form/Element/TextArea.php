@@ -36,7 +36,7 @@ class TextArea extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Form\Element::class);
+        $schema = $this->getSchema(Form\ElementAbstract::class);
         $schema->setTitle('textarea');
         $schema->addProperty('mode', Property::getString());
 

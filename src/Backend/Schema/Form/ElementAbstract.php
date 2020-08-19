@@ -24,22 +24,31 @@ namespace Fusio\Impl\Backend\Schema\Form;
 use PSX\Schema\SchemaAbstract;
 
 /**
- * Element
+ * ElementAbstract
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Element extends SchemaAbstract
+abstract class ElementAbstract extends SchemaAbstract
 {
-    public function getDefinition()
-    {
-        $sb = $this->getSchemaBuilder('element');
-        $sb->string('element');
-        $sb->string('name');
-        $sb->string('title');
-        $sb->string('help');
+    /**
+     * @var string
+     */
+    private $element;
 
-        return $sb->getProperty();
-    }
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $help;
 }

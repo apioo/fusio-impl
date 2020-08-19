@@ -23,8 +23,10 @@ namespace Fusio\Impl\Backend\Api\Account;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Backend\Model\Account_Credentials;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
@@ -45,28 +47,29 @@ class ChangePassword extends BackendApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.account'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Account\ChangePassword::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.account']);
+        $put->setRequest(Model\Account_Credentials::class);
+        $put->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
-     * @inheritdoc
+     * @param Account_Credentials $record
+     * @param HttpContextInterface $context
+     * @return array|mixed
      */
     protected function doPut($record, HttpContextInterface $context)
     {
         $this->userService->changePassword(
-            $record->oldPassword,
-            $record->newPassword,
-            $record->verifyPassword,
+            $record->getOldPassword(),
+            $record->getNewPassword(),
+            $record->getVerifyPassword(),
             $this->context->getUserContext()
         );
 

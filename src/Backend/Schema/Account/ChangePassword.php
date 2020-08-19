@@ -32,20 +32,18 @@ use PSX\Schema\SchemaAbstract;
  */
 class ChangePassword extends SchemaAbstract
 {
-    public function getDefinition()
+    public function build(): void
     {
-        $sb = $this->getSchemaBuilder('Account Credentials');
-        $sb->setRequired(['oldPassword', 'newPassword', 'verifyPassword']);
-        $sb->string('oldPassword')
+        $type = $this->newStruct('Account_Credentials');
+        $type->setRequired(['oldPassword', 'newPassword', 'verifyPassword']);
+        $type->addString('oldPassword')
             ->setMinLength(8)
             ->setMaxLength(128);
-        $sb->string('newPassword')
+        $type->addString('newPassword')
             ->setMinLength(8)
             ->setMaxLength(128);
-        $sb->string('verifyPassword')
+        $type->addString('verifyPassword')
             ->setMinLength(8)
             ->setMaxLength(128);
-
-        return $sb->getProperty();
     }
 }

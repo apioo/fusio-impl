@@ -33,7 +33,7 @@ use PSX\Schema\SchemaAbstract;
  */
 class Container extends SchemaAbstract
 {
-    public function getDefinition()
+    public function build(): void
     {
         $sb = $this->getSchemaBuilder('container');
         $sb->arrayType('element')

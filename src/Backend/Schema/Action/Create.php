@@ -33,11 +33,9 @@ use PSX\Schema\SchemaAbstract;
  */
 class Create extends SchemaAbstract
 {
-    public function getDefinition()
+    public function build(): void
     {
-        $schema = $this->getSchema(Schema\Action::class);
-        $schema->setRequired(['name', 'config']);
-
-        return $schema;
+        $type = $this->modify(Schema\Action::class, 'Action_Create');
+        $type->setRequired(['name', 'config']);
     }
 }

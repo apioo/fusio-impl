@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Impl\Backend\Filter\PrimaryKey;
+use Fusio\Impl\Backend\Model\Action;
 use Fusio\Impl\Table;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Http\Exception as StatusCode;
@@ -45,9 +46,9 @@ trait ValidatorTrait
         ));
     }
 
-    protected function assertSandboxAccess($record)
+    protected function assertSandboxAccess(Action $record)
     {
-        $class = ltrim($record->class, '\\');
+        $class = ltrim($record->getClass(), '\\');
 
         if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
             throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');

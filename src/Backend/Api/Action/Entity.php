@@ -24,12 +24,13 @@ namespace Fusio\Impl\Backend\Api\Action;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -51,28 +52,26 @@ class Entity extends BackendApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('action_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Action_Entity_Path');
+        $path->addInteger('action_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Action::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $get->addResponse(200, $this->schemaManager->getSchema(Model\Action::class));
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Action\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('PUT');
+        $post->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $post->setRequest($this->schemaManager->getSchema(Model\Action_Update::class));
+        $post->addResponse(200, $this->schemaManager->getSchema(Model\Message::class));
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $delete->addResponse(200, $this->schemaManager->getSchema(Model\Message::class));
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -104,10 +103,7 @@ class Entity extends BackendApiAbstract
 
         $this->actionService->update(
             (int) $context->getUriFragment('action_id'),
-            $record->name,
-            $record->class,
-            $record->engine,
-            $record->config ? $record->config->getProperties() : null,
+            $record,
             $this->context->getUserContext()
         );
 

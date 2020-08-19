@@ -33,14 +33,11 @@ use PSX\Schema\SchemaAbstract;
  */
 class Collection extends SchemaAbstract
 {
-    public function getDefinition()
+    public function build(): void
     {
-        $sb = $this->getSchemaBuilder('Action Collection');
-        $sb->integer('totalResults');
-        $sb->integer('startIndex');
-        $sb->arrayType('entry')
-            ->setItems($this->getSchema(Schema\Action::class));
-
-        return $sb->getProperty();
+        $type = $this->newStruct('Action_Collection');
+        $type->addInteger('totalResults');
+        $type->addInteger('startIndex');
+        $type->addArray('entry', $this->get(Schema\Action::class));
     }
 }

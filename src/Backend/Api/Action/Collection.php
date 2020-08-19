@@ -23,11 +23,12 @@ namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model\Action_Create;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Collection
@@ -49,25 +50,24 @@ class Collection extends BackendApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->addQueryParameter('startIndex', Property::getInteger())
-            ->addQueryParameter('count', Property::getInteger())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $query = $get->setQueryParameters('Action_Collection_Query');
+        $query->addInteger('startIndex');
+        $query->addInteger('count');
+        $query->addString('search');
+        $get->addResponse(200, Model\Action_Collection::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Action\Create::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $post->setRequest(Model\Action_Create::class);
+        $post->addResponse(201, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -90,10 +90,7 @@ class Collection extends BackendApiAbstract
         $this->assertSandboxAccess($record);
 
         $this->actionService->create(
-            $record->name,
-            $record->class,
-            $record->engine,
-            $record->config ? $record->config->getProperties() : null,
+            $record,
             $this->context->getUserContext()
         );
 

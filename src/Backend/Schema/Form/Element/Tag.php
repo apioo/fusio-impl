@@ -35,7 +35,7 @@ class Tag extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Form\Element::class);
+        $schema = $this->getSchema(Form\ElementAbstract::class);
         $schema->setTitle('tag');
 
         return $schema;

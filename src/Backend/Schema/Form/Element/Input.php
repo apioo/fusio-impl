@@ -36,7 +36,7 @@ class Input extends SchemaAbstract
 {
     public function getDefinition()
     {
-        $schema = $this->getSchema(Form\Element::class);
+        $schema = $this->getSchema(Form\ElementAbstract::class);
         $schema->setTitle('input');
         $schema->addProperty('type', Property::getString());
 

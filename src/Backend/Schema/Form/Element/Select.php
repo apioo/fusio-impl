@@ -41,7 +41,7 @@ class Select extends SchemaAbstract
         $sb->string('value');
         $option = $sb->getProperty();
 
-        $schema = $this->getSchema(Form\Element::class);
+        $schema = $this->getSchema(Form\ElementAbstract::class);
         $schema->setTitle('select');
         $schema->addProperty('options', Property::getArray()->setItems($option));
 

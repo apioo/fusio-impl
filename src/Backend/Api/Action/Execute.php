@@ -24,11 +24,12 @@ namespace Fusio\Impl\Backend\Api\Action;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Environment\HttpResponseInterface;
-use PSX\Schema\Property;
 
 /**
  * Execute
@@ -48,18 +49,18 @@ class Execute extends BackendApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('action_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Action_Execute_Path');
+        $path->addInteger('action_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.action'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Action\Execute\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Action\Execute\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.action']);
+        $post->setRequest($this->schemaManager->getSchema(Model\Action_Execute_Request::class));
+        $post->addResponse(200, $this->schemaManager->getSchema(Model\Action_Execute_Response::class));
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -70,11 +71,7 @@ class Execute extends BackendApiAbstract
         try {
             $response = $this->actionExecutorService->execute(
                 (int) $context->getUriFragment('action_id'),
-                $record->method,
-                $record->uriFragments,
-                $record->parameters,
-                $record->headers,
-                $record->body
+                $record
             );
 
             if ($response instanceof HttpResponseInterface) {
