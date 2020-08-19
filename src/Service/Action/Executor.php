@@ -25,6 +25,7 @@ use Fusio\Engine\Context;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
+use Fusio\Impl\Backend\Model\Action_Execute_Request;
 use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpContext;
 use PSX\Http\Request as HttpRequest;
@@ -75,35 +76,35 @@ class Executor
         $this->userRepository    = $userRepository;
     }
 
-    public function execute($actionId, $method, $uriFragments, $parameters, $headers, RecordInterface $body = null)
+    public function execute($actionId, Action_Execute_Request $request)
     {
         $action = $this->actionTable->get($actionId);
-
-        if (!empty($action)) {
-            if ($body === null) {
-                $body = new Record();
-            }
-
-            $app  = $this->appRepository->get(1);
-            $user = $this->userRepository->get(1);
-
-            $uriFragments = $this->parseQueryString($uriFragments);
-            $parameters   = $this->parseQueryString($parameters);
-            $headers      = $this->parseQueryString($headers);
-
-            $uri = new Uri('/');
-            $uri = $uri->withParameters($parameters);
-
-            $httpRequest = new HttpRequest($uri, $method, $headers);
-            $httpContext = new HttpContext($httpRequest, $uriFragments);
-
-            $context = new Context($actionId, '/', $app, $user);
-            $request = new Request($httpContext, $body);
-
-            return $this->processor->execute($action['id'], $request, $context);
-        } else {
+        if (empty($action)) {
             return null;
         }
+
+        $body = $request->getBody();
+        if ($body === null) {
+            $body = new Record();
+        }
+
+        $app  = $this->appRepository->get(1);
+        $user = $this->userRepository->get(1);
+
+        $uriFragments = $this->parseQueryString($request->getUriFragments());
+        $parameters   = $this->parseQueryString($request->getParameters());
+        $headers      = $this->parseQueryString($request->getHeaders());
+
+        $uri = new Uri('/');
+        $uri = $uri->withParameters($parameters);
+
+        $httpRequest = new HttpRequest($uri, $request->getMethod(), $headers);
+        $httpContext = new HttpContext($httpRequest, $uriFragments);
+
+        $context = new Context($actionId, '/', $app, $user);
+        $request = new Request($httpContext, $body);
+
+        return $this->processor->execute($action['id'], $request, $context);
     }
 
     private function parseQueryString($data)
