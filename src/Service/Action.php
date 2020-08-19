@@ -27,6 +27,8 @@ use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Action_Create;
+use Fusio\Impl\Backend\Model\Action_Update;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
@@ -80,30 +82,33 @@ class Action
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $class, $engine, $config, UserContext $context)
+    public function create(Action_Create $action, UserContext $context)
     {
         // check whether action exists
-        if ($this->exists($name)) {
+        if ($this->exists($action->getName())) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
+        $engine = $action->getEngine();
+        $class  = $action->getClass();
         if (empty($engine)) {
             $engine = EngineDetector::getEngine($class);
         }
 
         // check source
-        $parameters = new Parameters($config ?: []);
+        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onCreate($name, $parameters);
+            $handler->onCreate($action->getName(), $parameters);
         }
 
         // create action
         $record = [
             'status' => Table\Action::STATUS_ACTIVE,
-            'name'   => $name,
+            'name'   => $action->getName(),
             'class'  => $class,
             'engine' => $engine,
             'config' => self::serializeConfig($config),
@@ -114,45 +119,48 @@ class Action
 
         $actionId = $this->actionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($actionId, $record, $context), ActionEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($actionId, $record, $context));
 
         return $actionId;
     }
 
-    public function update($actionId, $name, $class, $engine, $config, UserContext $context)
+    public function update($actionId, Action_Update $action, UserContext $context)
     {
-        $action = $this->actionTable->get($actionId);
+        $existing = $this->actionTable->get($actionId);
 
-        if (empty($action)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($action['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing['status'] == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
         // in case the class is empty use the existing class
+        $class = $action->getClass();
         if (empty($class)) {
-            $class = $action['class'];
+            $class = $existing['class'];
         }
 
+        $engine = $action->getEngine();
         if (empty($engine)) {
-            $engine = $action['engine'];
+            $engine = $existing['engine'];
         }
 
         // check source
-        $parameters = new Parameters($config ?: []);
+        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onUpdate($name, $parameters);
+            $handler->onUpdate($action->getName(), $parameters);
         }
 
         // update action
         $record = [
-            'id'     => $action['id'],
-            'name'   => $name,
+            'id'     => $existing['id'],
+            'name'   => $action->getName(),
             'class'  => $class,
             'engine' => $engine,
             'config' => self::serializeConfig($config),
@@ -161,7 +169,7 @@ class Action
 
         $this->actionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($actionId, $record, $action, $context), ActionEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($actionId, $record, $existing, $context));
     }
 
     public function delete($actionId, UserContext $context)
@@ -195,7 +203,7 @@ class Action
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($actionId, $action, $context), ActionEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($actionId, $action, $context));
     }
 
     public function exists(string $name)
