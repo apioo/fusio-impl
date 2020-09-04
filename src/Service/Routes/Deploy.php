@@ -26,9 +26,6 @@ use Fusio\Engine\Repository;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
-use PSX\Schema\Generator\JsonSchema;
-use PSX\Schema\Schema;
-use PSX\Sql\Condition;
 
 /**
  * Deploys a route method from development to production. That means that we
@@ -51,11 +48,6 @@ class Deploy
     protected $responseTable;
 
     /**
-     * @var \Fusio\Impl\Table\Schema
-     */
-    protected $schemaTable;
-
-    /**
      * @var \Fusio\Impl\Table\Action
      */
     protected $actionTable;
@@ -63,47 +55,17 @@ class Deploy
     /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \Fusio\Impl\Table\Routes\Response $responseTable
-     * @param \Fusio\Impl\Table\Schema $schemaTable
      * @param \Fusio\Impl\Table\Action $actionTable
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Schema $schemaTable, Table\Action $actionTable)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Action $actionTable)
     {
         $this->methodTable   = $methodTable;
         $this->responseTable = $responseTable;
-        $this->schemaTable   = $schemaTable;
         $this->actionTable   = $actionTable;
     }
 
     public function deploy($method)
     {
-        $schema = [];
-
-        if ($method['operation_id']) {
-            $schema['operation_id'] = $method['operation_id']; 
-        }
-
-        if ($method['parameters'] > 0) {
-            $schema['parameters'] = $this->getSchemaCache($method['parameters']);
-        }
-
-        if ($method['request'] > 0) {
-            $schema['request'] = $this->getSchemaCache($method['request']);
-        }
-
-        // get existing responses
-        $condition = new Condition();
-        $condition->equals('method_id', $method['id']);
-        $responses = $this->responseTable->getBy($condition);
-
-        if (!empty($responses)) {
-            $schema['responses'] = [];
-            foreach ($responses as $response) {
-                if ($response['response'] > 0) {
-                    $schema['responses'][$response['code']] = $this->getSchemaCache($response['response']);
-                }
-            }
-        }
-
         $action = null;
         if ($method['action'] > 0) {
             $action = $this->getActionCache($method['action']);
@@ -111,28 +73,12 @@ class Deploy
 
         // create cache and change status
         $method['status']       = Resource::STATUS_ACTIVE;
-        $method['schema_cache'] = json_encode($schema);
         $method['action_cache'] = json_encode($action);
 
         $this->methodTable->update($method);
     }
 
-    protected function getSchemaCache($schemaId)
-    {
-        $generator = new JsonSchema();
-        $result    = $this->schemaTable->get($schemaId);
-
-        if (!empty($result)) {
-            $schema = Service\Schema::unserializeCache($result['cache']);
-            if ($schema instanceof Schema) {
-                return $generator->toArray($schema);
-            }
-        }
-
-        return null;
-    }
-
-    protected function getActionCache($actionId)
+    private function getActionCache($actionId)
     {
         $repository = new Repository\ActionMemory();
         $action     = $this->actionTable->get($actionId);

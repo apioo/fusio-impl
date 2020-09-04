@@ -22,10 +22,12 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Route_Create;
+use Fusio\Impl\Backend\Model\Route_Update;
 use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Event\Routes\CreatedEvent;
-use Fusio\Impl\Event\Routes\DeletedEvent;
-use Fusio\Impl\Event\Routes\UpdatedEvent;
+use Fusio\Impl\Event\Route\CreatedEvent;
+use Fusio\Impl\Event\Route\DeletedEvent;
+use Fusio\Impl\Event\Route\UpdatedEvent;
 use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -34,13 +36,13 @@ use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Routes
+ * Route
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Routes
+class Route
 {
     /**
      * @var \Fusio\Impl\Table\Routes
@@ -83,25 +85,25 @@ class Routes
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($priority, $path, $controller, $scopes, $config, UserContext $context)
+    public function create(Route_Create $route, UserContext $context)
     {
         // check whether route exists
-        if ($this->exists($path)) {
+        if ($this->exists($route->getPath())) {
             throw new StatusCode\BadRequestException('Route already exists');
         }
 
-        if ($priority === null) {
-            $priority = $this->routesTable->getMaxPriority() + 1;
-        } elseif ($priority >= 0x1000000) {
+        if ($route->getPriority() === null) {
+            $route->setPriority($this->routesTable->getMaxPriority() + 1);
+        } elseif ($route->getPriority()>= 0x1000000) {
             throw new StatusCode\GoneException('Priority can not be greater or equal to ' . 0x1000000);
         }
 
-        if (!empty($controller)) {
-            if (!class_exists($controller)) {
+        if (!empty($route->getController())) {
+            if (!class_exists($route->getController())) {
                 throw new StatusCode\BadRequestException('Provided controller does not exist');
             }
         } else {
-            $controller = SchemaApiController::class;
+            $route->setController(SchemaApiController::class);
         }
 
         try {
@@ -110,16 +112,17 @@ class Routes
             // create route
             $record = [
                 'status'     => Table\Routes::STATUS_ACTIVE,
-                'priority'   => $priority,
+                'priority'   => $route->getPriority(),
                 'methods'    => 'ANY',
-                'path'       => $path,
-                'controller' => $controller,
+                'path'       => $route->getPath(),
+                'controller' => $route->getController(),
             ];
 
             $this->routesTable->create($record);
 
             // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
+            $route->setId($routeId);
 
             // assign scopes
             if (!empty($scopes)) {
@@ -127,7 +130,7 @@ class Routes
             }
 
             // handle config
-            $this->configService->handleConfig($routeId, $path, $config, $context);
+            $this->configService->handleConfig($route->getId(), $route->getPath(), $route->getConfig(), $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -136,23 +139,24 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($routeId, $record, $config, $context), RoutesEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($route, $context));
 
         return $routeId;
     }
 
-    public function update($routeId, $priority, $scopes, $config, UserContext $context)
+    public function update(int $routeId, Route_Update $route, UserContext $context)
     {
-        $route = $this->routesTable->get($routeId);
+        $existing = $this->routesTable->get($routeId);
 
-        if (empty($route)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($route['status'] == Table\Routes::STATUS_DELETED) {
+        if ($existing['status'] == Table\Routes::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
+        $priority = $route->getPriority();
         if ($priority === null) {
             $priority = $this->routesTable->getMaxPriority() + 1;
         } elseif ($priority >= 0x1000000) {
@@ -164,7 +168,7 @@ class Routes
 
             // update route
             $record = [
-                'id'       => $route['id'],
+                'id'       => $existing['id'],
                 'priority' => $priority,
             ];
 
@@ -172,11 +176,11 @@ class Routes
 
             // assign scopes
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($route['id'], $scopes, $context);
+                $this->scopeService->createFromRoute($existing['id'], $scopes, $context);
             }
 
             // handle config
-            $this->configService->handleConfig($route['id'], $route['path'], $config, $context);
+            $this->configService->handleConfig($existing['id'], $existing['path'], $route->getConfig(), $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -185,35 +189,35 @@ class Routes
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($routeId, [], $config, $route, $context), RoutesEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($routeId, [], $route->getConfig(), $existing, $context), RoutesEvents::UPDATE);
     }
 
-    public function delete($routeId, UserContext $context)
+    public function delete(int $routeId, UserContext $context)
     {
-        $route = $this->routesTable->get($routeId);
+        $existing = $this->routesTable->get($routeId);
 
-        if (empty($route)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($route['status'] == Table\Routes::STATUS_DELETED) {
+        if ($existing['status'] == Table\Routes::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
         // check whether route has a production version
-        if ($this->methodTable->hasProductionVersion($route['id'])) {
+        if ($this->methodTable->hasProductionVersion($existing['id'])) {
             throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
         }
 
         // delete route
         $record = [
-            'id'     => $route['id'],
+            'id'     => $existing['id'],
             'status' => Table\Routes::STATUS_DELETED
         ];
 
         $this->routesTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($routeId, $route, $context), RoutesEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($routeId, $existing, $context), RoutesEvents::DELETE);
     }
 
     /**

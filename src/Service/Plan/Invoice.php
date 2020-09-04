@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
 use Fusio\Impl\Event\Plan\Invoice\CreatedEvent;
 use Fusio\Impl\Event\Plan\Invoice\DeletedEvent;
 use Fusio\Impl\Event\Plan\Invoice\PayedEvent;
@@ -83,9 +84,9 @@ class Invoice
      * @param \Fusio\Impl\Authorization\UserContext $context
      * @param integer $prevId
      */
-    public function create($contractId, \DateTime $startDate, UserContext $context, $prevId = null)
+    public function create(Plan_Invoice_Create $invoice, UserContext $context, $prevId = null)
     {
-        $contract = $this->contractTable->get($contractId);
+        $contract = $this->contractTable->get($invoice->getContractId());
         if (empty($contract)) {
             throw new \InvalidArgumentException('Invalid contract id');
         }
@@ -119,7 +120,7 @@ class Invoice
         return (int) $invoiceId;
     }
 
-    public function update($invoiceId, $status, UserContext $context)
+    public function update(int $invoiceId, $status, UserContext $context)
     {
         $invoice = $this->invoiceTable->get($invoiceId);
 

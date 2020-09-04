@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Config_Update;
 use Fusio\Impl\Event\Config\UpdatedEvent;
 use Fusio\Impl\Event\ConfigEvents;
 use Fusio\Impl\Table;
@@ -57,22 +58,21 @@ class Config
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function update($configId, $value, UserContext $context)
+    public function update(int $configId, Config_Update $config, UserContext $context)
     {
-        $config = $this->configTable->get($configId);
-
-        if (empty($config)) {
+        $existing = $this->configTable->get($configId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find config');
         }
 
         $record = [
-            'id'    => $config['id'],
-            'value' => $value,
+            'id'    => $existing['id'],
+            'value' => $config->getValue(),
         ];
 
         $this->configTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($configId, $record, $context), ConfigEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($config, $context));
     }
 
     public function getValue($name)

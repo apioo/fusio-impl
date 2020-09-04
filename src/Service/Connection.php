@@ -27,6 +27,8 @@ use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Connection_Create;
+use Fusio\Impl\Backend\Model\Connection_Update;
 use Fusio\Impl\Event\Connection\CreatedEvent;
 use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
@@ -83,19 +85,20 @@ class Connection
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $class, $config, UserContext $context)
+    public function create(Connection_Create $connection, UserContext $context)
     {
         // check whether connection exists
-        if ($this->exists($name)) {
+        if ($this->exists($connection->getName())) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
-        $parameters = new Parameters($config ?: []);
-        $factory    = $this->connectionFactory->factory($class);
+        $config     = $connection->getConfig();
+        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
+        $factory    = $this->connectionFactory->factory($connection->getClass());
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
-            $factory->onUp($name, $parameters);
+            $factory->onUp($connection->getName(), $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
@@ -105,14 +108,14 @@ class Connection
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onCreate($name, $parameters, $conn);
+            $factory->onCreate($connection->getName(), $parameters, $conn);
         }
 
         // create connection
         $record = [
             'status' => Table\Connection::STATUS_ACTIVE,
-            'name'   => $name,
-            'class'  => $class,
+            'name'   => $connection->getName(),
+            'class'  => $connection->getClass(),
             'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
@@ -120,25 +123,26 @@ class Connection
 
         $connectionId = $this->connectionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($connectionId, $record, $context), ConnectionEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($connection, $context));
 
         return $connectionId;
     }
 
-    public function update($connectionId, $name, $class, $config, UserContext $context)
+    public function update(int $connectionId, Connection_Update $connection, UserContext $context)
     {
-        $connection = $this->connectionTable->get($connectionId);
+        $existing = $this->connectionTable->get($connectionId);
 
-        if (empty($connection)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
 
-        if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+        if ($existing['status'] == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $parameters = new Parameters($config ?: []);
-        $factory    = $this->connectionFactory->factory($class);
+        $config     = $connection->getConfig();
+        $parameters = new Parameters($config !== null ? $config->getProperties() : []);
+        $factory    = $this->connectionFactory->factory($connection->getClass());
 
         $conn = $factory->getConnection($parameters);
 
@@ -147,57 +151,57 @@ class Connection
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onUpdate($name, $parameters, $conn);
+            $factory->onUpdate($connection->getName(), $parameters, $conn);
         }
 
         // update connection
         $record = [
-            'id'     => $connection['id'],
+            'id'     => $existing['id'],
             'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($connectionId, $record, $connection, $context), ConnectionEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
     }
 
-    public function delete($connectionId, UserContext $context)
+    public function delete(int $connectionId, UserContext $context)
     {
-        $connection = $this->connectionTable->get($connectionId);
+        $existing = $this->connectionTable->get($connectionId);
 
-        if (empty($connection)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
 
-        if ($connection['status'] == Table\Connection::STATUS_DELETED) {
+        if ($existing['status'] == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config = self::decryptConfig($connection['config'], $this->secretKey);
+        $config = self::decryptConfig($existing['config'], $this->secretKey);
 
         $parameters = new Parameters($config ?: []);
-        $factory    = $this->connectionFactory->factory($connection['class']);
+        $factory    = $this->connectionFactory->factory($existing['class']);
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
-            $factory->onDown($connection['name'], $parameters);
+            $factory->onDown($existing['name'], $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onDelete($connection['name'], $parameters, $conn);
+            $factory->onDelete($existing['name'], $parameters, $conn);
         }
 
         $record = [
-            'id'     => $connection['id'],
+            'id'     => $existing['id'],
             'status' => Table\Connection::STATUS_DELETED,
         ];
 
         $this->connectionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($connectionId, $connection, $context), ConnectionEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function exists(string $name)
@@ -259,7 +263,7 @@ class Connection
 
         $parts = explode('.', $data, 2);
         if (count($parts) == 2) {
-            list($iv, $data) = $parts;
+            [$iv, $data] = $parts;
 
             $config = OpenSsl::decrypt(base64_decode($data), self::CIPHER_METHOD, $secretKey, OPENSSL_RAW_DATA, base64_decode($iv));
             $config = Parser::decode($config, true);

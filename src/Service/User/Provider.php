@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Engine\Model\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
 use PSX\Framework\Config\Config;
@@ -89,14 +90,14 @@ class Provider
         if ($user instanceof User) {
             $scopes = $this->userService->getDefaultScopes();
 
-            $userId = $this->userService->createRemote(
-                $provider->getId(),
-                $user->getId(),
-                $user->getName(),
-                $user->getEmail(),
-                $scopes,
-                UserContext::newAnonymousContext()
-            );
+            $remote = new User_Remote();
+            $remote->setProvider($provider->getId());
+            $remote->setRemoteId($user->getId());
+            $remote->setName($user->getName());
+            $remote->setEmail($user->getEmail());
+            $remote->setScopes($scopes);
+
+            $userId = $this->userService->createRemote($remote, UserContext::newAnonymousContext());
 
             // @TODO this is the consumer app. Probably we need a better way to
             // define this id

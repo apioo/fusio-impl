@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Service\Routes;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Event\Routes\DeployedEvent;
+use Fusio\Impl\Backend\Model\Route_Method;
+use Fusio\Impl\Backend\Model\Route_Version;
+use Fusio\Impl\Event\Route\DeployedEvent;
 use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Loader\Filter\ExternalFilter;
 use Fusio\Impl\Table;
@@ -89,21 +91,21 @@ class Config
      *
      * @param integer $routeId
      * @param string $path
-     * @param \PSX\Record\RecordInterface $result
+     * @param Route_Version[] $versions
      */
-    public function handleConfig($routeId, $path, $result, UserContext $context)
+    public function handleConfig(int $routeId, string $path, array $versions, UserContext $context)
     {
         $availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
-        foreach ($result as $version) {
+        foreach ($versions as $version) {
             // check version
-            $ver = isset($version['version']) ? intval($version['version']) : 0;
+            $ver = $version->getVersion() ?? 0;
             if ($ver <= 0) {
                 throw new StatusCode\BadRequestException('Version must be a positive integer');
             }
 
             // check status
-            $status = isset($version['status']) ? $version['status'] : 0;
+            $status = $version->getStatus() ?? 0;
             if (!in_array($status, [Resource::STATUS_DEVELOPMENT, Resource::STATUS_ACTIVE, Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
                 throw new StatusCode\BadRequestException('Invalid status value');
             }
@@ -125,8 +127,7 @@ class Config
                 $this->methodTable->deleteAllFromRoute($routeId, $ver);
 
                 // parse methods
-                $methods = isset($version['methods']) ? $version['methods'] : [];
-
+                $methods = $version->getMethods() ?? [];
                 foreach ($methods as $method => $config) {
                     // check method
                     if (!in_array($method, $availableMethods)) {
@@ -178,20 +179,20 @@ class Config
      * @param string $method
      * @param integer $ver
      * @param integer $status
-     * @param array $config
+     * @param Route_Method $config
      * @param string $path
      * @return int
      */
-    private function createMethod($routeId, $method, $ver, $status, $config, $path)
+    private function createMethod(int $routeId, string $method, int $ver, int $status, Route_Method $config, string $path)
     {
-        $active      = isset($config['active'])      ? $config['active']      : false;
-        $public      = isset($config['public'])      ? $config['public']      : false;
-        $description = isset($config['description']) ? $config['description'] : null;
-        $operationId = isset($config['operationId']) ? $config['operationId'] : null;
-        $parameters  = isset($config['parameters'])  ? $config['parameters']  : null;
-        $request     = isset($config['request'])     ? $config['request']     : null;
-        $action      = isset($config['action'])      ? $config['action']      : null;
-        $costs       = isset($config['costs'])       ? $config['costs']       : null;
+        $active      = $config->getActive() ?? false;
+        $public      = $config->getPublic() ?? false;
+        $description = $config->getDescription();
+        $operationId = $config->getOperationId();
+        $parameters  = $config->getParameters();
+        $request     = $config->getRequest();
+        $action      = $config->getAction();
+        $costs       = $config->getCosts();
 
         if (empty($operationId)) {
             $operationId = self::buildOperationId($path, $method);
@@ -220,12 +221,12 @@ class Config
 
     /**
      * @param integer $methodId
-     * @param array $config
+     * @param Route_Method $config
      */
-    private function createResponses($methodId, $config)
+    private function createResponses(int $methodId, Route_Method $config)
     {
-        $response   = isset($config['response'])  ? $config['response']   : null; // deprecated
-        $responses  = isset($config['responses']) ? $config['responses']  : null;
+        $response  = $config->getResponse(); // deprecated
+        $responses = $config->getResponses();
 
         if (!empty($responses)) {
             foreach ($responses as $statusCode => $response) {

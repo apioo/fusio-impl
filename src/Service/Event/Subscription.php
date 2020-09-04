@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Event_Subscription_Create;
+use Fusio\Impl\Backend\Model\Event_Subscription_Update;
 use Fusio\Impl\Event\Event\Subscription\CreatedEvent;
 use Fusio\Impl\Event\Event\Subscription\DeletedEvent;
 use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
@@ -66,48 +68,47 @@ class Subscription
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($eventId, $userId, $endpoint, UserContext $context)
+    public function create(Event_Subscription_Create $subscription, UserContext $context)
     {
         // create event
         $record = [
-            'event_id' => $eventId,
-            'user_id'  => $userId,
+            'event_id' => $subscription->getEventId(),
+            'user_id'  => $subscription->getUserId(),
             'status'   => Table\Event\Subscription::STATUS_ACTIVE,
-            'endpoint' => $endpoint,
+            'endpoint' => $subscription->getEndpoint(),
         ];
 
         $this->subscriptionTable->create($record);
 
         // get last insert id
         $subscriptionId = $this->subscriptionTable->getLastInsertId();
+        $subscription->setId($subscriptionId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($subscriptionId, $record, $context), SubscriptionEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($subscription, $context));
     }
 
-    public function update($subscriptionId, $endpoint, UserContext $context)
+    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context)
     {
-        $subscription = $this->subscriptionTable->get($subscriptionId);
-
-        if (empty($subscription)) {
+        $existing = $this->subscriptionTable->get($subscriptionId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
         // update subscription
         $record = [
-            'id'       => $subscription['id'],
-            'endpoint' => $endpoint,
+            'id'       => $existing['id'],
+            'endpoint' => $subscription->getEndpoint(),
         ];
 
         $this->subscriptionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($subscription['id'], $record, $subscription, $context), SubscriptionEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($subscription, $existing, $context));
     }
 
-    public function delete($subscriptionId, UserContext $context)
+    public function delete(int $subscriptionId, UserContext $context)
     {
-        $subscription = $this->subscriptionTable->get($subscriptionId);
-
-        if (empty($subscription)) {
+        $existing = $this->subscriptionTable->get($subscriptionId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
@@ -116,11 +117,11 @@ class Subscription
 
         // remove subscription
         $record = [
-            'id' => $subscription['id'],
+            'id' => $existing['id'],
         ];
 
         $this->subscriptionTable->delete($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($subscription['id'], $subscription, $context), SubscriptionEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 }

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
@@ -105,8 +105,8 @@ class Log
         // @TODO use hrtime if we require PHP >= 7.3
         $endTime = microtime();
 
-        list($startUsec, $startSec) = explode(' ', $startTime);
-        list($endUsec, $endSec) = explode(' ', $endTime);
+        [$startUsec, $startSec] = explode(' ', $startTime);
+        [$endUsec, $endSec] = explode(' ', $endTime);
 
         $diffSec  = $startSec != $endSec ? $endSec - $startSec : 0;
         $diffUsec = $endUsec - $startUsec;

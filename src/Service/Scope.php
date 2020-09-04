@@ -22,6 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Scope_Create;
+use Fusio\Impl\Backend\Model\Scope_Route;
+use Fusio\Impl\Backend\Model\Scope_Update;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
@@ -81,10 +84,10 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($name, $description, array $routes = null, UserContext $context)
+    public function create(Scope_Create $scope, UserContext $context)
     {
         // check whether scope exists
-        if ($this->exists($name)) {
+        if ($this->exists($scope->getName())) {
             throw new StatusCode\BadRequestException('Scope already exists');
         }
 
@@ -93,16 +96,17 @@ class Scope
 
             // create scope
             $record = [
-                'name'        => $name,
-                'description' => $description ?: '',
+                'name'        => $scope->getName(),
+                'description' => $scope->getDescription() ?? '',
             ];
 
             $this->scopeTable->create($record);
 
             // insert routes
             $scopeId = $this->scopeTable->getLastInsertId();
+            $scope->setId($scopeId);
 
-            $this->insertRoutes($scopeId, $routes);
+            $this->insertRoutes($scopeId, $scope->getRoutes());
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -111,12 +115,12 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($scopeId, $record, $routes, $context), ScopeEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($scope, $context));
 
         return $scopeId;
     }
 
-    public function createFromRoute($routeId, array $scopeNames, UserContext $context)
+    public function createFromRoute(int $routeId, array $scopeNames, UserContext $context)
     {
         // remove all scopes from this route
         $this->scopeRouteTable->deleteAllFromRoute($routeId);
@@ -135,27 +139,29 @@ class Scope
                 ]);
             } else {
                 // create new scope
-                $route = (object) [
-                    'routeId' => $routeId,
-                    'allow'   => 1,
-                    'methods' => 'GET|POST|PUT|PATCH|DELETE',
-                ];
+                $route = new Scope_Route();
+                $route->setRouteId($routeId);
+                $route->setAllow(true);
+                $route->setMethods('GET|POST|PUT|PATCH|DELETE');
 
-                $this->create($scopeName, null, [$route], $context);
+                $scope = new Scope_Create();
+                $scope->setName($scopeName);
+                $scope->setRoutes([$route]);
+
+                $this->create($scope, $context);
             }
         }
     }
 
-    public function update($scopeId, $name, $description, array $routes = null, UserContext $context)
+    public function update(Scope_Update $scope, UserContext $context)
     {
-        $scope = $this->scopeTable->get($scopeId);
-
-        if (empty($scope)) {
+        $existing = $this->scopeTable->get($scope->getId());
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
 
         // check whether this is a system scope
-        if (in_array($scope['id'], [1, 2, 3])) {
+        if (in_array($existing['id'], [1, 2, 3])) {
             throw new StatusCode\BadRequestException('It is not possible to change this scope');
         }
 
@@ -163,16 +169,16 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             $record = [
-                'id'          => $scope['id'],
-                'name'        => $name,
-                'description' => $description,
+                'id'          => $existing['id'],
+                'name'        => $scope->getName(),
+                'description' => $scope->getDescription(),
             ];
 
             $this->scopeTable->update($record);
 
-            $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+            $this->scopeRouteTable->deleteAllFromScope($existing['id']);
 
-            $this->insertRoutes($scope['id'], $routes);
+            $this->insertRoutes($existing['id'], $scope->getRoutes());
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -181,30 +187,29 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($scopeId, $record, $routes, $scope, $context), ScopeEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($scope, $existing, $context));
     }
 
-    public function delete($scopeId, UserContext $context)
+    public function delete(int $scopeId, UserContext $context)
     {
-        $scope = $this->scopeTable->get($scopeId);
-
-        if (empty($scope)) {
+        $existing = $this->scopeTable->get($scopeId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
 
         // check whether the scope is used by an app or user
-        $appScopes = $this->appScopeTable->getCount(new Condition(['scope_id', '=', $scope['id']]));
+        $appScopes = $this->appScopeTable->getCount(new Condition(['scope_id', '=', $existing['id']]));
         if ($appScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an app. Remove the scope from the app in order to delete the scope');
         }
 
-        $userScopes = $this->userScopeTable->getCount(new Condition(['scope_id', '=', $scope['id']]));
+        $userScopes = $this->userScopeTable->getCount(new Condition(['scope_id', '=', $existing['id']]));
         if ($userScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assgined to an user. Remove the scope from the user in order to delete the scope');
         }
 
         // check whether this is a system scope
-        if (in_array($scope['id'], [1, 2, 3])) {
+        if (in_array($existing['id'], [1, 2, 3])) {
             throw new StatusCode\BadRequestException('It is not possible to change this scope');
         }
 
@@ -212,10 +217,10 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             // delete all routes assigned to the scope
-            $this->scopeRouteTable->deleteAllFromScope($scope['id']);
+            $this->scopeRouteTable->deleteAllFromScope($existing['id']);
 
             $record = [
-                'id' => $scope['id']
+                'id' => $existing['id']
             ];
 
             $this->scopeTable->delete($record);
@@ -227,7 +232,7 @@ class Scope
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($scopeId, $scope, $context), ScopeEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     /**

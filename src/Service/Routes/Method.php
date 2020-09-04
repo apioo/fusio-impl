@@ -21,16 +21,17 @@
 
 namespace Fusio\Impl\Service\Routes;
 
-use Fusio\Engine\Schema\LoaderInterface;
+use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Schema\LazySchema;
+use Fusio\Impl\Schema\LazyDefinitions;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Api\Specification;
+use PSX\Api\SpecificationInterface;
+use PSX\Api\Util\Inflection;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Parser\JsonSchema\Document;
-use PSX\Schema\Parser\JsonSchema\RefResolver;
-use PSX\Schema\Property;
-use PSX\Schema\Schema;
+use PSX\Schema\TypeFactory;
+use PSX\Schema\TypeInterface;
 
 /**
  * Method
@@ -44,52 +45,46 @@ class Method
     /**
      * @var \Fusio\Impl\Table\Routes\Method
      */
-    protected $methodTable;
+    private $methodTable;
 
     /**
      * @var \Fusio\Impl\Table\Routes\Response
      */
-    protected $responseTable;
+    private $responseTable;
 
     /**
      * @var \Fusio\Impl\Table\Scope\Route
      */
-    protected $scopeTable;
+    private $scopeTable;
 
     /**
-     * @var \Fusio\Engine\Schema\LoaderInterface
+     * @var Connection
      */
-    protected $schemaLoader;
-
-    /**
-     * @var \PSX\Schema\Parser\JsonSchema\RefResolver
-     */
-    protected $resolver;
+    private $connection;
 
     /**
      * @param \Fusio\Impl\Table\Routes\Method $methodTable
      * @param \Fusio\Impl\Table\Routes\Response $responseTable
      * @param \Fusio\Impl\Table\Scope\Route $scopeTable
-     * @param \Fusio\Engine\Schema\LoaderInterface $schemaLoader
+     * @param Connection $connection
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Scope\Route $scopeTable, LoaderInterface $schemaLoader)
+    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Scope\Route $scopeTable, Connection $connection)
     {
         $this->methodTable   = $methodTable;
         $this->responseTable = $responseTable;
         $this->scopeTable    = $scopeTable;
-        $this->schemaLoader  = $schemaLoader;
-        $this->resolver      = RefResolver::createDefault();
+        $this->connection    = $connection;
     }
 
     /**
      * Returns an api resource documentation for the provided route and version
      * 
      * @param integer $routeId
-     * @param string $version
      * @param string $path
-     * @return \PSX\Api\Resource
+     * @param string|null $version
+     * @return \PSX\Api\SpecificationInterface
      */
-    public function getDocumentation($routeId, $version, $path)
+    public function getDocumentation(int $routeId, string $path, ?string $version): SpecificationInterface
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
@@ -101,31 +96,18 @@ class Method
             throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
         }
 
+        $definitions = new LazyDefinitions($this->connection);
+
         $methods  = $this->methodTable->getMethods($routeId, $version, true, true);
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
         $scopes   = $this->scopeTable->getScopesForRoute($routeId);
 
-        // check variable path fragments
-        $parts = explode('/', $path);
-        foreach ($parts as $part) {
-            if (isset($part[0])) {
-                $name = null;
-                if ($part[0] == ':') {
-                    $name = substr($part, 1);
-                } elseif ($part[0] == '$') {
-                    $pos  = strpos($part, '<');
-                    $name = substr($part, 1, $pos - 1);
-                }
-
-                if ($name !== null) {
-                    $resource->addPathParameter($name, Property::getString());
-                }
-            }
-        }
+        $pathName = $this->getPathName($path);
+        $definitions->addType($pathName, $this->getPathType($path));
+        $resource->setPathParameters($pathName);
 
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
-            $schemaCache    = $method['schemaCache'];
 
             if (!empty($method['description'])) {
                 $resourceMethod->setDescription($method['description']);
@@ -143,67 +125,29 @@ class Method
                 $resourceMethod->setTags($scopes[$method['method']]);
             }
 
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($schemaCache)) {
-                // if we are not in development mode and a cache is available
-                // use it
-                $spec = json_decode($schemaCache, true);
+            if (!empty($method['operation_id'])) {
+                $resourceMethod->setOperationId($method['operation_id']);
+            }
 
-                if (isset($spec['operation_id'])) {
-                    $resourceMethod->setOperationId($spec['operation_id']);
-                }
+            if (!empty($method['parameters'])) {
+                $resourceMethod->setQueryParameters($method['parameters']);
+            }
 
-                if (isset($spec['parameters'])) {
-                    $property   = $this->getProperty($spec['parameters']);
-                    $properties = $property->getProperties();
+            if (!empty($method['request'])) {
+                $resourceMethod->setRequest($method['request']);
+            }
 
-                    if (!empty($properties)) {
-                        foreach ($properties as $name => $type) {
-                            $resourceMethod->addQueryParameter($name, $type);
-                        }
-                    }
-                }
-
-                if (isset($spec['request'])) {
-                    $resourceMethod->setRequest(new Schema($this->getProperty($spec['request'])));
-                }
-
-                if (isset($spec['responses'])) {
-                    foreach ($spec['responses'] as $code => $schema) {
-                        $resourceMethod->addResponse($code, new Schema($this->getProperty($schema)));
-                    }
-                }
-            } else {
-                if ($method['operation_id']) {
-                    $resourceMethod->setOperationId($method['operation_id']);
-                }
-
-                if ($method['parameters'] > 0) {
-                    $schema     = $this->schemaLoader->getSchema($method['parameters']);
-                    $properties = $schema->getDefinition()->getProperties();
-
-                    if (!empty($properties)) {
-                        foreach ($properties as $name => $type) {
-                            $resourceMethod->addQueryParameter($name, $type);
-                        }
-                    }
-                }
-
-                if ($method['request'] > 0) {
-                    $resourceMethod->setRequest(new LazySchema($this->schemaLoader, $method['request']));
-                }
-
-                $responses = $this->responseTable->getResponses($method['id']);
-                if (!empty($responses)) {
-                    foreach ($responses as $response) {
-                        $resourceMethod->addResponse($response['code'], new LazySchema($this->schemaLoader, $response['response']));
-                    }
+            $responses = $this->responseTable->getResponses($method['id']);
+            if (!empty($responses)) {
+                foreach ($responses as $response) {
+                    $resourceMethod->addResponse($response['code'], $response['response']);
                 }
             }
 
             $resource->addMethod($resourceMethod);
         }
 
-        return $resource;
+        return Specification::fromResource($resource, $definitions);
     }
 
     /**
@@ -277,15 +221,32 @@ class Method
         return isset($method['status']) ? $method['status'] : Resource::STATUS_DEVELOPMENT;
     }
 
-    /**
-     * @param array $schema
-     * @return \PSX\Schema\PropertyInterface
-     */
-    private function getProperty(array $schema)
+    private function getPathName(string $path): string
     {
-        $document = new Document($schema, $this->resolver);
-        $this->resolver->setRootDocument($document);
+        return Inflection::generateTitleFromRoute($path) . 'Path';
+    }
 
-        return $document->getProperty();
+    private function getPathType(string $path): TypeInterface
+    {
+        $type = TypeFactory::getStruct();
+
+        $parts = explode('/', $path);
+        foreach ($parts as $part) {
+            if (isset($part[0])) {
+                $name = null;
+                if ($part[0] == ':') {
+                    $name = substr($part, 1);
+                } elseif ($part[0] == '$') {
+                    $pos  = strpos($part, '<');
+                    $name = substr($part, 1, $pos - 1);
+                }
+
+                if ($name !== null) {
+                    $type->addProperty($name, TypeFactory::getString());
+                }
+            }
+        }
+
+        return $type;
     }
 }

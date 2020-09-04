@@ -23,6 +23,9 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Rate_Allocation;
+use Fusio\Impl\Backend\Model\Rate_Create;
+use Fusio\Impl\Backend\Model\Rate_Update;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;
@@ -76,10 +79,10 @@ class Rate
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create($priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
+    public function create(Rate_Create $rate, UserContext $context)
     {
         // check whether rate exists
-        if ($this->exists($name)) {
+        if ($this->exists($rate->getName())) {
             throw new StatusCode\BadRequestException('Rate already exists');
         }
 
@@ -89,10 +92,10 @@ class Rate
             // create rate
             $record = [
                 'status'     => Table\Rate::STATUS_ACTIVE,
-                'priority'   => $priority,
-                'name'       => $name,
-                'rate_limit' => $rateLimit,
-                'timespan'   => $timespan,
+                'priority'   => $rate->getPriority(),
+                'name'       => $rate->getName(),
+                'rate_limit' => $rate->getRateLimit(),
+                'timespan'   => $rate->getTimespan(),
             ];
 
             $this->rateTable->create($record);
@@ -100,7 +103,7 @@ class Rate
             // get last insert id
             $rateId = $this->rateTable->getLastInsertId();
 
-            $this->handleAllocation($rateId, $allocations);
+            $this->handleAllocations($rateId, $rate->getAllocations());
 
             $this->rateTable->commit();
         } catch (\Throwable $e) {
@@ -109,20 +112,19 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($rateId, $record, $allocations, $context), RateEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($rate, $context));
 
         return $rateId;
     }
 
-    public function update($rateId, $priority, $name, $rateLimit, \DateInterval $timespan, array $allocations = null, UserContext $context)
+    public function update(int $rateId, Rate_Update $rate, UserContext $context)
     {
-        $rate = $this->rateTable->get($rateId);
-
-        if (empty($rate)) {
+        $existing = $this->rateTable->get($rateId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
-        if ($rate['status'] == Table\Rate::STATUS_DELETED) {
+        if ($existing['status'] == Table\Rate::STATUS_DELETED) {
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
@@ -131,16 +133,16 @@ class Rate
 
             // update rate
             $record = [
-                'id'         => $rate['id'],
-                'priority'   => $priority,
-                'name'       => $name,
-                'rate_limit' => $rateLimit,
-                'timespan'   => $timespan,
+                'id'         => $existing['id'],
+                'priority'   => $rate->getPriority(),
+                'name'       => $rate->getName(),
+                'rate_limit' => $rate->getRateLimit(),
+                'timespan'   => $rate->getTimespan(),
             ];
 
             $this->rateTable->update($record);
 
-            $this->handleAllocation($rate['id'], $allocations);
+            $this->handleAllocations($existing['id'], $rate->getAllocations());
 
             $this->rateTable->commit();
         } catch (\Throwable $e) {
@@ -149,25 +151,24 @@ class Rate
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($rateId, $record, $allocations, $rate, $context), RateEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($rate, $existing, $context));
     }
 
     public function delete($rateId, UserContext $context)
     {
-        $rate = $this->rateTable->get($rateId);
-
-        if (empty($rate)) {
+        $existing = $this->rateTable->get($rateId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
         $record = [
-            'id'     => $rate['id'],
+            'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
         ];
 
         $this->rateTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($rateId, $rate, $context), RateEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
     
     /**
@@ -244,7 +245,11 @@ class Rate
         return $this->logTable->getCount($condition);
     }
 
-    protected function handleAllocation($rateId, array $allocations = null)
+    /**
+     * @param int $rateId
+     * @param Rate_Allocation[] $allocations
+     */
+    protected function handleAllocations(int $rateId, array $allocations = null)
     {
         $this->rateAllocationTable->deleteAllFromRate($rateId);
 
@@ -252,10 +257,10 @@ class Rate
             foreach ($allocations as $allocation) {
                 $this->rateAllocationTable->create(array(
                     'rate_id'       => $rateId,
-                    'route_id'      => $allocation->routeId,
-                    'app_id'        => $allocation->appId,
-                    'authenticated' => $allocation->authenticated,
-                    'parameters'    => $allocation->parameters,
+                    'route_id'      => $allocation->getRouteId(),
+                    'app_id'        => $allocation->getAppId(),
+                    'authenticated' => $allocation->getAuthenticated(),
+                    'parameters'    => $allocation->getParameters(),
                 ));
             }
         }

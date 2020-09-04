@@ -29,10 +29,16 @@ use Fusio\Engine\Parameters;
 use Fusio\Engine\Routes\ProviderInterface;
 use Fusio\Engine\Routes\Setup;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Action_Create;
+use Fusio\Impl\Backend\Model\Route_Create;
+use Fusio\Impl\Backend\Model\Route_Method;
+use Fusio\Impl\Backend\Model\Route_Method_Responses;
+use Fusio\Impl\Backend\Model\Route_Version;
+use Fusio\Impl\Backend\Model\Schema_Create;
 use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Action;
-use Fusio\Impl\Service\Routes;
+use Fusio\Impl\Service\Route;
 use Fusio\Impl\Service\Schema;
 use Psr\Container\ContainerInterface;
 use PSX\Api\Resource;
@@ -66,7 +72,7 @@ class Provider
     private $container;
 
     /**
-     * @var \Fusio\Impl\Service\Routes
+     * @var \Fusio\Impl\Service\Route
      */
     private $routesService;
 
@@ -105,7 +111,7 @@ class Provider
      */
     private $routes;
 
-    public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Routes $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Route $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
         $this->providerFactory = $providerFactory;
@@ -189,42 +195,34 @@ class Provider
 
     private function createSchemas(array $schemas, UserContext $context)
     {
-        $schema = $this->schemaManager->getSchema(BackendSchema\Schema\Create::class);
+        $schema = $this->schemaManager->getSchema(Schema_Create::class);
 
         foreach ($schemas as $index => $data) {
-            $data   = \json_decode(\json_encode($data));
+            $data = \json_decode(\json_encode($data));
+            /** @var Schema_Create $record */
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
-            $id = $this->schemaService->exists($record->name);
+            $id = $this->schemaService->exists($record->getName());
             if (!$id) {
-                $id = $this->schemaService->create(
-                    $record->name,
-                    $record->source,
-                    $context
-                );
+                $this->schemaService->create($record, $context);
             }
 
-            $this->schemas[$index] = $id;
+            $this->schemas[$index] = $record->getName();
         }
     }
 
     private function createActions(array $actions, UserContext $context)
     {
-        $schema = $this->schemaManager->getSchema(BackendSchema\Action\Create::class);
+        $schema = $this->schemaManager->getSchema(Action_Create::class);
 
         foreach ($actions as $index => $data) {
-            $data   = \json_decode(\json_encode($data));
+            $data = \json_decode(\json_encode($data));
+            /** @var Action_Create $record */
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
-            $id = $this->actionService->exists($record->name);
+            $id = $this->actionService->exists($record->getName());
             if (!$id) {
-                $id = $this->actionService->create(
-                    $record->name,
-                    $record->class,
-                    $record->engine,
-                    $record->config ? $record->config->getProperties() : null,
-                    $context
-                );
+                $id = $this->actionService->create($record, $context);
             }
 
             $this->actions[$index] = $id;
@@ -234,85 +232,66 @@ class Provider
     private function createRoutes(array $routes, $basePath, $scopes, UserContext $context)
     {
         $scopes = $scopes ?: [];
-        $schema = $this->schemaManager->getSchema(BackendSchema\Routes\Create::class);
+        $schema = $this->schemaManager->getSchema(Route_Create::class);
 
         foreach ($routes as $index => $data) {
-            $data   = \json_decode(\json_encode($data));
+            $data = \json_decode(\json_encode($data));
+            /** @var Route_Create $record */
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
-            $record->path = $this->buildPath($basePath, $record->path);
-            $record->config = $this->buildConfig($record->config);
+            $record->setPath($this->buildPath($basePath, $record->getPath()));
+            $record->setScopes(array_merge($scopes, $record->getScopes() ?? []));
 
-            if (is_array($record->scopes)) {
-                $scopes = array_merge($scopes, $record->scopes);
+            foreach ($record->getConfig() as $key => $version) {
+                /** @var Route_Version $version */
+                $this->resolveVersion($version);
             }
 
-            $id = $this->routesService->exists($record->path);
+            $id = $this->routesService->exists($record->getPath());
             if (!$id) {
-                $id = $this->routesService->create(
-                    $record->priority,
-                    $record->path,
-                    $record->controller,
-                    $scopes,
-                    $record->config,
-                    $context
-                );
+                $id = $this->routesService->create($record, $context);
             }
 
             $this->routes[$index] = $id;
         }
     }
 
-    private function buildPath($basePath, $path)
+    private function buildPath(string $basePath, string $path)
     {
         return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
     }
 
-    private function buildConfig($config)
+    private function resolveVersion(Route_Version $version)
     {
-        if (!is_iterable($config)) {
-            throw new StatusCode\BadRequestException('Config must be an array');
-        }
+        // we can create only resources in development mode
+        $version->setVersion(Resource::STATUS_DEVELOPMENT);
 
-        foreach ($config as $key => $version) {
-            // we can create only resources in development mode
-            $config[$key]['status'] = Resource::STATUS_DEVELOPMENT;
+        if ($version->getMethods()) {
+            foreach ($version->getMethods() as $methodName => $method) {
+                /** @var Route_Method $method */
+                $method->setParameters($this->resolveSchema($method->getParameters()));
+                $method->setRequest($this->resolveSchema($method->getRequest()));
+                $method->setResponse($this->resolveSchema($method->getResponse()));
 
-            if (isset($version['methods']) && is_iterable($version['methods'])) {
-                foreach ($version['methods'] as $methodName => $method) {
-                    if (isset($method['parameters'])) {
-                        $config[$key]['methods'][$methodName]['parameters'] = $this->resolveSchema($method['parameters']);
+                if ($method->getResponses()) {
+                    $responses = new Route_Method_Responses();
+                    foreach ($method->getResponses() as $code => $response) {
+                        $responses[$code] = $this->resolveSchema($response);
                     }
-
-                    if (isset($method['request'])) {
-                        $config[$key]['methods'][$methodName]['request'] = $this->resolveSchema($method['request']);
-                    }
-
-                    if (isset($method['response'])) {
-                        $config[$key]['methods'][$methodName]['response'] = $this->resolveSchema($method['response']);
-                    }
-
-                    if (isset($method['responses']) && is_iterable($method['responses'])) {
-                        $responses = [];
-                        foreach ($method['responses'] as $code => $response) {
-                            $responses[$code] = $this->resolveSchema($response);
-                        }
-
-                        $config[$key]['methods'][$methodName]['responses'] = $responses;
-                    }
-
-                    if (isset($method['action'])) {
-                        $config[$key]['methods'][$methodName]['action'] = $this->resolveAction($method['action']);
-                    }
+                    $method->setResponses($responses);
                 }
+
+                $method->setAction($this->resolveAction($method->getAction()));
             }
         }
-
-        return $config;
     }
 
     private function resolveSchema($schema)
     {
+        if (empty($schema)) {
+            return null;
+        }
+
         if (isset($this->schemas[$schema])) {
             return $this->schemas[$schema];
         } else {
@@ -322,6 +301,10 @@ class Provider
 
     private function resolveAction($action)
     {
+        if (empty($action)) {
+            return null;
+        }
+
         if (isset($this->actions[$action])) {
             return $this->actions[$action];
         } else {

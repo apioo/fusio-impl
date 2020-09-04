@@ -24,6 +24,10 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Account_Credentials;
+use Fusio\Impl\Backend\Model\User_Create;
+use Fusio\Impl\Backend\Model\User_Remote;
+use Fusio\Impl\Backend\Model\User_Update;
 use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
@@ -165,22 +169,22 @@ class User
         PasswordComplexity::assert($password, $this->configService->getValue('user_pw_length'));
     }
 
-    public function create($status, $name, $email, $password, array $scopes = null, UserContext $context)
+    public function create(User_Create $user, UserContext $context)
     {
         // check whether user name exists
-        if ($this->userTable->getCount(new Condition(['name', '=', $name])) > 0) {
+        if ($this->userTable->getCount(new Condition(['name', '=', $user->getName()])) > 0) {
             throw new StatusCode\BadRequestException('User name already exists');
         }
 
         // check whether user email exists
-        if ($this->userTable->getCount(new Condition(['email', '=', $email])) > 0) {
+        if ($this->userTable->getCount(new Condition(['email', '=', $user->getEmail()])) > 0) {
             throw new StatusCode\BadRequestException('User email already exists');
         }
 
         // check values
-        $this->assertName($name);
-        $this->assertEmail($email);
-        $this->assertPasswordComplexity($password);
+        $this->assertName($user->getName());
+        $this->assertEmail($user->getEmail());
+        $this->assertPasswordComplexity($user->getPassword());
 
         try {
             $this->userTable->beginTransaction();
@@ -188,10 +192,10 @@ class User
             // create user
             $record = [
                 'provider' => ProviderInterface::PROVIDER_SYSTEM,
-                'status'   => $status,
-                'name'     => $name,
-                'email'    => $email,
-                'password' => $password !== null ? \password_hash($password, PASSWORD_DEFAULT) : null,
+                'status'   => $user->getStatus(),
+                'name'     => $user->getName(),
+                'email'    => $user->getEmail(),
+                'password' => $user->getPassword() !== null ? \password_hash($user->getPassword(), PASSWORD_DEFAULT) : null,
                 'points'   => $this->configService->getValue('points_default') ?: null,
                 'date'     => new DateTime(),
             ];
@@ -199,9 +203,10 @@ class User
             $this->userTable->create($record);
 
             $userId = $this->userTable->getLastInsertId();
+            $user->setId($userId);
 
             // add scopes
-            $this->insertScopes($userId, $scopes);
+            $this->insertScopes($user);
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -210,34 +215,31 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($userId, $record, $scopes, $context), UserEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($user, $context));
 
         return $userId;
     }
 
-    public function createRemote($provider, $id, $name, $email, array $scopes = null, UserContext $context)
+    public function createRemote(User_Remote $remote, UserContext $context)
     {
         // check whether user exists
         $condition  = new Condition();
-        $condition->equals('provider', $provider);
-        $condition->equals('remote_id', $id);
+        $condition->equals('provider', $remote->getProvider());
+        $condition->equals('remote_id', $remote->getRemoteId());
 
-        $user = $this->userTable->getOneBy($condition);
-
-        if (!empty($user)) {
-            return $user['id'];
+        $existing = $this->userTable->getOneBy($condition);
+        if (!empty($existing)) {
+            return $existing['id'];
         }
 
         // replace spaces with a dot
-        $name = str_replace(' ', '.', $name);
+        $remote->setName(str_replace(' ', '.', $remote->getName()));
 
         // check values
-        $this->assertName($name);
+        $this->assertName($remote->getName());
 
-        if (!empty($email)) {
-            $this->assertEmail($email);
-        } else {
-            $email = null;
+        if (!empty($remote->getEmail())) {
+            $this->assertEmail($remote->getEmail());
         }
 
         try {
@@ -245,11 +247,11 @@ class User
 
             // create user
             $record = [
-                'provider'  => $provider,
+                'provider'  => $remote->getProvider(),
                 'status'    => Table\User::STATUS_CONSUMER,
-                'remote_id' => $id,
-                'name'      => $name,
-                'email'     => $email,
+                'remote_id' => $remote->getRemoteId(),
+                'name'      => $remote->getName(),
+                'email'     => $remote->getEmail(),
                 'password'  => null,
                 'points'    => $this->configService->getValue('points_default') ?: null,
                 'date'      => new DateTime(),
@@ -260,7 +262,7 @@ class User
             $userId = $this->userTable->getLastInsertId();
 
             // add scopes
-            $this->insertScopes($userId, $scopes);
+            $this->insertScopes($userId, $remote->getScopes());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -269,54 +271,59 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($userId, $record, $scopes, $context), UserEvents::CREATE);
+        $user = new User_Create();
+        $user->setId($userId);
+        $user->setName($remote->getName());
+        $user->setEmail($remote->getEmail());
+        $user->setScopes($remote->getScopes());
+
+        $this->eventDispatcher->dispatch(new CreatedEvent($user, $context));
 
         return $userId;
     }
 
-    public function update($userId, $status, $name, $email, array $scopes = null, $attributes = null, UserContext $context)
+    public function update(User_Update $user, UserContext $context)
     {
-        $user = $this->userTable->get($userId);
-
-        if (empty($user)) {
+        $existing = $this->userTable->get($user->getId());
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        if ($status === null) {
-            $status = $user['status'];
+        if ($user->getStatus() === null) {
+            $user->setStatus($existing['status']);
         }
 
-        if ($name === null) {
-            $name = $user['name'];
+        if ($user->getName() === null) {
+            $user->setName($existing['name']);
         }
 
         // check values
-        $this->assertName($name);
-        $this->assertEmail($email);
+        $this->assertName($user->getName());
+        $this->assertEmail($user->getEmail());
 
         try {
             $this->userTable->beginTransaction();
 
             // update user
             $record = [
-                'id'     => $user['id'],
-                'status' => $status,
-                'name'   => $name,
-                'email'  => $email,
+                'id'     => $existing['id'],
+                'status' => $user->getStatus(),
+                'name'   => $user->getName(),
+                'email'  => $user->getEmail(),
             ];
 
             $this->userTable->update($record);
 
-            if ($scopes !== null) {
+            if ($user->getScopes() !== null) {
                 // delete existing scopes
-                $this->userScopeTable->deleteAllFromUser($user['id']);
+                $this->userScopeTable->deleteAllFromUser($existing['id']);
 
                 // add scopes
-                $this->insertScopes($user['id'], $scopes);
+                $this->insertScopes($existing['id'], $user->getScopes());
             }
 
             // update attributes
-            $this->updateAttributes($user['id'], $attributes);
+            $this->updateAttributes($existing['id'], $user->getAttributes());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -325,25 +332,24 @@ class User
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($userId, $record, $scopes, $user, $context), UserEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($user, $existing, $context));
     }
 
     public function delete($userId, UserContext $context)
     {
-        $user = $this->userTable->get($userId);
-
-        if (empty($user)) {
+        $existing = $this->userTable->get($userId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
         $record = [
-            'id'     => $user['id'],
+            'id'     => $existing['id'],
             'status' => Table\User::STATUS_DELETED,
         ];
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($userId, $user, $context), UserEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function changeStatus($userId, $status, UserContext $context)
@@ -364,7 +370,7 @@ class User
         $this->eventDispatcher->dispatch(new ChangedStatusEvent($user['status'], $status, $context), UserEvents::CHANGE_STATUS);
     }
 
-    public function changePassword($oldPassword, $newPassword, $verifyPassword, UserContext $context)
+    public function changePassword(Account_Credentials $credentials, UserContext $context)
     {
         $appId  = $context->getAppId();
         $userId = $context->getUserId();
@@ -374,27 +380,27 @@ class User
             throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
         }
 
-        if (empty($newPassword)) {
+        if (empty($credentials->getNewPassword())) {
             throw new StatusCode\BadRequestException('New password must not be empty');
         }
 
-        if (empty($oldPassword)) {
+        if (empty($credentials->getOldPassword())) {
             throw new StatusCode\BadRequestException('Old password must not be empty');
         }
 
         // check verify password
-        if ($newPassword != $verifyPassword) {
+        if ($credentials->getNewPassword() != $credentials->getVerifyPassword()) {
             throw new StatusCode\BadRequestException('New password does not match the verify password');
         }
 
         // assert password complexity
-        $this->assertPasswordComplexity($newPassword);
+        $this->assertPasswordComplexity($credentials->getNewPassword());
 
         // change password
-        $result = $this->userTable->changePassword($userId, $oldPassword, $newPassword);
+        $result = $this->userTable->changePassword($userId, $credentials->getOldPassword(), $credentials->getNewPassword());
 
         if ($result) {
-            $this->eventDispatcher->dispatch(new ChangedPasswordEvent($oldPassword, $newPassword, $context), UserEvents::CHANGE_PASSWORD);
+            $this->eventDispatcher->dispatch(new ChangedPasswordEvent($credentials, $context), UserEvents::CHANGE_PASSWORD);
 
             return true;
         } else {

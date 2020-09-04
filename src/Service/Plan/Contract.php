@@ -23,6 +23,8 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Contract_Create;
+use Fusio\Impl\Backend\Model\Plan_Contract_Update;
 use Fusio\Impl\Event\Plan\Contract\CreatedEvent;
 use Fusio\Impl\Event\Plan\Contract\DeletedEvent;
 use Fusio\Impl\Event\Plan\Contract\UpdatedEvent;
@@ -53,7 +55,7 @@ class Contract
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Plan\Contract $contractTable
@@ -62,9 +64,9 @@ class Contract
      */
     public function __construct(Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, EventDispatcherInterface $eventDispatcher)
     {
-        $this->contractTable = $contractTable;
-        $this->invoiceTable  = $invoiceTable;
-        $this->eventDispatcher  = $eventDispatcher;
+        $this->contractTable   = $contractTable;
+        $this->invoiceTable    = $invoiceTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -102,47 +104,47 @@ class Contract
      * @param integer $points
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function update($contractId, $planId, $status, $amount, $points, UserContext $context)
+    public function update(int $contractId, Plan_Contract_Update $contract, UserContext $context)
     {
-        $contract = $this->contractTable->get($contractId);
+        $existing = $this->contractTable->get($contractId);
 
-        if (empty($contract)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
 
-        if ($contract['status'] == Table\Plan\Contract::STATUS_DELETED) {
+        if ($existing['status'] == Table\Plan\Contract::STATUS_DELETED) {
             throw new StatusCode\GoneException('Contract was deleted');
         }
 
         // update contract
         $record = [
-            'id'      => $contract['id'],
-            'plan_id' => $planId,
-            'status'  => $status,
-            'amount'  => $amount,
-            'points'  => $points,
+            'id'      => $existing['id'],
+            'plan_id' => $contract->getPlan(),
+            'status'  => $contract->getStatus(),
+            'amount'  => $contract->getAmount(),
+            'points'  => $contract->getPoints(),
         ];
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($contractId, $record, $contract, $context), ContractEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($contractId, $record, $existing, $context), ContractEvents::UPDATE);
     }
 
-    public function delete($contractId, UserContext $context)
+    public function delete(int $contractId, UserContext $context)
     {
-        $contract = $this->contractTable->get($contractId);
+        $existing = $this->contractTable->get($contractId);
 
-        if (empty($contract)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
 
         $record = [
-            'id'     => $contract['id'],
+            'id'     => $existing['id'],
             'status' => Table\Plan\Contract::STATUS_DELETED,
         ];
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($contractId, $contract, $context), ContractEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($contractId, $existing, $context), ContractEvents::DELETE);
     }
 }

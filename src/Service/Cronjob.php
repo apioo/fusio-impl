@@ -22,6 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Action_Execute_Request;
+use Fusio\Impl\Backend\Model\Cronjob_Create;
+use Fusio\Impl\Backend\Model\Cronjob_Update;
 use Fusio\Impl\Event\Cronjob\CreatedEvent;
 use Fusio\Impl\Event\Cronjob\DeletedEvent;
 use Fusio\Impl\Event\Cronjob\UpdatedEvent;
@@ -89,78 +92,76 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($name, $cron, $action, UserContext $context)
+    public function create(Cronjob_Create $cronjob, UserContext $context)
     {
         // check whether cronjob exists
-        if ($this->exists($name)) {
+        if ($this->exists($cronjob->getName())) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
         }
 
         // create cronjob
         $record = [
             'status' => Table\Cronjob::STATUS_ACTIVE,
-            'name'   => $name,
-            'cron'   => $cron,
-            'action' => $action,
+            'name'   => $cronjob->getName(),
+            'cron'   => $cronjob->getCron(),
+            'action' => $cronjob->getAction(),
         ];
 
         $this->cronjobTable->create($record);
 
         $cronjobId = $this->cronjobTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($cronjobId, $record, $context), CronjobEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($cronjob, $context));
 
         $this->writeCronFile();
 
         return $cronjobId;
     }
 
-    public function update($cronjobId, $name, $cron, $action, UserContext $context)
+    public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context)
     {
-        $cronjob = $this->cronjobTable->get($cronjobId);
-
-        if (empty($cronjob)) {
+        $existing = $this->cronjobTable->get($cronjobId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($cronjob['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
         $record = [
-            'id'     => $cronjob['id'],
-            'name'   => $name,
-            'cron'   => $cron,
-            'action' => $action,
+            'id'     => $existing['id'],
+            'name'   => $cronjob->getName(),
+            'cron'   => $cronjob->getCron(),
+            'action' => $cronjob->getAction(),
         ];
 
         $this->cronjobTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($cronjobId, $record, $cronjob, $context), CronjobEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
 
         $this->writeCronFile();
     }
 
-    public function delete($cronjobId, UserContext $context)
+    public function delete(int $cronjobId, UserContext $context)
     {
-        $cronjob = $this->cronjobTable->get($cronjobId);
-
-        if (empty($cronjob)) {
+        $existing = $this->cronjobTable->get($cronjobId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($cronjob['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
         $record = [
-            'id'     => $cronjob['id'],
+            'id'     => $existing['id'],
             'status' => Table\Cronjob::STATUS_DELETED,
         ];
 
         $this->cronjobTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($cronjobId, $cronjob, $context), CronjobEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         $this->writeCronFile();
     }
@@ -170,33 +171,28 @@ class Cronjob
      * 
      * @param integer $cronjobId
      */
-    public function execute($cronjobId)
+    public function execute(int $cronjobId)
     {
-        $cronjob = $this->cronjobTable->get($cronjobId);
-
-        if (empty($cronjob)) {
+        $existing = $this->cronjobTable->get($cronjobId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($cronjob['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
         $exitCode = null;
         try {
-            $this->executorService->execute(
-                $cronjob['action'],
-                'GET',
-                null,
-                null,
-                null,
-                null
-            );
+            $execute = new Action_Execute_Request();
+            $execute->setMethod('GET');
+
+            $this->executorService->execute($existing['action'], $execute);
 
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
             $this->errorTable->create([
-                'cronjob_id' => $cronjob['id'],
+                'cronjob_id' => $existing['id'],
                 'message'    => $e->getMessage(),
                 'trace'      => $e->getTraceAsString(),
                 'file'       => $e->getFile(),
@@ -208,7 +204,7 @@ class Cronjob
 
         // set execute date
         $record = [
-            'id' => $cronjob['id'],
+            'id' => $existing['id'],
             'execute_date' => new \DateTime(),
             'exit_code' => $exitCode,
         ];

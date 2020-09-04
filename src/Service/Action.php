@@ -119,12 +119,12 @@ class Action
 
         $actionId = $this->actionTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($actionId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($action, $context));
 
         return $actionId;
     }
 
-    public function update($actionId, Action_Update $action, UserContext $context)
+    public function update(int $actionId, Action_Update $action, UserContext $context)
     {
         $existing = $this->actionTable->get($actionId);
 
@@ -169,18 +169,18 @@ class Action
 
         $this->actionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($actionId, $record, $existing, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
     }
 
-    public function delete($actionId, UserContext $context)
+    public function delete(int $actionId, UserContext $context)
     {
-        $action = $this->actionTable->get($actionId);
+        $existing = $this->actionTable->get($actionId);
 
-        if (empty($action)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($action['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing['status'] == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
@@ -189,21 +189,21 @@ class Action
             throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
         }
 
-        $config     = self::unserializeConfig($action['config']);
+        $config     = self::unserializeConfig($existing['config']);
         $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($action['class'], $action['engine']);
+        $handler    = $this->newAction($existing['class'], $existing['engine']);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onDelete($action['name'], $parameters);
+            $handler->onDelete($existing['name'], $parameters);
         }
 
         $this->actionTable->update([
-            'id'     => $action['id'],
+            'id'     => $existing['id'],
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($actionId, $action, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function exists(string $name)

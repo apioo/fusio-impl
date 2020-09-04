@@ -23,6 +23,8 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Create;
+use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
@@ -78,68 +80,67 @@ class Schema
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $source, UserContext $context)
+    public function create(Schema_Create $schema, UserContext $context)
     {
-        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $name)) {
+        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
         // check whether schema exists
-        if ($this->exists($name)) {
+        if ($this->exists($schema->getName())) {
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
         // create schema
         $record = [
             'status' => Table\Schema::STATUS_ACTIVE,
-            'name'   => $name,
-            'source' => $source,
-            'cache'  => $this->schemaParser->parse(json_encode($source)),
+            'name'   => $schema->getName(),
+            'source' => $schema->getSource(),
+            'cache'  => $this->schemaParser->parse(json_encode($schema->getSource())),
         ];
 
         $this->schemaTable->create($record);
 
         $schemaId = $this->schemaTable->getLastInsertId();
+        $schema->setId($schemaId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($schemaId, $record, $context), SchemaEvents::CREATE);
-        
+        $this->eventDispatcher->dispatch(new CreatedEvent($schema, $context));
+
         return $schemaId;
     }
 
-    public function update($schemaId, $name, $source, $form, UserContext $context)
+    public function update(Schema_Update $schema, UserContext $context)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (empty($schema)) {
+        $existing = $this->schemaTable->get($schema->getId());
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
         $record = [
-            'id'     => $schema['id'],
-            'name'   => $name,
-            'source' => $source,
-            'form'   => $form,
-            'cache'  => $this->schemaParser->parse(json_encode($source)),
+            'id'     => $existing['id'],
+            'name'   => $schema->getName(),
+            'source' => $schema->getSource(),
+            'form'   => $schema->getForm(),
+            'cache'  => $this->schemaParser->parse(json_encode($schema->getSource())),
         ];
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($schemaId, $record, $schema, $context), SchemaEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
     }
 
-    public function delete($schemaId, UserContext $context)
+    public function delete(int $schemaId, UserContext $context)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (empty($schema)) {
+        $existing = $this->schemaTable->get($schemaId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
@@ -149,13 +150,13 @@ class Schema
         }
 
         $record = [
-            'id'     => $schema['id'],
+            'id'     => $existing['id'],
             'status' => Table\Schema::STATUS_DELETED,
         ];
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($schemaId, $schema, $context), SchemaEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function updateForm($schemaId, $form, UserContext $context)

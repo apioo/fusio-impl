@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Marketplace_Install;
 use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;
@@ -71,10 +72,10 @@ class Installer
         $this->filesystem = new Filesystem();
     }
 
-    public function install(string $name, UserContext $context): App
+    public function install(Marketplace_Install $install, UserContext $context): App
     {
-        $remoteApp = $this->remoteRepository->fetchByName($name);
-        $localApp = $this->localRepository->fetchByName($name);
+        $remoteApp = $this->remoteRepository->fetchByName($install->getName());
+        $localApp = $this->localRepository->fetchByName($install->getName());
 
         if ($localApp instanceof App) {
             throw new StatusCode\BadRequestException('App already installed');
