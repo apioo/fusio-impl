@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Tests\Loader;
 
 use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Loader\Context;
-use Fusio\Impl\Loader\RoutingParser;
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
 use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Http\Request;
@@ -39,7 +39,7 @@ use PSX\Uri\Uri;
  */
 class RoutingParserTest extends DbTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -61,7 +61,7 @@ class RoutingParserTest extends DbTestCase
         $request = new Request(new Uri($path), $method);
         $context = new Context();
 
-        $parser  = new RoutingParser($this->connection);
+        $parser  = new DatabaseFinder($this->connection);
         $request = $parser->resolve($request, $context);
 
         $this->assertInstanceOf(RequestInterface::class, $request);
@@ -97,7 +97,7 @@ class RoutingParserTest extends DbTestCase
         $request = new Request(new Uri($path), $method);
         $context = new Context();
 
-        $parser  = new RoutingParser($this->connection);
+        $parser  = new DatabaseFinder($this->connection);
         $request = $parser->resolve($request, $context);
 
         $this->assertEmpty($request);
