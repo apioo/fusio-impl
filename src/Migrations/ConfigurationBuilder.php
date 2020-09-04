@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Migrations;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Migrations;
+use Doctrine\Migrations;
 use Fusio\Engine\ConnectorInterface;
 
 /**
@@ -36,8 +36,8 @@ class ConfigurationBuilder
 {
     /**
      * @param \Doctrine\DBAL\Connection $connection
-     * @param \Doctrine\DBAL\Migrations\OutputWriter|null $outputWriter
-     * @return \Doctrine\DBAL\Migrations\Configuration\Configuration
+     * @param \Doctrine\Migrations\OutputWriter|null $outputWriter
+     * @return \Doctrine\Migrations\Configuration\Configuration
      */
     public static function fromSystem(Connection $connection, Migrations\OutputWriter $outputWriter = null)
     {
@@ -55,8 +55,8 @@ class ConfigurationBuilder
     /**
      * @param string $connectionId
      * @param \Fusio\Engine\ConnectorInterface $connector
-     * @param \Doctrine\DBAL\Migrations\OutputWriter|null $outputWriter
-     * @return \Doctrine\DBAL\Migrations\Configuration\Configuration
+     * @param \Doctrine\Migrations\OutputWriter|null $outputWriter
+     * @return \Doctrine\Migrations\Configuration\Configuration
      */
     public static function fromConnector($connectionId, ConnectorInterface $connector, Migrations\OutputWriter $outputWriter = null)
     {

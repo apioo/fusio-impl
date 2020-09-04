@@ -49,7 +49,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
     protected $tableManager;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
