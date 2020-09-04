@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Filter;
 
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
@@ -45,13 +45,13 @@ class AssertMethod implements FilterInterface
     protected $routesMethodService;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
     /**
      * @param \Fusio\Impl\Service\Routes\Method $routesMethodService
-     * @param \Fusio\Impl\Loader\Context $context
+     * @param \Fusio\Impl\Framework\Loader\Context $context
      */
     public function __construct(Service\Routes\Method $routesMethodService, Context $context)
     {

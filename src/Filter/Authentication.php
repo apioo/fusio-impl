@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Filter;
 
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service\Security\TokenValidator;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
@@ -44,7 +44,7 @@ class Authentication implements FilterInterface
     protected $tokenValidator;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
