@@ -33,6 +33,7 @@ use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
@@ -54,7 +55,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     const SCHEMA_PASSTHRU = 'passthru';
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
@@ -145,15 +146,15 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * based on the data. If the route is in production mode read the schema
      * from the cache else resolve it
      *
-     * @param integer $version
-     * @return \PSX\Api\Resource|null
+     * @param string|null $version
+     * @return SpecificationInterface
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(string $version = null): ?SpecificationInterface
     {
         return $this->routesMethodService->getDocumentation(
             $this->context->getRouteId(),
-            $version,
-            $this->context->getPath()
+            $this->context->getPath(),
+            $version
         );
     }
 
