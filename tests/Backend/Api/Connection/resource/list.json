@@ -1,45 +1,54 @@
 {
-  "path": "\/backend\/connection\/list",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Connection_Connection": {
-        "type": "object",
-        "title": "Connection Connection",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "class": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/connection\/list",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.connection"
+        ]
       },
-      "Connection_Index": {
-        "type": "object",
-        "title": "Connection Index",
-        "properties": {
-          "connections": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Connection_Connection"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Connection_Index"
+      "tags": [],
+      "responses": {
+        "200": "Connection_Index"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Connection_Config"
+        }
+      }
+    },
+    "Connection_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16
+    },
+    "Connection_Index": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
+          }
+        }
       }
     }
   }

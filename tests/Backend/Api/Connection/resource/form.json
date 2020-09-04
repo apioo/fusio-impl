@@ -1,152 +1,116 @@
 {
-  "path": "\/backend\/connection\/form",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "class": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/connection\/form",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.connection"
+        ]
       },
-      "Input": {
-        "type": "object",
-        "title": "input",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
-        }
-      },
-      "Select": {
-        "type": "object",
-        "title": "select",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "options": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Option"
-            }
-          }
-        }
-      },
-      "Option": {
-        "type": "object",
-        "title": "option",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          }
-        }
-      },
-      "Tag": {
-        "type": "object",
-        "title": "tag",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          }
-        }
-      },
-      "Textarea": {
-        "type": "object",
-        "title": "textarea",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "mode": {
-            "type": "string"
-          }
-        }
-      },
-      "Container": {
-        "type": "object",
-        "title": "container",
-        "properties": {
-          "element": {
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#\/definitions\/Input"
-                },
-                {
-                  "$ref": "#\/definitions\/Select"
-                },
-                {
-                  "$ref": "#\/definitions\/Tag"
-                },
-                {
-                  "$ref": "#\/definitions\/Textarea"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Container"
+      "tags": [],
+      "queryParameters": "Connection_Form_Query",
+      "responses": {
+        "200": "Form_Container"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Connection_Form_Query": {
+      "type": "object",
+      "properties": {
+        "class": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Container": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "Form_Element_Input"
+              },
+              {
+                "$ref": "Form_Element_Select"
+              },
+              {
+                "$ref": "Form_Element_Tag"
+              },
+              {
+                "$ref": "Form_Element_TextArea"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "Form_Element": {
+      "type": "object",
+      "properties": {
+        "element": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "help": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "element"
+      ]
+    },
+    "Form_Element_Input": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Element_Select": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "Form_Element_Select_Option"
+          }
+        }
+      }
+    },
+    "Form_Element_Select_Option": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Form_Element_Tag": {
+      "$extends": "Form_Element",
+      "type": "object"
+    },
+    "Form_Element_TextArea": {
+      "$extends": "Form_Element",
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string"
+        }
       }
     }
   }

@@ -1,130 +1,235 @@
 {
-  "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "contract_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Plan_User": {
-        "type": "object",
-        "title": "Plan User",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "Plan": {
-        "type": "object",
-        "title": "Plan",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          }
-        }
-      },
-      "Plan_Contract": {
-        "type": "object",
-        "title": "Plan Contract",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "user": {
-            "$ref": "#\/definitions\/Plan_User"
-          },
-          "plan": {
-            "$ref": "#\/definitions\/Plan"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          },
-          "insertDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Plan_Contract"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Plan_Contract"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
+  "pathParameters": "Plan_Contract_Entity",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.plan"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Plan_Contract"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "backend": [
+          "backend.plan"
+        ]
+      },
+      "tags": [],
+      "request": "Plan_Contract_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
       }
     },
     "DELETE": {
+      "security": {
+        "backend": [
+          "backend.plan"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "App_Token"
+          }
+        }
+      }
+    },
+    "App_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        }
+      }
+    },
+    "Plan_Contract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "User"
+        },
+        "plan": {
+          "$ref": "Plan"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        },
+        "insertDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Plan_Contract_Entity": {
+      "type": "object",
+      "properties": {
+        "contract_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Plan_Contract_Update": {
+      "$extends": "Plan_Contract",
+      "type": "object"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "$ref": "App"
+          }
+        },
+        "attributes": {
+          "$ref": "User_Attributes"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "User_Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

@@ -1,123 +1,90 @@
 {
-  "path": "\/backend\/connection\/$connection_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "connection_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Connection_Config": {
-        "type": "object",
-        "title": "Connection Config",
-        "additionalProperties": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "number"
-            },
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            },
-            {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "maxItems": 16
-            }
-          ]
-        },
-        "maxProperties": 16
-      },
-      "Connection": {
-        "type": "object",
-        "title": "Connection",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "class": {
-            "type": "string"
-          },
-          "config": {
-            "$ref": "#\/definitions\/Connection_Config"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Connection"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Connection"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/connection\/$connection_id<[0-9]+>",
+  "pathParameters": "Connection_Entity_Path",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.connection"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Connection"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "backend": [
+          "backend.connection"
+        ]
+      },
+      "tags": [],
+      "request": "Connection_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
       }
     },
     "DELETE": {
+      "security": {
+        "backend": [
+          "backend.connection"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Connection_Config"
+        }
+      }
+    },
+    "Connection_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16
+    },
+    "Connection_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Connection_Update": {
+      "$extends": "Connection",
+      "type": "object"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }

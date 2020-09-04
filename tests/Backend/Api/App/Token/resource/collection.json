@@ -1,104 +1,104 @@
 {
-  "path": "\/backend\/app\/token",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "from": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "to": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/app\/token",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.app"
+        ]
       },
-      "App_Token": {
-        "type": "object",
-        "title": "App Token",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "expire": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "App_Token_Collection": {
-        "type": "object",
-        "title": "App Token Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/App_Token"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/App_Token_Collection"
+      "tags": [],
+      "queryParameters": "App_Token_Collection_Query",
+      "responses": {
+        "200": "App_Token_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "App_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "App_Token_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "App_Token"
+      }
+    },
+    "App_Token_Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
       }
     }
   }

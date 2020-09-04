@@ -1,149 +1,117 @@
 {
-  "path": "\/backend\/action",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Action": {
-        "type": "object",
-        "title": "Action",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "class": {
-            "type": "string"
-          },
-          "engine": {
-            "type": "string"
-          },
-          "config": {
-            "$ref": "#\/definitions\/Action_Config"
-          }
-        },
-        "required": [
-          "name",
-          "config"
-        ]
-      },
-      "Action_Config": {
-        "type": "object",
-        "title": "Action Config",
-        "additionalProperties": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "number"
-            },
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            },
-            {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "maxItems": 16
-            }
-          ]
-        },
-        "maxProperties": 16
-      },
-      "Action_Collection": {
-        "type": "object",
-        "title": "Action Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Action"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Action_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Action"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/action",
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "security": {
+        "backend": [
+          "backend.action"
+        ]
+      },
+      "tags": [],
+      "queryParameters": "Action_Collection_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Action_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "security": {
+        "backend": [
+          "backend.action"
+        ]
+      },
+      "tags": [],
+      "request": "Action_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Action_Config"
+        }
+      }
+    },
+    "Action_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Action"
+      }
+    },
+    "Action_Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Action_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Action_Create": {
+      "$extends": "Action",
+      "type": "object",
+      "required": [
+        "name",
+        "config"
+      ]
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }

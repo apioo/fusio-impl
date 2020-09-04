@@ -1,89 +1,87 @@
 {
-  "path": "\/backend\/config\/$config_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "config_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Config": {
-        "type": "object",
-        "title": "Config",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              },
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Config"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Config"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/config\/$config_id<[0-9]+>",
+  "pathParameters": "Config_Entity_Path",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.config"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Config"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "backend": [
+          "backend.config"
+        ]
+      },
+      "tags": [],
+      "request": "Config_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Config": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        }
+      }
+    },
+    "Config_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "config_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Config_Update": {
+      "$extends": "Config",
+      "type": "object"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }

@@ -1,45 +1,59 @@
 {
-  "path": "\/backend\/action\/list",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Action_Action": {
-        "type": "object",
-        "title": "Action Action",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "class": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/action\/list",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.action"
+        ]
       },
-      "Action_Index": {
-        "type": "object",
-        "title": "Action Index",
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Action_Action"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Action_Index"
+      "tags": [],
+      "responses": {
+        "200": "Action_Index"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Action_Config"
+        }
+      }
+    },
+    "Action_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Action_Index": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "Action"
+          }
+        }
       }
     }
   }

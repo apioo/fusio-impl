@@ -1,49 +1,44 @@
 {
-  "path": "\/backend\/log\/error\/$error_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "error_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/log\/error\/$error_id<[0-9]+>",
+  "pathParameters": "Log_Error_Entity_Path",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.log"
+        ]
       },
-      "Log_Error": {
-        "type": "object",
-        "title": "Log Error",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Log_Error"
+      "tags": [],
+      "responses": {
+        "200": "Log_Error"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Log_Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "integer"
+        },
+        "trace": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        }
+      }
+    },
+    "Log_Error_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "error_id": {
+          "type": "integer"
+        }
       }
     }
   }

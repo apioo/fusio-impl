@@ -1,121 +1,95 @@
 {
-  "path": "\/backend\/marketplace",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Marketplace_Collection_Apps": {
-        "type": "object",
-        "title": "Marketplace Collection Apps",
-        "additionalProperties": {
-          "$ref": "#\/definitions\/Marketplace_App_Remote"
-        }
-      },
-      "Marketplace_App_Remote": {
-        "type": "object",
-        "title": "Marketplace App Remote",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "screenshot": {
-            "type": "string"
-          },
-          "website": {
-            "type": "string"
-          },
-          "downloadUrl": {
-            "type": "string"
-          },
-          "sha1Hash": {
-            "type": "string"
-          },
-          "local": {
-            "$ref": "#\/definitions\/Marketplace_App"
-          }
-        }
-      },
-      "Marketplace_App": {
-        "type": "object",
-        "title": "Marketplace App",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "screenshot": {
-            "type": "string"
-          },
-          "website": {
-            "type": "string"
-          },
-          "downloadUrl": {
-            "type": "string"
-          },
-          "sha1Hash": {
-            "type": "string"
-          }
-        }
-      },
-      "Marketplace_Collection": {
-        "type": "object",
-        "title": "Marketplace Collection",
-        "properties": {
-          "apps": {
-            "$ref": "#\/definitions\/Marketplace_Collection_Apps"
-          }
-        }
-      },
-      "Marketplace_Install": {
-        "type": "object",
-        "title": "Marketplace Install",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Marketplace_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Marketplace_Install"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/marketplace",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.marketplace"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Marketplace_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "security": {
+        "backend": [
+          "backend.marketplace"
+        ]
+      },
+      "tags": [],
+      "request": "Marketplace_Install",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Marketplace_App": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "screenshot": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "downloadUrl": {
+          "type": "string"
+        },
+        "sha1Hash": {
+          "type": "string"
+        }
+      }
+    },
+    "Marketplace_Collection": {
+      "type": "object",
+      "properties": {
+        "apps": {
+          "$ref": "Marketplace_Collection_Apps"
+        }
+      }
+    },
+    "Marketplace_Collection_Apps": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Marketplace_Remote_App"
+      }
+    },
+    "Marketplace_Install": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Marketplace_Remote_App": {
+      "$extends": "Marketplace_App",
+      "type": "object",
+      "properties": {
+        "local": {
+          "$ref": "Marketplace_App"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }

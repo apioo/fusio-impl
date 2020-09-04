@@ -1,116 +1,116 @@
 {
-  "path": "\/backend\/rate\/$rate_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "rate_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Rate_Allocation": {
-        "type": "object",
-        "title": "Rate Allocation",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "authenticated": {
-            "type": "boolean"
-          },
-          "parameters": {
-            "type": "string"
-          }
-        }
-      },
-      "Rate": {
-        "type": "object",
-        "title": "Rate",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "rateLimit": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "timespan": {
-            "type": "string",
-            "format": "duration"
-          },
-          "allocation": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Rate_Allocation"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Rate"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Rate"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/rate\/$rate_id<[0-9]+>",
+  "pathParameters": "Rate_Entity_Path",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.rate"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Rate"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "backend": [
+          "backend.rate"
+        ]
+      },
+      "tags": [],
+      "request": "Rate_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
       }
     },
     "DELETE": {
+      "security": {
+        "backend": [
+          "backend.rate"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Message"
       }
+    }
+  },
+  "definitions": {
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Rate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "rateLimit": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timespan": {
+          "format": "duration",
+          "type": "string"
+        },
+        "allocations": {
+          "type": "array",
+          "items": {
+            "$ref": "Rate_Allocation"
+          }
+        }
+      }
+    },
+    "Rate_Allocation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "authenticated": {
+          "type": "boolean"
+        },
+        "parameters": {
+          "type": "string"
+        }
+      }
+    },
+    "Rate_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "rate_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Rate_Update": {
+      "$extends": "Rate",
+      "type": "object"
     }
   }
 }

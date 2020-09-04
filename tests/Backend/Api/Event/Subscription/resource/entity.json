@@ -1,81 +1,82 @@
 {
-  "path": "\/backend\/event\/subscription\/$subscription_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "subscription_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Event_Subscription": {
-        "type": "object",
-        "title": "Event Subscription",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "eventId": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "endpoint": {
-            "type": "string"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Event_Subscription"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Event_Subscription"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/event\/subscription\/$subscription_id<[0-9]+>",
+  "pathParameters": "Event_Subscription_Entity_Path",
   "methods": {
     "GET": {
+      "security": {
+        "backend": [
+          "backend.subscription"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Event_Subscription"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "backend": [
+          "backend.subscription"
+        ]
+      },
+      "tags": [],
+      "request": "Event_Subscription_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
       }
     },
     "DELETE": {
+      "security": {
+        "backend": [
+          "backend.subscription"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Event_Subscription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "eventId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Subscription_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "subscription_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Event_Subscription_Update": {
+      "$extends": "Event_Subscription",
+      "type": "object"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }
