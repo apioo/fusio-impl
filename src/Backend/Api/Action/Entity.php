@@ -23,7 +23,6 @@ namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
@@ -60,16 +59,16 @@ class Entity extends BackendApiAbstract
 
         $get = $builder->addMethod('GET');
         $get->setSecurity(Authorization::BACKEND, ['backend.action']);
-        $get->addResponse(200, $this->schemaManager->getSchema(Model\Action::class));
+        $get->addResponse(200, Model\Action::class);
 
         $post = $builder->addMethod('PUT');
         $post->setSecurity(Authorization::BACKEND, ['backend.action']);
-        $post->setRequest($this->schemaManager->getSchema(Model\Action_Update::class));
-        $post->addResponse(200, $this->schemaManager->getSchema(Model\Message::class));
+        $post->setRequest(Model\Action_Update::class);
+        $post->addResponse(200, Model\Message::class);
 
         $delete = $builder->addMethod('DELETE');
         $delete->setSecurity(Authorization::BACKEND, ['backend.action']);
-        $delete->addResponse(200, $this->schemaManager->getSchema(Model\Message::class));
+        $delete->addResponse(200, Model\Message::class);
 
         return $builder->getSpecification();
     }

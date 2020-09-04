@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\App\Token;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -45,15 +45,15 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('token_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('App_Token_Entity_Path');
+        $path->addInteger('token_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.app'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\App\Token::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.app']);
+        $get->addResponse(200, Model\App_Token::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

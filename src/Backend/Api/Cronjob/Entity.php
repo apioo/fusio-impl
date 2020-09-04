@@ -23,13 +23,12 @@ namespace Fusio\Impl\Backend\Api\Cronjob;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -53,26 +52,24 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('cronjob_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Cronjob_Entity_Path');
+        $path->addInteger('cronjob_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.cronjob'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Cronjob::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.cronjob']);
+        $get->addResponse(200, Model\Cronjob::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.cronjob'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Cronjob\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.cronjob']);
+        $put->setRequest(Model\Cronjob_Update::class);
+        $put->addResponse(200, Model\Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.cronjob'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.cronjob']);
+        $delete->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -98,9 +95,7 @@ class Entity extends BackendApiAbstract
     {
         $this->cronjobService->update(
             (int) $context->getUriFragment('cronjob_id'),
-            $record->name,
-            $record->cron,
-            $record->action,
+            $record,
             $this->context->getUserContext()
         );
 

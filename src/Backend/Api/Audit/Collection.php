@@ -23,13 +23,12 @@ namespace Fusio\Impl\Backend\Api\Audit;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Backend\View\Audit\QueryFilter;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Collection
@@ -45,24 +44,24 @@ class Collection extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.audit'])
-            ->addQueryParameter('startIndex', Property::getInteger())
-            ->addQueryParameter('count', Property::getInteger())
-            ->addQueryParameter('from', Property::getDateTime())
-            ->addQueryParameter('to', Property::getDateTime())
-            ->addQueryParameter('appId', Property::getInteger())
-            ->addQueryParameter('userId', Property::getInteger())
-            ->addQueryParameter('event', Property::getString())
-            ->addQueryParameter('ip', Property::getString())
-            ->addQueryParameter('message', Property::getString())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Audit\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.audit']);
+        $query = $get->setQueryParameters('Audit_Collection_Query');
+        $query->addInteger('startIndex');
+        $query->addInteger('count');
+        $query->addDateTime('from');
+        $query->addDateTime('to');
+        $query->addInteger('appId');
+        $query->addInteger('userId');
+        $query->addString('event');
+        $query->addString('ip');
+        $query->addString('message');
+        $query->addString('search');
+        $get->addResponse(200, Model\Audit_Collection::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

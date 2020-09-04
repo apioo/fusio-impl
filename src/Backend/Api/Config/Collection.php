@@ -23,12 +23,11 @@ namespace Fusio\Impl\Backend\Api\Config;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Collection
@@ -50,17 +49,17 @@ class Collection extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.config'])
-            ->addQueryParameter('startIndex', Property::getInteger())
-            ->addQueryParameter('count', Property::getInteger())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Config\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.config']);
+        $query = $get->setQueryParameters('Config_Collection_Query');
+        $query->addInteger('startIndex');
+        $query->addInteger('count');
+        $query->addString('search');
+        $get->addResponse(200, Model\Config_Collection::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Connection;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
@@ -31,7 +31,6 @@ use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Record\RecordInterface;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -61,26 +60,24 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('connection_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Connection_Entity_Path');
+        $path->addInteger('connection_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Connection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.connection']);
+        $get->addResponse(200, Model\Connection::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Connection\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.connection']);
+        $put->setRequest(Model\Connection_Update::class);
+        $put->addResponse(200, Model\Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.connection']);
+        $delete->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -110,18 +107,9 @@ class Entity extends BackendApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
-        $data = $record->config;
-        if ($data instanceof RecordInterface) {
-            $config = $data->getProperties();
-        } else {
-            $config = null;
-        }
-
         $this->connectionService->update(
             (int) $context->getUriFragment('connection_id'),
-            $record->name,
-            $record->class,
-            $config,
+            $record,
             $this->context->getUserContext()
         );
 

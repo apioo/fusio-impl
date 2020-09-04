@@ -23,7 +23,6 @@ namespace Fusio\Impl\Backend\Api\Action;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
 use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -57,8 +56,8 @@ class Execute extends BackendApiAbstract
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.action']);
-        $post->setRequest($this->schemaManager->getSchema(Model\Action_Execute_Request::class));
-        $post->addResponse(200, $this->schemaManager->getSchema(Model\Action_Execute_Response::class));
+        $post->setRequest(Model\Action_Execute_Request::class);
+        $post->addResponse(200, Model\Action_Execute_Response::class);
 
         return $builder->getSpecification();
     }

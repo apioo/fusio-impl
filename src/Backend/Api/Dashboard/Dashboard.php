@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Dashboard;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -49,14 +49,13 @@ class Dashboard extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.dashboard'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Dashboard\Dashboard::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.dashboard']);
+        $get->addResponse(200, Model\Dashboard::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

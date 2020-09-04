@@ -24,7 +24,7 @@ namespace Fusio\Impl\Backend\Api\Routes;
 use Fusio\Engine\Routes\ProviderInterface;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Provider\ProviderConfig;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -56,14 +56,13 @@ class Index extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes\Index::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $get->addResponse(200, Model\Route_Index::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -78,7 +77,7 @@ class Index extends BackendApiAbstract
             $provider = $this->containerAutowireResolver->getObject($class);
             if ($provider instanceof ProviderInterface) {
                 $result[] = [
-                    'name' => $provider->getName(),
+                    'name'  => $provider->getName(),
                     'class' => $name,
                 ];
             }

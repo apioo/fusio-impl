@@ -49,28 +49,27 @@ class Provider extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('provider', Property::getString());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Route_Provider_Path');
+        $path->addString('provider');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Form\Container::class))
-            ->addQueryParameter('class', Property::getString())
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $query = $get->setQueryParameters('Route_Provider_Query');
+        $query->addString('class');
+        $get->addResponse(200, Model\Form_Container::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider\Config::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes\Provider\Changelog::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $post->setRequest(Model\Route_Provider::class);
+        $post->addResponse(201, Model\Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Routes\Provider::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $put->setRequest(Model\Route_Provider_Config::class);
+        $put->addResponse(200, Model\Route_Provider_Changelog::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

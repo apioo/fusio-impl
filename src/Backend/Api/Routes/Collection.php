@@ -23,12 +23,11 @@ namespace Fusio\Impl\Backend\Api\Routes;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Collection
@@ -43,7 +42,7 @@ class Collection extends BackendApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes
+     * @var \Fusio\Impl\Service\Route
      */
     protected $routesService;
 
@@ -52,23 +51,22 @@ class Collection extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->addQueryParameter('startIndex', Property::getInteger())
-            ->addQueryParameter('count', Property::getInteger())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $query = $get->setQueryParameters('Route_Collection_Query');
+        $query->addInteger('startIndex');
+        $query->addInteger('count');
+        $query->addString('search');
+        $get->addResponse(200, Model\Route_Collection::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.routes'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Routes\Create::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.routes']);
+        $post->setRequest(Model\Route_Create::class);
+        $post->addResponse(201, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -89,11 +87,7 @@ class Collection extends BackendApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->routesService->create(
-            $record->priority,
-            $record->path,
-            $record->controller,
-            $record->scopes,
-            $record->config,
+            $record,
             $this->context->getUserContext()
         );
 

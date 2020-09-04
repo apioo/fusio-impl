@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\Api\Connection;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Model\Connection_Index;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -48,14 +49,13 @@ class Index extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Connection\Index::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.connection']);
+        $get->addResponse(200, Connection_Index::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

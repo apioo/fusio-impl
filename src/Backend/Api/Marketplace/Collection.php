@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Marketplace;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Service\Marketplace\App;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -61,20 +61,18 @@ class Collection extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Marketplace\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.marketplace']);
+        $get->addResponse(200, Model\Marketplace_Collection::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.marketplace'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Marketplace\Install::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.marketplace']);
+        $post->setRequest(Model\Marketplace_Install::class);
+        $post->addResponse(201, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -108,7 +106,7 @@ class Collection extends BackendApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $app = $this->marketplaceInstaller->install(
-            $record->name,
+            $record,
             $this->context->getUserContext()
         );
 

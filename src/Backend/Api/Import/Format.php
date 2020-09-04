@@ -24,11 +24,10 @@ namespace Fusio\Impl\Backend\Api\Import;
 use Fusio\Impl\Adapter\Transform;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Format
@@ -44,16 +43,16 @@ class Format extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('format', Property::getString());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Import_Format_Path');
+        $path->addString('format');
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.import'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Import\Format\Schema::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Adapter\Extern::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.import']);
+        $post->setRequest($this->schemaManager->getSchema(Model\Import_Format_Schema::class));
+        $post->addResponse(200, $this->schemaManager->getSchema(Model\Adapter_Extern::class));
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

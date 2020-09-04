@@ -67,9 +67,7 @@ class ChangePassword extends BackendApiAbstract
     protected function doPut($record, HttpContextInterface $context)
     {
         $this->userService->changePassword(
-            $record->getOldPassword(),
-            $record->getNewPassword(),
-            $record->getVerifyPassword(),
+            $record,
             $this->context->getUserContext()
         );
 

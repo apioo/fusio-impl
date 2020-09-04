@@ -23,11 +23,10 @@ namespace Fusio\Impl\Backend\Api\App;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Token
@@ -49,16 +48,16 @@ class Token extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('app_id', Property::getInteger());
-        $resource->addPathParameter('token_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('App_Token_Path');
+        $path->addInteger('app_id');
+        $path->addInteger('token_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.app'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.app']);
+        $delete->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

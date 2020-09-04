@@ -23,13 +23,12 @@ namespace Fusio\Impl\Backend\Api\Log;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -45,15 +44,15 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('log_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Log_Entity_Path');
+        $path->addInteger('log_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.log'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Log::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.log']);
+        $get->addResponse(200, Model\Log::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

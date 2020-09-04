@@ -23,13 +23,12 @@ namespace Fusio\Impl\Backend\Api\Plan\Contract;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -53,26 +52,24 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('contract_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Plan_Contract_Entity');
+        $path->addInteger('contract_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.plan'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.plan']);
+        $get->addResponse(200, Model\Plan_Contract::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.plan'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Contract\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.plan']);
+        $put->setRequest(Model\Plan_Contract_Update::class);
+        $put->addResponse(200, Model\Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.plan'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.plan']);
+        $delete->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -98,10 +95,7 @@ class Entity extends BackendApiAbstract
     {
         $this->planContractService->update(
             (int) $context->getUriFragment('contract_id'),
-            $record->planId,
-            $record->status,
-            $record->amount,
-            $record->points,
+            $record,
             $this->context->getUserContext()
         );
 

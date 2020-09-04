@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\Api\Connection;
 use Fusio\Engine\Form\Container;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
+use Fusio\Impl\Backend\Model\Form_Container;
 use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -50,15 +51,15 @@ class Form extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.connection'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Form\Container::class))
-            ->addQueryParameter('class', Property::getString())
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.connection']);
+        $get->addResponse(200, Form_Container::class);
+        $query = $get->setQueryParameters('Connection_Form_Query');
+        $query->addString('class');
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

@@ -23,14 +23,13 @@ namespace Fusio\Impl\Backend\Api\Rate;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -54,26 +53,24 @@ class Entity extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('rate_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Rate_Entity_Path');
+        $path->addInteger('rate_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Rate::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.rate']);
+        $get->addResponse(200, Model\Rate::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Rate\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::BACKEND, ['backend.rate']);
+        $put->setRequest(Model\Rate_Update::class);
+        $put->addResponse(200, Model\Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::BACKEND, ['backend.rate'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::BACKEND, ['backend.rate']);
+        $delete->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -103,11 +100,7 @@ class Entity extends BackendApiAbstract
     {
         $this->rateService->update(
             (int) $context->getUriFragment('rate_id'),
-            $record->priority,
-            $record->name,
-            $record->rateLimit,
-            $record->timespan,
-            $record->allocation,
+            $record,
             $this->context->getUserContext()
         );
 
