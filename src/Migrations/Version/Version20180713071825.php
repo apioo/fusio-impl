@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Adapter;
 use Fusio\Engine\User\ProviderInterface;
@@ -19,7 +19,7 @@ class Version20180713071825 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         if (!$schema->hasTable('fusio_action')) {
             $actionTable = $schema->createTable('fusio_action');
@@ -416,7 +416,7 @@ class Version20180713071825 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $schema->dropTable('fusio_action');
         $schema->dropTable('fusio_app');

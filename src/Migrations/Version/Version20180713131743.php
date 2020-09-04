@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Adapter;
 use Fusio\Impl\Backend;
@@ -19,7 +19,7 @@ class Version20180713131743 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $inserts = NewInstallation::getData();
 
@@ -42,7 +42,7 @@ class Version20180713131743 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $tableNames = $schema->getTableNames();
 

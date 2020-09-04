@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Migrations\MigrationUtil;
 use Fusio\Impl\Service\Routes\Config;
@@ -15,7 +15,7 @@ class Version20190707074312 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $routesMethodTable = $schema->getTable('fusio_routes_method');
         $routesMethodTable->addColumn('operation_id', 'string', ['notnull' => false, 'length' => 255]);
@@ -26,7 +26,7 @@ class Version20190707074312 extends AbstractMigration
         });
     }
 
-    public function postUp(Schema $schema)
+    public function postUp(Schema $schema): void
     {
         $sql = 'SELECT method.id,
                        method.method,
@@ -48,7 +48,7 @@ class Version20190707074312 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
     }
 }

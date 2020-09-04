@@ -41,7 +41,7 @@ final class Version20191022185247 extends AbstractMigration
         $configTable->changeColumn('value', ['length' => 512]);
     }
 
-    public function postUp(Schema $schema)
+    public function postUp(Schema $schema): void
     {
     }
 

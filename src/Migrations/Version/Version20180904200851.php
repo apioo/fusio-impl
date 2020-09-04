@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
@@ -17,7 +17,7 @@ class Version20180904200851 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $planTable = $schema->createTable('fusio_plan');
         $planTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -87,7 +87,7 @@ class Version20180904200851 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $schema->dropTable('fusio_plan');
         $schema->dropTable('fusio_plan_usage');

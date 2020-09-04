@@ -2,7 +2,7 @@
 
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Migrations\MigrationUtil;
 
@@ -14,7 +14,7 @@ class Version20190416200104 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $planTable = $schema->getTable('fusio_plan');
         if (!$planTable->hasColumn('period_type')) {
@@ -93,7 +93,7 @@ class Version20190416200104 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $schema->dropTable('fusio_user_attribute');
         $schema->dropTable('fusio_plan_contract');
