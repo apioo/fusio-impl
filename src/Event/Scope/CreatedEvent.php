@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Scope_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,47 +35,22 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Scope_Create
      */
-    protected $scopeId;
+    private $scope;
 
-    /**
-     * @var array
-     */
-    protected $record;
-
-    /**
-     * @var array
-     */
-    protected $routes;
-
-    /**
-     * @param integer $scopeId
-     * @param array $record
-     * @param array $routes
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($scopeId, array $record, $routes, UserContext $context)
+    public function __construct(Scope_Create $scope, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->scopeId = $scopeId;
-        $this->record  = $record;
-        $this->routes  = $routes;
+        $this->scope = $scope;
     }
 
-    public function getScopeId()
+    /**
+     * @return Scope_Create
+     */
+    public function getScope(): Scope_Create
     {
-        return $this->scopeId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getRoutes()
-    {
-        return $this->routes;
+        return $this->scope;
     }
 }

@@ -19,18 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Event;
+namespace Fusio\Impl\Event\Route;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
- * SubscriptionEvents
+ * DeletedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class SubscriptionEvents
+class DeletedEvent extends EventAbstract
 {
-    const CREATE = 'subscription.create';
-    const DELETE = 'subscription.delete';
-    const UPDATE = 'subscription.update';
+    /**
+     * @var RecordInterface
+     */
+    private $existing;
+
+    /**
+     * @param RecordInterface $existing
+     * @param UserContext $context
+     */
+    public function __construct(RecordInterface $existing, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->existing = $existing;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
+    }
 }

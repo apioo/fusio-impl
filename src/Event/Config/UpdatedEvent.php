@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Config;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Config_Update;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Config_Update
      */
-    protected $configId;
+    private $config;
 
     /**
-     * @var array
+     * @param Config_Update $config
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $configId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($configId, array $record, UserContext $context)
+    public function __construct(Config_Update $config, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->configId = $configId;
-        $this->record   = $record;
+        $this->config = $config;
     }
 
-    public function getConfigId()
+    /**
+     * @return Config_Update
+     */
+    public function getConfig(): Config_Update
     {
-        return $this->configId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->config;
     }
 }

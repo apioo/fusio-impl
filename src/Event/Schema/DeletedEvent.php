@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class DeletedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var RecordInterface
      */
-    protected $schemaId;
+    private $existing;
 
     /**
-     * @var array
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $schema;
-
-    /**
-     * @param integer $schemaId
-     * @param array $schema
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($schemaId, $schema, UserContext $context)
+    public function __construct(RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->schemaId = $schemaId;
-        $this->schema   = $schema;
+        $this->existing = $existing;
     }
 
-    public function getSchemaId()
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
     {
-        return $this->schemaId;
-    }
-
-    public function getSchema()
-    {
-        return $this->schema;
+        return $this->existing;
     }
 }

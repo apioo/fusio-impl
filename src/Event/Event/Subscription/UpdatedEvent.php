@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Event_Subscription_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Event_Subscription_Update
      */
-    protected $subscriptionId;
+    private $subscription;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Event_Subscription_Update $subscription
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $subscription;
-
-    /**
-     * @param integer $subscriptionId
-     * @param array $record
-     * @param array $subscription
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($subscriptionId, array $record, $subscription, UserContext $context)
+    public function __construct(Event_Subscription_Update $subscription, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->subscriptionId = $subscriptionId;
-        $this->record         = $record;
-        $this->subscription   = $subscription;
+        $this->subscription = $subscription;
+        $this->existing     = $existing;
     }
 
-    public function getSubscriptionId()
-    {
-        return $this->subscriptionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getSubscription()
+    /**
+     * @return Event_Subscription_Update
+     */
+    public function getSubscription(): Event_Subscription_Update
     {
         return $this->subscription;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

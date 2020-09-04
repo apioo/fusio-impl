@@ -19,19 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event;
+namespace Fusio\Impl\Event\Route;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * RoutesEvents
+ * DeployedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RoutesEvents
+class DeployedEvent extends EventAbstract
 {
-    const CREATE = 'routes.create';
-    const DELETE = 'routes.delete';
-    const DEPLOY = 'routes.deploy';
-    const UPDATE = 'routes.update';
+    /**
+     * @var integer
+     */
+    protected $routeId;
+
+    /**
+     * @var array
+     */
+    protected $method;
+
+    /**
+     * @param integer $routeId
+     * @param array $method
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct($routeId, $method, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->routeId = $routeId;
+        $this->method  = $method;
+    }
+
+    public function getRouteId()
+    {
+        return $this->routeId;
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
+    }
 }

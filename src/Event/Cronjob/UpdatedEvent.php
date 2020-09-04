@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Cronjob;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Cronjob_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Cronjob_Update
      */
-    protected $cronjobId;
+    private $cronjob;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Cronjob_Update $cronjob
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $cronjob;
-
-    /**
-     * @param integer $cronjobId
-     * @param array $record
-     * @param array $cronjob
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($cronjobId, array $record, $cronjob, UserContext $context)
+    public function __construct(Cronjob_Update $cronjob, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->cronjobId = $cronjobId;
-        $this->record    = $record;
-        $this->cronjob   = $cronjob;
+        $this->cronjob  = $cronjob;
+        $this->existing = $existing;
     }
 
-    public function getCronjobId()
-    {
-        return $this->cronjobId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getCronjob()
+    /**
+     * @return Cronjob_Update
+     */
+    public function getCronjob(): Cronjob_Update
     {
         return $this->cronjob;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\App;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\App_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,59 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var App_Update
      */
-    protected $appId;
+    private $app;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param App_Update $app
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $scopes;
-
-    /**
-     * @var array
-     */
-    protected $app;
-
-    /**
-     * @param integer $appId
-     * @param array $record
-     * @param array $scopes
-     * @param array $app
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($appId, array $record, $scopes, $app, UserContext $context)
+    public function __construct(App_Update $app, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->appId  = $appId;
-        $this->record = $record;
-        $this->scopes = $scopes;
-        $this->app    = $app;
+        $this->app      = $app;
+        $this->existing = $existing;
     }
 
-    public function getAppId()
-    {
-        return $this->appId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getScopes()
-    {
-        return $this->scopes;
-    }
-
-    public function getApp()
+    /**
+     * @return App_Update
+     */
+    public function getApp(): App_Update
     {
         return $this->app;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

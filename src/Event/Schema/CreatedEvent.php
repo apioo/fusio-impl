@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Schema_Create
      */
-    protected $schemaId;
+    private $schema;
 
     /**
-     * @var array
+     * @param Schema_Create $schema
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $schemaId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($schemaId, array $record, UserContext $context)
+    public function __construct(Schema_Create $schema, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->schemaId = $schemaId;
-        $this->record   = $record;
+        $this->schema = $schema;
     }
 
-    public function getSchemaId()
+    /**
+     * @return Schema_Create
+     */
+    public function getSchema(): Schema_Create
     {
-        return $this->schemaId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->schema;
     }
 }

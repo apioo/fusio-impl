@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Account_Credentials;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class ChangedPasswordEvent extends EventAbstract
 {
     /**
-     * @var string
+     * @var Account_Credentials
      */
-    protected $oldPassword;
+    protected $credentials;
 
     /**
-     * @var string
-     */
-    protected $newPassword;
-
-    /**
-     * @param string $oldPassword
-     * @param string $newPassword
+     * @param Account_Credentials $credentials
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct($oldPassword, $newPassword, UserContext $context)
+    public function __construct(Account_Credentials $credentials, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->oldPassword = $oldPassword;
-        $this->newPassword = $newPassword;
+        $this->credentials = $credentials;
     }
 
-    public function getOldPassword()
+    /**
+     * @return Account_Credentials
+     */
+    public function getCredentials(): Account_Credentials
     {
-        return $this->oldPassword;
-    }
-
-    public function getNewPassword()
-    {
-        return $this->newPassword;
+        return $this->credentials;
     }
 }

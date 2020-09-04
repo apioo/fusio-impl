@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,47 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var User_Create
      */
-    protected $userId;
+    private $user;
 
     /**
-     * @var array
+     * @param User_Create $user
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @var array
-     */
-    protected $scopes;
-
-    /**
-     * @param integer $userId
-     * @param array $record
-     * @param array $scopes
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($userId, array $record, $scopes, UserContext $context)
+    public function __construct(User_Create $user, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->userId = $userId;
-        $this->record = $record;
-        $this->scopes = $scopes;
+        $this->user = $user;
     }
 
-    public function getUserId()
+    /**
+     * @return User_Create
+     */
+    public function getUser(): User_Create
     {
-        return $this->userId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getScopes()
-    {
-        return $this->scopes;
+        return $this->user;
     }
 }

@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Plan\Contract;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Contract_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Plan_Contract_Update
      */
-    protected $contractId;
+    private $contract;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Plan_Contract_Update $contract
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $contract;
-
-    /**
-     * @param integer $contractId
-     * @param array $record
-     * @param array $invoice
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($contractId, array $record, $invoice, UserContext $context)
+    public function __construct(Plan_Contract_Update $contract, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->contractId = $contractId;
-        $this->record     = $record;
-        $this->contract   = $invoice;
+        $this->contract = $contract;
+        $this->existing = $existing;
     }
 
-    public function getContractId()
-    {
-        return $this->contractId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getContract()
+    /**
+     * @return Plan_Contract_Update
+     */
+    public function getContract(): Plan_Contract_Update
     {
         return $this->contract;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

@@ -19,50 +19,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Routes;
+namespace Fusio\Impl\Event\Route;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Route_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
- * DeletedEvent
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DeletedEvent extends EventAbstract
+class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Route_Update
      */
-    protected $routeId;
+    private $route;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $route;
+    private $existing;
 
     /**
-     * @param integer $routeId
-     * @param array $route
-     * @param \Fusio\Impl\Authorization\UserContext $context
+     * @param Route_Update $route
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    public function __construct($routeId, $route, UserContext $context)
+    public function __construct(Route_Update $route, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->routeId = $routeId;
-        $this->route   = $route;
+        $this->route    = $route;
+        $this->existing = $existing;
     }
 
-    public function getRouteId()
-    {
-        return $this->routeId;
-    }
-
-    public function getRoute()
+    /**
+     * @return Route_Update
+     */
+    public function getRoute(): Route_Update
     {
         return $this->route;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

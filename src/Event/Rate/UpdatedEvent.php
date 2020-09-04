@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Rate;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Rate_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,59 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Rate_Update
      */
-    protected $rateId;
+    private $rate;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Rate_Update $rate
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $allocations;
-
-    /**
-     * @var array
-     */
-    protected $rate;
-
-    /**
-     * @param integer $rateId
-     * @param array $record
-     * @param array $allocations
-     * @param array $rate
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($rateId, array $record, $allocations, $rate, UserContext $context)
+    public function __construct(Rate_Update $rate, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->rateId      = $rateId;
-        $this->record      = $record;
-        $this->allocations = $allocations;
-        $this->rate        = $rate;
+        $this->rate     = $rate;
+        $this->existing = $existing;
     }
 
-    public function getRateId()
-    {
-        return $this->rateId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getAllocations()
-    {
-        return $this->allocations;
-    }
-
-    public function getRate()
+    /**
+     * @return Rate_Update
+     */
+    public function getRate(): Rate_Update
     {
         return $this->rate;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

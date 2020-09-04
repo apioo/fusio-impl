@@ -19,18 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Event\Plan;
+namespace Fusio\Impl\Event\Route;
+
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Route_Create;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * ContractEvents
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ContractEvents
+class CreatedEvent extends EventAbstract
 {
-    const CREATE = 'plan.contract.create';
-    const DELETE = 'plan.contract.delete';
-    const UPDATE = 'plan.contract.update';
+    /**
+     * @var Route_Create
+     */
+    private $route;
+
+    /**
+     * @param Route_Create $route
+     * @param UserContext $context
+     */
+    public function __construct(Route_Create $route, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->route = $route;
+    }
+
+    /**
+     * @return Route_Create
+     */
+    public function getRoute(): Route_Create
+    {
+        return $this->route;
+    }
 }

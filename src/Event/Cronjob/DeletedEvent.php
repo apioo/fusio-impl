@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Cronjob;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class DeletedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var RecordInterface
      */
-    protected $cronjobId;
+    private $existing;
 
     /**
-     * @var array
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $cronjob;
-
-    /**
-     * @param integer $cronjobId
-     * @param array $cronjob
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($cronjobId, $cronjob, UserContext $context)
+    public function __construct(RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->cronjobId = $cronjobId;
-        $this->cronjob   = $cronjob;
+        $this->existing = $existing;
     }
 
-    public function getCronjobId()
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
     {
-        return $this->cronjobId;
-    }
-
-    public function getCronjob()
-    {
-        return $this->cronjob;
+        return $this->existing;
     }
 }

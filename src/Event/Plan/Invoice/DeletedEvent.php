@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class DeletedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var RecordInterface
      */
-    protected $invoiceId;
+    private $existing;
 
     /**
-     * @var array
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $invoice;
-
-    /**
-     * @param integer $invoiceId
-     * @param array $invoice
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($invoiceId, $invoice, UserContext $context)
+    public function __construct(RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->invoiceId = $invoiceId;
-        $this->invoice   = $invoice;
+        $this->existing = $existing;
     }
 
-    public function getInvoiceId()
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
     {
-        return $this->invoiceId;
-    }
-
-    public function getInvoice()
-    {
-        return $this->invoice;
+        return $this->existing;
     }
 }
