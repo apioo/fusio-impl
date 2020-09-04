@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Service;
 use PSX\Schema\Parser\TypeSchema;
 
@@ -33,7 +32,7 @@ use PSX\Schema\Parser\TypeSchema;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Parser implements ParserInterface
+class Parser
 {
     protected $connection;
 
@@ -52,10 +51,6 @@ class Parser implements ParserInterface
     public function parse($source)
     {
         $resolver = new TypeSchema\ImportResolver();
-
-        if ($this->connection !== null) {
-            $resolver->addResolver('schema', new Resolver($this->connection));
-        }
 
         $parser = new TypeSchema($resolver);
         $schema = $parser->parse($source);
