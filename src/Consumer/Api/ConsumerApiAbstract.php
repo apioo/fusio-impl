@@ -36,7 +36,7 @@ abstract class ConsumerApiAbstract extends SchemaApiAbstract
     use ProtectionTrait;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
