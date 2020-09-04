@@ -51,9 +51,9 @@ trait Services
         );
     }
 
-    public function getRoutesService(): Service\Routes
+    public function getRoutesService(): Service\Route
     {
-        return new Service\Routes(
+        return new Service\Route(
             $this->get('table_manager')->getTable(Table\Routes::class),
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('scope_service'),
@@ -68,7 +68,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Routes\Method::class),
             $this->get('table_manager')->getTable(Table\Routes\Response::class),
             $this->get('table_manager')->getTable(Table\Scope\Route::class),
-            $this->get('schema_loader')
+            $this->get('connection')
         );
     }
 

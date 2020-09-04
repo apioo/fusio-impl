@@ -29,13 +29,13 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\EventListener\WebhookListener;
-use Fusio\Impl\Loader\Context;
-use Fusio\Impl\Loader\DatabaseRoutes;
-use Fusio\Impl\Loader\Filter\ExternalFilter;
-use Fusio\Impl\Loader\Filter\InternalFilter;
-use Fusio\Impl\Loader\GeneratorFactory;
-use Fusio\Impl\Loader\ResourceListing;
-use Fusio\Impl\Loader\RoutingParser;
+use Fusio\Impl\Framework\Api\GeneratorFactory;
+use Fusio\Impl\Framework\Api\ResourceListing;
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
+use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
+use Fusio\Impl\Framework\Filter\ExternalFilter;
+use Fusio\Impl\Framework\Filter\InternalFilter;
 use Fusio\Impl\Mail;
 use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
@@ -72,12 +72,12 @@ class Container extends DefaultContainer
 
     public function getRoutingParser(): RoutingParserInterface
     {
-        return new DatabaseRoutes($this->get('connection'));
+        return new DatabaseParser($this->get('connection'));
     }
 
     public function getLoaderLocationFinder(): LocationFinderInterface
     {
-        return new RoutingParser($this->get('connection'));
+        return new DatabaseFinder($this->get('connection'));
     }
 
     public function getResourceListing(): ListingInterface

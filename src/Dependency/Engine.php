@@ -140,16 +140,6 @@ trait Engine
         );
     }
 
-    public function getSchemaParser(): Schema\ParserInterface
-    {
-        return new ImplSchema\Parser($this->get('connection'));
-    }
-
-    public function getSchemaLoader(): Schema\LoaderInterface
-    {
-        return new ImplSchema\Loader($this->get('connection'));
-    }
-
     public function getAppRepository(): Repository\AppInterface
     {
         return new ImplRepository\AppDatabase($this->get('connection'));
