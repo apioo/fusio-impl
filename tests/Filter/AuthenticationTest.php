@@ -24,7 +24,7 @@ namespace Fusio\Impl\Tests\Filter;
 use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
 use Fusio\Impl\Filter\Authentication;
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Tests\DbTestCase;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\Environment;
