@@ -22,8 +22,10 @@
 namespace Fusio\Impl\EventListener;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Event;
 use Fusio\Impl\Table;
+use PSX\Record\Record;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -46,10 +48,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getActionId(),
+            $event->getAction()->getId(),
             'action.create',
-            sprintf('Created action %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created action %s', $event->getAction()->getName()),
+            $event->getAction()
         );
     }
 
@@ -57,9 +59,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getActionId(),
+            $event->getExisting()->getProperty('id'),
             'action.delete',
-            sprintf('Deleted action %s', $event->getAction()['name'])
+            sprintf('Deleted action %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -67,10 +69,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getActionId(),
+            $event->getAction()->getId(),
             'action.update',
-            sprintf('Updated action %s', $event->getAction()['name']),
-            $event->getRecord()
+            sprintf('Updated action %s', $event->getAction()->getName()),
+            $event->getAction()
         );
     }
 
@@ -78,10 +80,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getAppId(),
+            $event->getApp()->getId(),
             'app.create',
-            sprintf('Created app %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created app %s', $event->getApp()->getName()),
+            $event->getApp()
         );
     }
 
@@ -89,9 +91,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getAppId(),
+            $event->getExisting()->getProperty('id'),
             'app.delete',
-            sprintf('Deleted app %s', $event->getApp()['name'])
+            sprintf('Deleted app %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -102,14 +104,14 @@ class AuditListener implements EventSubscriberInterface
             $event->getAppId(),
             'app.generate_token',
             sprintf('Generated token for app'),
-            [
+            Record::fromArray([
                 'appId' => $event->getAppId(),
                 'tokenId' => $event->getTokenId(),
                 'accessToken' => $event->getAccessToken(),
                 'scope' => $event->getScopes(),
                 'expires' => $event->getExpires()->format('Y-m-d H:i:s'),
                 'now' => $event->getNow()->format('Y-m-d H:i:s')
-            ]
+            ])
         );
     }
 
@@ -120,10 +122,10 @@ class AuditListener implements EventSubscriberInterface
             $event->getAppId(),
             'app.remove_token',
             sprintf('Removed token from app'),
-            [
+            Record::fromArray([
                 'appId' => $event->getAppId(),
                 'tokenId' => $event->getTokenId()
-            ]
+            ])
         );
     }
 
@@ -131,10 +133,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getAppId(),
+            $event->getApp()->getId(),
             'app.update',
-            sprintf('Updated app %s', $event->getApp()['name']),
-            $event->getRecord()
+            sprintf('Updated app %s', $event->getApp()->getName()),
+            $event->getApp()
         );
     }
 
@@ -142,10 +144,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getConfigId(),
+            $event->getConfig()->getId(),
             'config.update',
-            sprintf('Updated config %s', $event->getRecord()['id']),
-            $event->getRecord()
+            sprintf('Updated config %s', $event->getConfig()->getId()),
+            $event->getConfig()
         );
     }
 
@@ -153,10 +155,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getConnectionId(),
+            $event->getConnection()->getId(),
             'connection.create',
-            sprintf('Created connection %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created connection %s', $event->getConnection()->getName()),
+            $event->getConnection()
         );
     }
 
@@ -164,9 +166,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getConnectionId(),
+            $event->getExisting()->getProperty('id'),
             'connection.delete',
-            sprintf('Deleted connection %s', $event->getConnection()['name'])
+            sprintf('Deleted connection %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -174,10 +176,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getConnectionId(),
+            $event->getConnection()->getId(),
             'connection.update',
-            sprintf('Updated connection %s', $event->getConnection()['name']),
-            $event->getRecord()
+            sprintf('Updated connection %s', $event->getConnection()->getName()),
+            $event->getConnection()
         );
     }
 
@@ -185,10 +187,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getCronjobId(),
+            $event->getCronjob()->getId(),
             'cronjob.create',
-            sprintf('Created cronjob %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created cronjob %s', $event->getCronjob()->getName()),
+            $event->getCronjob()
         );
     }
 
@@ -196,9 +198,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getCronjobId(),
+            $event->getExisting()->getProperty('id'),
             'cronjob.delete',
-            sprintf('Deleted cronjob %s', $event->getCronjob()['name'])
+            sprintf('Deleted cronjob %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -206,10 +208,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getCronjobId(),
+            $event->getCronjob()->getId(),
             'cronjob.update',
-            sprintf('Updated cronjob %s', $event->getCronjob()['name']),
-            $event->getRecord()
+            sprintf('Updated cronjob %s', $event->getCronjob()->getName()),
+            $event->getCronjob()
         );
     }
 
@@ -217,10 +219,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getEventId(),
+            $event->getEvent()->getId(),
             'event.create',
-            sprintf('Created event %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created event %s', $event->getEvent()->getName()),
+            $event->getEvent()
         );
     }
 
@@ -228,9 +230,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getEventId(),
+            $event->getExisting()->getProperty('id'),
             'event.delete',
-            sprintf('Deleted event %s', $event->getEvent()['name'])
+            sprintf('Deleted event %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -238,10 +240,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getEventId(),
+            $event->getEvent()->getId(),
             'event.update',
-            sprintf('Updated event %s', $event->getEvent()['name']),
-            $event->getRecord()
+            sprintf('Updated event %s', $event->getEvent()->getName()),
+            $event->getEvent()
         );
     }
 
@@ -249,10 +251,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSubscriptionId(),
+            $event->getSubscription()->getId(),
             'event.subscription.create',
-            sprintf('Created event subscription %s', $event->getRecord()['endpoint']),
-            $event->getRecord()
+            sprintf('Created event subscription %s', $event->getSubscription()->getEndpoint()),
+            $event->getSubscription()
         );
     }
 
@@ -260,9 +262,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSubscriptionId(),
+            $event->getExisting()->getProperty('id'),
             'event.subscription.delete',
-            sprintf('Deleted event subscription %s', $event->getSubscription()['endpoint'])
+            sprintf('Deleted event subscription %s', $event->getExisting()->getProperty('endpoint'))
         );
     }
 
@@ -270,10 +272,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSubscriptionId(),
+            $event->getSubscription()->getId(),
             'event.subscription.update',
-            sprintf('Updated event subscription %s', $event->getSubscription()['endpoint']),
-            $event->getRecord()
+            sprintf('Updated event subscription %s', $event->getSubscription()->getEndpoint()),
+            $event->getSubscription()
         );
     }
 
@@ -391,10 +393,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getRateId(),
+            $event->getRate()->getId(),
             'rate.create',
-            sprintf('Created rate %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created rate %s', $event->getRate()->getName()),
+            $event->getRate()
         );
     }
 
@@ -402,9 +404,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getRateId(),
+            $event->getExisting()->getProperty('id'),
             'rate.delete',
-            sprintf('Deleted rate %s', $event->getRate()['name'])
+            sprintf('Deleted rate %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -412,14 +414,14 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getRateId(),
+            $event->getRate()->getId(),
             'rate.update',
-            sprintf('Updated rate %s', $event->getRate()['name']),
-            $event->getRecord()
+            sprintf('Updated rate %s', $event->getRate()->getName()),
+            $event->getRate()
         );
     }
 
-    public function onRoutesCreate(Event\Routes\CreatedEvent $event)
+    public function onRoutesCreate(Event\Route\CreatedEvent $event)
     {
         $this->log(
             $event->getContext(),
@@ -430,7 +432,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRoutesDelete(Event\Routes\DeletedEvent $event)
+    public function onRoutesDelete(Event\Route\DeletedEvent $event)
     {
         $this->log(
             $event->getContext(),
@@ -440,7 +442,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRoutesDeploy(Event\Routes\DeployedEvent $event)
+    public function onRoutesDeploy(Event\Route\DeployedEvent $event)
     {
         $this->log(
             $event->getContext(),
@@ -450,7 +452,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRoutesUpdate(Event\Routes\UpdatedEvent $event)
+    public function onRoutesUpdate(Event\Route\UpdatedEvent $event)
     {
         $this->log(
             $event->getContext(),
@@ -615,7 +617,7 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    private function log(UserContext $context, $refId, $event, $message, array $content = null)
+    private function log(UserContext $context, $refId, $event, $message, ?object $content = null)
     {
         $this->auditTable->create([
             'app_id'   => $context->getAppId(),
@@ -629,96 +631,88 @@ class AuditListener implements EventSubscriberInterface
         ]);
     }
 
-    private function normalize(array $content = null)
+    private function normalize(?object $content = null)
     {
-        if ($content !== null) {
-            $result = new \stdClass();
-            foreach ($content as $key => $value) {
-                if ($value instanceof \DateTime) {
-                    $result->{$key} = $value->format('Y-m-d H:i:s');
-                } elseif ($key == 'password') {
-                    $result->{$key} = '******';
-                } elseif (in_array($key, ['cache', 'config'])) {
-                    $result->{$key} = null;
-                } else {
-                    $result->{$key} = $value;
-                }
-            }
-            return $result;
-        } else {
-            return null;
+        if ($content instanceof User_Create) {
+            $content->setPassword('******');
         }
+
+        if ($content instanceof \JsonSerializable) {
+            return json_encode($content);
+        }
+
+        return null;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            Event\ActionEvents::CREATE        => 'onActionCreate',
-            Event\ActionEvents::DELETE        => 'onActionDelete',
-            Event\ActionEvents::UPDATE        => 'onActionUpdate',
+            Event\Action\CreatedEvent::class        => 'onActionCreate',
+            Event\Action\DeletedEvent::class        => 'onActionDelete',
+            Event\Action\UpdatedEvent::class        => 'onActionUpdate',
 
-            Event\AppEvents::CREATE           => 'onAppCreate',
-            Event\AppEvents::DELETE           => 'onAppDelete',
-            Event\AppEvents::GENERATE_TOKEN   => 'onAppGenerateToken',
-            Event\AppEvents::REMOVE_TOKEN     => 'onAppRemoveToken',
-            Event\AppEvents::UPDATE           => 'onAppUpdate',
+            Event\App\CreatedEvent::class           => 'onAppCreate',
+            Event\App\DeletedEvent::class           => 'onAppDelete',
+            Event\App\GeneratedTokenEvent::class    => 'onAppGenerateToken',
+            Event\App\RemovedTokenEvent::class      => 'onAppRemoveToken',
+            Event\App\UpdatedEvent::class           => 'onAppUpdate',
 
-            Event\ConfigEvents::UPDATE        => 'onConfigUpdate',
+            Event\Config\UpdatedEvent::class        => 'onConfigUpdate',
 
-            Event\ConnectionEvents::CREATE    => 'onConnectionCreate',
-            Event\ConnectionEvents::DELETE    => 'onConnectionDelete',
-            Event\ConnectionEvents::UPDATE    => 'onConnectionUpdate',
+            Event\Connection\CreatedEvent::class    => 'onConnectionCreate',
+            Event\Connection\DeletedEvent::class    => 'onConnectionDelete',
+            Event\Connection\UpdatedEvent::class    => 'onConnectionUpdate',
 
-            Event\CronjobEvents::CREATE       => 'onCronjobCreate',
-            Event\CronjobEvents::DELETE       => 'onCronjobDelete',
-            Event\CronjobEvents::UPDATE       => 'onCronjobUpdate',
+            Event\Cronjob\CreatedEvent::class       => 'onCronjobCreate',
+            Event\Cronjob\DeletedEvent::class       => 'onCronjobDelete',
+            Event\Cronjob\UpdatedEvent::class       => 'onCronjobUpdate',
 
-            Event\EventEvents::CREATE         => 'onEventCreate',
-            Event\EventEvents::DELETE         => 'onEventDelete',
-            Event\EventEvents::UPDATE         => 'onEventUpdate',
+            Event\Event\CreatedEvent::class         => 'onEventCreate',
+            Event\Event\DeletedEvent::class         => 'onEventDelete',
+            Event\Event\UpdatedEvent::class         => 'onEventUpdate',
 
-            Event\Event\SubscriptionEvents::CREATE => 'onEventSubscriptionCreate',
-            Event\Event\SubscriptionEvents::DELETE => 'onEventSubscriptionDelete',
-            Event\Event\SubscriptionEvents::UPDATE => 'onEventSubscriptionUpdate',
+            Event\Event\Subscription\CreatedEvent::class => 'onEventSubscriptionCreate',
+            Event\Event\Subscription\DeletedEvent::class => 'onEventSubscriptionDelete',
+            Event\Event\Subscription\UpdatedEvent::class => 'onEventSubscriptionUpdate',
 
-            Event\PlanEvents::CREATE          => 'onPlanCreate',
-            Event\PlanEvents::DELETE          => 'onPlanDelete',
-            Event\PlanEvents::UPDATE          => 'onPlanUpdate',
+            Event\Plan\CreatedEvent::class          => 'onPlanCreate',
+            Event\Plan\DeletedEvent::class          => 'onPlanDelete',
+            Event\Plan\UpdatedEvent::class          => 'onPlanUpdate',
 
-            Event\Plan\ContractEvents::CREATE => 'onPlanContractCreate',
-            Event\Plan\ContractEvents::DELETE => 'onPlanContractDelete',
-            Event\Plan\ContractEvents::UPDATE => 'onPlanContractUpdate',
+            Event\Plan\Contract\CreatedEvent::class => 'onPlanContractCreate',
+            Event\Plan\Contract\DeletedEvent::class => 'onPlanContractDelete',
+            Event\Plan\Contract\UpdatedEvent::class => 'onPlanContractUpdate',
 
-            Event\Plan\InvoiceEvents::CREATE  => 'onPlanInvoiceCreate',
-            Event\Plan\InvoiceEvents::DELETE  => 'onPlanInvoiceDelete',
-            Event\Plan\InvoiceEvents::UPDATE  => 'onPlanInvoiceUpdate',
-            Event\Plan\InvoiceEvents::PAYED   => 'onPlanInvoicePayed',
+            Event\Plan\Invoice\CreatedEvent::class  => 'onPlanInvoiceCreate',
+            Event\Plan\Invoice\DeletedEvent::class  => 'onPlanInvoiceDelete',
+            Event\Plan\Invoice\UpdatedEvent::class  => 'onPlanInvoiceUpdate',
+            Event\Plan\Invoice\PayedEvent::class    => 'onPlanInvoicePayed',
 
-            Event\RateEvents::CREATE          => 'onRateCreate',
-            Event\RateEvents::DELETE          => 'onRateDelete',
-            Event\RateEvents::UPDATE          => 'onRateUpdate',
+            Event\Rate\CreatedEvent::class          => 'onRateCreate',
+            Event\Rate\DeletedEvent::class          => 'onRateDelete',
+            Event\Rate\UpdatedEvent::class          => 'onRateUpdate',
 
-            Event\RoutesEvents::CREATE        => 'onRoutesCreate',
-            Event\RoutesEvents::DELETE        => 'onRoutesDelete',
-            Event\RoutesEvents::DEPLOY        => 'onRoutesDeploy',
-            Event\RoutesEvents::UPDATE        => 'onRoutesUpdate',
+            Event\Route\CreatedEvent::class         => 'onRouteCreate',
+            Event\Route\DeletedEvent::class         => 'onRouteDelete',
+            Event\Route\DeployedEvent::class        => 'onRouteDeploy',
+            Event\Route\UpdatedEvent::class         => 'onRouteUpdate',
 
-            Event\SchemaEvents::CREATE        => 'onSchemaCreate',
-            Event\SchemaEvents::DELETE        => 'onSchemaDelete',
-            Event\SchemaEvents::UPDATE        => 'onSchemaUpdate',
+            Event\Schema\CreatedEvent::class        => 'onSchemaCreate',
+            Event\Schema\DeletedEvent::class        => 'onSchemaDelete',
+            Event\Schema\UpdatedEvent::class        => 'onSchemaUpdate',
 
-            Event\ScopeEvents::CREATE         => 'onScopeCreate',
-            Event\ScopeEvents::DELETE         => 'onScopeDelete',
-            Event\ScopeEvents::UPDATE         => 'onScopeUpdate',
+            Event\Scope\CreatedEvent::class         => 'onScopeCreate',
+            Event\Scope\DeletedEvent::class         => 'onScopeDelete',
+            Event\Scope\UpdatedEvent::class         => 'onScopeUpdate',
 
-            Event\TransactionEvents::PREPARE  => 'onTransactionPrepare',
-            Event\TransactionEvents::EXECUTE  => 'onTransactionExecute',
+            Event\Transaction\PreparedEvent::class  => 'onTransactionPrepare',
+            Event\Transaction\ExecutedEvent::class  => 'onTransactionExecute',
 
-            Event\UserEvents::CHANGE_PASSWORD => 'onUserChangePassword',
-            Event\UserEvents::CHANGE_STATUS   => 'onUserChangeStatus',
-            Event\UserEvents::CREATE          => 'onUserCreate',
-            Event\UserEvents::DELETE          => 'onUserDelete',
-            Event\UserEvents::UPDATE          => 'onUserUpdate',
+            Event\User\ChangedPasswordEvent::class  => 'onUserChangePassword',
+            Event\User\ChangedStatusEvent::class    => 'onUserChangeStatus',
+            Event\User\CreatedEvent::class          => 'onUserCreate',
+            Event\User\DeletedEvent::class          => 'onUserDelete',
+            Event\User\UpdatedEvent::class          => 'onUserUpdate',
         ];
     }
 }
