@@ -27,13 +27,13 @@ class Rate implements \JsonSerializable
      */
     protected $rateLimit;
     /**
-     * @var float|null
+     * @var \DateInterval|null
      */
     protected $timespan;
     /**
      * @var array<Rate_Allocation>|null
      */
-    protected $allocation;
+    protected $allocations;
     /**
      * @param int|null $id
      */
@@ -91,36 +91,36 @@ class Rate implements \JsonSerializable
         return $this->rateLimit;
     }
     /**
-     * @param float|null $timespan
+     * @param \DateInterval|null $timespan
      */
-    public function setTimespan(?float $timespan) : void
+    public function setTimespan(?\DateInterval $timespan) : void
     {
         $this->timespan = $timespan;
     }
     /**
-     * @return float|null
+     * @return \DateInterval|null
      */
-    public function getTimespan() : ?float
+    public function getTimespan() : ?\DateInterval
     {
         return $this->timespan;
     }
     /**
-     * @param array<Rate_Allocation>|null $allocation
+     * @param array<Rate_Allocation>|null $allocations
      */
-    public function setAllocation(?array $allocation) : void
+    public function setAllocations(?array $allocations) : void
     {
-        $this->allocation = $allocation;
+        $this->allocations = $allocations;
     }
     /**
      * @return array<Rate_Allocation>|null
      */
-    public function getAllocation() : ?array
+    public function getAllocations() : ?array
     {
-        return $this->allocation;
+        return $this->allocations;
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'priority' => $this->priority, 'name' => $this->name, 'rateLimit' => $this->rateLimit, 'timespan' => $this->timespan, 'allocation' => $this->allocation), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'priority' => $this->priority, 'name' => $this->name, 'rateLimit' => $this->rateLimit, 'timespan' => $this->timespan, 'allocations' => $this->allocations), static function ($value) : bool {
             return $value !== null;
         });
     }

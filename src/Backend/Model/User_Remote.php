@@ -8,10 +8,6 @@ namespace Fusio\Impl\Backend\Model;
 class User_Remote implements \JsonSerializable
 {
     /**
-     * @var int|null
-     */
-    protected $id;
-    /**
      * @var string|null
      */
     protected $provider;
@@ -32,20 +28,6 @@ class User_Remote implements \JsonSerializable
      * @var array<string>|null
      */
     protected $scopes;
-    /**
-     * @param int|null $id
-     */
-    public function setId(?int $id) : void
-    {
-        $this->id = $id;
-    }
-    /**
-     * @return int|null
-     */
-    public function getId() : ?int
-    {
-        return $this->id;
-    }
     /**
      * @param string|null $provider
      */
@@ -118,7 +100,7 @@ class User_Remote implements \JsonSerializable
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'provider' => $this->provider, 'remoteId' => $this->remoteId, 'name' => $this->name, 'email' => $this->email, 'scopes' => $this->scopes), static function ($value) : bool {
+        return (object) array_filter(array('provider' => $this->provider, 'remoteId' => $this->remoteId, 'name' => $this->name, 'email' => $this->email, 'scopes' => $this->scopes), static function ($value) : bool {
             return $value !== null;
         });
     }

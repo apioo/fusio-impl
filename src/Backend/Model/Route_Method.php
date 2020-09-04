@@ -36,15 +36,15 @@ class Route_Method implements \JsonSerializable
      */
     protected $operationId;
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $parameters;
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $request;
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $response;
     /**
@@ -158,44 +158,44 @@ class Route_Method implements \JsonSerializable
         return $this->operationId;
     }
     /**
-     * @param int|null $parameters
+     * @param string|null $parameters
      */
-    public function setParameters(?int $parameters) : void
+    public function setParameters(?string $parameters) : void
     {
         $this->parameters = $parameters;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getParameters() : ?int
+    public function getParameters() : ?string
     {
         return $this->parameters;
     }
     /**
-     * @param int|null $request
+     * @param string|null $request
      */
-    public function setRequest(?int $request) : void
+    public function setRequest(?string $request) : void
     {
         $this->request = $request;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getRequest() : ?int
+    public function getRequest() : ?string
     {
         return $this->request;
     }
     /**
-     * @param int|null $response
+     * @param string|null $response
      */
-    public function setResponse(?int $response) : void
+    public function setResponse(?string $response) : void
     {
         $this->response = $response;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getResponse() : ?int
+    public function getResponse() : ?string
     {
         return $this->response;
     }
