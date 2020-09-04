@@ -14,6 +14,6 @@ function runMigrations()
         \PSX\Framework\Test\Environment::getService('connection')
     );
 
-    $migration = new \Doctrine\DBAL\Migrations\Migration($configuration);
-    $migration->migrate();
+    $factory = new \Doctrine\Migrations\DependencyFactory($configuration);
+    $factory->getMigrator()->migrate();
 }
