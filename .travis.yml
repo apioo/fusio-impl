@@ -16,6 +16,7 @@ before_script:
   - mysql -e 'create database fusio;'
   - psql -c 'create database fusio;' -U postgres
 script:
+  - vendor/bin/psalm
   - vendor/bin/phpunit
 env:
   - DB=mysql
