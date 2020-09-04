@@ -19,20 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Framework\Loader\RoutingCollection;
 use Fusio\Impl\Table\Routes as TableRoutes;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
- * DatabaseRoutes
+ * DatabaseParser
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class DatabaseRoutes implements RoutingParserInterface
+class DatabaseParser implements RoutingParserInterface
 {
     /**
      * @var \Doctrine\DBAL\Connection

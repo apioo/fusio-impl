@@ -19,19 +19,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader\Filter;
+namespace Fusio\Impl\Framework\Filter;
 
 use Fusio\Impl\Backend\Filter\Routes\Path;
 use PSX\Api\Listing\FilterInterface;
 
 /**
- * ExternalFilter
+ * InternalFilter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExternalFilter implements FilterInterface
+class InternalFilter implements FilterInterface
 {
     protected $paths;
 
@@ -40,18 +40,18 @@ class ExternalFilter implements FilterInterface
         $this->paths = Path::getReserved();
     }
 
-    public function match($path)
+    public function match(string $path): bool
     {
         foreach ($this->paths as $part) {
             if (substr($path, 1, strlen($part)) == $part) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public function getId()
+    public function getId(): string
     {
-        return 'external';
+        return 'internal';
     }
 }

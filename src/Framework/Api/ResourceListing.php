@@ -19,8 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Api;
 
+use Fusio\Impl\Framework\Loader\Context;
 use PSX\Framework\Api\ControllerDocumentation;
 
 /**

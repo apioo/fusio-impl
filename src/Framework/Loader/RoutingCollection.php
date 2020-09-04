@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Loader;
 
 use PSX\Framework\Loader\RoutingCollection as PSXRoutingCollection;
 
@@ -34,6 +34,6 @@ class RoutingCollection extends PSXRoutingCollection
 {
     public function add(array $methods, $path, $source, $routeId = null)
     {
-        $this->routings[] = array($methods, $path, $source, $routeId);
+        $this->routings[] = [$methods, $path, $source, $routeId];
     }
 }

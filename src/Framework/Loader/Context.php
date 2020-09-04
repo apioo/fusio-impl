@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Loader;
 
 use Fusio\Engine\Model\AppInterface;
 use Fusio\Engine\Model\TokenInterface;
 use Fusio\Engine\Model\UserInterface;
 use Fusio\Impl\Authorization\UserContext;
+use PSX\Framework\Loader\Context as FrameworkContext;
 
 /**
  * Context
@@ -33,7 +34,7 @@ use Fusio\Impl\Authorization\UserContext;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Context extends \PSX\Framework\Loader\Context
+class Context extends FrameworkContext
 {
     /**
      * @var integer

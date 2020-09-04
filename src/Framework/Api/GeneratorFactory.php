@@ -19,13 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Api;
 
 use Doctrine\Common\Annotations\Reader;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Generator;
+use PSX\Api\GeneratorFactory as ApiGeneratorFactory;
 use PSX\Api\GeneratorInterface;
 
 /**
@@ -35,7 +36,7 @@ use PSX\Api\GeneratorInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class GeneratorFactory extends \PSX\Api\GeneratorFactory
+class GeneratorFactory extends ApiGeneratorFactory
 {
     /**
      * @var \Fusio\Impl\Table\Scope

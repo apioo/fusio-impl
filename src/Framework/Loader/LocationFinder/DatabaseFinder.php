@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Loader;
+namespace Fusio\Impl\Framework\Loader\LocationFinder;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Backend\Filter\Routes\Path;
@@ -30,13 +30,13 @@ use PSX\Framework\Loader\PathMatcher;
 use PSX\Http\RequestInterface;
 
 /**
- * RoutingParser
+ * DatabaseFinder
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RoutingParser implements LocationFinderInterface
+class DatabaseFinder implements LocationFinderInterface
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -53,7 +53,7 @@ class RoutingParser implements LocationFinderInterface
 
     /**
      * @param \PSX\Http\RequestInterface $request
-     * @param \Fusio\Impl\Loader\Context $context
+     * @param \Fusio\Impl\Framework\Loader\Context $context
      * @return \PSX\Http\RequestInterface|null
      */
     public function resolve(RequestInterface $request, Context $context)
