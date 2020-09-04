@@ -24,7 +24,7 @@ use Fusio\Engine\Context as EngineContext;
 use Fusio\Engine\Processor;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
