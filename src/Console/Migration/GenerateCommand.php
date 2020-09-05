@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Migrations\OutputWriter;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand as DoctrineGenerateCommand;
+use Doctrine\Migrations\OutputWriter;
+use Doctrine\Migrations\Tools\Console\Command\GenerateCommand as DoctrineGenerateCommand;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,7 +61,7 @@ class GenerateCommand extends DoctrineGenerateCommand
         $this->connector  = $connector;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -71,7 +71,7 @@ class GenerateCommand extends DoctrineGenerateCommand
         ;
     }
 
-    public function initialize(InputInterface $input, OutputInterface $output)
+    public function initialize(InputInterface $input, OutputInterface $output): void
     {
         $outputWriter = new OutputWriter(function($message) use ($output) {
             return $output->writeln($message);

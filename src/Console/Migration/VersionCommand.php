@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Console\Migration;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Migrations\OutputWriter;
-use Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand as DoctrineVersionCommand;
+use Doctrine\Migrations\OutputWriter;
+use Doctrine\Migrations\Tools\Console\Command\VersionCommand as DoctrineVersionCommand;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Impl\Migrations\ConfigurationBuilder;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,7 +62,7 @@ class VersionCommand extends DoctrineVersionCommand
         $this->connector  = $connector;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -72,7 +72,7 @@ class VersionCommand extends DoctrineVersionCommand
         ;
     }
 
-    public function initialize(InputInterface $input, OutputInterface $output)
+    public function initialize(InputInterface $input, OutputInterface $output): void
     {
         $outputWriter = new OutputWriter(function($message) use ($output) {
             return $output->writeln($message);
