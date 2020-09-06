@@ -54,36 +54,35 @@ trait Services
     public function getRoutesService(): Service\Route
     {
         return new Service\Route(
-            $this->get('table_manager')->getTable(Table\Routes::class),
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Route::class),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('scope_service'),
             $this->get('routes_config_service'),
             $this->get('event_dispatcher')
         );
     }
 
-    public function getRoutesMethodService(): Service\Routes\Method
+    public function getRoutesMethodService(): Service\Route\Method
     {
-        return new Service\Routes\Method(
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('table_manager')->getTable(Table\Routes\Response::class),
+        return new Service\Route\Method(
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
+            $this->get('table_manager')->getTable(Table\Route\Response::class),
             $this->get('table_manager')->getTable(Table\Scope\Route::class),
             $this->get('connection')
         );
     }
 
-    public function getRoutesConfigService(): Service\Routes\Config
+    public function getRoutesConfigService(): Service\Route\Config
     {
-        return new Service\Routes\Config(
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('table_manager')->getTable(Table\Routes\Response::class),
-            $this->get('routes_deploy_service'),
+        return new Service\Route\Config(
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
+            $this->get('table_manager')->getTable(Table\Route\Response::class),
             $this->get('resource_listing'),
             $this->get('event_dispatcher')
         );
     }
 
-    public function getRoutesProviderService(): Service\Routes\Provider
+    public function getRoutesProviderService(): Service\Route\Provider
     {
         $factory = new ProviderFactory(
             $this->get('provider_loader'),
@@ -92,7 +91,7 @@ trait Services
             \Fusio\Engine\Routes\ProviderInterface::class
         );
 
-        return new Service\Routes\Provider(
+        return new Service\Route\Provider(
             $this->get('connection'),
             $factory,
             $this,
@@ -118,7 +117,7 @@ trait Services
     {
         return new Service\Action(
             $this->get('table_manager')->getTable(Table\Action::class),
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('action_factory'),
             $this->get('event_dispatcher')
         );
@@ -330,7 +329,7 @@ trait Services
     {
         return new Service\Schema(
             $this->get('table_manager')->getTable(Table\Schema::class),
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('schema_parser'),
             $this->get('event_dispatcher')
         );
@@ -344,16 +343,6 @@ trait Services
             $this->get('table_manager')->getTable(Table\App\Scope::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('event_dispatcher')
-        );
-    }
-
-    public function getRoutesDeployService(): Service\Routes\Deploy
-    {
-        return new Service\Routes\Deploy(
-            $this->get('table_manager')->getTable(Table\Routes\Method::class),
-            $this->get('table_manager')->getTable(Table\Routes\Response::class),
-            $this->get('table_manager')->getTable(Table\Schema::class),
-            $this->get('table_manager')->getTable(Table\Action::class)
         );
     }
 
