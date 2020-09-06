@@ -1,25 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use Fusio\Adapter;
+use Doctrine\Migrations\AbstractMigration;
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Backend;
-use Fusio\Impl\Consumer;
-use Fusio\Impl\Export;
 use Fusio\Impl\Table;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180713071825 extends AbstractMigration
+final class Version20200905081453 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
-    public function up(Schema $schema): void
+    public function getDescription() : string
+    {
+        return 'Setup initial tables';
+    }
+
+    public function up(Schema $schema) : void
     {
         if (!$schema->hasTable('fusio_action')) {
             $actionTable = $schema->createTable('fusio_action');
@@ -219,66 +219,66 @@ class Version20180713071825 extends AbstractMigration
             $logErrorTable->addOption('engine', 'MyISAM');
         }
 
-        if (!$schema->hasTable('fusio_routes')) {
-            $routesTable = $schema->createTable('fusio_routes');
-            $routesTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $routesTable->addColumn('status', 'integer', ['default' => Table\Routes::STATUS_ACTIVE]);
-            $routesTable->addColumn('priority', 'integer', ['notnull' => false]);
-            $routesTable->addColumn('methods', 'string', ['length' => 64]);
-            $routesTable->addColumn('path', 'string', ['length' => 255]);
-            $routesTable->addColumn('controller', 'string', ['length' => 255]);
-            $routesTable->setPrimaryKey(['id']);
-            $routesTable->addIndex(['priority']);
+        if (!$schema->hasTable('fusio_plan')) {
+            $planTable = $schema->createTable('fusio_plan');
+            $planTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planTable->addColumn('status', 'integer');
+            $planTable->addColumn('name', 'string');
+            $planTable->addColumn('description', 'string');
+            $planTable->addColumn('price', 'decimal', ['precision' => 8, 'scale' => 2]);
+            $planTable->addColumn('points', 'integer');
+            $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
+            $planTable->setPrimaryKey(['id']);
         }
 
-        if (!$schema->hasTable('fusio_routes_method')) {
-            $routesMethodTable = $schema->createTable('fusio_routes_method');
-            $routesMethodTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $routesMethodTable->addColumn('route_id', 'integer');
-            $routesMethodTable->addColumn('method', 'string', ['length' => 8]);
-            $routesMethodTable->addColumn('version', 'integer');
-            $routesMethodTable->addColumn('status', 'integer');
-            $routesMethodTable->addColumn('active', 'integer', ['default' => 0]);
-            $routesMethodTable->addColumn('public', 'integer', ['default' => 0]);
-            $routesMethodTable->addColumn('description', 'string', ['notnull' => false, 'length' => 500]);
-            $routesMethodTable->addColumn('parameters', 'integer', ['notnull' => false]);
-            $routesMethodTable->addColumn('request', 'integer', ['notnull' => false]);
-            $routesMethodTable->addColumn('action', 'integer', ['notnull' => false]);
-            $routesMethodTable->addColumn('costs', 'integer', ['notnull' => false]);
-            $routesMethodTable->addColumn('schema_cache', 'text', ['notnull' => false]);
-            $routesMethodTable->addColumn('action_cache', 'text', ['notnull' => false]);
-            $routesMethodTable->setPrimaryKey(['id']);
-            $routesMethodTable->addUniqueIndex(['route_id', 'method', 'version']);
+        if (!$schema->hasTable('fusio_plan_contract')) {
+            $planContractTable = $schema->createTable('fusio_plan_contract');
+            $planContractTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planContractTable->addColumn('user_id', 'integer');
+            $planContractTable->addColumn('plan_id', 'integer');
+            $planContractTable->addColumn('status', 'integer');
+            $planContractTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
+            $planContractTable->addColumn('points', 'integer');
+            $planContractTable->addColumn('period_type', 'integer', ['notnull' => false]);
+            $planContractTable->addColumn('insert_date', 'datetime');
+            $planContractTable->setPrimaryKey(['id']);
         }
 
-        if (!$schema->hasTable('fusio_routes_response')) {
-            $routesResponseTable = $schema->createTable('fusio_routes_response');
-            $routesResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $routesResponseTable->addColumn('method_id', 'integer');
-            $routesResponseTable->addColumn('code', 'smallint');
-            $routesResponseTable->addColumn('response', 'integer');
-            $routesResponseTable->setPrimaryKey(['id']);
+        if (!$schema->hasTable('fusio_plan_invoice')) {
+            $planInvoiceTable = $schema->createTable('fusio_plan_invoice');
+            $planInvoiceTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planInvoiceTable->addColumn('contract_id', 'integer');
+            $planInvoiceTable->addColumn('user_id', 'integer');
+            $planInvoiceTable->addColumn('prev_id', 'integer', ['notnull' => false]);
+            $planInvoiceTable->addColumn('display_id', 'string');
+            $planInvoiceTable->addColumn('status', 'integer');
+            $planInvoiceTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
+            $planInvoiceTable->addColumn('points', 'integer');
+            $planInvoiceTable->addColumn('from_date', 'date');
+            $planInvoiceTable->addColumn('to_date', 'date');
+            $planInvoiceTable->addColumn('pay_date', 'datetime', ['notnull' => false]);
+            $planInvoiceTable->addColumn('insert_date', 'datetime');
+            $planInvoiceTable->setPrimaryKey(['id']);
         }
 
-        if (!$schema->hasTable('fusio_schema')) {
-            $schemaTable = $schema->createTable('fusio_schema');
-            $schemaTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
-            $schemaTable->addColumn('name', 'string', ['length' => 255]);
-            $schemaTable->addColumn('source', 'text');
-            $schemaTable->addColumn('cache', 'text');
-            $schemaTable->addColumn('form', 'text', ['notnull' => false, 'default' => null]);
-            $schemaTable->setPrimaryKey(['id']);
-            $schemaTable->addUniqueIndex(['name']);
+        if (!$schema->hasTable('fusio_plan_usage')) {
+            $planUsageTable = $schema->createTable('fusio_plan_usage');
+            $planUsageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planUsageTable->addColumn('route_id', 'integer');
+            $planUsageTable->addColumn('user_id', 'integer');
+            $planUsageTable->addColumn('app_id', 'integer');
+            $planUsageTable->addColumn('points', 'integer');
+            $planUsageTable->addColumn('insert_date', 'datetime');
+            $planUsageTable->setPrimaryKey(['id']);
+            $planUsageTable->addOption('engine', 'MyISAM');
         }
 
-        if (!$schema->hasTable('fusio_scope')) {
-            $scopeTable = $schema->createTable('fusio_scope');
-            $scopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $scopeTable->addColumn('name', 'string', ['length' => 32]);
-            $scopeTable->addColumn('description', 'string', ['length' => 255]);
-            $scopeTable->setPrimaryKey(['id']);
-            $scopeTable->addUniqueIndex(['name']);
+        if (!$schema->hasTable('fusio_provider')) {
+            $providerTable = $schema->createTable('fusio_provider');
+            $providerTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $providerTable->addColumn('type', 'string');
+            $providerTable->addColumn('class', 'string');
+            $providerTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_rate')) {
@@ -303,6 +303,93 @@ class Version20180713071825 extends AbstractMigration
             $rateAllocationTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_routes')) {
+            $routesTable = $schema->createTable('fusio_routes');
+            $routesTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $routesTable->addColumn('status', 'integer', ['default' => Table\Route::STATUS_ACTIVE]);
+            $routesTable->addColumn('priority', 'integer', ['notnull' => false]);
+            $routesTable->addColumn('methods', 'string', ['length' => 64]);
+            $routesTable->addColumn('path', 'string', ['length' => 255]);
+            $routesTable->addColumn('controller', 'string', ['length' => 255]);
+            $routesTable->setPrimaryKey(['id']);
+            $routesTable->addIndex(['priority']);
+        }
+
+        if (!$schema->hasTable('fusio_routes_method')) {
+            $routesMethodTable = $schema->createTable('fusio_routes_method');
+            $routesMethodTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $routesMethodTable->addColumn('route_id', 'integer');
+            $routesMethodTable->addColumn('method', 'string', ['length' => 8]);
+            $routesMethodTable->addColumn('version', 'integer');
+            $routesMethodTable->addColumn('status', 'integer');
+            $routesMethodTable->addColumn('active', 'integer', ['default' => 0]);
+            $routesMethodTable->addColumn('public', 'integer', ['default' => 0]);
+            $routesMethodTable->addColumn('operation_id', 'string', ['notnull' => false, 'length' => 255]);
+            $routesMethodTable->addColumn('description', 'string', ['notnull' => false, 'length' => 500]);
+            $routesMethodTable->addColumn('parameters', 'string', ['notnull' => false]);
+            $routesMethodTable->addColumn('request', 'string', ['notnull' => false]);
+            $routesMethodTable->addColumn('action', 'integer', ['notnull' => false]);
+            $routesMethodTable->addColumn('costs', 'integer', ['notnull' => false]);
+            $routesMethodTable->setPrimaryKey(['id']);
+            $routesMethodTable->addUniqueIndex(['route_id', 'method', 'version']);
+        }
+
+        if (!$schema->hasTable('fusio_routes_response')) {
+            $routesResponseTable = $schema->createTable('fusio_routes_response');
+            $routesResponseTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $routesResponseTable->addColumn('method_id', 'integer');
+            $routesResponseTable->addColumn('code', 'smallint');
+            $routesResponseTable->addColumn('response', 'string');
+            $routesResponseTable->setPrimaryKey(['id']);
+        }
+
+        if (!$schema->hasTable('fusio_schema')) {
+            $schemaTable = $schema->createTable('fusio_schema');
+            $schemaTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
+            $schemaTable->addColumn('name', 'string', ['length' => 255]);
+            $schemaTable->addColumn('source', 'text');
+            $schemaTable->addColumn('cache', 'text');
+            $schemaTable->addColumn('form', 'text', ['notnull' => false, 'default' => null]);
+            $schemaTable->setPrimaryKey(['id']);
+            $schemaTable->addUniqueIndex(['name']);
+        }
+
+        if (!$schema->hasTable('fusio_scope')) {
+            $scopeTable = $schema->createTable('fusio_scope');
+            $scopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $scopeTable->addColumn('name', 'string', ['length' => 32]);
+            $scopeTable->addColumn('description', 'string', ['length' => 255]);
+            $scopeTable->setPrimaryKey(['id']);
+            $scopeTable->addUniqueIndex(['name']);
+        }
+
+        if (!$schema->hasTable('fusio_scope_routes')) {
+            $scopeRoutesTable = $schema->createTable('fusio_scope_routes');
+            $scopeRoutesTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $scopeRoutesTable->addColumn('scope_id', 'integer');
+            $scopeRoutesTable->addColumn('route_id', 'integer');
+            $scopeRoutesTable->addColumn('allow', 'smallint');
+            $scopeRoutesTable->addColumn('methods', 'string', ['length' => 64, 'notnull' => false]);
+            $scopeRoutesTable->setPrimaryKey(['id']);
+        }
+
+        if (!$schema->hasTable('fusio_transaction')) {
+            $transactionTable = $schema->createTable('fusio_transaction');
+            $transactionTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $transactionTable->addColumn('invoice_id', 'integer');
+            $transactionTable->addColumn('status', 'integer');
+            $transactionTable->addColumn('provider', 'string');
+            $transactionTable->addColumn('transaction_id', 'string');
+            $transactionTable->addColumn('remote_id', 'string', ['notnull' => false]);
+            $transactionTable->addColumn('amount', 'decimal', ['precision' => 8, 'scale' => 2]);
+            $transactionTable->addColumn('return_url', 'string');
+            $transactionTable->addColumn('update_date', 'datetime', ['notnull' => false]);
+            $transactionTable->addColumn('insert_date', 'datetime');
+            $transactionTable->setPrimaryKey(['id']);
+            $transactionTable->addUniqueIndex(['transaction_id']);
+        }
+
         if (!$schema->hasTable('fusio_user')) {
             $userTable = $schema->createTable('fusio_user');
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -321,14 +408,13 @@ class Version20180713071825 extends AbstractMigration
             $userTable->addUniqueIndex(['email']);
         }
 
-        if (!$schema->hasTable('fusio_scope_routes')) {
-            $scopeRoutesTable = $schema->createTable('fusio_scope_routes');
-            $scopeRoutesTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $scopeRoutesTable->addColumn('scope_id', 'integer');
-            $scopeRoutesTable->addColumn('route_id', 'integer');
-            $scopeRoutesTable->addColumn('allow', 'smallint');
-            $scopeRoutesTable->addColumn('methods', 'string', ['length' => 64, 'notnull' => false]);
-            $scopeRoutesTable->setPrimaryKey(['id']);
+        if (!$schema->hasTable('fusio_user_attribute')) {
+            $userAttributeTable = $schema->createTable('fusio_user_attribute');
+            $userAttributeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $userAttributeTable->addColumn('user_id', 'integer');
+            $userAttributeTable->addColumn('name', 'string');
+            $userAttributeTable->addColumn('value', 'string');
+            $userAttributeTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_user_grant')) {
@@ -379,16 +465,15 @@ class Version20180713071825 extends AbstractMigration
             $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_trigger_event_id');
         }
 
-        if (isset($routesMethodTable)) {
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'routes_method_route_id');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['parameters'], ['id'], [], 'routes_method_parameters');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['request'], ['id'], [], 'routes_method_request');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action'], ['id'], [], 'routes_method_action');
+        if (isset($planContractTable)) {
+            $planContractTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_contract_user_id');
+            $planContractTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_contract_plan_id');
         }
 
-        if (isset($routesResponseTable)) {
-            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_routes_method'), ['method_id'], ['id'], [], 'routes_response_method_id');
-            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_schema'), ['response'], ['id'], [], 'routes_response_response');
+        if (isset($planContractTable)) {
+            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_contract'), ['contract_id'], ['id'], [], 'plan_invoice_contract_id');
+            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_invoice_user_id');
+            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_invoice'), ['prev_id'], ['id'], [], 'plan_invoice_prev_id');
         }
 
         if (isset($rateAllocationTable)) {
@@ -397,9 +482,22 @@ class Version20180713071825 extends AbstractMigration
             $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'rate_allocation_app_id');
         }
 
+        if (isset($routesMethodTable)) {
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'routes_method_route_id');
+            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action'], ['id'], [], 'routes_method_action');
+        }
+
+        if (isset($routesResponseTable)) {
+            $routesResponseTable->addForeignKeyConstraint($schema->getTable('fusio_routes_method'), ['method_id'], ['id'], [], 'routes_response_method_id');
+        }
+
         if (isset($scopeRoutesTable)) {
             $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'scope_routes_scope_id');
             $scopeRoutesTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'scope_routes_route_id');
+        }
+
+        if (isset($userAttributeTable)) {
+            $userAttributeTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'user_attribute_user_id');
         }
 
         if (isset($userGrantTable)) {
@@ -413,10 +511,7 @@ class Version20180713071825 extends AbstractMigration
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
-    public function down(Schema $schema): void
+    public function down(Schema $schema) : void
     {
         $schema->dropTable('fusio_action');
         $schema->dropTable('fusio_app');
@@ -434,6 +529,11 @@ class Version20180713071825 extends AbstractMigration
         $schema->dropTable('fusio_event_trigger');
         $schema->dropTable('fusio_log');
         $schema->dropTable('fusio_log_error');
+        $schema->dropTable('fusio_plan');
+        $schema->dropTable('fusio_plan_contract');
+        $schema->dropTable('fusio_plan_invoice');
+        $schema->dropTable('fusio_plan_usage');
+        $schema->dropTable('fusio_provider');
         $schema->dropTable('fusio_rate');
         $schema->dropTable('fusio_rate_allocation');
         $schema->dropTable('fusio_routes');
@@ -443,6 +543,7 @@ class Version20180713071825 extends AbstractMigration
         $schema->dropTable('fusio_scope');
         $schema->dropTable('fusio_scope_routes');
         $schema->dropTable('fusio_user');
+        $schema->dropTable('fusio_user_attribute');
         $schema->dropTable('fusio_user_grant');
         $schema->dropTable('fusio_user_scope');
     }

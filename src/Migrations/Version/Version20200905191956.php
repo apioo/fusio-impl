@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
- *
- * Inserts the test data if in test mode
  */
-class Version20180713132458 extends AbstractMigration
+final class Version20200905191956 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
-    public function up(Schema $schema): void
+    public function getDescription() : string
+    {
+        return 'Insert test data';
+    }
+
+    public function up(Schema $schema) : void
     {
         $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
 
@@ -27,10 +29,7 @@ class Version20180713132458 extends AbstractMigration
         $appTable->setPrimaryKey(['id']);
     }
 
-    /**
-     * @param Schema $schema
-     */
-    public function down(Schema $schema): void
+    public function down(Schema $schema) : void
     {
         $this->skipIf(!defined('FUSIO_IN_TEST'), 'Skipped test data');
 

@@ -1,25 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fusio\Impl\Migrations\Version;
 
-use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use Fusio\Adapter;
-use Fusio\Impl\Backend;
-use Fusio\Impl\Consumer;
-use Fusio\Impl\Export;
-use Fusio\Impl\Migrations\NewInstallation;
+use Doctrine\Migrations\AbstractMigration;
 use Fusio\Impl\Migrations\MigrationUtil;
+use Fusio\Impl\Migrations\NewInstallation;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180713131743 extends AbstractMigration
+final class Version20200905191429 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
-    public function up(Schema $schema): void
+    public function getDescription() : string
+    {
+        return 'Insert new installation data';
+    }
+
+    public function up(Schema $schema) : void
     {
         $inserts = NewInstallation::getData();
 
@@ -39,10 +39,7 @@ class Version20180713131743 extends AbstractMigration
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
-    public function down(Schema $schema): void
+    public function down(Schema $schema) : void
     {
         $tableNames = $schema->getTableNames();
 
