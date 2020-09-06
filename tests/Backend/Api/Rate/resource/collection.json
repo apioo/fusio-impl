@@ -78,7 +78,7 @@
           "format": "duration",
           "type": "string"
         },
-        "allocations": {
+        "allocation": {
           "type": "array",
           "items": {
             "$ref": "Rate_Allocation"

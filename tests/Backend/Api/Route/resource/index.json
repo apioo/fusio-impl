@@ -1,0 +1,54 @@
+{
+  "status": 1,
+  "path": "\/backend\/routes\/provider",
+  "methods": {
+    "GET": {
+      "security": {
+        "backend": [
+          "backend.routes"
+        ]
+      },
+      "tags": [],
+      "responses": {
+        "200": "Route_Index_Providers"
+      }
+    }
+  },
+  "definitions": {
+    "Route_Index_Providers": {
+      "type": "object",
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": {
+            "$ref": "Route_Provider"
+          }
+        }
+      }
+    },
+    "Route_Provider": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "$ref": "Route_Provider_Config"
+        }
+      }
+    },
+    "Route_Provider_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16
+    }
+  }
+}

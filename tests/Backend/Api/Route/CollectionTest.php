@@ -19,14 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Routes;
+namespace Fusio\Impl\Tests\Backend\Api\Route;
 
-use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
-use PSX\Framework\Test\Environment;
 
 /**
  * CollectionTest
@@ -180,9 +178,9 @@ JSON;
                         'active'      => true,
                         'public'      => true,
                         'description' => 'The GET method',
-                        'parameters'  => 2,
+                        'parameters'  => 'Collection-Schema',
                         'responses'   => [
-                            '200'     => 1
+                            '200'     => 'Passthru'
                         ],
                         'action'      => 3,
                     ],
@@ -190,9 +188,9 @@ JSON;
                         'active'      => true,
                         'public'      => true,
                         'description' => 'The POST method',
-                        'request'     => 2,
+                        'request'     => 'Collection-Schema',
                         'responses'   => [
-                            '201'     => 1
+                            '201'     => 'Passthru'
                         ],
                         'action'      => 3,
                     ]

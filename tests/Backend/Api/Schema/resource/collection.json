@@ -1,114 +1,120 @@
 {
-  "path": "\/backend\/schema",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Schema": {
-        "type": "object",
-        "title": "Schema",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "source": {
-            "$ref": "#\/definitions\/Schema_Source"
-          },
-          "form": {
-            "$ref": "#\/definitions\/Schema_UI"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      },
-      "Schema_Source": {
-        "type": "object",
-        "title": "Schema Source",
-        "additionalProperties": true
-      },
-      "Schema_UI": {
-        "type": "object",
-        "title": "Schema UI",
-        "additionalProperties": true
-      },
-      "Schema_Collection": {
-        "type": "object",
-        "title": "Schema Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Schema"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Schema_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Schema"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/schema",
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "security": {
+        "backend": [
+          "backend.schema"
+        ]
+      },
+      "tags": [],
+      "queryParameters": "Schema_Collection_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Schema_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "security": {
+        "backend": [
+          "backend.schema"
+        ]
+      },
+      "tags": [],
+      "request": "Schema_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "source": {
+          "$ref": "Schema_Source"
+        },
+        "form": {
+          "$ref": "Schema_Form"
+        }
+      }
+    },
+    "Schema_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Schema"
+      }
+    },
+    "Schema_Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Schema_Create": {
+      "$extends": "Schema",
+      "type": "object",
+      "required": [
+        "name"
+      ]
+    },
+    "Schema_Form": {
+      "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_Source": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     }
   }

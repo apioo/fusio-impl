@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Routes;
+namespace Fusio\Impl\Tests\Backend\Api\Route;
 
-use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Table\Route as TableRoutes;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -85,7 +84,7 @@ class EntityTest extends ControllerDbTestCase
                     "public": true,
                     "operationId": "listFoo",
                     "responses": {
-                        "200": 2
+                        "200": "Collection-Schema"
                     },
                     "action": 3
                 },
@@ -93,9 +92,9 @@ class EntityTest extends ControllerDbTestCase
                     "active": true,
                     "public": false,
                     "operationId": "createFoo",
-                    "request": 3,
+                    "request": "Entry-Schema",
                     "responses": {
-                        "201": 1
+                        "201": "Passthru"
                     },
                     "action": 3,
                     "costs": 1
@@ -161,21 +160,21 @@ JSON;
                     'GET' => [
                         'active'     => true,
                         'public'     => true,
-                        'parameters' => 2,
-                        'action'     => 3,
+                        'parameters' => 'Collection-Schema',
                         'responses'  => [
-                            '200'    => 1
+                            '200'    => 'Passthru'
                         ],
                         'costs'      => 16,
+                        'action'     => 3,
                     ],
                     'POST' => [
                         'active'     => true,
                         'public'     => false,
-                        'action'     => 3,
-                        'request'    => 1,
+                        'request'    => 'Passthru',
                         'responses'  => [
-                            '201'    => 1
+                            '201'    => 'Passthru'
                         ],
+                        'action'     => 3,
                     ],
                 ],
             ]],

@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Routes;
+namespace Fusio\Impl\Tests\Backend\Api\Route;
 
 use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
+use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
@@ -145,7 +146,7 @@ JSON;
         Assert::assertRoute('/foo/table', ['foo', 'foo', 'bar'], [[
             'method'       => 'GET',
             'version'      => 1,
-            'status'       => 4,
+            'status'       => Resource::STATUS_DEVELOPMENT,
             'active'       => true,
             'public'       => true,
             'description'  => 'Returns all entries on the table',
@@ -160,7 +161,7 @@ JSON;
         ], [
             'method'       => 'POST',
             'version'      => 1,
-            'status'       => 4,
+            'status'       => Resource::STATUS_DEVELOPMENT,
             'active'       => true,
             'public'       => false,
             'description'  => 'Creates a new entry on the table',

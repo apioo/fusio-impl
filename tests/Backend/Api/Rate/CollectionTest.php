@@ -248,6 +248,7 @@ JSON;
 
         $result = Environment::getService('connection')->fetchAll($sql, ['rate_id' => $row['id']]);
 
+        $this->assertNotEmpty($result);
         $this->assertEquals(5, $result[0]['id']);
         $this->assertEquals(5, $result[0]['rate_id']);
         $this->assertEquals(1, $result[0]['route_id']);
