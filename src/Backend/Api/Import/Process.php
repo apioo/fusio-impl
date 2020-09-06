@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Import;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -49,19 +49,19 @@ class Process extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.import'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Adapter\Extern::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Import\Process\Result::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.import']);
+        $post->setRequest(Model\Adapter_Extern::class);
+        $post->addResponse(200, Model\Import_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param Model\Adapter_Extern $record
      */
     public function doPost($record, HttpContextInterface $context)
     {

@@ -49,19 +49,20 @@ class Format extends BackendApiAbstract
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.import']);
-        $post->setRequest($this->schemaManager->getSchema(Model\Import_Format_Schema::class));
-        $post->addResponse(200, $this->schemaManager->getSchema(Model\Adapter_Extern::class));
+        $post->setRequest(Model\Import_Request::class);
+        $post->addResponse(200, Model\Adapter_Extern::class);
 
         return $builder->getSpecification();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param Model\Import_Request $record
      */
     public function doPost($record, HttpContextInterface $context)
     {
         $format = $context->getUriFragment('format');
-        $body   = Transform::fromSchema($format, $record->schema);
+        $body   = Transform::fromSchema($format, $record->getSchema());
 
         return $body;
     }
