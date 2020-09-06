@@ -546,9 +546,9 @@ class WebhookListener implements EventSubscriberInterface
             Event\Rate\DeletedEvent::class          => 'onRateDelete',
             Event\Rate\UpdatedEvent::class          => 'onRateUpdate',
 
-            Event\Route\CreatedEvent::class         => 'onRoutesCreate',
-            Event\Route\DeletedEvent::class         => 'onRoutesDelete',
-            Event\Route\UpdatedEvent::class         => 'onRoutesUpdate',
+            Event\Route\CreatedEvent::class         => 'onRouteCreate',
+            Event\Route\DeletedEvent::class         => 'onRouteDelete',
+            Event\Route\UpdatedEvent::class         => 'onRouteUpdate',
 
             Event\Schema\CreatedEvent::class        => 'onSchemaCreate',
             Event\Schema\DeletedEvent::class        => 'onSchemaDelete',

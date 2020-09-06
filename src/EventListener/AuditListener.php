@@ -421,45 +421,35 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onRoutesCreate(Event\Route\CreatedEvent $event)
+    public function onRouteCreate(Event\Route\CreatedEvent $event)
     {
         $this->log(
             $event->getContext(),
-            $event->getRouteId(),
+            $event->getRoute()->getId(),
             'routes.create',
-            sprintf('Created route %s', $event->getRecord()['path']),
-            $event->getRecord()
+            sprintf('Created route %s', $event->getRoute()->getPath()),
+            $event->getRoute()
         );
     }
 
-    public function onRoutesDelete(Event\Route\DeletedEvent $event)
+    public function onRouteDelete(Event\Route\DeletedEvent $event)
     {
         $this->log(
             $event->getContext(),
-            $event->getRouteId(),
+            $event->getExisting()->getProperty('id'),
             'routes.delete',
-            sprintf('Deleted route %s', $event->getRoute()['path'])
+            sprintf('Deleted route %s', $event->getExisting()->getProperty('path'))
         );
     }
 
-    public function onRoutesDeploy(Event\Route\DeployedEvent $event)
+    public function onRouteUpdate(Event\Route\UpdatedEvent $event)
     {
         $this->log(
             $event->getContext(),
-            $event->getRouteId(),
-            'routes.deploy',
-            sprintf('Deployed method %s', $event->getMethod()['method'])
-        );
-    }
-
-    public function onRoutesUpdate(Event\Route\UpdatedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getRouteId(),
+            $event->getRoute()->getId(),
             'routes.update',
-            sprintf('Updated route %s', $event->getRoute()['path']),
-            $event->getRecord()
+            sprintf('Updated route %s', $event->getRoute()->getPath()),
+            $event->getRoute()
         );
     }
 
@@ -467,10 +457,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSchemaId(),
+            $event->getSchema()->getId(),
             'schema.create',
-            sprintf('Created schema %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created schema %s', $event->getSchema()->getName()),
+            $event->getSchema()
         );
     }
 
@@ -478,9 +468,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSchemaId(),
+            $event->getExisting()->getProperty('id'),
             'schema.delete',
-            sprintf('Deleted schema %s', $event->getSchema()['name'])
+            sprintf('Deleted schema %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -488,10 +478,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getSchemaId(),
+            $event->getSchema()->getId(),
             'schema.update',
-            sprintf('Updated schema %s', $event->getSchema()['name']),
-            $event->getRecord()
+            sprintf('Updated schema %s', $event->getSchema()->getName()),
+            $event->getSchema()
         );
     }
 
@@ -499,10 +489,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getScopeId(),
+            $event->getScope()->getId(),
             'scope.create',
-            sprintf('Created scope %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created scope %s', $event->getScope()->getName()),
+            $event->getScope()
         );
     }
 
@@ -510,9 +500,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getScopeId(),
+            $event->getExisting()->getProperty('id'),
             'scope.delete',
-            sprintf('Deleted scope %s', $event->getScope()['name'])
+            sprintf('Deleted scope %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -520,10 +510,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getScopeId(),
+            $event->getScope()->getId(),
             'scope.update',
-            sprintf('Updated scope %s', $event->getScope()['name']),
-            $event->getRecord()
+            sprintf('Updated scope %s', $event->getScope()->getName()),
+            $event->getScope()
         );
     }
 
@@ -534,7 +524,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getTransaction()->getId(),
             'transaction.prepare',
             sprintf('Prepared transaction %s', $event->getTransaction()->getTransactionId()),
-            [
+            Record::fromArray([
                 'invoiceId' => $event->getTransaction()->getInvoiceId(),
                 'transactionId' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
@@ -542,7 +532,7 @@ class AuditListener implements EventSubscriberInterface
                 'remoteId' => $event->getTransaction()->getRemoteId(),
                 'amount' => $event->getTransaction()->getAmount(),
                 'returnUrl' => $event->getTransaction()->getReturnUrl(),
-            ]
+            ])
         );
     }
 
@@ -553,7 +543,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getTransaction()->getId(),
             'transaction.execute',
             sprintf('Executed transaction %s', $event->getTransaction()->getTransactionId()),
-            [
+            Record::fromArray([
                 'invoiceId' => $event->getTransaction()->getInvoiceId(),
                 'transactionId' => $event->getTransaction()->getTransactionId(),
                 'provider' => $event->getTransaction()->getProvider(),
@@ -561,7 +551,7 @@ class AuditListener implements EventSubscriberInterface
                 'remoteId' => $event->getTransaction()->getRemoteId(),
                 'amount' => $event->getTransaction()->getAmount(),
                 'returnUrl' => $event->getTransaction()->getReturnUrl(),
-            ]
+            ])
         );
     }
 
@@ -694,7 +684,6 @@ class AuditListener implements EventSubscriberInterface
 
             Event\Route\CreatedEvent::class         => 'onRouteCreate',
             Event\Route\DeletedEvent::class         => 'onRouteDelete',
-            Event\Route\DeployedEvent::class        => 'onRouteDeploy',
             Event\Route\UpdatedEvent::class         => 'onRouteUpdate',
 
             Event\Schema\CreatedEvent::class        => 'onSchemaCreate',
