@@ -163,6 +163,7 @@ final class Version20200905081453 extends AbstractMigration
             $eventResponseTable->addColumn('subscription_id', 'integer');
             $eventResponseTable->addColumn('status', 'integer');
             $eventResponseTable->addColumn('code', 'integer', ['notnull' => false]);
+            $eventResponseTable->addColumn('error', 'string', ['notnull' => false]);
             $eventResponseTable->addColumn('attempts', 'integer');
             $eventResponseTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
             $eventResponseTable->addColumn('insert_date', 'datetime');
