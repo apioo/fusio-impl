@@ -23,7 +23,7 @@ namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Loader\RoutingCollection;
-use Fusio\Impl\Table\Routes as TableRoutes;
+use Fusio\Impl\Table\Route as TableRoutes;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
