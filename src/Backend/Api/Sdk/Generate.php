@@ -23,7 +23,7 @@ namespace Fusio\Impl\Backend\Api\Sdk;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -52,20 +52,18 @@ class Generate extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.sdk'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Sdk\Types::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.sdk']);
+        $get->addResponse(200, Model\Sdk_Types::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.sdk'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Sdk\Generate::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.sdk']);
+        $post->setRequest(Model\Sdk_Generate::class);
+        $post->addResponse(200, Model\Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -80,13 +78,14 @@ class Generate extends BackendApiAbstract
 
     /**
      * @inheritdoc
+     * @param Model\Sdk_Generate $record
      */
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->console->setAutoExit(false);
 
-        $format = $record->format;
-        $config = $record->config;
+        $format = $record->getFormat();
+        $config = $record->getConfig();
 
         if (!in_array($format, GeneratorFactory::getPossibleTypes())) {
             throw new StatusCode\BadRequestException('Invalid format provided');

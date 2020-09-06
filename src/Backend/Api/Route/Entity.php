@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Routes;
+namespace Fusio\Impl\Backend\Api\Route;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
@@ -78,12 +78,12 @@ class Entity extends BackendApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        $route = $this->tableManager->getTable(View\Routes::class)->getEntity(
+        $route = $this->tableManager->getTable(View\Route::class)->getEntity(
             (int) $context->getUriFragment('route_id')
         );
 
         if (!empty($route)) {
-            if ($route['status'] == Table\Routes::STATUS_DELETED) {
+            if ($route['status'] == Table\Route::STATUS_DELETED) {
                 throw new StatusCode\GoneException('Route was deleted');
             }
 

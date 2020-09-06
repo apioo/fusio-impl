@@ -19,15 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Routes;
+namespace Fusio\Impl\Backend\Api\Route;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Provider
@@ -40,7 +39,7 @@ class Provider extends BackendApiAbstract
 {
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes\Provider
+     * @var \Fusio\Impl\Service\Route\Provider
      */
     protected $routesProviderService;
 
@@ -87,7 +86,7 @@ class Provider extends BackendApiAbstract
     {
         return $this->routesProviderService->getChangelog(
             $context->getUriFragment('provider'),
-            $record->getProperties()
+            $record
         );
     }
 
@@ -98,9 +97,7 @@ class Provider extends BackendApiAbstract
     {
         $this->routesProviderService->create(
             $context->getUriFragment('provider'),
-            $record->path,
-            $record->scopes,
-            $record->config,
+            $record,
             $this->context->getUserContext()
         );
 

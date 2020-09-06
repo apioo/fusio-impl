@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Routes;
+namespace Fusio\Impl\Backend\Api\Route;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
@@ -74,7 +74,7 @@ class Collection extends BackendApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Routes::class)->getCollection(
+        return $this->tableManager->getTable(View\Route::class)->getCollection(
             (int) $context->getParameter('startIndex'),
             (int) $context->getParameter('count'),
             $context->getParameter('search')

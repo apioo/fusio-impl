@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Routes;
+namespace Fusio\Impl\Backend\Api\Route;
 
 use Fusio\Engine\Routes\ProviderInterface;
 use Fusio\Impl\Authorization\Authorization;
@@ -60,7 +60,7 @@ class Index extends BackendApiAbstract
 
         $get = $builder->addMethod('GET');
         $get->setSecurity(Authorization::BACKEND, ['backend.routes']);
-        $get->addResponse(200, Model\Route_Index::class);
+        $get->addResponse(200, Model\Route_Index_Providers::class);
 
         return $builder->getSpecification();
     }
