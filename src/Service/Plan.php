@@ -84,7 +84,7 @@ class Plan
         // get last insert id
         $planId = $this->planTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($planId, $record, $context), PlanEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($planId, $record, $context));
 
         return $planId;
     }
@@ -113,7 +113,7 @@ class Plan
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($existing['id'], $record, $existing, $context), PlanEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($existing['id'], $record, $existing, $context));
     }
 
     public function delete(int $planId, UserContext $context)
@@ -131,7 +131,7 @@ class Plan
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($existing['id'], $existing, $context), PlanEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing['id'], $existing, $context));
     }
     
     public function exists(string $name)

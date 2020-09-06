@@ -91,7 +91,7 @@ class Contract
 
         $contractId = $this->contractTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context), ContractEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context));
 
         return (int) $contractId;
     }
@@ -127,7 +127,7 @@ class Contract
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($contractId, $record, $existing, $context), ContractEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($contractId, $record, $existing, $context));
     }
 
     public function delete(int $contractId, UserContext $context)
@@ -145,6 +145,6 @@ class Contract
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($contractId, $existing, $context), ContractEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($contractId, $existing, $context));
     }
 }

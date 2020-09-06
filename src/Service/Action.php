@@ -54,7 +54,7 @@ class Action
     protected $actionTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
     protected $routesMethodTable;
 
@@ -70,11 +70,11 @@ class Action
 
     /**
      * @param \Fusio\Impl\Table\Action $actionTable
-     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
      * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Action $actionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Route\Method $routesMethodTable, Factory\ActionInterface $actionFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable       = $actionTable;
         $this->routesMethodTable = $routesMethodTable;
@@ -118,6 +118,7 @@ class Action
         $this->actionTable->create($record);
 
         $actionId = $this->actionTable->getLastInsertId();
+        $action->setId($actionId);
 
         $this->eventDispatcher->dispatch(new CreatedEvent($action, $context));
 
@@ -127,7 +128,6 @@ class Action
     public function update(int $actionId, Action_Update $action, UserContext $context)
     {
         $existing = $this->actionTable->get($actionId);
-
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -182,11 +182,6 @@ class Action
 
         if ($existing['status'] == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
-        }
-
-        // check depending
-        if ($this->routesMethodTable->hasAction($actionId)) {
-            throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
         }
 
         $config     = self::unserializeConfig($existing['config']);

@@ -103,7 +103,7 @@ class Rate
             // get last insert id
             $rateId = $this->rateTable->getLastInsertId();
 
-            $this->handleAllocations($rateId, $rate->getAllocations());
+            $this->handleAllocations($rateId, $rate->getAllocation());
 
             $this->rateTable->commit();
         } catch (\Throwable $e) {
@@ -142,7 +142,7 @@ class Rate
 
             $this->rateTable->update($record);
 
-            $this->handleAllocations($existing['id'], $rate->getAllocations());
+            $this->handleAllocations($existing['id'], $rate->getAllocation());
 
             $this->rateTable->commit();
         } catch (\Throwable $e) {

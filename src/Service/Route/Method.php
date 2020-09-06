@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Routes;
+namespace Fusio\Impl\Service\Route;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\Authorization;
@@ -43,12 +43,12 @@ use PSX\Schema\TypeInterface;
 class Method
 {
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
     private $methodTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Response
+     * @var \Fusio\Impl\Table\Route\Response
      */
     private $responseTable;
 
@@ -63,12 +63,12 @@ class Method
     private $connection;
 
     /**
-     * @param \Fusio\Impl\Table\Routes\Method $methodTable
-     * @param \Fusio\Impl\Table\Routes\Response $responseTable
+     * @param \Fusio\Impl\Table\Route\Method $methodTable
+     * @param \Fusio\Impl\Table\Route\Response $responseTable
      * @param \Fusio\Impl\Table\Scope\Route $scopeTable
      * @param Connection $connection
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Table\Scope\Route $scopeTable, Connection $connection)
+    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Connection $connection)
     {
         $this->methodTable   = $methodTable;
         $this->responseTable = $responseTable;

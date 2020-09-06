@@ -19,14 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Routes;
+namespace Fusio\Impl\Service\Route;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Route_Method;
 use Fusio\Impl\Backend\Model\Route_Version;
-use Fusio\Impl\Event\Route\DeployedEvent;
-use Fusio\Impl\Event\RoutesEvents;
-use Fusio\Impl\Loader\Filter\ExternalFilter;
+use Fusio\Impl\Framework\Filter\ExternalFilter;
 use Fusio\Impl\Table;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\ListingInterface;
@@ -44,19 +42,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Config
 {
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
     protected $methodTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Response
+     * @var \Fusio\Impl\Table\Route\Response
      */
     protected $responseTable;
-
-    /**
-     * @var \Fusio\Impl\Service\Routes\Deploy
-     */
-    protected $deployService;
 
     /**
      * @var \PSX\Api\ListingInterface
@@ -69,17 +62,15 @@ class Config
     protected $eventDispatcher;
 
     /**
-     * @param \Fusio\Impl\Table\Routes\Method $methodTable
-     * @param \Fusio\Impl\Table\Routes\Response $responseTable
-     * @param \Fusio\Impl\Service\Routes\Deploy $deployService
+     * @param \Fusio\Impl\Table\Route\Method $methodTable
+     * @param \Fusio\Impl\Table\Route\Response $responseTable
      * @param \PSX\Api\ListingInterface $listing
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Routes\Method $methodTable, Table\Routes\Response $responseTable, Deploy $deployService, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;
         $this->responseTable   = $responseTable;
-        $this->deployService   = $deployService;
         $this->listing         = $listing;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -143,25 +134,10 @@ class Config
             } else {
                 // update only existing methods
                 foreach ($existingMethods as $existingMethod) {
-                    if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && $status == Resource::STATUS_ACTIVE) {
-                        // deploy method to active
-                        $this->deployService->deploy($existingMethod);
-
-                        // dispatch event
-                        $this->eventDispatcher->dispatch(new DeployedEvent($routeId, $existingMethod, $context), RoutesEvents::DEPLOY);
-                    } elseif ($existingMethod['status'] != $status) {
-                        // we can not transition directly from development to
-                        // deprecated or closed
-                        if ($existingMethod['status'] == Resource::STATUS_DEVELOPMENT && in_array($status, [Resource::STATUS_DEPRECATED, Resource::STATUS_CLOSED])) {
-                            throw new StatusCode\BadRequestException('A route can only transition from development to production');
-                        }
-
-                        // change only the status if not in development
-                        $this->methodTable->update([
-                            'id'     => $existingMethod['id'],
-                            'status' => $status,
-                        ]);
-                    }
+                    $this->methodTable->update([
+                        'id'     => $existingMethod['id'],
+                        'status' => $status,
+                    ]);
                 }
             }
         }

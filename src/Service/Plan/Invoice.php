@@ -115,7 +115,7 @@ class Invoice
 
         $invoiceId = $this->invoiceTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context), InvoiceEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context));
 
         return (int) $invoiceId;
     }
@@ -140,7 +140,7 @@ class Invoice
 
         $this->invoiceTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($invoiceId, $record, $invoice, $context), InvoiceEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($invoiceId, $record, $invoice, $context));
     }
 
     public function delete($invoiceId, UserContext $context)
@@ -158,7 +158,7 @@ class Invoice
 
         $this->invoiceTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($invoiceId, $invoice, $context), InvoiceEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($invoiceId, $invoice, $context));
     }
 
     /**
@@ -207,7 +207,7 @@ class Invoice
 
         // dispatch payed event
         $context = UserContext::newContext($contract['user_id'], 2);
-        $this->eventDispatcher->dispatch(new PayedEvent($invoice['id'], $invoice, $transaction, $context), InvoiceEvents::PAYED);
+        $this->eventDispatcher->dispatch(new PayedEvent($invoice['id'], $invoice, $transaction, $context));
     }
 
     /**

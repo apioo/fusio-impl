@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service\Routes;
+namespace Fusio\Impl\Service\Route;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Factory\ContainerAwareInterface;
@@ -33,9 +33,10 @@ use Fusio\Impl\Backend\Model\Action_Create;
 use Fusio\Impl\Backend\Model\Route_Create;
 use Fusio\Impl\Backend\Model\Route_Method;
 use Fusio\Impl\Backend\Model\Route_Method_Responses;
+use Fusio\Impl\Backend\Model\Route_Provider;
+use Fusio\Impl\Backend\Model\Route_Provider_Config;
 use Fusio\Impl\Backend\Model\Route_Version;
 use Fusio\Impl\Backend\Model\Schema_Create;
-use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Route;
@@ -74,7 +75,7 @@ class Provider
     /**
      * @var \Fusio\Impl\Service\Route
      */
-    private $routesService;
+    private $routeService;
 
     /**
      * @var \Fusio\Impl\Service\Schema
@@ -111,12 +112,12 @@ class Provider
      */
     private $routes;
 
-    public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Route $routesService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
+    public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Route $routeService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
         $this->providerFactory = $providerFactory;
         $this->container = $container;
-        $this->routesService = $routesService;
+        $this->routeService = $routeService;
         $this->schemaService = $schemaService;
         $this->actionService = $actionService;
         $this->elementFactory = $elementFactory;
@@ -127,10 +128,9 @@ class Provider
         $this->routes = [];
     }
 
-    public function create($provider, $basePath, $scopes, $config, UserContext $context)
+    public function create(string $provider, Route_Provider $config, UserContext $context)
     {
         $provider = $this->providerFactory->factory($provider);
-
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
@@ -140,7 +140,9 @@ class Provider
         }
 
         $setup = new Setup();
-        $configuration = new Parameters($config->getProperties());
+        $basePath = $config->getPath();
+        $scopes = $config->getScopes();
+        $configuration = new Parameters($config->getConfig()->getProperties());
 
         $provider->setup($setup, $basePath, $configuration);
 
@@ -174,7 +176,7 @@ class Provider
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName, array $config)
+    public function getChangelog(string $providerName, Route_Provider_Config $config)
     {
         $provider = $this->providerFactory->factory($providerName);
 
@@ -184,7 +186,7 @@ class Provider
 
         $setup = new Setup();
 
-        $provider->setup($setup, '/[path]', new Parameters($config));
+        $provider->setup($setup, '/[path]', new Parameters($config->getProperties()));
 
         return [
             'schemas' => $setup->getSchemas(),
@@ -225,7 +227,7 @@ class Provider
                 $id = $this->actionService->create($record, $context);
             }
 
-            $this->actions[$index] = $id;
+            $this->actions[$index] = (int) $id;
         }
     }
 
@@ -236,6 +238,8 @@ class Provider
 
         foreach ($routes as $index => $data) {
             $data = \json_decode(\json_encode($data));
+            $this->resolveConfig($data);
+
             /** @var Route_Create $record */
             $record = (new SchemaTraverser())->traverse($data, $schema, new TypeVisitor());
 
@@ -244,12 +248,12 @@ class Provider
 
             foreach ($record->getConfig() as $key => $version) {
                 /** @var Route_Version $version */
-                $this->resolveVersion($version);
+                $version->setStatus(Resource::STATUS_DEVELOPMENT);
             }
 
-            $id = $this->routesService->exists($record->getPath());
+            $id = $this->routeService->exists($record->getPath());
             if (!$id) {
-                $id = $this->routesService->create($record, $context);
+                $id = $this->routeService->create($record, $context);
             }
 
             $this->routes[$index] = $id;
@@ -261,37 +265,39 @@ class Provider
         return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
     }
 
-    private function resolveVersion(Route_Version $version)
+    private function resolveConfig(\stdClass $data)
     {
-        // we can create only resources in development mode
-        $version->setVersion(Resource::STATUS_DEVELOPMENT);
+        $versions = $data->config ?? [];
 
-        if ($version->getMethods()) {
-            foreach ($version->getMethods() as $methodName => $method) {
-                /** @var Route_Method $method */
-                $method->setParameters($this->resolveSchema($method->getParameters()));
-                $method->setRequest($this->resolveSchema($method->getRequest()));
-                $method->setResponse($this->resolveSchema($method->getResponse()));
+        foreach ($versions as $index => $version) {
+            if (!isset($version->methods) || !$version->methods instanceof \stdClass) {
+                continue;
+            }
 
-                if ($method->getResponses()) {
-                    $responses = new Route_Method_Responses();
-                    foreach ($method->getResponses() as $code => $response) {
-                        $responses[$code] = $this->resolveSchema($response);
-                    }
-                    $method->setResponses($responses);
+            foreach ($version->methods as $methodName => $method) {
+                if (isset($method->parameters)) {
+                    $data->config[$index]->methods->{$methodName}->parameters = $this->resolveSchema($method->parameters);
                 }
 
-                $method->setAction($this->resolveAction($method->getAction()));
+                if (isset($method->request)) {
+                    $data->config[$index]->methods->{$methodName}->request = $this->resolveSchema($method->request);
+                }
+
+                if (isset($method->responses) && $method->responses instanceof \stdClass) {
+                    foreach ($method->responses as $code => $response) {
+                        $data->config[$index]->methods->{$methodName}->responses->{$code} = $this->resolveSchema($response);
+                    }
+                }
+
+                if (isset($method->action)) {
+                    $data->config[$index]->methods->{$methodName}->action = $this->resolveAction($method->action);
+                }
             }
         }
     }
 
     private function resolveSchema($schema)
     {
-        if (empty($schema)) {
-            return null;
-        }
-
         if (isset($this->schemas[$schema])) {
             return $this->schemas[$schema];
         } else {
@@ -301,10 +307,6 @@ class Provider
 
     private function resolveAction($action)
     {
-        if (empty($action)) {
-            return null;
-        }
-
         if (isset($this->actions[$action])) {
             return $this->actions[$action];
         } else {

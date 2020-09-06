@@ -29,6 +29,7 @@ use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
 use Fusio\Impl\Event\SchemaEvents;
+use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
@@ -52,12 +53,12 @@ class Schema
     protected $schemaTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
     protected $routesMethodTable;
 
     /**
-     * @var \Fusio\Engine\Schema\ParserInterface
+     * @var \Fusio\Impl\Schema\Parser
      */
     protected $schemaParser;
 
@@ -68,11 +69,11 @@ class Schema
 
     /**
      * @param \Fusio\Impl\Table\Schema $schemaTable
-     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
-     * @param \Fusio\Engine\Schema\ParserInterface $schemaParser
+     * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
+     * @param \Fusio\Impl\Schema\Parser $schemaParser
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Schema $schemaTable, Table\Routes\Method $routesMethodTable, ParserInterface $schemaParser, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Parser $schemaParser, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesMethodTable = $routesMethodTable;
@@ -109,9 +110,9 @@ class Schema
         return $schemaId;
     }
 
-    public function update(Schema_Update $schema, UserContext $context)
+    public function update(int $schemaId, Schema_Update $schema, UserContext $context)
     {
-        $existing = $this->schemaTable->get($schema->getId());
+        $existing = $this->schemaTable->get($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -142,11 +143,6 @@ class Schema
 
         if ($existing['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
-        }
-
-        // check whether we have routes which depend on this schema
-        if ($this->routesMethodTable->hasSchema($schemaId)) {
-            throw new StatusCode\BadRequestException('Cannot delete schema because a route depends on it');
         }
 
         $record = [

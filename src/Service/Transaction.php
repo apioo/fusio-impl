@@ -163,7 +163,7 @@ class Transaction
             $this->updateTransaction($transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(new PreparedEvent($transaction), TransactionEvents::PREPARE);
+            $this->eventDispatcher->dispatch(new PreparedEvent($transaction));
 
             $this->transactionTable->commit();
 
@@ -204,7 +204,7 @@ class Transaction
             $this->updateTransaction($transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(new ExecutedEvent($transaction), TransactionEvents::EXECUTE);
+            $this->eventDispatcher->dispatch(new ExecutedEvent($transaction));
 
             $this->transactionTable->commit();
 

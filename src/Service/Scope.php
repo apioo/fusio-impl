@@ -106,7 +106,7 @@ class Scope
             $scopeId = $this->scopeTable->getLastInsertId();
             $scope->setId($scopeId);
 
-            $this->insertRoutes($scopeId, $scope->getRoutes());
+            $this->insertRoutes($scopeId, $scope->getRoutes() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -153,9 +153,9 @@ class Scope
         }
     }
 
-    public function update(Scope_Update $scope, UserContext $context)
+    public function update(int $scopeId, Scope_Update $scope, UserContext $context)
     {
-        $existing = $this->scopeTable->get($scope->getId());
+        $existing = $this->scopeTable->get($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -178,7 +178,7 @@ class Scope
 
             $this->scopeRouteTable->deleteAllFromScope($existing['id']);
 
-            $this->insertRoutes($existing['id'], $scope->getRoutes());
+            $this->insertRoutes($existing['id'], $scope->getRoutes() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -266,17 +266,21 @@ class Scope
             return false;
         }
     }
-    
-    protected function insertRoutes($scopeId, $routes)
+
+    /**
+     * @param int $scopeId
+     * @param Scope_Route[] $routes
+     */
+    protected function insertRoutes(int $scopeId, array $routes)
     {
         if (!empty($routes) && is_array($routes)) {
             foreach ($routes as $route) {
-                if ($route->allow) {
+                if ($route->getAllow()) {
                     $this->scopeRouteTable->create(array(
                         'scope_id' => $scopeId,
-                        'route_id' => $route->routeId,
-                        'allow'    => $route->allow ? 1 : 0,
-                        'methods'  => $route->methods,
+                        'route_id' => $route->getRouteId(),
+                        'allow'    => $route->getAllow() ? 1 : 0,
+                        'methods'  => $route->getMethods(),
                     ));
                 }
             }
