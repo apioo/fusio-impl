@@ -1166,7 +1166,7 @@
           "type": "string",
           "format": "duration"
         },
-        "allocations": {
+        "allocation": {
           "type": "array",
           "items": {
             "$ref": "Rate_Allocation"
@@ -1326,8 +1326,8 @@
       "properties": {
       },
       "required": [
-        "userId",
-        "planId"
+        "path",
+        "config"
       ]
     },
     "Route_Update": {
