@@ -71,7 +71,7 @@ class Invoker
     protected $planPayerService;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Method 
+     * @var \Fusio\Impl\Table\Route\Method 
      */
     protected $methodTable;
 
@@ -99,11 +99,11 @@ class Invoker
      * @param \Fusio\Engine\Processor $processor
      * @param \Fusio\Impl\Service\Security\TokenValidator $tokenValidator
      * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Table\Routes\Method $methodTable
+     * @param \Fusio\Impl\Table\Route\Method $methodTable
      * @param \PSX\Framework\Config\Config $config
      * @param \PSX\Http\RequestInterface $request
      */
-    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Plan\Payer $planPayerService, Table\Routes\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
+    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Plan\Payer $planPayerService, Table\Route\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
     {
         $this->processor        = $processor;
         $this->tokenValidator   = $tokenValidator;
