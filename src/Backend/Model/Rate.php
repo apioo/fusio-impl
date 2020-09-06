@@ -33,7 +33,7 @@ class Rate implements \JsonSerializable
     /**
      * @var array<Rate_Allocation>|null
      */
-    protected $allocations;
+    protected $allocation;
     /**
      * @param int|null $id
      */
@@ -105,22 +105,22 @@ class Rate implements \JsonSerializable
         return $this->timespan;
     }
     /**
-     * @param array<Rate_Allocation>|null $allocations
+     * @param array<Rate_Allocation>|null $allocation
      */
-    public function setAllocations(?array $allocations) : void
+    public function setAllocation(?array $allocation) : void
     {
-        $this->allocations = $allocations;
+        $this->allocation = $allocation;
     }
     /**
      * @return array<Rate_Allocation>|null
      */
-    public function getAllocations() : ?array
+    public function getAllocation() : ?array
     {
-        return $this->allocations;
+        return $this->allocation;
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'priority' => $this->priority, 'name' => $this->name, 'rateLimit' => $this->rateLimit, 'timespan' => $this->timespan, 'allocations' => $this->allocations), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'priority' => $this->priority, 'name' => $this->name, 'rateLimit' => $this->rateLimit, 'timespan' => $this->timespan, 'allocation' => $this->allocation), static function ($value) : bool {
             return $value !== null;
         });
     }
