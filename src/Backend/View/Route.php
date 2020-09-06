@@ -28,13 +28,13 @@ use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Routes
+ * Route
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Routes extends ViewAbstract
+class Route extends ViewAbstract
 {
     public function getCollection($startIndex = null, $count = null, $search = null)
     {
@@ -47,7 +47,7 @@ class Routes extends ViewAbstract
         }
 
         $condition  = new Condition();
-        $condition->equals('status', Table\Routes::STATUS_ACTIVE);
+        $condition->equals('status', Table\Route::STATUS_ACTIVE);
         $condition->notLike('path', '/backend%');
         $condition->notLike('path', '/consumer%');
         $condition->notLike('path', '/doc%');
@@ -59,10 +59,10 @@ class Routes extends ViewAbstract
         }
 
         $definition = [
-            'totalResults' => $this->getTable(Table\Routes::class)->getCount($condition),
+            'totalResults' => $this->getTable(Table\Route::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Routes::class), 'getAll'], [$startIndex, $count, 'priority', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Route::class), 'getAll'], [$startIndex, $count, 'priority', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'path' => 'path',
@@ -75,13 +75,13 @@ class Routes extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Routes::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Route::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'path' => 'path',
             'controller' => 'controller',
             'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
-            'config' => $this->doCollection([$this->getTable(Table\Routes\Method::class), 'getMethods'], [new Reference('id')], [
+            'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id')], [
                 'version' => 'version',
                 'status' => 'status',
                 'method' => 'method',
@@ -91,7 +91,7 @@ class Routes extends ViewAbstract
                 'operationId' => 'operation_id',
                 'parameters' => 'parameters',
                 'request' => 'request',
-                'responses' => $this->doCollection([$this->getTable(Table\Routes\Response::class), 'getResponses'], [new Reference('id')], [
+                'responses' => $this->doCollection([$this->getTable(Table\Route\Response::class), 'getResponses'], [new Reference('id')], [
                     'code' => 'code',
                     'response' => 'response',
                 ]),
@@ -121,17 +121,17 @@ class Routes extends ViewAbstract
                     }
 
                     if (!empty($row['parameters'])) {
-                        $method->parameters = (int) $row['parameters'];
+                        $method->parameters = $row['parameters'];
                     }
 
                     if (!empty($row['request'])) {
-                        $method->request = (int) $row['request'];
+                        $method->request = $row['request'];
                     }
 
                     if (!empty($row['responses'])) {
                         $responses = [];
                         foreach ($row['responses'] as $response) {
-                            $responses[$response['code']] = (int) $response['response'];
+                            $responses[$response['code']] = $response['response'];
                         }
                         $method->responses = $responses;
                     }

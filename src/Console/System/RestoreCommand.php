@@ -101,7 +101,7 @@ class RestoreCommand extends Command
                 break;
 
             case 'routes':
-                return $this->restoreRecord($id, $column, 'fusio_routes', Table\Routes::STATUS_ACTIVE);
+                return $this->restoreRecord($id, $column, 'fusio_routes', Table\Route::STATUS_ACTIVE);
                 break;
 
             case 'schema':

@@ -73,7 +73,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes\Method
+     * @var \Fusio\Impl\Service\Route\Method
      */
     protected $routesMethodService;
 
