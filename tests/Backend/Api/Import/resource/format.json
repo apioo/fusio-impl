@@ -1,6 +1,7 @@
 {
   "status": 1,
-  "path": "\/backend\/import\/process",
+  "path": "\/backend\/import\/:format",
+  "pathParameters": "Import_Format_Path",
   "methods": {
     "POST": {
       "security": {
@@ -115,6 +116,14 @@
         "type": "any"
       },
       "maxProperties": 16
+    },
+    "Import_Format_Path": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        }
+      }
     },
     "Import_Response": {
       "type": "object",

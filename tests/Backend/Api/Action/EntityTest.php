@@ -191,26 +191,4 @@ JSON;
         $this->assertEquals(3, $row['id']);
         $this->assertEquals(0, $row['status']);
     }
-
-    public function testDeleteInUse()
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
-        $response = $this->sendRequest('/backend/action/3', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Cannot delete action because a route depends on it"
-}
-JSON;
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
 }

@@ -47,7 +47,7 @@ class OpenAPITest extends ControllerDbTestCase
         ));
 
         $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/openapi.json');
+        $expect = file_get_contents(__DIR__ . '/resource/format.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
