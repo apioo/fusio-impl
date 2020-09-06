@@ -1,0 +1,176 @@
+{
+  "definitions": {
+    "Export_Debug": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "$ref": "Export_Debug_Headers"
+        },
+        "parameters": {
+          "$ref": "Export_Debug_Parameters"
+        },
+        "body": {
+          "$ref": "Export_Debug_Body"
+        }
+      }
+    },
+    "Export_Debug_Headers": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Debug_Parameters": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Debug_Body": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Health": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Export_Health_Check"
+      }
+    },
+    "Export_Health_Check": {
+      "type": "object",
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "Export_Route": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "$ref": "Export_Route_Path"
+        }
+      }
+    },
+    "Export_Route_Path": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Export_Route_Method"
+      }
+    },
+    "Export_Route_Method": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "string"
+      }
+    },
+    "Export_Rpc_Request": {
+      "oneOf": [{
+        "$ref": "Export_Rpc_Request_Batch"
+      }, {
+        "$ref": "Export_Rpc_Request_Call"
+      }]
+    },
+    "Export_Rpc_Request_Batch": {
+      "type": "array",
+      "items": {
+        "$ref": "Export_Rpc_Request_Call"
+      }
+    },
+    "Export_Rpc_Request_Call": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "params": {
+          "$ref": "Export_Rpc_Request_Params"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Export_Rpc_Request_Params": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Rpc_Response": {
+      "oneOf": [{
+        "$ref": "Export_Rpc_Response_Batch"
+      }, {
+        "$ref": "Export_Rpc_Response_Return"
+      }]
+    },
+    "Export_Rpc_Response_Batch": {
+      "type": "array",
+      "items": {
+        "$ref": "Export_Rpc_Response_Return"
+      }
+    },
+    "Export_Rpc_Response_Return": {
+      "oneOf": [{
+        "$ref": "Export_Rpc_Response_Success"
+      }, {
+        "$ref": "Export_Rpc_Response_Error"
+      }]
+    },
+    "Export_Rpc_Response_Success": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "Export_Rpc_Response_Result"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Export_Rpc_Response_Result": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Rpc_Response_Error": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "error": {
+          "$ref": "Export_Rpc_Response_Errors"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Export_Rpc_Response_Errors": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Schema": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "$ref": "Export_Schema_TypeSchema"
+        },
+        "form": {
+          "$ref": "Export_Schema_Form"
+        }
+      }
+    },
+    "Export_Schema_TypeSchema": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Export_Schema_Form": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
