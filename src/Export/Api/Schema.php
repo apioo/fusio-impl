@@ -26,6 +26,7 @@ use Fusio\Impl\Export\Schema as ExportSchema;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
@@ -50,23 +51,23 @@ class Schema extends SchemaApiAbstract
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes\Method
+     * @var \Fusio\Impl\Service\Route\Method
      */
     protected $routesMethodService;
 
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('name', Property::getString());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Export_Api_Schema_Path');
+        $path->addString('name');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(ExportSchema\Schema::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, ExportSchema\Schema::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

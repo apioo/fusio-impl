@@ -21,9 +21,10 @@
 
 namespace Fusio\Impl\Export\Api;
 
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Export\Schema;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 
@@ -45,15 +46,14 @@ class Routes extends SchemaApiAbstract
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Routes::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, Model\Route::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -61,6 +61,6 @@ class Routes extends SchemaApiAbstract
      */
     protected function doGet(HttpContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Routes::class)->getPublic();
+        return $this->tableManager->getTable(View\Route::class)->getPublic();
     }
 }

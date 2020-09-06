@@ -28,6 +28,7 @@ use Fusio\Impl\Rpc\Invoker;
 use Fusio\Impl\Table;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
@@ -67,7 +68,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes\Method
+     * @var \Fusio\Impl\Service\Route\Method
      */
     protected $routesMethodService;
 
@@ -112,17 +113,16 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
     /**
      * @inheritdoc
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Rpc\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Rpc\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend']);
+        $post->setRequest(Model\Export_Rpc_Request::class);
+        $post->addResponse(200, Model\Export_Rpc_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
@@ -135,7 +135,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
             $this->securityTokenValidator,
             $this->rateService,
             $this->planPayerService,
-            $this->tableManager->getTable(Table\Routes\Method::class),
+            $this->tableManager->getTable(Table\Route\Method::class),
             $this->tableManager->getTable(Table\Schema::class),
             $this->config,
             $this->request
