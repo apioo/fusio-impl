@@ -129,8 +129,8 @@ class Assert extends \PHPUnit\Framework\Assert
             self::assertEquals($row['public'] ? 1 : 0, $methods[$index]['public']);
             self::assertEquals($row['description'], $methods[$index]['description']);
             self::assertEquals($row['operation_id'], $methods[$index]['operation_id']);
-            self::assertEquals(self::resolveId('fusio_schema', $row['parameters']), $methods[$index]['parameters'], 'Used parameters schema ' . self::resolveName('fusio_schema', $methods[$index]['parameters']));
-            self::assertEquals(self::resolveId('fusio_schema', $row['request']), $methods[$index]['request'], 'Used request schema ' . self::resolveName('fusio_schema', $methods[$index]['request']));
+            self::assertEquals($row['parameters'], $methods[$index]['parameters'], 'Used parameters schema ' . self::resolveName('fusio_schema', $methods[$index]['parameters']));
+            self::assertEquals($row['request'], $methods[$index]['request'], 'Used request schema ' . self::resolveName('fusio_schema', $methods[$index]['request']));
             self::assertEquals(self::resolveId('fusio_action', $row['action']), $methods[$index]['action'], 'Used action ' . self::resolveName('fusio_action', $methods[$index]['action']));
             self::assertEquals($row['costs'], $methods[$index]['costs']);
 
@@ -150,7 +150,7 @@ class Assert extends \PHPUnit\Framework\Assert
                 $respIndex = 0;
                 foreach ($row['responses'] as $code => $resp) {
                     self::assertEquals($code, $responses[$respIndex]['code']);
-                    self::assertEquals(self::resolveId('fusio_schema', $resp), $responses[$respIndex]['response'], 'Used ' . $responses[$respIndex]['code'] . ' response ' . self::resolveName('fusio_schema', $responses[$respIndex]['response']));
+                    self::assertEquals($resp, $responses[$respIndex]['response'], 'Used ' . $responses[$respIndex]['code'] . ' response ' . $responses[$respIndex]['response']);
 
                     $respIndex++;
                 }
