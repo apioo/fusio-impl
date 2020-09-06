@@ -579,10 +579,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getUserId(),
+            $event->getUser()->getId(),
             'user.create',
-            sprintf('Created user %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created user %s', $event->getUser()->getName()),
+            $event->getUser()
         );
     }
 
@@ -590,9 +590,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getUserId(),
+            $event->getExisting()->getProperty('id'),
             'user.delete',
-            sprintf('Deleted user %s', $event->getUser()['name'])
+            sprintf('Deleted user %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -600,10 +600,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getUserId(),
+            $event->getUser()->getId(),
             'user.update',
-            sprintf('Updated user %s', $event->getUser()['name']),
-            $event->getRecord()
+            sprintf('Updated user %s', $event->getUser()->getName()),
+            $event->getUser()
         );
     }
 
