@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Routes;
+namespace Fusio\Impl\Table\Route;
 
 use PSX\Sql\TableAbstract;
 
@@ -43,7 +43,7 @@ class Response extends TableAbstract
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
             'method_id' => self::TYPE_INT,
             'code' => self::TYPE_INT,
-            'response' => self::TYPE_INT,
+            'response' => self::TYPE_VARCHAR,
         );
     }
 

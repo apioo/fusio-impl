@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table\Routes;
+namespace Fusio\Impl\Table\Route;
 
 use PSX\Api\Resource;
 use PSX\Sql\TableAbstract;
@@ -50,12 +50,10 @@ class Method extends TableAbstract
             'public' => self::TYPE_INT,
             'description' => self::TYPE_VARCHAR,
             'operation_id' => self::TYPE_VARCHAR,
-            'parameters' => self::TYPE_INT,
-            'request' => self::TYPE_INT,
+            'parameters' => self::TYPE_VARCHAR,
+            'request' => self::TYPE_VARCHAR,
             'action' => self::TYPE_INT,
             'costs' => self::TYPE_INT,
-            'schema_cache' => self::TYPE_TEXT,
-            'action_cache' => self::TYPE_TEXT,
         );
     }
 
@@ -77,56 +75,6 @@ class Method extends TableAbstract
         }
 
         $this->connection->executeQuery($sql, $params);
-    }
-
-    /**
-     * Returns whether a schema id is in use by a route. In the worst case this
-     * gets reported by the database constraints but we use this method to 
-     * report a proper error message
-     * 
-     * @param integer $schemaId
-     * @return boolean
-     */
-    public function hasSchema($schemaId)
-    {
-        $sql = '    SELECT COUNT(resp.id) AS cnt
-                      FROM fusio_routes_response resp
-                INNER JOIN fusio_routes_method method
-                        ON resp.method_id = method.id
-                INNER JOIN fusio_routes routes
-                        ON routes.id = method.route_id
-                     WHERE routes.status = 1
-                       AND (method.parameters = :schema_id OR method.request = :schema_id OR resp.response = :schema_id)';
-
-        $count = $this->connection->fetchColumn($sql, [
-            'schema_id' => $schemaId,
-        ]);
-
-        return $count > 0;
-    }
-
-    /**
-     * Returns whether a action id is in use by a route. In the worst case this
-     * gets reported by the database constraints but we use this method to
-     * report a proper error message
-     *
-     * @param integer $actionId
-     * @return boolean
-     */
-    public function hasAction($actionId)
-    {
-        $sql = '    SELECT COUNT(method.id) AS cnt
-                      FROM fusio_routes_method method
-                INNER JOIN fusio_routes routes
-                        ON routes.id = method.route_id
-                     WHERE routes.status = 1
-                       AND method.action = :action_id';
-
-        $count = $this->connection->fetchColumn($sql, [
-            'action_id' => $actionId,
-        ]);
-
-        return $count > 0;
     }
 
     /**

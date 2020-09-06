@@ -24,13 +24,13 @@ namespace Fusio\Impl\Table;
 use PSX\Sql\TableAbstract;
 
 /**
- * Routes
+ * Route
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Routes extends TableAbstract
+class Route extends TableAbstract
 {
     const STATUS_ACTIVE  = 1;
     const STATUS_DELETED = 0;
