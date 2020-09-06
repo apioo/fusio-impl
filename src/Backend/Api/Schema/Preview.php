@@ -23,11 +23,10 @@ namespace Fusio\Impl\Backend\Api\Schema;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Preview
@@ -49,15 +48,15 @@ class Preview extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('schema_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Schema_Preview_Path');
+        $path->addInteger('schema_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::BACKEND, ['backend.schema'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Schema\Preview\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::BACKEND, ['backend.schema']);
+        $post->addResponse(200, Model\Schema_Preview_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
