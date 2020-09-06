@@ -206,7 +206,7 @@ class User
             $user->setId($userId);
 
             // add scopes
-            $this->insertScopes($user);
+            $this->insertScopes($userId, $user->getScopes());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -282,9 +282,9 @@ class User
         return $userId;
     }
 
-    public function update(User_Update $user, UserContext $context)
+    public function update(int $userId, User_Update $user, UserContext $context)
     {
-        $existing = $this->userTable->get($user->getId());
+        $existing = $this->userTable->get($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -435,7 +435,7 @@ class User
         });
     }
 
-    protected function insertScopes($userId, $scopes)
+    protected function insertScopes(int $userId, array $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);

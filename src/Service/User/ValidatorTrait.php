@@ -48,7 +48,7 @@ trait ValidatorTrait
             throw new StatusCode\BadRequestException('Name must not be empty');
         }
 
-        if (preg_match('/' . Schema\User::NAME_PATTERN . '/', $name)) {
+        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $name)) {
             return $name;
         } else {
             throw new StatusCode\BadRequestException('Name must be between 3 and 32 signs and use only the characters (a-zA-Z0-9-_.)');
