@@ -23,12 +23,11 @@ namespace Fusio\Impl\Backend\Api\Statistic;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * IncomingTransactions
@@ -50,22 +49,22 @@ class IncomingTransactions extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.statistic'])
-            ->addQueryParameter('from', Property::getDateTime())
-            ->addQueryParameter('to', Property::getDateTime())
-            ->addQueryParameter('planId', Property::getInteger())
-            ->addQueryParameter('userId', Property::getInteger())
-            ->addQueryParameter('appId', Property::getInteger())
-            ->addQueryParameter('status', Property::getInteger())
-            ->addQueryParameter('provider', Property::getString())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.statistic']);
+        $query = $get->setQueryParameters('Statistic_IncomingTransactions_Query');
+        $query->addDateTime('from');
+        $query->addDateTime('to');
+        $query->addInteger('planId');
+        $query->addInteger('userId');
+        $query->addInteger('appId');
+        $query->addInteger('status');
+        $query->addString('provider');
+        $query->addString('search');
+        $get->addResponse(200, Model\Statistic_Chart::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

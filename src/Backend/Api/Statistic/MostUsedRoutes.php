@@ -23,12 +23,11 @@ namespace Fusio\Impl\Backend\Api\Statistic;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * MostUsedRoutes
@@ -50,26 +49,26 @@ class MostUsedRoutes extends BackendApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::BACKEND, ['backend.statistic'])
-            ->addQueryParameter('from', Property::getDateTime())
-            ->addQueryParameter('to', Property::getDateTime())
-            ->addQueryParameter('routeId', Property::getInteger())
-            ->addQueryParameter('appId', Property::getInteger())
-            ->addQueryParameter('userId', Property::getInteger())
-            ->addQueryParameter('ip', Property::getString())
-            ->addQueryParameter('userAgent', Property::getString())
-            ->addQueryParameter('method', Property::getString())
-            ->addQueryParameter('path', Property::getString())
-            ->addQueryParameter('header', Property::getString())
-            ->addQueryParameter('body', Property::getString())
-            ->addQueryParameter('search', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Statistic\Chart::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.statistic']);
+        $query = $get->setQueryParameters('Statistic_MostUsedRoutes_Query');
+        $query->addDateTime('from');
+        $query->addDateTime('to');
+        $query->addInteger('routeId');
+        $query->addInteger('appId');
+        $query->addInteger('userId');
+        $query->addString('ip');
+        $query->addString('userAgent');
+        $query->addString('method');
+        $query->addString('path');
+        $query->addString('header');
+        $query->addString('body');
+        $query->addString('search');
+        $get->addResponse(200, Model\Statistic_Chart::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
