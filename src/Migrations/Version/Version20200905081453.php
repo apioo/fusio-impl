@@ -31,6 +31,7 @@ final class Version20200905081453 extends AbstractMigration
             $actionTable->addColumn('config', 'text', ['notnull' => false]);
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
+            $actionTable->addUniqueIndex(['name']);
         }
 
         if (!$schema->hasTable('fusio_app')) {
@@ -329,7 +330,7 @@ final class Version20200905081453 extends AbstractMigration
             $routesMethodTable->addColumn('description', 'string', ['notnull' => false, 'length' => 500]);
             $routesMethodTable->addColumn('parameters', 'string', ['notnull' => false]);
             $routesMethodTable->addColumn('request', 'string', ['notnull' => false]);
-            $routesMethodTable->addColumn('action', 'integer', ['notnull' => false]);
+            $routesMethodTable->addColumn('action', 'string', ['notnull' => false]);
             $routesMethodTable->addColumn('costs', 'integer', ['notnull' => false]);
             $routesMethodTable->setPrimaryKey(['id']);
             $routesMethodTable->addUniqueIndex(['route_id', 'method', 'version']);
