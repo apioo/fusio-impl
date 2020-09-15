@@ -237,7 +237,7 @@
           "$ref": "Route_Method_Responses"
         },
         "action": {
-          "type": "integer"
+          "type": "string"
         },
         "costs": {
           "type": "integer"

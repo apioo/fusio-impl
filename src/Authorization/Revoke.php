@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Backend\Schema\Message;
+use Fusio\Impl\Backend\Model\Message;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -57,13 +57,12 @@ class Revoke extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->addResponse(200, $this->schemaManager->getSchema(Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->addResponse(200, Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     protected function doPost($record, HttpContextInterface $context)

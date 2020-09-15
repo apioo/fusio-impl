@@ -366,7 +366,7 @@ class NewInstallation
 
         // routes method
         $lastRouteId = count($data['fusio_routes']);
-        $data['fusio_routes_method'][] = ['route_id' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1, 'costs' => null];
+        $data['fusio_routes_method'][] = ['route_id' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 'Welcome', 'costs' => null];
         $data['fusio_routes_response'][] = ['method_id' => 1, 'code' => 200, 'response' => 1];
 
         // scope routes

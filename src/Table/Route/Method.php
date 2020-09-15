@@ -52,7 +52,7 @@ class Method extends TableAbstract
             'operation_id' => self::TYPE_VARCHAR,
             'parameters' => self::TYPE_VARCHAR,
             'request' => self::TYPE_VARCHAR,
-            'action' => self::TYPE_INT,
+            'action' => self::TYPE_VARCHAR,
             'costs' => self::TYPE_INT,
         );
     }

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Adapter\Transform;
+use Fusio\Impl\Adapter\Transformer;
 use Fusio\Impl\Service;
 use Monolog\Handler\NullHandler;
 use Psr\Log\LoggerInterface;
@@ -91,7 +91,7 @@ class ImportCommand extends Command
             $schema = file_get_contents($file);
 
             if (!empty($format)) {
-                $import = Transform::fromSchema($format, $schema);
+                $import = Transformer::fromSchema($format, $schema);
             } else {
                 $import = file_get_contents($file);
             }

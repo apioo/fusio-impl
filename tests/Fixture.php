@@ -103,7 +103,7 @@ class Fixture
                 ['status' => 1, 'name' => 'paypal', 'class' => PaypalConnection::class, 'config' => Service\Connection::encryptConfig(['foo' => 'bar'], $secretKey)],
             ],
             'fusio_cronjob' => [
-                ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 3, 'execute_date' => '2015-02-27 19:59:15', 'exit_code' => 0],
+                ['status' => 1, 'name' => 'Test-Cron', 'cron' => '*/30 * * * *', 'action' => 'Sql-Table', 'execute_date' => '2015-02-27 19:59:15', 'exit_code' => 0],
             ],
             'fusio_cronjob_error' => [
                 ['cronjob_id' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
@@ -144,17 +144,17 @@ class Fixture
                 ['method_id' => 11, 'code' => 200, 'response' => 'Passthru'],
             ],
             'fusio_routes_method' => [
-                ['route_id' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => 'listFoo', 'parameters' => null, 'request' => null, 'action' => 3, 'costs' => null],
-                ['route_id' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'operation_id' => 'createFoo', 'parameters' => null, 'request' => 'Entry-Schema', 'action' => 3, 'costs' => 1],
+                ['route_id' => self::getLastRouteId() + 1, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => 'listFoo', 'parameters' => null, 'request' => null, 'action' => 'Sql-Table', 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 1, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 0, 'operation_id' => 'createFoo', 'parameters' => null, 'request' => 'Entry-Schema', 'action' => 'Sql-Table', 'costs' => 1],
                 ['route_id' => self::getLastRouteId() + 1, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'operation_id' => null, 'parameters' => null, 'request' => null, 'action' => null, 'costs' => null],
                 ['route_id' => self::getLastRouteId() + 1, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'operation_id' => null, 'parameters' => null, 'request' => null, 'action' => null, 'costs' => null],
                 ['route_id' => self::getLastRouteId() + 1, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 0, 'public' => 0, 'operation_id' => null, 'parameters' => null, 'request' => null, 'action' => null, 'costs' => null],
 
-                ['route_id' => self::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 4, 'costs' => null],
-                ['route_id' => self::getLastRouteId() + 2, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 4, 'costs' => null],
-                ['route_id' => self::getLastRouteId() + 2, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 4, 'costs' => null],
-                ['route_id' => self::getLastRouteId() + 2, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 4, 'costs' => null],
-                ['route_id' => self::getLastRouteId() + 2, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 4, 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 2, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 'Inspect-Action', 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 2, 'method' => 'POST', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 'Inspect-Action', 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 2, 'method' => 'PUT', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 'Inspect-Action', 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 2, 'method' => 'PATCH', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 'Inspect-Action', 'costs' => null],
+                ['route_id' => self::getLastRouteId() + 2, 'method' => 'DELETE','version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'operation_id' => null, 'parameters' => null, 'request' => 1, 'action' => 'Inspect-Action', 'costs' => null],
             ],
             'fusio_log' => [
                 ['app_id' => 3, 'route_id' => 1, 'ip' => '127.0.0.1', 'user_agent' => 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.130 Safari/537.36', 'method' => 'GET', 'path' => '/bar', 'header' => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'body' => 'foobar', 'execution_time' => 500000, 'date' => '2015-06-25 22:49:09'],

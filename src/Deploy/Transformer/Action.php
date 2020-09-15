@@ -76,7 +76,7 @@ class Action extends TransformerAbstract
     private function resolveActionsFromRoutes(array $data, $basePath)
     {
         $actions = [];
-        $type    = SystemAbstract::TYPE_ROUTES;
+        $type    = SystemAbstract::TYPE_ROUTE;
 
         if (isset($data[$type]) && is_array($data[$type])) {
             foreach ($data[$type] as $name => $row) {

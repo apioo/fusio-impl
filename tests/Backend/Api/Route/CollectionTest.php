@@ -182,7 +182,7 @@ JSON;
                         'responses'   => [
                             '200'     => 'Passthru'
                         ],
-                        'action'      => 3,
+                        'action'      => 'Sql-Table',
                     ],
                     'POST' => [
                         'active'      => true,
@@ -192,7 +192,7 @@ JSON;
                         'responses'   => [
                             '201'     => 'Passthru'
                         ],
-                        'action'      => 3,
+                        'action'      => 'Sql-Table',
                     ]
                 ],
             ]],

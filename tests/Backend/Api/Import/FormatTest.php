@@ -21,21 +21,35 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Import;
 
+use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * RamlTest
+ * FormatTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RamlTest extends ControllerDbTestCase
+class FormatTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
         return Fixture::getDataSet();
+    }
+
+    public function testDocumentation()
+    {
+        $response = $this->sendRequest('/doc/*/backend/import/:format', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = Documentation::getResource($response);
+        $expect = file_get_contents(__DIR__ . '/resource/format.json');
+
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     /**
@@ -43,12 +57,12 @@ class RamlTest extends ControllerDbTestCase
      */
     public function testPost($case)
     {
-        $spec   = file_get_contents(__DIR__ . '/resource/' . $case . '.yaml');
-        $expect = file_get_contents(__DIR__ . '/resource/' . $case . '_expect.yaml');
+        $spec   = file_get_contents(__DIR__ . '/resource/' . $case . '.json');
+        $expect = file_get_contents(__DIR__ . '/resource/' . $case . '_expect.json');
 
         $body = json_encode(['schema' => $spec]);
 
-        $response = $this->sendRequest('/backend/import/raml', 'POST', array(
+        $response = $this->sendRequest('/backend/import/openapi', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf',
             'Content-Type'  => 'application/json',
@@ -63,9 +77,9 @@ class RamlTest extends ControllerDbTestCase
     public function providerSpecs()
     {
         return [
-            ['raml_case01'],
-            ['raml_case02'],
-            ['raml_case03'],
+            ['openapi_case01'],
+            ['openapi_case02'],
+            ['openapi_case03'],
         ];
     }
 }

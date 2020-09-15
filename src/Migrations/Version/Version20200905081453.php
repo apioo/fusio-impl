@@ -486,7 +486,6 @@ final class Version20200905081453 extends AbstractMigration
 
         if (isset($routesMethodTable)) {
             $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'routes_method_route_id');
-            $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_action'), ['action'], ['id'], [], 'routes_method_action');
         }
 
         if (isset($routesResponseTable)) {

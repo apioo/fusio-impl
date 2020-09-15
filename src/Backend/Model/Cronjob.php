@@ -21,7 +21,7 @@ class Cronjob implements \JsonSerializable
      */
     protected $cron;
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $action;
     /**
@@ -79,16 +79,16 @@ class Cronjob implements \JsonSerializable
         return $this->cron;
     }
     /**
-     * @param int|null $action
+     * @param string|null $action
      */
-    public function setAction(?int $action) : void
+    public function setAction(?string $action) : void
     {
         $this->action = $action;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getAction() : ?int
+    public function getAction() : ?string
     {
         return $this->action;
     }

@@ -276,16 +276,28 @@
             "type": "string"
           }
         },
-        "routes": {
+        "paymentClass": {
           "type": "array",
           "items": {
-            "$ref": "Route"
+            "type": "string"
           }
         },
-        "action": {
+        "userClass": {
           "type": "array",
           "items": {
-            "$ref": "Action"
+            "type": "string"
+          }
+        },
+        "routesClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connection": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
           }
         },
         "schema": {
@@ -294,24 +306,18 @@
             "$ref": "Schema"
           }
         },
-        "connection": {
+        "action": {
           "type": "array",
           "items": {
-            "$ref": "Connection"
+            "$ref": "Action"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Route"
           }
         }
-      }
-    },
-    "Adapter_Extern": {
-      "$extends": "Adapter",
-      "type": "object",
-      "properties": {
-      }
-    },
-    "Adapter_Intern": {
-      "$extends": "Adapter",
-      "type": "object",
-      "properties": {
       }
     },
     "App": {
@@ -567,7 +573,7 @@
           "type": "string"
         },
         "action": {
-          "type": "integer"
+          "type": "string"
         },
         "executeDate": {
           "type": "string",
@@ -1301,7 +1307,7 @@
           "$ref": "Route_Method_Responses"
         },
         "action": {
-          "type": "integer"
+          "type": "string"
         },
         "costs": {
           "type": "integer"

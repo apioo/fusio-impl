@@ -25,11 +25,9 @@ use Fusio\Engine\Form\Container;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model\Form_Container;
-use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Form

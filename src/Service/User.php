@@ -22,20 +22,17 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Account_Credentials;
 use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Backend\Model\User_Update;
-use Fusio\Impl\Backend\Schema as BackendSchema;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
 use Fusio\Impl\Event\User\DeletedEvent;
 use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
-use Fusio\Impl\Event\UserEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\User\PasswordComplexity;
 use Fusio\Impl\Service\User\ValidatorTrait;
@@ -127,7 +124,7 @@ class User
         }
 
         // allow login either through username or email
-        if (preg_match('/' . BackendSchema\User::NAME_PATTERN . '/', $username)) {
+        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $username)) {
             $column = 'name';
         } else {
             $column = 'email';

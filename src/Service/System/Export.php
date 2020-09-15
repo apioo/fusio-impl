@@ -37,12 +37,6 @@ class Export extends SystemAbstract
     {
         $data = new stdClass();
 
-        // @TODO for schema and action exports there can be a problem with the
-        // order. In case a schema reference another schema and the depending
-        // schema is listed afterwards the import will not work. The same
-        // problem exists for actions. There must be a sorting to list entries
-        // with dependencies at the bottom
-
         foreach ($this->types as $type) {
             $result = array();
 
@@ -61,7 +55,7 @@ class Export extends SystemAbstract
      * @param integer $index
      * @param array $result
      */
-    protected function exportType($type, $index, array &$result)
+    private function exportType($type, $index, array &$result)
     {
         $collection = $this->doRequest('GET', $type . '?startIndex=' . $index);
         $count      = isset($collection->totalResults) ? $collection->totalResults : 0;
@@ -76,7 +70,27 @@ class Export extends SystemAbstract
                     throw new \RuntimeException('Exporting ' . $type . ' failed, the API responded with: ' . $entity->message);
                 }
 
-                $result[] = $this->transform($type, $entity);
+                if ($type === self::TYPE_SCOPE) {
+                    $result[] = $this->transformScope($entity);
+                } elseif ($type === self::TYPE_USER) {
+                    $result[] = $this->transformUser($entity);
+                } elseif ($type === self::TYPE_APP) {
+                    $result[] = $this->transformApp($entity);
+                } elseif ($type === self::TYPE_CONNECTION) {
+                    $result[] = $this->transformConnection($entity);
+                } elseif ($type === self::TYPE_SCHEMA) {
+                    $result[] = $this->transformSchema($entity);
+                } elseif ($type === self::TYPE_ACTION) {
+                    $result[] = $this->transformAction($entity);
+                } elseif ($type === self::TYPE_ROUTE) {
+                    $result[] = $this->transformRoute($entity);
+                } elseif ($type === self::TYPE_CRONJOB) {
+                    $result[] = $this->transformCronjob($entity);
+                } elseif ($type === self::TYPE_RATE) {
+                    $result[] = $this->transformRate($entity);
+                } elseif ($type === self::TYPE_EVENT) {
+                    $result[] = $this->transformEvent($entity);
+                }
             }
         }
 
@@ -85,21 +99,85 @@ class Export extends SystemAbstract
         }
     }
 
-    /**
-     * @param string $tableName
-     * @param string $id
-     * @param string $type
-     * @return string
-     */
-    protected function getReference($tableName, $id, $type)
+    private function transformConnection(stdClass $entity)
     {
-        $name = $this->connection->fetchColumn('SELECT name FROM ' . $tableName . ' WHERE id = :id', ['id' => $id]);
+        unset($entity->id);
 
-        if (empty($name)) {
-            $type = substr($tableName, 6);
-            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $id);
-        }
+        return $entity;
+    }
 
-        return $name;
+    private function transformSchema(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
+
+        return $entity;
+    }
+
+    private function transformAction(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
+
+        return $entity;
+    }
+
+    private function transformRoute(stdClass $entity)
+    {
+        unset($entity->id);
+
+        return $entity;
+    }
+
+    private function transformCronjob(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
+        unset($entity->executeDate);
+        unset($entity->exitCode);
+        unset($entity->errors);
+
+        return $entity;
+    }
+
+    private function transformRate(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->status);
+
+        return $entity;
+    }
+
+    private function transformApp(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->appKey);
+        unset($entity->appSecret);
+        unset($entity->tokens);
+
+        return $entity;
+    }
+
+    private function transformUser(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->apps);
+
+        return $entity;
+    }
+
+    private function transformScope(stdClass $entity)
+    {
+        unset($entity->id);
+        unset($entity->routes);
+
+        return $entity;
+    }
+
+    private function transformEvent(stdClass $entity)
+    {
+        unset($entity->id);
+
+        return $entity;
     }
 }

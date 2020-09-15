@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Backend\Schema\User;
+use Fusio\Impl\Backend\Model\User;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -50,13 +50,12 @@ class Whoami extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(User::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, User::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     protected function doGet(HttpContextInterface $context)

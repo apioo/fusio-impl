@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Backend\Api\Import;
 
-use Fusio\Impl\Adapter\Transform;
+use Fusio\Impl\Adapter\Transformer;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
@@ -50,7 +50,7 @@ class Format extends BackendApiAbstract
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.import']);
         $post->setRequest(Model\Import_Request::class);
-        $post->addResponse(200, Model\Adapter_Extern::class);
+        $post->addResponse(200, Model\Adapter::class);
 
         return $builder->getSpecification();
     }
@@ -62,7 +62,7 @@ class Format extends BackendApiAbstract
     public function doPost($record, HttpContextInterface $context)
     {
         $format = $context->getUriFragment('format');
-        $body   = Transform::fromSchema($format, $record->getSchema());
+        $body   = Transformer::fromSchema($format, $record->getSchema());
 
         return $body;
     }

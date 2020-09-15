@@ -87,12 +87,14 @@ class Import extends SystemAbstract
 
             if (is_array($entries)) {
                 foreach ($entries as $entry) {
-                    if ($entry instanceof stdClass) {
-                        if (method_exists($this, $method)) {
-                            $this->$method($type, $entry, $result);
-                        } else {
-                            $this->importGeneral($type, $entry, $result);
-                        }
+                    if (!$entry instanceof stdClass) {
+                        continue;
+                    }
+
+                    if ($type === self::TYPE_ROUTE) {
+                        $this->importRoutes($type, $entry, $result);
+                    } else {
+                        $this->importGeneral($type, $entry, $result);
                     }
                 }
             }
@@ -106,7 +108,7 @@ class Import extends SystemAbstract
      * @param \stdClass $data
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    protected function importGeneral($type, stdClass $data, Result $result)
+    private function importGeneral($type, stdClass $data, Result $result)
     {
         $name = $data->name;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE name = :name', [
@@ -135,7 +137,7 @@ class Import extends SystemAbstract
      * @param \stdClass $data
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    protected function importRoutes($type, stdClass $data, Result $result)
+    private function importRoutes($type, stdClass $data, Result $result)
     {
         $path = $data->path;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_routes WHERE path = :path', [
@@ -143,19 +145,19 @@ class Import extends SystemAbstract
         ]);
 
         if (!empty($id)) {
-            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform(self::TYPE_ROUTES, $data));
+            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform(self::TYPE_ROUTE, $data));
         } else {
-            $response = $this->doRequest('POST', 'routes', $this->transform(self::TYPE_ROUTES, $data));
+            $response = $this->doRequest('POST', 'routes', $this->transform(self::TYPE_ROUTE, $data));
         }
 
         if (isset($response->success) && $response->success === false) {
             $this->logger->error($response->message);
 
-            $result->add(self::TYPE_ROUTES, Result::ACTION_FAILED, $path . ': ' . $response->message);
+            $result->add(self::TYPE_ROUTE, Result::ACTION_FAILED, $path . ': ' . $response->message);
         } elseif (!empty($id)) {
-            $result->add(self::TYPE_ROUTES, Result::ACTION_UPDATED, $path);
+            $result->add(self::TYPE_ROUTE, Result::ACTION_UPDATED, $path);
         } else {
-            $result->add(self::TYPE_ROUTES, Result::ACTION_CREATED, $path);
+            $result->add(self::TYPE_ROUTE, Result::ACTION_CREATED, $path);
         }
     }
 
@@ -163,7 +165,7 @@ class Import extends SystemAbstract
      * @param \stdClass $config
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    protected function importConfig(stdClass $config, Result $result)
+    private function importConfig(stdClass $config, Result $result)
     {
         $count = 0;
         foreach ($config as $name => $value) {
@@ -195,7 +197,7 @@ class Import extends SystemAbstract
      * @param \stdClass $data
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    protected function importProvider(stdClass $data, Result $result)
+    private function importProvider(stdClass $data, Result $result)
     {
         $providerTypes  = $this->providerWriter->getAvailableTypes();
         $providerConfig = [];
@@ -218,23 +220,5 @@ class Import extends SystemAbstract
                 $result->add('class', Result::ACTION_REGISTERED, $newClass);
             }
         }
-    }
-
-    /**
-     * @param string $tableName
-     * @param string $name
-     * @param string $type
-     * @return integer
-     */
-    protected function getReference($tableName, $name, $type)
-    {
-        $id = (int) $this->connection->fetchColumn('SELECT id FROM ' . $tableName . ' WHERE name = :name', ['name' => $name]);
-
-        if (empty($id)) {
-            $type = substr($tableName, 6);
-            throw new \RuntimeException('Could not resolve ' . $type . ' ' . $name);
-        }
-
-        return $id;
     }
 }

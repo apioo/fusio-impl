@@ -174,7 +174,7 @@ class Schema extends TransformerAbstract
     private function resolveSchemasFromRoutes(array $data, $basePath)
     {
         $schemas = [];
-        $type    = SystemAbstract::TYPE_ROUTES;
+        $type    = SystemAbstract::TYPE_ROUTE;
 
         if (isset($data[$type]) && is_array($data[$type])) {
             foreach ($data[$type] as $name => $row) {

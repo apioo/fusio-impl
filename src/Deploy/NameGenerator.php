@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Deploy;
 
-use Fusio\Impl\Backend\Schema;
 use RuntimeException;
 use Symfony\Component\Yaml\Tag\TaggedValue;
 
@@ -68,7 +67,7 @@ class NameGenerator
                 throw new RuntimeException('Invalid tag provide: ' . $source->getTag());
             }
         } elseif (is_string($source)) {
-            if (preg_match('/' . Schema\Schema::NAME_PATTERN . '/', $source)) {
+            if (preg_match('/^[a-zA-Z0-9\-\_]{3,255}$/', $source)) {
                 return $source;
             } else {
                 return self::getNameFromJsonSchema($source);

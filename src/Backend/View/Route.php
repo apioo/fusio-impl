@@ -137,7 +137,7 @@ class Route extends ViewAbstract
                     }
 
                     if (!empty($row['action'])) {
-                        $method->action = (int) $row['action'];
+                        $method->action = $row['action'];
                     }
 
                     if (!empty($row['costs'])) {

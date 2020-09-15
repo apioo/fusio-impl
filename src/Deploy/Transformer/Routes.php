@@ -37,7 +37,7 @@ class Routes extends TransformerAbstract
 {
     public function transform(array $data, \stdClass $import, $basePath)
     {
-        $routes = isset($data[SystemAbstract::TYPE_ROUTES]) ? $data[SystemAbstract::TYPE_ROUTES] : [];
+        $routes = isset($data[SystemAbstract::TYPE_ROUTE]) ? $data[SystemAbstract::TYPE_ROUTE] : [];
 
         if (!empty($routes) && is_array($routes)) {
             $priority = count($routes);
@@ -52,7 +52,7 @@ class Routes extends TransformerAbstract
 
     protected function transformRoutes($priority, $path, $data, $basePath)
     {
-        $data = $this->includeDirective->resolve($data, $basePath, SystemAbstract::TYPE_ROUTES);
+        $data = $this->includeDirective->resolve($data, $basePath, SystemAbstract::TYPE_ROUTE);
 
         $scopes = [];
 

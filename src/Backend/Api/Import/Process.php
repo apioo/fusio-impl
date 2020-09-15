@@ -53,7 +53,7 @@ class Process extends BackendApiAbstract
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.import']);
-        $post->setRequest(Model\Adapter_Extern::class);
+        $post->setRequest(Model\Adapter::class);
         $post->addResponse(200, Model\Import_Response::class);
 
         return $builder->getSpecification();
@@ -61,7 +61,7 @@ class Process extends BackendApiAbstract
 
     /**
      * {@inheritdoc}
-     * @param Model\Adapter_Extern $record
+     * @param Model\Adapter $record
      */
     public function doPost($record, HttpContextInterface $context)
     {

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Backend\Schema;
 use PSX\Http\Exception as StatusCode;
 
 /**

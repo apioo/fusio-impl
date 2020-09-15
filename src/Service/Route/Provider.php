@@ -224,10 +224,10 @@ class Provider
 
             $id = $this->actionService->exists($record->getName());
             if (!$id) {
-                $id = $this->actionService->create($record, $context);
+                $this->actionService->create($record, $context);
             }
 
-            $this->actions[$index] = (int) $id;
+            $this->actions[$index] = $record->getName();
         }
     }
 

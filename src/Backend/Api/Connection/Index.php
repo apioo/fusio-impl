@@ -24,7 +24,6 @@ namespace Fusio\Impl\Backend\Api\Connection;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model\Connection_Index;
-use Fusio\Impl\Backend\Schema;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;

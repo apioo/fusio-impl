@@ -42,7 +42,6 @@ trait ValidatorTrait
         return new Validator(array(
             new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Route::class))]),
             new Field('/path', [new Path()]),
-            new Field('/config/(\d+)/methods/([A-Z]+)/action', [new PrimaryKey($this->tableManager->getTable(Table\Action::class))]),
         ));
     }
 }

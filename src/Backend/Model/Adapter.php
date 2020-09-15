@@ -16,21 +16,33 @@ class Adapter implements \JsonSerializable
      */
     protected $connectionClass;
     /**
-     * @var array<Routes>|null
+     * @var array<string>|null
      */
-    protected $routes;
+    protected $paymentClass;
     /**
-     * @var array<Action>|null
+     * @var array<string>|null
      */
-    protected $action;
+    protected $userClass;
+    /**
+     * @var array<string>|null
+     */
+    protected $routesClass;
+    /**
+     * @var array<Connection>|null
+     */
+    protected $connection;
     /**
      * @var array<Schema>|null
      */
     protected $schema;
     /**
-     * @var array<Connection>|null
+     * @var array<Action>|null
      */
-    protected $connection;
+    protected $action;
+    /**
+     * @var array<Route>|null
+     */
+    protected $routes;
     /**
      * @param array<string>|null $actionClass
      */
@@ -60,32 +72,60 @@ class Adapter implements \JsonSerializable
         return $this->connectionClass;
     }
     /**
-     * @param array<Routes>|null $routes
+     * @param array<string>|null $paymentClass
      */
-    public function setRoutes(?array $routes) : void
+    public function setPaymentClass(?array $paymentClass) : void
     {
-        $this->routes = $routes;
+        $this->paymentClass = $paymentClass;
     }
     /**
-     * @return array<Routes>|null
+     * @return array<string>|null
      */
-    public function getRoutes() : ?array
+    public function getPaymentClass() : ?array
     {
-        return $this->routes;
+        return $this->paymentClass;
     }
     /**
-     * @param array<Action>|null $action
+     * @param array<string>|null $userClass
      */
-    public function setAction(?array $action) : void
+    public function setUserClass(?array $userClass) : void
     {
-        $this->action = $action;
+        $this->userClass = $userClass;
     }
     /**
-     * @return array<Action>|null
+     * @return array<string>|null
      */
-    public function getAction() : ?array
+    public function getUserClass() : ?array
     {
-        return $this->action;
+        return $this->userClass;
+    }
+    /**
+     * @param array<string>|null $routesClass
+     */
+    public function setRoutesClass(?array $routesClass) : void
+    {
+        $this->routesClass = $routesClass;
+    }
+    /**
+     * @return array<string>|null
+     */
+    public function getRoutesClass() : ?array
+    {
+        return $this->routesClass;
+    }
+    /**
+     * @param array<Connection>|null $connection
+     */
+    public function setConnection(?array $connection) : void
+    {
+        $this->connection = $connection;
+    }
+    /**
+     * @return array<Connection>|null
+     */
+    public function getConnection() : ?array
+    {
+        return $this->connection;
     }
     /**
      * @param array<Schema>|null $schema
@@ -102,22 +142,36 @@ class Adapter implements \JsonSerializable
         return $this->schema;
     }
     /**
-     * @param array<Connection>|null $connection
+     * @param array<Action>|null $action
      */
-    public function setConnection(?array $connection) : void
+    public function setAction(?array $action) : void
     {
-        $this->connection = $connection;
+        $this->action = $action;
     }
     /**
-     * @return array<Connection>|null
+     * @return array<Action>|null
      */
-    public function getConnection() : ?array
+    public function getAction() : ?array
     {
-        return $this->connection;
+        return $this->action;
+    }
+    /**
+     * @param array<Route>|null $routes
+     */
+    public function setRoutes(?array $routes) : void
+    {
+        $this->routes = $routes;
+    }
+    /**
+     * @return array<Route>|null
+     */
+    public function getRoutes() : ?array
+    {
+        return $this->routes;
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('actionClass' => $this->actionClass, 'connectionClass' => $this->connectionClass, 'routes' => $this->routes, 'action' => $this->action, 'schema' => $this->schema, 'connection' => $this->connection), static function ($value) : bool {
+        return (object) array_filter(array('actionClass' => $this->actionClass, 'connectionClass' => $this->connectionClass, 'paymentClass' => $this->paymentClass, 'userClass' => $this->userClass, 'routesClass' => $this->routesClass, 'connection' => $this->connection, 'schema' => $this->schema, 'action' => $this->action, 'routes' => $this->routes), static function ($value) : bool {
             return $value !== null;
         });
     }
