@@ -68,7 +68,7 @@ class EntityTest extends ControllerDbTestCase
     "id": 1,
     "name": "Test-Cron",
     "cron": "*\/30 * * * *",
-    "action": 3,
+    "action": "Sql-Table",
     "executeDate": "2015-02-27T19:59:15Z",
     "exitCode": 0,
     "errors": [
@@ -132,7 +132,7 @@ JSON;
         ), json_encode([
             'name' => 'Foo-Cron',
             'cron' => '10 * * * *',
-            'action' => 4,
+            'action' => 'Inspect',
         ]));
 
         $body   = (string) $response->getBody();
@@ -160,7 +160,7 @@ JSON;
         $this->assertEquals(1, $row['id']);
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
-        $this->assertEquals(4, $row['action']);
+        $this->assertEquals('Inspect', $row['action']);
 
         // check generated cron file
         $actual = CronFile::get();

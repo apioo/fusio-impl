@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Filter\Routes;
 
-use Fusio\Impl\Backend\Filter\Routes\Path;
+use Fusio\Impl\Backend\Filter\Route\Path;
 use PHPUnit\Framework\TestCase;
 
 /**

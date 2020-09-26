@@ -151,7 +151,7 @@ JSON;
         ), json_encode([
             'name' => 'New-Cron',
             'cron' => '5 * * * *',
-            'action' => 3,
+            'action' => 'Sql-Table',
         ]));
 
         $body   = (string) $response->getBody();
@@ -179,7 +179,7 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
-        $this->assertEquals(3, $row['action']);
+        $this->assertEquals('Sql-Table', $row['action']);
 
         // check generated cron file
         $actual = CronFile::get();

@@ -203,6 +203,9 @@
     "Plan_Contract_Create": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "userId": {
           "type": "integer"
         },

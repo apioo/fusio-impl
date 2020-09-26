@@ -59,7 +59,7 @@
           "type": "string"
         },
         "action": {
-          "type": "integer"
+          "type": "string"
         },
         "executeDate": {
           "format": "date-time",

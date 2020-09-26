@@ -9,7 +9,7 @@
         ]
       },
       "tags": [],
-      "request": "Adapter_Extern",
+      "request": "Adapter",
       "responses": {
         "200": "Import_Response"
       }
@@ -61,16 +61,28 @@
             "type": "string"
           }
         },
-        "routes": {
+        "paymentClass": {
           "type": "array",
           "items": {
-            "$generic": "Routes"
+            "type": "string"
           }
         },
-        "action": {
+        "userClass": {
           "type": "array",
           "items": {
-            "$ref": "Action"
+            "type": "string"
+          }
+        },
+        "routesClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connection": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
           }
         },
         "schema": {
@@ -79,17 +91,19 @@
             "$ref": "Schema"
           }
         },
-        "connection": {
+        "action": {
           "type": "array",
           "items": {
-            "$ref": "Connection"
+            "$ref": "Action"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Route"
           }
         }
       }
-    },
-    "Adapter_Extern": {
-      "$extends": "Adapter",
-      "type": "object"
     },
     "Connection": {
       "type": "object",
@@ -130,6 +144,105 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "array",
+          "items": {
+            "$ref": "Route_Version"
+          }
+        }
+      }
+    },
+    "Route_Method": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "request": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "responses": {
+          "$ref": "Route_Method_Responses"
+        },
+        "action": {
+          "type": "string"
+        },
+        "costs": {
+          "type": "integer"
+        }
+      }
+    },
+    "Route_Method_Responses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Route_Methods": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "Route_Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "methods": {
+          "$ref": "Route_Methods"
         }
       }
     },
