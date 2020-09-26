@@ -25,6 +25,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -64,7 +65,7 @@ class Collection extends BackendApiAbstract
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.cronjob']);
         $post->setRequest(Model\Cronjob_Create::class);
-        $post->addResponse(201, Model\Message::class);
+        $post->addResponse(201, Message::class);
 
         return $builder->getSpecification();
     }

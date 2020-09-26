@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\Api\Sdk;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Model\Message;
 use PSX\Api\GeneratorFactory;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -61,7 +62,7 @@ class Generate extends BackendApiAbstract
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.sdk']);
         $post->setRequest(Model\Sdk_Generate::class);
-        $post->addResponse(200, Model\Message::class);
+        $post->addResponse(200, Message::class);
 
         return $builder->getSpecification();
     }

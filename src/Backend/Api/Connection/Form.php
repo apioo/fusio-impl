@@ -24,7 +24,7 @@ namespace Fusio\Impl\Backend\Api\Connection;
 use Fusio\Engine\Form\Container;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Model\Form_Container;
+use Fusio\Impl\Model\Form_Container;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;

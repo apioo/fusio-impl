@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\Api\Marketplace;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Model\Message;
 use Fusio\Impl\Service\Marketplace\App;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -70,7 +71,7 @@ class Collection extends BackendApiAbstract
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.marketplace']);
         $post->setRequest(Model\Marketplace_Install::class);
-        $post->addResponse(201, Model\Message::class);
+        $post->addResponse(201, Message::class);
 
         return $builder->getSpecification();
     }

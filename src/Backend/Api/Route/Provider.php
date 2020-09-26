@@ -24,6 +24,8 @@ namespace Fusio\Impl\Backend\Api\Route;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Model\Form_Container;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -56,12 +58,12 @@ class Provider extends BackendApiAbstract
         $get->setSecurity(Authorization::BACKEND, ['backend.routes']);
         $query = $get->setQueryParameters('Route_Provider_Query');
         $query->addString('class');
-        $get->addResponse(200, Model\Form_Container::class);
+        $get->addResponse(200, Form_Container::class);
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.routes']);
         $post->setRequest(Model\Route_Provider::class);
-        $post->addResponse(201, Model\Message::class);
+        $post->addResponse(201, Message::class);
 
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::BACKEND, ['backend.routes']);

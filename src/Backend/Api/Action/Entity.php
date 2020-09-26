@@ -25,6 +25,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Model\Message;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -64,11 +65,11 @@ class Entity extends BackendApiAbstract
         $post = $builder->addMethod('PUT');
         $post->setSecurity(Authorization::BACKEND, ['backend.action']);
         $post->setRequest(Model\Action_Update::class);
-        $post->addResponse(200, Model\Message::class);
+        $post->addResponse(200, Message::class);
 
         $delete = $builder->addMethod('DELETE');
         $delete->setSecurity(Authorization::BACKEND, ['backend.action']);
-        $delete->addResponse(200, Model\Message::class);
+        $delete->addResponse(200, Message::class);
 
         return $builder->getSpecification();
     }

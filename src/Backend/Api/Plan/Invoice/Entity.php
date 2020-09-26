@@ -25,6 +25,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -63,11 +64,11 @@ class Entity extends BackendApiAbstract
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::BACKEND, ['backend.plan']);
         $put->setRequest(Model\Plan_Invoice_Update::class);
-        $put->addResponse(200, Model\Message::class);
+        $put->addResponse(200, Message::class);
 
         $delete = $builder->addMethod('DELETE');
         $delete->setSecurity(Authorization::BACKEND, ['backend']);
-        $delete->addResponse(200, Model\Message::class);
+        $delete->addResponse(200, Message::class);
 
         return $builder->getSpecification();
     }
@@ -95,7 +96,7 @@ class Entity extends BackendApiAbstract
     {
         $this->planInvoiceService->update(
             (int) $context->getUriFragment('invoice_id'),
-            $record->status,
+            $record,
             $this->context->getUserContext()
         );
 

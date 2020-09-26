@@ -25,6 +25,7 @@ use Fusio\Engine\Form\Container;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Model\Form_Container;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -55,7 +56,7 @@ class Form extends BackendApiAbstract
         $get->setSecurity(Authorization::BACKEND, ['backend.action']);
         $query = $get->setQueryParameters('Action_Form_Query');
         $query->addString('class');
-        $get->addResponse(200, Model\Form_Container::class);
+        $get->addResponse(200, Form_Container::class);
 
         return $builder->getSpecification();
     }

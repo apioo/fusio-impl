@@ -24,6 +24,7 @@ namespace Fusio\Impl\Backend\Api\Marketplace;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Model\Message;
 use Fusio\Impl\Service\Marketplace\App;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -72,11 +73,11 @@ class Entity extends BackendApiAbstract
 
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::BACKEND, ['backend.marketplace']);
-        $put->addResponse(200, Model\Message::class);
+        $put->addResponse(200, Message::class);
 
         $delete = $builder->addMethod('DELETE');
         $delete->setSecurity(Authorization::BACKEND, ['backend.marketplace']);
-        $delete->addResponse(200, Model\Message::class);
+        $delete->addResponse(200, Message::class);
 
         return $builder->getSpecification();
     }

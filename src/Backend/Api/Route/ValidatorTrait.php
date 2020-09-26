@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Backend\Api\Route;
 
 use Fusio\Impl\Backend\Filter\PrimaryKey;
-use Fusio\Impl\Backend\Filter\Routes\Path;
+use Fusio\Impl\Backend\Filter\Route\Path;
 use Fusio\Impl\Table;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Schema\Validation\Field;

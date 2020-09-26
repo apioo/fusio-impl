@@ -26,6 +26,7 @@ use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\Model\Plan_Contract_Create;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Model\Message;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -66,7 +67,7 @@ class Collection extends BackendApiAbstract
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend.plan']);
         $post->setRequest(Model\Plan_Contract_Create::class);
-        $post->addResponse(201, Model\Message::class);
+        $post->addResponse(201, Message::class);
 
         return $builder->getSpecification();
     }
