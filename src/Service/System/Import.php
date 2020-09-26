@@ -83,8 +83,6 @@ class Import extends SystemAbstract
 
         foreach ($this->types as $type) {
             $entries = isset($data->{$type}) ? $data->{$type} : null;
-            $method  = 'import' . ucfirst($type);
-
             if (is_array($entries)) {
                 foreach ($entries as $entry) {
                     if (!$entry instanceof stdClass) {
@@ -108,7 +106,7 @@ class Import extends SystemAbstract
      * @param \stdClass $data
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    private function importGeneral($type, stdClass $data, Result $result)
+    private function importGeneral(string $type, stdClass $data, Result $result)
     {
         $name = $data->name;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_' . $type . ' WHERE name = :name', [
@@ -116,9 +114,9 @@ class Import extends SystemAbstract
         ]);
 
         if (!empty($id)) {
-            $response = $this->doRequest('PUT', $type . '/' . $id, $this->transform($type, $data));
+            $response = $this->doRequest('PUT', $type . '/' . $id, $data);
         } else {
-            $response = $this->doRequest('POST', $type, $this->transform($type, $data));
+            $response = $this->doRequest('POST', $type, $data);
         }
 
         if (isset($response->success) && $response->success === false) {
@@ -137,7 +135,7 @@ class Import extends SystemAbstract
      * @param \stdClass $data
      * @param \Fusio\Impl\Service\System\Import\Result $result
      */
-    private function importRoutes($type, stdClass $data, Result $result)
+    private function importRoutes(string $type, stdClass $data, Result $result)
     {
         $path = $data->path;
         $id   = $this->connection->fetchColumn('SELECT id FROM fusio_routes WHERE path = :path', [
@@ -145,9 +143,9 @@ class Import extends SystemAbstract
         ]);
 
         if (!empty($id)) {
-            $response = $this->doRequest('PUT', 'routes/' . $id, $this->transform(self::TYPE_ROUTE, $data));
+            $response = $this->doRequest('PUT', 'routes/' . $id, $data);
         } else {
-            $response = $this->doRequest('POST', 'routes', $this->transform(self::TYPE_ROUTE, $data));
+            $response = $this->doRequest('POST', 'routes', $data);
         }
 
         if (isset($response->success) && $response->success === false) {

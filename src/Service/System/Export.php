@@ -55,7 +55,7 @@ class Export extends SystemAbstract
      * @param integer $index
      * @param array $result
      */
-    private function exportType($type, $index, array &$result)
+    private function exportType(string $type, int $index, array &$result)
     {
         $collection = $this->doRequest('GET', $type . '?startIndex=' . $index);
         $count      = isset($collection->totalResults) ? $collection->totalResults : 0;
@@ -70,32 +70,39 @@ class Export extends SystemAbstract
                     throw new \RuntimeException('Exporting ' . $type . ' failed, the API responded with: ' . $entity->message);
                 }
 
-                if ($type === self::TYPE_SCOPE) {
-                    $result[] = $this->transformScope($entity);
-                } elseif ($type === self::TYPE_USER) {
-                    $result[] = $this->transformUser($entity);
-                } elseif ($type === self::TYPE_APP) {
-                    $result[] = $this->transformApp($entity);
-                } elseif ($type === self::TYPE_CONNECTION) {
-                    $result[] = $this->transformConnection($entity);
-                } elseif ($type === self::TYPE_SCHEMA) {
-                    $result[] = $this->transformSchema($entity);
-                } elseif ($type === self::TYPE_ACTION) {
-                    $result[] = $this->transformAction($entity);
-                } elseif ($type === self::TYPE_ROUTE) {
-                    $result[] = $this->transformRoute($entity);
-                } elseif ($type === self::TYPE_CRONJOB) {
-                    $result[] = $this->transformCronjob($entity);
-                } elseif ($type === self::TYPE_RATE) {
-                    $result[] = $this->transformRate($entity);
-                } elseif ($type === self::TYPE_EVENT) {
-                    $result[] = $this->transformEvent($entity);
-                }
+                $result[] = $this->transform($type, $entity);
             }
         }
 
         if ($count > count($result)) {
             $this->exportType($type, $index + self::COLLECTION_SIZE, $result);
+        }
+    }
+
+    private function transform(string $type, stdClass $entity): stdClass
+    {
+        if ($type === self::TYPE_SCOPE) {
+            return $this->transformScope($entity);
+        } elseif ($type === self::TYPE_USER) {
+            return $this->transformUser($entity);
+        } elseif ($type === self::TYPE_APP) {
+            return $this->transformApp($entity);
+        } elseif ($type === self::TYPE_CONNECTION) {
+            return $this->transformConnection($entity);
+        } elseif ($type === self::TYPE_SCHEMA) {
+            return $this->transformSchema($entity);
+        } elseif ($type === self::TYPE_ACTION) {
+            return $this->transformAction($entity);
+        } elseif ($type === self::TYPE_ROUTE) {
+            return $this->transformRoute($entity);
+        } elseif ($type === self::TYPE_CRONJOB) {
+            return $this->transformCronjob($entity);
+        } elseif ($type === self::TYPE_RATE) {
+            return $this->transformRate($entity);
+        } elseif ($type === self::TYPE_EVENT) {
+            return $this->transformEvent($entity);
+        } else {
+            return $entity;
         }
     }
 

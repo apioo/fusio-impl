@@ -95,7 +95,7 @@ class Deploy
             SystemAbstract::TYPE_CONNECTION => $this->newTransformer(Transformer\Connection::class),
             SystemAbstract::TYPE_SCHEMA     => $this->newTransformer(Transformer\Schema::class),
             SystemAbstract::TYPE_ACTION     => $this->newTransformer(Transformer\Action::class),
-            SystemAbstract::TYPE_ROUTE     => $this->newTransformer(Transformer\Routes::class),
+            SystemAbstract::TYPE_ROUTE      => $this->newTransformer(Transformer\Route::class),
             SystemAbstract::TYPE_CRONJOB    => $this->newTransformer(Transformer\Cronjob::class),
             SystemAbstract::TYPE_RATE       => $this->newTransformer(Transformer\Rate::class),
             SystemAbstract::TYPE_EVENT      => $this->newTransformer(Transformer\Event::class),
