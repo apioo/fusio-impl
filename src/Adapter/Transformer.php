@@ -36,8 +36,10 @@ use Fusio\Impl\Backend\Model\Schema_Source;
 use PSX\Api\Parser;
 use PSX\Api\Resource;
 use PSX\Json;
+use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\Schema;
+use PSX\Schema\SchemaResolver;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -107,9 +109,11 @@ class Transformer
         $specification = $parser->parse($schema);
         $definitions = $specification->getDefinitions();
 
-        foreach ($definitions->getAllTypes() as $name => $type) {
-            $schema = new Schema($type, $definitions);
-            $data   = \json_decode($this->generator->generate($schema));
+        foreach ($definitions->getTypes(DefinitionsInterface::SELF_NAMESPACE) as $name => $type) {
+            $schema = new Schema($type, clone $definitions);
+            (new SchemaResolver())->resolve($schema);
+
+            $data = \json_decode($this->generator->generate($schema));
 
             $source = new Schema_Source();
             foreach ($data as $key => $value) {
