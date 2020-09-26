@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
-use Fusio\Impl\Backend\Filter\Routes\Path;
+use Fusio\Impl\Backend\Filter\Route\Path;
 use PSX\Api\Listing\FilterInterface;
 
 /**
