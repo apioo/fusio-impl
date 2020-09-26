@@ -12,11 +12,29 @@ class Plan_Contract_Create implements \JsonSerializable
     /**
      * @var int|null
      */
+    protected $id;
+    /**
+     * @var int|null
+     */
     protected $userId;
     /**
      * @var int|null
      */
     protected $planId;
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id) : void
+    {
+        $this->id = $id;
+    }
+    /**
+     * @return int|null
+     */
+    public function getId() : ?int
+    {
+        return $this->id;
+    }
     /**
      * @param int|null $userId
      */
@@ -47,7 +65,7 @@ class Plan_Contract_Create implements \JsonSerializable
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('userId' => $this->userId, 'planId' => $this->planId), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'userId' => $this->userId, 'planId' => $this->planId), static function ($value) : bool {
             return $value !== null;
         });
     }

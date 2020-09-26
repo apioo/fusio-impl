@@ -892,6 +892,9 @@
     "Plan_Contract_Create": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
         "userId": {
           "type": "integer"
         },
@@ -962,10 +965,22 @@
       }
     },
     "Plan_Invoice_Create": {
-      "$extends": "Plan_Invoice",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "contractId": {
+          "type": "integer"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
       "required": [
-        "userId",
-        "planId"
+        "contractId",
+        "startDate"
       ]
     },
     "Plan_Invoice_Update": {
