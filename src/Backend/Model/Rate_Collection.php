@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Backend\Model;
 
 /**
- * @extends Collection<Rate>
+ * @extends \Fusio\Impl\Model\Collection<Rate>
  */
-class Rate_Collection extends Collection
+class Rate_Collection extends \Fusio\Impl\Model\Collection
 {
 }

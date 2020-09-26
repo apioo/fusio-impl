@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Backend\Model;
 
 /**
- * @extends Collection<Log>
+ * @extends \Fusio\Impl\Model\Collection<Log>
  */
-class Log_Collection extends Collection
+class Log_Collection extends \Fusio\Impl\Model\Collection
 {
 }

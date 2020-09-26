@@ -1,133 +1,8 @@
 {
+  "$import": {
+    "common": "file:///common_schema.json"
+  },
   "definitions": {
-    "Collection": {
-      "type": "object",
-      "properties": {
-        "totalResults": {
-          "type": "integer"
-        },
-        "startIndex": {
-          "type": "integer"
-        },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$generic": "T"
-          }
-        }
-      }
-    },
-    "Message": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "Form_Container": {
-      "type": "object",
-      "properties": {
-        "element": {
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "$ref": "Form_Element_Input"
-              },
-              {
-                "$ref": "Form_Element_Select"
-              },
-              {
-                "$ref": "Form_Element_Tag"
-              },
-              {
-                "$ref": "Form_Element_TextArea"
-              }
-            ],
-            "discriminator": {
-              "propertyName": "element",
-              "mapping": {
-                "http://fusio-project.org/ns/2015/form/input": "Form_Element_Input",
-                "http://fusio-project.org/ns/2015/form/select": "Form_Element_Select",
-                "http://fusio-project.org/ns/2015/form/tag": "Form_Element_Tag",
-                "http://fusio-project.org/ns/2015/form/textarea": "Form_Element_TextArea"
-              }
-            }
-          }
-        }
-      }
-    },
-    "Form_Element": {
-      "type": "object",
-      "properties": {
-        "element": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "title": {
-          "type": "string"
-        },
-        "help": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "element"
-      ]
-    },
-    "Form_Element_Input": {
-      "$extends": "Form_Element",
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        }
-      }
-    },
-    "Form_Element_Select_Option": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string"
-        },
-        "value": {
-          "type": "string"
-        }
-      }
-    },
-    "Form_Element_Select": {
-      "$extends": "Form_Element",
-      "type": "object",
-      "properties": {
-        "options": {
-          "type": "array",
-          "items": {
-            "$ref": "Form_Element_Select_Option"
-          }
-        }
-      }
-    },
-    "Form_Element_Tag": {
-      "$extends": "Form_Element",
-      "type": "object",
-      "properties": {
-      }
-    },
-    "Form_Element_TextArea": {
-      "$extends": "Form_Element",
-      "type": "object",
-      "properties": {
-        "mode": {
-          "type": "string"
-        }
-      }
-    },
     "Account_Credentials": {
       "type": "object",
       "properties": {
@@ -178,19 +53,13 @@
     },
     "Action_Create": {
       "$extends": "Action",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name",
         "config"
       ]
     },
     "Action_Update": {
-      "$extends": "Action",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Action"
     },
     "Action_Index": {
       "type": "object",
@@ -204,7 +73,7 @@
       }
     },
     "Action_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Action"
       }
@@ -392,16 +261,13 @@
       }
     },
     "App_Token_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "App_token"
       }
     },
     "App_Create": {
       "$extends": "App",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "userId",
         "name",
@@ -410,13 +276,10 @@
       ]
     },
     "App_Update": {
-      "$extends": "App",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "App"
     },
     "App_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "App"
       }
@@ -457,7 +320,7 @@
       "additionalProperties": true
     },
     "Audit_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Audit"
       }
@@ -496,16 +359,13 @@
       }
     },
     "Config_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Config"
       }
     },
     "Config_Update": {
-      "$extends": "Config",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Config"
     },
     "Connection": {
       "type": "object",
@@ -531,22 +391,16 @@
       "maxProperties": 16
     },
     "Connection_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Connection"
       }
     },
     "Connection_Create": {
-      "$extends": "Connection",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Connection"
     },
     "Connection_Update": {
-      "$extends": "Connection",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Connection"
     },
     "Connection_Index": {
       "type": "object",
@@ -608,16 +462,13 @@
       }
     },
     "Cronjob_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Cronjob"
       }
     },
     "Cronjob_Create": {
       "$extends": "Cronjob",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name",
         "cron",
@@ -625,10 +476,7 @@
       ]
     },
     "Cronjob_Update": {
-      "$extends": "Cronjob",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Cronjob"
     },
     "Dashboard": {
       "type": "object",
@@ -675,7 +523,7 @@
       }
     },
     "Dashboard_Apps": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Dashboard_App"
       }
@@ -696,7 +544,7 @@
       }
     },
     "Dashboard_Requests": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Dashboard_Request"
       }
@@ -723,7 +571,7 @@
       }
     },
     "Dashboard_Transactions": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Dashboard_Transaction"
       }
@@ -744,7 +592,7 @@
       }
     },
     "Dashboard_Users": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Dashboard_User"
       }
@@ -765,25 +613,19 @@
       }
     },
     "Event_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Event"
       }
     },
     "Event_Create": {
       "$extends": "Event",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name"
       ]
     },
     "Event_Update": {
-      "$extends": "Event",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Event"
     },
     "Event_Subscription": {
       "type": "object",
@@ -803,16 +645,13 @@
       }
     },
     "Event_Subscription_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Event_Subscription"
       }
     },
     "Event_Subscription_Create": {
       "$extends": "Event_Subscription",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "eventId",
         "userId",
@@ -820,10 +659,7 @@
       ]
     },
     "Event_Subscription_Update": {
-      "$extends": "Event_Subscription",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Event_Subscription"
     },
     "Import_Request": {
       "type": "object",
@@ -887,7 +723,7 @@
       }
     },
     "Log_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Log"
       }
@@ -910,7 +746,7 @@
       }
     },
     "Log_Error_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Log_Error"
       }
@@ -1002,26 +838,20 @@
       }
     },
     "Plan_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Plan"
       }
     },
     "Plan_Create": {
       "$extends": "Plan",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name",
         "price"
       ]
     },
     "Plan_Update": {
-      "$extends": "Plan",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Plan"
     },
     "Plan_Contract": {
       "type": "object",
@@ -1054,7 +884,7 @@
       }
     },
     "Plan_Contract_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Plan_Contract"
       }
@@ -1075,10 +905,7 @@
       ]
     },
     "Plan_Contract_Update": {
-      "$extends": "Plan_Contract",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Plan_Contract"
     },
     "Plan_Invoice": {
       "type": "object",
@@ -1129,26 +956,20 @@
       }
     },
     "Plan_Invoice_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Plan_Invoice"
       }
     },
     "Plan_Invoice_Create": {
       "$extends": "Plan_Invoice",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "userId",
         "planId"
       ]
     },
     "Plan_Invoice_Update": {
-      "$extends": "Plan_Invoice",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Plan_Invoice"
     },
     "Rate": {
       "type": "object",
@@ -1181,25 +1002,19 @@
       }
     },
     "Rate_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Rate"
       }
     },
     "Rate_Create": {
       "$extends": "Rate",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name"
       ]
     },
     "Rate_Update": {
-      "$extends": "Rate",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Rate"
     },
     "Rate_Allocation": {
       "type": "object",
@@ -1321,26 +1136,20 @@
       }
     },
     "Route_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Route"
       }
     },
     "Route_Create": {
       "$extends": "Route",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "path",
         "config"
       ]
     },
     "Route_Update": {
-      "$extends": "Route",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Route"
     },
     "Route_Index_Providers": {
       "type": "object",
@@ -1440,25 +1249,19 @@
       "additionalProperties": true
     },
     "Schema_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Schema"
       }
     },
     "Schema_Create": {
       "$extends": "Schema",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name"
       ]
     },
     "Schema_Update": {
-      "$extends": "Schema",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Schema"
     },
     "Schema_Preview_Response": {
       "type": "object",
@@ -1504,25 +1307,19 @@
       }
     },
     "Scope_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Scope"
       }
     },
     "Scope_Create": {
       "$extends": "Scope",
-      "type": "object",
-      "properties": {
-      },
       "required": [
         "name"
       ]
     },
     "Scope_Update": {
-      "$extends": "Scope",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "Scope"
     },
     "Statistic_Chart_Data": {
       "type": "array",
@@ -1612,7 +1409,7 @@
       }
     },
     "Transaction_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "Transaction"
       }
@@ -1688,7 +1485,7 @@
       }
     },
     "User_Collection": {
-      "$ref": "Collection",
+      "$ref": "common:Collection",
       "$template": {
         "T": "User"
       }
@@ -1709,10 +1506,7 @@
       ]
     },
     "User_Update": {
-      "$extends": "User",
-      "type": "object",
-      "properties": {
-      }
+      "$extends": "User"
     }
   }
 }

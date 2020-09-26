@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Fusio\Impl\Backend\Model;
+namespace Fusio\Impl\Model;
 
 
 class Form_Element_Select extends Form_Element implements \JsonSerializable
