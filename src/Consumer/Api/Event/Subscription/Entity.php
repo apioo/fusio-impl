@@ -22,13 +22,13 @@
 namespace Fusio\Impl\Consumer\Api\Event\Subscription;
 
 use Fusio\Impl\Authorization\Authorization;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -50,26 +50,24 @@ class Entity extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('subscription_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Event_Subscription_Entity_Path');
+        $path->addInteger('subscription_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Event\Subscription::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.subscription']);
+        $get->addResponse(200, Model\Event_Subscription::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Event\Subscription\Update::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::CONSUMER, ['consumer.subscription']);
+        $put->setRequest(Model\Event_Subscription_Update::class);
+        $put->addResponse(200, Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.subscription'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::CONSUMER, ['consumer.subscription']);
+        $delete->addResponse(200, Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

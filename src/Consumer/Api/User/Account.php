@@ -23,8 +23,9 @@ namespace Fusio\Impl\Consumer\Api\User;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Consumer\Model;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -49,20 +50,18 @@ class Account extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\User\Account::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $get->addResponse(200, Model\User_Account::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->setRequest($this->schemaManager->getSchema(Schema\User\Account::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $put->setRequest(Model\User_Account::class);
+        $put->addResponse(200, Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

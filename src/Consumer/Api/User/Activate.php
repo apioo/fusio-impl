@@ -21,7 +21,8 @@
 
 namespace Fusio\Impl\Consumer\Api\User;
 
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\Model;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -47,14 +48,13 @@ class Activate extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema(Schema\User\Activate::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setRequest(Model\User_Activate::class);
+        $post->addResponse(200, Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

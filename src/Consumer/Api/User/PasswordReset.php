@@ -22,7 +22,8 @@
 namespace Fusio\Impl\Consumer\Api\User;
 
 use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\Model;
+use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -48,21 +49,19 @@ class PasswordReset extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->setRequest($this->schemaManager->getSchema(Schema\User\Email::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $post->setRequest(Model\User_Email::class);
+        $post->addResponse(200, Message::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->setRequest($this->schemaManager->getSchema(Schema\User\PasswordReset::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Message::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $put->setRequest(Model\User_PasswordReset::class);
+        $put->addResponse(200, Message::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

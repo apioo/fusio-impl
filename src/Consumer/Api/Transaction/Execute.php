@@ -48,14 +48,14 @@ class Execute extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('transaction_id', Property::getString());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Transaction_Execute_Path');
+        $path->addInteger('transaction_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setDescription('Executes the payment on the remote provider and redirects the user to the app using the provided return url')
-        );
+        $get = $builder->addMethod('GET');
+        $get->setDescription('Executes the payment on the remote provider and redirects the user to the app using the provided return url');
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

@@ -23,14 +23,13 @@ namespace Fusio\Impl\Consumer\Api\User;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\Model;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
-use PSX\Schema\Property;
 
 /**
  * Authorize
@@ -52,22 +51,21 @@ class Authorize extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->addQueryParameter('client_id', Property::getString())
-            ->addQueryParameter('scope', Property::getString())
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Meta::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $query = $get->setQueryParameters('Consumer_User_Authorize_Query');
+        $query->addString('client_id');
+        $query->addString('scope');
+        $get->addResponse(200, Model\Authorize_Meta::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.user'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Authorize\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Authorize\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::CONSUMER, ['consumer.user']);
+        $post->setRequest(Model\Authorize_Request::class);
+        $post->addResponse(200, Model\Authorize_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

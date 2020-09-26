@@ -23,7 +23,7 @@ namespace Fusio\Impl\Consumer\Api\Plan\Invoice;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -43,14 +43,13 @@ class Collection extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.plan'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Invoice\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.plan']);
+        $get->addResponse(200, $this->schemaManager->getSchema(Model\Plan_Invoice_Collection::class));
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

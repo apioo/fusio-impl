@@ -25,6 +25,7 @@ use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Backend\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
@@ -49,20 +50,18 @@ class Collection extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.plan'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Contract\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.plan']);
+        $get->addResponse(200, Model\Plan_Contract_Collection::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.plan'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Plan\Order\Request::class))
-            ->addResponse(201, $this->schemaManager->getSchema(Schema\Plan\Order\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::CONSUMER, ['consumer.plan']);
+        $post->setRequest(Model\Plan_Order_Request::class);
+        $post->addResponse(201, Model\Plan_Order_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

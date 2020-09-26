@@ -51,13 +51,14 @@ class Entity extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('grant_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Grant_Entity_Path');
+        $path->addInteger('grant_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.grant']));
+        $delete = $builder->addMethod('DELETE');
+        $delete->setSecurity(Authorization::CONSUMER, ['consumer.grant']);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

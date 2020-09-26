@@ -23,12 +23,11 @@ namespace Fusio\Impl\Consumer\Api\Plan\Invoice;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -44,15 +43,15 @@ class Entity extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('invoice_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Plan_Invoice_Entity_Path');
+        $path->addInteger('invoice_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.plan'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Plan\Invoice::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.plan']);
+        $get->addResponse(200, Model\Plan_Invoice::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

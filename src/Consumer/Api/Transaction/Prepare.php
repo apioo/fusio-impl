@@ -24,10 +24,10 @@ namespace Fusio\Impl\Consumer\Api\Transaction;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Prepare
@@ -49,16 +49,16 @@ class Prepare extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('provider', Property::getString());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Transaction_Prepare_Path');
+        $path->addString('provider');
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.transaction'])
-            ->setRequest($this->schemaManager->getSchema(Schema\Transaction\Prepare\Request::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction\Prepare\Response::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setSecurity(Authorization::CONSUMER, ['consumer.transaction']);
+        $post->setRequest(Model\Consumer_Transaction_Prepare_Request::class);
+        $post->addResponse(200, Model\Consumer_Transaction_Prepare_Response::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

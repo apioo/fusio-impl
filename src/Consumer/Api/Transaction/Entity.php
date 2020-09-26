@@ -23,12 +23,11 @@ namespace Fusio\Impl\Consumer\Api\Transaction;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Schema\Property;
 
 /**
  * Entity
@@ -44,15 +43,15 @@ class Entity extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
-        $resource->addPathParameter('transaction_id', Property::getInteger());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $path = $builder->setPathParameters('Consumer_Transaction_Entity_Path');
+        $path->addInteger('transaction_id');
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.transaction'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Transaction::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.transaction']);
+        $get->addResponse(200, Model\Transaction::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**
