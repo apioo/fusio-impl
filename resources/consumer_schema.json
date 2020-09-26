@@ -47,11 +47,43 @@
       }
     },
     "App_Create": {
-      "$extends": "App",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "required": ["name", "url", "scopes"]
     },
     "App_Update": {
-      "$extends": "App",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "required": ["name", "url", "scopes"]
     },
     "Authorize_Meta": {
@@ -399,7 +431,7 @@
           "type": "integer"
         },
         "returnUrl": {
-          "type": "integer"
+          "type": "string"
         }
       },
       "required": ["invoiceId", "returnUrl"]
@@ -408,7 +440,7 @@
       "type": "object",
       "properties": {
         "approvalUrl": {
-          "type": "integer"
+          "type": "string"
         }
       }
     },
