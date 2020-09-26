@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -102,7 +103,10 @@ class BillingRun
                 // if the to date is in the past we generate a new invoice for
                 // the next time period. This creates a new invoice which the
                 // user can pay
-                $invoiceId = $this->invoiceService->create($contract['id'], $startDate, UserContext::newAnonymousContext(), $lastInvoice['id']);
+                $create = new Plan_Invoice_Create();
+                $create->setContractId($contract['id']);
+                $create->setStartDate($startDate);
+                $invoiceId = $this->invoiceService->create($create, UserContext::newAnonymousContext(), $lastInvoice['id']);
 
                 // @TODO we need a mechanism to reset the points of a user after
                 // a billing period. Currently we have more a pay-per-use

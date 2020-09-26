@@ -83,8 +83,9 @@ class Plan
 
         // get last insert id
         $planId = $this->planTable->getLastInsertId();
+        $plan->setId($planId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($planId, $record, $context));
+        $this->eventDispatcher->dispatch(new CreatedEvent($plan, $context));
 
         return $planId;
     }
@@ -92,7 +93,6 @@ class Plan
     public function update(int $planId, Plan_Update $plan, UserContext $context)
     {
         $existing = $this->planTable->get($planId);
-
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -113,7 +113,7 @@ class Plan
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($existing['id'], $record, $existing, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
     }
 
     public function delete(int $planId, UserContext $context)
@@ -131,7 +131,7 @@ class Plan
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($existing['id'], $existing, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
     
     public function exists(string $name)

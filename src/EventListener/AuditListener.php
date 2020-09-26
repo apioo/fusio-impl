@@ -283,10 +283,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getPlanId(),
+            $event->getPlan()->getId(),
             'plan.create',
-            sprintf('Created plan %s', $event->getRecord()['name']),
-            $event->getRecord()
+            sprintf('Created plan %s', $event->getPlan()->getName()),
+            $event->getPlan()
         );
     }
 
@@ -294,9 +294,9 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getPlanId(),
+            $event->getExisting()->getProperty('id'),
             'plan.delete',
-            sprintf('Deleted plan %s', $event->getPlan()['name'])
+            sprintf('Deleted plan %s', $event->getExisting()->getProperty('name'))
         );
     }
 
@@ -304,10 +304,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getPlanId(),
+            $event->getPlan()->getId(),
             'plan.update',
-            sprintf('Updated plan %s', $event->getPlan()['name']),
-            $event->getRecord()
+            sprintf('Updated plan %s', $event->getPlan()->getName()),
+            $event->getPlan()
         );
     }
 
@@ -315,10 +315,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getContractId(),
+            $event->getContract()->getId(),
             'contract.create',
             'Created contract',
-            $event->getRecord()
+            $event->getContract()
         );
     }
 
@@ -326,7 +326,7 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getContractId(),
+            $event->getExisting()->getProperty('id'),
             'contract.delete',
             'Deleted contract'
         );
@@ -336,10 +336,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getContractId(),
+            $event->getContract()->getId(),
             'contract.update',
             'Updated contract',
-            $event->getRecord()
+            $event->getContract()
         );
     }
 
@@ -347,10 +347,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getInvoiceId(),
+            $event->getInvoice()->getId(),
             'invoice.create',
             'Created invoice',
-            $event->getRecord()
+            $event->getInvoice()
         );
     }
 
@@ -358,7 +358,7 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getInvoiceId(),
+            $event->getExisting()->getProperty('id'),
             'invoice.delete',
             'Deleted invoice'
         );
@@ -368,10 +368,10 @@ class AuditListener implements EventSubscriberInterface
     {
         $this->log(
             $event->getContext(),
-            $event->getInvoiceId(),
+            $event->getInvoice()->getId(),
             'invoice.update',
             'Updated invoice',
-            $event->getRecord()
+            $event->getInvoice()
         );
     }
 
@@ -382,7 +382,7 @@ class AuditListener implements EventSubscriberInterface
             $event->getInvoiceId(),
             'invoice.payed',
             'Payed invoice',
-            [
+            (object) [
                 'transactionId' => $event->getTransaction()->getId(),
                 'transaction' => $event->getTransaction()->getTransactionId(),
             ]

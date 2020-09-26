@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -77,7 +78,12 @@ class Order
     {
         $product    = $this->planTable->getProduct($planId);
         $contractId = $this->contractService->create($context->getUserId(), $product, $context);
-        $invoiceId  = $this->invoiceService->create($contractId, new \DateTime(), $context);
+
+        $invoice = new Plan_Invoice_Create();
+        $invoice->setContractId($contractId);
+        $invoice->setStartDate(new \DateTime());
+
+        $invoiceId  = $this->invoiceService->create($invoice, $context);
 
         return [
             'contractId' => $contractId,

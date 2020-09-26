@@ -28,7 +28,6 @@ use Fusio\Impl\Backend\Model\Plan_Contract_Update;
 use Fusio\Impl\Event\Plan\Contract\CreatedEvent;
 use Fusio\Impl\Event\Plan\Contract\DeletedEvent;
 use Fusio\Impl\Event\Plan\Contract\UpdatedEvent;
-use Fusio\Impl\Event\Plan\ContractEvents;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;
@@ -91,7 +90,12 @@ class Contract
 
         $contractId = $this->contractTable->getLastInsertId();
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context));
+        $contract = new Plan_Contract_Create();
+        $contract->setId($contractId);
+        $contract->setPlanId($product->getId());
+        $contract->setUserId($userId);
+
+        $this->eventDispatcher->dispatch(new CreatedEvent($contract, $context));
 
         return (int) $contractId;
     }
@@ -107,7 +111,6 @@ class Contract
     public function update(int $contractId, Plan_Contract_Update $contract, UserContext $context)
     {
         $existing = $this->contractTable->get($contractId);
-
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
@@ -127,13 +130,12 @@ class Contract
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($contractId, $record, $existing, $context));
+        $this->eventDispatcher->dispatch(new UpdatedEvent($contract, $existing, $context));
     }
 
     public function delete(int $contractId, UserContext $context)
     {
         $existing = $this->contractTable->get($contractId);
-
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
@@ -145,6 +147,6 @@ class Contract
 
         $this->contractTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($contractId, $existing, $context));
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 }
