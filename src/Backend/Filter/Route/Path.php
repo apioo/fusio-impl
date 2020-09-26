@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Filter\Routes;
+namespace Fusio\Impl\Backend\Filter\Route;
 
 use PSX\Validate\FilterAbstract;
 
