@@ -88,7 +88,7 @@ class Entity extends ConsumerApiAbstract
     {
         $this->consumerSubscriptionService->update(
             $context->getUriFragment('subscription_id'),
-            $record->endpoint,
+            $record,
             $this->context->getUserContext()
         );
 

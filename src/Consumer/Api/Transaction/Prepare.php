@@ -23,7 +23,6 @@ namespace Fusio\Impl\Consumer\Api\Transaction;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
 use Fusio\Impl\Consumer\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -55,8 +54,8 @@ class Prepare extends ConsumerApiAbstract
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::CONSUMER, ['consumer.transaction']);
-        $post->setRequest(Model\Consumer_Transaction_Prepare_Request::class);
-        $post->addResponse(200, Model\Consumer_Transaction_Prepare_Response::class);
+        $post->setRequest(Model\Transaction_Prepare_Request::class);
+        $post->addResponse(200, Model\Transaction_Prepare_Response::class);
 
         return $builder->getSpecification();
     }
@@ -68,8 +67,7 @@ class Prepare extends ConsumerApiAbstract
     {
         $approvalUrl = $this->transactionService->prepare(
             $context->getUriFragment('provider'),
-            $record->invoiceId,
-            $record->returnUrl,
+            $record,
             $this->context->getUserContext()
         );
         

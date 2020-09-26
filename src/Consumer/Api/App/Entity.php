@@ -92,9 +92,7 @@ class Entity extends ConsumerApiAbstract
     {
         $this->consumerAppService->update(
             (int) $context->getUriFragment('app_id'),
-            $record->name,
-            $record->url,
-            $record->scopes,
+            $record,
             $this->context->getUserContext()
         );
 

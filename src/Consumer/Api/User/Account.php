@@ -81,8 +81,7 @@ class Account extends ConsumerApiAbstract
     protected function doPut($record, HttpContextInterface $context)
     {
         $this->consumerUserService->update(
-            $record->email,
-            $record->attributes,
+            $record,
             $this->context->getUserContext()
         );
 

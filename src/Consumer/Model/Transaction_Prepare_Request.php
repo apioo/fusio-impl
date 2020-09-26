@@ -14,7 +14,7 @@ class Transaction_Prepare_Request implements \JsonSerializable
      */
     protected $invoiceId;
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $returnUrl;
     /**
@@ -32,16 +32,16 @@ class Transaction_Prepare_Request implements \JsonSerializable
         return $this->invoiceId;
     }
     /**
-     * @param int|null $returnUrl
+     * @param string|null $returnUrl
      */
-    public function setReturnUrl(?int $returnUrl) : void
+    public function setReturnUrl(?string $returnUrl) : void
     {
         $this->returnUrl = $returnUrl;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getReturnUrl() : ?int
+    public function getReturnUrl() : ?string
     {
         return $this->returnUrl;
     }

@@ -8,20 +8,20 @@ namespace Fusio\Impl\Consumer\Model;
 class Transaction_Prepare_Response implements \JsonSerializable
 {
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $approvalUrl;
     /**
-     * @param int|null $approvalUrl
+     * @param string|null $approvalUrl
      */
-    public function setApprovalUrl(?int $approvalUrl) : void
+    public function setApprovalUrl(?string $approvalUrl) : void
     {
         $this->approvalUrl = $approvalUrl;
     }
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getApprovalUrl() : ?int
+    public function getApprovalUrl() : ?string
     {
         return $this->approvalUrl;
     }

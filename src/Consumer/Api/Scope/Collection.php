@@ -23,7 +23,7 @@ namespace Fusio\Impl\Consumer\Api\Scope;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Schema;
+use Fusio\Impl\Consumer\Model;
 use Fusio\Impl\Consumer\View;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -43,14 +43,13 @@ class Collection extends ConsumerApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->setSecurity(Authorization::CONSUMER, ['consumer.scope'])
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Scope\Collection::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::CONSUMER, ['consumer.scope']);
+        $get->addResponse(200, Model\Scope_Collection::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

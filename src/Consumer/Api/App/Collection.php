@@ -85,9 +85,7 @@ class Collection extends ConsumerApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->consumerAppService->create(
-            $record->name,
-            $record->url,
-            $record->scopes,
+            $record,
             $this->context->getUserContext()
         );
 

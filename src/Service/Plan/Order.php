@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
+use Fusio\Impl\Consumer\Model\Plan_Order_Request;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -70,13 +71,13 @@ class Order
     }
 
     /**
-     * @param integer $planId
+     * @param Plan_Order_Request $order
      * @param \Fusio\Impl\Authorization\UserContext $context
      * @return array
      */
-    public function order($planId, UserContext $context)
+    public function order(Plan_Order_Request $order, UserContext $context)
     {
-        $product    = $this->planTable->getProduct($planId);
+        $product    = $this->planTable->getProduct($order->getPlanId());
         $contractId = $this->contractService->create($context->getUserId(), $product, $context);
 
         $invoice = new Plan_Invoice_Create();
