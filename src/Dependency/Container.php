@@ -31,11 +31,10 @@ use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\EventListener\WebhookListener;
 use Fusio\Impl\Framework\Api\GeneratorFactory;
 use Fusio\Impl\Framework\Api\ResourceListing;
+use Fusio\Impl\Framework\Filter;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
 use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
-use Fusio\Impl\Framework\Filter\ExternalFilter;
-use Fusio\Impl\Framework\Filter\InternalFilter;
 use Fusio\Impl\Mail;
 use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
@@ -95,8 +94,13 @@ class Container extends DefaultContainer
     public function getListingFilterFactory(): FilterFactoryInterface
     {
         $filter = new FilterFactory();
-        $filter->addFilter('internal', new InternalFilter());
-        $filter->addFilter('external', new ExternalFilter());
+        $filter->addFilter('authorization', new Filter\AuthorizationFilter());
+        $filter->addFilter('backend', new Filter\BackendFilter());
+        $filter->addFilter('consumer', new Filter\ConsumerFilter());
+        $filter->addFilter('doc', new Filter\DocFilter());
+        $filter->addFilter('export', new Filter\ExportFilter());
+        $filter->addFilter('external', new Filter\ExternalFilter());
+        $filter->addFilter('internal', new Filter\InternalFilter());
         $filter->setDefault('external');
 
         return $filter;
