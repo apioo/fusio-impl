@@ -27,6 +27,7 @@ use Fusio\Impl\Backend\Model\Account_Credentials;
 use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Backend\Model\User_Update;
+use Fusio\Impl\Consumer\Model\User_ChangePassword;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -367,7 +368,7 @@ class User
         $this->eventDispatcher->dispatch(new ChangedStatusEvent($user['status'], $status, $context));
     }
 
-    public function changePassword(Account_Credentials $credentials, UserContext $context)
+    public function changePassword(User_ChangePassword $changePassword, UserContext $context)
     {
         $appId  = $context->getAppId();
         $userId = $context->getUserId();
@@ -377,26 +378,31 @@ class User
             throw new StatusCode\BadRequestException('Changing the password is only possible through the backend or consumer app');
         }
 
-        if (empty($credentials->getNewPassword())) {
+        if (empty($changePassword->getNewPassword())) {
             throw new StatusCode\BadRequestException('New password must not be empty');
         }
 
-        if (empty($credentials->getOldPassword())) {
+        if (empty($changePassword->getOldPassword())) {
             throw new StatusCode\BadRequestException('Old password must not be empty');
         }
 
         // check verify password
-        if ($credentials->getNewPassword() != $credentials->getVerifyPassword()) {
+        if ($changePassword->getNewPassword() != $changePassword->getVerifyPassword()) {
             throw new StatusCode\BadRequestException('New password does not match the verify password');
         }
 
         // assert password complexity
-        $this->assertPasswordComplexity($credentials->getNewPassword());
+        $this->assertPasswordComplexity($changePassword->getNewPassword());
 
         // change password
-        $result = $this->userTable->changePassword($userId, $credentials->getOldPassword(), $credentials->getNewPassword());
+        $result = $this->userTable->changePassword($userId, $changePassword->getOldPassword(), $changePassword->getNewPassword());
 
         if ($result) {
+            $credentials = new Account_Credentials();
+            $credentials->setNewPassword($changePassword->getNewPassword());
+            $credentials->setOldPassword($changePassword->getOldPassword());
+            $credentials->setVerifyPassword($changePassword->getVerifyPassword());
+
             $this->eventDispatcher->dispatch(new ChangedPasswordEvent($credentials, $context));
 
             return true;

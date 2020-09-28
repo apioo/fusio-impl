@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Consumer\Model\Authorize_Request;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
@@ -86,17 +87,18 @@ class Authorize
         $this->config          = $config;
     }
 
-    public function authorize($userId, $responseType, $clientId, $redirectUri, $scope, $state, $allow)
+    public function authorize($userId, Authorize_Request $request)
     {
         // response type
-        if (!in_array($responseType, ['code', 'token'])) {
+        if (!in_array($request->getResponseType(), ['code', 'token'])) {
             throw new StatusCode\BadRequestException('Invalid response type');
         }
 
         // client id
-        $app = $this->getApp($clientId);
+        $app = $this->getApp($request->getClientId());
 
         // redirect uri
+        $redirectUri = $request->getRedirectUri();
         if (!empty($redirectUri)) {
             $redirectUri = new Uri($redirectUri);
 
@@ -122,17 +124,18 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope);
+        $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $request->getScope());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
 
         // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app['id'], $allow);
+        $this->saveUserDecision($userId, $app['id'], $request->getAllow());
 
-        if ($allow) {
-            if ($responseType == 'token') {
+        $state = $request->getState();
+        if ($request->getAllow()) {
+            if ($request->getResponseType() == 'token') {
                 // check whether implicit grant is allowed
                 if ($this->config['fusio_grant_implicit'] !== true) {
                     throw new StatusCode\BadRequestException('Token response type is not supported');
@@ -202,7 +205,7 @@ class Authorize
                     $parameters['state'] = $state;
                 }
 
-                if ($responseType == 'token') {
+                if ($request->getResponseType() == 'token') {
                     $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
                 } else {
                     $redirectUri = $redirectUri->withParameters($parameters)->toString();

@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\User_Create;
+use Fusio\Impl\Consumer\Model\User_Register;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 
@@ -75,9 +77,9 @@ class Register
         $this->configService  = $configService;
     }
 
-    public function register($name, $email, $password, $captcha)
+    public function register(User_Register $register)
     {
-        $this->captchaService->assertCaptcha($captcha);
+        $this->captchaService->assertCaptcha($register->getCaptcha());
 
         // determine initial user status
         $status   = Table\User::STATUS_DISABLED;
@@ -87,20 +89,21 @@ class Register
         }
 
         $scopes = $this->userService->getDefaultScopes();
-        $userId = $this->userService->create(
-            $status,
-            $name,
-            $email,
-            $password,
-            $scopes,
-            UserContext::newAnonymousContext()
-        );
+
+        $user = new User_Create();
+        $user->setStatus($status);
+        $user->setName($register->getName());
+        $user->setEmail($register->getEmail());
+        $user->setPassword($register->getPassword());
+        $user->setScopes($scopes);
+
+        $userId = $this->userService->create($user, UserContext::newAnonymousContext());
 
         // send activation mail
         if ($approval) {
             $token = $this->tokenService->generateToken($userId);
 
-            $this->mailerService->sendActivationMail($token, $name, $email);
+            $this->mailerService->sendActivationMail($token, $register->getName(), $register->getEmail());
         }
     }
 }

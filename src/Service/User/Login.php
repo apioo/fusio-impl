@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Service\User;
 
+use Fusio\Impl\Consumer\Model\User_Login;
+use Fusio\Impl\Consumer\Model\User_Refresh;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
@@ -61,10 +63,11 @@ class Login
         $this->config          = $config;
     }
 
-    public function login($name, $password, array $scopes = null)
+    public function login(User_Login $login)
     {
-        $userId = $this->userService->authenticateUser($name, $password, [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
+        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword(), [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
         if ($userId > 0) {
+            $scopes = $login->getScopes();
             if (empty($scopes)) {
                 $scopes = $this->userService->getAvailableScopes($userId);
             } else {
@@ -85,13 +88,13 @@ class Login
         return null;
     }
 
-    public function refresh($refreshToken)
+    public function refresh(User_Refresh $refresh)
     {
         $appId = $this->getAppId();
 
         return $this->appTokenService->refreshAccessToken(
             $appId,
-            $refreshToken,
+            $refresh->getRefresh_token(),
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_consumer')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))
