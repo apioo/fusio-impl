@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Consumer\Model;
 
 /**
- * @Required({"token"})
+ * @Required({"oldPassword", "newPassword", "verifyPassword"})
  */
 class User_ChangePassword implements \JsonSerializable
 {
