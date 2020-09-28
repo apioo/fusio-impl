@@ -36,6 +36,11 @@ class ChangedStatusEvent extends EventAbstract
     /**
      * @var integer
      */
+    protected $userId;
+
+    /**
+     * @var integer
+     */
     protected $oldStatus;
 
     /**
@@ -44,16 +49,23 @@ class ChangedStatusEvent extends EventAbstract
     protected $newStatus;
 
     /**
-     * @param integer $oldStatus
-     * @param integer $newStatus
-     * @param \Fusio\Impl\Authorization\UserContext $context
+     * @param int $userId
+     * @param int $oldStatus
+     * @param int $newStatus
+     * @param UserContext $context
      */
-    public function __construct($oldStatus, $newStatus, UserContext $context)
+    public function __construct($userId, $oldStatus, $newStatus, UserContext $context)
     {
         parent::__construct($context);
 
+        $this->userId = $userId;
         $this->oldStatus = $oldStatus;
         $this->newStatus = $newStatus;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     public function getOldStatus()

@@ -365,7 +365,7 @@ class User
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(new ChangedStatusEvent($user['status'], $status, $context));
+        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user['status'], $status, $context));
     }
 
     public function changePassword(User_ChangePassword $changePassword, UserContext $context)
