@@ -96,12 +96,7 @@ class Authorize extends ConsumerApiAbstract
     {
         return $this->userAuthorizeService->authorize(
             $this->context->getUserId(),
-            $record->responseType,
-            $record->clientId,
-            $record->redirectUri,
-            $record->scope,
-            $record->state,
-            $record->allow
+            $record
         );
     }
 }

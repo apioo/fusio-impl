@@ -63,10 +63,7 @@ class Register extends SchemaApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->userRegisterService->register(
-            $record->name,
-            $record->email,
-            $record->password,
-            $record->captcha
+            $record
         );
 
         return array(

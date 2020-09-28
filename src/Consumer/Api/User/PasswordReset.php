@@ -70,8 +70,7 @@ class PasswordReset extends SchemaApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->userResetPasswordService->resetPassword(
-            $record->email,
-            $record->captcha
+            $record
         );
 
         return [
@@ -86,8 +85,7 @@ class PasswordReset extends SchemaApiAbstract
     protected function doPut($record, HttpContextInterface $context)
     {
         $this->userResetPasswordService->changePassword(
-            $record->token,
-            $record->newPassword
+            $record
         );
 
         return [

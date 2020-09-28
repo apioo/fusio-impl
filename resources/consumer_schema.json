@@ -228,11 +228,27 @@
       }
     },
     "Event_Subscription_Create": {
-      "$extends": "Event_Subscription",
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
       "required": ["event", "endpoint"]
     },
     "Event_Subscription_Update": {
-      "$extends": "Event_Subscription",
+      "type": "object",
+      "properties": {
+        "event": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
       "required": ["event", "endpoint"]
     },
     "Grant": {
@@ -505,7 +521,7 @@
           "type": "string"
         }
       },
-      "required": ["token"]
+      "required": ["oldPassword", "newPassword", "verifyPassword"]
     },
     "User_Email": {
       "type": "object",

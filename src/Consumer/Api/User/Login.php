@@ -68,9 +68,7 @@ class Login extends SchemaApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $token = $this->userLoginService->login(
-            $record->username,
-            $record->password,
-            $record->scopes
+            $record
         );
 
         return $this->renderToken($token);
@@ -82,7 +80,7 @@ class Login extends SchemaApiAbstract
     protected function doPut($record, HttpContextInterface $context)
     {
         $token = $this->userLoginService->refresh(
-            $record->refresh_token
+            $record
         );
 
         return $this->renderToken($token);

@@ -63,7 +63,7 @@ class Activate extends SchemaApiAbstract
     protected function doPost($record, HttpContextInterface $context)
     {
         $this->userActivateService->activate(
-            $record->token
+            $record
         );
 
         return array(

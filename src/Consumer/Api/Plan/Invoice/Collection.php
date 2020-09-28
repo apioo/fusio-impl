@@ -47,7 +47,7 @@ class Collection extends ConsumerApiAbstract
 
         $get = $builder->addMethod('GET');
         $get->setSecurity(Authorization::CONSUMER, ['consumer.plan']);
-        $get->addResponse(200, $this->schemaManager->getSchema(Model\Plan_Invoice_Collection::class));
+        $get->addResponse(200, Model\Plan_Invoice_Collection::class);
 
         return $builder->getSpecification();
     }

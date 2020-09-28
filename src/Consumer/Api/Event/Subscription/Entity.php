@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Consumer\Api\Event\Subscription;
 
 use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Consumer\Model;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
 use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Model\Message;

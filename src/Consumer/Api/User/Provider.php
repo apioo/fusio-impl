@@ -64,16 +64,9 @@ class Provider extends SchemaApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $provider    = $context->getUriFragment('provider');
-        $code        = $record->code;
-        $clientId    = $record->clientId;
-        $redirectUri = $record->redirectUri;
-
         $token = $this->userProviderService->provider(
-            $provider,
-            $code,
-            $clientId,
-            $redirectUri
+            $context->getUriFragment('provider'),
+            $record
         );
 
         if (!empty($token)) {

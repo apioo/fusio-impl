@@ -65,9 +65,7 @@ class ChangePassword extends ConsumerApiAbstract
     protected function doPut($record, HttpContextInterface $context)
     {
         $this->userService->changePassword(
-            $record->oldPassword,
-            $record->newPassword,
-            $record->verifyPassword,
+            $record,
             $this->context->getUserContext()
         );
 
