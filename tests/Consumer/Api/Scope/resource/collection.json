@@ -1,55 +1,56 @@
 {
-  "path": "\/consumer\/scope",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_Scope": {
-        "type": "object",
-        "title": "Consumer Scope",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
+  "path": "\/consumer\/scope",
+  "methods": {
+    "GET": {
+      "security": {
+        "consumer": [
+          "consumer.scope"
+        ]
       },
-      "Consumer_Scope_Collection": {
-        "type": "object",
-        "title": "Consumer Scope Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_Scope"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Scope_Collection"
+      "tags": [],
+      "responses": {
+        "200": "Scope_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Scope_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Scope"
       }
     }
   }

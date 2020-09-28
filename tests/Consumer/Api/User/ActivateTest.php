@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
+use Fusio\Impl\Consumer\Model\User_Register;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -67,7 +68,11 @@ class ActivateTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        Environment::getService('user_register_service')->register('baz', 'baz@localhost.com', 'test1234!', null);
+        $register = new User_Register();
+        $register->setName('baz');
+        $register->setEmail('baz@localhost.com');
+        $register->setPassword('test1234!');
+        Environment::getService('user_register_service')->register($register);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'provider', 'status', 'remote_id', 'name', 'email')

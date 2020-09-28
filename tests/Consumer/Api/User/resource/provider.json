@@ -1,66 +1,51 @@
 {
-  "path": "\/consumer\/provider\/:provider",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "provider": {
-            "type": "string"
-          }
-        }
-      },
-      "Consumer_User_Provider": {
-        "type": "object",
-        "title": "Consumer User Provider",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "clientId": {
-            "type": "string"
-          },
-          "redirectUri": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": true
-      },
-      "Consumer_User_JWT": {
-        "type": "object",
-        "title": "Consumer User JWT",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Consumer_User_Provider"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Consumer_User_JWT"
+  "path": "\/consumer\/provider\/:provider",
+  "pathParameters": "Consumer_User_Provider",
+  "methods": {
+    "POST": {
+      "tags": [],
+      "request": "User_Provider",
+      "responses": {
+        "200": "User_JWT"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "POST": {
-      "request": "#\/definitions\/POST-request",
-      "responses": {
-        "200": "#\/definitions\/POST-200-response"
+  "definitions": {
+    "Consumer_User_Provider": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "User_JWT": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "User_Provider": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "redirectUri": {
+          "type": "string"
+        }
       }
     }
   }

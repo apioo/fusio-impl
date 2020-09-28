@@ -1,60 +1,64 @@
 {
-  "path": "\/consumer\/plan",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_Plan": {
-        "type": "object",
-        "title": "Consumer Plan",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          }
-        }
+  "path": "\/consumer\/plan",
+  "methods": {
+    "GET": {
+      "security": {
+        "consumer": [
+          "consumer.plan"
+        ]
       },
-      "Consumer_Plan_Collection": {
-        "type": "object",
-        "title": "Consumer Plan Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_Plan"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Plan_Collection"
+      "tags": [],
+      "responses": {
+        "200": "Plan_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        }
+      }
+    },
+    "Plan_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Plan"
       }
     }
   }

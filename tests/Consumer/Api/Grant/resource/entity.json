@@ -1,25 +1,26 @@
 {
-  "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "grant_id": {
-            "type": "integer"
-          }
+  "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
+  "pathParameters": "Consumer_Grant_Entity_Path",
+  "methods": {
+    "DELETE": {
+      "security": {
+        "consumer": [
+          "consumer.grant"
+        ]
+      },
+      "tags": [],
+      "responses": []
+    }
+  },
+  "definitions": {
+    "Consumer_Grant_Entity_Path": {
+      "type": "object",
+      "properties": {
+        "grant_id": {
+          "type": "integer"
         }
       }
     }
-  },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "DELETE": {}
   }
 }

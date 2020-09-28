@@ -1,60 +1,51 @@
 {
-  "path": "\/consumer\/transaction\/prepare\/:provider",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "provider": {
-            "type": "string"
-          }
-        }
-      },
-      "Consumer_Transaction_Prepare_Request": {
-        "type": "object",
-        "title": "Consumer Transaction Prepare Request",
-        "properties": {
-          "invoiceId": {
-            "type": "integer"
-          },
-          "returnUrl": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "invoiceId",
-          "returnUrl"
+  "path": "\/consumer\/transaction\/prepare\/:provider",
+  "pathParameters": "Consumer_Transaction_Prepare_Path",
+  "methods": {
+    "POST": {
+      "security": {
+        "consumer": [
+          "consumer.transaction"
         ]
       },
-      "Consumer_Transaction_Prepare_Response": {
-        "type": "object",
-        "title": "Consumer Transaction Prepare Response",
-        "properties": {
-          "approvalUrl": {
-            "type": "string"
-          }
-        }
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Consumer_Transaction_Prepare_Request"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Consumer_Transaction_Prepare_Response"
+      "tags": [],
+      "request": "Transaction_Prepare_Request",
+      "responses": {
+        "200": "Transaction_Prepare_Response"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "POST": {
-      "request": "#\/definitions\/POST-request",
-      "responses": {
-        "200": "#\/definitions\/POST-200-response"
+  "definitions": {
+    "Consumer_Transaction_Prepare_Path": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "Transaction_Prepare_Request": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "integer"
+        },
+        "returnUrl": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "invoiceId",
+        "returnUrl"
+      ]
+    },
+    "Transaction_Prepare_Response": {
+      "type": "object",
+      "properties": {
+        "approvalUrl": {
+          "type": "string"
+        }
       }
     }
   }

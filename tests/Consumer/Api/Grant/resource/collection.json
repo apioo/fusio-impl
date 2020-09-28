@@ -1,88 +1,93 @@
 {
-  "path": "\/consumer\/grant",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_App_Grant": {
-        "type": "object",
-        "title": "Consumer App Grant",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "app": {
-            "$ref": "#\/definitions\/Consumer_App"
-          },
-          "createDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
+  "path": "\/consumer\/grant",
+  "methods": {
+    "GET": {
+      "security": {
+        "consumer": [
+          "consumer.grant"
+        ]
       },
-      "Consumer_App": {
-        "type": "object",
-        "title": "Consumer App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "Consumer_Grant_Collection": {
-        "type": "object",
-        "title": "Consumer Grant Collection",
-        "properties": {
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_App_Grant"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Grant_Collection"
+      "tags": [],
+      "responses": {
+        "200": "Grant_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Grant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "app": {
+          "$ref": "App"
+        },
+        "createDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Grant_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Grant"
       }
     }
   }

@@ -1,107 +1,122 @@
 {
-  "path": "\/consumer\/app\/$app_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "app_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Consumer_App": {
-        "type": "object",
-        "title": "Consumer App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "url",
-          "scopes"
-        ]
-      },
-      "Consumer_Message": {
-        "type": "object",
-        "title": "Consumer Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_App"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Consumer_App"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/consumer\/app\/$app_id<[0-9]+>",
+  "pathParameters": "Consumer_App_Collection_Path",
   "methods": {
     "GET": {
+      "security": {
+        "consumer": [
+          "consumer.app"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "App"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "security": {
+        "consumer": [
+          "consumer.app"
+        ]
+      },
+      "tags": [],
+      "request": "App_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Message"
       }
     },
     "DELETE": {
+      "security": {
+        "consumer": [
+          "consumer.app"
+        ]
+      },
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "App_Update": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "scopes"
+      ]
+    },
+    "Consumer_App_Collection_Path": {
+      "type": "object",
+      "properties": {
+        "app_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
     }
   }
