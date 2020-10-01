@@ -180,6 +180,11 @@ class Container extends DefaultContainer
         return new Schema\Parser($this->get('connection'));
     }
 
+    public function getSchemaLoader(): Schema\Loader
+    {
+        return new Schema\Loader($this->get('connection'));
+    }
+
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands

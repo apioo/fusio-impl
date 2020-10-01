@@ -52,7 +52,7 @@ use PSX\Record\RecordInterface;
  */
 class SchemaApiController extends SchemaApiAbstract implements DocumentedInterface
 {
-    const SCHEMA_PASSTHRU = 'passthru';
+    private const SCHEMA_PASSTHRU = 'Passthru';
 
     /**
      * @var \Fusio\Impl\Framework\Loader\Context
@@ -70,6 +70,12 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * @var \Fusio\Engine\Processor
      */
     protected $processor;
+
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Schema\Loader
+     */
+    protected $schemaLoader;
 
     /**
      * @Inject
@@ -218,10 +224,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     protected function parseRequest(RequestInterface $request, MethodAbstract $method)
     {
         if ($method->hasRequest()) {
-            if ($method->getRequest()->getDefinition()->getTitle() == self::SCHEMA_PASSTHRU) {
+            if ($method->getRequest() == self::SCHEMA_PASSTHRU) {
                 return new PassthruRecord($this->requestReader->getBody($request));
             } else {
-                return $this->requestReader->getBodyAs($request, $method->getRequest(), $this->getValidator($method));
+                $schema = $this->schemaLoader->getSchema($method->getRequest());
+                return $this->requestReader->getBodyAs($request, $schema, $this->getValidator($method));
             }
         } else {
             return new Record();
@@ -251,7 +258,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         $method   = $this->context->getMethod();
         $actionId = $method['action'];
         $costs    = (int) $method['costs'];
-        $cache    = $method['action_cache'];
 
         if ($costs > 0) {
             // as anonymous user it is not possible to pay
@@ -269,18 +275,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $this->planPayerService->pay($costs, $context);
         }
 
-        if ($actionId > 0) {
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {
-                // if the method is not in dev mode we load the action from the
-                // cache
-                $this->processor->push(Repository\ActionMemory::fromJson($cache));
-
-                $response = $this->processor->execute($actionId, $request, $context);
-
-                $this->processor->pop();
-            } else {
-                $response = $this->processor->execute($actionId, $request, $context);
-            }
+        if (!empty($actionId)) {
+            $response = $this->processor->execute($actionId, $request, $context);
         } else {
             throw new StatusCode\ServiceUnavailableException('No action provided');
         }

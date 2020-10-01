@@ -81,19 +81,25 @@ class Method extends TableAbstract
      * Returns only active methods for the route
      *
      * @param integer $routeId
-     * @param integer $version
-     * @param boolean $active
-     * @param boolean $cache
+     * @param integer|null $version
+     * @param boolean|null $active
      * @return array
      */
-    public function getMethods($routeId, $version = null, $active = true, $cache = false)
+    public function getMethods(int $routeId, ?int $version = null, ?bool $active = true)
     {
-        $fields = ['method.id', 'method.route_id', 'method.version', 'method.status', 'method.method', 'method.active', 'method.public', 'method.description', 'method.operation_id', 'method.parameters', 'method.request', 'method.action', 'method.costs'];
-        if ($cache) {
-            $fields[] = 'method.schema_cache';
-        }
-
-        $sql = '  SELECT ' . implode(',', $fields) . '
+        $sql = '  SELECT method.id,
+                         method.route_id,
+                         method.version,
+                         method.status,
+                         method.method,
+                         method.active,
+                         method.public,
+                         method.description,
+                         method.operation_id,
+                         method.parameters,
+                         method.request,
+                         method.action,
+                         method.costs
                     FROM fusio_routes_method method
                    WHERE method.route_id = :route_id';
 
@@ -131,8 +137,7 @@ class Method extends TableAbstract
                        method.operation_id,
                        method.action,
                        method.status,
-                       method.costs,
-                       method.action_cache
+                       method.costs
                   FROM fusio_routes_method method
                  WHERE route_id = :route_id
                    AND version = :version

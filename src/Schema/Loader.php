@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\Schema\LoaderInterface;
 use Fusio\Impl\Service;
 use PSX\Schema\SchemaInterface;
 use RuntimeException;
@@ -34,7 +33,7 @@ use RuntimeException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Loader implements LoaderInterface
+class Loader
 {
     protected $connection;
 
@@ -45,7 +44,13 @@ class Loader implements LoaderInterface
 
     public function getSchema($schemaId)
     {
-        $row = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE id = :id', array('id' => $schemaId));
+        if (is_numeric($schemaId)) {
+            $column = 'id';
+        } else {
+            $column = 'name';
+        }
+
+        $row = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
 
         if (!empty($row)) {
             $cache = isset($row['cache']) ? $row['cache'] : null;

@@ -23,7 +23,7 @@ namespace Fusio\Impl\Export\Api;
 
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Export;
-use Fusio\Impl\Export\Schema;
+use Fusio\Impl\Export\Model;
 use Fusio\Impl\Rpc\Invoker;
 use Fusio\Impl\Table;
 use PSX\Api\DocumentedInterface;

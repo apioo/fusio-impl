@@ -68,7 +68,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('table_manager')->getTable(Table\Route\Response::class),
             $this->get('table_manager')->getTable(Table\Scope\Route::class),
-            $this->get('connection')
+            $this->get('schema_loader')
         );
     }
 

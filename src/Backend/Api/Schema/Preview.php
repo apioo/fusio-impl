@@ -64,7 +64,7 @@ class Preview extends BackendApiAbstract
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $body = $this->schemaService->getHtmlPreview(
+        $body = $this->schemaService->generatePreview(
             (int) $context->getUriFragment('schema_id')
         );
 

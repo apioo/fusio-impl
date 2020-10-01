@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Backend\Model\Message;
+use Fusio\Impl\Model\Message;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;

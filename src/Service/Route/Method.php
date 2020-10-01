@@ -21,15 +21,17 @@
 
 namespace Fusio\Impl\Service\Route;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Schema\LazyDefinitions;
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Api\Specification;
 use PSX\Api\SpecificationInterface;
 use PSX\Api\Util\Inflection;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\Definitions;
+use PSX\Schema\DefinitionsInterface;
+use PSX\Schema\Type\StructType;
 use PSX\Schema\TypeFactory;
 use PSX\Schema\TypeInterface;
 
@@ -58,22 +60,22 @@ class Method
     private $scopeTable;
 
     /**
-     * @var Connection
+     * @var Loader
      */
-    private $connection;
+    private $schemaLoader;
 
     /**
      * @param \Fusio\Impl\Table\Route\Method $methodTable
      * @param \Fusio\Impl\Table\Route\Response $responseTable
      * @param \Fusio\Impl\Table\Scope\Route $scopeTable
-     * @param Connection $connection
+     * @param Loader $schemaLoader
      */
-    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Connection $connection)
+    public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Loader $schemaLoader)
     {
         $this->methodTable   = $methodTable;
         $this->responseTable = $responseTable;
         $this->scopeTable    = $scopeTable;
-        $this->connection    = $connection;
+        $this->schemaLoader  = $schemaLoader;
     }
 
     /**
@@ -96,15 +98,13 @@ class Method
             throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
         }
 
-        $definitions = new LazyDefinitions($this->connection);
+        $definitions = new Definitions();
 
-        $methods  = $this->methodTable->getMethods($routeId, $version, true, true);
+        $methods  = $this->methodTable->getMethods($routeId, $version, true);
         $resource = new Resource($this->getStatusFromMethods($methods), $path);
         $scopes   = $this->scopeTable->getScopesForRoute($routeId);
 
-        $pathName = $this->getPathName($path);
-        $definitions->addType($pathName, $this->getPathType($path));
-        $resource->setPathParameters($pathName);
+        $this->buildPathParameters($path, $resource, $definitions);
 
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
@@ -131,16 +131,22 @@ class Method
 
             if (!empty($method['parameters'])) {
                 $resourceMethod->setQueryParameters($method['parameters']);
+
+                $definitions->addSchema($method['parameters'], $this->schemaLoader->getSchema($method['parameters']));
             }
 
             if (!empty($method['request'])) {
                 $resourceMethod->setRequest($method['request']);
+
+                $definitions->addSchema($method['request'], $this->schemaLoader->getSchema($method['request']));
             }
 
             $responses = $this->responseTable->getResponses($method['id']);
             if (!empty($responses)) {
                 foreach ($responses as $response) {
                     $resourceMethod->addResponse($response['code'], $response['response']);
+
+                    $definitions->addSchema($response['response'], $this->schemaLoader->getSchema($response['response']));
                 }
             }
 
@@ -221,16 +227,24 @@ class Method
         return isset($method['status']) ? $method['status'] : Resource::STATUS_DEVELOPMENT;
     }
 
-    private function getPathName(string $path): string
+    private function buildPathParameters(string $path, Resource $resource, DefinitionsInterface $definitions)
     {
-        return Inflection::generateTitleFromRoute($path) . 'Path';
+        $type = $this->getPathType($path);
+        if (!$type instanceof StructType) {
+            return;
+        }
+
+        $pathName = Inflection::generateTitleFromRoute($path) . 'Path';
+        $definitions->addType($pathName, $type);
+        $resource->setPathParameters($pathName);
     }
 
-    private function getPathType(string $path): TypeInterface
+    private function getPathType(string $path): ?TypeInterface
     {
         $type = TypeFactory::getStruct();
 
         $parts = explode('/', $path);
+        $count = 0;
         foreach ($parts as $part) {
             if (isset($part[0])) {
                 $name = null;
@@ -243,10 +257,11 @@ class Method
 
                 if ($name !== null) {
                     $type->addProperty($name, TypeFactory::getString());
+                    $count++;
                 }
             }
         }
 
-        return $type;
+        return $count > 0 ? $type : null;
     }
 }

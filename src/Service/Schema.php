@@ -175,7 +175,7 @@ class Schema
         $this->schemaTable->update($record);
     }
 
-    public function getHtmlPreview($schemaId)
+    public function generatePreview($schemaId)
     {
         $schema = $this->schemaTable->get($schemaId);
 
