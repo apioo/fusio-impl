@@ -132,8 +132,8 @@ JSON;
                         'GET' => [
                             'active'   => true,
                             'public'   => true,
-                            'action'   => 4,
-                            'response' => 1,
+                            'action'   => 'Inspect-Action',
+                            'response' => 'Passthru',
                         ],
                     ],
                 ]],
@@ -245,8 +245,8 @@ JSON;
                         'GET' => [
                             'active'   => true,
                             'public'   => true,
-                            'action'   => 4,
-                            'response' => 1,
+                            'action'   => 'Inspect-Action',
+                            'response' => 'Passthru',
                         ],
                     ],
                 ]],

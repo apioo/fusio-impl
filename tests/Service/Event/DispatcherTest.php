@@ -58,11 +58,10 @@ class DispatcherTest extends ControllerDbTestCase
         $this->assertEquals('{"foo":"bar"}', $responses[1]['payload']);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testDispatchInvalid()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->newDispatcher()->dispatch('bar', ['foo' => 'bar']);
     }
 

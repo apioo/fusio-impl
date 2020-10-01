@@ -71,11 +71,10 @@ class AuthenticationTest extends DbTestCase
         $this->assertEquals('Consumer', $user->getName());
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testHandleInvalidJWTFormat()
     {
+        $this->expectException(\DomainException::class);
+
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foo.bar.baz']]);
         $response = new Response();
@@ -94,11 +93,10 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\UnauthorizedException
-     */
     public function testHandleInvalidToken()
     {
+        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Bearer foobar']]);
         $response = new Response();
@@ -117,11 +115,10 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\UnauthorizedException
-     */
     public function testHandleInvalidAuthType()
     {
+        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0'], 'Authorization' => ['Basic foobar']]);
         $response = new Response();
@@ -140,11 +137,10 @@ class AuthenticationTest extends DbTestCase
         $authentication->handle($request, $response, $filterChain);
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\UnauthorizedException
-     */
     public function testHandleNoAuthorizationHeader()
     {
+        $this->expectException(\PSX\Http\Exception\UnauthorizedException::class);
+
         $context  = $this->newContext();
         $request  = new Request(new Uri('/foo'), 'GET', ['Content-Type' => ['application/json'], 'User-Agent' => ['FooAgent 1.0']]);
         $response = new Response();
