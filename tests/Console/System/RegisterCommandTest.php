@@ -170,8 +170,8 @@ JSON;
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('Adapter-Schema', $methods[0]['request']);
+        $this->assertEquals('Void-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -180,7 +180,7 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 
     public function testCommandAutoConfirm()
@@ -301,8 +301,8 @@ JSON;
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('Adapter-Schema', $methods[0]['request']);
+        $this->assertEquals('Void-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -311,6 +311,6 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 }
