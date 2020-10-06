@@ -120,8 +120,6 @@ JSON;
     public function testPut()
     {
         $schema = [
-            'id' => 'http://phpsx.org#',
-            'title' => 'test',
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -162,8 +160,6 @@ JSON;
     public function testPutForm()
     {
         $schema = [
-            'id' => 'http://phpsx.org#',
-            'title' => 'test',
             'type' => 'object',
             'properties' => [
                 'title' => [
