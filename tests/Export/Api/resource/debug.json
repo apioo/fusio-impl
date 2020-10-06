@@ -1,109 +1,78 @@
 {
-  "path": "\/export\/debug",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Export_Debug_Headers": {
-        "type": "object",
-        "title": "Export Debug Headers",
-        "additionalProperties": true
-      },
-      "Export_Debug_Parameters": {
-        "type": "object",
-        "title": "Export Debug Parameters",
-        "additionalProperties": true
-      },
-      "Export_Debug_Request": {
-        "type": "object",
-        "title": "Export Debug Request",
-        "additionalProperties": true
-      },
-      "Export_Debug": {
-        "type": "object",
-        "title": "Export Debug",
-        "properties": {
-          "method": {
-            "type": "string"
-          },
-          "headers": {
-            "$ref": "#\/definitions\/Export_Debug_Headers"
-          },
-          "parameters": {
-            "$ref": "#\/definitions\/Export_Debug_Parameters"
-          },
-          "body": {
-            "$ref": "#\/definitions\/Export_Debug_Request"
-          }
-        }
-      },
-      "Passthru": {
-        "type": "object",
-        "title": "passthru",
-        "description": "No schema information available",
-        "additionalProperties": true
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Export_Debug"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Passthru"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Export_Debug"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Passthru"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Export_Debug"
-      },
-      "DELETE-request": {
-        "$ref": "#\/definitions\/Passthru"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Export_Debug"
-      },
-      "PATCH-request": {
-        "$ref": "#\/definitions\/Passthru"
-      },
-      "PATCH-200-response": {
-        "$ref": "#\/definitions\/Export_Debug"
-      }
-    }
-  },
+  "path": "\/export\/debug",
   "methods": {
     "GET": {
+      "tags": [],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Debug"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "tags": [],
+      "request": "Passthru",
       "responses": {
-        "200": "#\/definitions\/POST-200-response"
+        "200": "Debug"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "tags": [],
+      "request": "Passthru",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Debug"
       }
     },
     "DELETE": {
-      "request": "#\/definitions\/DELETE-request",
+      "tags": [],
+      "request": "Passthru",
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Debug"
       }
     },
     "PATCH": {
-      "request": "#\/definitions\/PATCH-request",
+      "tags": [],
+      "request": "Passthru",
       "responses": {
-        "200": "#\/definitions\/PATCH-200-response"
+        "200": "Debug"
       }
+    }
+  },
+  "definitions": {
+    "Debug": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "$ref": "Debug_Headers"
+        },
+        "parameters": {
+          "$ref": "Debug_Parameters"
+        },
+        "body": {
+          "$ref": "Debug_Body"
+        }
+      }
+    },
+    "Debug_Body": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Debug_Headers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Debug_Parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object"
     }
   }
 }
