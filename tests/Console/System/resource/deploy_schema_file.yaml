@@ -1,11 +1,2 @@
 schema:
-  Ref-Schema: >
-    {
-      "title": "test",
-      "type": "object",
-      "properties": {
-        "content": {
-          "$ref": "file:///schema.json#/properties/content"
-        }
-      }
-    }
+  Ref-Schema: !include schema.json

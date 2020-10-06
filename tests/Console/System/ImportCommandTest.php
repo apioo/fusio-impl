@@ -129,7 +129,7 @@ JSON;
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('Test-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -138,7 +138,7 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(4, $responses[0]['response']);
+        $this->assertEquals('New-Schema', $responses[0]['response']);
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -162,9 +162,9 @@ JSON;
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
-        $this->assertEquals(4, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('New-Schema', $methods[0]['parameters']);
+        $this->assertEquals('New-Schema', $methods[0]['request']);
+        $this->assertEquals('Test-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id ORDER BY id ASC', [
@@ -173,9 +173,9 @@ JSON;
 
         $this->assertEquals(2, count($responses));
         $this->assertEquals(201, $responses[0]['code']);
-        $this->assertEquals(4, $responses[0]['response']);
+        $this->assertEquals('New-Schema', $responses[0]['response']);
         $this->assertEquals(500, $responses[1]['code']);
-        $this->assertEquals(5, $responses[1]['response']);
+        $this->assertEquals('Error-Schema', $responses[1]['response']);
     }
 
     public function testCommandOpenAPI()
@@ -196,87 +196,16 @@ JSON;
         // check schema
         $actual = $this->fetchList('SELECT name FROM fusio_schema');
 
-        $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
-        $this->assertContains('pets-_petId_-showPetById-GET-500-response', $actual);
-        $this->assertContains('pets-createPets-POST-500-response', $actual);
-        $this->assertContains('pets-listPets-GET-200-response', $actual);
-        $this->assertContains('pets-listPets-GET-500-response', $actual);
-        $this->assertContains('pets-listPets-GET-query', $actual);
+        $this->assertContains('Error', $actual);
+        $this->assertContains('Pet', $actual);
+        $this->assertContains('Pets', $actual);
+        $this->assertContains('PetsGetQuery', $actual);
+        $this->assertContains('PetsPetIdGetQuery', $actual);
 
         // check action
         $actual = $this->fetchList('SELECT name FROM fusio_action');
 
-        $this->assertContains('pets-_petId_-showPetById-GET', $actual);
-        $this->assertContains('pets-createPets-POST', $actual);
-        $this->assertContains('pets-listPets-GET', $actual);
-
-        // check routes
-        $actual = $this->fetchList('SELECT path FROM fusio_routes');
-
-        $this->assertContains('/pets', $actual);
-        $this->assertContains('/pets/:petId', $actual);
-    }
-
-    public function testCommandRaml()
-    {
-        $command = Environment::getService('console')->find('system:import');
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'file'    => __DIR__ . '/resource/raml.yaml',
-            'format'  => 'raml'
-        ]);
-
-        $display = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Import successful!/', $display, $display);
-
-        // check schema
-        $actual = $this->fetchList('SELECT name FROM fusio_schema');
-
-        $this->assertContains('helloworld-GET-200-response', $actual);
-
-        // check action
-        $actual = $this->fetchList('SELECT name FROM fusio_action');
-
-        $this->assertContains('helloworld-GET', $actual);
-
-        // check routes
-        $actual = $this->fetchList('SELECT path FROM fusio_routes');
-
-        $this->assertContains('/helloworld', $actual);
-    }
-
-    public function testCommandSwagger()
-    {
-        $command = Environment::getService('console')->find('system:import');
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'file'    => __DIR__ . '/resource/swagger.json',
-            'format'  => 'swagger'
-        ]);
-
-        $display = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Import successful!/', $display, $display);
-
-        // check schema
-        $actual = $this->fetchList('SELECT name FROM fusio_schema');
-
-        $this->assertContains('pets-_petId_-showPetById-GET-200-response', $actual);
-        $this->assertContains('pets-_petId_-showPetById-GET-500-response', $actual);
-        $this->assertContains('pets-createPets-POST-500-response', $actual);
-        $this->assertContains('pets-listPets-GET-200-response', $actual);
-        $this->assertContains('pets-listPets-GET-500-response', $actual);
-        $this->assertContains('pets-listPets-GET-query', $actual);
-
-        // check action
-        $actual = $this->fetchList('SELECT name FROM fusio_action');
-
-        $this->assertContains('pets-_petId_-showPetById-GET', $actual);
+        $this->assertContains('pets-_petId-showPetById-GET', $actual);
         $this->assertContains('pets-createPets-POST', $actual);
         $this->assertContains('pets-listPets-GET', $actual);
 

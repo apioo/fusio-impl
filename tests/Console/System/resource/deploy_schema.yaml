@@ -1,7 +1,6 @@
 schema:
   Test-Schema: >
     {
-      "title": "test",
       "type": "object",
       "properties": {
         "foo": {
@@ -11,14 +10,16 @@ schema:
     }
   Ref-Schema: >
     {
-      "title": "test",
+      "$import": {
+        "remote": "schema:///Test-Schema"
+      },
       "type": "object",
       "properties": {
         "content": {
-          "$ref": "schema:///Test-Schema"
+          "$ref": "remote:Test-Schema"
         },
         "title": {
-          "$ref": "schema:///Test-Schema#/properties/foo"
+          "$ref": "remote:Test-Schema"
         }
       }
     }

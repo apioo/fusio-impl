@@ -64,7 +64,7 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(5, $action['id']);
-        $this->assertContains('Console/System/resource/test-action.php', $action['class']);
+        $this->assertStringContainsString('Console/System/resource/test-action.php', $action['class']);
         $this->assertEquals(PhpFile::class, $action['engine']);
         $this->assertEquals(null, $action['config']);
 
@@ -92,7 +92,7 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('s_Console_System_resource_test-action_php', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -101,7 +101,7 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 
     public function testCommandRoutesActionClassInvalid()
@@ -116,6 +116,6 @@ class DeployCommandRouteFilePhpTest extends ControllerDbTestCase
 
         $display = $commandTester->getDisplay();
 
-        $this->assertRegExp('/Could not resolve action foo_php/', $display, $display);
+        $this->assertStringContainsString('- [FAILED] action foo_php: Could not resolve class foo.php', $display, $display);
     }
 }

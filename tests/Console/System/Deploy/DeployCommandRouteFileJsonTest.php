@@ -64,7 +64,7 @@ class DeployCommandRouteFileJsonTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(5, $action['id']);
-        $this->assertContains('Console/System/resource/static.json', $action['class']);
+        $this->assertStringContainsString('Console/System/resource/static.json', $action['class']);
         $this->assertEquals(StaticFile::class, $action['engine']);
         $this->assertEquals(null, $action['config']);
 
@@ -92,7 +92,7 @@ class DeployCommandRouteFileJsonTest extends ControllerDbTestCase
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('s_Console_System_resource_static_json', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -101,6 +101,6 @@ class DeployCommandRouteFileJsonTest extends ControllerDbTestCase
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 }

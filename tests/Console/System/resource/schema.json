@@ -1,20 +1,26 @@
 {
-  "id": "http:\/\/phpsx.org#",
-  "title": "test",
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    },
-    "content": {
-      "type": "string"
-    },
-    "author": {
-      "$ref": "file:///author.json"
-    },
-    "date": {
-      "type": "string",
-      "format": "date-time"
+  "$import": {
+    "self": "file:///author.json"
+  },
+  "definitions": {
+    "Test": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "author": {
+          "$ref": "Author"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     }
-  }
+  },
+  "$ref": "Test"
 }

@@ -83,7 +83,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             VoidAction::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
@@ -98,7 +98,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             VoidConnection::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -145,7 +145,7 @@ JSON;
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -215,7 +215,7 @@ JSON;
             VoidAction::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
@@ -230,7 +230,7 @@ JSON;
             VoidConnection::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -276,7 +276,7 @@ JSON;
 
         $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [

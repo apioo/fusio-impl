@@ -1,233 +1,521 @@
 {
-  "scope": [
+  "action": [
     {
-      "name": "bar",
-      "description": "Bar access"
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
+      "date": "[datetime]",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "Inspect-Action"
     },
     {
-      "name": "foo",
-      "description": "Foo access"
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+      "config": {
+        "connection": 2,
+        "table": "app_news"
+      },
+      "date": "[datetime]",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "Sql-Table"
     },
     {
-      "name": "consumer.user",
-      "description": "Edit your account settings"
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "config": {
+        "response": "{\"foo\": \"bar\"}"
+      },
+      "date": "[datetime]",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "Util-Static-Response"
     },
     {
-      "name": "consumer.transaction",
-      "description": "Execute transactions"
+      "class": "Fusio\\Impl\\Action\\Welcome",
+      "date": "[datetime]",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "Welcome"
+    }
+  ],
+  "app": [
+    {
+      "date": "[datetime]",
+      "name": "Pending",
+      "parameters": "",
+      "status": 2,
+      "url": "http://google.com",
+      "userId": 2
     },
     {
-      "name": "consumer.subscription",
-      "description": "View and manage your subscriptions"
+      "date": "[datetime]",
+      "name": "Foo-App",
+      "parameters": "",
+      "scopes": [
+        "authorization",
+        "foo",
+        "bar"
+      ],
+      "status": 1,
+      "url": "http://google.com",
+      "userId": 2
     },
     {
-      "name": "consumer.scope",
-      "description": "View available scopes"
+      "date": "[datetime]",
+      "name": "Consumer",
+      "parameters": "",
+      "scopes": [
+        "consumer",
+        "authorization"
+      ],
+      "status": 1,
+      "url": "http://fusio-project.org",
+      "userId": 1
     },
     {
-      "name": "consumer.plan",
-      "description": "View available plans"
-    },
-    {
-      "name": "consumer.grant",
-      "description": "View and manage your grants"
-    },
-    {
-      "name": "consumer.event",
-      "description": "View and manage your events"
-    },
-    {
-      "name": "consumer.app",
-      "description": "View and manage your apps"
-    },
-    {
-      "name": "backend.user",
-      "description": "View and manage users"
-    },
-    {
-      "name": "backend.transaction",
-      "description": "View transactions"
-    },
-    {
-      "name": "backend.statistic",
-      "description": "View statistics"
-    },
-    {
-      "name": "backend.sdk",
-      "description": "Generate client SDKs"
-    },
-    {
-      "name": "backend.scope",
-      "description": "View and manage scopes"
-    },
-    {
-      "name": "backend.schema",
-      "description": "View and manage schemas"
-    },
-    {
-      "name": "backend.routes",
-      "description": "View and manage routes"
-    },
-    {
-      "name": "backend.rate",
-      "description": "View and manage rates"
-    },
-    {
-      "name": "backend.plan",
-      "description": "View and manage plans"
-    },
-    {
-      "name": "backend.marketplace",
-      "description": "View and manage apps from the marketplace"
-    },
-    {
-      "name": "backend.log",
-      "description": "View logs"
-    },
-    {
-      "name": "backend.import",
-      "description": "Execute import"
-    },
-    {
-      "name": "backend.event",
-      "description": "View and manage events"
-    },
-    {
-      "name": "backend.dashboard",
-      "description": "View dashboard statistic"
-    },
-    {
-      "name": "backend.cronjob",
-      "description": "View and manage cronjob entries"
-    },
-    {
-      "name": "backend.connection",
-      "description": "View and manage connections"
-    },
-    {
-      "name": "backend.config",
-      "description": "View and edit config entries"
-    },
-    {
-      "name": "backend.audit",
-      "description": "View audits"
-    },
-    {
-      "name": "backend.app",
-      "description": "View and manage apps"
-    },
-    {
-      "name": "backend.action",
-      "description": "View and manage actions"
-    },
-    {
-      "name": "backend.account",
-      "description": "Option to change the password of your account"
-    },
-    {
-      "name": "authorization",
-      "description": "Authorization API endpoint"
-    },
-    {
-      "name": "consumer",
-      "description": "Global access to the consumer API"
-    },
-    {
-      "name": "backend",
-      "description": "Global access to the backend API"
+      "date": "[datetime]",
+      "name": "Backend",
+      "parameters": "",
+      "scopes": [
+        "backend",
+        "authorization"
+      ],
+      "status": 1,
+      "url": "http://fusio-project.org",
+      "userId": 1
     }
   ],
   "connection": [
     {
-      "status": 1,
-      "name": "paypal",
       "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
-      "config": {}
+      "config": {
+        "foo": "bar"
+      },
+      "name": "paypal",
+      "status": 1
     },
     {
-      "status": 1,
-      "name": "Test",
       "class": "Fusio\\Impl\\Connection\\Native",
-      "config": {}
+      "config": {
+        "foo": "bar"
+      },
+      "name": "Test",
+      "status": 1
     },
     {
-      "status": 1,
-      "name": "System",
       "class": "Fusio\\Impl\\Connection\\System",
-      "config": {}
+      "config": {},
+      "name": "System",
+      "status": 1
+    }
+  ],
+  "cronjob": [
+    {
+      "action": "Sql-Table",
+      "cron": "*/30 * * * *",
+      "name": "Test-Cron"
+    }
+  ],
+  "event": [
+    {
+      "description": "Foo event description",
+      "name": "foo-event"
+    },
+    {
+      "description": "",
+      "name": "fusio.action.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.action.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.action.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.app.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.app.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.app.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.connection.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.connection.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.connection.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.cronjob.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.cronjob.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.cronjob.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.subscription.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.subscription.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.subscription.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.event.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.plan.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.plan.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.plan.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.rate.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.rate.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.rate.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.routes.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.routes.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.routes.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.schema.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.schema.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.schema.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.scope.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.scope.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.scope.update"
+    },
+    {
+      "description": "",
+      "name": "fusio.user.create"
+    },
+    {
+      "description": "",
+      "name": "fusio.user.delete"
+    },
+    {
+      "description": "",
+      "name": "fusio.user.update"
+    }
+  ],
+  "rate": [
+    {
+      "allocation": [
+        {
+          "authenticated": true,
+          "id": 4,
+          "rateId": 4,
+          "routeId": 108
+        }
+      ],
+      "name": "gold",
+      "priority": 10,
+      "rateLimit": 16,
+      "timespan": "P1M"
+    },
+    {
+      "allocation": [
+        {
+          "id": 3,
+          "rateId": 3,
+          "routeId": 108
+        }
+      ],
+      "name": "silver",
+      "priority": 5,
+      "rateLimit": 8,
+      "timespan": "P1M"
+    },
+    {
+      "allocation": [
+        {
+          "authenticated": false,
+          "id": 2,
+          "rateId": 2
+        }
+      ],
+      "name": "Default-Anonymous",
+      "priority": 4,
+      "rateLimit": 60,
+      "timespan": "PT1H"
+    },
+    {
+      "allocation": [
+        {
+          "id": 1,
+          "rateId": 1
+        }
+      ],
+      "name": "Default",
+      "priority": 0,
+      "rateLimit": 720,
+      "timespan": "PT1H"
+    }
+  ],
+  "routes": [
+    {
+      "config": [
+        {
+          "methods": {
+            "DELETE": {
+              "action": "Inspect-Action",
+              "active": true,
+              "public": true,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              }
+            },
+            "GET": {
+              "action": "Inspect-Action",
+              "active": true,
+              "public": true,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              }
+            },
+            "PATCH": {
+              "action": "Inspect-Action",
+              "active": true,
+              "public": true,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              }
+            },
+            "POST": {
+              "action": "Inspect-Action",
+              "active": true,
+              "public": true,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              }
+            },
+            "PUT": {
+              "action": "Inspect-Action",
+              "active": true,
+              "public": true,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              }
+            }
+          },
+          "status": 4,
+          "version": 1
+        }
+      ],
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "path": "/inspect/:foo",
+      "scopes": [
+        "bar"
+      ],
+      "status": 1
+    },
+    {
+      "config": [
+        {
+          "methods": {
+            "GET": {
+              "action": "Sql-Table",
+              "active": true,
+              "operationId": "listFoo",
+              "public": true,
+              "responses": {
+                "200": "Collection-Schema"
+              }
+            },
+            "POST": {
+              "action": "Sql-Table",
+              "active": true,
+              "costs": 1,
+              "operationId": "createFoo",
+              "public": false,
+              "request": "Entry-Schema",
+              "responses": {
+                "201": "Passthru"
+              }
+            }
+          },
+          "status": 4,
+          "version": 1
+        }
+      ],
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "path": "/foo",
+      "scopes": [
+        "bar"
+      ],
+      "status": 1
+    },
+    {
+      "config": [
+        {
+          "methods": {
+            "GET": {
+              "action": "Welcome",
+              "active": true,
+              "public": true,
+              "responses": {
+                "200": "1"
+              }
+            }
+          },
+          "status": 4,
+          "version": 1
+        }
+      ],
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "path": "/",
+      "scopes": [
+        "bar"
+      ],
+      "status": 1
     }
   ],
   "schema": [
     {
-      "name": "Entry-Schema",
-      "source": {
-        "title": "entry",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "form": {
-        "title": {
-          "ui:autofocus": true,
-          "ui:emptyValue": ""
-        },
         "content": {
           "ui:widget": "textarea"
         },
         "date": {
           "ui:widget": "alt-datetime"
+        },
+        "title": {
+          "ui:autofocus": true,
+          "ui:emptyValue": ""
+        }
+      },
+      "name": "Entry-Schema",
+      "source": {
+        "$ref": "Entry",
+        "definitions": {
+          "Entry": {
+            "properties": {
+              "content": {
+                "type": "string"
+              },
+              "date": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
         }
       }
     },
     {
       "name": "Collection-Schema",
       "source": {
-        "title": "collection",
-        "type": "object",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "itemsPerPage": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "title": "entry",
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "content": {
-                  "type": "string"
-                },
-                "date": {
-                  "type": "string",
-                  "format": "date-time"
-                }
+        "$ref": "Collection",
+        "definitions": {
+          "Collection": {
+            "properties": {
+              "entry": {
+                "$ref": "Entry"
+              },
+              "itemsPerPage": {
+                "type": "integer"
+              },
+              "startIndex": {
+                "type": "integer"
+              },
+              "totalResults": {
+                "type": "integer"
               }
-            }
+            },
+            "title": "collection",
+            "type": "object"
+          },
+          "Entry": {
+            "properties": {
+              "content": {
+                "type": "string"
+              },
+              "date": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "type": "object"
           }
         }
       }
@@ -235,240 +523,157 @@
     {
       "name": "Passthru",
       "source": {
-        "id": "http:\/\/fusio-project.org",
-        "title": "passthru",
-        "type": "object",
+        "additionalProperties": true,
         "description": "No schema was specified.",
-        "additionalProperties": true
+        "type": "object"
       }
     }
   ],
-  "action": [
+  "scope": [
     {
-      "name": "Inspect-Action",
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "date": "[datetime]",
-      "config": {}
+      "description": "Bar access",
+      "name": "bar"
     },
     {
-      "name": "Sql-Table",
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {
-        "connection": "Test",
-        "table": "app_news"
-      },
-      "date": "[datetime]"
+      "description": "Foo access",
+      "name": "foo"
     },
     {
-      "name": "Util-Static-Response",
-      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "config": {
-        "response": "{\"foo\": \"bar\"}"
-      },
-      "date": "[datetime]"
+      "description": "Edit your account settings",
+      "name": "consumer.user"
     },
     {
-      "name": "Welcome",
-      "class": "Fusio\\Impl\\Action\\Welcome",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "date": "[datetime]",
-      "config": {}
-    }
-  ],
-  "routes": [
-    {
-      "status": 1,
-      "path": "\/inspect\/:foo",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [
-        "bar"
-      ],
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Inspect-Action"
-            },
-            "POST": {
-              "active": true,
-              "public": true,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Inspect-Action"
-            },
-            "PUT": {
-              "active": true,
-              "public": true,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Inspect-Action"
-            },
-            "PATCH": {
-              "active": true,
-              "public": true,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Inspect-Action"
-            },
-            "DELETE": {
-              "active": true,
-              "public": true,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Inspect-Action"
-            }
-          }
-        }
-      ]
+      "description": "Execute transactions",
+      "name": "consumer.transaction"
     },
     {
-      "status": 1,
-      "path": "\/foo",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [
-        "bar"
-      ],
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "operationId": "listFoo",
-              "responses": {
-                "200": "Collection-Schema"
-              },
-              "action": "Sql-Table"
-            },
-            "POST": {
-              "active": true,
-              "public": false,
-              "operationId": "createFoo",
-              "request": "Entry-Schema",
-              "responses": {
-                "201": "Passthru"
-              },
-              "action": "Sql-Table",
-              "costs": 1
-            }
-          }
-        }
-      ]
+      "description": "View and manage your subscriptions",
+      "name": "consumer.subscription"
     },
     {
-      "status": 1,
-      "path": "\/",
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "scopes": [
-        "bar"
-      ],
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "responses": {
-                "200": "Passthru"
-              },
-              "action": "Welcome"
-            }
-          }
-        }
-      ]
-    }
-  ],
-  "cronjob": [
-    {
-      "name": "Test-Cron",
-      "cron": "*\/30 * * * *",
-      "action": "Sql-Table"
-    }
-  ],
-  "rate": [
-    {
-      "priority": 10,
-      "name": "gold",
-      "rateLimit": 16,
-      "timespan": "P1M",
-      "allocation": [
-        {
-          "id": 4,
-          "rateId": 4,
-          "routeId": 108,
-          "authenticated": true
-        }
-      ]
+      "description": "View available scopes",
+      "name": "consumer.scope"
     },
     {
-      "priority": 5,
-      "name": "silver",
-      "rateLimit": 8,
-      "timespan": "P1M",
-      "allocation": [
-        {
-          "id": 3,
-          "rateId": 3,
-          "routeId": 108
-        }
-      ]
+      "description": "View available plans",
+      "name": "consumer.plan"
     },
     {
-      "priority": 4,
-      "name": "Default-Anonymous",
-      "rateLimit": 60,
-      "timespan": "PT1H",
-      "allocation": [
-        {
-          "id": 2,
-          "rateId": 2,
-          "authenticated": false
-        }
-      ]
+      "description": "View and manage your grants",
+      "name": "consumer.grant"
     },
     {
-      "priority": 0,
-      "name": "Default",
-      "rateLimit": 720,
-      "timespan": "PT1H",
-      "allocation": [
-        {
-          "id": 1,
-          "rateId": 1
-        }
-      ]
+      "description": "View and manage your events",
+      "name": "consumer.event"
+    },
+    {
+      "description": "View and manage your apps",
+      "name": "consumer.app"
+    },
+    {
+      "description": "View and manage users",
+      "name": "backend.user"
+    },
+    {
+      "description": "View transactions",
+      "name": "backend.transaction"
+    },
+    {
+      "description": "View statistics",
+      "name": "backend.statistic"
+    },
+    {
+      "description": "Generate client SDKs",
+      "name": "backend.sdk"
+    },
+    {
+      "description": "View and manage scopes",
+      "name": "backend.scope"
+    },
+    {
+      "description": "View and manage schemas",
+      "name": "backend.schema"
+    },
+    {
+      "description": "View and manage routes",
+      "name": "backend.routes"
+    },
+    {
+      "description": "View and manage rates",
+      "name": "backend.rate"
+    },
+    {
+      "description": "View and manage plans",
+      "name": "backend.plan"
+    },
+    {
+      "description": "View and manage apps from the marketplace",
+      "name": "backend.marketplace"
+    },
+    {
+      "description": "View logs",
+      "name": "backend.log"
+    },
+    {
+      "description": "Execute import",
+      "name": "backend.import"
+    },
+    {
+      "description": "View and manage events",
+      "name": "backend.event"
+    },
+    {
+      "description": "View dashboard statistic",
+      "name": "backend.dashboard"
+    },
+    {
+      "description": "View and manage cronjob entries",
+      "name": "backend.cronjob"
+    },
+    {
+      "description": "View and manage connections",
+      "name": "backend.connection"
+    },
+    {
+      "description": "View and edit config entries",
+      "name": "backend.config"
+    },
+    {
+      "description": "View audits",
+      "name": "backend.audit"
+    },
+    {
+      "description": "View and manage apps",
+      "name": "backend.app"
+    },
+    {
+      "description": "View and manage actions",
+      "name": "backend.action"
+    },
+    {
+      "description": "Option to change the password of your account",
+      "name": "backend.account"
+    },
+    {
+      "description": "Authorization API endpoint",
+      "name": "authorization"
+    },
+    {
+      "description": "Global access to the consumer API",
+      "name": "consumer"
+    },
+    {
+      "description": "Global access to the backend API",
+      "name": "backend"
     }
   ],
   "user": [
     {
-      "provider": 1,
-      "status": 1,
-      "name": "Developer",
+      "date": "[datetime]",
       "email": "developer@localhost.com",
+      "name": "Developer",
       "points": 10,
+      "provider": 1,
       "scopes": [
         "backend",
         "backend.account",
@@ -505,24 +710,24 @@
         "foo",
         "bar"
       ],
-      "date": "[datetime]"
+      "status": 1
     },
     {
-      "provider": 1,
-      "status": 2,
-      "name": "Disabled",
+      "date": "[datetime]",
       "email": "disabled@localhost.com",
+      "name": "Disabled",
+      "provider": 1,
       "scopes": [
         "authorization"
       ],
-      "date": "[datetime]"
+      "status": 2
     },
     {
-      "provider": 1,
-      "status": 0,
-      "name": "Consumer",
+      "date": "[datetime]",
       "email": "consumer@localhost.com",
+      "name": "Consumer",
       "points": 100,
+      "provider": 1,
       "scopes": [
         "consumer",
         "consumer.app",
@@ -537,251 +742,54 @@
         "foo",
         "bar"
       ],
-      "date": "[datetime]"
+      "status": 0
     },
     {
-      "provider": 1,
-      "status": 1,
-      "name": "Administrator",
-      "email": "admin@localhost.com",
-      "scopes": [
-        "backend",
-        "backend.account",
-        "backend.action",
-        "backend.app",
-        "backend.audit",
-        "backend.config",
-        "backend.connection",
-        "backend.cronjob",
-        "backend.dashboard",
-        "backend.event",
-        "backend.import",
-        "backend.log",
-        "backend.marketplace",
-        "backend.plan",
-        "backend.rate",
-        "backend.routes",
-        "backend.schema",
-        "backend.scope",
-        "backend.sdk",
-        "backend.statistic",
-        "backend.transaction",
-        "backend.user",
-        "consumer",
-        "consumer.app",
-        "consumer.event",
-        "consumer.grant",
-        "consumer.plan",
-        "consumer.scope",
-        "consumer.subscription",
-        "consumer.transaction",
-        "consumer.user",
-        "authorization",
-        "foo",
-        "bar"
-      ],
       "attributes": {
         "first_name": "Johann",
         "last_name": "Bach"
       },
-      "date": "[datetime]"
-    }
-  ],
-  "app": [
-    {
-      "userId": "Consumer",
-      "status": 2,
-      "name": "Pending",
-      "url": "http:\/\/google.com",
-      "parameters": "",
-      "date": "[datetime]"
-    },
-    {
-      "userId": "Consumer",
-      "status": 1,
-      "name": "Foo-App",
-      "url": "http:\/\/google.com",
-      "parameters": "",
+      "date": "[datetime]",
+      "email": "admin@localhost.com",
+      "name": "Administrator",
+      "provider": 1,
       "scopes": [
+        "backend",
+        "backend.account",
+        "backend.action",
+        "backend.app",
+        "backend.audit",
+        "backend.config",
+        "backend.connection",
+        "backend.cronjob",
+        "backend.dashboard",
+        "backend.event",
+        "backend.import",
+        "backend.log",
+        "backend.marketplace",
+        "backend.plan",
+        "backend.rate",
+        "backend.routes",
+        "backend.schema",
+        "backend.scope",
+        "backend.sdk",
+        "backend.statistic",
+        "backend.transaction",
+        "backend.user",
+        "consumer",
+        "consumer.app",
+        "consumer.event",
+        "consumer.grant",
+        "consumer.plan",
+        "consumer.scope",
+        "consumer.subscription",
+        "consumer.transaction",
+        "consumer.user",
         "authorization",
         "foo",
         "bar"
       ],
-      "date": "[datetime]"
-    },
-    {
-      "userId": "Administrator",
-      "status": 1,
-      "name": "Consumer",
-      "url": "http:\/\/fusio-project.org",
-      "parameters": "",
-      "scopes": [
-        "consumer",
-        "authorization"
-      ],
-      "date": "[datetime]"
-    },
-    {
-      "userId": "Administrator",
-      "status": 1,
-      "name": "Backend",
-      "url": "http:\/\/fusio-project.org",
-      "parameters": "",
-      "scopes": [
-        "backend",
-        "authorization"
-      ],
-      "date": "[datetime]"
-    }
-  ],
-  "event": [
-    {
-      "name": "foo-event",
-      "description": "Foo event description"
-    },
-    {
-      "name": "fusio.action.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.action.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.action.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.app.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.app.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.app.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.connection.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.connection.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.connection.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.cronjob.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.cronjob.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.cronjob.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.subscription.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.subscription.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.subscription.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.event.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.plan.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.plan.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.plan.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.rate.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.rate.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.rate.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.routes.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.routes.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.routes.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.schema.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.schema.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.schema.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.scope.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.scope.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.scope.update",
-      "description": ""
-    },
-    {
-      "name": "fusio.user.create",
-      "description": ""
-    },
-    {
-      "name": "fusio.user.delete",
-      "description": ""
-    },
-    {
-      "name": "fusio.user.update",
-      "description": ""
+      "status": 1
     }
   ]
 }
