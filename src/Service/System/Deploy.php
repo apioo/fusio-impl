@@ -25,6 +25,7 @@ use Fusio\Impl\Deploy\Transformer;
 use Fusio\Impl\Deploy\EnvProperties;
 use Fusio\Impl\Deploy\IncludeDirective;
 use Fusio\Impl\Deploy\TransformerInterface;
+use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -43,17 +44,22 @@ class Deploy
     /**
      * @var \Fusio\Impl\Service\System\Import
      */
-    protected $importService;
+    private $importService;
 
     /**
      * @var \Fusio\Impl\Service\System\WebServer
      */
-    protected $webServerService;
+    private $webServerService;
 
     /**
      * @var EnvProperties
      */
     private $envProperties;
+
+    /**
+     * @var ImportResolver
+     */
+    private $importResolver;
 
     /**
      * @var IncludeDirective
@@ -64,12 +70,14 @@ class Deploy
      * @param \Fusio\Impl\Service\System\Import $importService
      * @param \Fusio\Impl\Service\System\WebServer $webServerService
      * @param \Fusio\Impl\Deploy\EnvProperties $envProperties
+     * @param \PSX\Schema\Parser\TypeSchema\ImportResolver $importResolver
      */
-    public function __construct(Import $importService, WebServer $webServerService, EnvProperties $envProperties)
+    public function __construct(Import $importService, WebServer $webServerService, EnvProperties $envProperties, ImportResolver $importResolver)
     {
         $this->importService    = $importService;
         $this->webServerService = $webServerService;
         $this->envProperties    = $envProperties;
+        $this->importResolver   = $importResolver;
         $this->includeDirective = new IncludeDirective($envProperties);
     }
 
@@ -93,7 +101,7 @@ class Deploy
             SystemAbstract::TYPE_APP        => $this->newTransformer(Transformer\App::class),
             SystemAbstract::TYPE_CONFIG     => $this->newTransformer(Transformer\Config::class),
             SystemAbstract::TYPE_CONNECTION => $this->newTransformer(Transformer\Connection::class),
-            SystemAbstract::TYPE_SCHEMA     => $this->newTransformer(Transformer\Schema::class),
+            SystemAbstract::TYPE_SCHEMA     => $this->newTransformer(Transformer\Schema::class, [$this->importResolver]),
             SystemAbstract::TYPE_ACTION     => $this->newTransformer(Transformer\Action::class),
             SystemAbstract::TYPE_ROUTE      => $this->newTransformer(Transformer\Route::class),
             SystemAbstract::TYPE_CRONJOB    => $this->newTransformer(Transformer\Cronjob::class),
@@ -128,8 +136,8 @@ class Deploy
         return $result;
     }
 
-    private function newTransformer(string $class): TransformerInterface
+    private function newTransformer(string $class, array $arguments = []): TransformerInterface
     {
-        return new $class($this->includeDirective);
+        return new $class($this->includeDirective, ...$arguments);
     }
 }
