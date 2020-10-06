@@ -169,7 +169,7 @@ class NewInstallation
                 ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rate_limit' => 60, 'timespan' => 'PT1H'],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'priority' => 0x10000000 | 67, 'methods' => 'ANY', 'path' => '/backend/account',                             'controller' => Backend\Api\Account\Update::class],
+                ['status' => 1, 'priority' => 0x10000000 | 67, 'methods' => 'ANY', 'path' => '/backend/account',                             'controller' => Backend\Api\Account\Account::class],
                 ['status' => 1, 'priority' => 0x10000000 | 67, 'methods' => 'ANY', 'path' => '/backend/account/change_password',             'controller' => Backend\Api\Account\ChangePassword::class],
                 ['status' => 1, 'priority' => 0x10000000 | 66, 'methods' => 'ANY', 'path' => '/backend/action',                              'controller' => Backend\Api\Action\Collection::class],
                 ['status' => 1, 'priority' => 0x10000000 | 65, 'methods' => 'ANY', 'path' => '/backend/action/list',                         'controller' => Backend\Api\Action\Index::class],

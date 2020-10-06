@@ -24,19 +24,21 @@ namespace Fusio\Impl\Backend\Api\Account;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Backend\Api\BackendApiAbstract;
 use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Backend\Model\User;
 use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * UpdateAccount
+ * Account
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Update extends BackendApiAbstract
+class Account extends BackendApiAbstract
 {
     /**
      * @Inject
@@ -51,12 +53,27 @@ class Update extends BackendApiAbstract
     {
         $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
+        $get = $builder->addMethod('GET');
+        $get->setSecurity(Authorization::BACKEND, ['backend.account']);
+        $get->addResponse(200, User::class);
+
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::BACKEND, ['backend.account']);
         $put->setRequest(Model\User_Update::class);
         $put->addResponse(200, Message::class);
 
         return $builder->getSpecification();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doGet(HttpContextInterface $context)
+    {
+        return $this->tableManager->getTable(View\User::class)->getEntity(
+            $this->context->getUserId(),
+            $this->config->get('fusio_user_attributes')
+        );
     }
 
     /**
@@ -72,7 +89,7 @@ class Update extends BackendApiAbstract
 
         return array(
             'success' => true,
-            'message' => 'Password successful changed',
+            'message' => 'Account successful changed',
         );
     }
 }
