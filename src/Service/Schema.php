@@ -97,7 +97,7 @@ class Schema
             'status' => Table\Schema::STATUS_ACTIVE,
             'name'   => $schema->getName(),
             'source' => $schema->getSource(),
-            'cache'  => $this->schemaParser->parse(json_encode($schema->getSource())),
+            'cache'  => $this->schemaParser->parse($schema->getName(), json_encode($schema->getSource())),
         ];
 
         $this->schemaTable->create($record);
@@ -126,7 +126,7 @@ class Schema
             'name'   => $schema->getName(),
             'source' => $schema->getSource(),
             'form'   => $schema->getForm(),
-            'cache'  => $this->schemaParser->parse(json_encode($schema->getSource())),
+            'cache'  => $this->schemaParser->parse($schema->getName(), json_encode($schema->getSource())),
         ];
 
         $this->schemaTable->update($record);

@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Schema;
 
-use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
 use PSX\Schema\Parser\TypeSchema;
 
@@ -34,27 +33,60 @@ use PSX\Schema\Parser\TypeSchema;
  */
 class Parser
 {
-    protected $connection;
+    /**
+     * @var TypeSchema\ImportResolver
+     */
+    private $importResolver;
 
-    public function __construct(Connection $connection = null)
+    public function __construct(TypeSchema\ImportResolver $importResolver)
     {
-        $this->connection = $connection;
+        $this->importResolver = $importResolver;
     }
 
     /**
      * Parses and resolves the json schema source and returns the object
      * presentation of the schema
      *
-     * @param string $source
+     * @param string $name
+     * @param string|null $source
      * @return string
      */
-    public function parse($source)
+    public function parse(string $name, ?string $source): ?string
     {
-        $resolver = new TypeSchema\ImportResolver();
+        if (empty($source)) {
+            return null;
+        }
 
-        $parser = new TypeSchema($resolver);
-        $schema = $parser->parse($source);
+        $parser = new TypeSchema($this->importResolver);
+        $schema = $parser->parse($this->transform($source, $name));
 
         return Service\Schema::serializeCache($schema);
+    }
+
+    private function transform(string $schema, string $name): string
+    {
+        $schema = json_decode($schema);
+        if (!$schema instanceof \stdClass) {
+            throw new \InvalidArgumentException('Schema must be of type object');
+        }
+
+        $root = [];
+        foreach ($schema as $key => $value) {
+            if (in_array($key, ['$import', 'definitions'])) {
+                continue;
+            }
+
+            $root[$key] = $value;
+            unset($schema->{$key});
+        }
+
+        if (empty($schema->definitions)) {
+            $schema->definitions = new \stdClass();
+        }
+
+        $schema->definitions->{$name} = (object) $root;
+        $schema->{'$ref'} = $name;
+
+        return json_encode($schema, JSON_PRETTY_PRINT);
     }
 }

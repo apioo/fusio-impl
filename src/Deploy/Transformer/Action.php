@@ -90,7 +90,8 @@ class Action extends TransformerAbstract
                             $name = NameGenerator::getActionNameFromSource($config['action']);
 
                             $actions[$name] = [
-                                'class' => $config['action']
+                                'class'  => $config['action'],
+                                'config' => new \stdClass()
                             ];
                         }
                     }
@@ -103,6 +104,6 @@ class Action extends TransformerAbstract
 
     private function isName($schema)
     {
-        return is_string($schema) && preg_match('/' . Backend\Schema\Action::NAME_PATTERN . '/', $schema);
+        return is_string($schema) && preg_match('/^[a-zA-Z0-9\-\_]{3,255}$/', $schema);
     }
 }

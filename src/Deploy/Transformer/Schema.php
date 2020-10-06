@@ -22,16 +22,17 @@
 namespace Fusio\Impl\Deploy\Transformer;
 
 use Fusio\Impl\Backend;
+use Fusio\Impl\Deploy\IncludeDirective;
 use Fusio\Impl\Deploy\NameGenerator;
 use Fusio\Impl\Deploy\TransformerAbstract;
 use Fusio\Impl\Service\System\SystemAbstract;
-use PSX\Json\Parser;
-use PSX\Json\Pointer;
-use PSX\Schema\Generator\JsonSchema;
+use PSX\Schema\Generator;
+use PSX\Schema\Parser;
 use PSX\Schema\SchemaManager;
-use PSX\Uri\Uri;
+use PSX\Schema\SchemaResolver;
 use RuntimeException;
 use Symfony\Component\Yaml\Tag\TaggedValue;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Schema
@@ -42,6 +43,18 @@ use Symfony\Component\Yaml\Tag\TaggedValue;
  */
 class Schema extends TransformerAbstract
 {
+    /**
+     * @var Parser\TypeSchema\ImportResolver
+     */
+    private $importResolver;
+
+    public function __construct(IncludeDirective $includeDirective, Parser\TypeSchema\ImportResolver $importResolver)
+    {
+        parent::__construct($includeDirective);
+
+        $this->importResolver = $importResolver;
+    }
+
     public function transform(array $data, \stdClass $import, $basePath)
     {
         $resolvedSchemas = $this->resolveSchemasFromRoutes($data, $basePath);
@@ -80,7 +93,7 @@ class Schema extends TransformerAbstract
                 $file = $basePath . '/' . $data->getValue();
 
                 if (is_file($file)) {
-                    return $this->resolveFile($file);
+                    return \json_decode($this->resolveFile($file));
                 } else {
                     throw new RuntimeException('Could not resolve file: ' . $file);
                 }
@@ -90,14 +103,14 @@ class Schema extends TransformerAbstract
         } elseif (is_string($data)) {
             if (class_exists($data)) {
                 $schema = (new SchemaManager())->getSchema($data, SchemaManager::TYPE_ANNOTATION);
-                $result = (new JsonSchema())->generate($schema);
+                $result = (new Generator\TypeSchema())->generate($schema);
 
                 return \json_decode($result);
             } else {
-                return $this->traverseSchema(Parser::decode($data), $basePath);
+                return \json_decode($data);
             }
         } elseif (is_array($data) || $data instanceof \stdClass) {
-            return $this->traverseSchema($data, $basePath);
+            return $data;
         } else {
             throw new RuntimeException('Schema must be a string or array');
         }
@@ -105,62 +118,29 @@ class Schema extends TransformerAbstract
 
     /**
      * @param string $file
-     * @param string $fragment
-     * @return mixed
+     * @return string
      */
-    private function resolveFile($file, $fragment = null)
+    private function resolveFile(string $file): string
     {
         if (!is_file($file)) {
             throw new RuntimeException('Could not resolve schema ' . $file);
         }
 
-        $basePath = pathinfo($file, PATHINFO_DIRNAME);
-        $data     = Parser::decode(file_get_contents($file));
+        $basePath  = pathinfo($file, PATHINFO_DIRNAME);
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
 
-        if (!empty($fragment)) {
-            $pointer = new Pointer($fragment);
-            $data    = $pointer->evaluate($data);
-        }
-
-        return $this->traverseSchema($data, $basePath);
-    }
-
-    /**
-     * @param mixed $data
-     * @param string $basePath
-     * @return mixed
-     */
-    private function traverseSchema($data, $basePath)
-    {
-        if ($data instanceof \stdClass) {
-            if (isset($data->{'$ref'}) && is_string($data->{'$ref'})) {
-                $uri = new Uri($data->{'$ref'});
-
-                if ($uri->isAbsolute()) {
-                    if ($uri->getScheme() == 'file') {
-                        return $this->resolveFile($basePath . '/' . $uri->getPath(), $uri->getFragment());
-                    } elseif ($uri->getScheme() == 'schema') {
-                        // schema scheme is allowed
-                    } else {
-                        throw new RuntimeException('Scheme ' . $uri->getScheme() . ' is not supported');
-                    }
-                }
-            }
-
-            $object = new \stdClass();
-            foreach ($data as $key => $value) {
-                $object->{$key} = $this->traverseSchema($value, $basePath);
-            }
-            return $object;
-        } elseif (is_array($data)) {
-            $array = [];
-            foreach ($data as $value) {
-                $array[] = $this->traverseSchema($value, $basePath);
-            }
-            return $array;
+        if (in_array($extension, ['yaml', 'yml'])) {
+            $data = \json_encode(Yaml::parse(file_get_contents($file)));
         } else {
-            return $data;
+            $data = file_get_contents($file);
         }
+
+        $schema = (new Parser\TypeSchema($this->importResolver, $basePath))->parse($data);
+
+        // remove not needed schemas from the definitions
+        (new SchemaResolver())->resolve($schema);
+
+        return (new Generator\TypeSchema())->generate($schema);
     }
 
     /**
@@ -225,6 +205,6 @@ class Schema extends TransformerAbstract
 
     private function isName($schema)
     {
-        return is_string($schema) && preg_match('/' . Backend\Schema\Schema::NAME_PATTERN . '/', $schema);
+        return is_string($schema) && preg_match('/^[a-zA-Z0-9\-\_]{3,255}$/', $schema);
     }
 }
