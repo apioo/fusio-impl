@@ -1,38 +1,38 @@
 {
   "definitions": {
-    "Export_Debug": {
+    "Debug": {
       "type": "object",
       "properties": {
         "headers": {
-          "$ref": "Export_Debug_Headers"
+          "$ref": "Debug_Headers"
         },
         "parameters": {
-          "$ref": "Export_Debug_Parameters"
+          "$ref": "Debug_Parameters"
         },
         "body": {
-          "$ref": "Export_Debug_Body"
+          "$ref": "Debug_Body"
         }
       }
     },
-    "Export_Debug_Headers": {
+    "Debug_Headers": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Debug_Parameters": {
+    "Debug_Parameters": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Debug_Body": {
+    "Debug_Body": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Health": {
+    "Health": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Export_Health_Check"
+        "$ref": "Health_Check"
       }
     },
-    "Export_Health_Check": {
+    "Health_Check": {
       "type": "object",
       "properties": {
         "healthy": {
@@ -43,40 +43,40 @@
         }
       }
     },
-    "Export_Route": {
+    "Route": {
       "type": "object",
       "properties": {
         "routes": {
-          "$ref": "Export_Route_Path"
+          "$ref": "Route_Path"
         }
       }
     },
-    "Export_Route_Path": {
+    "Route_Path": {
       "type": "object",
       "additionalProperties": {
-        "$ref": "Export_Route_Method"
+        "$ref": "Route_Method"
       }
     },
-    "Export_Route_Method": {
+    "Route_Method": {
       "type": "object",
       "additionalProperties": {
         "$ref": "string"
       }
     },
-    "Export_Rpc_Request": {
+    "Rpc_Request": {
       "oneOf": [{
-        "$ref": "Export_Rpc_Request_Batch"
+        "$ref": "Rpc_Request_Batch"
       }, {
-        "$ref": "Export_Rpc_Request_Call"
+        "$ref": "Rpc_Request_Call"
       }]
     },
-    "Export_Rpc_Request_Batch": {
+    "Rpc_Request_Batch": {
       "type": "array",
       "items": {
-        "$ref": "Export_Rpc_Request_Call"
+        "$ref": "Rpc_Request_Call"
       }
     },
-    "Export_Rpc_Request_Call": {
+    "Rpc_Request_Call": {
       "type": "object",
       "properties": {
         "jsonrpc": {
@@ -86,89 +86,89 @@
           "type": "string"
         },
         "params": {
-          "$ref": "Export_Rpc_Request_Params"
+          "$ref": "Rpc_Request_Params"
         },
         "id": {
           "type": "integer"
         }
       }
     },
-    "Export_Rpc_Request_Params": {
+    "Rpc_Request_Params": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Rpc_Response": {
+    "Rpc_Response": {
       "oneOf": [{
-        "$ref": "Export_Rpc_Response_Batch"
+        "$ref": "Rpc_Response_Batch"
       }, {
-        "$ref": "Export_Rpc_Response_Return"
+        "$ref": "Rpc_Response_Return"
       }]
     },
-    "Export_Rpc_Response_Batch": {
+    "Rpc_Response_Batch": {
       "type": "array",
       "items": {
-        "$ref": "Export_Rpc_Response_Return"
+        "$ref": "Rpc_Response_Return"
       }
     },
-    "Export_Rpc_Response_Return": {
+    "Rpc_Response_Return": {
       "oneOf": [{
-        "$ref": "Export_Rpc_Response_Success"
+        "$ref": "Rpc_Response_Success"
       }, {
-        "$ref": "Export_Rpc_Response_Error"
+        "$ref": "Rpc_Response_Error"
       }]
     },
-    "Export_Rpc_Response_Success": {
+    "Rpc_Response_Success": {
       "type": "object",
       "properties": {
         "jsonrpc": {
           "type": "string"
         },
         "result": {
-          "$ref": "Export_Rpc_Response_Result"
+          "$ref": "Rpc_Response_Result"
         },
         "id": {
           "type": "integer"
         }
       }
     },
-    "Export_Rpc_Response_Result": {
+    "Rpc_Response_Result": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Rpc_Response_Error": {
+    "Rpc_Response_Error": {
       "type": "object",
       "properties": {
         "jsonrpc": {
           "type": "string"
         },
         "error": {
-          "$ref": "Export_Rpc_Response_Errors"
+          "$ref": "Rpc_Response_Errors"
         },
         "id": {
           "type": "integer"
         }
       }
     },
-    "Export_Rpc_Response_Errors": {
+    "Rpc_Response_Errors": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Schema": {
+    "Schema": {
       "type": "object",
       "properties": {
         "schema": {
-          "$ref": "Export_Schema_TypeSchema"
+          "$ref": "Schema_TypeSchema"
         },
         "form": {
-          "$ref": "Export_Schema_Form"
+          "$ref": "Schema_Form"
         }
       }
     },
-    "Export_Schema_TypeSchema": {
+    "Schema_TypeSchema": {
       "type": "object",
       "additionalProperties": true
     },
-    "Export_Schema_Form": {
+    "Schema_Form": {
       "type": "object",
       "additionalProperties": true
     }

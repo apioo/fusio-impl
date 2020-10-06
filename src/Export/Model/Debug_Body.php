@@ -7,6 +7,6 @@ namespace Fusio\Impl\Export\Model;
 /**
  * @extends \PSX\Record\Record<mixed>
  */
-class Export_Rpc_Response_Result extends \PSX\Record\Record
+class Debug_Body extends \PSX\Record\Record
 {
 }

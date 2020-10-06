@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Export\Model;
 
 
-class Export_Health_Check implements \JsonSerializable
+class Health_Check implements \JsonSerializable
 {
     /**
      * @var bool|null

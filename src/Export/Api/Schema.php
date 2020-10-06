@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Export\Api;
 
 use Fusio\Impl\Backend\View;
-use Fusio\Impl\Export\Schema as ExportSchema;
+use Fusio\Impl\Export\Model;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
@@ -31,7 +31,6 @@ use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\Generator;
-use PSX\Schema\Property;
 use PSX\Schema\SchemaInterface;
 
 /**
@@ -65,7 +64,7 @@ class Schema extends SchemaApiAbstract
         $path->addString('name');
 
         $get = $builder->addMethod('GET');
-        $get->addResponse(200, ExportSchema\Schema::class);
+        $get->addResponse(200, Model\Schema::class);
 
         return $builder->getSpecification();
     }

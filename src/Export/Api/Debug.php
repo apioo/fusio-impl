@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Export\Api;
 
-use Fusio\Impl\Export\Schema;
+use Fusio\Impl\Export\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -42,33 +42,28 @@ class Debug extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Debug::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, Model\Debug::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('POST')
-            ->setRequest($this->schemaManager->getSchema(Passthru::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Debug::class))
-        );
+        $post = $builder->addMethod('POST');
+        $post->setRequest(Passthru::class);
+        $post->addResponse(200, Model\Debug::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PUT')
-            ->setRequest($this->schemaManager->getSchema(Passthru::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Debug::class))
-        );
+        $put = $builder->addMethod('PUT');
+        $put->setRequest(Passthru::class);
+        $put->addResponse(200, Model\Debug::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('DELETE')
-            ->setRequest($this->schemaManager->getSchema(Passthru::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Debug::class))
-        );
+        $delete = $builder->addMethod('DELETE');
+        $delete->setRequest(Passthru::class);
+        $delete->addResponse(200, Model\Debug::class);
 
-        $resource->addMethod(Resource\Factory::getMethod('PATCH')
-            ->setRequest($this->schemaManager->getSchema(Passthru::class))
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Debug::class))
-        );
+        $patch = $builder->addMethod('PATCH');
+        $patch->setRequest(Passthru::class);
+        $patch->addResponse(200, Model\Debug::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

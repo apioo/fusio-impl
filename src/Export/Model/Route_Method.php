@@ -7,6 +7,6 @@ namespace Fusio\Impl\Export\Model;
 /**
  * @extends \PSX\Record\Record<string>
  */
-class Export_Route_Method extends \PSX\Record\Record
+class Route_Method extends \PSX\Record\Record
 {
 }

@@ -5,41 +5,41 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Export\Model;
 
 
-class Export_Schema implements \JsonSerializable
+class Schema implements \JsonSerializable
 {
     /**
-     * @var Export_Schema_TypeSchema|null
+     * @var Schema_TypeSchema|null
      */
     protected $schema;
     /**
-     * @var Export_Schema_Form|null
+     * @var Schema_Form|null
      */
     protected $form;
     /**
-     * @param Export_Schema_TypeSchema|null $schema
+     * @param Schema_TypeSchema|null $schema
      */
-    public function setSchema(?Export_Schema_TypeSchema $schema) : void
+    public function setSchema(?Schema_TypeSchema $schema) : void
     {
         $this->schema = $schema;
     }
     /**
-     * @return Export_Schema_TypeSchema|null
+     * @return Schema_TypeSchema|null
      */
-    public function getSchema() : ?Export_Schema_TypeSchema
+    public function getSchema() : ?Schema_TypeSchema
     {
         return $this->schema;
     }
     /**
-     * @param Export_Schema_Form|null $form
+     * @param Schema_Form|null $form
      */
-    public function setForm(?Export_Schema_Form $form) : void
+    public function setForm(?Schema_Form $form) : void
     {
         $this->form = $form;
     }
     /**
-     * @return Export_Schema_Form|null
+     * @return Schema_Form|null
      */
-    public function getForm() : ?Export_Schema_Form
+    public function getForm() : ?Schema_Form
     {
         return $this->form;
     }

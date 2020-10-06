@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Export\Api;
 
-use Fusio\Impl\Export\Schema;
+use Fusio\Impl\Export\Model;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
@@ -48,13 +48,12 @@ class Health extends SchemaApiAbstract
      */
     public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $resource = new Resource(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $resource->addMethod(Resource\Factory::getMethod('GET')
-            ->addResponse(200, $this->schemaManager->getSchema(Schema\Health::class))
-        );
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, Model\Health::class);
 
-        return $resource;
+        return $builder->getSpecification();
     }
 
     /**

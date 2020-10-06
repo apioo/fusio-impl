@@ -19,40 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Export\Schema\Rpc;
+namespace Fusio\Impl\Export\Api;
 
-use PSX\Schema\Property;
-use PSX\Schema\SchemaAbstract;
+use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Backend\View;
+use PSX\Api\Resource;
+use PSX\Api\SpecificationInterface;
+use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * Request
+ * Route
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends SchemaAbstract
+class Route extends SchemaApiAbstract
 {
-    public function getDefinition()
+    /**
+     * @Inject
+     * @var \PSX\Sql\TableManager
+     */
+    protected $tableManager;
+
+    /**
+     * @inheritdoc
+     */
+    public function getDocumentation(?string $version = null): ?SpecificationInterface
     {
-        $sb = $this->getSchemaBuilder('Export Rpc Request Call');
-        $sb->string('jsonrpc');
-        $sb->string('method');
-        $sb->property('params')
-            ->setTitle('Export Rpc Request Params')
-            ->setDescription('Method params');
-        $sb->integer('id');
-        $rpcCall = $sb->getProperty();
+        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
-        $batchCall = Property::getArray()
-            ->setTitle('Export Rpc Request Batch')
-            ->setItems($rpcCall);
+        $get = $builder->addMethod('GET');
+        $get->addResponse(200, Model\Route::class);
 
-        return Property::get()
-            ->setTitle('Export Rpc Request')
-            ->setOneOf([
-                $rpcCall,
-                $batchCall,
-            ]);
+        return $builder->getSpecification();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doGet(HttpContextInterface $context)
+    {
+        return $this->tableManager->getTable(View\Route::class)->getPublic();
     }
 }

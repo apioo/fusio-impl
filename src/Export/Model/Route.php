@@ -5,23 +5,23 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Export\Model;
 
 
-class Export_Route implements \JsonSerializable
+class Route implements \JsonSerializable
 {
     /**
-     * @var Export_Route_Path|null
+     * @var Route_Path|null
      */
     protected $routes;
     /**
-     * @param Export_Route_Path|null $routes
+     * @param Route_Path|null $routes
      */
-    public function setRoutes(?Export_Route_Path $routes) : void
+    public function setRoutes(?Route_Path $routes) : void
     {
         $this->routes = $routes;
     }
     /**
-     * @return Export_Route_Path|null
+     * @return Route_Path|null
      */
-    public function getRoutes() : ?Export_Route_Path
+    public function getRoutes() : ?Route_Path
     {
         return $this->routes;
     }

@@ -7,6 +7,6 @@ namespace Fusio\Impl\Export\Model;
 /**
  * @extends \PSX\Record\Record<mixed>
  */
-class Export_Debug_Body extends \PSX\Record\Record
+class Schema_TypeSchema extends \PSX\Record\Record
 {
 }

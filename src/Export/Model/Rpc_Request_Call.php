@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Export\Model;
 
 
-class Export_Rpc_Request_Call implements \JsonSerializable
+class Rpc_Request_Call implements \JsonSerializable
 {
     /**
      * @var string|null
@@ -16,7 +16,7 @@ class Export_Rpc_Request_Call implements \JsonSerializable
      */
     protected $method;
     /**
-     * @var Export_Rpc_Request_Params|null
+     * @var Rpc_Request_Params|null
      */
     protected $params;
     /**
@@ -52,16 +52,16 @@ class Export_Rpc_Request_Call implements \JsonSerializable
         return $this->method;
     }
     /**
-     * @param Export_Rpc_Request_Params|null $params
+     * @param Rpc_Request_Params|null $params
      */
-    public function setParams(?Export_Rpc_Request_Params $params) : void
+    public function setParams(?Rpc_Request_Params $params) : void
     {
         $this->params = $params;
     }
     /**
-     * @return Export_Rpc_Request_Params|null
+     * @return Rpc_Request_Params|null
      */
-    public function getParams() : ?Export_Rpc_Request_Params
+    public function getParams() : ?Rpc_Request_Params
     {
         return $this->params;
     }

@@ -15,8 +15,8 @@
         "tags": [
           "bar"
         ],
-        "operationId": "inspectFooGetPassthru",
         "requestBody": {
+          "description": "GET Request",
           "content": {
             "application\/json": {
               "schema": {
@@ -27,7 +27,7 @@
         },
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -42,8 +42,8 @@
         "tags": [
           "bar"
         ],
-        "operationId": "inspectFooPutPassthru",
         "requestBody": {
+          "description": "PUT Request",
           "content": {
             "application\/json": {
               "schema": {
@@ -54,7 +54,7 @@
         },
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "PUT 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -69,8 +69,8 @@
         "tags": [
           "bar"
         ],
-        "operationId": "inspectFooPostPassthru",
         "requestBody": {
+          "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
@@ -81,7 +81,7 @@
         },
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "POST 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -96,8 +96,8 @@
         "tags": [
           "bar"
         ],
-        "operationId": "inspectFooDeletePassthru",
         "requestBody": {
+          "description": "DELETE Request",
           "content": {
             "application\/json": {
               "schema": {
@@ -108,7 +108,7 @@
         },
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "DELETE 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -123,8 +123,8 @@
         "tags": [
           "bar"
         ],
-        "operationId": "inspectFooPatchPassthru",
         "requestBody": {
+          "description": "PATCH Request",
           "content": {
             "application\/json": {
               "schema": {
@@ -135,7 +135,7 @@
         },
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "PATCH 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -150,7 +150,7 @@
         {
           "name": "foo",
           "in": "path",
-          "required": true,
+          "required": false,
           "schema": {
             "type": "string"
           }
@@ -162,14 +162,14 @@
         "tags": [
           "bar"
         ],
-        "operationId": "fooListFoo",
+        "operationId": "listFoo",
         "responses": {
           "200": {
-            "description": "GET 200 response",
+            "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Collection"
+                  "$ref": "#\/components\/schemas\/Collection-Schema"
                 }
               }
             }
@@ -180,19 +180,20 @@
         "tags": [
           "bar"
         ],
-        "operationId": "fooCreateFoo",
+        "operationId": "createFoo",
         "requestBody": {
+          "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Entry"
+                "$ref": "#\/components\/schemas\/Entry-Schema"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "No schema was specified.",
+            "description": "POST 201 Response",
             "content": {
               "application\/json": {
                 "schema": {
@@ -209,61 +210,33 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     },
     "\/": {
       "get": {
         "tags": [
           "bar"
         ],
-        "operationId": "getPassthru",
         "responses": {
           "200": {
-            "description": "No schema was specified.",
+            "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Passthru"
+                  "$ref": "#\/components\/schemas\/1"
                 }
               }
             }
           }
         }
-      },
-      "parameters": []
+      }
     }
   },
   "components": {
     "schemas": {
-      "Passthru": {
-        "type": "object",
-        "title": "passthru",
-        "description": "No schema was specified.",
-        "additionalProperties": true
-      },
-      "Entry": {
-        "type": "object",
-        "title": "entry",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "Collection": {
-        "type": "object",
         "title": "collection",
+        "type": "object",
         "properties": {
           "totalResults": {
             "type": "integer"
@@ -275,12 +248,53 @@
             "type": "integer"
           },
           "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Entry"
-            }
+            "$ref": "#\/components\/schemas\/Entry"
           }
         }
+      },
+      "Collection-Schema": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Entry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Entry-Schema": {
+        "$ref": "#\/components\/schemas\/Entry"
+      },
+      "InspectFooPath": {
+        "type": "object",
+        "properties": {
+          "foo": {
+            "type": "string"
+          }
+        }
+      },
+      "Passthru": {
+        "title": "passthru",
+        "description": "No schema was specified.",
+        "type": "object",
+        "additionalProperties": []
+      },
+      "1": {
+        "title": "passthru",
+        "description": "No schema was specified.",
+        "type": "object",
+        "additionalProperties": []
       }
     },
     "securitySchemes": {

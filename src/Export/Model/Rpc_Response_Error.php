@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Export\Model;
 
 
-class Export_Rpc_Response_Error implements \JsonSerializable
+class Rpc_Response_Error implements \JsonSerializable
 {
     /**
      * @var string|null
      */
     protected $jsonrpc;
     /**
-     * @var Export_Rpc_Response_Errors|null
+     * @var Rpc_Response_Errors|null
      */
     protected $error;
     /**
@@ -34,16 +34,16 @@ class Export_Rpc_Response_Error implements \JsonSerializable
         return $this->jsonrpc;
     }
     /**
-     * @param Export_Rpc_Response_Errors|null $error
+     * @param Rpc_Response_Errors|null $error
      */
-    public function setError(?Export_Rpc_Response_Errors $error) : void
+    public function setError(?Rpc_Response_Errors $error) : void
     {
         $this->error = $error;
     }
     /**
-     * @return Export_Rpc_Response_Errors|null
+     * @return Rpc_Response_Errors|null
      */
-    public function getError() : ?Export_Rpc_Response_Errors
+    public function getError() : ?Rpc_Response_Errors
     {
         return $this->error;
     }
