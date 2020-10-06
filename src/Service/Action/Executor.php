@@ -26,11 +26,9 @@ use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Backend\Model\Action_Execute_Request;
-use Fusio\Impl\Table;
 use PSX\Http\Environment\HttpContext;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
-use PSX\Record\RecordInterface;
 use PSX\Uri\Uri;
 
 /**
@@ -43,46 +41,34 @@ use PSX\Uri\Uri;
 class Executor
 {
     /**
-     * @var \Fusio\Impl\Table\Action
-     */
-    protected $actionTable;
-
-    /**
      * @var \Fusio\Engine\ProcessorInterface
      */
-    protected $processor;
+    private $processor;
 
     /**
      * @var \Fusio\Engine\Repository\AppInterface
      */
-    protected $appRepository;
+    private $appRepository;
 
     /**
      * @var \Fusio\Engine\Repository\UserInterface
      */
-    protected $userRepository;
+    private $userRepository;
 
     /**
-     * @param \Fusio\Impl\Table\Action $actionTable
      * @param \Fusio\Engine\ProcessorInterface $processor
      * @param \Fusio\Engine\Repository\AppInterface $appRepository
      * @param \Fusio\Engine\Repository\UserInterface $userRepository
      */
-    public function __construct(Table\Action $actionTable, ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
+    public function __construct(ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
-        $this->actionTable       = $actionTable;
-        $this->processor         = $processor;
-        $this->appRepository     = $appRepository;
-        $this->userRepository    = $userRepository;
+        $this->processor      = $processor;
+        $this->appRepository  = $appRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function execute($actionId, Action_Execute_Request $request)
     {
-        $action = $this->actionTable->get($actionId);
-        if (empty($action)) {
-            return null;
-        }
-
         $body = $request->getBody();
         if ($body === null) {
             $body = new Record();
@@ -101,10 +87,10 @@ class Executor
         $httpRequest = new HttpRequest($uri, $request->getMethod(), $headers);
         $httpContext = new HttpContext($httpRequest, $uriFragments);
 
-        $context = new Context($actionId, '/', $app, $user);
+        $context = new Context(0, '/', $app, $user);
         $request = new Request($httpContext, $body);
 
-        return $this->processor->execute($action['id'], $request, $context);
+        return $this->processor->execute($actionId, $request, $context);
     }
 
     private function parseQueryString($data)
