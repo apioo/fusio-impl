@@ -36,6 +36,7 @@ use Fusio\Impl\Table;
 use PSX\Api\Resource;
 use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
+use PSX\Schema\Parser\TypeSchema\ImportResolver;
 
 /**
  * NewInstallation
@@ -54,10 +55,10 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $parser = new Parser();
+        $parser = new Parser(ImportResolver::createDefault());
         $now    = new \DateTime();
         $schema = self::getPassthruSchema();
-        $cache  = $parser->parse($schema);
+        $cache  = $parser->parse('Passthru', $schema);
 
         $data = [
             'fusio_user' => [
@@ -383,8 +384,6 @@ class NewInstallation
     private static function getPassthruSchema()
     {
         return json_encode([
-            'id' => 'http://fusio-project.org',
-            'title' => 'passthru',
             'type' => 'object',
             'description' => 'No schema was specified.',
             'additionalProperties' => true,
