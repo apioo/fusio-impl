@@ -59,5 +59,7 @@ class ExecuteCommand extends Command
         $this->eventExecutorService->execute();
 
         $output->writeln('Execution successful');
+
+        return 0;
     }
 }

@@ -131,5 +131,7 @@ class TokenCommand extends Command
         $output->writeln("");
         $output->writeln(Yaml::dump($response, 2));
         $output->writeln("");
+
+        return 0;
     }
 }

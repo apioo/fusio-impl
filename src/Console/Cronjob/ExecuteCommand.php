@@ -61,5 +61,7 @@ class ExecuteCommand extends Command
         $this->cronjobService->execute($input->getArgument('cronjob'));
 
         $output->writeln('Execution successful');
+
+        return 0;
     }
 }

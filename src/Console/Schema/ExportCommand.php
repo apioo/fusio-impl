@@ -73,11 +73,12 @@ class ExportCommand extends Command
         $row = $this->connection->fetchAssoc($sql, ['name' => $name]);
 
         if (!empty($row)) {
-            $generator = new Generator\JsonSchema();
+            $generator = new Generator\TypeSchema();
             $schema    = Service\Schema::unserializeCache($row['cache']);
 
             if ($schema instanceof SchemaInterface) {
                 $output->writeln($generator->generate($schema));
+                return 0;
             } else {
                 $output->writeln('Invalid schema name');
                 return 1;

@@ -73,5 +73,7 @@ class BillingRunCommand extends Command
 
         $output->writeln('');
         $output->writeln('Execution successful');
+
+        return 0;
     }
 }

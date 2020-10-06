@@ -60,5 +60,7 @@ abstract class ClassCommandAbstract extends Command
             ->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 }

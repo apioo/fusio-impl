@@ -86,31 +86,24 @@ class RestoreCommand extends Command
         switch ($type) {
             case 'action':
                 return $this->restoreRecord($id, $column, 'fusio_action', Table\Action::STATUS_ACTIVE);
-                break;
 
             case 'app':
                 return $this->restoreRecord($id, $column, 'fusio_app', Table\App::STATUS_ACTIVE);
-                break;
 
             case 'connection':
                 return $this->restoreRecord($id, $column, 'fusio_connection', Table\Connection::STATUS_ACTIVE);
-                break;
 
             case 'cronjob':
                 return $this->restoreRecord($id, $column, 'fusio_cronjob', Table\Cronjob::STATUS_ACTIVE);
-                break;
 
             case 'routes':
                 return $this->restoreRecord($id, $column, 'fusio_routes', Table\Route::STATUS_ACTIVE);
-                break;
 
             case 'schema':
                 return $this->restoreRecord($id, $column, 'fusio_schema', Table\Schema::STATUS_ACTIVE);
-                break;
 
             case 'user':
                 return $this->restoreRecord($id, $column, 'fusio_user', Table\User::STATUS_DISABLED);
-                break;
         }
 
         return 0;

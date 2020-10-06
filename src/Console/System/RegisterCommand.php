@@ -122,14 +122,9 @@ class RegisterCommand extends Command
                 $definition   = Parser::decode($definition, false);
                 $instructions = $this->parser->parse($definition);
                 $rows         = array();
-                $hasRoutes    = false;
 
                 foreach ($instructions as $instruction) {
                     $rows[] = [$instruction->getName(), $instruction->getDescription()];
-
-                    if ($instruction instanceof Instruction\Route) {
-                        $hasRoutes = true;
-                    }
                 }
 
                 $output->writeLn('Loaded definition ' . $adapter->getDefinition());

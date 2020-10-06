@@ -68,35 +68,37 @@ class DetailCommandAbstract extends Command
     {
         $object = $this->factory->factory($input->getArgument('class'));
 
-        if ($object instanceof ConfigurableInterface) {
-            $elementFactory = new Form\ElementFactory($this->actionRepository, $this->connectionRepository);
-            $builder        = new Form\Builder();
-
-            $object->configure($builder, $elementFactory);
-
-            $fields = $builder->getForm();
-            $rows   = [];
-
-            foreach ($fields->getElements() as $element) {
-                $type    = substr(strrchr(get_class($element), '\\'), 1);
-                $details = $this->getDetails($element);
-
-                if (strlen($details) > 32) {
-                    $details = substr($details, 0, 32) . ' [...]';
-                }
-
-                $rows[] = [$element->name, $type, $details];
-            }
-
-            $table = new Table($output);
-            $table
-                ->setHeaders(['Name', 'Type', 'Details'])
-                ->setRows($rows);
-
-            $table->render();
-        } else {
+        if (!$object instanceof ConfigurableInterface) {
             $output->writeln('The object is not configurable');
         }
+
+        $elementFactory = new Form\ElementFactory($this->actionRepository, $this->connectionRepository);
+        $builder        = new Form\Builder();
+
+        $object->configure($builder, $elementFactory);
+
+        $fields = $builder->getForm();
+        $rows   = [];
+
+        foreach ($fields->getElements() as $element) {
+            $type    = substr(strrchr(get_class($element), '\\'), 1);
+            $details = $this->getDetails($element);
+
+            if (strlen($details) > 32) {
+                $details = substr($details, 0, 32) . ' [...]';
+            }
+
+            $rows[] = [$element->name, $type, $details];
+        }
+
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Name', 'Type', 'Details'])
+            ->setRows($rows);
+
+        $table->render();
+
+        return 0;
     }
 
     protected function getDetails(RecordInterface $element)

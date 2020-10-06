@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Console\App;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\App_Create;
 use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,18 +39,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\System\ApiExecutor
+     * @var \Fusio\Impl\Service\App
      */
-    protected $apiExecutor;
+    protected $appService;
 
     /**
-     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     * @param \Fusio\Impl\Service\App $appService
      */
-    public function __construct(Service\System\ApiExecutor $apiExecutor)
+    public function __construct(Service\App $appService)
     {
         parent::__construct();
 
-        $this->apiExecutor = $apiExecutor;
+        $this->appService = $appService;
     }
 
     protected function configure()
@@ -56,27 +58,30 @@ class AddCommand extends Command
         $this
             ->setName('app:add')
             ->setDescription('Adds a new app')
-            ->addArgument('userId', InputArgument::REQUIRED, 'The name of the app')
-            ->addArgument('status', InputArgument::REQUIRED, 'The name of the app')
+            ->addArgument('userId', InputArgument::REQUIRED, 'The user id of the app')
+            ->addArgument('status', InputArgument::REQUIRED, 'The status of the app')
             ->addArgument('name', InputArgument::REQUIRED, 'The name of the app')
-            ->addArgument('url', InputArgument::REQUIRED, 'The name of the app')
-            ->addArgument('parameters', InputArgument::REQUIRED, 'The name of the app')
-            ->addArgument('scopes', InputArgument::REQUIRED, 'The name of the app');
+            ->addArgument('url', InputArgument::REQUIRED, 'The url of the app')
+            ->addArgument('parameters', InputArgument::REQUIRED, 'Parameters of the app')
+            ->addArgument('scopes', InputArgument::REQUIRED, 'Scopes of the app');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $response = $this->apiExecutor->request('POST', 'app', [
-            'userId' => $input->getArgument('userId'),
-            'status' => $input->getArgument('status'),
-            'name' => $input->getArgument('name'),
-            'url' => $input->getArgument('url'),
-            'parameters' => $input->getArgument('parameters'),
-            'scopes' => explode(',', $input->getArgument('scopes')),
-        ]);
+        $create = new App_Create();
+        $create->setUserId((int) $input->getArgument('userId'));
+        $create->setStatus((int) $input->getArgument('status'));
+        $create->setName($input->getArgument('name'));
+        $create->setUrl($input->getArgument('url'));
+        $create->setParameters($input->getArgument('parameters'));
+        $create->setScopes(explode(',', $input->getArgument('scopes')));
 
-        $output->writeln("");
-        $output->writeln($response->message);
-        $output->writeln("");
+        $this->appService->create($create, UserContext::newAnonymousContext());
+
+        $output->writeln('');
+        $output->writeln('App successful created');
+        $output->writeln('');
+
+        return 0;
     }
 }

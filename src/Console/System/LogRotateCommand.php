@@ -63,6 +63,8 @@ class LogRotateCommand extends Command
 
         $this->archiveAuditTable($schemaManager, $schema, $output);
         $this->archiveLogTable($schemaManager, $schema, $output);
+
+        return 0;
     }
 
     private function archiveAuditTable(AbstractSchemaManager $schemaManager, Schema $schema, OutputInterface $output)

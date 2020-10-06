@@ -91,5 +91,7 @@ class InstallCommand extends Command
             $output->writeln($e->getMessage());
             $output->writeln('');
         }
+
+        return 0;
     }
 }
