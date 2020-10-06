@@ -126,7 +126,6 @@ trait Services
     public function getActionExecutorService(): Service\Action\Executor
     {
         return new Service\Action\Executor(
-            $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('processor'),
             $this->get('app_repository'),
             $this->get('user_repository')
@@ -314,7 +313,8 @@ trait Services
         return new Service\System\Deploy(
             $this->get('system_import_service'),
             $this->get('system_web_server_service'),
-            new EnvProperties($this->get('config'))
+            new EnvProperties($this->get('config')),
+            $this->get('schema_parser_import_resolver')
         );
     }
 

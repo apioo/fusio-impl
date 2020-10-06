@@ -51,6 +51,7 @@ use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Schema\Console as SchemaConsole;
+use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -177,7 +178,15 @@ class Container extends DefaultContainer
 
     public function getSchemaParser(): Schema\Parser
     {
-        return new Schema\Parser($this->get('connection'));
+        return new Schema\Parser($this->get('schema_parser_import_resolver'));
+    }
+
+    public function getSchemaParserImportResolver(): ImportResolver
+    {
+        $resolver = ImportResolver::createDefault($this->get('http_client'));
+        $resolver->addResolver('schema', new Schema\Parser\Resolver\Database($this->get('connection')));
+
+        return $resolver;
     }
 
     public function getSchemaLoader(): Schema\Loader
@@ -200,16 +209,16 @@ class Container extends DefaultContainer
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
         // fusio commands
-        $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Action\AddCommand($this->get('action_service')));
         $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
         $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
         $application->add(new Console\Action\ExecuteCommand($this->get('action_executor_service'), $this->get('table_manager')->getTable(Table\Action::class)));
         $application->add(new Console\Action\ListCommand($this->get('table_manager')->getTable(View\Action::class)));
 
-        $application->add(new Console\App\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\App\AddCommand($this->get('app_service')));
         $application->add(new Console\App\ListCommand($this->get('table_manager')->getTable(View\App::class)));
 
-        $application->add(new Console\Connection\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Connection\AddCommand($this->get('connection_service')));
         $application->add(new Console\Connection\ClassCommand($this->get('connection_parser')));
         $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
         $application->add(new Console\Connection\ListCommand($this->get('table_manager')->getTable(View\Connection::class)));
@@ -234,7 +243,7 @@ class Container extends DefaultContainer
 
         $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
 
-        $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Schema\AddCommand($this->get('schema_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('connection')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
 
