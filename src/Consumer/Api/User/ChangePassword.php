@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Consumer\Api\User;
 
 use Fusio\Impl\Authorization\Authorization;
+use Fusio\Impl\Backend\Model\Account_ChangePassword;
 use Fusio\Impl\Consumer\Api\ConsumerApiAbstract;
-use Fusio\Impl\Consumer\Model;
 use Fusio\Impl\Model\Message;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -53,7 +53,7 @@ class ChangePassword extends ConsumerApiAbstract
 
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::CONSUMER, ['consumer.user']);
-        $put->setRequest(Model\User_ChangePassword::class);
+        $put->setRequest(Account_ChangePassword::class);
         $put->addResponse(200, Message::class);
 
         return $builder->getSpecification();

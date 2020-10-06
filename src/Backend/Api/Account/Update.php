@@ -30,13 +30,13 @@ use PSX\Api\SpecificationInterface;
 use PSX\Http\Environment\HttpContextInterface;
 
 /**
- * ChangePassword
+ * UpdateAccount
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ChangePassword extends BackendApiAbstract
+class Update extends BackendApiAbstract
 {
     /**
      * @Inject
@@ -53,7 +53,7 @@ class ChangePassword extends BackendApiAbstract
 
         $put = $builder->addMethod('PUT');
         $put->setSecurity(Authorization::BACKEND, ['backend.account']);
-        $put->setRequest(Model\Account_ChangePassword::class);
+        $put->setRequest(Model\User_Update::class);
         $put->addResponse(200, Message::class);
 
         return $builder->getSpecification();
@@ -64,7 +64,8 @@ class ChangePassword extends BackendApiAbstract
      */
     protected function doPut($record, HttpContextInterface $context)
     {
-        $this->userService->changePassword(
+        $this->userService->update(
+            $this->context->getUserId(),
             $record,
             $this->context->getUserContext()
         );

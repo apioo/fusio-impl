@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Fusio\Impl\Backend\Model;
 
 
-class Account_Credentials implements \JsonSerializable
+class Account_ChangePassword implements \JsonSerializable
 {
     /**
      * @var string|null

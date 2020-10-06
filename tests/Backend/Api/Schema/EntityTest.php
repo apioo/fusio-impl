@@ -68,8 +68,6 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Passthru",
     "source": {
-        "id": "http:\/\/fusio-project.org",
-        "title": "passthru",
         "type": "object",
         "description": "No schema was specified.",
         "additionalProperties": true

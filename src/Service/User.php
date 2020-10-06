@@ -23,11 +23,10 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Account_Credentials;
+use Fusio\Impl\Backend\Model\Account_ChangePassword;
 use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Backend\Model\User_Update;
-use Fusio\Impl\Consumer\Model\User_ChangePassword;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;
@@ -368,7 +367,7 @@ class User
         $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user['status'], $status, $context));
     }
 
-    public function changePassword(User_ChangePassword $changePassword, UserContext $context)
+    public function changePassword(Account_ChangePassword $changePassword, UserContext $context)
     {
         $appId  = $context->getAppId();
         $userId = $context->getUserId();
@@ -398,12 +397,7 @@ class User
         $result = $this->userTable->changePassword($userId, $changePassword->getOldPassword(), $changePassword->getNewPassword());
 
         if ($result) {
-            $credentials = new Account_Credentials();
-            $credentials->setNewPassword($changePassword->getNewPassword());
-            $credentials->setOldPassword($changePassword->getOldPassword());
-            $credentials->setVerifyPassword($changePassword->getVerifyPassword());
-
-            $this->eventDispatcher->dispatch(new ChangedPasswordEvent($credentials, $context));
+            $this->eventDispatcher->dispatch(new ChangedPasswordEvent($changePassword, $context));
 
             return true;
         } else {

@@ -508,21 +508,6 @@
       },
       "required": ["token"]
     },
-    "User_ChangePassword": {
-      "type": "object",
-      "properties": {
-        "oldPassword": {
-          "type": "string"
-        },
-        "newPassword": {
-          "type": "string"
-        },
-        "verifyPassword": {
-          "type": "string"
-        }
-      },
-      "required": ["oldPassword", "newPassword", "verifyPassword"]
-    },
     "User_Email": {
       "type": "object",
       "properties": {

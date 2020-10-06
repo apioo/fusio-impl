@@ -3,7 +3,7 @@
     "common": "file:///common_schema.json"
   },
   "definitions": {
-    "Account_Credentials": {
+    "Account_ChangePassword": {
       "type": "object",
       "properties": {
         "oldPassword": {
