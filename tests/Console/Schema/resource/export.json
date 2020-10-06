@@ -1,10 +1,25 @@
 {
-  "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-  "id": "urn:schema.phpsx.org#",
   "definitions": {
+    "Collection": {
+      "title": "collection",
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "$ref": "Entry"
+        }
+      }
+    },
     "Entry": {
       "type": "object",
-      "title": "entry",
       "properties": {
         "id": {
           "type": "integer"
@@ -16,29 +31,11 @@
           "type": "string"
         },
         "date": {
-          "type": "string",
-          "format": "date-time"
+          "format": "date-time",
+          "type": "string"
         }
       }
     }
   },
-  "type": "object",
-  "title": "collection",
-  "properties": {
-    "totalResults": {
-      "type": "integer"
-    },
-    "itemsPerPage": {
-      "type": "integer"
-    },
-    "startIndex": {
-      "type": "integer"
-    },
-    "entry": {
-      "type": "array",
-      "items": {
-        "$ref": "#\/definitions\/Entry"
-      }
-    }
-  }
+  "$ref": "Collection"
 }

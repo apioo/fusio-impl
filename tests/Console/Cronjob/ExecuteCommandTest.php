@@ -52,7 +52,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertContains('Execution successful', $actual);
+        $this->assertStringContainsString('Execution successful', $actual);
 
         $cronjob = $this->connection->fetchAssoc('SELECT * FROM fusio_cronjob WHERE id = :id', ['id' => 1]);
 
@@ -60,7 +60,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
         $this->assertEquals(1, $cronjob['status']);
         $this->assertEquals('Test-Cron', $cronjob['name']);
         $this->assertEquals('*/30 * * * *', $cronjob['cron']);
-        $this->assertEquals(3, $cronjob['action']);
+        $this->assertEquals('Sql-Table', $cronjob['action']);
         $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
         $this->assertEquals(0, $cronjob['exit_code']);
     }
