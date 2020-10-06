@@ -1,116 +1,81 @@
 {
-  "path": "\/foo",
-  "version": "*",
   "status": 4,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Entry": {
-        "type": "object",
-        "title": "entry",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Collection": {
-        "type": "object",
-        "title": "collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "itemsPerPage": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Entry"
-            }
-          }
-        }
-      },
-      "Passthru": {
-        "type": "object",
-        "title": "passthru",
-        "description": "No schema was specified.",
-        "additionalProperties": true
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Entry"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Passthru"
-      }
-    }
-  },
+  "path": "\/foo",
   "methods": {
     "GET": {
       "operationId": "listFoo",
+      "tags": [
+        "bar"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Collection-Schema"
       }
     },
     "POST": {
       "operationId": "createFoo",
-      "request": "#\/definitions\/POST-request",
+      "security": {
+        "app": [
+          "bar"
+        ]
+      },
+      "tags": [
+        "bar"
+      ],
+      "request": "Entry-Schema",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Passthru"
       }
     }
   },
-  "links": [
-    {
-      "rel": "client-php",
-      "href": "\/export\/client-php\/*\/foo"
+  "definitions": {
+    "Collection": {
+      "title": "collection",
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "$ref": "Entry"
+        }
+      }
     },
-    {
-      "rel": "client-typescript",
-      "href": "\/export\/client-typescript\/*\/foo"
+    "Collection-Schema": {
+      "$ref": "Collection"
     },
-    {
-      "rel": "markup-html",
-      "href": "\/export\/markup-html\/*\/foo"
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
     },
-    {
-      "rel": "markup-markdown",
-      "href": "\/export\/markup-markdown\/*\/foo"
+    "Entry-Schema": {
+      "$ref": "Entry"
     },
-    {
-      "rel": "spec-jsonschema",
-      "href": "\/export\/spec-jsonschema\/*\/foo"
-    },
-    {
-      "rel": "spec-openapi",
-      "href": "\/export\/spec-openapi\/*\/foo"
-    },
-    {
-      "rel": "spec-raml",
-      "href": "\/export\/spec-raml\/*\/foo"
-    },
-    {
-      "rel": "spec-swagger",
-      "href": "\/export\/spec-swagger\/*\/foo"
+    "Passthru": {
+      "description": "No schema was specified.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
     }
-  ]
+  }
 }
