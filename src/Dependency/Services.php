@@ -346,6 +346,14 @@ trait Services
         );
     }
 
+    public function getSdkService(): Service\Sdk
+    {
+        return new Service\Sdk(
+            $this->get('console'),
+            $this->get('config')
+        );
+    }
+
     public function getRateService(): Service\Rate
     {
         return new Service\Rate(

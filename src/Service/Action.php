@@ -21,18 +21,19 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model;
 use Fusio\Impl\Backend\Model\Action_Create;
 use Fusio\Impl\Backend\Model\Action_Update;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
-use Fusio\Impl\Event\ActionEvents;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -51,39 +52,48 @@ class Action
     /**
      * @var \Fusio\Impl\Table\Action
      */
-    protected $actionTable;
+    private $actionTable;
 
     /**
      * @var \Fusio\Impl\Table\Route\Method
      */
-    protected $routesMethodTable;
+    private $routeMethodTable;
 
     /**
      * @var \Fusio\Engine\Factory\ActionInterface
      */
-    protected $actionFactory;
+    private $actionFactory;
+
+    /**
+     * @var \PSX\Framework\Config\Config
+     */
+    private $config;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Action $actionTable
-     * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Route\Method $routeMethodTable
      * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
+     * @param \PSX\Framework\Config\Config $config
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Action $actionTable, Table\Route\Method $routesMethodTable, Factory\ActionInterface $actionFactory, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, Config $config, EventDispatcherInterface $eventDispatcher)
     {
-        $this->actionTable       = $actionTable;
-        $this->routesMethodTable = $routesMethodTable;
-        $this->actionFactory     = $actionFactory;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->actionTable      = $actionTable;
+        $this->routeMethodTable = $routeMethodTable;
+        $this->actionFactory    = $actionFactory;
+        $this->config           = $config;
+        $this->eventDispatcher  = $eventDispatcher;
     }
 
     public function create(Action_Create $action, UserContext $context)
     {
+        $this->assertSandboxAccess($action);
+
         // check whether action exists
         if ($this->exists($action->getName())) {
             throw new StatusCode\BadRequestException('Action already exists');
@@ -127,6 +137,8 @@ class Action
 
     public function update(int $actionId, Action_Update $action, UserContext $context)
     {
+        $this->assertSandboxAccess($action);
+
         $existing = $this->actionTable->get($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
@@ -241,6 +253,15 @@ class Action
         }
 
         return $action;
+    }
+
+    private function assertSandboxAccess(Model\Action $record)
+    {
+        $class = ltrim($record->getClass(), '\\');
+
+        if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
+            throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
+        }
     }
 
     /**

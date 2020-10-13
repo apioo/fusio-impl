@@ -19,72 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Sdk;
+namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\Backend\Api\BackendApiAbstract;
-use Fusio\Impl\Backend\Model;
-use Fusio\Impl\Model\Message;
+use Fusio\Impl\Backend\Model\Sdk_Generate;
 use PSX\Api\GeneratorFactory;
-use PSX\Api\Resource;
-use PSX\Api\SpecificationInterface;
-use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\Exception as Statuscode;
+use PSX\Http\Exception as StatusCode;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
 /**
- * Generate
+ * Sdk
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Generate extends BackendApiAbstract
+class Sdk
 {
     /**
-     * @Inject
-     * @var \Symfony\Component\Console\Application
+     * @var Application
      */
-    protected $console;
+    private $console;
 
     /**
-     * @inheritdoc
+     * @var \PSX\Framework\Config\Config
      */
-    public function getDocumentation(?string $version = null): ?SpecificationInterface
+    private $config;
+
+    public function __construct(Application $console, \PSX\Framework\Config\Config $config)
     {
-        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
-
-        $get = $builder->addMethod('GET');
-        $get->setSecurity(Authorization::BACKEND, ['backend.sdk']);
-        $get->addResponse(200, Model\Sdk_Types::class);
-
-        $post = $builder->addMethod('POST');
-        $post->setSecurity(Authorization::BACKEND, ['backend.sdk']);
-        $post->setRequest(Model\Sdk_Generate::class);
-        $post->addResponse(200, Message::class);
-
-        return $builder->getSpecification();
+        $this->console = $console;
+        $this->config = $config;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function doGet(HttpContextInterface $context)
+    public function generate(Sdk_Generate $record)
     {
-        return [
-            'types' => $this->getTypes(),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     * @param Model\Sdk_Generate $record
-     */
-    protected function doPost($record, HttpContextInterface $context)
-    {
-        $this->console->setAutoExit(false);
-
         $format = $record->getFormat();
         $config = $record->getConfig();
 
@@ -99,21 +69,31 @@ class Generate extends BackendApiAbstract
 
         $file = 'sdk-' . $format . '.zip';
 
-        $this->generate($sdkDir, $format, $config);
-
-        return [
-            'success' => true,
-            'message' => 'SDK successfully generated',
-            'link' => $this->config['psx_url'] . '/sdk/' . $file,
+        $parameters = [
+            'command'  => 'api:generate',
+            'dir'      => $sdkDir,
+            '--format' => $format,
+            '--filter' => 'external',
         ];
+
+        if (!empty($config)) {
+            $parameters['--config'] = $config;
+        }
+
+        $autoExit = $this->console->isAutoExitEnabled();
+        $this->console->setAutoExit(false);
+        $this->console->run(new ArrayInput($parameters), new NullOutput());
+        $this->console->setAutoExit($autoExit);
+
+        return $this->config['psx_url'] . '/sdk/' . $file;
     }
 
-    private function getTypes(): array
+    public function getTypes(): array
     {
         $sdkDir = $this->getSdkDir();
         $result = [];
         $types  = GeneratorFactory::getPossibleTypes();
-        
+
         foreach ($types as $type) {
             $fileName = 'sdk-' . $type . '.zip';
             $sdkZip = $sdkDir . '/' . $fileName;
@@ -125,22 +105,6 @@ class Generate extends BackendApiAbstract
         }
 
         return $result;
-    }
-
-    private function generate($dir, $format, $config)
-    {
-        $parameters = [
-            'command'  => 'api:generate',
-            'dir'      => $dir,
-            '--format' => $format,
-            '--filter' => 'external',
-        ];
-
-        if (!empty($config)) {
-            $parameters['--config'] = $config;
-        }
-
-        $this->console->run(new ArrayInput($parameters), new NullOutput());
     }
 
     private function getSdkDir()

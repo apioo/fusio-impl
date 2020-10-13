@@ -24,7 +24,8 @@ namespace Fusio\Impl\Schema;
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
 use PSX\Schema\SchemaInterface;
-use RuntimeException;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\Parser\TypeSchema;
 
 /**
  * Loader
@@ -35,14 +36,23 @@ use RuntimeException;
  */
 class Loader
 {
+    /**
+     * @var Connection
+     */
     protected $connection;
 
-    public function __construct(Connection $connection)
+    /**
+     * @var SchemaManager
+     */
+    private $schemaManager;
+
+    public function __construct(Connection $connection, SchemaManager $schemaManager)
     {
         $this->connection = $connection;
+        $this->schemaManager = $schemaManager;
     }
 
-    public function getSchema($schemaId)
+    public function getSchema($schemaId): SchemaInterface
     {
         if (is_numeric($schemaId)) {
             $column = 'id';
@@ -50,22 +60,20 @@ class Loader
             $column = 'name';
         }
 
-        $row = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
+        $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
+        $source = $row['source'];
 
-        if (!empty($row)) {
-            $cache = isset($row['cache']) ? $row['cache'] : null;
-
-            if (!empty($cache)) {
-                $cache = Service\Schema::unserializeCache($cache);
-
-                if ($cache instanceof SchemaInterface) {
-                    return $cache;
-                }
+        if (strpos($source, '{') !== false) {
+            // in case the source is a schema write it to a file
+            $hash = md5($source);
+            $schemaFile = PSX_PATH_CACHE . '/schema-' . $row['name'] . '-' . $hash . '.json';
+            if (!is_file($schemaFile) || md5_file($schemaFile) !== $hash) {
+                file_put_contents($schemaFile, $source);
             }
 
-            throw new RuntimeException(sprintf('Schema %s cache not available', $row['name']));
-        } else {
-            throw new RuntimeException('Invalid schema reference ' . $schemaId);
+            $source = $schemaFile;
         }
+
+        return $this->schemaManager->getSchema($source);
     }
 }
