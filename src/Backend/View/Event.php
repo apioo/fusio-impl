@@ -46,7 +46,7 @@ class Event extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Event::STATUS_ACTIVE, Table\Event::STATUS_INTERNAL]);
+        $condition->in('status', [Table\Event::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');

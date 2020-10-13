@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Transaction;
 
+use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
 
 /**
@@ -87,13 +88,13 @@ class QueryFilter extends QueryFilterAbstract
         return 'insert_date';
     }
 
-    public static function create(array $parameters)
+    public static function create(RequestInterface $request)
     {
-        $filter    = parent::create($parameters);
-        $invoiceId = isset($parameters['invoiceId']) ? $parameters['invoiceId'] : null;
-        $status    = isset($parameters['status']) ? $parameters['status'] : null;
-        $provider  = isset($parameters['provider']) ? $parameters['provider'] : null;
-        $search    = isset($parameters['search']) ? $parameters['search'] : null;
+        $filter    = parent::create($request);
+        $invoiceId = $request->get('invoiceId');
+        $status    = $request->get('status');
+        $provider  = $request->get('provider');
+        $search    = $request->get('search');
 
         // parse search if available
         if (!empty($search)) {

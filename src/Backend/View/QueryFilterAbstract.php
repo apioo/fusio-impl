@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View;
 
+use Fusio\Engine\RequestInterface;
 use PSX\Sql\Condition;
 
 /**
@@ -67,10 +68,10 @@ abstract class QueryFilterAbstract
         return 'date';
     }
 
-    public static function create(array $parameters)
+    public static function create(RequestInterface $request)
     {
-        $from = new \DateTimeImmutable(isset($parameters['from']) ? $parameters['from'] : '-1 month');
-        $to   = new \DateTimeImmutable(isset($parameters['to']) ? $parameters['to'] : 'now');
+        $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
+        $to   = new \DateTimeImmutable($request->get('to') ?? 'now');
 
         // from date is large then to date
         if ($from->getTimestamp() > $to->getTimestamp()) {

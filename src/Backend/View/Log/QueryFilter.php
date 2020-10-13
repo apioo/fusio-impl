@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Log;
 
+use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
 
 /**
@@ -166,19 +167,19 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(array $parameters)
+    public static function create(RequestInterface $request)
     {
-        $filter    = parent::create($parameters);
-        $routeId   = isset($parameters['routeId']) ? $parameters['routeId'] : null;
-        $appId     = isset($parameters['appId']) ? $parameters['appId'] : null;
-        $userId    = isset($parameters['userId']) ? $parameters['userId'] : null;
-        $ip        = isset($parameters['ip']) ? $parameters['ip'] : null;
-        $userAgent = isset($parameters['userAgent']) ? $parameters['userAgent'] : null;
-        $method    = isset($parameters['method']) ? $parameters['method'] : null;
-        $path      = isset($parameters['path']) ? $parameters['path'] : null;
-        $header    = isset($parameters['header']) ? $parameters['header'] : null;
-        $body      = isset($parameters['body']) ? $parameters['body'] : null;
-        $search    = isset($parameters['search']) ? $parameters['search'] : null;
+        $filter    = parent::create($request);
+        $routeId   = $request->get('routeId');
+        $appId     = $request->get('appId');
+        $userId    = $request->get('userId');
+        $ip        = $request->get('ip');
+        $userAgent = $request->get('userAgent');
+        $method    = $request->get('method');
+        $path      = $request->get('path');
+        $header    = $request->get('header');
+        $body      = $request->get('body');
+        $search    = $request->get('search');
 
         // parse search if available
         if (!empty($search)) {
