@@ -253,7 +253,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $record = new PassthruRecord($record);
         }
 
-        $request  = new Request($httpContext, $record);
+        $request  = new Request\HttpRequest($httpContext, $record);
         $response = null;
         $method   = $this->context->getMethod();
         $actionId = $method['action'];
