@@ -24,6 +24,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_action')) {
             $actionTable = $schema->createTable('fusio_action');
             $actionTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $actionTable->addColumn('category_id', 'integer', ['default' => 1]);
             $actionTable->addColumn('status', 'integer', ['default' => Table\Action::STATUS_ACTIVE]);
             $actionTable->addColumn('name', 'string', ['length' => 255]);
             $actionTable->addColumn('class', 'string', ['length' => 255]);
@@ -101,6 +102,14 @@ final class Version20200905081453 extends AbstractMigration
             $auditTable->addOption('engine', 'MyISAM');
         }
 
+        if (!$schema->hasTable('fusio_category')) {
+            $categoryTable = $schema->createTable('fusio_category');
+            $categoryTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $categoryTable->addColumn('name', 'string', ['length' => 64]);
+            $categoryTable->setPrimaryKey(['id']);
+            $categoryTable->addUniqueIndex(['name']);
+        }
+
         if (!$schema->hasTable('fusio_config')) {
             $configTable = $schema->createTable('fusio_config');
             $configTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -151,6 +160,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_event')) {
             $eventTable = $schema->createTable('fusio_event');
             $eventTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $eventTable->addColumn('category_id', 'integer', ['default' => 1]);
             $eventTable->addColumn('status', 'integer');
             $eventTable->addColumn('name', 'string', ['length' => 64]);
             $eventTable->addColumn('description', 'string', ['length' => 255]);
@@ -308,6 +318,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_routes')) {
             $routesTable = $schema->createTable('fusio_routes');
             $routesTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $routesTable->addColumn('category_id', 'integer', ['default' => 1]);
             $routesTable->addColumn('status', 'integer', ['default' => Table\Route::STATUS_ACTIVE]);
             $routesTable->addColumn('priority', 'integer', ['notnull' => false]);
             $routesTable->addColumn('methods', 'string', ['length' => 64]);
@@ -348,10 +359,10 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_schema')) {
             $schemaTable = $schema->createTable('fusio_schema');
             $schemaTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $schemaTable->addColumn('category_id', 'integer', ['default' => 1]);
             $schemaTable->addColumn('status', 'integer', ['default' => Table\Schema::STATUS_ACTIVE]);
             $schemaTable->addColumn('name', 'string', ['length' => 255]);
             $schemaTable->addColumn('source', 'text');
-            $schemaTable->addColumn('cache', 'text');
             $schemaTable->addColumn('form', 'text', ['notnull' => false, 'default' => null]);
             $schemaTable->setPrimaryKey(['id']);
             $schemaTable->addUniqueIndex(['name']);
@@ -360,6 +371,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_scope')) {
             $scopeTable = $schema->createTable('fusio_scope');
             $scopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $scopeTable->addColumn('category_id', 'integer', ['default' => 1]);
             $scopeTable->addColumn('name', 'string', ['length' => 32]);
             $scopeTable->addColumn('description', 'string', ['length' => 255]);
             $scopeTable->setPrimaryKey(['id']);
