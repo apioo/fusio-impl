@@ -19,27 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Event;
+namespace Fusio\Impl\System\Action;
 
-use Fusio\Impl\Backend\Filter\PrimaryKey;
-use Fusio\Impl\Table;
-use PSX\Api\Resource\MethodAbstract;
-use PSX\Schema\Validation\Field;
-use PSX\Schema\Validation\Validator;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\RpcRequest;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Service\Health;
+use PSX\Framework\Config\Config;
+use PSX\Http\Environment\HttpResponse;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * ValidatorTrait
+ * GetHealth
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-trait ValidatorTrait
+class GetHealth extends ActionAbstract
 {
-    protected function getValidator(MethodAbstract $method)
+    /**
+     * @var Health
+     */
+    private $healthService;
+
+    public function __construct(Health $healthService)
     {
-        return new Validator(array(
-            new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Event::class))]),
-        ));
+        $this->healthService = $healthService;
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    {
+        $result  = $this->healthService->check();
+        $healthy = $result->isHealthy();
+
+        return [
+            'healthy' => $healthy,
+            'checks'  => $result->getChecks(),
+        ];
     }
 }

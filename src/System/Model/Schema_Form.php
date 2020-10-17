@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Fusio\Impl\Export\Model;
+namespace Fusio\Impl\System\Model;
 
 /**
  * @extends \PSX\Record\Record<mixed>

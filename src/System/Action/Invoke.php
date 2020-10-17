@@ -19,48 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Export\Api;
+namespace Fusio\Impl\System\Action;
 
-use Fusio\Impl\Backend\Model;
-use Fusio\Impl\Backend\View;
-use PSX\Api\Resource;
-use PSX\Api\SpecificationInterface;
-use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Http\Environment\HttpContextInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
+use Fusio\Engine\Request\RpcRequest;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Rpc\InvokerFactory;
 
 /**
- * Route
+ * Invoke
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Route extends SchemaApiAbstract
+class Invoke extends ActionAbstract
 {
     /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
+     * @var InvokerFactory
      */
-    protected $tableManager;
+    private $invokerFactory;
 
-    /**
-     * @inheritdoc
-     */
-    public function getDocumentation(?string $version = null): ?SpecificationInterface
+    public function __construct(InvokerFactory $invokerFactory)
     {
-        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
-
-        $get = $builder->addMethod('GET');
-        $get->addResponse(200, Model\Route::class);
-
-        return $builder->getSpecification();
+        $this->invokerFactory = $invokerFactory;
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doGet(HttpContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return $this->tableManager->getTable(View\Route::class)->getPublic();
+        if ($request instanceof HttpRequest) {
+            $invoker = $this->invokerFactory->createByEngine($request);
+            return $invoker->invoke($request->getUriFragment('method'), $request->getPayload());
+        } else {
+            throw new \RuntimeException('Invalid request type');
+        }
     }
 }

@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Fusio\Impl\Export\Model;
+namespace Fusio\Impl\System\Model;
 
 /**
  * @extends \PSX\Record\Record<mixed>
  */
-class Debug_Body extends \PSX\Record\Record
+class Debug_Headers extends \PSX\Record\Record
 {
 }
