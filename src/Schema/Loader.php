@@ -23,9 +23,11 @@ namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Service;
+use PSX\Framework\Schema\Passthru;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManager;
 use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * Loader
@@ -42,17 +44,28 @@ class Loader
     protected $connection;
 
     /**
-     * @var SchemaManager
+     * @var SchemaManagerInterface
      */
     private $schemaManager;
 
-    public function __construct(Connection $connection, SchemaManager $schemaManager)
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
         $this->schemaManager = $schemaManager;
     }
 
     public function getSchema($schemaId): SchemaInterface
+    {
+        if ($schemaId === Passthru::class) {
+            $source = $schemaId;
+        } else {
+            $source = $this->getSource($schemaId);
+        }
+
+        return $this->schemaManager->getSchema($source);
+    }
+
+    private function getSource($schemaId): string
     {
         if (is_numeric($schemaId)) {
             $column = 'id';
@@ -61,7 +74,7 @@ class Loader
         }
 
         $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
-        $source = $row['source'];
+        $source = $row['source'] ?? null;
 
         if (strpos($source, '{') !== false) {
             // in case the source is a schema write it to a file
@@ -74,6 +87,6 @@ class Loader
             $source = $schemaFile;
         }
 
-        return $this->schemaManager->getSchema($source);
+        return $source;
     }
 }

@@ -38,6 +38,7 @@ use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Mail;
 use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
+use Fusio\Impl\Rpc\InvokerFactory;
 use Fusio\Impl\Schema;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
@@ -191,7 +192,22 @@ class Container extends DefaultContainer
 
     public function getSchemaLoader(): Schema\Loader
     {
-        return new Schema\Loader($this->get('connection'));
+        return new Schema\Loader(
+            $this->get('connection'),
+            $this->get('schema_manager')
+        );
+    }
+
+    public function getInvokerFactory(): InvokerFactory
+    {
+        return new InvokerFactory(
+            $this->get('processor'),
+            $this->get('plan_payer_service'),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
+            $this->get('schema_loader'),
+            $this->get('security_token_validator'),
+            $this->get('rate_service')
+        );
     }
 
     protected function appendConsoleCommands(Application $application)

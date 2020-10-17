@@ -25,6 +25,7 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Api\Resource;
@@ -53,67 +54,44 @@ class Invoker
     /**
      * @var \Fusio\Engine\Processor
      */
-    protected $processor;
-
-    /**
-     * @var \Fusio\Impl\Service\Security\TokenValidator
-     */
-    protected $tokenValidator;
-
-    /**
-     * @var \Fusio\Impl\Service\Rate
-     */
-    protected $rateService;
+    private $processor;
 
     /**
      * @var \Fusio\Impl\Service\Plan\Payer
      */
-    protected $planPayerService;
+    private $planPayerService;
 
     /**
      * @var \Fusio\Impl\Table\Route\Method 
      */
-    protected $methodTable;
+    private $methodTable;
 
     /**
-     * @var \Fusio\Impl\Table\Schema
+     * @var array
      */
-    protected $schemaTable;
+    private $middlewares;
 
     /**
-     * @var \PSX\Framework\Config\Config
+     * @param Processor $processor
+     * @param Service\Plan\Payer $planPayerService
+     * @param Table\Route\Method $methodTable
      */
-    protected $config;
-
-    /**
-     * @var \PSX\Http\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \PSX\Schema\SchemaTraverser
-     */
-    protected $schemaTraverser;
-
-    /**
-     * @param \Fusio\Engine\Processor $processor
-     * @param \Fusio\Impl\Service\Security\TokenValidator $tokenValidator
-     * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Table\Route\Method $methodTable
-     * @param \PSX\Framework\Config\Config $config
-     * @param \PSX\Http\RequestInterface $request
-     */
-    public function __construct(Processor $processor, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService, Service\Plan\Payer $planPayerService, Table\Route\Method $methodTable, Table\Schema $schemaTable, Config $config, RequestInterface $request)
+    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Table\Route\Method $methodTable)
     {
         $this->processor        = $processor;
-        $this->tokenValidator   = $tokenValidator;
-        $this->rateService      = $rateService;
         $this->planPayerService = $planPayerService;
         $this->methodTable      = $methodTable;
-        $this->schemaTable      = $schemaTable;
-        $this->config           = $config;
-        $this->request          = $request;
-        $this->schemaTraverser  = new SchemaTraverser();
+        $this->middlewares      = [];
+    }
+
+    public function addMiddleware(callable $middleware)
+    {
+        $this->middlewares[] = $middleware;
+    }
+
+    public function invoke($method, $arguments)
+    {
+        return $this->__invoke($method, $arguments);
     }
 
     public function __invoke($method, $arguments)
@@ -131,9 +109,7 @@ class Invoker
 
     private function execute($operationId, $arguments)
     {
-        $remoteIp = $this->request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1';
-        $method   = $this->methodTable->getMethodByOperationId($operationId);
-
+        $method = $this->methodTable->getMethodByOperationId($operationId);
         if (empty($method)) {
             throw new MethodNotFoundException('Method not found');
         }
@@ -142,73 +118,22 @@ class Invoker
         $context->setRouteId($method['route_id']);
         $context->setMethod($method);
 
-        $success = $this->tokenValidator->assertAuthorization(
-            $method['method'],
-            $this->request->getHeader('Authorization'),
-            $context
-        );
+        $arguments = Record::from($arguments);
 
-        if (!$success) {
-            throw new StatusCode\UnauthorizedException('Could not authorize request', 'Bearer');
+        foreach ($this->middlewares as $middleware) {
+            $middleware($arguments, $method, $context);
         }
 
-        $success = $this->rateService->assertLimit(
-            $remoteIp,
-            $context->getRouteId(),
-            $context->getApp()
-        );
-
-        if (!$success) {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
-        }
-
-        $parameters = Record::from($arguments);
-
-        // validate schema
-        $body = new Record();
-        if ($method['request'] > 0) {
-            if (!$parameters->hasProperty('body')) {
-                throw new StatusCode\BadRequestException('No body provided');
-            }
-
-            $schema = $this->getSchema($method['request']);
-            if ($schema instanceof SchemaInterface) {
-                $body = $this->schemaTraverser->traverse($parameters->getProperty('body'), $schema, new TypeVisitor());
-            }
-        }
-
-        // execute action
-        return $this->executeAction($parameters, $body, $method, $context);
+        return $this->executeAction($operationId, $arguments, $method, $context);
     }
 
-    private function getSchema($schemaId)
+    private function executeAction($operationId, RecordInterface $arguments, $method, Context $context)
     {
-        $row = $this->schemaTable->get($schemaId);
-
-        if (isset($row['cache'])) {
-            return Service\Schema::unserializeCache($row['cache']);
-        } else {
-            return null;
-        }
-    }
-    
-    private function executeAction(RecordInterface $parameters, RecordInterface $body, $method, Context $context)
-    {
-        $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context = new EngineContext($method['route_id'], $baseUrl, $context->getApp(), $context->getUser());
-
-        $rpcContext = new RpcContext(
-            $method['method'],
-            (array) $parameters->getProperty('headers'),
-            (array) $parameters->getProperty('uriFragments'),
-            (array) $parameters->getProperty('parameters')
-        );
-
-        $request  = new Request($rpcContext, $body);
+        $context  = new EngineContext($method['route_id'], '', $context->getApp(), $context->getUser());
+        $request  = new Request\RpcRequest($operationId, $arguments);
         $response = null;
         $actionId = $method['action'];
         $costs    = (int) $method['costs'];
-        $cache    = $method['action_cache'];
 
         if ($costs > 0) {
             // as anonymous user it is not possible to pay
@@ -227,17 +152,7 @@ class Invoker
         }
 
         if ($actionId > 0) {
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {
-                // if the method is not in dev mode we load the action from the
-                // cache
-                $this->processor->push(Repository\ActionMemory::fromJson($cache));
-
-                $response = $this->processor->execute($actionId, $request, $context);
-
-                $this->processor->pop();
-            } else {
-                $response = $this->processor->execute($actionId, $request, $context);
-            }
+            $response = $this->processor->execute($actionId, $request, $context);
         } else {
             throw new StatusCode\ServiceUnavailableException('No action provided');
         }
