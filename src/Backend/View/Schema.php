@@ -92,7 +92,6 @@ class Schema extends ViewAbstract
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
-            'cache' => 'cache',
             'form' => 'form',
         ]);
 
