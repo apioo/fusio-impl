@@ -19,49 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Authorization;
+namespace Fusio\Impl\Authorization\Action;
 
-use Fusio\Impl\Backend\Model\User;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
-use PSX\Api\Resource;
-use PSX\Api\SpecificationInterface;
-use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Http\Environment\HttpContextInterface;
+use PSX\Framework\Config\Config;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Whoami
+ * GetWhoami
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Whoami extends SchemaApiAbstract
+class GetWhoami extends ActionAbstract
 {
-    use ProtectionTrait;
+    /**
+     * @var View\User
+     */
+    private $table;
 
     /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
+     * @var Config
      */
-    protected $tableManager;
+    private $config;
 
-    /**
-     * @inheritdoc
-     */
-    public function getDocumentation(?string $version = null): ?SpecificationInterface
+    public function __construct(TableManagerInterface $tableManager, Config $config)
     {
-        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
-
-        $get = $builder->addMethod('GET');
-        $get->addResponse(200, User::class);
-
-        return $builder->getSpecification();
+        $this->table = $tableManager->getTable(View\User::class);
+        $this->config = $config;
     }
 
-    protected function doGet(HttpContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return $this->tableManager->getTable(View\User::class)->getEntity(
-            $this->context->getUserId(),
+        return $this->table->getEntity(
+            $context->getUser()->getId(),
             $this->config->get('fusio_user_attributes')
         );
     }
