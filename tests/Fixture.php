@@ -66,9 +66,6 @@ class Fixture
         $schemaEntryForm = file_get_contents(__DIR__ . '/resources/entry_form.json');
         $schemaCollectionSource = file_get_contents(__DIR__ . '/resources/collection_schema.json');
 
-        $schemaEntry = (new TypeSchema())->parse($schemaEntrySource);
-        $schemaCollection = (new TypeSchema())->parse($schemaCollectionSource);
-
         $now = new \DateTime();
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
@@ -83,9 +80,9 @@ class Fixture
                 ['status' => 3, 'name' => 'Deleted', 'email' => 'deleted@localhost.com', 'password' => '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 'points' => null, 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_action' => [
-                ['status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
-                ['status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig([]), 'date' => '2015-02-27 19:59:15'],
+                ['category_id' => 1, 'status' => 1, 'name' => 'Util-Static-Response', 'class' => UtilStaticResponse::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), 'date' => '2015-02-27 19:59:15'],
+                ['category_id' => 1, 'status' => 1, 'name' => 'Sql-Table', 'class' => SqlTable::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), 'date' => '2015-02-27 19:59:15'],
+                ['category_id' => 1, 'status' => 1, 'name' => 'Inspect-Action', 'class' => InspectAction::class, 'engine' => PhpClass::class, 'config' => Service\Action::serializeConfig([]), 'date' => '2015-02-27 19:59:15'],
             ],
             'fusio_app' => [
                 ['user_id' => 2, 'status' => 1, 'name' => 'Foo-App', 'url' => 'http://google.com', 'parameters' => '', 'app_key' => '5347307d-d801-4075-9aaa-a21a29a448c5', 'app_secret' => '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', 'date' => '2015-02-22 22:19:07'],
@@ -109,7 +106,7 @@ class Fixture
                 ['cronjob_id' => 1, 'message' => 'Syntax error, malformed JSON', 'trace' => '[trace]', 'file' => '[file]', 'line' => 74],
             ],
             'fusio_event' => [
-                ['status' => 1, 'name' => 'foo-event', 'description' => 'Foo event description'],
+                ['category_id' => 1, 'status' => 1, 'name' => 'foo-event', 'description' => 'Foo event description'],
             ],
             'fusio_event_subscription' => [
                 ['event_id' => 37, 'user_id' => 1, 'status' => 1, 'endpoint' => 'http://www.fusio-project.org/ping'],
@@ -122,8 +119,8 @@ class Fixture
                 ['trigger_id' => 1, 'subscription_id' => 1, 'status' => 2, 'code' => 200, 'attempts' => 1, 'execute_date' => '2018-06-02 14:41:23', 'insert_date' => '2018-06-02 14:41:23'],
             ],
             'fusio_routes' => [
-                ['status' => 1, 'priority' => 1, 'methods' => 'ANY', 'path' => '/foo', 'controller' => SchemaApiController::class],
-                ['status' => 1, 'priority' => 2, 'methods' => 'ANY', 'path' => '/inspect/:foo', 'controller' => SchemaApiController::class],
+                ['category_id' => 1, 'status' => 1, 'priority' => 1, 'methods' => 'ANY', 'path' => '/foo', 'controller' => SchemaApiController::class],
+                ['category_id' => 1, 'status' => 1, 'priority' => 2, 'methods' => 'ANY', 'path' => '/inspect/:foo', 'controller' => SchemaApiController::class],
             ],
             'fusio_rate' => [
                 ['status' => 1, 'priority' => 5, 'name' => 'silver', 'rate_limit' => 8, 'timespan' => 'P1M'],
@@ -181,12 +178,12 @@ class Fixture
                 ['invoice_id' => 2, 'status' => 1, 'provider' => 'paypal', 'transaction_id' => '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'remote_id' => 'PAY-1B56960729604235TKQQIYVY', 'amount' => 39.99, 'return_url' => 'http://myapp.com', 'update_date' => null, 'insert_date' => '2018-10-05 18:18:00'],
             ],
             'fusio_schema' => [
-                ['status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource, 'cache' => Service\Schema::serializeCache($schemaCollection)],
-                ['status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'cache' => Service\Schema::serializeCache($schemaEntry), 'form' => $schemaEntryForm],
+                ['category_id' => 1, 'status' => 1, 'name' => 'Collection-Schema', 'source' => $schemaCollectionSource],
+                ['category_id' => 1, 'status' => 1, 'name' => 'Entry-Schema', 'source' => $schemaEntrySource, 'form' => $schemaEntryForm],
             ],
             'fusio_scope' => [
-                ['name' => 'foo', 'description' => 'Foo access'],
-                ['name' => 'bar', 'description' => 'Bar access'],
+                ['category_id' => 1, 'name' => 'foo', 'description' => 'Foo access'],
+                ['category_id' => 1, 'name' => 'bar', 'description' => 'Bar access'],
             ],
             'fusio_app_scope' => [
                 ['app_id' => 3, 'scope_id' => 3],
