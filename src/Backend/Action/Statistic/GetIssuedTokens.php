@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Scope;
+namespace Fusio\Impl\Backend\Action\Statistic;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;

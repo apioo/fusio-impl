@@ -19,36 +19,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api;
+namespace Fusio\Impl\Backend\Action\Schema;
 
-use Fusio\Impl\Authorization\ProtectionTrait;
-use PSX\Framework\Controller\SchemaApiAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Schema;
 
 /**
- * ConsumerApiAbstract
+ * GetPreview
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class ConsumerApiAbstract extends SchemaApiAbstract
+class GetPreview extends ActionAbstract
 {
-    use ProtectionTrait;
-
     /**
-     * @var \Fusio\Impl\Framework\Loader\Context
+     * @var Schema
      */
-    protected $context;
+    private $schemaService;
 
-    /**
-     * @Inject
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    protected $schemaManager;
+    public function __construct(Schema $schemaService)
+    {
+        $this->schemaService = $schemaService;
+    }
 
-    /**
-     * @Inject
-     * @var \PSX\Sql\TableManager
-     */
-    protected $tableManager;
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    {
+        $body = $this->schemaService->generatePreview(
+            (int) $request->get('schema_id')
+        );
+
+        return [
+            'preview' => $body
+        ];
+    }
 }

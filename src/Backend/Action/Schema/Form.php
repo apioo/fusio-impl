@@ -19,56 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Api\User;
+namespace Fusio\Impl\Backend\Action\Schema;
 
-use Fusio\Impl\Consumer\Model;
-use Fusio\Impl\Model\Message;
-use PSX\Api\Resource;
-use PSX\Api\SpecificationInterface;
-use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Http\Environment\HttpContextInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Form;
+use Fusio\Impl\Service\Schema;
 
 /**
- * Activate
+ * GetForm
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Activate extends SchemaApiAbstract
+class Form extends ActionAbstract
 {
     /**
-     * @Inject
-     * @var \Fusio\Impl\Service\User\Activate
+     * @var Schema
      */
-    protected $userActivateService;
+    private $schemaService;
 
-    /**
-     * @inheritdoc
-     */
-    public function getDocumentation(?string $version = null): ?SpecificationInterface
+    public function __construct(Schema $schemaService)
     {
-        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
-
-        $post = $builder->addMethod('POST');
-        $post->setRequest(Model\User_Activate::class);
-        $post->addResponse(200, Message::class);
-
-        return $builder->getSpecification();
+        $this->schemaService = $schemaService;
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doPost($record, HttpContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $this->userActivateService->activate(
-            $record
+        $body = $request->getPayload();
+
+        assert($body instanceof Schema_Form);
+
+        $this->schemaService->updateForm(
+            (int) $request->get('schema_id'),
+            $body,
+            UserContext::newActionContext($context)
         );
 
         return array(
             'success' => true,
-            'message' => 'Activation successful',
+            'message' => 'Schema form successful updated',
         );
     }
 }
