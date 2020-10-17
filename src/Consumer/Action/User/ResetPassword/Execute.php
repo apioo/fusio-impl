@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\User;
+namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;

@@ -19,45 +19,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
+namespace Fusio\Impl\Consumer\Action\Plan\Contract;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\User_Email;
-use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Consumer\Model\Plan_Order_Request;
+use Fusio\Impl\Service\Plan\Order;
 
 /**
- * Request
+ * Create
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends ActionAbstract
+class Create extends ActionAbstract
 {
     /**
-     * @var UserResetPassword
+     * @var Order
      */
-    private $resetService;
+    private $orderService;
 
-    public function __construct(UserResetPassword $resetService)
+    public function __construct(Order $orderService)
     {
-        $this->resetService = $resetService;
+        $this->orderService = $orderService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $body = $request->getPayload();
 
-        assert($body instanceof User_Email);
+        assert($body instanceof Plan_Order_Request);
 
-        $this->resetService->resetPassword($body);
-
-        return [
-            'success' => true,
-            'message' => 'Password reset email was send',
-        ];
+        return $this->orderService->order(
+            $body,
+            UserContext::newActionContext($context)
+        );
     }
 }

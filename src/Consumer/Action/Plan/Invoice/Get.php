@@ -19,27 +19,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Api\Plan\Invoice;
+namespace Fusio\Impl\Consumer\Action\Plan\Invoice;
 
-use Fusio\Impl\Backend\Filter\PrimaryKey;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Table;
-use PSX\Api\Resource\MethodAbstract;
-use PSX\Schema\Validation\Field;
-use PSX\Schema\Validation\Validator;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * ValidatorTrait
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-trait ValidatorTrait
+class Get extends ActionAbstract
 {
-    protected function getValidator(MethodAbstract $method)
+    /**
+     * @var View\Plan\Invoice
+     */
+    private $table;
+
+    public function __construct(TableManagerInterface $tableManager)
     {
-        return new Validator(array(
-            new Field('/id', [new PrimaryKey($this->tableManager->getTable(Table\Plan\Invoice::class))]),
-        ));
+        $this->table = $tableManager->getTable(View\Plan\Invoice::class);
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    {
+        return $this->table->getEntity(
+            $context->getUser()->getId(),
+            (int) $request->get('invoice_id')
+        );
     }
 }

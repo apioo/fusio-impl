@@ -19,45 +19,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\User\ResetPassword;
+namespace Fusio\Impl\Consumer\Action\Plan;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\User_Email;
-use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
+use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Request
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Request extends ActionAbstract
+class Get extends ActionAbstract
 {
     /**
-     * @var UserResetPassword
+     * @var View\Plan
      */
-    private $resetService;
+    private $table;
 
-    public function __construct(UserResetPassword $resetService)
+    public function __construct(TableManagerInterface $tableManager)
     {
-        $this->resetService = $resetService;
+        $this->table = $tableManager->getTable(View\Plan::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $body = $request->getPayload();
-
-        assert($body instanceof User_Email);
-
-        $this->resetService->resetPassword($body);
-
-        return [
-            'success' => true,
-            'message' => 'Password reset email was send',
-        ];
+        return $this->table->getEntity(
+            $context->getUser()->getId(),
+            (int) $request->get('plan_id')
+        );
     }
 }
