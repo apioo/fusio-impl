@@ -266,6 +266,37 @@
         "T": "App_token"
       }
     },
+    "App_Token_Collection_Query": {
+      "$extends": "common:Collection_Query",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "App_Create": {
       "$extends": "App",
       "required": [
