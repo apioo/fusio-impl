@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Framework\Loader\LocationFinder;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Backend\Filter\Route\Path;
 use Fusio\Impl\Table\Route as TableRoutes;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
@@ -59,31 +58,20 @@ class DatabaseFinder implements LocationFinderInterface
     public function resolve(RequestInterface $request, Context $context)
     {
         $sql = 'SELECT id,
+                       category_id,
                        methods,
                        path,
                        controller
                   FROM fusio_routes
                  WHERE status = :status ';
 
-        $paths  = Path::getReserved();
-        $found  = false;
         $path   = $request->getUri()->getPath();
         $params = ['status' => TableRoutes::STATUS_ACTIVE];
 
-        // check whether we have a known system path if yes select only those
-        // routes matching the specific priority
-        foreach ($paths as $value => $systemPath) {
-            if (strpos($path, '/' . $systemPath) === 0) {
-                $found = true;
-                $sql  .= 'AND (priority >= ' . $value . ' AND priority < ' . ($value << 1) . ') ';
-                break;
-            }
-        }
-
-        // if not we only want to search the user routes and exclude all system
-        // paths means all priorities under 0x1000000
-        if (!$found) {
-            $sql.= 'AND (priority IS NULL OR priority < ' . 0x1000000 . ') ';
+        $categoryId = $this->getCategoryId($path);
+        if (!empty($categoryId)) {
+            $sql.= 'AND category_id = :category_id ';
+            $params['category_id'] = $categoryId;
         }
 
         $sql.= 'ORDER BY priority DESC';
@@ -107,5 +95,17 @@ class DatabaseFinder implements LocationFinderInterface
         }
 
         return null;
+    }
+
+    private function getCategoryId(string $path): ?int
+    {
+        $parts = explode('/', $path);
+        $category = $parts[1] ?? null;
+
+        if ($category === null) {
+            return null;
+        }
+
+        return (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
     }
 }
