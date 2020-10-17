@@ -108,6 +108,7 @@ class Method
 
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
+            $resourceMethod->setOperationId($method['action']);
 
             if (!empty($method['description'])) {
                 $resourceMethod->setDescription($method['description']);
@@ -123,10 +124,6 @@ class Method
 
             if (isset($scopes[$method['method']])) {
                 $resourceMethod->setTags($scopes[$method['method']]);
-            }
-
-            if (!empty($method['operation_id'])) {
-                $resourceMethod->setOperationId($method['operation_id']);
             }
 
             if (!empty($method['parameters'])) {

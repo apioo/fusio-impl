@@ -72,7 +72,7 @@ class TokenValidator
         $this->userRepository = $userRepository;
     }
 
-    public function assertAuthorization(string $requestMethod, $authorization, Context $context)
+    public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context)
     {
         if ($requestMethod === 'OPTIONS') {
             $needsAuth = false;
