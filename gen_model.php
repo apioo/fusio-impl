@@ -17,9 +17,9 @@ $schemas = [
         'config' => 'namespace=Fusio\Impl\Consumer\Model&mapping[common]=Fusio\Impl\Model',
     ],
     [
-        'source' => 'resources/export_schema.json',
-        'target' => 'src/Export/Model',
-        'config' => 'namespace=Fusio\Impl\Export\Model',
+        'source' => 'resources/system_schema.json',
+        'target' => 'src/System/Model',
+        'config' => 'namespace=Fusio\Impl\System\Model&mapping[common]=Fusio\Impl\Model',
     ]
 ];
 
