@@ -119,6 +119,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Action::class),
             $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('action_factory'),
+            $this->get('config'),
             $this->get('event_dispatcher')
         );
     }

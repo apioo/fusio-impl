@@ -60,7 +60,7 @@ class Execute extends ActionAbstract
 
         try {
             $response = $this->actionExecutorService->execute(
-                (int) $request->get('action_id'),
+                $request->get('action_id'),
                 $body
             );
 
@@ -72,9 +72,9 @@ class Execute extends ActionAbstract
                 ];
             } else {
                 return [
-                    'statusCode' => 204,
+                    'statusCode' => 200,
                     'headers'    => new \stdClass(),
-                    'body'       => new \stdClass(),
+                    'body'       => $response,
                 ];
             }
         } catch (\Throwable $e) {

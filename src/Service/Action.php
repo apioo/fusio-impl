@@ -36,6 +36,7 @@ use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\Config as FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -81,7 +82,7 @@ class Action
      * @param \PSX\Framework\Config\Config $config
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, Config $config, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, FrameworkConfig $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable      = $actionTable;
         $this->routeMethodTable = $routeMethodTable;
