@@ -20,9 +20,9 @@
 
 namespace Fusio\Impl\Rpc\Middleware;
 
+use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request\RpcRequest;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Record\PassthruRecord;
 use Fusio\Impl\Schema\Loader;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\SchemaTraverser;

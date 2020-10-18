@@ -21,22 +21,17 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Engine\Context as EngineContext;
-use Fusio\Engine\Repository;
+use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
-use Fusio\Impl\Export;
 use Fusio\Impl\Filter\AssertMethod;
 use Fusio\Impl\Filter\Authentication;
 use Fusio\Impl\Filter\Logger;
 use Fusio\Impl\Filter\RequestLimit;
-use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
-use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
