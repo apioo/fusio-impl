@@ -19,21 +19,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Export;
+namespace Fusio\Impl\Tests\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use Symfony\Component\Yaml\Yaml;
 
 /**
- * RamlTest
+ * OpenAPITest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RamlTest extends ControllerDbTestCase
+class OpenAPITest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -47,15 +46,14 @@ class RamlTest extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/raml/*/foo', 'GET', array(
+        $response = $this->sendRequest('/export/openapi/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
-        $json   = json_encode(Yaml::parse($body));
-        $expect = json_encode(Yaml::parse(file_get_contents(__DIR__ . '/resources/raml_resource.yaml')));
+        $expect = file_get_contents(__DIR__ . '/resources/openapi_resource.json');
 
-        $this->assertJsonStringEqualsJsonString($expect, $json, $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     /**
@@ -65,15 +63,34 @@ class RamlTest extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/raml/*/*', 'GET', array(
+        $response = $this->sendRequest('/export/openapi/*/*', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
-        $json   = json_encode(Yaml::parse($body));
-        $expect = json_encode(Yaml::parse(file_get_contents(__DIR__ . '/resources/raml_collection_external.yaml')));
+        $expect = file_get_contents(__DIR__ . '/resources/openapi_collection_external.json');
 
-        $this->assertJsonStringEqualsJsonString($expect, $json, $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    /**
+     * @dataProvider providerDebugStatus
+     */
+    public function testGetCollectionInternal($debug)
+    {
+        Environment::getContainer()->get('config')->set('psx_debug', $debug);
+
+        $response = $this->sendRequest('/export/openapi/*/*?filter=internal', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = __DIR__ . '/resources/openapi_collection_internal.json';
+        $actual = __DIR__ . '/resources/openapi_collection_internal_actual.json';
+
+        file_put_contents($actual, $body);
+
+        $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
     public function providerDebugStatus()
