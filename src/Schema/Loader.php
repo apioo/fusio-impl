@@ -56,12 +56,7 @@ class Loader
 
     public function getSchema($schemaId): SchemaInterface
     {
-        if ($schemaId === Passthru::class) {
-            $source = $schemaId;
-        } else {
-            $source = $this->getSource($schemaId);
-        }
-
+        $source = $this->getSource($schemaId);
         return $this->schemaManager->getSchema($source);
     }
 

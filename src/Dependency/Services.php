@@ -132,6 +132,15 @@ trait Services
         );
     }
 
+    public function getActionInvokerService(): Service\Action\Invoker
+    {
+        return new Service\Action\Invoker(
+            $this->get('processor'),
+            $this->get('plan_payer_service'),
+            $this->get('config')
+        );
+    }
+
     public function getAppService(): Service\App
     {
         return new Service\App(

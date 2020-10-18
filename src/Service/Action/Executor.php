@@ -88,7 +88,7 @@ class Executor
         $httpContext = new HttpContext($httpRequest, $uriFragments);
 
         $context = new Context(0, '/', $app, $user);
-        $request = new Request($httpContext, $body);
+        $request = new Request\HttpRequest($httpContext, $body);
 
         return $this->processor->execute($actionId, $request, $context);
     }

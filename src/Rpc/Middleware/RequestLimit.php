@@ -20,11 +20,10 @@
 
 namespace Fusio\Impl\Rpc\Middleware;
 
+use Fusio\Engine\Request\RpcRequest;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Http\Exception as StatusCode;
-use PSX\Http\RequestInterface;
-use PSX\Record\RecordInterface;
 
 /**
  * RequestLimit
@@ -51,7 +50,7 @@ class RequestLimit
         $this->remoteIp = $remoteIp;
     }
 
-    public function __invoke(RecordInterface $arguments, array $method, Context $context)
+    public function __invoke(RpcRequest $request, Context $context)
     {
         $success = $this->rateService->assertLimit(
             $this->remoteIp,

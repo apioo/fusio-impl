@@ -20,10 +20,10 @@
 
 namespace Fusio\Impl\Rpc;
 
-use Fusio\Engine\Processor;
 use Fusio\Engine\Request\HttpRequest;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\Action\Invoker as ActionInvoker;
 use Fusio\Impl\Table;
 use PSX\Http\RequestInterface;
 use PSX\Schema\SchemaTraverser;
@@ -38,9 +38,14 @@ use PSX\Schema\SchemaTraverser;
 class InvokerFactory
 {
     /**
-     * @var \Fusio\Engine\Processor
+     * @var \Fusio\Impl\Service\Action\Invoker
      */
-    private $processor;
+    private $actionInvoker;
+
+    /**
+     * @var \Fusio\Impl\Table\Route\Method
+     */
+    private $methodTable;
 
     /**
      * @var \Fusio\Impl\Schema\Loader
@@ -58,32 +63,20 @@ class InvokerFactory
     private $rateService;
 
     /**
-     * @var \Fusio\Impl\Service\Plan\Payer
-     */
-    private $planPayerService;
-
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
-
-    /**
      * @var \PSX\Schema\SchemaTraverser
      */
     private $schemaTraverser;
 
     /**
-     * @param Processor $processor
+     * @param ActionInvoker $actionInvoker
+     * @param Table\Route\Method $methodTable
      * @param Loader $schemaLoader
      * @param Service\Security\TokenValidator $tokenValidator
      * @param Service\Rate $rateService
-     * @param Service\Plan\Payer $planPayerService
-     * @param Table\Route\Method $methodTable
      */
-    public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Table\Route\Method $methodTable, Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
+    public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable, Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
     {
-        $this->processor        = $processor;
-        $this->planPayerService = $planPayerService;
+        $this->actionInvoker    = $actionInvoker;
         $this->methodTable      = $methodTable;
         $this->schemaLoader     = $schemaLoader;
         $this->tokenValidator   = $tokenValidator;
@@ -93,7 +86,7 @@ class InvokerFactory
 
     public function createByFramework(RequestInterface $request): Invoker
     {
-        $invoker = new Invoker($this->processor, $this->planPayerService, $this->methodTable);
+        $invoker = new Invoker($this->actionInvoker, $this->methodTable);
         $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $request->getHeader('Authorization')));
         $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1'));
         $invoker->addMiddleware(new Middleware\ValidateSchema($this->schemaLoader));
@@ -103,7 +96,7 @@ class InvokerFactory
 
     public function createByEngine(HttpRequest $request): Invoker
     {
-        $invoker = new Invoker($this->processor, $this->planPayerService, $this->methodTable);
+        $invoker = new Invoker($this->actionInvoker, $this->methodTable);
         $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $request->getHeader('Authorization')));
         $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'));
         $invoker->addMiddleware(new Middleware\ValidateSchema($this->schemaLoader));

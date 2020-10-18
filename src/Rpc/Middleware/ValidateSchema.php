@@ -20,10 +20,11 @@
 
 namespace Fusio\Impl\Rpc\Middleware;
 
+use Fusio\Engine\Request\RpcRequest;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Record\PassthruRecord;
 use Fusio\Impl\Schema\Loader;
 use PSX\Http\Exception as StatusCode;
-use PSX\Record\RecordInterface;
 use PSX\Schema\SchemaTraverser;
 use PSX\Schema\Visitor\TypeVisitor;
 
@@ -36,6 +37,8 @@ use PSX\Schema\Visitor\TypeVisitor;
  */
 class ValidateSchema
 {
+    private const SCHEMA_PASSTHRU = 'Passthru';
+
     /**
      * @var Loader
      */
@@ -52,15 +55,22 @@ class ValidateSchema
         $this->schemaTraverser = new SchemaTraverser();
     }
 
-    public function __invoke(RecordInterface $arguments, array $method, Context $context)
+    public function __invoke(RpcRequest $request, Context $context)
     {
+        $method    = $context->getMethod();
+        $arguments = $request->getArguments();
+
         if (!empty($method['request'])) {
             if (!$arguments->hasProperty('payload')) {
                 throw new StatusCode\BadRequestException('No payload argument provided');
             }
 
-            $schema  = $this->schemaLoader->getSchema($method['request']);
-            $payload = $this->schemaTraverser->traverse($arguments->getProperty('payload'), $schema, new TypeVisitor());
+            if ($method['request'] == self::SCHEMA_PASSTHRU) {
+                $payload = new PassthruRecord($arguments->getProperty('payload'));
+            } else {
+                $schema  = $this->schemaLoader->getSchema($method['request']);
+                $payload = $this->schemaTraverser->traverse($arguments->getProperty('payload'), $schema, new TypeVisitor());
+            }
 
             $arguments->setProperty('payload', $payload);
         } else {

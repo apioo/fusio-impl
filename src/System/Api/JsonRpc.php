@@ -41,9 +41,10 @@ use PSX\Json\Rpc\Server;
 class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
 {
     /**
+     * @Inject
      * @var \Fusio\Impl\Rpc\InvokerFactory
      */
-    protected $invokerFactory;
+    protected $rpcInvokerFactory;
 
     /**
      * @return array
@@ -79,7 +80,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
      */
     protected function doPost($record, HttpContextInterface $context)
     {
-        $invoker = $this->invokerFactory->createByFramework($this->request);
+        $invoker = $this->rpcInvokerFactory->createByFramework($this->request);
         $server  = new Server($invoker);
 
         return $server->invoke($record);

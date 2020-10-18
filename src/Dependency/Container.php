@@ -198,11 +198,10 @@ class Container extends DefaultContainer
         );
     }
 
-    public function getInvokerFactory(): InvokerFactory
+    public function getRpcInvokerFactory(): InvokerFactory
     {
         return new InvokerFactory(
-            $this->get('processor'),
-            $this->get('plan_payer_service'),
+            $this->get('action_invoker_service'),
             $this->get('table_manager')->getTable(Table\Route\Method::class),
             $this->get('schema_loader'),
             $this->get('security_token_validator'),

@@ -133,7 +133,8 @@ class Method extends TableAbstract
 
     public function getMethod($routeId, $version, $method)
     {
-        $sql = 'SELECT method.public,
+        $sql = 'SELECT method.route_id,
+                       method.public,
                        method.operation_id,
                        method.action,
                        method.status,

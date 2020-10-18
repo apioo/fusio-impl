@@ -109,9 +109,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan\Payer
+     * @var \Fusio\Impl\Service\Action\Invoker
      */
-    protected $planPayerService;
+    protected $actionInvokerService;
 
     /**
      * @return array
@@ -242,9 +242,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      */
     private function executeAction($record, HttpContextInterface $httpContext)
     {
-        $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->context->getApp(), $this->context->getUser());
-
         if (!$record instanceof RecordInterface) {
             // in case the record is not an RecordInterface, this means the
             // schema traverser has produced a different instance we put the
@@ -253,34 +250,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $record = new PassthruRecord($record);
         }
 
-        $request  = new Request\HttpRequest($httpContext, $record);
-        $response = null;
-        $method   = $this->context->getMethod();
-        $actionId = $method['action'];
-        $costs    = (int) $method['costs'];
+        $request = new Request\HttpRequest($httpContext, $record);
 
-        if ($costs > 0) {
-            // as anonymous user it is not possible to pay
-            if ($this->context->getUser()->isAnonymous()) {
-                throw new StatusCode\ForbiddenException('This action costs points because of this you must be authenticated in order to call this action');
-            }
-
-            // in case the method has assigned costs check whether the user has
-            // enough points
-            $remaining = $this->context->getUser()->getPoints() - $costs;
-            if ($remaining < 0) {
-                throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
-            }
-
-            $this->planPayerService->pay($costs, $context);
-        }
-
-        if (!empty($actionId)) {
-            $response = $this->processor->execute($actionId, $request, $context);
-        } else {
-            throw new StatusCode\ServiceUnavailableException('No action provided');
-        }
-
-        return $response;
+        return $this->actionInvokerService->invoke($request, $this->context);
     }
 }

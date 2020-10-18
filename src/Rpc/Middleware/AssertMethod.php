@@ -22,46 +22,36 @@ namespace Fusio\Impl\Rpc\Middleware;
 
 use Fusio\Engine\Request\RpcRequest;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Service;
-use PSX\Http\Exception as StatusCode;
+use Fusio\Impl\Table;
+use PSX\Json\Rpc\Exception\MethodNotFoundException;
 
 /**
- * Authentication
+ * AssertMethod
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class Authentication
+class AssertMethod
 {
     /**
-     * @var Service\Security\TokenValidator
+     * @var Table\Route\Method
      */
-    private $tokenValidator;
+    private $methodTable;
 
-    /**
-     * @var string
-     */
-    private $authorization;
-
-    public function __construct(Service\Security\TokenValidator $tokenValidator, string $authorization)
+    public function __construct(Table\Route\Method $methodTable)
     {
-        $this->tokenValidator = $tokenValidator;
-        $this->authorization = $authorization;
+        $this->methodTable = $methodTable;
     }
 
     public function __invoke(RpcRequest $request, Context $context)
     {
-        $method = $context->getMethod();
-
-        $success = $this->tokenValidator->assertAuthorization(
-            $method['method'],
-            $this->authorization,
-            $context
-        );
-
-        if (!$success) {
-            throw new StatusCode\UnauthorizedException('Could not authorize request', 'Bearer');
+        $method = $this->methodTable->getMethodByOperationId($request->getMethod());
+        if (empty($method)) {
+            throw new MethodNotFoundException('Method not found');
         }
+
+        $context->setRouteId($method['route_id']);
+        $context->setMethod($method);
     }
 }
