@@ -19,43 +19,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Connection;
+namespace Fusio\Impl\Provider;
 
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\Form\Container;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Engine\ConnectionInterface;
+use Fusio\Engine\Factory\FactoryInterface;
+use Fusio\Engine\Form;
 
 /**
- * GetForm
+ * ConnectionProviderParser
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class GetForm extends ActionAbstract
+class ConnectionProviderParser extends ProviderParser
 {
-    /**
-     * @var ConnectionProviderParser
-     */
-    private $connectionParser;
-
-    public function __construct(ConnectionProviderParser $connectionParser)
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader)
     {
-        $this->connectionParser = $connectionParser;
-    }
-
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
-    {
-        $className = $request->get('class');
-        $form      = $this->connectionParser->getForm($className);
-
-        if ($form instanceof Container) {
-            return $form;
-        } else {
-            return new Container();
-        }
+        parent::__construct($factory, $elementFactory, $providerLoader, ProviderConfig::TYPE_CONNECTION, ConnectionInterface::class);
     }
 }

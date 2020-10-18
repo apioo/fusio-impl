@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Provider\ActionProviderParser;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
@@ -42,12 +43,11 @@ use PSX\Sql\TableManagerInterface;
 class GetForm extends ActionAbstract
 {
     /**
-     * @Inject
-     * @var \Fusio\Engine\Parser\ParserInterface
+     * @var ActionProviderParser
      */
     private $actionParser;
 
-    public function __construct(ParserInterface $actionParser)
+    public function __construct(ActionProviderParser $actionParser)
     {
         $this->actionParser = $actionParser;
     }

@@ -88,7 +88,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Action\GetIndex::class, null, [200 => Backend\Model\Action_Index::class], null, 'backend.action'),
                 ],
                 '/action/form' => [
-                    'PUT' => new Method(Backend\Action\Action\Form::class, '', [], null, 'backend.action'),
+                    'PUT' => new Method(Backend\Action\Action\GetForm::class, null, [200 => Form_Container::class], null, 'backend.action'),
                 ],
                 '/action/execute/$action_id<[0-9]+>' => [
                     'POST' => new Method(Backend\Action\Action\Execute::class, Backend\Model\Action_Execute_Request::class, [200 => Backend\Model\Action_Execute_Response::class], null, 'backend.action'),
@@ -137,7 +137,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Connection\GetIndex::class, null, [200 => Backend\Model\Connection_Index::class], null, 'backend.connection'),
                 ],
                 '/connection/form' => [
-                    'PUT' => new Method(Backend\Action\Connection\GetForm::class, '', [], null, 'backend.connection'),
+                    'PUT' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], null, 'backend.connection'),
                 ],
                 '/connection/$connection_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Backend\Model\Connection::class], null, 'backend.connection'),
