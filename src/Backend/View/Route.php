@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Route extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -47,12 +47,8 @@ class Route extends ViewAbstract
         }
 
         $condition  = new Condition();
+        $condition->equals('category_id', $categoryId ?: 1);
         $condition->equals('status', Table\Route::STATUS_ACTIVE);
-        $condition->notLike('path', '/backend%');
-        $condition->notLike('path', '/consumer%');
-        $condition->notLike('path', '/doc%');
-        $condition->notLike('path', '/authorization%');
-        $condition->notLike('path', '/export%');
 
         if (!empty($search)) {
             $condition->like('path', '%' . $search . '%');

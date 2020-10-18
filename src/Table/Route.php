@@ -44,6 +44,7 @@ class Route extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'category_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'priority' => self::TYPE_INT,
             'methods' => self::TYPE_VARCHAR,

@@ -135,6 +135,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_cronjob')) {
             $cronjobTable = $schema->createTable('fusio_cronjob');
             $cronjobTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $cronjobTable->addColumn('category_id', 'integer', ['default' => 1]);
             $cronjobTable->addColumn('status', 'integer', ['default' => Table\Cronjob::STATUS_ACTIVE]);
             $cronjobTable->addColumn('name', 'string', ['length' => 64]);
             $cronjobTable->addColumn('cron', 'string');

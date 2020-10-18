@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -46,6 +46,7 @@ class Event extends ViewAbstract
         }
 
         $condition = new Condition();
+        $condition->equals('category_id', $categoryId ?: 1);
         $condition->in('status', [Table\Event::STATUS_ACTIVE]);
 
         if (!empty($search)) {
