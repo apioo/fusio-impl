@@ -25,6 +25,18 @@
         },
         "count": {
           "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
         }
       }
     },

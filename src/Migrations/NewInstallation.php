@@ -27,13 +27,12 @@ use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
-use Fusio\Impl\Backend\Model\Account_ChangePassword;
 use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
+use Fusio\Impl\Model\Collection_Category_Query;
+use Fusio\Impl\Model\Collection_Query;
 use Fusio\Impl\System;
-use Fusio\Impl\Consumer\Model\Plan_Order_Request;
 use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Export;
 use Fusio\Impl\Model\Form_Container;
 use Fusio\Impl\Model\Message;
 use Fusio\Impl\Table;
@@ -82,7 +81,7 @@ class NewInstallation
                     'PUT' => new Method(Backend\Action\Account\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'backend.account'),
                 ],
                 '/action' => [
-                    'GET' => new Method(Backend\Action\Action\GetAll::class, null, [200 => Backend\Model\Action_Collection::class], null, 'backend.action'),
+                    'GET' => new Method(Backend\Action\Action\GetAll::class, null, [200 => Backend\Model\Action_Collection::class], Collection_Category_Query::class, 'backend.action'),
                     'POST' => new Method(Backend\Action\Action\Create::class, Backend\Model\Action_Create::class, [200 => Message::class], null, 'backend.action', 'fusio.action.create'),
                 ],
                 '/action/list' => [
@@ -100,13 +99,13 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Action\Delete::class, null, [200 => Message::class], null, 'backend.action', 'fusio.action.delete'),
                 ],
                 '/app/token' => [
-                    'GET' => new Method(Backend\Action\App\Token\GetAll::class, null, [200 => Backend\Model\App_Token_Collection::class], null, 'backend.app'),
+                    'GET' => new Method(Backend\Action\App\Token\GetAll::class, null, [200 => Backend\Model\App_Token_Collection::class], Backend\Model\App_Token_Collection_Query::class, 'backend.app'),
                 ],
                 '/app/token/$token_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\App\Token\Get::class, null, [200 => Backend\Model\App_Token::class], null, 'backend.app'),
                 ],
                 '/app' => [
-                    'GET' => new Method(Backend\Action\App\GetAll::class, null, [200 => Backend\Model\App_Collection::class], null, 'backend.app'),
+                    'GET' => new Method(Backend\Action\App\GetAll::class, null, [200 => Backend\Model\App_Collection::class], Collection_Query::class, 'backend.app'),
                     'POST' => new Method(Backend\Action\App\Create::class, Backend\Model\App_Create::class, [200 => Message::class], null, 'backend.app'),
                 ],
                 '/app/$app_id<[0-9]+>' => [
@@ -118,20 +117,20 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\App\DeleteToken::class, null, [200 => Message::class], null, 'backend.app'),
                 ],
                 '/audit' => [
-                    'GET' => new Method(Backend\Action\Audit\GetAll::class, null, [200 => Backend\Model\Audit_Collection::class], null, 'backend.audit'),
+                    'GET' => new Method(Backend\Action\Audit\GetAll::class, null, [200 => Backend\Model\Audit_Collection::class], Backend\Model\Audit_Collection_Query::class, 'backend.audit'),
                 ],
                 '/audit/$audit_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Audit\Get::class, null, [200 => Backend\Model\Audit::class], null, 'backend.audit'),
                 ],
                 '/config' => [
-                    'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Backend\Model\Config_Collection::class], null, 'backend.config'),
+                    'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Backend\Model\Config_Collection::class], Collection_Query::class, 'backend.config'),
                 ],
                 '/config/$config_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Config\Get::class, null, [200 => Backend\Model\Config::class], null, 'backend.config'),
                     'PUT' => new Method(Backend\Action\Config\Update::class, Backend\Model\Config_Update::class, [200 => Message::class], null, 'backend.config'),
                 ],
                 '/connection' => [
-                    'GET' => new Method(Backend\Action\Connection\GetAll::class, null, [200 => Backend\Model\Connection_Collection::class], null, 'backend.connection'),
+                    'GET' => new Method(Backend\Action\Connection\GetAll::class, null, [200 => Backend\Model\Connection_Collection::class], Collection_Query::class, 'backend.connection'),
                     'POST' => new Method(Backend\Action\Connection\Create::class, Backend\Model\Connection_Create::class, [200 => Message::class], null, 'backend.connection'),
                 ],
                 '/connection/list' => [
@@ -146,7 +145,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Connection\Delete::class, null, [200 => Message::class], null, 'backend.connection'),
                 ],
                 '/cronjob' => [
-                    'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Backend\Model\Cronjob_Collection::class], null, 'backend.cronjob'),
+                    'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Backend\Model\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
                     'POST' => new Method(Backend\Action\Cronjob\Create::class, Backend\Model\Cronjob_Create::class, [200 => Message::class], null, 'backend.cronjob'),
                 ],
                 '/cronjob/$cronjob_id<[0-9]+>' => [
@@ -158,7 +157,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Dashboard\GetAll::class, null, [200 => Backend\Model\Dashboard::class], null, 'backend.dashboard'),
                 ],
                 '/event/subscription' => [
-                    'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Backend\Model\Event_Subscription_Collection::class], null, 'backend.event'),
+                    'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Backend\Model\Event_Subscription_Collection::class], Collection_Query::class, 'backend.event'),
                     'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Backend\Model\Event_Subscription_Create::class, [200 => Message::class], null, 'backend.event'),
                 ],
                 '/event/subscription/$subscription_id<[0-9]+>' => [
@@ -167,7 +166,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'backend.event'),
                 ],
                 '/event' => [
-                    'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Backend\Model\Event_Collection::class], null, 'backend.event'),
+                    'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Backend\Model\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
                     'POST' => new Method(Backend\Action\Event\Create::class, Backend\Model\Event_Create::class, [200 => Message::class], null, 'backend.event'),
                 ],
                 '/event/$event_id<[0-9]+>' => [
@@ -182,13 +181,13 @@ class NewInstallation
                     'POST' => new Method(Backend\Action\Import\Process::class, Backend\Model\Adapter::class, [200 => Backend\Model\Import_Response::class], null, 'backend.import'),
                 ],
                 '/log/error' => [
-                    'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Backend\Model\Log_Error_Collection::class], null, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Backend\Model\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),
                 ],
                 '/log/error/$error_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Log\Error\Get::class, null, [200 => Backend\Model\Log_Error::class], null, 'backend.log'),
                 ],
                 '/log' => [
-                    'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Backend\Model\Log_Collection::class], null, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Backend\Model\Log_Collection::class], Backend\Model\Log_Collection_Query::class, 'backend.log'),
                 ],
                 '/log/$error_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Log\Get::class, null, [200 => Backend\Model\Log::class], null, 'backend.log'),
@@ -203,7 +202,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Marketplace\Remove::class, null, [200 => Message::class], null, 'backend.marketplace'),
                 ],
                 '/plan/contract' => [
-                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Backend\Model\Plan_Contract_Collection::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Backend\Model\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
                     'POST' => new Method(Backend\Action\Plan\Contract\Create::class, Backend\Model\Plan_Contract_Create::class, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/contract/$contract_id<[0-9]+>' => [
@@ -212,7 +211,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Plan\Contract\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/invoice' => [
-                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Backend\Model\Plan_Invoice_Collection::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Backend\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'backend.plan'),
                     'POST' => new Method(Backend\Action\Plan\Invoice\Create::class, Backend\Model\Plan_Invoice_Create::class, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/invoice/$invoice_id<[0-9]+>' => [
@@ -221,7 +220,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Plan\Invoice\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan' => [
-                    'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Backend\Model\Plan_Collection::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Backend\Model\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
                     'POST' => new Method(Backend\Action\Plan\Create::class, Backend\Model\Plan_Create::class, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/$plan_id<[0-9]+>' => [
@@ -230,7 +229,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Plan\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/rate' => [
-                    'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Backend\Model\Rate_Collection::class], null, 'backend.rate'),
+                    'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Backend\Model\Rate_Collection::class], Collection_Query::class, 'backend.rate'),
                     'POST' => new Method(Backend\Action\Rate\Create::class, Backend\Model\Rate_Create::class, [200 => Message::class], null, 'backend.rate'),
                 ],
                 '/rate/$rate_id<[0-9]+>' => [
@@ -239,7 +238,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Rate\Delete::class, null, [200 => Message::class], null, 'backend.rate'),
                 ],
                 '/routes' => [
-                    'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Backend\Model\Route_Collection::class], null, 'backend.route'),
+                    'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Backend\Model\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),
                     'POST' => new Method(Backend\Action\Route\Create::class, Backend\Model\Route_Create::class, [200 => Message::class], null, 'backend.route'),
                 ],
                 '/routes/provider' => [
@@ -256,7 +255,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Route\Delete::class, null, [200 => Message::class], null, 'backend.route'),
                 ],
                 '/schema' => [
-                    'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Backend\Model\Schema_Collection::class], null, 'backend.schema'),
+                    'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Backend\Model\Schema_Collection::class], Collection_Category_Query::class, 'backend.schema'),
                     'POST' => new Method(Backend\Action\Schema\Create::class, Backend\Model\Schema_Create::class, [200 => Message::class], null, 'backend.schema'),
                 ],
                 '/schema/preview/$schema_id<[0-9]+>' => [
@@ -271,7 +270,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Schema\Delete::class, null, [200 => Message::class], null, 'backend.schema'),
                 ],
                 '/scope' => [
-                    'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Backend\Model\Scope_Collection::class], null, 'backend.scope'),
+                    'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Backend\Model\Scope_Collection::class], Collection_Category_Query::class, 'backend.scope'),
                     'POST' => new Method(Backend\Action\Scope\Create::class, Backend\Model\Scope_Create::class, [200 => Message::class], null, 'backend.scope'),
                 ],
                 '/scope/$scope_id<[0-9]+>' => [
@@ -284,43 +283,43 @@ class NewInstallation
                     'POST' => new Method(Backend\Action\Sdk\Generate::class, Backend\Model\Sdk_Generate::class, [200 => Message::class], null, 'backend.sdk'),
                 ],
                 '/statistic/count_requests' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/errors_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_requests' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_transactions' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Transaction_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/issued_tokens' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\App_Token_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_apps' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_routes' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_average' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/used_points' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Backend\Model\Statistic_Count::class], null, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Plan_Usage_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/transaction' => [
-                    'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Backend\Model\Transaction_Collection::class], null, 'backend.transaction'),
+                    'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Backend\Model\Transaction_Collection::class], Backend\Model\Transaction_Collection_Query::class, 'backend.transaction'),
                 ],
                 '/transaction/$transaction_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Transaction\Get::class, null, [200 => Backend\Model\Transaction::class], null, 'backend.transaction'),
                 ],
                 '/user' => [
-                    'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Backend\Model\User_Collection::class], null, 'backend.user'),
+                    'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Backend\Model\User_Collection::class], Collection_Query::class, 'backend.user'),
                     'POST' => new Method(Backend\Action\User\Create::class, Backend\Model\User_Create::class, [200 => Message::class], null, 'backend.user'),
                 ],
                 '/user/$user_id<[0-9]+>' => [
@@ -331,7 +330,7 @@ class NewInstallation
             ],
             'consumer' => [
                 '/app' => [
-                    'GET' => new Method(Consumer\Action\App\GetAll::class, null, [200 => Consumer\Model\App_Collection::class], null, 'consumer.app'),
+                    'GET' => new Method(Consumer\Action\App\GetAll::class, null, [200 => Consumer\Model\App_Collection::class], Collection_Query::class, 'consumer.app'),
                     'POST' => new Method(Consumer\Action\App\Create::class, Consumer\Model\App_Create::class, [200 => Message::class], null, 'consumer.app'),
                 ],
                 '/app/$app_id<[0-9]+>' => [
@@ -340,38 +339,38 @@ class NewInstallation
                     'DELETE' => new Method(Consumer\Action\App\Delete::class, null, [200 => Message::class], null, 'consumer.app'),
                 ],
                 '/event' => [
-                    'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Consumer\Model\Event_Collection::class], null, 'consumer.event'),
+                    'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Consumer\Model\Event_Collection::class], Collection_Query::class, 'consumer.event'),
                 ],
                 '/grant' => [
-                    'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Consumer\Model\Grant_Collection::class], null, 'consumer.grant'),
+                    'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Consumer\Model\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
                 ],
                 '/grant/$grant_id<[0-9]+>' => [
                     'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [200 => Message::class], null, 'consumer.grant'),
                 ],
                 '/plan/contract' => [
-                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Consumer\Model\Plan_Contract_Collection::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Consumer\Model\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
                     'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, null, [200 => Consumer\Model\Plan_Order_Request::class], null, 'consumer.plan'),
                 ],
                 '/plan/contract/$contract_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Consumer\Model\Plan_Contract::class], null, 'consumer.plan'),
                 ],
                 '/plan/invoice' => [
-                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Consumer\Model\Plan_Invoice_Collection::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Consumer\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'consumer.plan'),
                 ],
                 '/plan/invoice/$invoice_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Plan\Invoice\Get::class, null, [200 => Consumer\Model\Plan_Invoice::class], null, 'consumer.plan'),
                 ],
                 '/plan' => [
-                    'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Consumer\Model\Plan_Collection::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Consumer\Model\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),
                 ],
                 '/plan/$plan_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Plan\Get::class, null, [200 => Consumer\Model\Plan::class], null, 'consumer.plan'),
                 ],
                 '/scope' => [
-                    'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Consumer\Model\Scope_Collection::class], null, 'consumer.scope'),
+                    'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Consumer\Model\Scope_Collection::class], Collection_Query::class, 'consumer.scope'),
                 ],
                 '/subscription' => [
-                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], null, 'consumer.event'),
+                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.event'),
                     'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Consumer\Model\Event_Subscription_Create::class, [200 => Message::class], null, 'consumer.event'),
                 ],
                 '/subscription/$subscription_id<[0-9]+>' => [
@@ -380,7 +379,7 @@ class NewInstallation
                     'DELETE' => new Method(Consumer\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'consumer.event'),
                 ],
                 '/transaction' => [
-                    'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], null, 'consumer.transaction'),
+                    'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
                 ],
                 '/transaction/execute/:transaction_id' => [
                     'POST' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),

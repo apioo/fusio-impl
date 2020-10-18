@@ -356,6 +356,37 @@
         "T": "Audit"
       }
     },
+    "Audit_Collection_Query": {
+      "$extends": "common:Collection_Query",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "event": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Config": {
       "type": "object",
       "properties": {
@@ -759,6 +790,49 @@
         "T": "Log"
       }
     },
+    "Log_Collection_Query": {
+      "$extends": "common:Collection_Query",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Log_Error": {
       "type": "object",
       "properties": {
@@ -1044,6 +1118,31 @@
           "items": {
             "$ref": "Rate_Allocation"
           }
+        }
+      }
+    },
+    "Plan_Usage_Collection_Query": {
+      "$extends": "common:Collection_Query",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     },
@@ -1458,6 +1557,37 @@
       "$ref": "common:Collection",
       "$template": {
         "T": "Transaction"
+      }
+    },
+    "Transaction_Collection_Query": {
+      "$extends": "common:Collection_Query",
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "planId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
       }
     },
     "User": {
