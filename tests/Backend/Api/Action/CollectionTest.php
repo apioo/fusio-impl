@@ -74,19 +74,19 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 164,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 3,
+            "id": 163,
             "status": 1,
             "name": "Sql-Table",
             "date": "[datetime]"
         },
         {
-            "id": 2,
+            "id": 162,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"
@@ -94,7 +94,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "status": 1,
-            "name": "Welcome",
+            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]
@@ -122,7 +122,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
+            "id": 163,
             "status": 1,
             "name": "Sql-Table",
             "date": "[datetime]"
@@ -152,19 +152,19 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 4,
+            "id": 164,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 3,
+            "id": 163,
             "status": 1,
             "name": "Sql-Table",
             "date": "[datetime]"
         },
         {
-            "id": 2,
+            "id": 162,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"
@@ -172,7 +172,7 @@ JSON;
         {
             "id": 1,
             "status": 1,
-            "name": "Welcome",
+            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]

@@ -1,96 +1,118 @@
 {
-  "status": 1,
-  "path": "\/backend\/action\/$action_id<[0-9]+>",
-  "pathParameters": "Action_Entity_Path",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.action"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Action"
-      }
-    },
-    "PUT": {
-      "security": {
-        "backend": [
-          "backend.action"
-        ]
-      },
-      "tags": [],
-      "request": "Action_Update",
-      "responses": {
-        "200": "Message"
-      }
-    },
-    "DELETE": {
-      "security": {
-        "backend": [
-          "backend.action"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Message"
-      }
-    }
-  },
   "definitions": {
     "Action": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-        },
         "class": {
-          "type": "string"
-        },
-        "engine": {
           "type": "string"
         },
         "config": {
           "$ref": "Action_Config"
-        }
-      }
-    },
-    "Action_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Action_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "action_id": {
+        },
+        "engine": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
+          "type": "string"
+        },
+        "status": {
           "type": "integer"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Action_Config": {
+      "additionalProperties": {
+        "type": "any"
+      },
+      "type": "object"
     },
     "Action_Update": {
       "$extends": "Action",
       "type": "object"
     },
-    "Message": {
-      "type": "object",
+    "BackendActionAction_idPath": {
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
+        "action_id": {
           "type": "string"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Backend_Model_Action": {
+      "$ref": "Action"
+    },
+    "Backend_Model_Action_Update": {
+      "$ref": "Action_Update"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object"
     }
-  }
+  },
+  "methods": {
+    "DELETE": {
+      "operationId": "Backend_Action_Action_Delete",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_Action_Get",
+      "responses": {
+        "200": "Passthru"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Action_Update",
+      "request": "Backend_Model_Action_Update",
+      "responses": {
+        "200": "Passthru"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
+    }
+  },
+  "path": "/backend/action/$action_id<[0-9]+>",
+  "pathParameters": "BackendActionAction_idPath",
+  "status": 1
 }
