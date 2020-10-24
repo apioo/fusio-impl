@@ -67,8 +67,19 @@
         "actions": {
           "type": "array",
           "items": {
-            "$ref": "Action"
+            "$ref": "Action_Index_Entry"
           }
+        }
+      }
+    },
+    "Action_Index_Entry": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
         }
       }
     },
@@ -470,8 +481,19 @@
         "connections": {
           "type": "array",
           "items": {
-            "$ref": "Connection"
+            "$ref": "Connection_Index_Entry"
           }
+        }
+      }
+    },
+    "Connection_Index_Entry": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
         }
       }
     },
@@ -1377,16 +1399,12 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "$ref": "Schema_Source"
+          "$ref": "string"
         },
         "form": {
           "$ref": "Schema_Form"
         }
       }
-    },
-    "Schema_Source": {
-      "type": "object",
-      "additionalProperties": true
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
