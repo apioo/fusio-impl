@@ -34,6 +34,15 @@ use PSX\Framework\Test\ControllerDbTestCase;
  */
 class CollectionTest extends ControllerDbTestCase
 {
+    private $routeId;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->routeId = Fixture::getId('fusio_routes', '/foo');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -61,7 +70,7 @@ class CollectionTest extends ControllerDbTestCase
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
@@ -70,7 +79,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 2,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -80,7 +89,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -104,7 +113,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
@@ -113,7 +122,7 @@ JSON;
         {
             "id": 2,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -123,7 +132,7 @@ JSON;
         {
             "id": 1,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -147,7 +156,7 @@ JSON;
 
         $body = (string) $response->getBody();
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
@@ -156,7 +165,7 @@ JSON;
         {
             "id": 2,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",
@@ -166,7 +175,7 @@ JSON;
         {
             "id": 1,
             "appId": 3,
-            "routeId": 1,
+            "routeId": {$this->routeId},
             "ip": "127.0.0.1",
             "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
             "method": "GET",

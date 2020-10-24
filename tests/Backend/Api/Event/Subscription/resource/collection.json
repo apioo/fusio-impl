@@ -3,31 +3,43 @@
   "path": "\/backend\/event\/subscription",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Event_Subscription_GetAll",
       "security": {
-        "backend": [
-          "backend.subscription"
+        "app": [
+          "backend.event"
         ]
       },
-      "tags": [],
-      "queryParameters": "Event_Subscription_Collection_Query",
+      "tags": [
+        "backend.event"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Event_Subscription_Collection"
+        "200": "Backend_Model_Event_Subscription_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Event_Subscription_Create",
       "security": {
-        "backend": [
-          "backend.subscription"
+        "app": [
+          "backend.event"
         ]
       },
-      "tags": [],
-      "request": "Event_Subscription_Create",
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Subscription_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Event_Subscription_Collection": {
+      "$ref": "Event_Subscription_Collection"
+    },
+    "Backend_Model_Event_Subscription_Create": {
+      "$ref": "Event_Subscription_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -42,6 +54,20 @@
           "items": {
             "$generic": "T"
           }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     },
@@ -68,20 +94,6 @@
         "T": "Event_Subscription"
       }
     },
-    "Event_Subscription_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
-      }
-    },
     "Event_Subscription_Create": {
       "$extends": "Event_Subscription",
       "type": "object",
@@ -101,6 +113,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

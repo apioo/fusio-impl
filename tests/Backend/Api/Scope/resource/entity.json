@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/scope\/$scope_id<[0-9]+>",
-  "pathParameters": "Scope_Entity_Path",
+  "pathParameters": "BackendScopeScope_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Scope_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.scope"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.scope"
+      ],
       "responses": {
-        "200": "Scope"
+        "200": "Backend_Model_Scope"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Scope_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.scope"
         ]
       },
-      "tags": [],
-      "request": "Scope_Update",
+      "tags": [
+        "backend.scope"
+      ],
+      "request": "Backend_Model_Scope_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Scope_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.scope"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.scope"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendScopeScope_idPath": {
+      "type": "object",
+      "properties": {
+        "scope_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Scope": {
+      "$ref": "Scope"
+    },
+    "Backend_Model_Scope_Update": {
+      "$ref": "Scope_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -49,6 +72,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Scope": {
       "type": "object",
@@ -68,14 +94,6 @@
           "items": {
             "$ref": "Scope_Route"
           }
-        }
-      }
-    },
-    "Scope_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "scope_id": {
-          "type": "integer"
         }
       }
     },

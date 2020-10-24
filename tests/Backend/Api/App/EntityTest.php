@@ -36,6 +36,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_app', 'Foo-App');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -43,7 +52,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/app/3', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/app/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -56,7 +65,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/app/3', 'GET', array(
+        $response = $this->sendRequest('/backend/app/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -64,9 +73,9 @@ class EntityTest extends ControllerDbTestCase
         $body = (string) $response->getBody();
         $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "id": 3,
+    "id": {$this->id},
     "userId": 2,
     "status": 1,
     "name": "Foo-App",
@@ -137,7 +146,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/app/3', 'POST', array(
+        $response = $this->sendRequest('/backend/app/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -151,7 +160,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/app/5', 'PUT', array(
+        $response = $this->sendRequest('/backend/app/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -177,21 +186,20 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
         $this->assertEquals('', $row['parameters']);
 
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(5);
+        /** @var Table\App\Scope $table */
+        $table = Environment::getService('table_manager')->getTable(Table\App\Scope::class);
+        $scopes = $table->getAvailableScopes($this->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -199,7 +207,7 @@ JSON;
 
     public function testPutWithParameters()
     {
-        $response = $this->sendRequest('/backend/app/5', 'PUT', array(
+        $response = $this->sendRequest('/backend/app/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -226,21 +234,20 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'user_id', 'name', 'url', 'parameters')
             ->from('fusio_app')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
         $this->assertEquals(2, $row['status']);
         $this->assertEquals(2, $row['user_id']);
         $this->assertEquals('Bar', $row['name']);
         $this->assertEquals('http://microsoft.com', $row['url']);
         $this->assertEquals('foo=bar', $row['parameters']);
 
-        $scopes = Environment::getService('table_manager')->getTable(Table\App\Scope::class)->getAvailableScopes(5);
+        /** @var Table\App\Scope $table */
+        $table = Environment::getService('table_manager')->getTable(Table\App\Scope::class);
+        $scopes = $table->getAvailableScopes($this->id);
         $scopes = Table\Scope::getNames($scopes);
 
         $this->assertEquals(['foo', 'bar'], $scopes);
@@ -248,7 +255,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/app/5', 'DELETE', array(
+        $response = $this->sendRequest('/backend/app/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -268,14 +275,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_app')
-            ->where('id = 5')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
         $this->assertEquals(Table\App::STATUS_DELETED, $row['status']);
     }
 }

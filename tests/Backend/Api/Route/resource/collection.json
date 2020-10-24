@@ -3,31 +3,43 @@
   "path": "\/backend\/routes",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Route_GetAll",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "queryParameters": "Route_Collection_Query",
+      "tags": [
+        "backend.route"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "Route_Collection"
+        "200": "Backend_Model_Route_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Route_Create",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "request": "Route_Create",
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Route_Collection": {
+      "$ref": "Route_Collection"
+    },
+    "Backend_Model_Route_Create": {
+      "$ref": "Route_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -45,6 +57,29 @@
         }
       }
     },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -55,6 +90,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Route": {
       "type": "object",
@@ -89,20 +130,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Route"
-      }
-    },
-    "Route_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Route_Create": {

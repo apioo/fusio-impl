@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/schema\/$schema_id<[0-9]+>",
-  "pathParameters": "Schema_Entity_Path",
+  "pathParameters": "BackendSchemaSchema_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Schema_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.schema"
+      ],
       "responses": {
-        "200": "Schema"
+        "200": "Backend_Model_Schema"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Schema_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
-      "request": "Schema_Update",
+      "tags": [
+        "backend.schema"
+      ],
+      "request": "Backend_Model_Schema_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Schema_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.schema"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendSchemaSchema_idPath": {
+      "type": "object",
+      "properties": {
+        "schema_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Schema": {
+      "$ref": "Schema"
+    },
+    "Backend_Model_Schema_Update": {
+      "$ref": "Schema_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -49,6 +72,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Schema": {
       "type": "object",
@@ -68,14 +94,6 @@
         },
         "form": {
           "$ref": "Schema_Form"
-        }
-      }
-    },
-    "Schema_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "schema_id": {
-          "type": "integer"
         }
       }
     },

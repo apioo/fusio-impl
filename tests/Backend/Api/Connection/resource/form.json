@@ -1,34 +1,8 @@
 {
-  "status": 1,
-  "path": "\/backend\/connection\/form",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "queryParameters": "Connection_Form_Query",
-      "responses": {
-        "200": "Form_Container"
-      }
-    }
-  },
   "definitions": {
-    "Connection_Form_Query": {
-      "type": "object",
-      "properties": {
-        "class": {
-          "type": "string"
-        }
-      }
-    },
     "Form_Container": {
-      "type": "object",
       "properties": {
         "element": {
-          "type": "array",
           "items": {
             "oneOf": [
               {
@@ -44,14 +18,18 @@
                 "$ref": "Form_Element_TextArea"
               }
             ]
-          }
+          },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
     },
     "Form_Element": {
-      "type": "object",
       "properties": {
         "element": {
+          "type": "string"
+        },
+        "help": {
           "type": "string"
         },
         "name": {
@@ -59,38 +37,35 @@
         },
         "title": {
           "type": "string"
-        },
-        "help": {
-          "type": "string"
         }
       },
       "required": [
         "element"
-      ]
+      ],
+      "type": "object"
     },
     "Form_Element_Input": {
       "$extends": "Form_Element",
-      "type": "object",
       "properties": {
         "type": {
           "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Form_Element_Select": {
       "$extends": "Form_Element",
-      "type": "object",
       "properties": {
         "options": {
-          "type": "array",
           "items": {
             "$ref": "Form_Element_Select_Option"
-          }
+          },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
     },
     "Form_Element_Select_Option": {
-      "type": "object",
       "properties": {
         "key": {
           "type": "string"
@@ -98,7 +73,8 @@
         "value": {
           "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Form_Element_Tag": {
       "$extends": "Form_Element",
@@ -106,12 +82,33 @@
     },
     "Form_Element_TextArea": {
       "$extends": "Form_Element",
-      "type": "object",
       "properties": {
         "mode": {
           "type": "string"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Model_Form_Container": {
+      "$ref": "Form_Container"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Connection_GetForm",
+      "responses": {
+        "200": "Model_Form_Container"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    }
+  },
+  "path": "/backend/connection/form",
+  "status": 1
 }

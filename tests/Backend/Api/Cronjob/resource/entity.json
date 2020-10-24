@@ -1,59 +1,32 @@
 {
-  "status": 1,
-  "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
-  "pathParameters": "Cronjob_Entity_Path",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.cronjob"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Cronjob"
-      }
-    },
-    "PUT": {
-      "security": {
-        "backend": [
-          "backend.cronjob"
-        ]
-      },
-      "tags": [],
-      "request": "Cronjob_Update",
-      "responses": {
-        "200": "Message"
-      }
-    },
-    "DELETE": {
-      "security": {
-        "backend": [
-          "backend.cronjob"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Message"
-      }
-    }
-  },
   "definitions": {
-    "Cronjob": {
-      "type": "object",
+    "BackendCronjobCronjob_idPath": {
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        "cronjob_id": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Backend_Model_Cronjob": {
+      "$ref": "Cronjob"
+    },
+    "Backend_Model_Cronjob_Update": {
+      "$ref": "Cronjob_Update"
+    },
+    "Cronjob": {
+      "properties": {
+        "action": {
+          "type": "string"
         },
         "cron": {
           "type": "string"
         },
-        "action": {
-          "type": "string"
+        "errors": {
+          "items": {
+            "$ref": "Cronjob_Error"
+          },
+          "type": "array"
         },
         "executeDate": {
           "format": "date-time",
@@ -62,53 +35,98 @@
         "exitCode": {
           "type": "integer"
         },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "Cronjob_Error"
-          }
-        }
-      }
-    },
-    "Cronjob_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "cronjob_id": {
+        "id": {
           "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Cronjob_Error": {
-      "type": "object",
       "properties": {
-        "message": {
-          "type": "string"
-        },
-        "trace": {
-          "type": "string"
-        },
         "file": {
           "type": "string"
         },
         "line": {
           "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "trace": {
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Cronjob_Update": {
       "$extends": "Cronjob",
       "type": "object"
     },
     "Message": {
-      "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
         "message": {
           "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
-  }
+  },
+  "methods": {
+    "DELETE": {
+      "operationId": "Backend_Action_Cronjob_Delete",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_Cronjob_Get",
+      "responses": {
+        "200": "Backend_Model_Cronjob"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Cronjob_Update",
+      "request": "Backend_Model_Cronjob_Update",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
+    }
+  },
+  "path": "/backend/cronjob/$cronjob_id<[0-9]+>",
+  "pathParameters": "BackendCronjobCronjob_idPath",
+  "status": 1
 }

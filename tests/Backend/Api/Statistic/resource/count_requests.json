@@ -3,36 +3,44 @@
   "path": "\/backend\/statistic\/count_requests",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Statistic_GetCountRequests",
       "security": {
-        "backend": [
+        "app": [
           "backend.statistic"
         ]
       },
-      "tags": [],
-      "queryParameters": "Statistic_CountRequests_Query",
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_Model_Log_Collection_Query",
       "responses": {
-        "200": "Statistic_Count"
+        "200": "Backend_Model_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Statistic_Count": {
+    "Backend_Model_Log_Collection_Query": {
+      "$ref": "Log_Collection_Query"
+    },
+    "Backend_Model_Statistic_Count": {
+      "$ref": "Statistic_Count"
+    },
+    "Collection_Query": {
       "type": "object",
       "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
         "count": {
           "type": "integer"
         },
-        "from": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "to": {
-          "format": "date-time",
+        "search": {
           "type": "string"
         }
       }
     },
-    "Statistic_CountRequests_Query": {
+    "Log_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
         "from": {
@@ -71,6 +79,22 @@
           "type": "string"
         },
         "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Statistic_Count": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
           "type": "string"
         }
       }

@@ -3,43 +3,60 @@
   "path": "\/backend\/statistic\/incoming_transactions",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Statistic_GetIncomingTransactions",
       "security": {
-        "backend": [
+        "app": [
           "backend.statistic"
         ]
       },
-      "tags": [],
-      "queryParameters": "Statistic_IncomingTransactions_Query",
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_Model_Transaction_Collection_Query",
       "responses": {
-        "200": "Statistic_Chart"
+        "200": "Backend_Model_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Statistic_Chart": {
+    "Backend_Model_Statistic_Count": {
+      "$ref": "Statistic_Count"
+    },
+    "Backend_Model_Transaction_Collection_Query": {
+      "$ref": "Transaction_Collection_Query"
+    },
+    "Collection_Query": {
       "type": "object",
       "properties": {
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "startIndex": {
+          "type": "integer"
         },
-        "data": {
-          "type": "array",
-          "items": {
-            "$generic": "Statistic_Chart_Data"
-          }
+        "count": {
+          "type": "integer"
         },
-        "series": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "search": {
+          "type": "string"
         }
       }
     },
-    "Statistic_IncomingTransactions_Query": {
+    "Statistic_Count": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Transaction_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
         "from": {

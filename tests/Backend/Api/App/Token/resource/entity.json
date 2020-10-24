@@ -1,17 +1,20 @@
 {
   "status": 1,
   "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
-  "pathParameters": "App_Token_Entity_Path",
+  "pathParameters": "BackendAppTokenToken_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_App_Token_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.app"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.app"
+      ],
       "responses": {
-        "200": "App_Token"
+        "200": "Backend_Model_App_Token"
       }
     }
   },
@@ -41,13 +44,16 @@
         }
       }
     },
-    "App_Token_Entity_Path": {
+    "BackendAppTokenToken_idPath": {
       "type": "object",
       "properties": {
         "token_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Backend_Model_App_Token": {
+      "$ref": "App_Token"
     }
   }
 }

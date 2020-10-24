@@ -1,28 +1,34 @@
 {
   "status": 1,
   "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
-  "pathParameters": "Schema_Preview_Path",
+  "pathParameters": "BackendSchemaPreviewSchema_idPath",
   "methods": {
     "POST": {
+      "operationId": "Backend_Action_Schema_GetPreview",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.schema"
+      ],
       "responses": {
-        "200": "Schema_Preview_Response"
+        "200": "Backend_Model_Schema_Preview_Response"
       }
     }
   },
   "definitions": {
-    "Schema_Preview_Path": {
+    "BackendSchemaPreviewSchema_idPath": {
       "type": "object",
       "properties": {
         "schema_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Backend_Model_Schema_Preview_Response": {
+      "$ref": "Schema_Preview_Response"
     },
     "Schema_Preview_Response": {
       "type": "object",

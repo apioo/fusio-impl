@@ -35,6 +35,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_event', 'foo-event');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -42,7 +51,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/event/34', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/event/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -55,7 +64,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/event/37', 'GET', array(
+        $response = $this->sendRequest('/backend/event/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -63,7 +72,8 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 37,
+    "id": {$this->id},
+    "status": 1,
     "name": "foo-event",
     "description": "Foo event description"
 }
@@ -97,7 +107,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/event/37', 'POST', array(
+        $response = $this->sendRequest('/backend/event/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -111,7 +121,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/event/37', 'PUT', array(
+        $response = $this->sendRequest('/backend/event/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -134,21 +144,18 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'name', 'description')
             ->from('fusio_event')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(37, $row['id']);
         $this->assertEquals('New-Test', $row['name']);
         $this->assertEquals('Test new description', $row['description']);
     }
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/event/37', 'DELETE', array(
+        $response = $this->sendRequest('/backend/event/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -175,6 +182,6 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(37, $row['id']);
+        $this->assertEquals($this->id, $row['id']);
     }
 }

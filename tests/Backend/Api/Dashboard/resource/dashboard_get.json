@@ -67,7 +67,7 @@
       ]
     ],
     "series": [
-      "\/backend\/account"
+      "\/foo"
     ]
   },
   "incomingRequests": {
@@ -280,7 +280,7 @@
       ]
     ],
     "series": [
-      "\/backend\/account"
+      "\/foo"
     ]
   },
   "timePerRoute": {
@@ -351,7 +351,7 @@
       ]
     ],
     "series": [
-      "\/backend\/account (ms)"
+      "\/foo (ms)"
     ]
   },
   "latestApps": {
@@ -381,6 +381,11 @@
   "latestRequests": {
     "entry": [
       {
+        "path": "\/backend\/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59",
+        "ip": "127.0.0.1",
+        "date": "[datetime]"
+      },
+      {
         "path": "\/bar",
         "ip": "127.0.0.1",
         "date": "[datetime]"
@@ -400,12 +405,12 @@
         "date": "[datetime]"
       },
       {
-        "status": 0,
+        "status": 1,
         "name": "Consumer",
         "date": "[datetime]"
       },
       {
-        "status": 2,
+        "status": 1,
         "name": "Disabled",
         "date": "[datetime]"
       },
@@ -415,7 +420,7 @@
         "date": "[datetime]"
       },
       {
-        "status": 3,
+        "status": 1,
         "name": "Deleted",
         "date": "[datetime]"
       }

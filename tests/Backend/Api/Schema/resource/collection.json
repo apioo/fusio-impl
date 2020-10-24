@@ -3,31 +3,43 @@
   "path": "\/backend\/schema",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Schema_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
-      "queryParameters": "Schema_Collection_Query",
+      "tags": [
+        "backend.schema"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "Schema_Collection"
+        "200": "Backend_Model_Schema_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Schema_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.schema"
         ]
       },
-      "tags": [],
-      "request": "Schema_Create",
+      "tags": [
+        "backend.schema"
+      ],
+      "request": "Backend_Model_Schema_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Schema_Collection": {
+      "$ref": "Schema_Collection"
+    },
+    "Backend_Model_Schema_Create": {
+      "$ref": "Schema_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -45,6 +57,29 @@
         }
       }
     },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -55,6 +90,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Schema": {
       "type": "object",
@@ -81,20 +122,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Schema"
-      }
-    },
-    "Schema_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Schema_Create": {

@@ -1,43 +1,7 @@
 {
-  "status": 1,
-  "path": "\/backend\/audit",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.audit"
-        ]
-      },
-      "tags": [],
-      "queryParameters": "Audit_Collection_Query",
-      "responses": {
-        "200": "Audit_Collection"
-      }
-    }
-  },
   "definitions": {
     "App": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-        },
-        "url": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "string"
-        },
         "appKey": {
           "type": "string"
         },
@@ -48,65 +12,69 @@
           "format": "date-time",
           "type": "string"
         },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "tokens": {
-          "type": "array",
-          "items": {
-            "$ref": "App_Token"
-          }
-        }
-      }
-    },
-    "App_Token": {
-      "type": "object",
-      "properties": {
         "id": {
           "type": "integer"
         },
-        "token": {
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
           "type": "string"
         },
-        "scope": {
+        "parameters": {
           "type": "string"
         },
-        "ip": {
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "tokens": {
+          "items": {
+            "$ref": "App_Token"
+          },
+          "type": "array"
+        },
+        "url": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "App_Token": {
+      "properties": {
+        "date": {
+          "format": "date-time",
           "type": "string"
         },
         "expire": {
           "format": "date-time",
           "type": "string"
         },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Audit": {
-      "type": "object",
-      "properties": {
         "id": {
           "type": "integer"
-        },
-        "app": {
-          "$ref": "App"
-        },
-        "user": {
-          "$ref": "User"
-        },
-        "event": {
-          "type": "string"
         },
         "ip": {
           "type": "string"
         },
-        "message": {
+        "scope": {
           "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Audit": {
+      "properties": {
+        "app": {
+          "$ref": "App"
         },
         "content": {
           "$ref": "Audit_Object"
@@ -114,8 +82,24 @@
         "date": {
           "format": "date-time",
           "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "User"
         }
-      }
+      },
+      "type": "object"
     },
     "Audit_Collection": {
       "$ref": "Collection",
@@ -124,29 +108,16 @@
       }
     },
     "Audit_Collection_Query": {
-      "type": "object",
+      "$extends": "Collection_Query",
       "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "from": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "to": {
-          "format": "date-time",
-          "type": "string"
-        },
         "appId": {
           "type": "integer"
         },
-        "userId": {
-          "type": "integer"
-        },
         "event": {
+          "type": "string"
+        },
+        "from": {
+          "format": "date-time",
           "type": "string"
         },
         "ip": {
@@ -157,63 +128,68 @@
         },
         "search": {
           "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
     "Audit_Object": {
-      "description": "A key value object containing the changes",
-      "type": "object",
       "additionalProperties": {
         "type": "any"
-      }
+      },
+      "description": "A key value object containing the changes",
+      "type": "object"
+    },
+    "Backend_Model_Audit_Collection": {
+      "$ref": "Audit_Collection"
+    },
+    "Backend_Model_Audit_Collection_Query": {
+      "$ref": "Audit_Collection_Query"
     },
     "Collection": {
-      "type": "object",
       "properties": {
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "items": {
+            "$generic": "T"
+          },
+          "type": "array"
         },
         "startIndex": {
           "type": "integer"
         },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$generic": "T"
-          }
+        "totalResults": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
-    "User": {
-      "type": "object",
+    "Collection_Query": {
       "properties": {
-        "id": {
+        "count": {
           "type": "integer"
         },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-        },
-        "email": {
+        "search": {
           "type": "string"
         },
-        "points": {
+        "startIndex": {
           "type": "integer"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
+        }
+      },
+      "type": "object"
+    },
+    "User": {
+      "properties": {
         "apps": {
-          "type": "array",
           "items": {
             "$ref": "App"
-          }
+          },
+          "type": "array"
         },
         "attributes": {
           "$ref": "User_Attributes"
@@ -221,14 +197,56 @@
         "date": {
           "format": "date-time",
           "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$",
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
     "User_Attributes": {
-      "type": "object",
       "additionalProperties": {
         "type": "string"
-      }
+      },
+      "type": "object"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Audit_GetAll",
+      "queryParameters": "Backend_Model_Audit_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Audit_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.audit"
+        ]
+      },
+      "tags": [
+        "backend.audit"
+      ]
+    }
+  },
+  "path": "/backend/audit",
+  "status": 1
 }

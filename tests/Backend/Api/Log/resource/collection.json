@@ -3,19 +3,28 @@
   "path": "\/backend\/log",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Log_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.log"
         ]
       },
-      "tags": [],
-      "queryParameters": "Log_Collection_Query",
+      "tags": [
+        "backend.log"
+      ],
+      "queryParameters": "Backend_Model_Log_Collection_Query",
       "responses": {
-        "200": "Log_Collection"
+        "200": "Backend_Model_Log_Collection"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Log_Collection": {
+      "$ref": "Log_Collection"
+    },
+    "Backend_Model_Log_Collection_Query": {
+      "$ref": "Log_Collection_Query"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -30,6 +39,20 @@
           "items": {
             "$generic": "T"
           }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     },
@@ -76,14 +99,9 @@
       }
     },
     "Log_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
         "from": {
           "format": "date-time",
           "type": "string"

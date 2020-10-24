@@ -1,67 +1,59 @@
 {
-  "status": 1,
-  "path": "\/backend\/connection",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "queryParameters": "Connection_Collection_Query",
-      "responses": {
-        "200": "Connection_Collection"
-      }
-    },
-    "POST": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "request": "Connection_Create",
-      "responses": {
-        "201": "Message"
-      }
-    }
-  },
   "definitions": {
+    "Backend_Model_Connection_Collection": {
+      "$ref": "Connection_Collection"
+    },
+    "Backend_Model_Connection_Create": {
+      "$ref": "Connection_Create"
+    },
     "Collection": {
-      "type": "object",
       "properties": {
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "items": {
+            "$generic": "T"
+          },
+          "type": "array"
         },
         "startIndex": {
           "type": "integer"
         },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$generic": "T"
-          }
+        "totalResults": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
-    "Connection": {
-      "type": "object",
+    "Collection_Query": {
       "properties": {
-        "id": {
+        "count": {
           "type": "integer"
         },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        "search": {
+          "type": "string"
         },
+        "startIndex": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Connection": {
+      "properties": {
         "class": {
           "type": "string"
         },
         "config": {
           "$ref": "Connection_Config"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Connection_Collection": {
       "$ref": "Collection",
@@ -69,41 +61,67 @@
         "T": "Connection"
       }
     },
-    "Connection_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "integer"
-        }
-      }
-    },
     "Connection_Config": {
-      "type": "object",
       "additionalProperties": {
         "type": "any"
       },
-      "maxProperties": 16
+      "maxProperties": 16,
+      "type": "object"
     },
     "Connection_Create": {
       "$extends": "Connection",
       "type": "object"
     },
     "Message": {
-      "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
         "message": {
           "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Connection_GetAll",
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Connection_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    },
+    "POST": {
+      "operationId": "Backend_Action_Connection_Create",
+      "request": "Backend_Model_Connection_Create",
+      "responses": {
+        "201": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    }
+  },
+  "path": "/backend/connection",
+  "status": 1
 }

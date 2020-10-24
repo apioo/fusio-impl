@@ -63,89 +63,15 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 37,
+    "totalResults": 1,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
             "id": 37,
+            "status": 1,
             "name": "foo-event",
             "description": "Foo event description"
-        },
-        {
-            "id": 1,
-            "name": "fusio.action.create",
-            "description": ""
-        },
-        {
-            "id": 2,
-            "name": "fusio.action.delete",
-            "description": ""
-        },
-        {
-            "id": 3,
-            "name": "fusio.action.update",
-            "description": ""
-        },
-        {
-            "id": 4,
-            "name": "fusio.app.create",
-            "description": ""
-        },
-        {
-            "id": 5,
-            "name": "fusio.app.delete",
-            "description": ""
-        },
-        {
-            "id": 6,
-            "name": "fusio.app.update",
-            "description": ""
-        },
-        {
-            "id": 7,
-            "name": "fusio.connection.create",
-            "description": ""
-        },
-        {
-            "id": 8,
-            "name": "fusio.connection.delete",
-            "description": ""
-        },
-        {
-            "id": 9,
-            "name": "fusio.connection.update",
-            "description": ""
-        },
-        {
-            "id": 10,
-            "name": "fusio.cronjob.create",
-            "description": ""
-        },
-        {
-            "id": 11,
-            "name": "fusio.cronjob.delete",
-            "description": ""
-        },
-        {
-            "id": 12,
-            "name": "fusio.cronjob.update",
-            "description": ""
-        },
-        {
-            "id": 13,
-            "name": "fusio.event.create",
-            "description": ""
-        },
-        {
-            "id": 14,
-            "name": "fusio.event.delete",
-            "description": ""
-        },
-        {
-            "id": 16,
-            "name": "fusio.event.subscription.create",
-            "description": ""
         }
     ]
 }

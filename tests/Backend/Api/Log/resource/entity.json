@@ -1,21 +1,35 @@
 {
   "status": 1,
   "path": "\/backend\/log\/$log_id<[0-9]+>",
-  "pathParameters": "Log_Entity_Path",
+  "pathParameters": "BackendLogLog_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Log_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.log"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.log"
+      ],
       "responses": {
-        "200": "Log"
+        "200": "Backend_Model_Log"
       }
     }
   },
   "definitions": {
+    "BackendLogLog_idPath": {
+      "type": "object",
+      "properties": {
+        "log_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Log": {
+      "$ref": "Log"
+    },
     "Log": {
       "type": "object",
       "properties": {
@@ -49,14 +63,6 @@
           "items": {
             "$ref": "Log_Error"
           }
-        }
-      }
-    },
-    "Log_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "log_id": {
-          "type": "integer"
         }
       }
     },

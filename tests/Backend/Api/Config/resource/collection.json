@@ -1,52 +1,52 @@
 {
-  "status": 1,
-  "path": "\/backend\/config",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.config"
-        ]
-      },
-      "tags": [],
-      "queryParameters": "Config_Collection_Query",
-      "responses": {
-        "200": "Config_Collection"
-      }
-    }
-  },
   "definitions": {
+    "Backend_Model_Config_Collection": {
+      "$ref": "Config_Collection"
+    },
     "Collection": {
-      "type": "object",
       "properties": {
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "items": {
+            "$generic": "T"
+          },
+          "type": "array"
         },
         "startIndex": {
           "type": "integer"
         },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$generic": "T"
-          }
+        "totalResults": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
-    "Config": {
-      "type": "object",
+    "Collection_Query": {
       "properties": {
-        "id": {
+        "count": {
           "type": "integer"
         },
-        "type": {
+        "search": {
+          "type": "string"
+        },
+        "startIndex": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Config": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
           "type": "integer"
         },
         "name": {
           "type": "string"
         },
-        "description": {
-          "type": "string"
+        "type": {
+          "type": "integer"
         },
         "value": {
           "oneOf": [
@@ -64,7 +64,8 @@
             }
           ]
         }
-      }
+      },
+      "type": "object"
     },
     "Config_Collection": {
       "$ref": "Collection",
@@ -72,19 +73,27 @@
         "T": "Config"
       }
     },
-    "Config_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
-      }
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Config_GetAll",
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Config_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
+    }
+  },
+  "path": "/backend/config",
+  "status": 1
 }

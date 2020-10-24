@@ -3,19 +3,25 @@
   "path": "\/backend\/log\/error",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Log_Error_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.log"
         ]
       },
-      "tags": [],
-      "queryParameters": "Log_Error_Collection_Query",
+      "tags": [
+        "backend.log"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Log_Error_Collection"
+        "200": "Backend_Model_Log_Error_Collection"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Log_Error_Collection": {
+      "$ref": "Log_Error_Collection"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -30,6 +36,20 @@
           "items": {
             "$generic": "T"
           }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     },
@@ -56,19 +76,8 @@
         "T": "Log_Error"
       }
     },
-    "Log_Error_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
-      }
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     }
   }
 }

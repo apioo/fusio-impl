@@ -3,31 +3,43 @@
   "path": "\/backend\/rate",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Rate_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.rate"
         ]
       },
-      "tags": [],
-      "queryParameters": "Rate_Collection_Query",
+      "tags": [
+        "backend.rate"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Rate_Collection"
+        "200": "Backend_Model_Rate_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Rate_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.rate"
         ]
       },
-      "tags": [],
-      "request": "Rate_Create",
+      "tags": [
+        "backend.rate"
+      ],
+      "request": "Backend_Model_Rate_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Rate_Collection": {
+      "$ref": "Rate_Collection"
+    },
+    "Backend_Model_Rate_Create": {
+      "$ref": "Rate_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -45,6 +57,20 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -55,6 +81,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Rate": {
       "type": "object",
@@ -110,20 +142,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Rate"
-      }
-    },
-    "Rate_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Rate_Create": {

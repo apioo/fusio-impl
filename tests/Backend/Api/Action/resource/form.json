@@ -91,17 +91,13 @@
     },
     "Model_Form_Container": {
       "$ref": "Form_Container"
-    },
-    "Passthru": {
-      "description": "No schema information available",
-      "type": "object"
     }
   },
   "methods": {
     "GET": {
       "operationId": "Backend_Action_Action_GetForm",
       "responses": {
-        "200": "Passthru"
+        "200": "Model_Form_Container"
       },
       "security": {
         "app": [

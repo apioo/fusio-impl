@@ -1,91 +1,109 @@
 {
-  "status": 1,
-  "path": "\/backend\/connection\/$connection_id<[0-9]+>",
-  "pathParameters": "Connection_Entity_Path",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Connection"
-      }
-    },
-    "PUT": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "request": "Connection_Update",
-      "responses": {
-        "200": "Message"
-      }
-    },
-    "DELETE": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Message"
-      }
-    }
-  },
   "definitions": {
-    "Connection": {
-      "type": "object",
+    "BackendConnectionConnection_idPath": {
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-        },
+        "connection_id": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Backend_Model_Connection": {
+      "$ref": "Connection"
+    },
+    "Backend_Model_Connection_Update": {
+      "$ref": "Connection_Update"
+    },
+    "Connection": {
+      "properties": {
         "class": {
           "type": "string"
         },
         "config": {
           "$ref": "Connection_Config"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Connection_Config": {
-      "type": "object",
       "additionalProperties": {
         "type": "any"
       },
-      "maxProperties": 16
-    },
-    "Connection_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "connection_id": {
-          "type": "integer"
-        }
-      }
+      "maxProperties": 16,
+      "type": "object"
     },
     "Connection_Update": {
       "$extends": "Connection",
       "type": "object"
     },
     "Message": {
-      "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
         "message": {
           "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
-  }
+  },
+  "methods": {
+    "DELETE": {
+      "operationId": "Backend_Action_Connection_Delete",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_Connection_Get",
+      "responses": {
+        "200": "Backend_Model_Connection"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Connection_Update",
+      "request": "Backend_Model_Connection_Update",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    }
+  },
+  "path": "/backend/connection/$connection_id<[0-9]+>",
+  "pathParameters": "BackendConnectionConnection_idPath",
+  "status": 1
 }

@@ -3,43 +3,44 @@
   "path": "\/backend\/statistic\/used_points",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Statistic_GetUsedPoints",
       "security": {
-        "backend": [
+        "app": [
           "backend.statistic"
         ]
       },
-      "tags": [],
-      "queryParameters": "Statistic_UsedPoints_Query",
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_Model_Plan_Usage_Collection_Query",
       "responses": {
-        "200": "Statistic_Chart"
+        "200": "Backend_Model_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Statistic_Chart": {
+    "Backend_Model_Plan_Usage_Collection_Query": {
+      "$ref": "Plan_Usage_Collection_Query"
+    },
+    "Backend_Model_Statistic_Count": {
+      "$ref": "Statistic_Count"
+    },
+    "Collection_Query": {
       "type": "object",
       "properties": {
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "startIndex": {
+          "type": "integer"
         },
-        "data": {
-          "type": "array",
-          "items": {
-            "$generic": "Statistic_Chart_Data"
-          }
+        "count": {
+          "type": "integer"
         },
-        "series": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "search": {
+          "type": "string"
         }
       }
     },
-    "Statistic_UsedPoints_Query": {
+    "Plan_Usage_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
         "from": {
@@ -60,6 +61,22 @@
           "type": "integer"
         },
         "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Statistic_Count": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
           "type": "string"
         }
       }

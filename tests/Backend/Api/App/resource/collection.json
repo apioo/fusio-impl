@@ -1,55 +1,7 @@
 {
-  "status": 1,
-  "path": "\/backend\/app",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.app"
-        ]
-      },
-      "tags": [],
-      "queryParameters": "startIndex",
-      "responses": {
-        "200": "App_Collection"
-      }
-    },
-    "POST": {
-      "security": {
-        "backend": [
-          "backend.app"
-        ]
-      },
-      "tags": [],
-      "request": "App_Create",
-      "responses": {
-        "201": "Message"
-      }
-    }
-  },
   "definitions": {
     "App": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-        },
-        "url": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "string"
-        },
         "appKey": {
           "type": "string"
         },
@@ -60,19 +12,39 @@
           "format": "date-time",
           "type": "string"
         },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
         "scopes": {
-          "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
         },
         "tokens": {
-          "type": "array",
           "items": {
             "$ref": "App_Token"
-          }
+          },
+          "type": "array"
+        },
+        "url": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
     },
     "App_Collection": {
       "$ref": "Collection",
@@ -82,80 +54,126 @@
     },
     "App_Create": {
       "$extends": "App",
-      "type": "object",
       "required": [
         "userId",
         "name",
         "url",
         "scopes"
-      ]
+      ],
+      "type": "object"
     },
     "App_Token": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "token": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "string"
-        },
-        "ip": {
+        "date": {
+          "format": "date-time",
           "type": "string"
         },
         "expire": {
           "format": "date-time",
           "type": "string"
         },
-        "date": {
-          "format": "date-time",
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token": {
           "type": "string"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Backend_Model_App_Collection": {
+      "$ref": "App_Collection"
+    },
+    "Backend_Model_App_Create": {
+      "$ref": "App_Create"
     },
     "Collection": {
-      "type": "object",
       "properties": {
-        "totalResults": {
-          "type": "integer"
-        },
-        "startIndex": {
-          "type": "integer"
-        },
         "entry": {
-          "type": "array",
           "items": {
             "$generic": "T"
-          }
-        }
-      }
-    },
-    "Message": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
+          },
+          "type": "array"
         },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "startIndex": {
-      "type": "object",
-      "properties": {
         "startIndex": {
           "type": "integer"
         },
+        "totalResults": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Collection_Query": {
+      "properties": {
         "count": {
           "type": "integer"
         },
         "search": {
           "type": "string"
+        },
+        "startIndex": {
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_App_GetAll",
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_App_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.app"
+        ]
+      },
+      "tags": [
+        "backend.app"
+      ]
+    },
+    "POST": {
+      "operationId": "Backend_Action_App_Create",
+      "request": "Backend_Model_App_Create",
+      "responses": {
+        "201": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.app"
+        ]
+      },
+      "tags": [
+        "backend.app"
+      ]
+    }
+  },
+  "path": "/backend/app",
+  "status": 1
 }

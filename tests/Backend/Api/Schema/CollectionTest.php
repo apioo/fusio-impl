@@ -69,12 +69,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 2,
+            "id": 140,
             "status": 1,
             "name": "Collection-Schema"
         },
@@ -106,7 +106,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         }
@@ -133,12 +133,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 3,
+            "id": 141,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 2,
+            "id": 140,
             "status": 1,
             "name": "Collection-Schema"
         },
@@ -159,15 +159,16 @@ JSON;
     {
         $schema = <<<'JSON'
 {
-    "id": "http://phpsx.org#",
-    "title": "test",
+    "$import": {
+        "self": "schema:///Entry-Schema"
+    },
     "type": "object",
     "properties": {
         "title": {
             "type": "string"
         },
         "foo": {
-            "$ref": "schema:///Entry-Schema"
+            "$ref": "Entry-Schema"
         }
     }
 }

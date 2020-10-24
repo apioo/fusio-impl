@@ -38,6 +38,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_routes', '/foo');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -45,7 +54,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/routes/' . (Fixture::getLastRouteId() + 1), 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/routes/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -58,16 +67,15 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'GET', array(
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $id     = Fixture::getLastRouteId() + 1;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": {$id},
+    "id": {$this->id},
     "status": 1,
     "path": "\/foo",
     "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController",
@@ -83,9 +91,6 @@ class EntityTest extends ControllerDbTestCase
                     "active": true,
                     "public": true,
                     "operationId": "listFoo",
-                    "responses": {
-                        "200": "Collection-Schema"
-                    },
                     "action": "Sql-Table"
                 },
                 "POST": {
@@ -93,9 +98,6 @@ class EntityTest extends ControllerDbTestCase
                     "public": false,
                     "operationId": "createFoo",
                     "request": "Entry-Schema",
-                    "responses": {
-                        "201": "Passthru"
-                    },
                     "action": "Sql-Table",
                     "costs": 1
                 }
@@ -133,7 +135,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'POST', array(
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -147,7 +149,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -227,7 +229,7 @@ JSON;
 
     public function testPutDeploy()
     {
-        $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -324,7 +326,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'DELETE', array(
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -344,14 +346,14 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_routes')
-            ->where('id = ' . (Fixture::getLastRouteId() + 1))
+            ->where('id = ' . $this->id)
             ->setFirstResult(0)
             ->setMaxResults(1)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 1, $row['id']);
+        $this->assertEquals($this->id, $row['id']);
         $this->assertEquals(TableRoutes::STATUS_DELETED, $row['status']);
     }
 }

@@ -3,26 +3,32 @@
   "path": "\/backend\/account",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Account_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.account"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.account"
+      ],
       "responses": {
-        "200": "User"
+        "200": "Backend_Model_User"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Account_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.account"
         ]
       },
-      "tags": [],
-      "request": "User_Update",
+      "tags": [
+        "backend.account"
+      ],
+      "request": "Backend_Model_User_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
@@ -98,6 +104,12 @@
         }
       }
     },
+    "Backend_Model_User": {
+      "$ref": "User"
+    },
+    "Backend_Model_User_Update": {
+      "$ref": "User_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -108,6 +120,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User": {
       "type": "object",

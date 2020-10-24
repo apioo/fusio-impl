@@ -1,55 +1,47 @@
 {
-  "status": 1,
-  "path": "\/backend\/connection\/list",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.connection"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Connection_Index"
-      }
-    }
-  },
   "definitions": {
-    "Connection": {
-      "type": "object",
+    "Backend_Model_Connection_Index": {
+      "$ref": "Connection_Index"
+    },
+    "Connection_Index": {
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-        },
+        "connections": {
+          "items": {
+            "$ref": "Connection_Index_Entry"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Connection_Index_Entry": {
+      "properties": {
         "class": {
           "type": "string"
         },
-        "config": {
-          "$ref": "Connection_Config"
+        "name": {
+          "type": "string"
         }
-      }
-    },
-    "Connection_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
       },
-      "maxProperties": 16
-    },
-    "Connection_Index": {
-      "type": "object",
-      "properties": {
-        "connections": {
-          "type": "array",
-          "items": {
-            "$ref": "Connection"
-          }
-        }
-      }
+      "type": "object"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Connection_GetIndex",
+      "responses": {
+        "200": "Backend_Model_Connection_Index"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    }
+  },
+  "path": "/backend/connection/list",
+  "status": 1
 }

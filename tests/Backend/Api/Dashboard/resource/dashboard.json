@@ -3,18 +3,24 @@
   "path": "\/backend\/dashboard",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Dashboard_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.dashboard"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.dashboard"
+      ],
       "responses": {
-        "200": "Dashboard"
+        "200": "Backend_Model_Dashboard"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Dashboard": {
+      "$ref": "Dashboard"
+    },
     "Collection": {
       "type": "object",
       "properties": {

@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/rate\/$rate_id<[0-9]+>",
-  "pathParameters": "Rate_Entity_Path",
+  "pathParameters": "BackendRateRate_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Rate_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.rate"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.rate"
+      ],
       "responses": {
-        "200": "Rate"
+        "200": "Backend_Model_Rate"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Rate_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.rate"
         ]
       },
-      "tags": [],
-      "request": "Rate_Update",
+      "tags": [
+        "backend.rate"
+      ],
+      "request": "Backend_Model_Rate_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Rate_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.rate"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.rate"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendRateRate_idPath": {
+      "type": "object",
+      "properties": {
+        "rate_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Rate": {
+      "$ref": "Rate"
+    },
+    "Backend_Model_Rate_Update": {
+      "$ref": "Rate_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -49,6 +72,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Rate": {
       "type": "object",
@@ -97,14 +123,6 @@
         },
         "parameters": {
           "type": "string"
-        }
-      }
-    },
-    "Rate_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "rate_id": {
-          "type": "integer"
         }
       }
     },

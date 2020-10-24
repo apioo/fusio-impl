@@ -1,21 +1,35 @@
 {
   "status": 1,
   "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
-  "pathParameters": "Transaction_Entity_Path",
+  "pathParameters": "BackendTransactionTransaction_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Transaction_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.transaction"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.transaction"
+      ],
       "responses": {
-        "200": "Transaction"
+        "200": "Backend_Model_Transaction"
       }
     }
   },
   "definitions": {
+    "BackendTransactionTransaction_idPath": {
+      "type": "object",
+      "properties": {
+        "transaction_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Transaction": {
+      "$ref": "Transaction"
+    },
     "Transaction": {
       "type": "object",
       "properties": {
@@ -38,14 +52,6 @@
         "insertDate": {
           "format": "date-time",
           "type": "string"
-        }
-      }
-    },
-    "Transaction_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "transaction_id": {
-          "type": "integer"
         }
       }
     }

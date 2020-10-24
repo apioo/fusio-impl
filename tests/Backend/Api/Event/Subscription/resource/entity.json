@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/event\/subscription\/$subscription_id<[0-9]+>",
-  "pathParameters": "Event_Subscription_Entity_Path",
+  "pathParameters": "BackendEventSubscriptionSubscription_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Event_Subscription_Get",
       "security": {
-        "backend": [
-          "backend.subscription"
+        "app": [
+          "backend.event"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "Event_Subscription"
+        "200": "Backend_Model_Event_Subscription"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Event_Subscription_Update",
       "security": {
-        "backend": [
-          "backend.subscription"
+        "app": [
+          "backend.event"
         ]
       },
-      "tags": [],
-      "request": "Event_Subscription_Update",
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Subscription_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Event_Subscription_Delete",
       "security": {
-        "backend": [
-          "backend.subscription"
+        "app": [
+          "backend.event"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendEventSubscriptionSubscription_idPath": {
+      "type": "object",
+      "properties": {
+        "subscription_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Event_Subscription": {
+      "$ref": "Event_Subscription"
+    },
+    "Backend_Model_Event_Subscription_Update": {
+      "$ref": "Event_Subscription_Update"
+    },
     "Event_Subscription": {
       "type": "object",
       "properties": {
@@ -56,14 +79,6 @@
         }
       }
     },
-    "Event_Subscription_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "subscription_id": {
-          "type": "integer"
-        }
-      }
-    },
     "Event_Subscription_Update": {
       "$extends": "Event_Subscription",
       "type": "object"
@@ -78,6 +93,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

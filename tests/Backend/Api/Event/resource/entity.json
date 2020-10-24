@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/event\/$event_id<[0-9]+>",
-  "pathParameters": "Event_Entity_Path",
+  "pathParameters": "BackendEventEvent_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Event_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.event"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "Event"
+        "200": "Backend_Model_Event"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Event_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.event"
         ]
       },
-      "tags": [],
-      "request": "Event_Update",
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Event_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.event"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendEventEvent_idPath": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Event": {
+      "$ref": "Event"
+    },
+    "Backend_Model_Event_Update": {
+      "$ref": "Event_Update"
+    },
     "Event": {
       "type": "object",
       "properties": {
@@ -51,14 +74,6 @@
         },
         "description": {
           "type": "string"
-        }
-      }
-    },
-    "Event_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "event_id": {
-          "type": "integer"
         }
       }
     },
@@ -76,6 +91,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

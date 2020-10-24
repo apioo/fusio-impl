@@ -35,6 +35,15 @@ use PSX\Framework\Test\Environment;
  */
 class CollectionTest extends ControllerDbTestCase
 {
+    private $eventId;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->eventId = Fixture::getId('fusio_event', 'foo-event');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -61,7 +70,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
     "totalResults": 2,
     "startIndex": 0,
@@ -69,13 +78,13 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 2,
-            "eventId": 37,
+            "eventId": {$this->eventId},
             "userId": 2,
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         },
         {
             "id": 1,
-            "eventId": 37,
+            "eventId": {$this->eventId},
             "userId": 1,
             "endpoint": "http:\/\/www.fusio-project.org\/ping"
         }
@@ -93,7 +102,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'eventId'  => 34,
+            'eventId'  => $this->eventId,
             'userId'   => 1,
             'endpoint' => 'http://localhost',
         ]));
@@ -121,7 +130,7 @@ JSON;
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
         $this->assertEquals(3, $row['id']);
-        $this->assertEquals(34, $row['event_id']);
+        $this->assertEquals(37, $row['event_id']);
         $this->assertEquals(1, $row['user_id']);
         $this->assertEquals('http://localhost', $row['endpoint']);
     }

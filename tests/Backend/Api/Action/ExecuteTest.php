@@ -80,22 +80,24 @@ class ExecuteTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "statusCode": 200,
-    "headers": {},
     "body": {
-        "method": "GET",
+        "body": {},
+        "class": "Fusio\\Engine\\Request\\HttpRequest",
         "headers": {
             "content-type": [
-                "application\/json"
+                "application/json"
             ]
         },
-        "uri_fragments": {
-            "news_id": "10"
-        },
+        "method": "GET",
         "parameters": {
             "count": "10"
+        },
+        "uriFragments": {
+            "news_id": "10"
         }
-    }
+    },
+    "headers": {},
+    "statusCode": 200
 }
 JSON;
 

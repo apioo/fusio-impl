@@ -3,15 +3,18 @@
   "path": "\/backend\/app\/token",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_App_Token_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.app"
         ]
       },
-      "tags": [],
-      "queryParameters": "App_Token_Collection_Query",
+      "tags": [
+        "backend.app"
+      ],
+      "queryParameters": "Backend_Model_App_Token_Collection_Query",
       "responses": {
-        "200": "App_Token_Collection"
+        "200": "Backend_Model_App_Token_Collection"
       }
     }
   },
@@ -48,14 +51,9 @@
       }
     },
     "App_Token_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
         "from": {
           "format": "date-time",
           "type": "string"
@@ -84,6 +82,12 @@
         }
       }
     },
+    "Backend_Model_App_Token_Collection": {
+      "$ref": "App_Token_Collection"
+    },
+    "Backend_Model_App_Token_Collection_Query": {
+      "$ref": "App_Token_Collection_Query"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -98,6 +102,20 @@
           "items": {
             "$generic": "T"
           }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     }

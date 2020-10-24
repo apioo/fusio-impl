@@ -35,6 +35,17 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+    private $routeId;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_rate', 'gold');
+        $this->routeId = Fixture::getId('fusio_routes', '/foo');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -42,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/rate/3', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/rate/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -55,14 +66,13 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/rate/4', 'GET', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $routeId = Fixture::getLastRouteId() + 1;
-        $body    = (string) $response->getBody();
-        $expect  = <<<JSON
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
 {
     "id": 4,
     "status": 1,
@@ -74,7 +84,7 @@ class EntityTest extends ControllerDbTestCase
         {
             "id": 4,
             "rateId": 4,
-            "routeId": {$routeId},
+            "routeId": {$this->routeId},
             "authenticated": true
         }
     ]
@@ -109,7 +119,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/rate/4', 'POST', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -123,7 +133,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/rate/4', 'PUT', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -163,7 +173,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/rate/4', 'DELETE', array(
+        $response = $this->sendRequest('/backend/rate/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

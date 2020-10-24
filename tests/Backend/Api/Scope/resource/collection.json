@@ -3,31 +3,43 @@
   "path": "\/backend\/scope",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Scope_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.scope"
         ]
       },
-      "tags": [],
-      "queryParameters": "Scope_Collection_Query",
+      "tags": [
+        "backend.scope"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "Scope_Collection"
+        "200": "Backend_Model_Scope_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Scope_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.scope"
         ]
       },
-      "tags": [],
-      "request": "Scope_Create",
+      "tags": [
+        "backend.scope"
+      ],
+      "request": "Backend_Model_Scope_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Scope_Collection": {
+      "$ref": "Scope_Collection"
+    },
+    "Backend_Model_Scope_Create": {
+      "$ref": "Scope_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -45,6 +57,29 @@
         }
       }
     },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -55,6 +90,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Scope": {
       "type": "object",
@@ -81,20 +122,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Scope"
-      }
-    },
-    "Scope_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Scope_Create": {

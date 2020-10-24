@@ -61,10 +61,6 @@
     },
     "Model_Message": {
       "$ref": "Message"
-    },
-    "Passthru": {
-      "description": "No schema information available",
-      "type": "object"
     }
   },
   "methods": {
@@ -85,7 +81,7 @@
     "GET": {
       "operationId": "Backend_Action_Action_Get",
       "responses": {
-        "200": "Passthru"
+        "200": "Backend_Model_Action"
       },
       "security": {
         "app": [
@@ -100,7 +96,7 @@
       "operationId": "Backend_Action_Action_Update",
       "request": "Backend_Model_Action_Update",
       "responses": {
-        "200": "Passthru"
+        "200": "Model_Message"
       },
       "security": {
         "app": [

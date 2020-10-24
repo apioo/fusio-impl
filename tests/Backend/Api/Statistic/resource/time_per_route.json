@@ -3,43 +3,44 @@
   "path": "\/backend\/statistic\/time_per_route",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Statistic_GetTimePerRoute",
       "security": {
-        "backend": [
+        "app": [
           "backend.statistic"
         ]
       },
-      "tags": [],
-      "queryParameters": "Statistic_TimePerRoute_Query",
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_Model_Log_Collection_Query",
       "responses": {
-        "200": "Statistic_Chart"
+        "200": "Backend_Model_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Statistic_Chart": {
+    "Backend_Model_Log_Collection_Query": {
+      "$ref": "Log_Collection_Query"
+    },
+    "Backend_Model_Statistic_Count": {
+      "$ref": "Statistic_Count"
+    },
+    "Collection_Query": {
       "type": "object",
       "properties": {
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "startIndex": {
+          "type": "integer"
         },
-        "data": {
-          "type": "array",
-          "items": {
-            "$generic": "Statistic_Chart_Data"
-          }
+        "count": {
+          "type": "integer"
         },
-        "series": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "search": {
+          "type": "string"
         }
       }
     },
-    "Statistic_TimePerRoute_Query": {
+    "Log_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
         "from": {
@@ -78,6 +79,22 @@
           "type": "string"
         },
         "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Statistic_Count": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
           "type": "string"
         }
       }

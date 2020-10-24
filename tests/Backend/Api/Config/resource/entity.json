@@ -1,47 +1,32 @@
 {
-  "status": 1,
-  "path": "\/backend\/config\/$config_id<[0-9]+>",
-  "pathParameters": "Config_Entity_Path",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.config"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Config"
-      }
-    },
-    "PUT": {
-      "security": {
-        "backend": [
-          "backend.config"
-        ]
-      },
-      "tags": [],
-      "request": "Config_Update",
-      "responses": {
-        "200": "Message"
-      }
-    }
-  },
   "definitions": {
-    "Config": {
-      "type": "object",
+    "BackendConfigConfig_idPath": {
       "properties": {
-        "id": {
-          "type": "integer"
+        "config_id": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Backend_Model_Config": {
+      "$ref": "Config"
+    },
+    "Backend_Model_Config_Update": {
+      "$ref": "Config_Update"
+    },
+    "Config": {
+      "properties": {
+        "description": {
+          "type": "string"
         },
-        "type": {
+        "id": {
           "type": "integer"
         },
         "name": {
           "type": "string"
         },
-        "description": {
-          "type": "string"
+        "type": {
+          "type": "integer"
         },
         "value": {
           "oneOf": [
@@ -59,30 +44,60 @@
             }
           ]
         }
-      }
-    },
-    "Config_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "config_id": {
-          "type": "integer"
-        }
-      }
+      },
+      "type": "object"
     },
     "Config_Update": {
       "$extends": "Config",
       "type": "object"
     },
     "Message": {
-      "type": "object",
       "properties": {
-        "success": {
-          "type": "boolean"
-        },
         "message": {
           "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Config_Get",
+      "responses": {
+        "200": "Backend_Model_Config"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Config_Update",
+      "request": "Backend_Model_Config_Update",
+      "responses": {
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
+    }
+  },
+  "path": "/backend/config/$config_id<[0-9]+>",
+  "pathParameters": "BackendConfigConfig_idPath",
+  "status": 1
 }

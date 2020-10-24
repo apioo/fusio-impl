@@ -130,7 +130,7 @@ class ErrorsPerRouteTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/backend\/account\/change_password"
+        "\/backend\/token"
     ]
 }
 JSON;

@@ -1,60 +1,47 @@
 {
-  "status": 1,
-  "path": "\/backend\/action\/list",
-  "methods": {
-    "GET": {
-      "security": {
-        "backend": [
-          "backend.action"
-        ]
-      },
-      "tags": [],
-      "responses": {
-        "200": "Action_Index"
-      }
-    }
-  },
   "definitions": {
-    "Action": {
-      "type": "object",
+    "Action_Index": {
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-        },
+        "actions": {
+          "items": {
+            "$ref": "Action_Index_Entry"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Action_Index_Entry": {
+      "properties": {
         "class": {
           "type": "string"
         },
-        "engine": {
+        "name": {
           "type": "string"
-        },
-        "config": {
-          "$ref": "Action_Config"
         }
-      }
+      },
+      "type": "object"
     },
-    "Action_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Action_Index": {
-      "type": "object",
-      "properties": {
-        "actions": {
-          "type": "array",
-          "items": {
-            "$ref": "Action"
-          }
-        }
-      }
+    "Backend_Model_Action_Index": {
+      "$ref": "Action_Index"
     }
-  }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Action_GetIndex",
+      "responses": {
+        "200": "Backend_Model_Action_Index"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
+    }
+  },
+  "path": "/backend/action/list",
+  "status": 1
 }

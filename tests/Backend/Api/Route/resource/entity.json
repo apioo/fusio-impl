@@ -1,44 +1,67 @@
 {
   "status": 1,
   "path": "\/backend\/routes\/$route_id<[0-9]+>",
-  "pathParameters": "Route_Entity_Path",
+  "pathParameters": "BackendRoutesRoute_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Route_Get",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.route"
+      ],
       "responses": {
-        "200": "Route"
+        "200": "Backend_Model_Route"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Route_Update",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "request": "Route_Update",
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Route_Delete",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.route"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendRoutesRoute_idPath": {
+      "type": "object",
+      "properties": {
+        "route_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Route": {
+      "$ref": "Route"
+    },
+    "Backend_Model_Route_Update": {
+      "$ref": "Route_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -49,6 +72,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Route": {
       "type": "object",
@@ -76,14 +102,6 @@
           "items": {
             "$ref": "Route_Version"
           }
-        }
-      }
-    },
-    "Route_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "route_id": {
-          "type": "integer"
         }
       }
     },

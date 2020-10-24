@@ -130,7 +130,7 @@ class TimePerRouteTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/backend\/account\/change_password (ms)"
+        "\/backend\/token (ms)"
     ]
 }
 JSON;

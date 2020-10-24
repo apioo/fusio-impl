@@ -68,10 +68,15 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Passthru",
     "source": {
-        "type": "object",
-        "description": "No schema was specified.",
-        "additionalProperties": true
-    }
+        "definitions": {
+            "Passthru": {
+                "description": "No schema information available",
+                "type": "object"
+            }
+        },
+        "$ref": "Passthru"
+    },
+    "readonly": true
 }
 JSON;
 
@@ -83,7 +88,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/schema/10', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/200', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));

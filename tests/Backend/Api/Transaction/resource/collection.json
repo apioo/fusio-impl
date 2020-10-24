@@ -3,19 +3,28 @@
   "path": "\/backend\/transaction",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Transaction_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.transaction"
         ]
       },
-      "tags": [],
-      "queryParameters": "Transaction_Collection_Query",
+      "tags": [
+        "backend.transaction"
+      ],
+      "queryParameters": "Backend_Model_Transaction_Collection_Query",
       "responses": {
-        "200": "Transaction_Collection"
+        "200": "Backend_Model_Transaction_Collection"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Transaction_Collection": {
+      "$ref": "Transaction_Collection"
+    },
+    "Backend_Model_Transaction_Collection_Query": {
+      "$ref": "Transaction_Collection_Query"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -30,6 +39,20 @@
           "items": {
             "$generic": "T"
           }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
         }
       }
     },
@@ -65,14 +88,9 @@
       }
     },
     "Transaction_Collection_Query": {
+      "$extends": "Collection_Query",
       "type": "object",
       "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
         "from": {
           "format": "date-time",
           "type": "string"
