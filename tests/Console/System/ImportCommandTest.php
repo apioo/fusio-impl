@@ -110,7 +110,6 @@ JSON;
             'path' => '/bar',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
         $this->assertEquals('Fusio\Impl\Controller\SchemaApiController', $route['controller']);
@@ -121,7 +120,6 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -145,7 +143,6 @@ JSON;
             'path' => '/baz',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 4, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
@@ -156,7 +153,6 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 4, $methods[0]['route_id']);
         $this->assertEquals('POST', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);

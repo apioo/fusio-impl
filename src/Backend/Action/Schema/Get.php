@@ -26,9 +26,12 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\TableManagerInterface;
+use PSX\Schema\Generator;
 
 /**
  * Get
@@ -44,9 +47,15 @@ class Get extends ActionAbstract
      */
     private $table;
 
-    public function __construct(TableManagerInterface $tableManager)
+    /**
+     * @var Loader
+     */
+    private $schemaManager;
+
+    public function __construct(TableManagerInterface $tableManager, SchemaManagerInterface $schemaManager)
     {
         $this->table = $tableManager->getTable(View\Schema::class);
+        $this->schemaManager = $schemaManager;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
@@ -62,6 +71,18 @@ class Get extends ActionAbstract
         if ($schema['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
+
+        $source = $schema['source'];
+        $readonly = false;
+        if (strpos($source, '{') === false) {
+            $result = $this->schemaManager->getSchema($source);
+            $source = (new Generator\TypeSchema())->generate($result);
+
+            $readonly = true;
+        }
+
+        $schema['source'] = \json_decode($source);
+        $schema['readonly'] = $readonly;
 
         return $schema;
     }

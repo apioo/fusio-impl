@@ -162,7 +162,7 @@ class AuthenticationTest extends DbTestCase
     private function newContext()
     {
         $context = new Context();
-        $context->setRouteId(Fixture::getLastRouteId() + 1);
+        $context->setRouteId(Fixture::getId('fusio_routes', '/foo'));
 
         return $context;
     }

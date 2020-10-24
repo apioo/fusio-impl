@@ -101,16 +101,9 @@ class Schema extends TransformerAbstract
                 throw new RuntimeException('Invalid tag provide: ' . $data->getTag());
             }
         } elseif (is_string($data)) {
-            if (class_exists($data)) {
-                $schema = (new SchemaManager())->getSchema($data, SchemaManager::TYPE_ANNOTATION);
-                $result = (new Generator\TypeSchema())->generate($schema);
-
-                return \json_decode($result);
-            } else {
-                return \json_decode($data);
-            }
-        } elseif (is_array($data) || $data instanceof \stdClass) {
             return $data;
+        } elseif (is_array($data) || $data instanceof \stdClass) {
+            return \json_encode($data, \JSON_PRETTY_PRINT);
         } else {
             throw new RuntimeException('Schema must be a string or array');
         }

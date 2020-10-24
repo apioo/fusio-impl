@@ -8,18 +8,18 @@ namespace Fusio\Impl\Backend\Model;
 class Action_Index implements \JsonSerializable
 {
     /**
-     * @var array<Action>|null
+     * @var array<Action_Index_Entry>|null
      */
     protected $actions;
     /**
-     * @param array<Action>|null $actions
+     * @param array<Action_Index_Entry>|null $actions
      */
     public function setActions(?array $actions) : void
     {
         $this->actions = $actions;
     }
     /**
-     * @return array<Action>|null
+     * @return array<Action_Index_Entry>|null
      */
     public function getActions() : ?array
     {

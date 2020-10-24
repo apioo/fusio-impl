@@ -21,7 +21,7 @@ final class Version20200905191429 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $inserts = NewInstallation::getData();
+        $inserts = NewInstallation::getData()->toArray();
 
         foreach ($inserts as $tableName => $rows) {
             if (!empty($rows)) {
@@ -43,7 +43,7 @@ final class Version20200905191429 extends AbstractMigration
     {
         $tableNames = $schema->getTableNames();
 
-        $inserts = array_keys(NewInstallation::getData());
+        $inserts = array_keys(NewInstallation::getData()->toArray());
         $inserts = array_reverse($inserts);
 
         foreach ($inserts as $tableName) {

@@ -8,18 +8,18 @@ namespace Fusio\Impl\Backend\Model;
 class Connection_Index implements \JsonSerializable
 {
     /**
-     * @var array<Connection>|null
+     * @var array<Connection_Index_Entry>|null
      */
     protected $connections;
     /**
-     * @param array<Connection>|null $connections
+     * @param array<Connection_Index_Entry>|null $connections
      */
     public function setConnections(?array $connections) : void
     {
         $this->connections = $connections;
     }
     /**
-     * @return array<Connection>|null
+     * @return array<Connection_Index_Entry>|null
      */
     public function getConnections() : ?array
     {

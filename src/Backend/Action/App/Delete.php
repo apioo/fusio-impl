@@ -51,13 +51,13 @@ class Delete extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $this->appService->delete(
-            (int) $request->get('action_id'),
+            (int) $request->get('app_id'),
             UserContext::newActionContext($context)
         );
 
         return [
             'success' => true,
-            'message' => 'Action successful deleted',
+            'message' => 'App successful deleted',
         ];
     }
 }

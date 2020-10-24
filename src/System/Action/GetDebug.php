@@ -75,8 +75,9 @@ class GetDebug extends ActionAbstract
     {
         return [
             'method' => $request->getMethod(),
-            'headers' => $request->getHeaders(),
+            'uriFragments' => $request->getUriFragments(),
             'parameters' => $request->getParameters(),
+            'headers' => $request->getHeaders(),
             'body' => $request->getBody(),
         ];
     }

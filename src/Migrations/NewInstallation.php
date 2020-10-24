@@ -52,7 +52,7 @@ class NewInstallation
 {
     private static $data;
 
-    public static function getData()
+    public static function getData(): DataBag
     {
         if (self::$data) {
             return self::$data;
@@ -64,9 +64,76 @@ class NewInstallation
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $now = new \DateTime();
+        $bag = new DataBag();
+        $bag->addCategory('default');
+        $bag->addCategory('backend');
+        $bag->addCategory('consumer');
+        $bag->addCategory('system');
+        $bag->addCategory('authorization');
+        $bag->addUser('Administrator', 'admin@localhost.com', $password);
+        $bag->addApp('Administrator', 'Backend', 'http://fusio-project.org', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Consumer', 'http://fusio-project.org', $consumerAppKey, $consumerAppSecret);
+        $bag->addScope('backend', 'backend', 'Global access to the backend API');
+        $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
+        $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
+        $bag->addAppScope('Backend', 'backend');
+        $bag->addAppScope('Backend', 'authorization');
+        $bag->addAppScope('Consumer', 'consumer');
+        $bag->addAppScope('Consumer', 'authorization');
+        $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
+        $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
+        $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
+        $bag->addConfig('consumer_subscription', Table\Config::FORM_NUMBER, 8, 'The max amount of subscriptions a consumer can add');
+        $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application');
+        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation');
+        $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL');
+        $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization');
+        $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL');
+        $bag->addConfig('info_contact_email', Table\Config::FORM_STRING, '', 'The email address of the contact person/organization. MUST be in the format of an email address');
+        $bag->addConfig('info_license_name', Table\Config::FORM_STRING, '', 'The license name used for the API');
+        $bag->addConfig('info_license_url', Table\Config::FORM_STRING, '', 'A URL to the license used for the API. MUST be in the format of a URL');
+        $bag->addConfig('mail_register_subject', Table\Config::FORM_STRING, 'Fusio registration', 'Subject of the activation mail');
+        $bag->addConfig('mail_register_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}', 'Body of the activation mail');
+        $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail');
+        $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
+        $bag->addConfig('mail_sender', Table\Config::FORM_STRING, '', 'Email address which is used in the "From" header');
+        $bag->addConfig('provider_facebook_secret', Table\Config::FORM_STRING, '', 'Facebook app secret');
+        $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
+        $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
+        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
+        $bag->addConfig('scopes_default', Table\Config::FORM_STRING, 'authorization,consumer', 'If a user registers through the consumer API the following scopes are assigned');
+        $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
+        $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional a SMTP connection which is used as mailer');
+        $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional a HTTP or message queue connection which is used to dispatch events');
+        $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length');
+        $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
+        $bag->addConnection('System', ConnectionSystem::class);
+        $bag->addRate('Default', 0, 720, 'PT1H');
+        $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
+        $bag->addRateAllocation('Default');
+        $bag->addRateAllocation('Default-Anonymous', null, null, 0);
+        $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
+        $bag->addRoute('consumer', 0, '/consumer/token', Consumer\Authorization\Token::class);
+        $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
+        $bag->addRoute('system', 1, '/system/doc', Tool\Documentation\IndexController::class);
+        $bag->addRoute('system', 2, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
+        $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
+        $bag->addRoute('authorization', 0, '/authorization/token', Authorization\Token::class);
+        $bag->addSchema('default', 'Passthru', Passthru::class);
+        $bag->addUserScope('Administrator', 'backend');
+        $bag->addUserScope('Administrator', 'consumer');
+        $bag->addUserScope('Administrator', 'authorization');
 
-        $config = [
+        foreach (self::getRoutes() as $category => $routes) {
+            $bag->addRoutes($category, $routes);
+        }
+
+        return self::$data = $bag;
+    }
+
+    private static function getRoutes(): array
+    {
+        return [
             'default' => [
                 '/' => [
                     'GET' => new Method(Welcome::class, null, [200 => Passthru::class]),
@@ -158,16 +225,16 @@ class NewInstallation
                 ],
                 '/event/subscription' => [
                     'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Backend\Model\Event_Subscription_Collection::class], Collection_Query::class, 'backend.event'),
-                    'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Backend\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'backend.event'),
+                    'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Backend\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.subscription.create'),
                 ],
                 '/event/subscription/$subscription_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Event\Subscription\Get::class, null, [200 => Backend\Model\Event_Subscription::class], null, 'backend.event'),
-                    'PUT' => new Method(Backend\Action\Event\Subscription\Update::class, Backend\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'backend.event'),
-                    'DELETE' => new Method(Backend\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'backend.event'),
+                    'PUT' => new Method(Backend\Action\Event\Subscription\Update::class, Backend\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.update'),
+                    'DELETE' => new Method(Backend\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.delete'),
                 ],
                 '/event' => [
                     'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Backend\Model\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
-                    'POST' => new Method(Backend\Action\Event\Create::class, Backend\Model\Event_Create::class, [200 => Message::class], null, 'backend.event', 'fusio.event.create'),
+                    'POST' => new Method(Backend\Action\Event\Create::class, Backend\Model\Event_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.create'),
                 ],
                 '/event/$event_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Event\Get::class, null, [200 => Backend\Model\Event::class], null, 'backend.event'),
@@ -189,7 +256,7 @@ class NewInstallation
                 '/log' => [
                     'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Backend\Model\Log_Collection::class], Backend\Model\Log_Collection_Query::class, 'backend.log'),
                 ],
-                '/log/$error_id<[0-9]+>' => [
+                '/log/$log_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Log\Get::class, null, [200 => Backend\Model\Log::class], null, 'backend.log'),
                 ],
                 '/marketplace' => [
@@ -259,10 +326,10 @@ class NewInstallation
                     'POST' => new Method(Backend\Action\Schema\Create::class, Backend\Model\Schema_Create::class, [201 => Message::class], null, 'backend.schema', 'fusio.schema.create'),
                 ],
                 '/schema/preview/$schema_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Backend\Model\Schema_Preview_Response::class], null, 'backend.schema'),
+                    'POST' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Backend\Model\Schema_Preview_Response::class], null, 'backend.schema'),
                 ],
                 '/schema/form/$schema_id<[0-9]+>' => [
-                    'POST' => new Method(Backend\Action\Schema\Form::class, Backend\Model\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
+                    'PUT' => new Method(Backend\Action\Schema\Form::class, Backend\Model\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
                 ],
                 '/schema/$schema_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Schema\Get::class, null, [200 => Backend\Model\Schema::class], null, 'backend.schema'),
@@ -370,13 +437,13 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Consumer\Model\Scope_Collection::class], Collection_Query::class, 'consumer.scope'),
                 ],
                 '/subscription' => [
-                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.event'),
-                    'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Consumer\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'consumer.event'),
+                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.subscription'),
+                    'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Consumer\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'consumer.subscription'),
                 ],
                 '/subscription/$subscription_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Event\Subscription\Get::class, null, [200 => Consumer\Model\Event_Subscription::class], null, 'consumer.event'),
-                    'PUT' => new Method(Consumer\Action\Event\Subscription\Update::class, Consumer\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'consumer.event'),
-                    'DELETE' => new Method(Consumer\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'consumer.event'),
+                    'GET' => new Method(Consumer\Action\Event\Subscription\Get::class, null, [200 => Consumer\Model\Event_Subscription::class], null, 'consumer.subscription'),
+                    'PUT' => new Method(Consumer\Action\Event\Subscription\Update::class, Consumer\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'consumer.subscription'),
+                    'DELETE' => new Method(Consumer\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'consumer.subscription'),
                 ],
                 '/transaction' => [
                     'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
@@ -448,318 +515,5 @@ class NewInstallation
                 ],
             ],
         ];
-
-        self::$data = [
-            'fusio_user' => [
-                ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'points' => null, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_action' => [
-            ],
-            'fusio_app' => [
-                ['user_id' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $backendAppKey, 'app_secret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
-                ['user_id' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $consumerAppKey, 'app_secret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_audit' => [
-            ],
-            'fusio_config' => [
-                ['name' => 'app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', 'value' => 0],
-                ['name' => 'app_consumer', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The max amount of apps a consumer can register', 'value' => 16],
-
-                ['name' => 'authorization_url', 'type' => Table\Config::FORM_STRING, 'description' => 'Url where the user can authorize for the OAuth2 flow', 'value' => ''],
-
-                ['name' => 'consumer_subscription', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The max amount of subscriptions a consumer can add', 'value' => 8],
-
-                ['name' => 'info_title', 'type' => Table\Config::FORM_STRING, 'description' => 'The title of the application', 'value' => 'Fusio'],
-                ['name' => 'info_description', 'type' => Table\Config::FORM_STRING, 'description' => 'A short description of the application. CommonMark syntax MAY be used for rich text representation', 'value' => ''],
-                ['name' => 'info_tos', 'type' => Table\Config::FORM_STRING, 'description' => 'A URL to the Terms of Service for the API. MUST be in the format of a URL', 'value' => ''],
-                ['name' => 'info_contact_name', 'type' => Table\Config::FORM_STRING, 'description' => 'The identifying name of the contact person/organization', 'value' => ''],
-                ['name' => 'info_contact_url', 'type' => Table\Config::FORM_STRING, 'description' => 'The URL pointing to the contact information. MUST be in the format of a URL', 'value' => ''],
-                ['name' => 'info_contact_email', 'type' => Table\Config::FORM_STRING, 'description' => 'The email address of the contact person/organization. MUST be in the format of an email address', 'value' => ''],
-                ['name' => 'info_license_name', 'type' => Table\Config::FORM_STRING, 'description' => 'The license name used for the API', 'value' => ''],
-                ['name' => 'info_license_url', 'type' => Table\Config::FORM_STRING, 'description' => 'A URL to the license used for the API. MUST be in the format of a URL', 'value' => ''],
-
-                ['name' => 'mail_register_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the activation mail', 'value' => 'Fusio registration'],
-                ['name' => 'mail_register_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the activation mail', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}'],
-                ['name' => 'mail_pw_reset_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the password reset mail', 'value' => 'Fusio password reset'],
-                ['name' => 'mail_pw_reset_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the password reset mail', 'value' => 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.'],
-                ['name' => 'mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => 'Email address which is used in the "From" header', 'value' => ''],
-
-                ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Facebook app secret', 'value' => ''],
-                ['name' => 'provider_google_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Google app secret', 'value' => ''],
-                ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'GitHub app secret', 'value' => ''],
-
-                ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
-
-                ['name' => 'scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => 'If a user registers through the consumer API the following scopes are assigned', 'value' => 'authorization,consumer'],
-                ['name' => 'points_default', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The default amount of points which a user receives if he registers', 'value' => 0],
-
-                ['name' => 'system_mailer', 'type' => Table\Config::FORM_STRING, 'description' => 'Optional a SMTP connection which is used as mailer', 'value' => ''],
-                ['name' => 'system_dispatcher', 'type' => Table\Config::FORM_STRING, 'description' => 'Optional a HTTP or message queue connection which is used to dispatch events', 'value' => ''],
-
-                ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
-                ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
-            ],
-            'fusio_category' => [
-            ],
-            'fusio_connection' => [
-                ['status' => 1, 'name' => 'System', 'class' => ConnectionSystem::class, 'config' => null],
-            ],
-            'fusio_cronjob' => [
-            ],
-            'fusio_event' => [
-            ],
-            'fusio_log' => [
-            ],
-            'fusio_plan' => [
-            ],
-            'fusio_plan_contract' => [
-            ],
-            'fusio_plan_invoice' => [
-            ],
-            'fusio_provider' => [
-            ],
-            'fusio_rate' => [
-                ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rate_limit' => 720, 'timespan' => 'PT1H'],
-                ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rate_limit' => 60, 'timespan' => 'PT1H'],
-            ],
-            'fusio_routes' => [
-                ['category_id' => 2, 'status' => 1, 'priority' => 0, 'methods' => 'ANY', 'path' => '/backend/token',             'controller' => Backend\Authorization\Token::class],
-                ['category_id' => 3, 'status' => 1, 'priority' => 0, 'methods' => 'ANY', 'path' => '/consumer/token',            'controller' => Consumer\Authorization\Token::class],
-                ['category_id' => 4, 'status' => 1, 'priority' => 1, 'methods' => 'ANY', 'path' => '/system/jsonrpc',            'controller' => System\Api\JsonRpc::class],
-                ['category_id' => 4, 'status' => 1, 'priority' => 2, 'methods' => 'GET', 'path' => '/system/doc',                'controller' => Tool\Documentation\IndexController::class],
-                ['category_id' => 4, 'status' => 1, 'priority' => 3, 'methods' => 'GET', 'path' => '/system/doc/:version/*path', 'controller' => Tool\Documentation\DetailController::class],
-                ['category_id' => 4, 'status' => 1, 'priority' => 4, 'methods' => 'GET', 'path' => '/system/export/:type/:version/*path', 'controller' => Generator\GeneratorController::class],
-                ['category_id' => 5, 'status' => 1, 'priority' => 1, 'methods' => 'ANY', 'path' => '/authorization/token',       'controller' => Authorization\Token::class],
-            ],
-            'fusio_schema' => [
-                ['status' => 1, 'name' => 'Passthru', 'source' => Passthru::class, 'form' => null]
-            ],
-            'fusio_scope' => [
-            ],
-            'fusio_transaction' => [
-            ],
-            'fusio_app_code' => [
-            ],
-            'fusio_app_scope' => [
-                ['app_id' => 1, 'scope_id' => 1],
-                ['app_id' => 1, 'scope_id' => 3],
-                ['app_id' => 2, 'scope_id' => 2],
-                ['app_id' => 2, 'scope_id' => 3],
-            ],
-            'fusio_app_token' => [
-            ],
-            'fusio_cronjob_error' => [
-            ],
-            'fusio_event_subscription' => [
-            ],
-            'fusio_event_trigger' => [
-            ],
-            'fusio_event_response' => [
-            ],
-            'fusio_log_error' => [
-            ],
-            'fusio_plan_usage' => [
-            ],
-            'fusio_rate_allocation' => [
-                ['rate_id' => 1, 'route_id' => null, 'app_id' => null, 'authenticated' => null, 'parameters' => null],
-                ['rate_id' => 2, 'route_id' => null, 'app_id' => null, 'authenticated' => 0, 'parameters' => null],
-            ],
-            'fusio_routes_method' => [
-            ],
-            'fusio_routes_response' => [
-            ],
-            'fusio_scope_routes' => [
-            ],
-            'fusio_user_grant' => [
-            ],
-            'fusio_user_scope' => [
-                ['user_id' => 1, 'scope_id' => 1],
-                ['user_id' => 1, 'scope_id' => 2],
-                ['user_id' => 1, 'scope_id' => 3],
-            ],
-            'fusio_user_attribute' => [
-            ],
-        ];
-
-        $categoryId = 1;
-        $prio = 0;
-
-        foreach ($config as $category => $routes) {
-            self::$data['fusio_category'][] = [
-                'name' => $category,
-            ];
-
-            self::addScope($categoryId, $category);
-
-            foreach ($routes as $route => $config) {
-                $path = '/' . $category . $route;
-                self::addRoute($categoryId, $prio, $path);
-
-                foreach ($config as $methodName => $method) {
-                    $actionName = self::getActionName($method->getAction());
-                    self::addAction($categoryId, $actionName, $method->getAction());
-
-                    $parametersName = null;
-                    if ($method->getParameters()) {
-                        $parametersName = self::getSchemaName($method->getParameters());
-                        self::addSchema($categoryId, $parametersName, $method->getParameters());
-                    }
-
-                    $requestName = null;
-                    if ($method->getRequest()) {
-                        $requestName = self::getSchemaName($method->getRequest());
-                        self::addSchema($categoryId, $requestName, $method->getRequest());
-                    }
-
-                    if ($method->getScope()) {
-                        self::addScope($categoryId, $method->getScope());
-                        self::addScopeRoute($method->getScope(), $path);
-                    }
-
-                    if ($method->getEventName()) {
-                        self::addEvent($categoryId, $method->getEventName());
-                    }
-
-                    self::addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName);
-
-                    foreach ($method->getResponses() as $code => $response) {
-                        $responseName = self::getSchemaName($response);
-
-                        self::addSchema($categoryId, $responseName, $response);
-                        self::addRouteMethodResponse($path, $methodName, $code, $responseName);
-                    }
-                }
-
-                $prio++;
-            }
-
-            $categoryId++;
-        }
-
-        $result = [];
-        foreach (self::$data as $key => $value) {
-            $result[$key] = array_values($value);
-        }
-
-        return self::$data = $result;
-    }
-
-    private static function getActionName(string $class): string
-    {
-        $parts = explode('\\', $class);
-        array_shift($parts);
-        array_shift($parts);
-        return implode('_', $parts);
-    }
-
-    private static function getSchemaName(string $class): string
-    {
-        $parts = explode('\\', $class);
-        array_shift($parts);
-        array_shift($parts);
-        return implode('_', $parts);
-    }
-
-    private static function addRoute(int $categoryId, int $prio, string $path)
-    {
-        self::$data['fusio_routes'][$path] = [
-            'category_id' => $categoryId,
-            'status' => 1,
-            'priority' => $prio,
-            'methods' => 'ANY',
-            'path' => $path,
-            'controller' => SchemaApiController::class
-        ];
-    }
-
-    private static function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action)
-    {
-        self::$data['fusio_routes_method'][$path . $methodName] = [
-            'route_id' => self::getId('fusio_routes', $path),
-            'method' => $methodName,
-            'version' => 1,
-            'status' => Resource::STATUS_ACTIVE,
-            'active' => 1,
-            'public' => 0,
-            'parameters' => $parameters,
-            'request' => $request,
-            'action' => $action,
-            'costs' => null
-        ];
-    }
-
-    private static function addRouteMethodResponse(string $path, string $methodName, string $code, string $response)
-    {
-        self::$data['fusio_routes_response'][$path . $methodName . $code] = [
-            'method_id' => self::getId('fusio_routes_method', $path . $methodName),
-            'code' => $code,
-            'response' => $response
-        ];
-    }
-
-    private static function addAction(int $categoryId, string $name, string $class)
-    {
-        self::$data['fusio_action'][$name] = [
-            'category_id' => $categoryId,
-            'status' => 1,
-            'name' => $name,
-            'class' => $class,
-            'engine' => PhpClass::class,
-            'config' => null,
-            'date' => (new \DateTime())->format('Y-m-d H:i:s')
-        ];
-    }
-
-    private static function addSchema(int $categoryId, string $name, string $class)
-    {
-        self::$data['fusio_schema'][$name] = [
-            'category_id' => $categoryId,
-            'status' => 1,
-            'name' => $name,
-            'source' => $class,
-            'form' => null
-        ];
-    }
-
-    private static function addEvent(int $categoryId, string $name)
-    {
-        self::$data['fusio_event'][$name] = [
-            'category_id' => $categoryId,
-            'status' => Table\Event::STATUS_ACTIVE,
-            'name' => $name,
-            'description' => ''
-        ];
-    }
-
-    private static function addScope(int $categoryId, string $name)
-    {
-        self::$data['fusio_scope'][$name] = [
-            'category_id' => $categoryId,
-            'name' => $name,
-            'description' => ''
-        ];
-    }
-
-    private static function addScopeRoute(string $scope, string $path)
-    {
-        self::$data['fusio_scope_routes'][$scope . $path] = [
-            'scope_id' => self::getId('fusio_scope', $scope),
-            'route_id' => self::getId('fusio_routes', $path),
-            'allow' => 1,
-            'methods' => 'GET|POST|PUT|PATCH|DELETE'
-        ];
-    }
-
-    private static function getId(string $type, string $name): ?int
-    {
-        $index = 1;
-        foreach (self::$data[$type] as $key => $value) {
-            if ($name === $key) {
-                return $index;
-            }
-            $index++;
-        }
-
-        return null;
     }
 }

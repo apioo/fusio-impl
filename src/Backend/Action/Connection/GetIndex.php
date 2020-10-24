@@ -28,6 +28,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Provider\ConnectionProviderParser;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
@@ -42,14 +43,13 @@ use PSX\Sql\TableManagerInterface;
 class GetIndex extends ActionAbstract
 {
     /**
-     * @Inject
-     * @var \Fusio\Engine\Parser\ParserInterface
+     * @var ConnectionProviderParser
      */
     private $connectionParser;
 
-    public function __construct(ParserInterface $actionParser)
+    public function __construct(ConnectionProviderParser $connectionParser)
     {
-        $this->connectionParser = $actionParser;
+        $this->connectionParser = $connectionParser;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)

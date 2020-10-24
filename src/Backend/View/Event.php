@@ -59,6 +59,7 @@ class Event extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'description' => 'description',
             ]),
@@ -71,6 +72,7 @@ class Event extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Event::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'description' => 'description',
         ]);

@@ -47,8 +47,7 @@ class Schema extends TableAbstract
             'category_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
-            'source' => self::TYPE_JSON,
-            'cache' => self::TYPE_TEXT,
+            'source' => self::TYPE_TEXT,
             'form' => self::TYPE_JSON,
         );
     }

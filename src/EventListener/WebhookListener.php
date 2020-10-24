@@ -360,12 +360,12 @@ class WebhookListener implements EventSubscriberInterface
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
             ->withSource('/backend/routes')
-            ->withType('org.fusio-project.routes.create')
+            ->withType('org.fusio-project.route.create')
             ->withDataContentType('application/json')
             ->withData($event->getRoute())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.routes.create', $event);
+        $this->dispatcher->dispatch('fusio.route.create', $event);
     }
 
     public function onRouteDelete(Event\Route\DeletedEvent $event)
@@ -373,12 +373,12 @@ class WebhookListener implements EventSubscriberInterface
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
             ->withSource('/backend/routes/' . $event->getExisting()->getProperty('id'))
-            ->withType('org.fusio-project.routes.delete')
+            ->withType('org.fusio-project.route.delete')
             ->withDataContentType('application/json')
             ->withData($event->getExisting())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.routes.delete', $event);
+        $this->dispatcher->dispatch('fusio.route.delete', $event);
     }
 
     public function onRouteUpdate(Event\Route\UpdatedEvent $event)
@@ -386,12 +386,12 @@ class WebhookListener implements EventSubscriberInterface
         $event = (new Builder())
             ->withId(Uuid::pseudoRandom())
             ->withSource('/backend/routes/' . $event->getRoute()->getId())
-            ->withType('org.fusio-project.routes.update')
+            ->withType('org.fusio-project.route.update')
             ->withDataContentType('application/json')
             ->withData($event->getRoute())
             ->build();
 
-        $this->dispatcher->dispatch('fusio.routes.update', $event);
+        $this->dispatcher->dispatch('fusio.route.update', $event);
     }
 
     public function onSchemaCreate(Event\Schema\CreatedEvent $event)

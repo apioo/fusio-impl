@@ -70,7 +70,7 @@ class Assert extends \PHPUnit\Framework\Assert
         $connection = Environment::getService('connection');
 
         $sql = $connection->createQueryBuilder()
-            ->select('id', 'name', 'source', 'cache', 'form')
+            ->select('id', 'name', 'source', 'form')
             ->from('fusio_schema')
             ->where('name = :name')
             ->getSQL();
@@ -80,10 +80,6 @@ class Assert extends \PHPUnit\Framework\Assert
         self::assertNotEmpty($row['id']);
         self::assertEquals($expectName, $row['name']);
         self::assertJsonStringEqualsJsonString($expectSchema, $row['source']);
-        self::assertNotEmpty($row['cache']);
-
-        $schema = unserialize(base64_decode($row['cache']));
-        self::assertInstanceOf(SchemaInterface::class, $schema);
 
         if ($expectForm !== null) {
             self::assertJsonStringEqualsJsonString($expectForm, $row['form']);

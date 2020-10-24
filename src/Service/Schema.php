@@ -29,9 +29,11 @@ use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
 use Fusio\Impl\Event\SchemaEvents;
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
@@ -63,6 +65,11 @@ class Schema
     protected $schemaParser;
 
     /**
+     * @var \Fusio\Impl\Schema\Loader
+     */
+    protected $schemaLoader;
+
+    /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
@@ -71,13 +78,15 @@ class Schema
      * @param \Fusio\Impl\Table\Schema $schemaTable
      * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
      * @param \Fusio\Impl\Schema\Parser $schemaParser
+     * @param \Fusio\Impl\Schema\Loader $schemaLoader
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Parser $schemaParser, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Parser $schemaParser, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesMethodTable = $routesMethodTable;
         $this->schemaParser      = $schemaParser;
+        $this->schemaLoader      = $schemaLoader;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
@@ -92,12 +101,16 @@ class Schema
             throw new StatusCode\BadRequestException('Connection already exists');
         }
 
+        $source = $schema->getSource();
+        if ($source instanceof RecordInterface) {
+            $source = \json_encode($source);
+        }
+
         // create schema
         $record = [
             'status' => Table\Schema::STATUS_ACTIVE,
             'name'   => $schema->getName(),
-            'source' => $schema->getSource(),
-            'cache'  => $this->schemaParser->parse($schema->getName(), json_encode($schema->getSource())),
+            'source' => $source,
         ];
 
         $this->schemaTable->create($record);
@@ -121,12 +134,16 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
+        $source = $schema->getSource();
+        if ($source instanceof RecordInterface) {
+            $source = \json_encode($source);
+        }
+
         $record = [
             'id'     => $existing['id'],
             'name'   => $schema->getName(),
-            'source' => $schema->getSource(),
+            'source' => $source,
             'form'   => $schema->getForm(),
-            'cache'  => $this->schemaParser->parse($schema->getName(), json_encode($schema->getSource())),
         ];
 
         $this->schemaTable->update($record);
@@ -177,19 +194,11 @@ class Schema
 
     public function generatePreview($schemaId)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (!empty($schema)) {
-            $generator = new Generator\Html();
-            $schema    = self::unserializeCache($schema['cache']);
-
-            if ($schema instanceof SchemaInterface) {
-                return $generator->generate($schema);
-            } else {
-                throw new RuntimeException('Invalid schema');
-            }
+        $schema = $this->schemaLoader->getSchema($schemaId);
+        if ($schema instanceof SchemaInterface) {
+            return (new Generator\Html())->generate($schema);
         } else {
-            throw new StatusCode\NotFoundException('Invalid schema id');
+            throw new StatusCode\BadRequestException('Invalid schema');
         }
     }
 

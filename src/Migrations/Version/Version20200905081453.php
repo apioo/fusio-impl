@@ -373,6 +373,7 @@ final class Version20200905081453 extends AbstractMigration
             $scopeTable = $schema->createTable('fusio_scope');
             $scopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $scopeTable->addColumn('category_id', 'integer', ['default' => 1]);
+            $scopeTable->addColumn('status', 'integer', ['default' => Table\Scope::STATUS_ACTIVE]);
             $scopeTable->addColumn('name', 'string', ['length' => 32]);
             $scopeTable->addColumn('description', 'string', ['length' => 255]);
             $scopeTable->setPrimaryKey(['id']);

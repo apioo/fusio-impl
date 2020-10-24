@@ -36,6 +36,15 @@ use PSX\Json\Parser;
  */
 class InspectTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_routes', '/inspect/:foo');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -120,7 +129,7 @@ JSON;
 
         foreach ($statuuus as $key => $status) {
             // update the route status
-            $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 2), 'PUT', array(
+            $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([
@@ -233,7 +242,7 @@ JSON;
 
         foreach ($statuuus as $key => $status) {
             // update the route status
-            $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 2), 'PUT', array(
+            $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([

@@ -60,6 +60,7 @@ class Cronjob extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'cron' => 'cron',
                 'executeDate' => $this->fieldDateTime('execute_date'),
@@ -74,6 +75,7 @@ class Cronjob extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Cronjob::class), 'get'], [$id], [
             'id' => 'id',
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'cron' => 'cron',
             'action' => 'action',

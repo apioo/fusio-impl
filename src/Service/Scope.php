@@ -205,7 +205,7 @@ class Scope
 
         $userScopes = $this->userScopeTable->getCount(new Condition(['scope_id', '=', $existing['id']]));
         if ($userScopes > 0) {
-            throw new StatusCode\ConflictException('Scope is assgined to an user. Remove the scope from the user in order to delete the scope');
+            throw new StatusCode\ConflictException('Scope is assigned to an user. Remove the scope from the user in order to delete the scope');
         }
 
         // check whether this is a system scope
