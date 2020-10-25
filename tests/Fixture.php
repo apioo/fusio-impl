@@ -23,10 +23,7 @@ namespace Fusio\Impl\Tests;
 
 use Fusio\Adapter\Sql\Action\SqlTable;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
-use Fusio\Engine\Factory\Resolver\PhpClass;
-use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Connection\Native;
-use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Migrations\DataBag;
 use Fusio\Impl\Migrations\Method;
 use Fusio\Impl\Migrations\NewInstallation;
@@ -35,8 +32,6 @@ use Fusio\Impl\Table;
 use Fusio\Impl\Table\Plan\Invoice;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
-use PSX\Api\Resource;
-use PSX\Framework\Schema\Passthru;
 
 /**
  * Fixture
@@ -82,10 +77,10 @@ class Fixture
 
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
-        $data->addUser('Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, '2015-02-27 19:59:15');
-        $data->addUser('Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, '2015-02-27 19:59:15');
-        $data->addUser('Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, '2015-02-27 19:59:15');
-        $data->addUser('Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, '2015-02-27 19:59:15');
+        $data->addUser('Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_CONSUMER, '2015-02-27 19:59:15');
+        $data->addUser('Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED, '2015-02-27 19:59:15');
+        $data->addUser('Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ADMINISTRATOR, '2015-02-27 19:59:15');
+        $data->addUser('Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED, '2015-02-27 19:59:15');
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Sql-Table', SqlTable::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Inspect-Action', InspectAction::class, null, '2015-02-27 19:59:15');
@@ -127,6 +122,7 @@ class Fixture
         $data->addAppToken('Backend', 'Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', $expire->format('Y-m-d H:i:s'));
         $data->addUserScope('Administrator', 'foo');
         $data->addUserScope('Administrator', 'bar');
+        $data->addUserScope('Consumer', 'consumer');
         $data->addUserScope('Consumer', 'authorization');
         $data->addUserScope('Consumer', 'foo');
         $data->addUserScope('Consumer', 'bar');
@@ -142,14 +138,14 @@ class Fixture
         $data->addRoutes('default', [
             '/foo' => [
                 'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema']),
-                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => Passthru::class]),
+                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru']),
             ],
             '/inspect/:foo' => [
-                'GET' => new Method('Inspect-Action', Passthru::class, [200 => Passthru::class]),
-                'POST' => new Method('Inspect-Action', Passthru::class, [200 => Passthru::class]),
-                'PUT' => new Method('Inspect-Action', Passthru::class, [200 => Passthru::class]),
-                'DELETE' => new Method('Inspect-Action', Passthru::class, [200 => Passthru::class]),
-                'PATCH' => new Method('Inspect-Action', Passthru::class, [200 => Passthru::class]),
+                'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
+                'POST' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
+                'PUT' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
+                'DELETE' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
+                'PATCH' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
             ]
         ]);
 
@@ -159,6 +155,10 @@ class Fixture
         $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', '/foo');
         $data->addRateAllocation('gold', '/foo', null, true);
+        $data->addScopeRoute('foo', '/foo');
+        $data->addScopeRoute('foo', '/inspect/:foo');
+        $data->addScopeRoute('bar', '/foo');
+        $data->addScopeRoute('bar', '/inspect/:foo');
 
         $data->addTable('app_news', [
             ['title' => 'foo', 'content' => 'bar', 'date' => '2015-02-27 19:59:15'],

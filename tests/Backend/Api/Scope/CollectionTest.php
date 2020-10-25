@@ -68,17 +68,17 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 35,
+            "id": 36,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 34,
+            "id": 35,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 1,
+            "id": 4,
             "name": "default",
             "description": ""
         }
@@ -105,7 +105,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 34,
+            "id": 35,
             "name": "foo",
             "description": "Foo access"
         }
@@ -132,17 +132,17 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 35,
+            "id": 36,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 34,
+            "id": 35,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 1,
+            "id": 4,
             "name": "default",
             "description": ""
         }
@@ -163,11 +163,11 @@ JSON;
             'name'        => 'test',
             'description' => 'Test description',
             'routes' => [[
-                'routeId' => 1,
+                'routeId' => Fixture::getId('fusio_routes', '/foo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ], [
-                'routeId' => 2,
+                'routeId' => Fixture::getId('fusio_routes', '/inspect/:foo'),
                 'allow'   => true,
                 'methods' => 'GET|POST|PUT|PATCH|DELETE',
             ]]
@@ -195,7 +195,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(36, $row['id']);
+        $this->assertEquals(37, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 
@@ -209,15 +209,15 @@ JSON;
         $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 36]);
 
         $this->assertEquals([[
-            'id'       => 99,
+            'id'       => 98,
             'scope_id' => 36,
-            'route_id' => 2,
+            'route_id' => 111,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'id'       => 98,
+            'id'       => 97,
             'scope_id' => 36,
-            'route_id' => 1,
+            'route_id' => 110,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);

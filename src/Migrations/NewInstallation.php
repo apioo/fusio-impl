@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Migrations;
 
 use Fusio\Adapter;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
@@ -31,12 +30,10 @@ use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Model\Collection_Category_Query;
 use Fusio\Impl\Model\Collection_Query;
-use Fusio\Impl\System;
-use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Model\Form_Container;
 use Fusio\Impl\Model\Message;
+use Fusio\Impl\System;
 use Fusio\Impl\Table;
-use PSX\Api\Resource;
 use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
 use PSX\Framework\Schema\Passthru;
@@ -136,7 +133,7 @@ class NewInstallation
         return [
             'default' => [
                 '/' => [
-                    'GET' => new Method(Welcome::class, null, [200 => Passthru::class]),
+                    'GET' => new Method(Welcome::class, null, [200 => 'Passthru']),
                 ]
             ],
             'backend' => [
@@ -490,17 +487,17 @@ class NewInstallation
                     'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class]),
                 ],
                 '/invoke/:method' => [
-                    'POST' => new Method(System\Action\Invoke::class, Passthru::class, [200 => Passthru::class]),
+                    'POST' => new Method(System\Action\Invoke::class, 'Passthru', [200 => 'Passthru']),
                 ],
                 '/health' => [
                     'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class]),
                 ],
                 '/debug' => [
                     'GET' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class]),
-                    'POST' => new Method(System\Action\GetDebug::class, Passthru::class, [200 => System\Model\Debug::class]),
-                    'PUT' => new Method(System\Action\GetDebug::class, Passthru::class, [200 => System\Model\Debug::class]),
+                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
+                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
                     'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class]),
-                    'PATCH' => new Method(System\Action\GetDebug::class, Passthru::class, [200 => System\Model\Debug::class]),
+                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
                 ],
                 '/schema/:name' => [
                     'GET' => new Method(System\Action\GetSchema::class, null, [200 => System\Model\Schema::class]),

@@ -130,7 +130,7 @@ class MostUsedRoutesTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/backend\/token"
+        "\/foo"
     ]
 }
 JSON;

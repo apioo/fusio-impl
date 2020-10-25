@@ -36,10 +36,6 @@ class Scope extends TableAbstract
     const STATUS_ACTIVE  = 1;
     const STATUS_DELETED = 0;
 
-    const TYPE_BACKEND = 'backend';
-    const TYPE_CONSUMER = 'consumer';
-    const TYPE_APP = 'app';
-
     public function getName()
     {
         return 'fusio_scope';
@@ -67,22 +63,13 @@ class Scope extends TableAbstract
         }
     }
 
-    public function getScopesForType(string $type)
+    public function getScopesForCategory(string $category)
     {
-        if ($type === self::TYPE_BACKEND) {
-            $condition = new Condition();
-            $condition->like('name', 'backend%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        } elseif ($type === self::TYPE_CONSUMER) {
-            $condition = new Condition();
-            $condition->like('name', 'consumer%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        } else {
-            $condition = new Condition();
-            $condition->notLike('name', 'backend%');
-            $condition->notLike('name', 'consumer%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        }
+        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+
+        $condition = new Condition();
+        $condition->like('category_id', $categoryId);
+        $result = $this->getAll(0, 1024, null, null, $condition);
 
         $scopes = [];
         foreach ($result as $row) {

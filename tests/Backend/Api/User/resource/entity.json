@@ -1,40 +1,49 @@
 {
   "status": 1,
   "path": "\/backend\/user\/$user_id<[0-9]+>",
-  "pathParameters": "User_Entity_Path",
+  "pathParameters": "BackendUserUser_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_User_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.user"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.user"
+      ],
       "responses": {
-        "200": "User"
+        "200": "Backend_Model_User"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_User_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.user"
         ]
       },
-      "tags": [],
-      "request": "User_Update",
+      "tags": [
+        "backend.user"
+      ],
+      "request": "Backend_Model_User_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_User_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.user"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.user"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
@@ -110,6 +119,20 @@
         }
       }
     },
+    "BackendUserUser_idPath": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_User": {
+      "$ref": "User"
+    },
+    "Backend_Model_User_Update": {
+      "$ref": "User_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -120,6 +143,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User": {
       "type": "object",
@@ -165,14 +191,6 @@
       "type": "object",
       "additionalProperties": {
         "type": "string"
-      }
-    },
-    "User_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "user_id": {
-          "type": "integer"
-        }
       }
     },
     "User_Update": {

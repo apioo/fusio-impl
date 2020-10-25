@@ -70,9 +70,9 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
-            $appScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_APP);
-            $backendScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_BACKEND);
-            $consumerScopes = $this->scopeTable->getScopesForType(Table\Scope::TYPE_CONSUMER);
+            $appScopes = $this->scopeTable->getScopesForCategory('default');
+            $backendScopes = $this->scopeTable->getScopesForCategory('backend');
+            $consumerScopes = $this->scopeTable->getScopesForCategory('consumer');
 
             $authUrl  = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
             $tokenUrl = $this->url . '/' . $this->dispatch . 'authorization/token';

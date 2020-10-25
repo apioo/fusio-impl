@@ -137,7 +137,7 @@ class DataBag
                 $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName);
 
                 foreach ($method->getResponses() as $code => $response) {
-                    if (!$this->hasId('fusio_schema', $method->getRequest())) {
+                    if (!$this->hasId('fusio_schema', $response)) {
                         $responseName = $this->getSchemaName($response);
                         $this->addSchema($category, $responseName, $response);
                     } else {
@@ -515,10 +515,10 @@ class DataBag
         ];
     }
 
-    public function addUser(string $name, string $email, string $password, ?int $points = null, ?string $date = null)
+    public function addUser(string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ADMINISTRATOR, ?string $date = null)
     {
         $this->data['fusio_user'][$name] = [
-            'status' => Table\Route::STATUS_ACTIVE,
+            'status' => $status,
             'name' => $name,
             'email' => $email,
             'password' => $password,

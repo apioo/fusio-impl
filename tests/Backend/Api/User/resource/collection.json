@@ -3,27 +3,33 @@
   "path": "\/backend\/user",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_User_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.user"
         ]
       },
-      "tags": [],
-      "queryParameters": "User_Collection_Query",
+      "tags": [
+        "backend.user"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "User_Collection"
+        "200": "Backend_Model_User_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_User_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.user"
         ]
       },
-      "tags": [],
-      "request": "User_Create",
+      "tags": [
+        "backend.user"
+      ],
+      "request": "Backend_Model_User_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
@@ -99,6 +105,12 @@
         }
       }
     },
+    "Backend_Model_User_Collection": {
+      "$ref": "User_Collection"
+    },
+    "Backend_Model_User_Create": {
+      "$ref": "User_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -116,6 +128,20 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -126,6 +152,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User": {
       "type": "object",
@@ -177,20 +209,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "User"
-      }
-    },
-    "User_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "User_Create": {
