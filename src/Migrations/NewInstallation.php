@@ -239,10 +239,10 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Event\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.delete'),
                 ],
                 '/import/process' => [
-                    'POST' => new Method(Backend\Action\Import\Format::class, Backend\Model\Import_Request::class, [200 => Backend\Model\Adapter::class], null, 'backend.import'),
+                    'POST' => new Method(Backend\Action\Import\Process::class, Backend\Model\Adapter::class, [200 => Backend\Model\Import_Response::class], null, 'backend.import'),
                 ],
                 '/import/:format' => [
-                    'POST' => new Method(Backend\Action\Import\Process::class, Backend\Model\Adapter::class, [200 => Backend\Model\Import_Response::class], null, 'backend.import'),
+                    'POST' => new Method(Backend\Action\Import\Format::class, Backend\Model\Import_Request::class, [200 => Backend\Model\Adapter::class], null, 'backend.import'),
                 ],
                 '/log/error' => [
                     'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Backend\Model\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),

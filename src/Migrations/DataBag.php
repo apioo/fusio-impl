@@ -98,6 +98,7 @@ class DataBag
             $this->addRoute($category, $prio, $path, SchemaApiController::class);
 
             foreach ($config as $methodName => $method) {
+                /** @var Method $method */
                 if (!$this->hasId('fusio_action', $method->getAction())) {
                     $actionName = $this->getActionName($method->getAction());
                     $this->addAction($category, $actionName, $method->getAction());
@@ -134,7 +135,7 @@ class DataBag
                     $this->addEvent($category, $method->getEventName());
                 }
 
-                $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName);
+                $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName, $method->isPublic(), $method->getCosts());
 
                 foreach ($method->getResponses() as $code => $response) {
                     if (!$this->hasId('fusio_schema', $response)) {
@@ -460,7 +461,7 @@ class DataBag
         ];
     }
 
-    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action)
+    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, bool $public = false, ?int $costs = null)
     {
         $this->data['fusio_routes_method'][$path . $methodName] = [
             'route_id' => self::getId('fusio_routes', $path),
@@ -468,11 +469,11 @@ class DataBag
             'version' => 1,
             'status' => Resource::STATUS_ACTIVE,
             'active' => 1,
-            'public' => 0,
+            'public' => $public ? 1 : 0,
             'parameters' => $parameters,
             'request' => $request,
             'action' => $action,
-            'costs' => null
+            'costs' => $costs
         ];
     }
 

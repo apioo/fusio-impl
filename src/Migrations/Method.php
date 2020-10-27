@@ -65,7 +65,17 @@ class Method
      */
     private $eventName;
 
-    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null)
+    /**
+     * @var bool
+     */
+    private $public;
+
+    /**
+     * @var int|null
+     */
+    private $costs;
+
+    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null)
     {
         $this->action = $action;
         $this->request = $request;
@@ -73,6 +83,8 @@ class Method
         $this->parameters = $parameters;
         $this->scope = $scope;
         $this->eventName = $eventName;
+        $this->public = $public;
+        $this->costs = $costs;
     }
 
     /**
@@ -121,5 +133,21 @@ class Method
     public function getEventName(): ?string
     {
         return $this->eventName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublic(): bool
+    {
+        return $this->public;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCosts(): ?int
+    {
+        return $this->costs;
     }
 }
