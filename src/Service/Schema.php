@@ -186,7 +186,7 @@ class Schema
 
         $record = [
             'id'   => $schema['id'],
-            'form' => $form,
+            'form' => \json_encode($form),
         ];
 
         $this->schemaTable->update($record);

@@ -142,7 +142,7 @@ JSON;
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Test-Schema',
-            'source' => $schema,
+            'source' => \json_encode($schema),
         ]));
 
         $body   = (string) $response->getBody();
@@ -162,7 +162,7 @@ JSON;
 
     public function testPutForm()
     {
-        $schema = [
+        $schema = \json_encode([
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -175,14 +175,14 @@ JSON;
                     'type' => 'string'
                 ],
             ],
-        ];
+        ]);
 
-        $form = [
+        $form = \json_encode([
             'title' => [
                 'ui:autofocus' => true,
                 'ui:emptyValue' => ''
             ]
-        ];
+        ]);
 
         $response = $this->sendRequest('/backend/schema/2', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
@@ -205,7 +205,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Form-Schema', json_encode($schema), json_encode($form));
+        Assert::assertSchema('Form-Schema', $schema, $form);
     }
 
     public function testDelete()
