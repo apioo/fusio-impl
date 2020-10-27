@@ -103,7 +103,6 @@ class Fixture
         $data->addPlan('Plan A', 39.99, 500, 1);
         $data->addPlan('Plan B', 49.99, 1000, null);
         $data->addPlanContract('Administrator', 'Plan A', 19.99, 50, 1, '2018-10-05 18:18:00');
-        $data->addPlanContract('Administrator', 'Plan A', 19.99, 50, 1, '2018-10-05 18:18:00');
         $data->addPlanInvoice(0, null, 'Administrator', '0001-2019-896280', Invoice::STATUS_PAYED, 19.99, 100, '2019-04-27', '2019-04-27', '2019-04-27 20:57:00', '2019-04-27 20:57:00');
         $data->addPlanInvoice(0, 1, 'Administrator', '0001-2019-897635', Invoice::STATUS_OPEN, 19.99, 100, '2019-04-27', '2019-04-27', null, '2019-04-27 20:57:00');
         $data->addTransaction(0, 'paypal', '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'PAY-1B56960729604235TKQQIYVY', 39.99, 'http://myapp.com', '2018-10-05 18:18:00');
@@ -137,8 +136,8 @@ class Fixture
 
         $data->addRoutes('default', [
             '/foo' => [
-                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema']),
-                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru']),
+                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true),
+                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1),
             ],
             '/inspect/:foo' => [
                 'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
@@ -155,9 +154,8 @@ class Fixture
         $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', '/foo');
         $data->addRateAllocation('gold', '/foo', null, true);
-        $data->addScopeRoute('foo', '/foo');
-        $data->addScopeRoute('foo', '/inspect/:foo');
         $data->addScopeRoute('bar', '/foo');
+        $data->addScopeRoute('foo', '/inspect/:foo');
         $data->addScopeRoute('bar', '/inspect/:foo');
 
         $data->addTable('app_news', [

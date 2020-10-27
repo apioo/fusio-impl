@@ -1,42 +1,50 @@
 {
   "status": 1,
   "path": "\/backend\/routes\/provider\/:provider",
-  "pathParameters": "Route_Provider_Path",
+  "pathParameters": "BackendRoutesProviderProviderPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Route_Provider_Form",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "queryParameters": "Route_Provider_Query",
+      "tags": [
+        "backend.route"
+      ],
       "responses": {
-        "200": "Form_Container"
+        "200": "Model_Form_Container"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Route_Provider_Create",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "request": "Route_Provider",
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Provider",
       "responses": {
-        "201": "Message"
+        "200": "Model_Message"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Route_Provider_Changelog",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
-      "request": "Route_Provider_Config",
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Provider_Config",
       "responses": {
-        "200": "Route_Provider_Changelog"
+        "200": "Backend_Model_Route_Provider_Changelog"
       }
     }
   },
@@ -70,6 +78,23 @@
       "additionalProperties": {
         "type": "any"
       }
+    },
+    "BackendRoutesProviderProviderPath": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Route_Provider": {
+      "$ref": "Route_Provider"
+    },
+    "Backend_Model_Route_Provider_Changelog": {
+      "$ref": "Route_Provider_Changelog"
+    },
+    "Backend_Model_Route_Provider_Config": {
+      "$ref": "Route_Provider_Config"
     },
     "Form_Container": {
       "type": "object",
@@ -170,6 +195,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Form_Container": {
+      "$ref": "Form_Container"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Route": {
       "type": "object",
@@ -303,22 +334,6 @@
       },
       "maxProperties": 16
     },
-    "Route_Provider_Path": {
-      "type": "object",
-      "properties": {
-        "provider": {
-          "type": "string"
-        }
-      }
-    },
-    "Route_Provider_Query": {
-      "type": "object",
-      "properties": {
-        "class": {
-          "type": "string"
-        }
-      }
-    },
     "Route_Version": {
       "type": "object",
       "properties": {
@@ -347,7 +362,7 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "$ref": "Schema_Source"
+          "type": "string"
         },
         "form": {
           "$ref": "Schema_Form"
@@ -356,12 +371,6 @@
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Schema_Source": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

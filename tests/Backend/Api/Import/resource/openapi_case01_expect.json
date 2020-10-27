@@ -79,191 +79,23 @@
   "schema": [
     {
       "name": "Pet",
-      "source": {
-        "definitions": {
-          "Pet": {
-            "title": "Pet",
-            "type": "object",
-            "properties": {
-              "id": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "tag": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "name"
-            ]
-          }
-        },
-        "title": "Pet",
-        "type": "object",
-        "properties": {
-          "id": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "tag": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "name"
-        ]
-      }
+      "source": "{\n    \"definitions\": {\n        \"Pet\": {\n            \"title\": \"Pet\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"format\": \"int64\",\n                    \"type\": \"integer\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"tag\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"required\": [\n                \"id\",\n                \"name\"\n            ]\n        }\n    },\n    \"title\": \"Pet\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"id\": {\n            \"format\": \"int64\",\n            \"type\": \"integer\"\n        },\n        \"name\": {\n            \"type\": \"string\"\n        },\n        \"tag\": {\n            \"type\": \"string\"\n        }\n    },\n    \"required\": [\n        \"id\",\n        \"name\"\n    ]\n}"
     },
     {
       "name": "Pets",
-      "source": {
-        "definitions": {
-          "Pet": {
-            "title": "Pet",
-            "type": "object",
-            "properties": {
-              "id": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "tag": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "name"
-            ]
-          }
-        },
-        "title": "Pets",
-        "type": "array",
-        "items": {
-          "$ref": "Pet"
-        }
-      }
+      "source": "{\n    \"definitions\": {\n        \"Pet\": {\n            \"title\": \"Pet\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"format\": \"int64\",\n                    \"type\": \"integer\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"tag\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"required\": [\n                \"id\",\n                \"name\"\n            ]\n        }\n    },\n    \"title\": \"Pets\",\n    \"type\": \"array\",\n    \"items\": {\n        \"$ref\": \"Pet\"\n    }\n}"
     },
     {
       "name": "Error",
-      "source": {
-        "definitions": {
-          "Pet": {
-            "title": "Pet",
-            "type": "object",
-            "properties": {
-              "id": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "tag": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "name"
-            ]
-          }
-        },
-        "title": "Error",
-        "type": "object",
-        "properties": {
-          "code": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "message": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "code",
-          "message"
-        ]
-      }
+      "source": "{\n    \"definitions\": {\n        \"Pet\": {\n            \"title\": \"Pet\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"format\": \"int64\",\n                    \"type\": \"integer\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"tag\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"required\": [\n                \"id\",\n                \"name\"\n            ]\n        }\n    },\n    \"title\": \"Error\",\n    \"type\": \"object\",\n    \"properties\": {\n        \"code\": {\n            \"format\": \"int32\",\n            \"type\": \"integer\"\n        },\n        \"message\": {\n            \"type\": \"string\"\n        }\n    },\n    \"required\": [\n        \"code\",\n        \"message\"\n    ]\n}"
     },
     {
       "name": "PetsGetQuery",
-      "source": {
-        "definitions": {
-          "Pet": {
-            "title": "Pet",
-            "type": "object",
-            "properties": {
-              "id": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "tag": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "name"
-            ]
-          }
-        },
-        "type": "object",
-        "properties": {
-          "limit": {
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": []
-      }
+      "source": "{\n    \"definitions\": {\n        \"Pet\": {\n            \"title\": \"Pet\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"format\": \"int64\",\n                    \"type\": \"integer\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"tag\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"required\": [\n                \"id\",\n                \"name\"\n            ]\n        }\n    },\n    \"type\": \"object\",\n    \"properties\": {\n        \"limit\": {\n            \"format\": \"int32\",\n            \"type\": \"integer\"\n        }\n    },\n    \"required\": []\n}"
     },
     {
       "name": "PetsPetIdGetQuery",
-      "source": {
-        "definitions": {
-          "Pet": {
-            "title": "Pet",
-            "type": "object",
-            "properties": {
-              "id": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "name": {
-                "type": "string"
-              },
-              "tag": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "id",
-              "name"
-            ]
-          }
-        },
-        "type": "object",
-        "properties": {
-          "petId": {
-            "type": "string"
-          }
-        },
-        "required": []
-      }
+      "source": "{\n    \"definitions\": {\n        \"Pet\": {\n            \"title\": \"Pet\",\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"format\": \"int64\",\n                    \"type\": \"integer\"\n                },\n                \"name\": {\n                    \"type\": \"string\"\n                },\n                \"tag\": {\n                    \"type\": \"string\"\n                }\n            },\n            \"required\": [\n                \"id\",\n                \"name\"\n            ]\n        }\n    },\n    \"type\": \"object\",\n    \"properties\": {\n        \"petId\": {\n            \"type\": \"string\"\n        }\n    },\n    \"required\": []\n}"
     }
   ]
 }

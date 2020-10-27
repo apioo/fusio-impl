@@ -1,40 +1,49 @@
 {
   "status": 1,
   "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
-  "pathParameters": "Plan_Contract_Entity",
+  "pathParameters": "BackendPlanContractContract_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Plan_Contract_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "Plan_Contract"
+        "200": "Backend_Model_Plan_Contract"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Plan_Contract_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "request": "Plan_Contract_Update",
+      "tags": [
+        "backend.plan"
+      ],
+      "request": "Backend_Model_Plan_Contract_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Plan_Contract_Delete",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
@@ -110,6 +119,20 @@
         }
       }
     },
+    "BackendPlanContractContract_idPath": {
+      "type": "object",
+      "properties": {
+        "contract_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Plan_Contract": {
+      "$ref": "Plan_Contract"
+    },
+    "Backend_Model_Plan_Contract_Update": {
+      "$ref": "Plan_Contract_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -120,6 +143,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Plan": {
       "type": "object",
@@ -171,14 +197,6 @@
         "insertDate": {
           "format": "date-time",
           "type": "string"
-        }
-      }
-    },
-    "Plan_Contract_Entity": {
-      "type": "object",
-      "properties": {
-        "contract_id": {
-          "type": "integer"
         }
       }
     },

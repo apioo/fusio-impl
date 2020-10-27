@@ -111,7 +111,7 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "$ref": "Schema_Source"
+          "type": "string"
         },
         "form": {
           "$ref": "Schema_Form"
@@ -133,12 +133,6 @@
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Schema_Source": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

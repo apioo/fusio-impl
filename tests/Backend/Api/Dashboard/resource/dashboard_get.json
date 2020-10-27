@@ -405,12 +405,12 @@
         "date": "[datetime]"
       },
       {
-        "status": 1,
+        "status": 0,
         "name": "Consumer",
         "date": "[datetime]"
       },
       {
-        "status": 1,
+        "status": 2,
         "name": "Disabled",
         "date": "[datetime]"
       },
@@ -420,7 +420,7 @@
         "date": "[datetime]"
       },
       {
-        "status": 1,
+        "status": 3,
         "name": "Deleted",
         "date": "[datetime]"
       }

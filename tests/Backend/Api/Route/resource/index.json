@@ -3,18 +3,24 @@
   "path": "\/backend\/routes\/provider",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Route_Provider_Index",
       "security": {
-        "backend": [
-          "backend.routes"
+        "app": [
+          "backend.route"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.route"
+      ],
       "responses": {
-        "200": "Route_Index_Providers"
+        "200": "Backend_Model_Route_Index_Providers"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Route_Index_Providers": {
+      "$ref": "Route_Index_Providers"
+    },
     "Route_Index_Providers": {
       "type": "object",
       "properties": {

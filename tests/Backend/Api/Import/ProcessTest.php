@@ -55,7 +55,7 @@ class ProcessTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $data = $this->getData();
+        $data = file_get_contents(__DIR__ . '/resource/openapi_case01_expect.json');
         $body = new StringStream($data);
 
         $response = $this->sendRequest('/backend/import/process', 'POST', array(
@@ -84,126 +84,5 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // @TODO check entries
-    }
-
-    protected function getData()
-    {
-        return <<<'JSON'
-{
-    "routes": [
-        {
-            "path": "\/api\/pet\/:petId",
-            "config": [
-                {
-                    "version": 1,
-                    "status": 4,
-                    "methods": {
-                        "GET": {
-                            "active": true,
-                            "public": true,
-                            "parameters": "Passthru",
-                            "request": "Passthru",
-                            "responses": {
-                                "200": "api-pet-petId-GET-response"
-                            },
-                            "action": "Welcome"
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "path": "\/api\/pet",
-            "config": [
-                {
-                    "version": 1,
-                    "status": 4,
-                    "methods": {
-                        "POST": {
-                            "active": true,
-                            "public": true,
-                            "parameters": "Passthru",
-                            "request": "api-pet-POST-request",
-                            "responses": {
-                                "200": "Passthru"
-                            },
-                            "action": "Welcome"
-                        },
-                        "PUT": {
-                            "active": true,
-                            "public": true,
-                            "parameters": "Passthru",
-                            "request": "api-pet-PUT-request",
-                            "responses": {
-                                "200": "Passthru"
-                            },
-                            "action": "Welcome"
-                        }
-                    }
-                }
-            ]
-        }
-    ],
-    "schema": [
-        {
-            "name": "api-pet-petId-GET-response",
-            "source": {
-                "type": "object",
-                "title": "Pet",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "required": true,
-                        "title": "id"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    }
-                }
-            }
-        },
-        {
-            "name": "api-pet-POST-request",
-            "source": {
-                "type": "object",
-                "title": "Pet",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "required": true,
-                        "title": "id"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    }
-                }
-            }
-        },
-        {
-            "name": "api-pet-PUT-request",
-            "source": {
-                "type": "object",
-                "title": "Pet",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "required": true,
-                        "title": "id"
-                    },
-                    "name": {
-                        "type": "string",
-                        "required": true,
-                        "title": "name"
-                    }
-                }
-            }
-        }
-    ]
-}
-JSON;
     }
 }

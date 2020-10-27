@@ -69,6 +69,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Plan A",
             "description": "",
             "price": 39.99,
@@ -77,6 +78,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "status": 1,
             "name": "Plan B",
             "description": "",
             "price": 49.99,

@@ -85,19 +85,23 @@ class EntityTest extends ControllerDbTestCase
     "config": [
         {
             "version": 1,
-            "status": 4,
+            "status": 1,
             "methods": {
                 "GET": {
                     "active": true,
                     "public": true,
-                    "operationId": "listFoo",
+                    "responses": {
+                        "200": "Collection-Schema"
+                    },
                     "action": "Sql-Table"
                 },
                 "POST": {
                     "active": true,
                     "public": false,
-                    "operationId": "createFoo",
                     "request": "Entry-Schema",
+                    "responses": {
+                        "201": "Passthru"
+                    },
                     "action": "Sql-Table",
                     "costs": 1
                 }
@@ -186,7 +190,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Routes successful updated"
+    "message": "Route successful updated"
 }
 JSON;
 
@@ -244,7 +248,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Routes successful updated"
+    "message": "Route successful updated"
 }
 JSON;
 
@@ -282,45 +286,6 @@ JSON;
             ],
             'action'       => 'Sql-Table',
             'costs'        => 1,
-        ], [
-            'method'       => 'PUT',
-            'version'      => 1,
-            'status'       => 1,
-            'active'       => false,
-            'public'       => false,
-            'description'  => '',
-            'operation_id' => '',
-            'parameters'   => null,
-            'request'      => null,
-            'responses'    => [],
-            'action'       => null,
-            'costs'        => 0,
-        ], [
-            'method'       => 'PATCH',
-            'version'      => 1,
-            'status'       => 1,
-            'active'       => false,
-            'public'       => false,
-            'description'  => '',
-            'operation_id' => '',
-            'parameters'   => null,
-            'request'      => null,
-            'responses'    => [],
-            'action'       => null,
-            'costs'        => 0,
-        ], [
-            'method'       => 'DELETE',
-            'version'      => 1,
-            'status'       => 1,
-            'active'       => false,
-            'public'       => false,
-            'description'  => '',
-            'operation_id' => '',
-            'parameters'   => null,
-            'request'      => null,
-            'responses'    => [],
-            'action'       => null,
-            'costs'        => 0,
         ]]);
     }
 
@@ -335,7 +300,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Routes successful deleted"
+    "message": "Route successful deleted"
 }
 JSON;
 

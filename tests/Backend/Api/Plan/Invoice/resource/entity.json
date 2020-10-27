@@ -1,40 +1,49 @@
 {
   "status": 1,
   "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
-  "pathParameters": "Plan_Invoice_Entity_Path",
+  "pathParameters": "BackendPlanInvoiceInvoice_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Plan_Invoice_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "Plan_Invoice"
+        "200": "Backend_Model_Plan_Invoice"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Plan_Invoice_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "request": "Plan_Invoice_Update",
+      "tags": [
+        "backend.plan"
+      ],
+      "request": "Backend_Model_Plan_Invoice_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Plan_Invoice_Delete",
       "security": {
-        "backend": [
-          "backend"
+        "app": [
+          "backend.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
@@ -110,6 +119,20 @@
         }
       }
     },
+    "BackendPlanInvoiceInvoice_idPath": {
+      "type": "object",
+      "properties": {
+        "invoice_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Plan_Invoice": {
+      "$ref": "Plan_Invoice"
+    },
+    "Backend_Model_Plan_Invoice_Update": {
+      "$ref": "Plan_Invoice_Update"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -120,6 +143,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Plan_Invoice": {
       "type": "object",
@@ -166,14 +192,6 @@
         "insertDate": {
           "format": "date-time",
           "type": "string"
-        }
-      }
-    },
-    "Plan_Invoice_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "invoice_id": {
-          "type": "integer"
         }
       }
     },

@@ -3,30 +3,42 @@
   "path": "\/backend\/sdk",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Sdk_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.sdk"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.sdk"
+      ],
       "responses": {
-        "200": "Sdk_Types"
+        "200": "Backend_Model_Sdk_Types"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Sdk_Generate",
       "security": {
-        "backend": [
+        "app": [
           "backend.sdk"
         ]
       },
-      "tags": [],
-      "request": "Sdk_Generate",
+      "tags": [
+        "backend.sdk"
+      ],
+      "request": "Backend_Model_Sdk_Generate",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Sdk_Generate": {
+      "$ref": "Sdk_Generate"
+    },
+    "Backend_Model_Sdk_Types": {
+      "$ref": "Sdk_Types"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -37,6 +49,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Sdk_Generate": {
       "type": "object",

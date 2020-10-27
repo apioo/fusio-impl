@@ -1,43 +1,63 @@
 {
   "status": 1,
   "path": "\/backend\/marketplace\/:app_name",
-  "pathParameters": "Marketplace_Entity_Path",
+  "pathParameters": "BackendMarketplaceApp_namePath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Marketplace_Get",
       "security": {
-        "backend": [
+        "app": [
           "backend.marketplace"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.marketplace"
+      ],
       "responses": {
-        "200": "Marketplace_Local_App"
+        "200": "Backend_Model_Marketplace_Local_App"
       }
     },
     "PUT": {
+      "operationId": "Backend_Action_Marketplace_Update",
       "security": {
-        "backend": [
+        "app": [
           "backend.marketplace"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.marketplace"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Marketplace_Remove",
       "security": {
-        "backend": [
+        "app": [
           "backend.marketplace"
         ]
       },
-      "tags": [],
+      "tags": [
+        "backend.marketplace"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "BackendMarketplaceApp_namePath": {
+      "type": "object",
+      "properties": {
+        "app_name": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Marketplace_Local_App": {
+      "$ref": "Marketplace_Local_App"
+    },
     "Marketplace_App": {
       "type": "object",
       "properties": {
@@ -61,14 +81,6 @@
         }
       }
     },
-    "Marketplace_Entity_Path": {
-      "type": "object",
-      "properties": {
-        "app_name": {
-          "type": "string"
-        }
-      }
-    },
     "Marketplace_Local_App": {
       "$extends": "Marketplace_App",
       "type": "object",
@@ -88,6 +100,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

@@ -1,18 +1,21 @@
 {
   "status": 1,
   "path": "\/backend\/import\/:format",
-  "pathParameters": "Import_Format_Path",
+  "pathParameters": "BackendImportFormatPath",
   "methods": {
     "POST": {
+      "operationId": "Backend_Action_Import_Format",
       "security": {
-        "backend": [
+        "app": [
           "backend.import"
         ]
       },
-      "tags": [],
-      "request": "Import_Request",
+      "tags": [
+        "backend.import"
+      ],
+      "request": "Backend_Model_Import_Request",
       "responses": {
-        "200": "Adapter"
+        "200": "Backend_Model_Adapter"
       }
     }
   },
@@ -106,6 +109,20 @@
         }
       }
     },
+    "BackendImportFormatPath": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Adapter": {
+      "$ref": "Adapter"
+    },
+    "Backend_Model_Import_Request": {
+      "$ref": "Import_Request"
+    },
     "Connection": {
       "type": "object",
       "properties": {
@@ -130,14 +147,6 @@
         "type": "any"
       },
       "maxProperties": 16
-    },
-    "Import_Format_Path": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "type": "string"
-        }
-      }
     },
     "Import_Request": {
       "type": "object",
@@ -260,7 +269,7 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "$ref": "Schema_Source"
+          "type": "string"
         },
         "form": {
           "$ref": "Schema_Form"
@@ -269,12 +278,6 @@
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Schema_Source": {
       "type": "object",
       "additionalProperties": {
         "type": "any"

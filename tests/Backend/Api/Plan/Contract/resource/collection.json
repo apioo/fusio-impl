@@ -3,27 +3,33 @@
   "path": "\/backend\/plan\/contract",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Plan_Contract_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "queryParameters": "Plan_Contract_Collection_Query",
+      "tags": [
+        "backend.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Plan_Contract_Collection"
+        "200": "Backend_Model_Plan_Contract_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Plan_Contract_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "request": "Plan_Contract_Create",
+      "tags": [
+        "backend.plan"
+      ],
+      "request": "Backend_Model_Plan_Contract_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
@@ -99,6 +105,12 @@
         }
       }
     },
+    "Backend_Model_Plan_Contract_Collection": {
+      "$ref": "Plan_Contract_Collection"
+    },
+    "Backend_Model_Plan_Contract_Create": {
+      "$ref": "Plan_Contract_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -116,6 +128,20 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -126,6 +152,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Plan": {
       "type": "object",
@@ -184,20 +216,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Plan_Contract"
-      }
-    },
-    "Plan_Contract_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Plan_Contract_Create": {

@@ -3,31 +3,43 @@
   "path": "\/backend\/plan",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Plan_GetAll",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "queryParameters": "Plan_Collection_Query",
+      "tags": [
+        "backend.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Plan_Collection"
+        "200": "Backend_Model_Plan_Collection"
       }
     },
     "POST": {
+      "operationId": "Backend_Action_Plan_Create",
       "security": {
-        "backend": [
+        "app": [
           "backend.plan"
         ]
       },
-      "tags": [],
-      "request": "Plan_Create",
+      "tags": [
+        "backend.plan"
+      ],
+      "request": "Backend_Model_Plan_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Backend_Model_Plan_Collection": {
+      "$ref": "Plan_Collection"
+    },
+    "Backend_Model_Plan_Create": {
+      "$ref": "Plan_Create"
+    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -45,6 +57,20 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -55,6 +81,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "Plan": {
       "type": "object",
@@ -83,20 +115,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Plan"
-      }
-    },
-    "Plan_Collection_Query": {
-      "type": "object",
-      "properties": {
-        "startIndex": {
-          "type": "integer"
-        },
-        "count": {
-          "type": "integer"
-        },
-        "search": {
-          "type": "string"
-        }
       }
     },
     "Plan_Create": {
