@@ -113,12 +113,7 @@ class Transformer
             $schema = new Schema($type, clone $definitions);
             (new SchemaResolver())->resolve($schema);
 
-            $data = \json_decode($this->generator->generate($schema));
-
-            $source = new Schema_Source();
-            foreach ($data as $key => $value) {
-                $source->setProperty($key, $value);
-            }
+            $source = $this->generator->generate($schema);
 
             $schema = new Schema_Create();
             $schema->setName($name);

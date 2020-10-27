@@ -21,7 +21,7 @@ class Schema implements \JsonSerializable
      */
     protected $name;
     /**
-     * @var Schema_Source|null
+     * @var string|null
      */
     protected $source;
     /**
@@ -71,16 +71,16 @@ class Schema implements \JsonSerializable
         return $this->name;
     }
     /**
-     * @param Schema_Source|null $source
+     * @param string|null $source
      */
-    public function setSource(?Schema_Source $source) : void
+    public function setSource(?string $source) : void
     {
         $this->source = $source;
     }
     /**
-     * @return Schema_Source|null
+     * @return string|null
      */
-    public function getSource() : ?Schema_Source
+    public function getSource() : ?string
     {
         return $this->source;
     }
