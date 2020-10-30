@@ -166,7 +166,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);
         $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 
@@ -212,12 +212,12 @@ JSON;
         ]);
 
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(33, $responses[0]['id']);
+        $this->assertEquals(35, $responses[0]['id']);
         $this->assertEquals('foo', $responses[0]['name']);
         $this->assertEquals('Foo access', $responses[0]['description']);
         $this->assertEquals(1, $responses[0]['allow']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[0]['methods']);
-        $this->assertEquals(34, $responses[1]['id']);
+        $this->assertEquals(36, $responses[1]['id']);
         $this->assertEquals('bar', $responses[1]['name']);
         $this->assertEquals('Bar access', $responses[1]['description']);
         $this->assertEquals(1, $responses[1]['allow']);
@@ -277,7 +277,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
         $config   = Service\Action::unserializeConfig($action['config']);
@@ -344,7 +344,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
         $config   = Service\Action::unserializeConfig($action['config']);
@@ -400,7 +400,7 @@ JSON;
         $this->assertRegExp('/- \[CREATED\] routes \/bar/', $display, $display);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Schema',
         ]);
 
@@ -441,9 +441,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -494,7 +493,7 @@ JSON;
         $this->assertRegExp('/- \[CREATED\] schema Ref-Schema/', $display, $display);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Ref-Schema',
         ]);
 
@@ -515,9 +514,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(5, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 
     public function testCommandSchemaFile()
@@ -535,7 +533,7 @@ JSON;
         $this->assertRegExp('/- \[CREATED\] schema Ref-Schema/', $display, $display);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Ref-Schema',
         ]);
 
@@ -576,9 +574,8 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 
     public function testCommandApp()
@@ -655,18 +652,17 @@ JSON;
             'name' => 'Foo-Scope',
         ]);
 
-        $this->assertEquals(35, $scope['id']);
+        $this->assertEquals(37, $scope['id']);
         $this->assertEquals('Foo-Scope', $scope['name']);
         $this->assertEquals('Foo scope', $scope['description']);
     }
 
     private function assertJsonSchema($name, $source)
     {
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => $name,
         ]);
 
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
     }
 }
