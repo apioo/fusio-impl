@@ -111,12 +111,10 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "description": "Contains the TypeSchema specification",
-          "type": "string"
+          "$ref": "Schema_Source"
         },
         "form": {
-          "description": "Contains a UI vocabulary to describe the UI of the schema",
-          "type": "string"
+          "$ref": "Schema_Form"
         }
       }
     },
@@ -132,6 +130,20 @@
       "required": [
         "name"
       ]
+    },
+    "Schema_Form": {
+      "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_Source": {
+      "description": "Contains the TypeSchema specification",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
     }
   }
 }

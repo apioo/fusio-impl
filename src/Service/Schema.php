@@ -21,14 +21,13 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Schema_Create;
+use Fusio\Impl\Backend\Model\Schema_Form;
 use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
-use Fusio\Impl\Event\SchemaEvents;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Table;
@@ -37,7 +36,6 @@ use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
-use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -98,19 +96,15 @@ class Schema
 
         // check whether schema exists
         if ($this->exists($schema->getName())) {
-            throw new StatusCode\BadRequestException('Connection already exists');
-        }
-
-        $source = $schema->getSource();
-        if ($source instanceof RecordInterface) {
-            $source = \json_encode($source);
+            throw new StatusCode\BadRequestException('Schema already exists');
         }
 
         // create schema
         $record = [
             'status' => Table\Schema::STATUS_ACTIVE,
             'name'   => $schema->getName(),
-            'source' => $source,
+            'source' => $this->parseSource($schema->getSource()),
+            'form'   => $this->parseForm($schema->getForm()),
         ];
 
         $this->schemaTable->create($record);
@@ -134,16 +128,11 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $source = $schema->getSource();
-        if ($source instanceof RecordInterface) {
-            $source = \json_encode($source);
-        }
-
         $record = [
             'id'     => $existing['id'],
             'name'   => $schema->getName(),
-            'source' => $source,
-            'form'   => $schema->getForm(),
+            'source' => $this->parseSource($schema->getSource()),
+            'form'   => $this->parseForm($schema->getForm()),
         ];
 
         $this->schemaTable->update($record);
@@ -172,7 +161,7 @@ class Schema
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
-    public function updateForm($schemaId, $form, UserContext $context)
+    public function updateForm($schemaId, Schema_Form $form, UserContext $context)
     {
         $schema = $this->schemaTable->get($schemaId);
 
@@ -186,7 +175,7 @@ class Schema
 
         $record = [
             'id'   => $schema['id'],
-            'form' => \json_encode($form),
+            'form' => $this->parseForm($form),
         ];
 
         $this->schemaTable->update($record);
@@ -220,6 +209,29 @@ class Schema
             return $connection['id'];
         } else {
             return false;
+        }
+    }
+
+    private function parseSource(?RecordInterface $source): ?string
+    {
+        if ($source instanceof RecordInterface) {
+            $class = $source->getProperty('$class');
+            if (is_string($class)) {
+                return $class;
+            } else {
+                return \json_encode($source, JSON_PRETTY_PRINT);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private function parseForm(?RecordInterface $source): ?string
+    {
+        if ($source instanceof RecordInterface) {
+            return \json_encode($source, JSON_PRETTY_PRINT);
+        } else {
+            return null;
         }
     }
 

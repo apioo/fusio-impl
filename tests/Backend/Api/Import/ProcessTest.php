@@ -71,11 +71,16 @@ class ProcessTest extends ControllerDbTestCase
     "success": true,
     "message": "Import successful",
     "result": [
-        "[CREATED] schema api-pet-petId-GET-response",
-        "[CREATED] schema api-pet-POST-request",
-        "[CREATED] schema api-pet-PUT-request",
-        "[CREATED] routes \/api\/pet\/:petId",
-        "[CREATED] routes \/api\/pet"
+        "[CREATED] schema Pet",
+        "[CREATED] schema Pets",
+        "[CREATED] schema Error",
+        "[CREATED] schema PetsGetQuery",
+        "[CREATED] schema PetsPetIdGetQuery",
+        "[CREATED] action pets-listPets-GET",
+        "[CREATED] action pets-createPets-POST",
+        "[CREATED] action pets-_petId-showPetById-GET",
+        "[CREATED] routes \/pets",
+        "[CREATED] routes \/pets\/:petId"
     ]
 }
 JSON;

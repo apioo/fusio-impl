@@ -21,13 +21,11 @@ class Schema implements \JsonSerializable
      */
     protected $name;
     /**
-     * @var string|null
-     * @Description("Contains the TypeSchema specification")
+     * @var Schema_Source|null
      */
     protected $source;
     /**
-     * @var string|null
-     * @Description("Contains a UI vocabulary to describe the UI of the schema")
+     * @var Schema_Form|null
      */
     protected $form;
     /**
@@ -73,30 +71,30 @@ class Schema implements \JsonSerializable
         return $this->name;
     }
     /**
-     * @param string|null $source
+     * @param Schema_Source|null $source
      */
-    public function setSource(?string $source) : void
+    public function setSource(?Schema_Source $source) : void
     {
         $this->source = $source;
     }
     /**
-     * @return string|null
+     * @return Schema_Source|null
      */
-    public function getSource() : ?string
+    public function getSource() : ?Schema_Source
     {
         return $this->source;
     }
     /**
-     * @param string|null $form
+     * @param Schema_Form|null $form
      */
-    public function setForm(?string $form) : void
+    public function setForm(?Schema_Form $form) : void
     {
         $this->form = $form;
     }
     /**
-     * @return string|null
+     * @return Schema_Form|null
      */
-    public function getForm() : ?string
+    public function getForm() : ?Schema_Form
     {
         return $this->form;
     }

@@ -113,7 +113,8 @@ class Transformer
             $schema = new Schema($type, clone $definitions);
             (new SchemaResolver())->resolve($schema);
 
-            $source = $this->generator->generate($schema);
+            $result = $this->generator->toArray($type, $definitions);
+            $source = Schema_Source::fromArray($result);
 
             $schema = new Schema_Create();
             $schema->setName($name);

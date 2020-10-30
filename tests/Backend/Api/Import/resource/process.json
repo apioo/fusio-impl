@@ -1,10 +1,9 @@
 {
   "status": 1,
-  "path": "\/backend\/import\/:format",
-  "pathParameters": "BackendImportFormatPath",
+  "path": "\/backend\/import\/process",
   "methods": {
     "POST": {
-      "operationId": "Backend_Action_Import_Format",
+      "operationId": "Backend_Action_Import_Process",
       "security": {
         "app": [
           "backend.import"
@@ -13,9 +12,9 @@
       "tags": [
         "backend.import"
       ],
-      "request": "Backend_Model_Import_Request",
+      "request": "Backend_Model_Adapter",
       "responses": {
-        "200": "Backend_Model_Adapter"
+        "200": "Backend_Model_Import_Response"
       }
     }
   },
@@ -109,19 +108,11 @@
         }
       }
     },
-    "BackendImportFormatPath": {
-      "type": "object",
-      "properties": {
-        "format": {
-          "type": "string"
-        }
-      }
-    },
     "Backend_Model_Adapter": {
       "$ref": "Adapter"
     },
-    "Backend_Model_Import_Request": {
-      "$ref": "Import_Request"
+    "Backend_Model_Import_Response": {
+      "$ref": "Import_Response"
     },
     "Connection": {
       "type": "object",
@@ -148,11 +139,20 @@
       },
       "maxProperties": 16
     },
-    "Import_Request": {
+    "Import_Response": {
       "type": "object",
       "properties": {
-        "schema": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
           "type": "string"
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -269,7 +269,7 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "type": "string"
+          "$ref": "Schema_Source"
         },
         "form": {
           "$ref": "Schema_Form"
@@ -278,6 +278,13 @@
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_Source": {
+      "description": "Contains the TypeSchema specification",
       "type": "object",
       "additionalProperties": {
         "type": "any"
