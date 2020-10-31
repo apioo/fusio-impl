@@ -168,7 +168,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
         $methods = $this->routesMethodService->getRequestSchemas($this->context->getRouteId(), '*');
         foreach ($methods as $methodName => $schemaId) {
-            $url = $this->reverseRouter->getUrl(Export\Api\Schema::class, ['name' => $schemaId]);
+            $url = $this->config->get('psx_url') . $this->config->get('psx_dispatch') . '/system/schema/' . $schemaId;
             $response->addHeader('Link', '<' . $url . '>; rel="' . strtolower($methodName) . '-schema"');
         }
     }
