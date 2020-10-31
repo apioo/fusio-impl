@@ -68,7 +68,7 @@ class ImportCommandTest extends ControllerDbTestCase
         $this->assertNotEmpty($connection['config']);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'New-Schema',
         ]);
 
@@ -92,16 +92,15 @@ class ImportCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
         $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 

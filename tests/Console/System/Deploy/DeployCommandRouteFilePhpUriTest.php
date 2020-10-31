@@ -63,7 +63,7 @@ class DeployCommandRouteFilePhpUriTest extends ControllerDbTestCase
             'name' => 's_Console_System_resource_test-action_php',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertStringContainsString('Console/System/resource/test-action.php', $action['class']);
         $this->assertEquals(PhpFile::class, $action['engine']);
         $this->assertEquals(null, $action['config']);

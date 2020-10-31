@@ -73,7 +73,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
-            Adapter\Graphql\Action\GraphqlProcessor::class,
+            Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
@@ -110,7 +110,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertNotEmpty($connection['config']);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Adapter-Schema',
         ]);
 
@@ -133,16 +133,15 @@ class RegisterCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
@@ -203,7 +202,7 @@ JSON;
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
-            Adapter\Graphql\Action\GraphqlProcessor::class,
+            Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
@@ -240,7 +239,7 @@ JSON;
         $this->assertNotEmpty($connection['config']);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Adapter-Schema',
         ]);
 
@@ -263,16 +262,15 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
+        $this->assertEquals(165, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 
