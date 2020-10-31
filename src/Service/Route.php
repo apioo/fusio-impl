@@ -207,7 +207,7 @@ class Route
 
         // check whether route has a production version
         if ($this->methodTable->hasProductionVersion($existing['id'])) {
-            throw new StatusCode\ConflictException('It is not possible to delete a route which contains a active production or deprecated method');
+            throw new StatusCode\ConflictException('It is not possible to delete a route which contains an active production or deprecated method');
         }
 
         // delete route

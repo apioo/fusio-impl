@@ -29,7 +29,7 @@
       ],
       "request": "Backend_Model_Route_Provider",
       "responses": {
-        "200": "Model_Message"
+        "201": "Model_Message"
       }
     },
     "PUT": {
@@ -362,7 +362,7 @@
           "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
         },
         "source": {
-          "type": "string"
+          "$ref": "Schema_Source"
         },
         "form": {
           "$ref": "Schema_Form"
@@ -371,6 +371,13 @@
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_Source": {
+      "description": "Contains the TypeSchema specification",
       "type": "object",
       "additionalProperties": {
         "type": "any"

@@ -25,11 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Route_Create;
-use Fusio\Impl\Backend\Model\Route_Provider;
-use Fusio\Impl\Backend\Model\Route_Provider_Changelog;
-use Fusio\Impl\Service\Route;
+use Fusio\Impl\Backend\Model\Route_Provider_Config;
 use Fusio\Impl\Service\Route\Provider;
 
 /**
@@ -55,7 +51,7 @@ class Changelog extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Route_Provider_Changelog);
+        assert($body instanceof Route_Provider_Config);
 
         return $this->providerService->getChangelog(
             $request->get('provider'),

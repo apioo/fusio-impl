@@ -136,8 +136,8 @@ class Fixture
 
         $data->addRoutes('default', [
             '/foo' => [
-                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true),
-                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1),
+                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo'),
+                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo'),
             ],
             '/inspect/:foo' => [
                 'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),

@@ -135,7 +135,7 @@ class DataBag
                     $this->addEvent($category, $method->getEventName());
                 }
 
-                $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName, $method->isPublic(), $method->getCosts());
+                $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName, $method->isPublic(), $method->getCosts(), $method->getOperationId());
 
                 foreach ($method->getResponses() as $code => $response) {
                     if (!$this->hasId('fusio_schema', $response)) {
@@ -461,7 +461,7 @@ class DataBag
         ];
     }
 
-    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, bool $public = false, ?int $costs = null)
+    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, bool $public = false, ?int $costs = null, ?string $operationId = null)
     {
         $this->data['fusio_routes_method'][$path . $methodName] = [
             'route_id' => self::getId('fusio_routes', $path),
@@ -470,6 +470,7 @@ class DataBag
             'status' => Resource::STATUS_ACTIVE,
             'active' => 1,
             'public' => $public ? 1 : 0,
+            'operation_id' => $operationId,
             'parameters' => $parameters,
             'request' => $request,
             'action' => $action,

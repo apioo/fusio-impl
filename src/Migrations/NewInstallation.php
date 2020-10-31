@@ -310,7 +310,7 @@ class NewInstallation
                 ],
                 '/routes/provider/:provider' => [
                     'GET' => new Method(Backend\Action\Route\Provider\Form::class, null, [200 => Form_Container::class], null, 'backend.route'),
-                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Backend\Model\Route_Provider::class, [200 => Message::class], null, 'backend.route'),
+                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Backend\Model\Route_Provider::class, [201 => Message::class], null, 'backend.route'),
                     'PUT' => new Method(Backend\Action\Route\Provider\Changelog::class, Backend\Model\Route_Provider_Config::class, [200 => Backend\Model\Route_Provider_Changelog::class], null, 'backend.route'),
                 ],
                 '/routes/$route_id<[0-9]+>' => [

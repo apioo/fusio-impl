@@ -90,6 +90,7 @@ class EntityTest extends ControllerDbTestCase
                 "GET": {
                     "active": true,
                     "public": true,
+                    "operationId": "listFoo",
                     "responses": {
                         "200": "Collection-Schema"
                     },
@@ -98,6 +99,7 @@ class EntityTest extends ControllerDbTestCase
                 "POST": {
                     "active": true,
                     "public": false,
+                    "operationId": "createFoo",
                     "request": "Entry-Schema",
                     "responses": {
                         "201": "Passthru"
@@ -291,6 +293,12 @@ JSON;
 
     public function testDelete()
     {
+        // mark methods as closed so that we can delete them
+        $this->connection->executeUpdate('UPDATE fusio_routes_method SET status = :status WHERE route_id = :route_id', [
+            'status'   => Resource::STATUS_CLOSED,
+            'route_id' => $this->id,
+        ]);
+
         $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -320,5 +328,17 @@ JSON;
 
         $this->assertEquals($this->id, $row['id']);
         $this->assertEquals(TableRoutes::STATUS_DELETED, $row['status']);
+    }
+
+    public function testDeleteUsedMethods()
+    {
+        $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+
+        $this->assertEquals(409, $response->getStatusCode(), $body);
     }
 }

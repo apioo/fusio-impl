@@ -75,7 +75,12 @@ class Method
      */
     private $costs;
 
-    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null)
+    /**
+     * @var string|null
+     */
+    private $operationId;
+
+    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null)
     {
         $this->action = $action;
         $this->request = $request;
@@ -85,6 +90,7 @@ class Method
         $this->eventName = $eventName;
         $this->public = $public;
         $this->costs = $costs;
+        $this->operationId = $operationId;
     }
 
     /**
@@ -149,5 +155,13 @@ class Method
     public function getCosts(): ?int
     {
         return $this->costs;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOperationId(): ?string
+    {
+        return $this->operationId;
     }
 }
