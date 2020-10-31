@@ -133,7 +133,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(141, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action
@@ -141,7 +141,7 @@ JSON;
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
@@ -262,7 +262,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(141, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action
@@ -270,7 +270,7 @@ JSON;
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 

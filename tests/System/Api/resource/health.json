@@ -1,21 +1,16 @@
 {
   "status": 1,
-  "path": "\/export\/health",
+  "path": "\/system\/health",
   "methods": {
     "GET": {
+      "operationId": "System_Action_GetHealth",
       "tags": [],
       "responses": {
-        "200": "Health"
+        "200": "System_Model_Health_Check"
       }
     }
   },
   "definitions": {
-    "Health": {
-      "type": "object",
-      "additionalProperties": {
-        "$ref": "Health_Check"
-      }
-    },
     "Health_Check": {
       "type": "object",
       "properties": {
@@ -26,6 +21,9 @@
           "type": "string"
         }
       }
+    },
+    "System_Model_Health_Check": {
+      "$ref": "Health_Check"
     }
   }
 }

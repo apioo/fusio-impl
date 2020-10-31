@@ -153,18 +153,17 @@ class Route extends ViewAbstract
     public function getPublic()
     {
         $builder = $this->connection->createQueryBuilder()
-            ->select(['routes.path', 'method.method', 'action.class'])
-            ->from('fusio_routes', 'routes')
-            ->innerJoin('routes', 'fusio_routes_method', 'method', 'routes.id = method.route_id')
-            ->innerJoin('method', 'fusio_action', 'action', 'method.action = action.id')
-            ->where('(routes.priority IS NULL OR routes.priority < ' . 0x1000000 . ')')
-            ->orderBy('routes.priority', 'DESC');
+            ->select(['route.path', 'method.method', 'method.action'])
+            ->from('fusio_routes', 'route')
+            ->innerJoin('route', 'fusio_routes_method', 'method', 'route.id = method.route_id')
+            ->where('(route.category_id = 1)')
+            ->orderBy('route.id', 'ASC');
 
         $definition = [
             'routes' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [
                 'path' => 'path',
                 'method' => 'method',
-                'class' => 'class',
+                'action' => 'action',
             ], null, function (array $result) {
                 $data = [];
 
@@ -173,7 +172,7 @@ class Route extends ViewAbstract
                         $data[$row['path']] = [];
                     }
 
-                    $data[$row['path']][$row['method']] = $row['class'];
+                    $data[$row['path']][$row['method']] = $row['action'];
                 }
 
                 return $data;

@@ -42,7 +42,7 @@ class SchemaTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/schema/Entry-Schema', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/system/schema/Entry-Schema', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -54,7 +54,7 @@ class SchemaTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/schema/Entry-Schema', 'GET', array(
+        $response = $this->sendRequest('/system/schema/Entry-Schema', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -62,25 +62,27 @@ class SchemaTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "type": "object",
-        "title": "entry",
-        "properties": {
-            "id": {
-                "type": "integer"
-            },
-            "title": {
-                "type": "string"
-            },
-            "content": {
-                "type": "string"
-            },
-            "date": {
-                "type": "string",
-                "format": "date-time"
+        "definitions": {
+            "Entry": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                }
             }
-        }
+        },
+        "$ref": "Entry"
     },
     "form": {
         "title": {
@@ -103,7 +105,7 @@ JSON;
 
     public function testGetWithId()
     {
-        $response = $this->sendRequest('/export/schema/3', 'GET', array(
+        $response = $this->sendRequest('/system/schema/3', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -111,38 +113,132 @@ JSON;
         $expect = <<<'JSON'
 {
     "schema": {
-        "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-        "id": "urn:schema.phpsx.org#",
-        "type": "object",
-        "title": "entry",
-        "properties": {
-            "id": {
-                "type": "integer"
+        "definitions": {
+            "App": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "userId": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "parameters": {
+                        "type": "string"
+                    },
+                    "appKey": {
+                        "type": "string"
+                    },
+                    "appSecret": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tokens": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "App_Token"
+                        }
+                    }
+                }
             },
-            "title": {
-                "type": "string"
+            "App_Token": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "token": {
+                        "type": "string"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "ip": {
+                        "type": "string"
+                    },
+                    "expire": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "date": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                }
             },
-            "content": {
-                "type": "string"
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "points": {
+                        "type": "integer"
+                    },
+                    "scopes": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "apps": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "App"
+                        }
+                    },
+                    "attributes": {
+                        "$ref": "User_Attributes"
+                    },
+                    "date": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                }
             },
-            "date": {
-                "type": "string",
-                "format": "date-time"
+            "User_Attributes": {
+                "type": "object",
+                "additionalProperties": {
+                    "type": "string"
+                }
+            },
+            "User_Update": {
+                "$extends": "User",
+                "type": "object"
             }
-        }
+        },
+        "$ref": "User_Update"
     },
-    "form": {
-        "title": {
-            "ui:autofocus": true,
-            "ui:emptyValue": ""
-        },
-        "content": {
-            "ui:widget": "textarea"
-        },
-        "date": {
-            "ui:widget": "alt-datetime"
-        }
-    }
+    "form": null
 }
 JSON;
 
@@ -154,7 +250,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/export/schema/not_available', 'GET', array(
+        $response = $this->sendRequest('/system/schema/not_available', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -173,7 +269,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/export/schema/Entry-Schema', 'POST', array(
+        $response = $this->sendRequest('/system/schema/Entry-Schema', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -186,7 +282,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/schema/Entry-Schema', 'PUT', array(
+        $response = $this->sendRequest('/system/schema/Entry-Schema', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -199,7 +295,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/schema/Entry-Schema', 'DELETE', array(
+        $response = $this->sendRequest('/system/schema/Entry-Schema', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

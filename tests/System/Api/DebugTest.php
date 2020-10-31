@@ -41,7 +41,7 @@ class DebugTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/debug', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/system/debug', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -53,22 +53,30 @@ class DebugTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/debug?foo=bar', 'GET', array(
+        $response = $this->sendRequest('/system/debug?foo=bar', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+
         $expect = <<<'JSON'
 {
-    "method": "GET",
+    "body": {},
+    "class": "Fusio\\Engine\\Request\\HttpRequest",
     "headers": {
         "user-agent": [
             "Fusio TestCase"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
+    "method": "GET",
     "parameters": {
         "foo": "bar"
-    }
+    },
+    "uriFragments": []
 }
 JSON;
 
@@ -78,24 +86,32 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/export/debug', 'POST', array(
+        $response = $this->sendRequest('/system/debug', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+
         $expect = <<<'JSON'
 {
-    "method": "POST",
+    "body": {
+        "foo": "bar"
+    },
+    "class": "Fusio\\Engine\\Request\\HttpRequest",
     "headers": {
         "user-agent": [
             "Fusio TestCase"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
-    "body": {
-        "foo": "bar"
-    }
+    "method": "POST",
+    "parameters": [],
+    "uriFragments": []
 }
 JSON;
 
@@ -105,24 +121,32 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/debug', 'PUT', array(
+        $response = $this->sendRequest('/system/debug', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+
         $expect = <<<'JSON'
 {
-    "method": "PUT",
+    "body": {
+        "foo": "bar"
+    },
+    "class": "Fusio\\Engine\\Request\\HttpRequest",
     "headers": {
         "user-agent": [
             "Fusio TestCase"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
-    "body": {
-        "foo": "bar"
-    }
+    "method": "PUT",
+    "parameters": [],
+    "uriFragments": []
 }
 JSON;
 
@@ -132,24 +156,30 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/debug', 'DELETE', array(
+        $response = $this->sendRequest('/system/debug', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+
         $expect = <<<'JSON'
 {
-    "method": "DELETE",
+    "body": {},
+    "class": "Fusio\\Engine\\Request\\HttpRequest",
     "headers": {
         "user-agent": [
             "Fusio TestCase"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
-    "body": {
-        "foo": "bar"
-    }
+    "method": "DELETE",
+    "parameters": [],
+    "uriFragments": []
 }
 JSON;
 
@@ -159,24 +189,32 @@ JSON;
 
     public function testPatch()
     {
-        $response = $this->sendRequest('/export/debug', 'PATCH', array(
+        $response = $this->sendRequest('/system/debug', 'PATCH', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+        $body = preg_replace('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/m', '00000000-0000-0000-0000-000000000000', $body);
+
         $expect = <<<'JSON'
 {
-    "method": "PATCH",
+    "body": {
+        "foo": "bar"
+    },
+    "class": "Fusio\\Engine\\Request\\HttpRequest",
     "headers": {
         "user-agent": [
             "Fusio TestCase"
+        ],
+        "x-request-id": [
+            "00000000-0000-0000-0000-000000000000"
         ]
     },
-    "body": {
-        "foo": "bar"
-    }
+    "method": "PATCH",
+    "parameters": [],
+    "uriFragments": []
 }
 JSON;
 

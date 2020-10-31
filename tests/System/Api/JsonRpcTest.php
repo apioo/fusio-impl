@@ -42,7 +42,7 @@ class JsonRpcTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/jsonrpc', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/system/jsonrpc', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -54,7 +54,7 @@ class JsonRpcTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/jsonrpc', 'GET', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -71,7 +71,7 @@ class JsonRpcTest extends ControllerDbTestCase
         $builder = new Builder();
         $message = $builder->createCall('listFoo', [], 1);
 
-        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), \json_encode($message));
 
@@ -114,7 +114,7 @@ JSON;
             $builder->createCall('listFoo', ['parameters' => ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1]], 2),
         ];
 
-        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), \json_encode($message));
 
@@ -173,7 +173,7 @@ JSON;
         $builder = new Builder();
         $message = $builder->createCall('createFoo', [], 1);
 
-        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), \json_encode($message));
 
@@ -198,7 +198,7 @@ JSON;
         $builder = new Builder();
         $message = $builder->createCall('createFoo', [], 1);
 
-        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
@@ -224,7 +224,7 @@ JSON;
         $builder = new Builder();
         $message = $builder->createCall('createFoo', ['body' => ['title' => 12]], 1);
 
-        $response = $this->sendRequest('/export/jsonrpc', 'POST', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
@@ -247,7 +247,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/jsonrpc', 'PUT', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -261,7 +261,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/jsonrpc', 'DELETE', array(
+        $response = $this->sendRequest('/system/jsonrpc', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

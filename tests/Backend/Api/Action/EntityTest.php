@@ -37,6 +37,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_action', 'Sql-Table');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -44,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/action/3', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/action/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -57,19 +66,19 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/action/163', 'GET', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "id": 163,
+    "id": {$this->id},
     "status": 1,
     "name": "Sql-Table",
-    "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-    "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlTable",
+    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
         "table": "app_news"
@@ -106,7 +115,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/163', 'POST', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -120,7 +129,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/action/163', 'PUT', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -157,9 +166,9 @@ JSON;
             ->delete('fusio_routes_method')
             ->where('action = :action')
             ->getSQL();
-        Environment::getService('connection')->executeUpdate($sql, ['action' => 3]);
+        Environment::getService('connection')->executeUpdate($sql, ['action' => $this->id]);
 
-        $response = $this->sendRequest('/backend/action/163', 'DELETE', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -179,14 +188,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_action')
-            ->where('id = 163')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(163, $row['id']);
         $this->assertEquals(0, $row['status']);
     }
 }

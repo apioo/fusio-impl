@@ -4,11 +4,6 @@
   "methods": {
     "GET": {
       "operationId": "Consumer_Action_User_GetApp",
-      "security": {
-        "app": [
-          "consumer.user"
-        ]
-      },
       "tags": [
         "consumer.user"
       ],
@@ -18,11 +13,6 @@
     },
     "POST": {
       "operationId": "Consumer_Action_User_Authorize",
-      "security": {
-        "app": [
-          "consumer.user"
-        ]
-      },
       "tags": [
         "consumer.user"
       ],

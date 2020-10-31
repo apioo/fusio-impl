@@ -41,7 +41,7 @@ class HealthTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/health', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/system/health', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -53,7 +53,7 @@ class HealthTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/health', 'GET', array(
+        $response = $this->sendRequest('/system/health', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -78,7 +78,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/export/health', 'POST', array(
+        $response = $this->sendRequest('/system/health', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -91,7 +91,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/health', 'PUT', array(
+        $response = $this->sendRequest('/system/health', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -104,7 +104,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/health', 'DELETE', array(
+        $response = $this->sendRequest('/system/health', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

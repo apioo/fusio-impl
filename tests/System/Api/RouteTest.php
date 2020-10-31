@@ -41,19 +41,19 @@ class RouteTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/export/routes', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/system/route', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/routes.json');
+        $expect = file_get_contents(__DIR__ . '/resource/route.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
     {
-        $response = $this->sendRequest('/export/routes', 'GET', array(
+        $response = $this->sendRequest('/system/route', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -61,19 +61,19 @@ class RouteTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "routes": {
-        "\/inspect\/:foo": {
-            "GET": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-            "POST": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-            "PUT": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-            "PATCH": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-            "DELETE": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction"
+        "/": {
+            "GET": "Action_Welcome"
         },
-        "\/foo": {
-            "GET": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-            "POST": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
+        "/foo": {
+            "GET": "Sql-Table",
+            "POST": "Sql-Table"
         },
-        "\/": {
-            "GET": "Fusio\\Impl\\Action\\Welcome"
+        "/inspect/:foo": {
+            "DELETE": "Inspect-Action",
+            "GET": "Inspect-Action",
+            "PATCH": "Inspect-Action",
+            "POST": "Inspect-Action",
+            "PUT": "Inspect-Action"
         }
     }
 }
@@ -85,7 +85,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/export/routes', 'POST', array(
+        $response = $this->sendRequest('/system/route', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -98,7 +98,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/export/routes', 'PUT', array(
+        $response = $this->sendRequest('/system/route', 'PUT', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
@@ -111,7 +111,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/export/routes', 'DELETE', array(
+        $response = $this->sendRequest('/system/route', 'DELETE', array(
             'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',

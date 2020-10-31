@@ -40,7 +40,7 @@ class IndexTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/doc', 'GET', array(
+        $response = $this->sendRequest('/system/doc', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -52,7 +52,7 @@ class IndexTest extends ControllerDbTestCase
 
     public function testGetFilter()
     {
-        $response = $this->sendRequest('/doc?filter=internal', 'GET', array(
+        $response = $this->sendRequest('/system/doc?filter=internal', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 

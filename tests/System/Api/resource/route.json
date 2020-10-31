@@ -1,0 +1,38 @@
+{
+  "status": 1,
+  "path": "\/system\/route",
+  "methods": {
+    "GET": {
+      "operationId": "System_Action_GetAllRoute",
+      "tags": [],
+      "responses": {
+        "200": "System_Model_Route"
+      }
+    }
+  },
+  "definitions": {
+    "Route": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "$ref": "Route_Path"
+        }
+      }
+    },
+    "Route_Method": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Route_Path": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "System_Model_Route": {
+      "$ref": "Route"
+    }
+  }
+}

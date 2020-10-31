@@ -63,7 +63,7 @@ class DeployCommandRouteHttpsTest extends ControllerDbTestCase
             'name' => 'httpbin_org_get',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals('https://httpbin.org/get', $action['class']);
         $this->assertEquals(HttpUrl::class, $action['engine']);
         $this->assertEquals(null, $action['config']);

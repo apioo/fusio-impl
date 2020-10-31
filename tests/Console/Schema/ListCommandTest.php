@@ -55,8 +55,8 @@ class ListCommandTest extends ControllerDbTestCase
 +-----+-------------------+
 | ID  | Name              |
 +-----+-------------------+
-| 140 | Entry-Schema      |
-| 139 | Collection-Schema |
+| 141 | Entry-Schema      |
+| 140 | Collection-Schema |
 | 1   | Passthru          |
 +-----+-------------------+
 

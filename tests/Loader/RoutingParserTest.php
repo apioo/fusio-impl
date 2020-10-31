@@ -77,7 +77,7 @@ class RoutingParserTest extends DbTestCase
         ];
 
         $inserts = NewInstallation::getData();
-        $routes  = $inserts['fusio_routes'] ?? [];
+        $routes  = $inserts->toArray()['fusio_routes'] ?? [];
 
         foreach ($routes as $route) {
             $path = $route['path'];

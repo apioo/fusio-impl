@@ -1,24 +1,17 @@
 {
   "status": 1,
-  "path": "\/export\/schema\/:name",
-  "pathParameters": "Export_Api_Schema_Path",
+  "path": "\/system\/schema\/:name",
+  "pathParameters": "SystemSchemaNamePath",
   "methods": {
     "GET": {
+      "operationId": "System_Action_GetSchema",
       "tags": [],
       "responses": {
-        "200": "Schema"
+        "200": "System_Model_Schema"
       }
     }
   },
   "definitions": {
-    "Export_Api_Schema_Path": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        }
-      }
-    },
     "Schema": {
       "type": "object",
       "properties": {
@@ -41,6 +34,17 @@
       "additionalProperties": {
         "type": "any"
       }
+    },
+    "SystemSchemaNamePath": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "System_Model_Schema": {
+      "$ref": "Schema"
     }
   }
 }

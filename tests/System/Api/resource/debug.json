@@ -1,78 +1,85 @@
 {
-  "status": 1,
-  "path": "\/export\/debug",
-  "methods": {
-    "GET": {
-      "tags": [],
-      "responses": {
-        "200": "Debug"
-      }
-    },
-    "POST": {
-      "tags": [],
-      "request": "Passthru",
-      "responses": {
-        "200": "Debug"
-      }
-    },
-    "PUT": {
-      "tags": [],
-      "request": "Passthru",
-      "responses": {
-        "200": "Debug"
-      }
-    },
-    "DELETE": {
-      "tags": [],
-      "request": "Passthru",
-      "responses": {
-        "200": "Debug"
-      }
-    },
-    "PATCH": {
-      "tags": [],
-      "request": "Passthru",
-      "responses": {
-        "200": "Debug"
-      }
-    }
-  },
   "definitions": {
     "Debug": {
-      "type": "object",
       "properties": {
+        "body": {
+          "$ref": "Debug_Body"
+        },
         "headers": {
           "$ref": "Debug_Headers"
         },
         "parameters": {
           "$ref": "Debug_Parameters"
-        },
-        "body": {
-          "$ref": "Debug_Body"
         }
-      }
+      },
+      "type": "object"
     },
     "Debug_Body": {
-      "type": "object",
       "additionalProperties": {
         "type": "any"
-      }
+      },
+      "type": "object"
     },
     "Debug_Headers": {
-      "type": "object",
       "additionalProperties": {
         "type": "any"
-      }
+      },
+      "type": "object"
     },
     "Debug_Parameters": {
-      "type": "object",
       "additionalProperties": {
         "type": "any"
-      }
+      },
+      "type": "object"
     },
     "Passthru": {
       "description": "No schema information available",
       "type": "object"
+    },
+    "System_Model_Debug": {
+      "$ref": "Debug"
     }
-  }
+  },
+  "methods": {
+    "DELETE": {
+      "operationId": "System_Action_GetDebug",
+      "responses": {
+        "200": "System_Model_Debug"
+      },
+      "tags": []
+    },
+    "GET": {
+      "operationId": "System_Action_GetDebug",
+      "responses": {
+        "200": "System_Model_Debug"
+      },
+      "tags": []
+    },
+    "PATCH": {
+      "operationId": "System_Action_GetDebug",
+      "request": "Passthru",
+      "responses": {
+        "200": "System_Model_Debug"
+      },
+      "tags": []
+    },
+    "POST": {
+      "operationId": "System_Action_GetDebug",
+      "request": "Passthru",
+      "responses": {
+        "200": "System_Model_Debug"
+      },
+      "tags": []
+    },
+    "PUT": {
+      "operationId": "System_Action_GetDebug",
+      "request": "Passthru",
+      "responses": {
+        "200": "System_Model_Debug"
+      },
+      "tags": []
+    }
+  },
+  "path": "/system/debug",
+  "status": 1
 }

@@ -45,7 +45,7 @@ class MigrationUtilTest extends DbTestCase
     public function testSyncConfig()
     {
         $data   = NewInstallation::getData();
-        $config = $data['fusio_config'];
+        $config = $data->toArray()['fusio_config'];
 
         // add config
         $config[] = ['name' => 'foo_bar', 'type' => Config::FORM_STRING, 'description' => 'foobar', 'value' => 'test'];
@@ -72,7 +72,7 @@ class MigrationUtilTest extends DbTestCase
     public function testSyncRoute()
     {
         $data   = NewInstallation::getData();
-        $routes = $data['fusio_routes'];
+        $routes = $data->toArray()['fusio_routes'];
 
         // update route
         $routes[1]['priority'] = 268435476;

@@ -63,7 +63,7 @@ class DeployCommandRouteFileJsonTest extends ControllerDbTestCase
             'name' => 's_Console_System_resource_static_json',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertStringContainsString('Console/System/resource/static.json', $action['class']);
         $this->assertEquals(StaticFile::class, $action['engine']);
         $this->assertEquals(null, $action['config']);

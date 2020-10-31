@@ -485,31 +485,31 @@ class NewInstallation
             ],
             'system' => [
                 '/route' => [
-                    'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class]),
+                    'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class], null, null, null, true),
                 ],
                 '/invoke/:method' => [
-                    'POST' => new Method(System\Action\Invoke::class, 'Passthru', [200 => 'Passthru']),
+                    'POST' => new Method(System\Action\Invoke::class, 'Passthru', [200 => 'Passthru'], null, null, null),
                 ],
                 '/health' => [
-                    'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class]),
+                    'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class], null, null, null, true),
                 ],
                 '/debug' => [
-                    'GET' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class]),
-                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
-                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
-                    'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class]),
-                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class]),
+                    'GET' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
+                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                    'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
+                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
                 ],
                 '/schema/:name' => [
-                    'GET' => new Method(System\Action\GetSchema::class, null, [200 => System\Model\Schema::class]),
+                    'GET' => new Method(System\Action\GetSchema::class, null, [200 => System\Model\Schema::class], null, null, null, true),
                 ],
             ],
             'authorization' => [
                 '/revoke' => [
-                    'POST' => new Method(Authorization\Action\Revoke::class, null, [200 => Message::class]),
+                    'POST' => new Method(Authorization\Action\Revoke::class, null, [200 => Message::class], null, 'authorization'),
                 ],
                 '/whoami' => [
-                    'GET' => new Method(Authorization\Action\GetWhoami::class, null, [200 => Backend\Model\User::class]),
+                    'GET' => new Method(Authorization\Action\GetWhoami::class, null, [200 => Backend\Model\User::class], null, 'authorization'),
                 ],
             ],
         ];

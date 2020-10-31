@@ -1,137 +1,62 @@
 {
-  "path": "\/export\/jsonrpc",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Export_Rpc_Request_Call": {
-        "type": "object",
-        "title": "Export Rpc Request Call",
-        "properties": {
-          "jsonrpc": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "params": {
-            "title": "Export Rpc Request Params",
-            "description": "Method params"
-          },
-          "id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Export_Rpc_Request": {
-        "title": "Export Rpc Request",
-        "oneOf": [
-          {
-            "$ref": "#\/definitions\/Export_Rpc_Request_Call"
-          },
-          {
-            "type": "array",
-            "title": "Export Rpc Request Batch",
-            "items": {
-              "$ref": "#\/definitions\/Export_Rpc_Request_Call"
-            }
-          }
+  "path": "\/system\/jsonrpc",
+  "methods": {
+    "POST": {
+      "security": {
+        "backend": [
+          "backend"
         ]
       },
-      "Export_Rpc_Response_Return_Success": {
-        "type": "object",
-        "title": "Export Rpc Response Return Success",
-        "properties": {
-          "jsonrpc": {
-            "type": "string"
-          },
-          "result": {
-            "title": "Export Rpc Response Result",
-            "description": "Method result"
-          },
-          "id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Export_Rpc_Response_Return_Error": {
-        "type": "object",
-        "title": "Export Rpc Response Return Error",
-        "properties": {
-          "jsonrpc": {
-            "type": "string"
-          },
-          "error": {
-            "$ref": "#\/definitions\/Export_Rpc_Response_Error"
-          },
-          "id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Export_Rpc_Response_Error": {
-        "type": "object",
-        "title": "Export Rpc Response Error",
-        "properties": {
-          "code": {
-            "type": "integer"
-          },
-          "message": {
-            "type": "string"
-          },
-          "data": {
-            "title": "Export Rpc Response Error Data",
-            "description": "Error data"
-          }
-        }
-      },
-      "Export_Rpc_Response": {
-        "title": "Export Rpc Response",
-        "oneOf": [
-          {
-            "title": "Export Rpc Response Return",
-            "oneOf": [
-              {
-                "$ref": "#\/definitions\/Export_Rpc_Response_Return_Success"
-              },
-              {
-                "$ref": "#\/definitions\/Export_Rpc_Response_Return_Error"
-              }
-            ]
-          },
-          {
-            "type": "array",
-            "title": "Export Rpc Response Batch",
-            "items": {
-              "title": "Export Rpc Response Return",
-              "oneOf": [
-                {
-                  "$ref": "#\/definitions\/Export_Rpc_Response_Return_Success"
-                },
-                {
-                  "$ref": "#\/definitions\/Export_Rpc_Response_Return_Error"
-                }
-              ]
-            }
-          }
-        ]
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Export_Rpc_Request"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Export_Rpc_Response"
+      "tags": [],
+      "request": "Rpc_Request_Call",
+      "responses": {
+        "200": "Rpc_Response_Success"
       }
     }
   },
-  "methods": {
-    "POST": {
-      "request": "#\/definitions\/POST-request",
-      "responses": {
-        "200": "#\/definitions\/POST-200-response"
+  "definitions": {
+    "Rpc_Request_Call": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "params": {
+          "$ref": "Rpc_Request_Params"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Rpc_Request_Params": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Rpc_Response_Result": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Rpc_Response_Success": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "Rpc_Response_Result"
+        },
+        "id": {
+          "type": "integer"
+        }
       }
     }
   }

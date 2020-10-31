@@ -166,7 +166,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);
         $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 
@@ -277,7 +277,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
         $config   = Service\Action::unserializeConfig($action['config']);
@@ -344,7 +344,7 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(165, $action['id']);
+        $this->assertEquals(167, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
 
         $config   = Service\Action::unserializeConfig($action['config']);
@@ -441,7 +441,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(141, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check routes
@@ -514,7 +514,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(143, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -574,7 +574,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(141, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
