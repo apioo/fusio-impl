@@ -24,7 +24,7 @@ namespace Fusio\Impl\Migrations;
 use Fusio\Adapter;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Export;
+use PSX\Api\Resource;
 
 /**
  * Method
@@ -80,7 +80,12 @@ class Method
      */
     private $operationId;
 
-    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null)
+    /**
+     * @var int
+     */
+    private $status;
+
+    public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null, int $status = Resource::STATUS_ACTIVE)
     {
         $this->action = $action;
         $this->request = $request;
@@ -91,6 +96,7 @@ class Method
         $this->public = $public;
         $this->costs = $costs;
         $this->operationId = $operationId;
+        $this->status = $status;
     }
 
     /**
@@ -163,5 +169,13 @@ class Method
     public function getOperationId(): ?string
     {
         return $this->operationId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
     }
 }

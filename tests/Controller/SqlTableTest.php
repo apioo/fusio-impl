@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -138,7 +137,7 @@ JSON;
             $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Routes successful updated"
+    "message": "Route successful updated"
 }
 JSON;
 
@@ -491,7 +490,7 @@ JSON;
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
-            'link' => ['<http://127.0.0.1/export/schema/Entry-Schema>; rel="post-schema"'],
+            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -549,7 +548,7 @@ JSON;
             'access-control-allow-origin' => ['*'],
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
-            'link' => ['<http://127.0.0.1/export/schema/Entry-Schema>; rel="post-schema"'],
+            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
             'access-control-expose-headers' => ['*'],
         ];
 

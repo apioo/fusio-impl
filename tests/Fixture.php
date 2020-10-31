@@ -32,6 +32,7 @@ use Fusio\Impl\Table;
 use Fusio\Impl\Table\Plan\Invoice;
 use Fusio\Impl\Tests\Adapter\Test\InspectAction;
 use Fusio\Impl\Tests\Adapter\Test\PaypalConnection;
+use PSX\Api\Resource;
 
 /**
  * Fixture
@@ -136,8 +137,8 @@ class Fixture
 
         $data->addRoutes('default', [
             '/foo' => [
-                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo'),
-                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo'),
+                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', Resource::STATUS_DEVELOPMENT),
+                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', Resource::STATUS_DEVELOPMENT),
             ],
             '/inspect/:foo' => [
                 'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),

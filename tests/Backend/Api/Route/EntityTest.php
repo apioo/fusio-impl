@@ -85,7 +85,7 @@ class EntityTest extends ControllerDbTestCase
     "config": [
         {
             "version": 1,
-            "status": 1,
+            "status": 4,
             "methods": {
                 "GET": {
                     "active": true,
@@ -293,12 +293,6 @@ JSON;
 
     public function testDelete()
     {
-        // mark methods as closed so that we can delete them
-        $this->connection->executeUpdate('UPDATE fusio_routes_method SET status = :status WHERE route_id = :route_id', [
-            'status'   => Resource::STATUS_CLOSED,
-            'route_id' => $this->id,
-        ]);
-
         $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -332,6 +326,12 @@ JSON;
 
     public function testDeleteUsedMethods()
     {
+        // mark methods as closed so that we can delete them
+        $this->connection->executeUpdate('UPDATE fusio_routes_method SET status = :status WHERE route_id = :route_id', [
+            'status'   => Resource::STATUS_ACTIVE,
+            'route_id' => $this->id,
+        ]);
+
         $response = $this->sendRequest('/backend/routes/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'

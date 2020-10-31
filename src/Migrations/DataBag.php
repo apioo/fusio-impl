@@ -135,7 +135,14 @@ class DataBag
                     $this->addEvent($category, $method->getEventName());
                 }
 
-                $this->addRouteMethod($path, $methodName, $parametersName, $requestName, $actionName, $method->isPublic(), $method->getCosts(), $method->getOperationId());
+                $this->addRouteMethod(
+                    $path,
+                    $methodName,
+                    $parametersName,
+                    $requestName,
+                    $actionName,
+                    $method
+                );
 
                 foreach ($method->getResponses() as $code => $response) {
                     if (!$this->hasId('fusio_schema', $response)) {
@@ -461,20 +468,20 @@ class DataBag
         ];
     }
 
-    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, bool $public = false, ?int $costs = null, ?string $operationId = null)
+    public function addRouteMethod(string $path, string $methodName, ?string $parameters, ?string $request, string $action, Method $method)
     {
         $this->data['fusio_routes_method'][$path . $methodName] = [
             'route_id' => self::getId('fusio_routes', $path),
             'method' => $methodName,
             'version' => 1,
-            'status' => Resource::STATUS_ACTIVE,
+            'status' => $method->getStatus(),
             'active' => 1,
-            'public' => $public ? 1 : 0,
-            'operation_id' => $operationId,
+            'public' => $method->isPublic() ? 1 : 0,
+            'operation_id' => $method->getOperationId(),
             'parameters' => $parameters,
             'request' => $request,
             'action' => $action,
-            'costs' => $costs
+            'costs' => $method->getCosts()
         ];
     }
 
