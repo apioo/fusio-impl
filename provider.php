@@ -27,7 +27,7 @@ class. The following list contains an explanation of each extension point:
 return [
     'action' => [
         \Fusio\Adapter\File\Action\FileProcessor::class,
-        \Fusio\Adapter\Graphql\Action\GraphqlProcessor::class,
+        \Fusio\Adapter\GraphQL\Action\GraphQLProcessor::class,
         \Fusio\Adapter\Http\Action\HttpProcessor::class,
         \Fusio\Adapter\Php\Action\PhpProcessor::class,
         \Fusio\Adapter\Php\Action\PhpSandbox::class,

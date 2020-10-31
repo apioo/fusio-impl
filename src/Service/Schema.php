@@ -58,11 +58,6 @@ class Schema
     protected $routesMethodTable;
 
     /**
-     * @var \Fusio\Impl\Schema\Parser
-     */
-    protected $schemaParser;
-
-    /**
      * @var \Fusio\Impl\Schema\Loader
      */
     protected $schemaLoader;
@@ -75,15 +70,13 @@ class Schema
     /**
      * @param \Fusio\Impl\Table\Schema $schemaTable
      * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
-     * @param \Fusio\Impl\Schema\Parser $schemaParser
      * @param \Fusio\Impl\Schema\Loader $schemaLoader
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Parser $schemaParser, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesMethodTable = $routesMethodTable;
-        $this->schemaParser      = $schemaParser;
         $this->schemaLoader      = $schemaLoader;
         $this->eventDispatcher   = $eventDispatcher;
     }
@@ -233,31 +226,5 @@ class Schema
         } else {
             return null;
         }
-    }
-
-    /**
-     * @param \PSX\Schema\SchemaInterface|null $schema
-     * @return string|null
-     */
-    public static function serializeCache(SchemaInterface $schema = null)
-    {
-        if ($schema === null) {
-            return null;
-        }
-
-        return base64_encode(serialize($schema));
-    }
-
-    /**
-     * @param string|null $data
-     * @return \PSX\Schema\SchemaInterface|null
-     */
-    public static function unserializeCache($data)
-    {
-        if ($data === null) {
-            return null;
-        }
-
-        return unserialize(base64_decode($data));
     }
 }

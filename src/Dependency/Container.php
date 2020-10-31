@@ -177,11 +177,6 @@ class Container extends DefaultContainer
         return new ProviderWriter($this->get('connection'));
     }
 
-    public function getSchemaParser(): Schema\Parser
-    {
-        return new Schema\Parser($this->get('schema_parser_import_resolver'));
-    }
-
     public function getSchemaParserImportResolver(): ImportResolver
     {
         $resolver = ImportResolver::createDefault($this->get('http_client'));
@@ -259,7 +254,7 @@ class Container extends DefaultContainer
         $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
 
         $application->add(new Console\Schema\AddCommand($this->get('schema_service')));
-        $application->add(new Console\Schema\ExportCommand($this->get('connection')));
+        $application->add(new Console\Schema\ExportCommand($this->get('schema_loader')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
 
         $application->add(new Console\System\CheckCommand($this->get('connection')));

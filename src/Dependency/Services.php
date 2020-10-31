@@ -340,7 +340,6 @@ trait Services
         return new Service\Schema(
             $this->get('table_manager')->getTable(Table\Schema::class),
             $this->get('table_manager')->getTable(Table\Route\Method::class),
-            $this->get('schema_parser'),
             $this->get('schema_loader'),
             $this->get('event_dispatcher')
         );
