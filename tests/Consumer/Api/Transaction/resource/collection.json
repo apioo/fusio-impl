@@ -3,14 +3,18 @@
   "path": "\/consumer\/transaction",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Transaction_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.transaction"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.transaction"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Transaction_Collection"
+        "200": "Consumer_Model_Transaction_Collection"
       }
     }
   },
@@ -32,6 +36,26 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Transaction_Collection": {
+      "$ref": "Transaction_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
     "Transaction": {
       "type": "object",
       "properties": {
@@ -48,12 +72,10 @@
           "type": "number"
         },
         "updateDate": {
-          "format": "date-time",
-          "type": "string"
+          "type": "integer"
         },
         "insertDate": {
-          "format": "date-time",
-          "type": "string"
+          "type": "integer"
         }
       }
     },

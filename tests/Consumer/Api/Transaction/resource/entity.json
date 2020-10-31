@@ -1,28 +1,34 @@
 {
   "status": 1,
   "path": "\/consumer\/transaction\/$transaction_id<[0-9]+>",
-  "pathParameters": "Consumer_Transaction_Entity_Path",
+  "pathParameters": "ConsumerTransactionTransaction_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Transaction_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.transaction"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.transaction"
+      ],
       "responses": {
-        "200": "Transaction"
+        "200": "Consumer_Model_Transaction"
       }
     }
   },
   "definitions": {
-    "Consumer_Transaction_Entity_Path": {
+    "ConsumerTransactionTransaction_idPath": {
       "type": "object",
       "properties": {
         "transaction_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Consumer_Model_Transaction": {
+      "$ref": "Transaction"
     },
     "Transaction": {
       "type": "object",
@@ -40,12 +46,10 @@
           "type": "number"
         },
         "updateDate": {
-          "format": "date-time",
-          "type": "string"
+          "type": "integer"
         },
         "insertDate": {
-          "format": "date-time",
-          "type": "string"
+          "type": "integer"
         }
       }
     }

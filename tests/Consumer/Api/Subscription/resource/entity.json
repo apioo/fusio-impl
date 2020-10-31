@@ -1,51 +1,66 @@
 {
   "status": 1,
   "path": "\/consumer\/subscription\/$subscription_id<[0-9]+>",
-  "pathParameters": "Consumer_Event_Subscription_Entity_Path",
+  "pathParameters": "ConsumerSubscriptionSubscription_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Event_Subscription_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.subscription"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.subscription"
+      ],
       "responses": {
-        "200": "Event_Subscription"
+        "200": "Consumer_Model_Event_Subscription"
       }
     },
     "PUT": {
+      "operationId": "Consumer_Action_Event_Subscription_Update",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.subscription"
         ]
       },
-      "tags": [],
-      "request": "Event_Subscription_Update",
+      "tags": [
+        "consumer.subscription"
+      ],
+      "request": "Consumer_Model_Event_Subscription_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Consumer_Action_Event_Subscription_Delete",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.subscription"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.subscription"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
-    "Consumer_Event_Subscription_Entity_Path": {
+    "ConsumerSubscriptionSubscription_idPath": {
       "type": "object",
       "properties": {
         "subscription_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Consumer_Model_Event_Subscription": {
+      "$ref": "Event_Subscription"
+    },
+    "Consumer_Model_Event_Subscription_Update": {
+      "$ref": "Event_Subscription_Update"
     },
     "Event_Subscription": {
       "type": "object",
@@ -112,6 +127,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

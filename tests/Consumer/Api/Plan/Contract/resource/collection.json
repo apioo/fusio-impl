@@ -3,26 +3,33 @@
   "path": "\/consumer\/plan\/contract",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Plan_Contract_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Plan_Contract_Collection"
+        "200": "Consumer_Model_Plan_Contract_Collection"
       }
     },
     "POST": {
+      "operationId": "Consumer_Action_Plan_Contract_Create",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
-      "request": "Plan_Order_Request",
+      "tags": [
+        "consumer.plan"
+      ],
+      "request": "Consumer_Model_Plan_Order_Request",
       "responses": {
-        "201": "Plan_Order_Response"
+        "201": "Consumer_Model_Plan_Order_Response"
       }
     }
   },
@@ -43,6 +50,32 @@
           }
         }
       }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Plan_Contract_Collection": {
+      "$ref": "Plan_Contract_Collection"
+    },
+    "Consumer_Model_Plan_Order_Request": {
+      "$ref": "Plan_Order_Request"
+    },
+    "Consumer_Model_Plan_Order_Response": {
+      "$ref": "Plan_Order_Response"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     },
     "Plan": {
       "type": "object",

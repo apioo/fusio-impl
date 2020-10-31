@@ -3,21 +3,36 @@
   "path": "\/consumer\/login",
   "methods": {
     "POST": {
-      "tags": [],
-      "request": "User_Login",
+      "operationId": "Consumer_Action_User_Login",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Login",
       "responses": {
-        "200": "User_JWT"
+        "200": "Consumer_Model_User_JWT"
       }
     },
     "PUT": {
-      "tags": [],
-      "request": "User_Refresh",
+      "operationId": "Consumer_Action_User_Refresh",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Refresh",
       "responses": {
-        "200": "User_JWT"
+        "200": "Consumer_Model_User_JWT"
       }
     }
   },
   "definitions": {
+    "Consumer_Model_User_JWT": {
+      "$ref": "User_JWT"
+    },
+    "Consumer_Model_User_Login": {
+      "$ref": "User_Login"
+    },
+    "Consumer_Model_User_Refresh": {
+      "$ref": "User_Refresh"
+    },
     "User_JWT": {
       "type": "object",
       "properties": {

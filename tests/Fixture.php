@@ -106,7 +106,7 @@ class Fixture
         $data->addPlanContract('Administrator', 'Plan A', 19.99, 50, 1, '2018-10-05 18:18:00');
         $data->addPlanInvoice(0, null, 'Administrator', '0001-2019-896280', Invoice::STATUS_PAYED, 19.99, 100, '2019-04-27', '2019-04-27', '2019-04-27 20:57:00', '2019-04-27 20:57:00');
         $data->addPlanInvoice(0, 1, 'Administrator', '0001-2019-897635', Invoice::STATUS_OPEN, 19.99, 100, '2019-04-27', '2019-04-27', null, '2019-04-27 20:57:00');
-        $data->addTransaction(0, 'paypal', '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'PAY-1B56960729604235TKQQIYVY', 39.99, 'http://myapp.com', '2018-10-05 18:18:00');
+        $data->addTransaction(1, 'paypal', '9e239bb3-cfb4-4783-92e0-18ce187041bc', 'PAY-1B56960729604235TKQQIYVY', 39.99, 'http://myapp.com', '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addScope('default', 'foo', 'Foo access');
@@ -132,6 +132,7 @@ class Fixture
         $data->addUserScope('Developer', 'authorization');
         $data->addUserScope('Developer', 'foo');
         $data->addUserScope('Developer', 'bar');
+        $data->addUserGrant('Administrator', 'Backend', true, '2015-02-27 19:59:15');
         $data->addUserAttribute('Administrator', 'first_name', 'Johann');
         $data->addUserAttribute('Administrator', 'last_name', 'Bach');
 

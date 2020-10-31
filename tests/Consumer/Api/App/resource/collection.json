@@ -3,26 +3,33 @@
   "path": "\/consumer\/app",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_App_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.app"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.app"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "App_Collection"
+        "200": "Consumer_Model_App_Collection"
       }
     },
     "POST": {
+      "operationId": "Consumer_Action_App_Create",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.app"
         ]
       },
-      "tags": [],
-      "request": "App_Create",
+      "tags": [
+        "consumer.app"
+      ],
+      "request": "Consumer_Model_App_Create",
       "responses": {
-        "201": "Message"
+        "201": "Model_Message"
       }
     }
   },
@@ -111,6 +118,26 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_App_Collection": {
+      "$ref": "App_Collection"
+    },
+    "Consumer_Model_App_Create": {
+      "$ref": "App_Create"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -121,6 +148,12 @@
           "type": "string"
         }
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

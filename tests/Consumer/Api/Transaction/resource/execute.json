@@ -1,20 +1,27 @@
 {
   "status": 1,
   "path": "\/consumer\/transaction\/execute\/:transaction_id",
-  "pathParameters": "Consumer_Transaction_Execute_Path",
+  "pathParameters": "ConsumerTransactionExecuteTransaction_idPath",
   "methods": {
     "GET": {
-      "description": "Executes the payment on the remote provider and redirects the user to the app using the provided return url",
-      "tags": [],
+      "operationId": "Consumer_Action_Transaction_Execute",
+      "security": {
+        "app": [
+          "consumer.transaction"
+        ]
+      },
+      "tags": [
+        "consumer.transaction"
+      ],
       "responses": []
     }
   },
   "definitions": {
-    "Consumer_Transaction_Execute_Path": {
+    "ConsumerTransactionExecuteTransaction_idPath": {
       "type": "object",
       "properties": {
         "transaction_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
     }

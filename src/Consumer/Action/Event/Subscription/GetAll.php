@@ -44,7 +44,7 @@ class GetAll extends ActionAbstract
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->table = $tableManager->getTable(View\App::class);
+        $this->table = $tableManager->getTable(View\Event\Subscription::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)

@@ -3,14 +3,18 @@
   "path": "\/consumer\/grant",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Grant_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.grant"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.grant"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Grant_Collection"
+        "200": "Consumer_Model_Grant_Collection"
       }
     }
   },
@@ -69,6 +73,23 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Grant_Collection": {
+      "$ref": "Grant_Collection"
+    },
     "Grant": {
       "type": "object",
       "properties": {
@@ -89,6 +110,9 @@
       "$template": {
         "T": "Grant"
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     }
   }
 }

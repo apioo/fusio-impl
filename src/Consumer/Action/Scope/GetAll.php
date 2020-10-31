@@ -50,6 +50,7 @@ class GetAll extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getCollection(
+            1,
             $context->getUser()->getId(),
             (int) $request->get('startIndex')
         );

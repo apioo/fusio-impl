@@ -1,40 +1,49 @@
 {
   "status": 1,
   "path": "\/consumer\/app\/$app_id<[0-9]+>",
-  "pathParameters": "Consumer_App_Collection_Path",
+  "pathParameters": "ConsumerAppApp_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_App_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.app"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.app"
+      ],
       "responses": {
-        "200": "App"
+        "200": "Consumer_Model_App"
       }
     },
     "PUT": {
+      "operationId": "Consumer_Action_App_Update",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.app"
         ]
       },
-      "tags": [],
-      "request": "App_Update",
+      "tags": [
+        "consumer.app"
+      ],
+      "request": "Consumer_Model_App_Update",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Consumer_Action_App_Delete",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.app"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.app"
+      ],
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
@@ -100,13 +109,19 @@
         "scopes"
       ]
     },
-    "Consumer_App_Collection_Path": {
+    "ConsumerAppApp_idPath": {
       "type": "object",
       "properties": {
         "app_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Consumer_Model_App": {
+      "$ref": "App"
+    },
+    "Consumer_Model_App_Update": {
+      "$ref": "App_Update"
     },
     "Message": {
       "type": "object",
@@ -118,6 +133,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

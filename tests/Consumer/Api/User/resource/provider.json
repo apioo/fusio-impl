@@ -1,24 +1,33 @@
 {
   "status": 1,
   "path": "\/consumer\/provider\/:provider",
-  "pathParameters": "Consumer_User_Provider",
+  "pathParameters": "ConsumerProviderProviderPath",
   "methods": {
     "POST": {
-      "tags": [],
-      "request": "User_Provider",
+      "operationId": "Consumer_Action_User_Provider",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Provider",
       "responses": {
-        "200": "User_JWT"
+        "200": "Consumer_Model_User_JWT"
       }
     }
   },
   "definitions": {
-    "Consumer_User_Provider": {
+    "ConsumerProviderProviderPath": {
       "type": "object",
       "properties": {
         "provider": {
           "type": "string"
         }
       }
+    },
+    "Consumer_Model_User_JWT": {
+      "$ref": "User_JWT"
+    },
+    "Consumer_Model_User_Provider": {
+      "$ref": "User_Provider"
     },
     "User_JWT": {
       "type": "object",

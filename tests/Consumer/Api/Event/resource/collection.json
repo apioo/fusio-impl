@@ -3,14 +3,18 @@
   "path": "\/consumer\/event",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Event_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.event"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.event"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Event_Collection"
+        "200": "Consumer_Model_Event_Collection"
       }
     }
   },
@@ -32,6 +36,23 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Event_Collection": {
+      "$ref": "Event_Collection"
+    },
     "Event": {
       "type": "object",
       "properties": {
@@ -39,8 +60,7 @@
           "type": "integer"
         },
         "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+          "type": "string"
         },
         "description": {
           "type": "string"
@@ -52,6 +72,9 @@
       "$template": {
         "T": "Event"
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     }
   }
 }

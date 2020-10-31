@@ -1,29 +1,38 @@
 {
   "status": 1,
   "path": "\/consumer\/transaction\/prepare\/:provider",
-  "pathParameters": "Consumer_Transaction_Prepare_Path",
+  "pathParameters": "ConsumerTransactionPrepareProviderPath",
   "methods": {
     "POST": {
+      "operationId": "Consumer_Action_Transaction_Prepare",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.transaction"
         ]
       },
-      "tags": [],
-      "request": "Transaction_Prepare_Request",
+      "tags": [
+        "consumer.transaction"
+      ],
+      "request": "Consumer_Model_Transaction_Prepare_Request",
       "responses": {
-        "200": "Transaction_Prepare_Response"
+        "200": "Consumer_Model_Transaction_Prepare_Response"
       }
     }
   },
   "definitions": {
-    "Consumer_Transaction_Prepare_Path": {
+    "ConsumerTransactionPrepareProviderPath": {
       "type": "object",
       "properties": {
         "provider": {
           "type": "string"
         }
       }
+    },
+    "Consumer_Model_Transaction_Prepare_Request": {
+      "$ref": "Transaction_Prepare_Request"
+    },
+    "Consumer_Model_Transaction_Prepare_Response": {
+      "$ref": "Transaction_Prepare_Response"
     },
     "Transaction_Prepare_Request": {
       "type": "object",

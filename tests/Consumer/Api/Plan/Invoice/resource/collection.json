@@ -3,89 +3,22 @@
   "path": "\/consumer\/plan\/invoice",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Plan_Invoice_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Plan_Invoice_Collection"
+        "200": "Consumer_Model_Plan_Invoice_Collection"
       }
     }
   },
   "definitions": {
-    "App": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-        },
-        "url": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "string"
-        },
-        "appKey": {
-          "type": "string"
-        },
-        "appSecret": {
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "tokens": {
-          "type": "array",
-          "items": {
-            "$ref": "App_Token"
-          }
-        }
-      }
-    },
-    "App_Token": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "token": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "string"
-        },
-        "ip": {
-          "type": "string"
-        },
-        "expire": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -103,26 +36,31 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Plan_Invoice_Collection": {
+      "$ref": "Plan_Invoice_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
     "Plan_Invoice": {
       "type": "object",
       "properties": {
         "id": {
           "type": "integer"
-        },
-        "contractId": {
-          "type": "integer"
-        },
-        "user": {
-          "$ref": "User"
-        },
-        "transactionId": {
-          "type": "integer"
-        },
-        "prevId": {
-          "type": "integer"
-        },
-        "displayId": {
-          "type": "string"
         },
         "status": {
           "type": "integer"
@@ -132,14 +70,6 @@
         },
         "points": {
           "type": "integer"
-        },
-        "fromDate": {
-          "format": "date",
-          "type": "string"
-        },
-        "toDate": {
-          "format": "date",
-          "type": "string"
         },
         "payDate": {
           "format": "date-time",
@@ -155,52 +85,6 @@
       "$ref": "Collection",
       "$template": {
         "T": "Plan_Invoice"
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-        },
-        "email": {
-          "type": "string"
-        },
-        "points": {
-          "type": "integer"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "apps": {
-          "type": "array",
-          "items": {
-            "$ref": "App"
-          }
-        },
-        "attributes": {
-          "$ref": "User_Attributes"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "User_Attributes": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
       }
     }
   }

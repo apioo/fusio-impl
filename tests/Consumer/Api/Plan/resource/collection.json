@@ -3,14 +3,18 @@
   "path": "\/consumer\/plan",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Plan_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Plan_Collection"
+        "200": "Consumer_Model_Plan_Collection"
       }
     }
   },
@@ -32,6 +36,26 @@
         }
       }
     },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Plan_Collection": {
+      "$ref": "Plan_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
     "Plan": {
       "type": "object",
       "properties": {
@@ -48,9 +72,6 @@
           "type": "number"
         },
         "points": {
-          "type": "integer"
-        },
-        "period": {
           "type": "integer"
         }
       }

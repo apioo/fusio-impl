@@ -1,99 +1,34 @@
 {
   "status": 1,
   "path": "\/consumer\/plan\/contract\/$contract_id<[0-9]+>",
-  "pathParameters": "Consumer_Plan_Contract_Entity_Path",
+  "pathParameters": "ConsumerPlanContractContract_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Plan_Contract_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.plan"
+      ],
       "responses": {
-        "200": "Plan_Contract"
+        "200": "Consumer_Model_Plan_Contract"
       }
     }
   },
   "definitions": {
-    "App": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "userId": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-        },
-        "url": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "string"
-        },
-        "appKey": {
-          "type": "string"
-        },
-        "appSecret": {
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "tokens": {
-          "type": "array",
-          "items": {
-            "$ref": "App_Token"
-          }
-        }
-      }
-    },
-    "App_Token": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "token": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "string"
-        },
-        "ip": {
-          "type": "string"
-        },
-        "expire": {
-          "format": "date-time",
-          "type": "string"
-        },
-        "date": {
-          "format": "date-time",
-          "type": "string"
-        }
-      }
-    },
-    "Consumer_Plan_Contract_Entity_Path": {
+    "ConsumerPlanContractContract_idPath": {
       "type": "object",
       "properties": {
         "contract_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Consumer_Model_Plan_Contract": {
+      "$ref": "Plan_Contract"
     },
     "Plan": {
       "type": "object",
@@ -112,9 +47,6 @@
         },
         "points": {
           "type": "integer"
-        },
-        "period": {
-          "type": "integer"
         }
       }
     },
@@ -124,14 +56,11 @@
         "id": {
           "type": "integer"
         },
-        "user": {
-          "$ref": "User"
+        "status": {
+          "type": "integer"
         },
         "plan": {
           "$ref": "Plan"
-        },
-        "status": {
-          "type": "integer"
         },
         "amount": {
           "type": "number"
@@ -142,13 +71,19 @@
         "period": {
           "type": "integer"
         },
+        "invoices": {
+          "type": "array",
+          "items": {
+            "$ref": "Plan_Invoice"
+          }
+        },
         "insertDate": {
           "format": "date-time",
           "type": "string"
         }
       }
     },
-    "User": {
+    "Plan_Invoice": {
       "type": "object",
       "properties": {
         "id": {
@@ -157,41 +92,20 @@
         "status": {
           "type": "integer"
         },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-        },
-        "email": {
-          "type": "string"
+        "amount": {
+          "type": "number"
         },
         "points": {
           "type": "integer"
         },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "payDate": {
+          "format": "date-time",
+          "type": "string"
         },
-        "apps": {
-          "type": "array",
-          "items": {
-            "$ref": "App"
-          }
-        },
-        "attributes": {
-          "$ref": "User_Attributes"
-        },
-        "date": {
+        "insertDate": {
           "format": "date-time",
           "type": "string"
         }
-      }
-    },
-    "User_Attributes": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
       }
     }
   }

@@ -409,11 +409,11 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Consumer\Model\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
                 ],
                 '/grant/$grant_id<[0-9]+>' => [
-                    'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [200 => Message::class], null, 'consumer.grant'),
+                    'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [204 => Message::class], null, 'consumer.grant'),
                 ],
                 '/plan/contract' => [
                     'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Consumer\Model\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
-                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, null, [201 => Consumer\Model\Plan_Order_Request::class], null, 'consumer.plan'),
+                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, Consumer\Model\Plan_Order_Request::class, [201 => Consumer\Model\Plan_Order_Response::class], null, 'consumer.plan'),
                 ],
                 '/plan/contract/$contract_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Consumer\Model\Plan_Contract::class], null, 'consumer.plan'),
@@ -446,40 +446,41 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
                 ],
                 '/transaction/execute/:transaction_id' => [
-                    'POST' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),
+                    'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),
                 ],
                 '/transaction/prepare/:provider' => [
-                    'POST' => new Method(Consumer\Action\Transaction\Execute::class, Consumer\Model\Transaction_Prepare_Request::class, [200 => Consumer\Model\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
+                    'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Consumer\Model\Transaction_Prepare_Request::class, [200 => Consumer\Model\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
                 ],
                 '/transaction/$transaction_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Transaction\Get::class, null, [200 => Consumer\Model\Transaction::class], null, 'consumer.transaction'),
                 ],
                 '/account' => [
                     'GET' => new Method(Consumer\Action\User\Get::class, null, [200 => Consumer\Model\User_Account::class], null, 'consumer.user'),
+                    'PUT' => new Method(Consumer\Action\User\Update::class, Consumer\Model\User_Account::class, [200 => Message::class], null, 'consumer.user'),
                 ],
                 '/account/change_password' => [
-                    'PUT' => new Method(Consumer\Action\User\ChangePassword::class, null, [200 => Backend\Model\Account_ChangePassword::class], null, 'consumer.user'),
+                    'PUT' => new Method(Consumer\Action\User\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'consumer.user'),
                 ],
                 '/activate' => [
-                    'POST' => new Method(Consumer\Action\User\Activate::class, Consumer\Model\User_Activate::class, [200 => Message::class], null, 'consumer.user'),
+                    'POST' => new Method(Consumer\Action\User\Activate::class, Consumer\Model\User_Activate::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
                 '/authorize' => [
-                    'GET' => new Method(Consumer\Action\User\GetApp::class, null, [200 => Consumer\Model\Authorize_Meta::class], null, 'consumer.user'),
-                    'POST' => new Method(Consumer\Action\User\Authorize::class, Consumer\Model\Authorize_Request::class, [200 => Consumer\Model\Authorize_Response::class], null, 'consumer.user'),
+                    'GET' => new Method(Consumer\Action\User\GetApp::class, null, [200 => Consumer\Model\Authorize_Meta::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Authorize::class, Consumer\Model\Authorize_Request::class, [200 => Consumer\Model\Authorize_Response::class], null, 'consumer.user', null, true),
                 ],
                 '/login' => [
-                    'POST' => new Method(Consumer\Action\User\Login::class, Consumer\Model\User_Login::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user'),
-                    'PUT' => new Method(Consumer\Action\User\Refresh::class, Consumer\Model\User_Refresh::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user'),
+                    'POST' => new Method(Consumer\Action\User\Login::class, Consumer\Model\User_Login::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\Refresh::class, Consumer\Model\User_Refresh::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
                 ],
                 '/provider/:provider' => [
-                    'POST' => new Method(Consumer\Action\User\Provider::class, Consumer\Model\User_Provider::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user'),
+                    'POST' => new Method(Consumer\Action\User\Provider::class, Consumer\Model\User_Provider::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
                 ],
                 '/register' => [
-                    'POST' => new Method(Consumer\Action\User\Register::class, Consumer\Model\User_Register::class, [200 => Message::class], null, 'consumer.user'),
+                    'POST' => new Method(Consumer\Action\User\Register::class, Consumer\Model\User_Register::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
                 '/password_reset' => [
-                    'POST' => new Method(Consumer\Action\User\ResetPassword\Request::class, Consumer\Model\User_Email::class, [200 => Message::class], null, 'consumer.user'),
-                    'PUT' => new Method(Consumer\Action\User\ResetPassword\Execute::class, Consumer\Model\User_PasswordReset::class, [200 => Message::class], null, 'consumer.user'),
+                    'POST' => new Method(Consumer\Action\User\ResetPassword\Request::class, Consumer\Model\User_Email::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\ResetPassword\Execute::class, Consumer\Model\User_PasswordReset::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
             ],
             'system' => [

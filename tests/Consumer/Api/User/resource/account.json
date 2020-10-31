@@ -3,30 +3,39 @@
   "path": "\/consumer\/account",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_User_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.user"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.user"
+      ],
       "responses": {
-        "200": "User_Account"
+        "200": "Consumer_Model_User_Account"
       }
     },
     "PUT": {
+      "operationId": "Consumer_Action_User_Update",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.user"
         ]
       },
-      "tags": [],
-      "request": "User_Account",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Account",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Consumer_Model_User_Account": {
+      "$ref": "User_Account"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -37,6 +46,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User_Account": {
       "type": "object",

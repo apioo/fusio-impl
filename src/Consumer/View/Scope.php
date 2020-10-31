@@ -33,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Scope extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getCollection(int $categoryId, int $userId, int $startIndex = 0)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -42,6 +42,7 @@ class Scope extends ViewAbstract
         $count = 16;
 
         $condition = new Condition();
+        $condition->equals('scope.category_id', $categoryId ?: 1);
         $condition->equals('user_scope.user_id', $userId);
 
         $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);

@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Invoice extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = 0, $contractId = null)
+    public function getCollection(int $userId, int $startIndex = 0, ?int $contractId = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;

@@ -3,14 +3,20 @@
   "path": "\/consumer\/activate",
   "methods": {
     "POST": {
-      "tags": [],
-      "request": "User_Activate",
+      "operationId": "Consumer_Action_User_Activate",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Activate",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Consumer_Model_User_Activate": {
+      "$ref": "User_Activate"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -21,6 +27,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User_Activate": {
       "type": "object",

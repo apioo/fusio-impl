@@ -85,7 +85,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.marketplace",
         "backend.plan",
         "backend.rate",
-        "backend.routes",
+        "backend.route",
         "backend.schema",
         "backend.scope",
         "backend.sdk",
@@ -145,7 +145,7 @@ JSON;
         $expect = <<<JSON
 {
     "success": true,
-    "message": "Account update successful"
+    "message": "Account successful updated"
 }
 JSON;
 

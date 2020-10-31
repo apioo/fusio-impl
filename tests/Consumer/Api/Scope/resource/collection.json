@@ -3,14 +3,18 @@
   "path": "\/consumer\/scope",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Scope_GetAll",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.scope"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.scope"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "Scope_Collection"
+        "200": "Consumer_Model_Scope_Collection"
       }
     }
   },
@@ -31,6 +35,26 @@
           }
         }
       }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Scope_Collection": {
+      "$ref": "Scope_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     },
     "Scope": {
       "type": "object",

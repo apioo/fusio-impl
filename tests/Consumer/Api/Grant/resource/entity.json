@@ -1,26 +1,45 @@
 {
   "status": 1,
   "path": "\/consumer\/grant\/$grant_id<[0-9]+>",
-  "pathParameters": "Consumer_Grant_Entity_Path",
+  "pathParameters": "ConsumerGrantGrant_idPath",
   "methods": {
     "DELETE": {
+      "operationId": "Consumer_Action_Grant_Delete",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.grant"
         ]
       },
-      "tags": [],
-      "responses": []
+      "tags": [
+        "consumer.grant"
+      ],
+      "responses": {
+        "204": "Model_Message"
+      }
     }
   },
   "definitions": {
-    "Consumer_Grant_Entity_Path": {
+    "ConsumerGrantGrant_idPath": {
       "type": "object",
       "properties": {
         "grant_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

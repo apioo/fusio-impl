@@ -3,27 +3,32 @@
   "path": "\/consumer\/authorize",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_User_GetApp",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.user"
         ]
       },
-      "tags": [],
-      "queryParameters": "Consumer_User_Authorize_Query",
+      "tags": [
+        "consumer.user"
+      ],
       "responses": {
-        "200": "Authorize_Meta"
+        "200": "Consumer_Model_Authorize_Meta"
       }
     },
     "POST": {
+      "operationId": "Consumer_Action_User_Authorize",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.user"
         ]
       },
-      "tags": [],
-      "request": "Authorize_Request",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_Authorize_Request",
       "responses": {
-        "200": "Authorize_Response"
+        "200": "Consumer_Model_Authorize_Response"
       }
     }
   },
@@ -108,16 +113,14 @@
         }
       }
     },
-    "Consumer_User_Authorize_Query": {
-      "type": "object",
-      "properties": {
-        "client_id": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "string"
-        }
-      }
+    "Consumer_Model_Authorize_Meta": {
+      "$ref": "Authorize_Meta"
+    },
+    "Consumer_Model_Authorize_Request": {
+      "$ref": "Authorize_Request"
+    },
+    "Consumer_Model_Authorize_Response": {
+      "$ref": "Authorize_Response"
     },
     "Scope": {
       "type": "object",

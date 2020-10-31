@@ -1,28 +1,34 @@
 {
   "status": 1,
   "path": "\/consumer\/plan\/$plan_id<[0-9]+>",
-  "pathParameters": "Consumer_Plan_Entity",
+  "pathParameters": "ConsumerPlanPlan_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_Plan_Get",
       "security": {
-        "consumer": [
+        "app": [
           "consumer.plan"
         ]
       },
-      "tags": [],
+      "tags": [
+        "consumer.plan"
+      ],
       "responses": {
-        "200": "Plan"
+        "200": "Consumer_Model_Plan"
       }
     }
   },
   "definitions": {
-    "Consumer_Plan_Entity": {
+    "ConsumerPlanPlan_idPath": {
       "type": "object",
       "properties": {
         "plan_id": {
-          "type": "integer"
+          "type": "string"
         }
       }
+    },
+    "Consumer_Model_Plan": {
+      "$ref": "Plan"
     },
     "Plan": {
       "type": "object",
@@ -40,9 +46,6 @@
           "type": "number"
         },
         "points": {
-          "type": "integer"
-        },
-        "period": {
           "type": "integer"
         }
       }

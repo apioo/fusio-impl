@@ -3,14 +3,20 @@
   "path": "\/consumer\/register",
   "methods": {
     "POST": {
-      "tags": [],
-      "request": "User_Register",
+      "operationId": "Consumer_Action_User_Register",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Register",
       "responses": {
-        "200": "Message"
+        "200": "Model_Message"
       }
     }
   },
   "definitions": {
+    "Consumer_Model_User_Register": {
+      "$ref": "User_Register"
+    },
     "Message": {
       "type": "object",
       "properties": {
@@ -21,6 +27,9 @@
           "type": "string"
         }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     },
     "User_Register": {
       "type": "object",

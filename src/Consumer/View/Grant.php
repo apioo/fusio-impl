@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Grant extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = null)
+    public function getCollection(int $userId, int $startIndex = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
