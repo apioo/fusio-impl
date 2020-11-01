@@ -12,4 +12,7 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+    <stubs>
+        <file name="tests/stubs.php" />
+    </stubs>
 </psalm>
