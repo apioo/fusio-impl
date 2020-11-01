@@ -44,7 +44,6 @@ use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Api\Listing\CachedListing;
-use PSX\Api\Listing\FilterFactory;
 use PSX\Api\Listing\FilterFactoryInterface;
 use PSX\Api\ListingInterface;
 use PSX\Framework\Console as FrameworkConsole;
@@ -95,15 +94,8 @@ class Container extends DefaultContainer
 
     public function getListingFilterFactory(): FilterFactoryInterface
     {
-        $filter = new FilterFactory();
-        $filter->addFilter('authorization', new Filter\AuthorizationFilter());
-        $filter->addFilter('backend', new Filter\BackendFilter());
-        $filter->addFilter('consumer', new Filter\ConsumerFilter());
-        $filter->addFilter('doc', new Filter\DocFilter());
-        $filter->addFilter('export', new Filter\ExportFilter());
-        $filter->addFilter('external', new Filter\ExternalFilter());
-        $filter->addFilter('internal', new Filter\InternalFilter());
-        $filter->setDefault('external');
+        $filter = new Filter\FilterFactory($this->get('connection'));
+        $filter->setDefault('default');
 
         return $filter;
     }

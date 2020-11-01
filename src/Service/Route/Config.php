@@ -24,7 +24,7 @@ namespace Fusio\Impl\Service\Route;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Route_Method;
 use Fusio\Impl\Backend\Model\Route_Version;
-use Fusio\Impl\Framework\Filter\ExternalFilter;
+use Fusio\Impl\Framework\Filter\Filter;
 use Fusio\Impl\Table;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\ListingInterface;
@@ -144,8 +144,8 @@ class Config
 
         // invalidate resource cache
         if ($this->listing instanceof CachedListing) {
-            $this->listing->invalidateResourceIndex(new ExternalFilter());
-            $this->listing->invalidateResourceCollection(null, new ExternalFilter());
+            $this->listing->invalidateResourceIndex(new Filter('default'));
+            $this->listing->invalidateResourceCollection(null, new Filter('default'));
             $this->listing->invalidateResource($path);
         }
     }

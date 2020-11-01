@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\Filter\Route;
 
+use Fusio\Impl\Framework\Filter\Filter;
 use PSX\Validate\FilterAbstract;
 
 /**
@@ -33,20 +34,9 @@ use PSX\Validate\FilterAbstract;
 class Path extends FilterAbstract
 {
     /**
-     * @var array
-     */
-    protected static $reserved = [
-        0x10000000 => 'backend',
-        0x8000000  => 'consumer',
-        0x4000000  => 'authorization',
-        0x2000000  => 'doc',
-        0x1000000  => 'export'
-    ];
-
-    /**
      * @var string
      */
-    protected $errorMessage = '%s is not a valid path';
+    private $errorMessage = '%s is not a valid path';
 
     /**
      * @param mixed $value
@@ -69,7 +59,7 @@ class Path extends FilterAbstract
             }
 
             // check reserved segments
-            if (in_array(strtolower($parts[0]), self::$reserved)) {
+            if (in_array(strtolower($parts[0]), Filter::getReserved())) {
                 $this->errorMessage = '%s uses a path segment which is reserved for the system';
                 return false;
             }
@@ -98,13 +88,5 @@ class Path extends FilterAbstract
     public function getErrorMessage()
     {
         return $this->errorMessage;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getReserved()
-    {
-        return self::$reserved;
     }
 }

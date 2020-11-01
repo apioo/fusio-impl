@@ -25,16 +25,51 @@ use Fusio\Impl\Backend\Filter\Route\Path;
 use PSX\Api\Listing\FilterInterface;
 
 /**
- * FilterAbstract
+ * Filter
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-abstract class FilterAbstract implements FilterInterface
+class Filter implements FilterInterface
 {
+    /**
+     * @var string
+     */
+    private $id;
+
+    public function __construct(string $id)
+    {
+        $this->id = $id;
+    }
+
     public function match(string $path): bool
     {
-        return substr($path, 1, strlen($this->getId()) + 1) == '/' . $this->getId();
+        if ($this->getId() === 'default') {
+            $parts = explode('/', $path);
+            $name  = $parts[1] ?? null;
+
+            return !in_array($name, self::getReserved());
+        } else {
+            return substr($path, 1, strlen($this->getId()) + 1) == '/' . $this->getId();
+        }
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getReserved(): array
+    {
+        return [
+            'backend',
+            'consumer',
+            'system',
+            'authorization',
+        ];
     }
 }

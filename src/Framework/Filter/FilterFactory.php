@@ -21,17 +21,36 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
+use Doctrine\DBAL\Connection;
+use PSX\Api\Listing\FilterFactory as PSXFilterFactory;
+
 /**
- * BackendFilter
+ * FilterFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class BackendFilter extends FilterAbstract
+class FilterFactory extends PSXFilterFactory
 {
-    public function getId(): string
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    public function __construct(Connection $connection)
     {
-        return 'backend';
+        parent::__construct();
+
+        $this->connection = $connection;
+        $this->load();
+    }
+    
+    private function load()
+    {
+        $result = $this->connection->fetchAll('SELECT id, name FROM fusio_category');
+        foreach ($result as $row) {
+            $this->addFilter($row['name'], new Filter($row['name']));
+        }
     }
 }
