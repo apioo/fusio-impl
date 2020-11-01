@@ -51,7 +51,7 @@ class Filter implements FilterInterface
 
             return !in_array($name, self::getReserved());
         } else {
-            return substr($path, 1, strlen($this->getId()) + 1) == '/' . $this->getId();
+            return substr($path, 0, strlen($this->getId()) + 1) === '/' . $this->getId();
         }
     }
 
