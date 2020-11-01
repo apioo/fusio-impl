@@ -3,41 +3,23 @@
   "path": "\/system\/jsonrpc",
   "methods": {
     "POST": {
+      "description": "JSON-RPC Endpoint please take a look at https:\/\/www.jsonrpc.org\/specification",
       "security": {
         "backend": [
           "backend"
         ]
       },
       "tags": [],
-      "request": "Rpc_Request_Call",
+      "request": "Passthru",
       "responses": {
         "200": "Rpc_Response_Success"
       }
     }
   },
   "definitions": {
-    "Rpc_Request_Call": {
-      "type": "object",
-      "properties": {
-        "jsonrpc": {
-          "type": "string"
-        },
-        "method": {
-          "type": "string"
-        },
-        "params": {
-          "$ref": "Rpc_Request_Params"
-        },
-        "id": {
-          "type": "integer"
-        }
-      }
-    },
-    "Rpc_Request_Params": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object"
     },
     "Rpc_Response_Result": {
       "type": "object",

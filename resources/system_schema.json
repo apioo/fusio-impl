@@ -63,60 +63,6 @@
         "$ref": "string"
       }
     },
-    "Rpc_Request": {
-      "oneOf": [{
-        "$ref": "Rpc_Request_Batch"
-      }, {
-        "$ref": "Rpc_Request_Call"
-      }]
-    },
-    "Rpc_Request_Batch": {
-      "type": "array",
-      "items": {
-        "$ref": "Rpc_Request_Call"
-      }
-    },
-    "Rpc_Request_Call": {
-      "type": "object",
-      "properties": {
-        "jsonrpc": {
-          "type": "string"
-        },
-        "method": {
-          "type": "string"
-        },
-        "params": {
-          "$ref": "Rpc_Request_Params"
-        },
-        "id": {
-          "type": "integer"
-        }
-      }
-    },
-    "Rpc_Request_Params": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "Rpc_Response": {
-      "oneOf": [{
-        "$ref": "Rpc_Response_Batch"
-      }, {
-        "$ref": "Rpc_Response_Return"
-      }]
-    },
-    "Rpc_Response_Batch": {
-      "type": "array",
-      "items": {
-        "$ref": "Rpc_Response_Return"
-      }
-    },
-    "Rpc_Response_Return": {
-      "oneOf": [{
-        "$ref": "Rpc_Response_Success"
-      }, {
-        "$ref": "Rpc_Response_Error"
-      }]
-    },
     "Rpc_Response_Success": {
       "type": "object",
       "properties": {
@@ -132,24 +78,6 @@
       }
     },
     "Rpc_Response_Result": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "Rpc_Response_Error": {
-      "type": "object",
-      "properties": {
-        "jsonrpc": {
-          "type": "string"
-        },
-        "error": {
-          "$ref": "Rpc_Response_Errors"
-        },
-        "id": {
-          "type": "integer"
-        }
-      }
-    },
-    "Rpc_Response_Errors": {
       "type": "object",
       "additionalProperties": true
     },

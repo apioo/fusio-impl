@@ -27,6 +27,7 @@ use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Schema\Passthru;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Json\Rpc\Server;
@@ -69,7 +70,8 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
 
         $post = $builder->addMethod('POST');
         $post->setSecurity(Authorization::BACKEND, ['backend']);
-        $post->setRequest(Model\Rpc_Request_Call::class);
+        $post->setDescription('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification');
+        $post->setRequest(Passthru::class);
         $post->addResponse(200, Model\Rpc_Response_Success::class);
 
         return $builder->getSpecification();

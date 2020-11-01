@@ -73,6 +73,7 @@ class JsonRpcTest extends ControllerDbTestCase
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
 
         $body   = (string) $response->getBody();
@@ -116,6 +117,7 @@ JSON;
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
 
         $body   = (string) $response->getBody();
@@ -175,6 +177,7 @@ JSON;
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
+            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
 
         $body   = (string) $response->getBody();
