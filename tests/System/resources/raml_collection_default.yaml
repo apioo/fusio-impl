@@ -1,0 +1,85 @@
+#%RAML 1.0
+---
+baseUri: 'http://127.0.0.1/'
+version: v1
+title: Fusio
+/inspect/{foo}:
+  uriParameters:
+    foo:
+      type: string
+      required: false
+  get:
+    body:
+      application/json:
+        type: 1
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+  post:
+    body:
+      application/json:
+        type: 1
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+  put:
+    body:
+      application/json:
+        type: 1
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+  delete:
+    body:
+      application/json:
+        type: 1
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+  patch:
+    body:
+      application/json:
+        type: 1
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+/foo:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Collection-Schema
+  post:
+    body:
+      application/json:
+        type: 1
+    responses:
+      201:
+        body:
+          application/json:
+            type: Passthru
+/:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Passthru
+types:
+  Collection: { title: collection, type: object, properties: { totalResults: { type: integer }, itemsPerPage: { type: integer }, startIndex: { type: integer }, entry: { $ref: '#/types/Entry' } } }
+  Collection-Schema: { $ref: '#/types/Collection' }
+  Entry: { type: object, properties: { id: { type: integer }, title: { type: string }, content: { type: string }, date: { format: date-time, type: string } } }
+  Entry-Schema: { $ref: '#/types/Entry' }
+  InspectFooPath: { type: object, properties: { foo: { type: string } } }
+  Passthru: { description: 'No schema information available', type: object }

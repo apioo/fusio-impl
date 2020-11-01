@@ -10,6 +10,203 @@
     }
   ],
   "paths": {
+    "\/inspect\/{foo}": {
+      "get": {
+        "tags": [
+          "foo",
+          "bar"
+        ],
+        "operationId": "Inspect-Action",
+        "requestBody": {
+          "description": "GET Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "foo",
+          "bar"
+        ],
+        "operationId": "Inspect-Action",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "foo",
+          "bar"
+        ],
+        "operationId": "Inspect-Action",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "foo",
+          "bar"
+        ],
+        "operationId": "Inspect-Action",
+        "requestBody": {
+          "description": "DELETE Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "foo",
+          "bar"
+        ],
+        "operationId": "Inspect-Action",
+        "requestBody": {
+          "description": "PATCH Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PATCH 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "foo",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "\/foo": {
       "get": {
         "tags": [
@@ -64,6 +261,28 @@
           }
         ]
       }
+    },
+    "\/": {
+      "get": {
+        "operationId": "Action_Welcome",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -109,6 +328,14 @@
       },
       "Entry-Schema": {
         "$ref": "#\/components\/schemas\/Entry"
+      },
+      "InspectFooPath": {
+        "type": "object",
+        "properties": {
+          "foo": {
+            "type": "string"
+          }
+        }
       },
       "Passthru": {
         "description": "No schema information available",

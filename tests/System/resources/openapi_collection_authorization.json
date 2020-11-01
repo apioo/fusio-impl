@@ -1,0 +1,459 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fusio",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/authorization\/whoami": {
+      "get": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "Authorization_Action_GetWhoami",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      }
+    },
+    "\/authorization\/revoke": {
+      "post": {
+        "tags": [
+          "authorization"
+        ],
+        "operationId": "Authorization_Action_Revoke",
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "authorization"
+            ]
+          }
+        ]
+      }
+    },
+    "\/authorization\/token": {
+      "post": {
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/OAuth2_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "App": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App_Token"
+            }
+          }
+        }
+      },
+      "App_Token": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "expire": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Backend_Model_User": {
+        "$ref": "#\/components\/schemas\/User"
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Model_Message": {
+        "$ref": "#\/components\/schemas\/Message"
+      },
+      "OAuth2_Access_Token": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Authorization_Code": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "authorization_code",
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "code"
+        ]
+      },
+      "OAuth2_Client_Credentials": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "client_credentials",
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type"
+        ]
+      },
+      "OAuth2_Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Password": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "password",
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "username",
+          "password"
+        ]
+      },
+      "OAuth2_Refresh_Token": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "refresh_token",
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "OAuth2_Request": {
+        "oneOf": [
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Password"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
+          }
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          },
+          "email": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
+            }
+          },
+          "attributes": {
+            "$ref": "#\/components\/schemas\/User_Attributes"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "User_Attributes": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

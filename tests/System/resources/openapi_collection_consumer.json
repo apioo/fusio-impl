@@ -1,0 +1,2296 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fusio",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/consumer\/password_reset": {
+      "put": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_ResetPassword_Execute",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_PasswordReset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_ResetPassword_Request",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Email"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/consumer\/register": {
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Register",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Register"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/consumer\/provider\/{provider}": {
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Provider",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Provider"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/login": {
+      "put": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Refresh",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Refresh"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Login",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/consumer\/authorize": {
+      "get": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_GetApp",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Meta"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Authorize",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/consumer\/activate": {
+      "post": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Activate",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Activate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/consumer\/account\/change_password": {
+      "put": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_ChangePassword",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Account_ChangePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.user"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/account": {
+      "get": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_User_Account"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.user"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "consumer.user"
+        ],
+        "operationId": "Consumer_Action_User_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_User_Account"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.user"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/transaction\/{transaction_id}": {
+      "get": {
+        "tags": [
+          "consumer.transaction"
+        ],
+        "operationId": "Consumer_Action_Transaction_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.transaction"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/transaction\/prepare\/{provider}": {
+      "post": {
+        "tags": [
+          "consumer.transaction"
+        ],
+        "operationId": "Consumer_Action_Transaction_Prepare",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Prepare_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Prepare_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.transaction"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/transaction\/execute\/{transaction_id}": {
+      "get": {
+        "tags": [
+          "consumer.transaction"
+        ],
+        "operationId": "Consumer_Action_Transaction_Execute",
+        "responses": {},
+        "security": [
+          {
+            "app": [
+              "consumer.transaction"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/transaction": {
+      "get": {
+        "tags": [
+          "consumer.transaction"
+        ],
+        "operationId": "Consumer_Action_Transaction_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.transaction"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/subscription\/{subscription_id}": {
+      "get": {
+        "tags": [
+          "consumer.subscription"
+        ],
+        "operationId": "Consumer_Action_Event_Subscription_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.subscription"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "consumer.subscription"
+        ],
+        "operationId": "Consumer_Action_Event_Subscription_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.subscription"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "consumer.subscription"
+        ],
+        "operationId": "Consumer_Action_Event_Subscription_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.subscription"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "subscription_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/subscription": {
+      "get": {
+        "tags": [
+          "consumer.subscription"
+        ],
+        "operationId": "Consumer_Action_Event_Subscription_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.subscription"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "consumer.subscription"
+        ],
+        "operationId": "Consumer_Action_Event_Subscription_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.subscription"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/scope": {
+      "get": {
+        "tags": [
+          "consumer.scope"
+        ],
+        "operationId": "Consumer_Action_Scope_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Scope_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.scope"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/plan\/{plan_id}": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "plan_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/plan": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/plan\/invoice\/{invoice_id}": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Invoice_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Invoice"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "invoice_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/plan\/invoice": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Invoice_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Invoice_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/plan\/contract\/{contract_id}": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Contract_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Contract"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "contract_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/plan\/contract": {
+      "get": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Contract_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Contract_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "consumer.plan"
+        ],
+        "operationId": "Consumer_Action_Plan_Contract_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Order_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Order_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/grant\/{grant_id}": {
+      "delete": {
+        "tags": [
+          "consumer.grant"
+        ],
+        "operationId": "Consumer_Action_Grant_Delete",
+        "responses": {
+          "204": {
+            "description": "DELETE 204 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.grant"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "grant_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/grant": {
+      "get": {
+        "tags": [
+          "consumer.grant"
+        ],
+        "operationId": "Consumer_Action_Grant_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Grant_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.grant"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/event": {
+      "get": {
+        "tags": [
+          "consumer.event"
+        ],
+        "operationId": "Consumer_Action_Event_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.event"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/app\/{app_id}": {
+      "get": {
+        "tags": [
+          "consumer.app"
+        ],
+        "operationId": "Consumer_Action_App_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_App"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.app"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "consumer.app"
+        ],
+        "operationId": "Consumer_Action_App_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_App_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.app"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "consumer.app"
+        ],
+        "operationId": "Consumer_Action_App_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.app"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/app": {
+      "get": {
+        "tags": [
+          "consumer.app"
+        ],
+        "operationId": "Consumer_Action_App_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Model_App_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.app"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "consumer.app"
+        ],
+        "operationId": "Consumer_Action_App_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Consumer_Model_App_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.app"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/token": {
+      "post": {
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/OAuth2_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account_ChangePassword": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "verifyPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          }
+        }
+      },
+      "App": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string",
+            "minLength": 8
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "App_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "App_Create": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string",
+            "minLength": 8
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "url",
+          "scopes"
+        ]
+      },
+      "App_Update": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string",
+            "minLength": 8
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "url",
+          "scopes"
+        ]
+      },
+      "Authorize_Meta": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope"
+            }
+          }
+        }
+      },
+      "Authorize_Request": {
+        "type": "object",
+        "properties": {
+          "responseType": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "allow": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "responseType",
+          "clientId",
+          "scope",
+          "allow"
+        ]
+      },
+      "Authorize_Response": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "token": {
+            "$ref": "#\/components\/schemas\/Authorize_Response_Token"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        }
+      },
+      "Authorize_Response_Token": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      },
+      "Backend_Model_Account_ChangePassword": {
+        "$ref": "#\/components\/schemas\/Account_ChangePassword"
+      },
+      "Collection": {
+        "type": "object",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$generic": "T"
+            }
+          }
+        }
+      },
+      "Collection_Query": {
+        "type": "object",
+        "properties": {
+          "startIndex": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "search": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerAppApp_idPath": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerGrantGrant_idPath": {
+        "type": "object",
+        "properties": {
+          "grant_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerPlanContractContract_idPath": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerPlanInvoiceInvoice_idPath": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerPlanPlan_idPath": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerProviderProviderPath": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerSubscriptionSubscription_idPath": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerTransactionExecuteTransaction_idPath": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerTransactionPrepareProviderPath": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsumerTransactionTransaction_idPath": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string"
+          }
+        }
+      },
+      "Consumer_Model_App": {
+        "$ref": "#\/components\/schemas\/App"
+      },
+      "Consumer_Model_App_Collection": {
+        "$ref": "#\/components\/schemas\/App_Collection"
+      },
+      "Consumer_Model_App_Create": {
+        "$ref": "#\/components\/schemas\/App_Create"
+      },
+      "Consumer_Model_App_Update": {
+        "$ref": "#\/components\/schemas\/App_Update"
+      },
+      "Consumer_Model_Authorize_Meta": {
+        "$ref": "#\/components\/schemas\/Authorize_Meta"
+      },
+      "Consumer_Model_Authorize_Request": {
+        "$ref": "#\/components\/schemas\/Authorize_Request"
+      },
+      "Consumer_Model_Authorize_Response": {
+        "$ref": "#\/components\/schemas\/Authorize_Response"
+      },
+      "Consumer_Model_Event_Collection": {
+        "$ref": "#\/components\/schemas\/Event_Collection"
+      },
+      "Consumer_Model_Event_Subscription": {
+        "$ref": "#\/components\/schemas\/Event_Subscription"
+      },
+      "Consumer_Model_Event_Subscription_Collection": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
+      },
+      "Consumer_Model_Event_Subscription_Create": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Create"
+      },
+      "Consumer_Model_Event_Subscription_Update": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Update"
+      },
+      "Consumer_Model_Grant_Collection": {
+        "$ref": "#\/components\/schemas\/Grant_Collection"
+      },
+      "Consumer_Model_Plan": {
+        "$ref": "#\/components\/schemas\/Plan"
+      },
+      "Consumer_Model_Plan_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Collection"
+      },
+      "Consumer_Model_Plan_Contract": {
+        "$ref": "#\/components\/schemas\/Plan_Contract"
+      },
+      "Consumer_Model_Plan_Contract_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
+      },
+      "Consumer_Model_Plan_Invoice": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice"
+      },
+      "Consumer_Model_Plan_Invoice_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
+      },
+      "Consumer_Model_Plan_Order_Request": {
+        "$ref": "#\/components\/schemas\/Plan_Order_Request"
+      },
+      "Consumer_Model_Plan_Order_Response": {
+        "$ref": "#\/components\/schemas\/Plan_Order_Response"
+      },
+      "Consumer_Model_Scope_Collection": {
+        "$ref": "#\/components\/schemas\/Scope_Collection"
+      },
+      "Consumer_Model_Transaction": {
+        "$ref": "#\/components\/schemas\/Transaction"
+      },
+      "Consumer_Model_Transaction_Collection": {
+        "$ref": "#\/components\/schemas\/Transaction_Collection"
+      },
+      "Consumer_Model_Transaction_Prepare_Request": {
+        "$ref": "#\/components\/schemas\/Transaction_Prepare_Request"
+      },
+      "Consumer_Model_Transaction_Prepare_Response": {
+        "$ref": "#\/components\/schemas\/Transaction_Prepare_Response"
+      },
+      "Consumer_Model_User_Account": {
+        "$ref": "#\/components\/schemas\/User_Account"
+      },
+      "Consumer_Model_User_Activate": {
+        "$ref": "#\/components\/schemas\/User_Activate"
+      },
+      "Consumer_Model_User_Email": {
+        "$ref": "#\/components\/schemas\/User_Email"
+      },
+      "Consumer_Model_User_JWT": {
+        "$ref": "#\/components\/schemas\/User_JWT"
+      },
+      "Consumer_Model_User_Login": {
+        "$ref": "#\/components\/schemas\/User_Login"
+      },
+      "Consumer_Model_User_PasswordReset": {
+        "$ref": "#\/components\/schemas\/User_PasswordReset"
+      },
+      "Consumer_Model_User_Provider": {
+        "$ref": "#\/components\/schemas\/User_Provider"
+      },
+      "Consumer_Model_User_Refresh": {
+        "$ref": "#\/components\/schemas\/User_Refresh"
+      },
+      "Consumer_Model_User_Register": {
+        "$ref": "#\/components\/schemas\/User_Register"
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Event_Subscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "event": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Event_Subscription_Response"
+            }
+          }
+        }
+      },
+      "Event_Subscription_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Event_Subscription_Create": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "event",
+          "endpoint"
+        ]
+      },
+      "Event_Subscription_Response": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "attempts": {
+            "type": "string"
+          },
+          "executeDate": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Subscription_Update": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "event",
+          "endpoint"
+        ]
+      },
+      "Grant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "app": {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          "createDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Grant_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Model_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Collection_Query"
+      },
+      "Model_Message": {
+        "$ref": "#\/components\/schemas\/Message"
+      },
+      "OAuth2_Access_Token": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Authorization_Code": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "authorization_code",
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "code"
+        ]
+      },
+      "OAuth2_Client_Credentials": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "client_credentials",
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type"
+        ]
+      },
+      "OAuth2_Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Password": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "password",
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "username",
+          "password"
+        ]
+      },
+      "OAuth2_Refresh_Token": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "refresh_token",
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "OAuth2_Request": {
+        "oneOf": [
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Password"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
+          }
+        ]
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          }
+        }
+      },
+      "Plan_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Contract": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "plan": {
+            "$ref": "#\/components\/schemas\/Plan"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
+          },
+          "invoices": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Plan_Invoice"
+            }
+          },
+          "insertDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Plan_Contract_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Invoice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "payDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "insertDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Plan_Invoice_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Order_Request": {
+        "type": "object",
+        "properties": {
+          "planId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "planId"
+        ]
+      },
+      "Plan_Order_Response": {
+        "type": "object",
+        "properties": {
+          "contractId": {
+            "type": "integer"
+          },
+          "invoiceId": {
+            "type": "integer"
+          }
+        }
+      },
+      "Scope": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Scope_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "updateDate": {
+            "type": "integer"
+          },
+          "insertDate": {
+            "type": "integer"
+          }
+        }
+      },
+      "Transaction_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Transaction_Prepare_Request": {
+        "type": "object",
+        "properties": {
+          "invoiceId": {
+            "type": "integer"
+          },
+          "returnUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "invoiceId",
+          "returnUrl"
+        ]
+      },
+      "Transaction_Prepare_Response": {
+        "type": "object",
+        "properties": {
+          "approvalUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "User_Account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attributes": {
+            "$ref": "#\/components\/schemas\/User_Attributes"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "User_Activate": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "User_Attributes": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "User_Email": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "User_JWT": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "User_Login": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "User_PasswordReset": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token",
+          "newPassword"
+        ]
+      },
+      "User_Provider": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        }
+      },
+      "User_Refresh": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "User_Register": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "captcha": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

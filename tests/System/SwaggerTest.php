@@ -46,7 +46,7 @@ class SwaggerTest extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/swagger/*/foo', 'GET', array(
+        $response = $this->sendRequest('/system/export/swagger/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -59,16 +59,16 @@ class SwaggerTest extends ControllerDbTestCase
     /**
      * @dataProvider providerDebugStatus
      */
-    public function testGetCollectionExternal($debug)
+    public function testGetCollection($debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/swagger/*/*', 'GET', array(
+        $response = $this->sendRequest('/system/export/swagger/*/*', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/swagger_collection_external.json');
+        $expect = file_get_contents(__DIR__ . '/resources/swagger_collection_default.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }

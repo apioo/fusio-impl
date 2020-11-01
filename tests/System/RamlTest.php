@@ -47,7 +47,7 @@ class RamlTest extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/raml/*/foo', 'GET', array(
+        $response = $this->sendRequest('/system/export/raml/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -61,17 +61,17 @@ class RamlTest extends ControllerDbTestCase
     /**
      * @dataProvider providerDebugStatus
      */
-    public function testGetCollectionExternal($debug)
+    public function testGetCollection($debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/raml/*/*', 'GET', array(
+        $response = $this->sendRequest('/system/export/raml/*/*', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
         $json   = json_encode(Yaml::parse($body));
-        $expect = json_encode(Yaml::parse(file_get_contents(__DIR__ . '/resources/raml_collection_external.yaml')));
+        $expect = json_encode(Yaml::parse(file_get_contents(__DIR__ . '/resources/raml_collection_default.yaml')));
 
         $this->assertJsonStringEqualsJsonString($expect, $json, $body);
     }

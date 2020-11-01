@@ -46,7 +46,7 @@ class OpenAPITest extends ControllerDbTestCase
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/openapi/*/foo', 'GET', array(
+        $response = $this->sendRequest('/system/export/openapi/*/foo', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
@@ -56,48 +56,49 @@ class OpenAPITest extends ControllerDbTestCase
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    /**
-     * @dataProvider providerDebugStatus
-     */
-    public function testGetCollectionExternal($debug)
+    public function providerDebugStatus()
     {
-        Environment::getContainer()->get('config')->set('psx_debug', $debug);
-
-        $response = $this->sendRequest('/export/openapi/*/*', 'GET', array(
-            'User-Agent' => 'Fusio TestCase',
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/openapi_collection_external.json');
-
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**
-     * @dataProvider providerDebugStatus
+     * @dataProvider providerDebugCollectionStatus
+     * @param string $category
+     * @param bool $debug
      */
-    public function testGetCollectionInternal($debug)
+    public function testGetCollection(string $category, bool $debug)
     {
         Environment::getContainer()->get('config')->set('psx_debug', $debug);
 
-        $response = $this->sendRequest('/export/openapi/*/*?filter=internal', 'GET', array(
+        $response = $this->sendRequest('/system/export/openapi/*/*?filter=' . $category, 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
-        $expect = __DIR__ . '/resources/openapi_collection_internal.json';
-        $actual = __DIR__ . '/resources/openapi_collection_internal_actual.json';
+        $expect = __DIR__ . '/resources/openapi_collection_' . $category . '.json';
+        $actual = __DIR__ . '/resources/openapi_collection_' . $category . '_actual.json';
 
         file_put_contents($actual, $body);
 
         $this->assertJsonFileEqualsJsonFile($expect, $actual);
     }
 
-    public function providerDebugStatus()
+    public function providerDebugCollectionStatus()
     {
         return [
-            [true],
-            [false],
+            ['default', true],
+            ['default', false],
+            ['backend', true],
+            ['backend', false],
+            ['consumer', true],
+            ['consumer', false],
+            ['system', true],
+            ['system', false],
+            ['authorization', true],
+            ['authorization', false],
         ];
     }
 }

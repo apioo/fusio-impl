@@ -1,0 +1,617 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fusio",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/system\/schema\/{name}": {
+      "get": {
+        "operationId": "System_Action_GetSchema",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Schema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/system\/debug": {
+      "get": {
+        "operationId": "System_Action_GetDebug",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "System_Action_GetDebug",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "System_Action_GetDebug",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "System_Action_GetDebug",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "System_Action_GetDebug",
+        "requestBody": {
+          "description": "PATCH Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PATCH 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/health": {
+      "get": {
+        "operationId": "System_Action_GetHealth",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Health_Check"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/doc\/{version}\/{path}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Documentation_Detail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "version",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "path",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/system\/invoke\/{method}": {
+      "post": {
+        "operationId": "System_Action_Invoke",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Passthru"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "method",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/system\/route": {
+      "get": {
+        "operationId": "System_Action_GetAllRoute",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Route"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/jsonrpc": {
+      "post": {
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Rpc_Request_Call"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Rpc_Response_Success"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "backend": [
+              "backend"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Debug": {
+        "type": "object",
+        "properties": {
+          "headers": {
+            "$ref": "#\/components\/schemas\/Debug_Headers"
+          },
+          "parameters": {
+            "$ref": "#\/components\/schemas\/Debug_Parameters"
+          },
+          "body": {
+            "$ref": "#\/components\/schemas\/Debug_Body"
+          }
+        }
+      },
+      "Debug_Body": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Debug_Headers": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Debug_Parameters": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Discovery_Link": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
+      },
+      "Documentation_Detail": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "schema": {
+            "$ref": "#\/components\/schemas\/Documentation_Schema"
+          },
+          "pathParameters": {
+            "type": "string"
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Documentation_Methods"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Discovery_Link"
+            }
+          }
+        }
+      },
+      "Documentation_Method": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "queryParameters": {
+            "type": "string"
+          },
+          "request": {
+            "type": "string"
+          },
+          "responses": {
+            "$ref": "#\/components\/schemas\/Documentation_Method_Responses"
+          }
+        }
+      },
+      "Documentation_Method_Responses": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Documentation_Methods": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Documentation_Method"
+        }
+      },
+      "Documentation_Path": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "Documentation_Schema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "Health_Check": {
+        "type": "object",
+        "properties": {
+          "healthy": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "Passthru": {
+        "description": "No schema information available",
+        "type": "object"
+      },
+      "Route": {
+        "type": "object",
+        "properties": {
+          "routes": {
+            "$ref": "#\/components\/schemas\/Route_Path"
+          }
+        }
+      },
+      "Route_Method": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Route_Path": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Route_Method"
+        }
+      },
+      "Rpc_Request_Call": {
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "params": {
+            "$ref": "#\/components\/schemas\/Rpc_Request_Params"
+          },
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Rpc_Request_Params": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Rpc_Response_Result": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Rpc_Response_Success": {
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "type": "string"
+          },
+          "result": {
+            "$ref": "#\/components\/schemas\/Rpc_Response_Result"
+          },
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "$ref": "#\/components\/schemas\/Schema_TypeSchema"
+          },
+          "form": {
+            "$ref": "#\/components\/schemas\/Schema_Form"
+          }
+        }
+      },
+      "Schema_Form": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Schema_TypeSchema": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "SystemInvokeMethodPath": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string"
+          }
+        }
+      },
+      "SystemSchemaNamePath": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "System_Model_Debug": {
+        "$ref": "#\/components\/schemas\/Debug"
+      },
+      "System_Model_Health_Check": {
+        "$ref": "#\/components\/schemas\/Health_Check"
+      },
+      "System_Model_Route": {
+        "$ref": "#\/components\/schemas\/Route"
+      },
+      "System_Model_Schema": {
+        "$ref": "#\/components\/schemas\/Schema"
+      }
+    },
+    "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

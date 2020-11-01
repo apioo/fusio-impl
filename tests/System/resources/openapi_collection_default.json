@@ -13,8 +13,10 @@
     "\/inspect\/{foo}": {
       "get": {
         "tags": [
+          "foo",
           "bar"
         ],
+        "operationId": "Inspect-Action",
         "requestBody": {
           "description": "GET Request",
           "content": {
@@ -36,12 +38,22 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
       },
       "put": {
         "tags": [
+          "foo",
           "bar"
         ],
+        "operationId": "Inspect-Action",
         "requestBody": {
           "description": "PUT Request",
           "content": {
@@ -63,12 +75,22 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
       },
       "post": {
         "tags": [
+          "foo",
           "bar"
         ],
+        "operationId": "Inspect-Action",
         "requestBody": {
           "description": "POST Request",
           "content": {
@@ -90,12 +112,22 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
       },
       "delete": {
         "tags": [
+          "foo",
           "bar"
         ],
+        "operationId": "Inspect-Action",
         "requestBody": {
           "description": "DELETE Request",
           "content": {
@@ -117,12 +149,22 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
       },
       "patch": {
         "tags": [
+          "foo",
           "bar"
         ],
+        "operationId": "Inspect-Action",
         "requestBody": {
           "description": "PATCH Request",
           "content": {
@@ -144,7 +186,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": [
+              "foo",
+              "bar"
+            ]
+          }
+        ]
       },
       "parameters": [
         {
@@ -214,21 +264,24 @@
     },
     "\/": {
       "get": {
-        "tags": [
-          "bar"
-        ],
+        "operationId": "Action_Welcome",
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/1"
+                  "$ref": "#\/components\/schemas\/Passthru"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "app": []
+          }
+        ]
       }
     }
   },
@@ -285,16 +338,8 @@
         }
       },
       "Passthru": {
-        "title": "passthru",
-        "description": "No schema was specified.",
-        "type": "object",
-        "additionalProperties": []
-      },
-      "1": {
-        "title": "passthru",
-        "description": "No schema was specified.",
-        "type": "object",
-        "additionalProperties": []
+        "description": "No schema information available",
+        "type": "object"
       }
     },
     "securitySchemes": {
@@ -307,7 +352,7 @@
             "scopes": {
               "bar": "Bar access",
               "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
+              "default": ""
             }
           },
           "clientCredentials": {
@@ -316,7 +361,7 @@
             "scopes": {
               "bar": "Bar access",
               "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
+              "default": ""
             }
           },
           "authorizationCode": {
@@ -326,7 +371,7 @@
             "scopes": {
               "bar": "Bar access",
               "foo": "Foo access",
-              "authorization": "Authorization API endpoint"
+              "default": ""
             }
           }
         }
@@ -338,28 +383,28 @@
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "backend.user": "View and manage users",
-              "backend.transaction": "View transactions",
-              "backend.statistic": "View statistics",
-              "backend.sdk": "Generate client SDKs",
-              "backend.scope": "View and manage scopes",
-              "backend.schema": "View and manage schemas",
-              "backend.routes": "View and manage routes",
-              "backend.rate": "View and manage rates",
-              "backend.plan": "View and manage plans",
-              "backend.marketplace": "View and manage apps from the marketplace",
-              "backend.log": "View logs",
-              "backend.import": "Execute import",
-              "backend.event": "View and manage events",
-              "backend.dashboard": "View dashboard statistic",
-              "backend.cronjob": "View and manage cronjob entries",
-              "backend.connection": "View and manage connections",
-              "backend.config": "View and edit config entries",
-              "backend.audit": "View audits",
-              "backend.app": "View and manage apps",
-              "backend.action": "View and manage actions",
-              "backend.account": "Option to change the password of your account",
-              "backend": "Global access to the backend API"
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
             }
           }
         }
@@ -371,15 +416,15 @@
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "consumer.user": "Edit your account settings",
-              "consumer.transaction": "Execute transactions",
-              "consumer.subscription": "View and manage your subscriptions",
-              "consumer.scope": "View available scopes",
-              "consumer.plan": "View available plans",
-              "consumer.grant": "View and manage your grants",
-              "consumer.event": "View and manage your events",
-              "consumer.app": "View and manage your apps",
-              "consumer": "Global access to the consumer API"
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
             }
           }
         }

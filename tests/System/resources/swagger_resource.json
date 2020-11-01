@@ -1,13 +1,13 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "Fusio",
     "version": "1"
   },
-  "host": "127.0.0.1",
-  "basePath": "\/",
-  "schemes": [
-    "http"
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
   ],
   "paths": {
     "\/foo": {
@@ -16,12 +16,15 @@
           "bar"
         ],
         "operationId": "listFoo",
-        "parameters": [],
         "responses": {
           "200": {
-            "description": "GET 200 response",
-            "schema": {
-              "$ref": "#\/definitions\/Collection"
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Collection-Schema"
+                }
+              }
             }
           }
         }
@@ -31,22 +34,25 @@
           "bar"
         ],
         "operationId": "createFoo",
-        "parameters": [
-          {
-            "description": "POST request",
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#\/definitions\/Entry"
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Entry-Schema"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "201": {
-            "description": "No schema was specified.",
-            "schema": {
-              "$ref": "#\/definitions\/Passthru"
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Passthru"
+                }
+              }
             }
           }
         },
@@ -57,113 +63,145 @@
             ]
           }
         ]
-      },
-      "parameters": []
+      }
     }
   },
-  "definitions": {
-    "Entry": {
-      "type": "object",
-      "title": "entry",
-      "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "title": {
-          "type": "string"
-        },
-        "content": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
+  "components": {
+    "schemas": {
+      "Collection": {
+        "title": "collection",
+        "type": "object",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "itemsPerPage": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "$ref": "#\/components\/schemas\/Entry"
+          }
         }
+      },
+      "Collection-Schema": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Entry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Entry-Schema": {
+        "$ref": "#\/components\/schemas\/Entry"
+      },
+      "Passthru": {
+        "description": "No schema information available",
+        "type": "object"
       }
     },
-    "Collection": {
-      "type": "object",
-      "title": "collection",
-      "properties": {
-        "totalResults": {
-          "type": "integer"
-        },
-        "itemsPerPage": {
-          "type": "integer"
-        },
-        "startIndex": {
-          "type": "integer"
-        },
-        "entry": {
-          "type": "array",
-          "items": {
-            "$ref": "#\/definitions\/Entry"
+    "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
+            }
           }
         }
       }
-    },
-    "Passthru": {
-      "type": "object",
-      "title": "passthru",
-      "description": "No schema was specified.",
-      "additionalProperties": true
-    }
-  },
-  "securityDefinitions": {
-    "app": {
-      "type": "oauth2",
-      "flow": "password",
-      "scopes": {
-        "bar": "Bar access",
-        "foo": "Foo access",
-        "authorization": "Authorization API endpoint"
-      },
-      "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token"
-    },
-    "backend": {
-      "type": "oauth2",
-      "flow": "application",
-      "scopes": {
-        "backend.user": "View and manage users",
-        "backend.transaction": "View transactions",
-        "backend.statistic": "View statistics",
-        "backend.sdk": "Generate client SDKs",
-        "backend.scope": "View and manage scopes",
-        "backend.schema": "View and manage schemas",
-        "backend.routes": "View and manage routes",
-        "backend.rate": "View and manage rates",
-        "backend.plan": "View and manage plans",
-        "backend.marketplace": "View and manage apps from the marketplace",
-        "backend.log": "View logs",
-        "backend.import": "Execute import",
-        "backend.event": "View and manage events",
-        "backend.dashboard": "View dashboard statistic",
-        "backend.cronjob": "View and manage cronjob entries",
-        "backend.connection": "View and manage connections",
-        "backend.config": "View and edit config entries",
-        "backend.audit": "View audits",
-        "backend.app": "View and manage apps",
-        "backend.action": "View and manage actions",
-        "backend.account": "Option to change the password of your account",
-        "backend": "Global access to the backend API"
-      },
-      "tokenUrl": "http:\/\/127.0.0.1\/backend\/token"
-    },
-    "consumer": {
-      "type": "oauth2",
-      "flow": "application",
-      "scopes": {
-        "consumer.user": "Edit your account settings",
-        "consumer.transaction": "Execute transactions",
-        "consumer.subscription": "View and manage your subscriptions",
-        "consumer.scope": "View available scopes",
-        "consumer.plan": "View available plans",
-        "consumer.grant": "View and manage your grants",
-        "consumer.event": "View and manage your events",
-        "consumer.app": "View and manage your apps",
-        "consumer": "Global access to the consumer API"
-      },
-      "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token"
     }
   }
 }
