@@ -157,15 +157,13 @@ class Method extends TableAbstract
     {
         $sql = 'SELECT method.route_id,
                        method.method,
+                       method.status,
                        method.public,
                        method.operation_id,
                        method.parameters,
                        method.request,
                        method.action,
-                       method.status,
-                       method.costs,
-                       method.action_cache,
-                       method.schema_cache
+                       method.costs
                   FROM fusio_routes_method method
                  WHERE method.operation_id = :operation_id
                    AND method.active = :active';

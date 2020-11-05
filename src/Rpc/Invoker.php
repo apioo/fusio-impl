@@ -80,11 +80,11 @@ class Invoker
         try {
             return $this->execute($method, $arguments);
         } catch (StatusCodeException $e) {
-            throw new ServerErrorException($e->getMessage(), $e->getStatusCode());
+            throw new ServerErrorException($e->getMessage(), $e->getStatusCode(), $e);
         } catch (ValidationException $e) {
-            throw new ServerErrorException($e->getMessage(), 400);
+            throw new ServerErrorException($e->getMessage(), 400, $e);
         } catch (\Throwable $e) {
-            throw new ServerErrorException($e->getMessage(), 500);
+            throw new ServerErrorException($e->getMessage(), 500, $e);
         }
     }
 
@@ -96,6 +96,9 @@ class Invoker
         }
 
         $context = new Context();
+        $context->setRouteId((int) $method['route_id']);
+        $context->setMethod($method);
+
         $request = new Request\RpcRequest($operationId, Record::from($arguments));
 
         foreach ($this->middlewares as $middleware) {
