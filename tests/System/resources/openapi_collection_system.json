@@ -256,12 +256,13 @@
     },
     "\/system\/jsonrpc": {
       "post": {
+        "description": "JSON-RPC Endpoint please take a look at https:\/\/www.jsonrpc.org\/specification",
         "requestBody": {
           "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Rpc_Request_Call"
+                "$ref": "#\/components\/schemas\/Passthru"
               }
             }
           }
@@ -437,27 +438,6 @@
         "additionalProperties": {
           "$ref": "#\/components\/schemas\/Route_Method"
         }
-      },
-      "Rpc_Request_Call": {
-        "type": "object",
-        "properties": {
-          "jsonrpc": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "params": {
-            "$ref": "#\/components\/schemas\/Rpc_Request_Params"
-          },
-          "id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Rpc_Request_Params": {
-        "type": "object",
-        "additionalProperties": []
       },
       "Rpc_Response_Result": {
         "type": "object",
