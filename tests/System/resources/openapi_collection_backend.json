@@ -2025,8 +2025,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "POST 200 Response",
+          "201": {
+            "description": "POST 201 Response",
             "content": {
               "application\/json": {
                 "schema": {
