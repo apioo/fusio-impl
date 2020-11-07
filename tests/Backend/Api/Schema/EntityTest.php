@@ -68,13 +68,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Passthru",
     "source": {
-        "definitions": {
-            "Passthru": {
-                "description": "No schema information available",
-                "type": "object"
-            }
-        },
-        "$ref": "Passthru"
+        "$class": "PSX\\Framework\\Schema\\Passthru"
     },
     "readonly": true
 }

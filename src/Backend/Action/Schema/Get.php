@@ -75,13 +75,13 @@ class Get extends ActionAbstract
         $source = $schema['source'];
         $readonly = false;
         if (strpos($source, '{') === false) {
-            $result = $this->schemaManager->getSchema($source);
-            $source = (new Generator\TypeSchema())->generate($result);
-
+            $source = (object) ['$class' => $source];
             $readonly = true;
+        } else {
+            $source = \json_decode($source);
         }
 
-        $schema['source'] = \json_decode($source);
+        $schema['source'] = $source;
         $schema['readonly'] = $readonly;
 
         return $schema;
