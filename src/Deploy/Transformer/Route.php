@@ -93,6 +93,10 @@ class Route extends TransformerAbstract
                     $methods[$method]['description'] = $config['description'];
                 }
 
+                if (isset($config['operationId'])) {
+                    $methods[$method]['operationId'] = $config['operationId'];
+                }
+
                 if (isset($config['parameters'])) {
                     $methods[$method]['parameters'] = NameGenerator::getSchemaNameFromSource($config['parameters']);
                 }
