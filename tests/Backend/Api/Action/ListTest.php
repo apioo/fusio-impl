@@ -84,10 +84,6 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
-            "name": "Util-Static-Response",
-            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
-        },
-        {
             "name": "SMTP-Send",
             "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend"
         },
@@ -118,6 +114,10 @@ class ListTest extends ControllerDbTestCase
         {
             "name": "SQL-Query-Row",
             "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow"
+        },
+        {
+            "name": "Util-Static-Response",
+            "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
         },
         {
             "name": "Void-Action",
