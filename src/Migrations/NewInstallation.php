@@ -112,8 +112,8 @@ class NewInstallation
         $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
         $bag->addRoute('consumer', 0, '/consumer/token', Consumer\Authorization\Token::class);
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
-        $bag->addRoute('system', 1, '/system/doc', Tool\Documentation\IndexController::class);
-        $bag->addRoute('system', 2, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
+        $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
+        $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
         $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
         $bag->addRoute('authorization', 0, '/authorization/token', Authorization\Token::class);
         $bag->addSchema('default', 'Passthru', Passthru::class);

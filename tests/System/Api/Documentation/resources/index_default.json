@@ -25,11 +25,11 @@
   "links": [
     {
       "rel": "self",
-      "href": "http:\/\/127.0.0.1\/doc"
+      "href": "http:\/\/127.0.0.1\/system\/doc"
     },
     {
       "rel": "detail",
-      "href": "http:\/\/127.0.0.1\/doc\/{version}\/{path}"
+      "href": "http:\/\/127.0.0.1\/system\/doc\/{version}\/{path}"
     },
     {
       "rel": "api",

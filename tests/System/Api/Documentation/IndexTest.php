@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Documentation;
+namespace Fusio\Impl\Tests\System\Api\Documentation;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -45,19 +45,19 @@ class IndexTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/index_external.json');
+        $expect = file_get_contents(__DIR__ . '/resources/index_default.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
     public function testGetFilter()
     {
-        $response = $this->sendRequest('/system/doc?filter=internal', 'GET', array(
+        $response = $this->sendRequest('/system/doc?filter=backend', 'GET', array(
             'User-Agent' => 'Fusio TestCase',
         ));
 
         $body   = (string) $response->getBody();
-        $expect = file_get_contents(__DIR__ . '/resources/index_internal.json');
+        $expect = file_get_contents(__DIR__ . '/resources/index_backend.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
