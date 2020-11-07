@@ -56,7 +56,18 @@
         },
         "$ref": "Entry"
       },
-      "form": "{\r\n  \"title\": {\r\n    \"ui:autofocus\": true,\r\n    \"ui:emptyValue\": \"\"\r\n  },\r\n  \"content\": {\r\n    \"ui:widget\": \"textarea\"\r\n  },\r\n  \"date\": {\r\n    \"ui:widget\": \"alt-datetime\"\r\n  }\r\n}",
+      "form": {
+        "title": {
+          "ui:autofocus": true,
+          "ui:emptyValue": ""
+        },
+        "content": {
+          "ui:widget": "textarea"
+        },
+        "date": {
+          "ui:widget": "alt-datetime"
+        }
+      },
       "readonly": false
     },
     {

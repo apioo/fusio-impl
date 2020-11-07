@@ -76,7 +76,7 @@ class GetSchema extends ActionAbstract
 
         return [
             'schema' => $json,
-            'form' => \json_decode($schema['form']),
+            'form' => $schema['form'],
         ];
     }
 }

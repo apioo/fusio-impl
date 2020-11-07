@@ -75,7 +75,7 @@ class Schema extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'source' => 'source',
-            'form' => 'form',
+            'form' => $this->fieldJson('form'),
         ]);
 
         return $this->build($definition);
@@ -93,7 +93,7 @@ class Schema extends ViewAbstract
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
-            'form' => 'form',
+            'form' => $this->fieldJson('form'),
         ]);
 
         return $this->build($definition);
