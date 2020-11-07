@@ -161,7 +161,7 @@
         }
       }
     },
-    "\/system\/doc\/{version}\/{path}": {
+    "\/system\/doc": {
       "get": {
         "responses": {
           "200": {
@@ -169,31 +169,13 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Documentation_Detail"
+                  "$ref": "#\/components\/schemas\/Documentation_Index"
                 }
               }
             }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "version",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "path",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
+      }
     },
     "\/system\/invoke\/{method}": {
       "post": {
@@ -229,6 +211,40 @@
       "parameters": [
         {
           "name": "method",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/system\/doc\/{version}\/{path}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Documentation_Detail"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "version",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "path",
           "in": "path",
           "required": false,
           "schema": {
@@ -360,6 +376,23 @@
           }
         }
       },
+      "Documentation_Index": {
+        "type": "object",
+        "properties": {
+          "routings": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Documentation_Route"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Discovery_Link"
+            }
+          }
+        }
+      },
       "Documentation_Method": {
         "type": "object",
         "properties": {
@@ -396,6 +429,23 @@
             "type": "string"
           },
           "path": {
+            "type": "string"
+          }
+        }
+      },
+      "Documentation_Route": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
             "type": "string"
           }
         }

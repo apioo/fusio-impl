@@ -43,7 +43,6 @@ class WelcomeTest extends ControllerDbTestCase
     {
         $response = $this->sendRequest('/', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
         $version = Base::getVersion();
@@ -69,7 +68,6 @@ JSON;
     {
         $response = $this->sendRequest('/', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
         $this->assertEquals(405, $response->getStatusCode());
@@ -79,7 +77,6 @@ JSON;
     {
         $response = $this->sendRequest('/', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
         $this->assertEquals(405, $response->getStatusCode());
@@ -89,7 +86,6 @@ JSON;
     {
         $response = $this->sendRequest('/', 'PATCH', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
         $this->assertEquals(405, $response->getStatusCode());
@@ -99,7 +95,6 @@ JSON;
     {
         $response = $this->sendRequest('/', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ));
 
         $this->assertEquals(405, $response->getStatusCode());
