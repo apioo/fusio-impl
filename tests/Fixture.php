@@ -21,7 +21,8 @@
 
 namespace Fusio\Impl\Tests;
 
-use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Adapter\Sql\Action\SqlInsert;
+use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Migrations\DataBag;
@@ -83,7 +84,8 @@ class Fixture
         $data->addUser('Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ADMINISTRATOR, '2015-02-27 19:59:15');
         $data->addUser('Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED, '2015-02-27 19:59:15');
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), '2015-02-27 19:59:15');
-        $data->addAction('default', 'Sql-Table', SqlTable::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
+        $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
+        $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Inspect-Action', InspectAction::class, null, '2015-02-27 19:59:15');
         $data->addApp('Consumer', 'Foo-App', 'http://google.com', '5347307d-d801-4075-9aaa-a21a29a448c5', '342cefac55939b31cd0a26733f9a4f061c0829ed87dae7caff50feaa55aff23d', Table\App::STATUS_ACTIVE, '2015-02-22 22:19:07');
         $data->addApp('Consumer', 'Pending', 'http://google.com', '7c14809c-544b-43bd-9002-23e1c2de6067', 'bb0574181eb4a1326374779fe33e90e2c427f28ab0fc1ffd168bfd5309ee7caa', Table\App::STATUS_PENDING, '2015-02-22 22:19:07');
@@ -138,8 +140,8 @@ class Fixture
 
         $data->addRoutes('default', [
             '/foo' => [
-                'GET' => new Method('Sql-Table', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', Resource::STATUS_DEVELOPMENT),
-                'POST' => new Method('Sql-Table', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', Resource::STATUS_DEVELOPMENT),
+                'GET' => new Method('Sql-Select-All', null, [200 => 'Collection-Schema'], null, null, null, true, null, 'listFoo', Resource::STATUS_DEVELOPMENT),
+                'POST' => new Method('Sql-Insert', 'Entry-Schema', [201 => 'Passthru'], null, null, null, false, 1, 'createFoo', Resource::STATUS_DEVELOPMENT),
             ],
             '/inspect/:foo' => [
                 'GET' => new Method('Inspect-Action', 'Passthru', [200 => 'Passthru']),
