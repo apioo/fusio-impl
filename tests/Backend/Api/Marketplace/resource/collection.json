@@ -28,7 +28,7 @@
       ],
       "request": "Backend_Model_Marketplace_Install",
       "responses": {
-        "200": "Backend_Model_Marketplace_Install"
+        "201": "Backend_Model_Marketplace_Install"
       }
     }
   },
