@@ -69,10 +69,8 @@ class DatabaseFinder implements LocationFinderInterface
         $params = ['status' => TableRoutes::STATUS_ACTIVE];
 
         $categoryId = $this->getCategoryId($path);
-        if (!empty($categoryId)) {
-            $sql.= 'AND category_id = :category_id ';
-            $params['category_id'] = $categoryId;
-        }
+        $sql.= 'AND category_id = :category_id ';
+        $params['category_id'] = $categoryId;
 
         $sql.= 'ORDER BY priority DESC';
 
@@ -97,15 +95,20 @@ class DatabaseFinder implements LocationFinderInterface
         return null;
     }
 
-    private function getCategoryId(string $path): ?int
+    private function getCategoryId(string $path): int
     {
         $parts = explode('/', $path);
         $category = $parts[1] ?? null;
 
         if ($category === null) {
-            return null;
+            return 1;
         }
 
-        return (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+        if (empty($categoryId)) {
+            return 1;
+        }
+
+        return $categoryId;
     }
 }
