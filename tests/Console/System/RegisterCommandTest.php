@@ -147,7 +147,6 @@ JSON;
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(167, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
@@ -282,7 +281,6 @@ JSON;
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(167, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 

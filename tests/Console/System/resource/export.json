@@ -7,14 +7,24 @@
       "name": "Inspect-Action"
     },
     {
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
       "config": {
         "connection": 2,
         "table": "app_news"
       },
       "date": "[datetime]",
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Sql-Table"
+      "name": "Sql-Insert"
+    },
+    {
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "config": {
+        "connection": 2,
+        "table": "app_news"
+      },
+      "date": "[datetime]",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "Sql-Select-All"
     },
     {
       "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
@@ -98,7 +108,7 @@
   ],
   "cronjob": [
     {
-      "action": "Sql-Table",
+      "action": "Sql-Select-All",
       "cron": "*/30 * * * *",
       "name": "Test-Cron"
     }
@@ -232,7 +242,7 @@
         {
           "methods": {
             "GET": {
-              "action": "Sql-Table",
+              "action": "Sql-Select-All",
               "active": true,
               "operationId": "listFoo",
               "public": true,
@@ -241,7 +251,7 @@
               }
             },
             "POST": {
-              "action": "Sql-Table",
+              "action": "Sql-Insert",
               "active": true,
               "costs": 1,
               "operationId": "createFoo",
