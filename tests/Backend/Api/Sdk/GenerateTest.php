@@ -65,14 +65,14 @@ class GenerateTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "types": {
+        "client-go": null,
         "client-php": null,
         "client-typescript": null,
         "markup-html": null,
         "markup-markdown": null,
-        "spec-jsonschema": null,
         "spec-openapi": null,
         "spec-raml": null,
-        "spec-swagger": null
+        "spec-typeschema": null
     }
 }
 JSON;
