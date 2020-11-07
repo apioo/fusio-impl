@@ -112,7 +112,7 @@ JSON;
         $builder = new Builder();
         $message = [
             $builder->createCall('listFoo', [], 1),
-            $builder->createCall('listFoo', ['parameters' => ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1]], 2),
+            $builder->createCall('listFoo', ['filterBy' => 'id', 'filterOp' => 'equals', 'filterValue' => 1], 2),
         ];
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
@@ -173,11 +173,10 @@ JSON;
     public function testPostMissingAuthorization()
     {
         $builder = new Builder();
-        $message = $builder->createCall('createFoo', [], 1);
+        $message = $builder->createCall('createFoo', ['payload' => (object) []], 1);
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
-            'Authorization' => 'Bearer b41344388feed85bc362e518387fdc8c81b896bfe5e794131e1469770571d873'
         ), \json_encode($message));
 
         $body   = (string) $response->getBody();
@@ -196,10 +195,10 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPostEmpyBody()
+    public function testPostEmptyBody()
     {
         $builder = new Builder();
-        $message = $builder->createCall('createFoo', [], 1);
+        $message = $builder->createCall('createFoo', ['payload' => (object) []], 1);
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -210,11 +209,11 @@ JSON;
         $expect = <<<'JSON'
 {
     "jsonrpc": "2.0",
-    "id": 1,
     "error": {
         "code": 400,
-        "message": "No body provided"
-    }
+        "message": "Column title must not be null"
+    },
+    "id": 1
 }
 JSON;
 
@@ -225,7 +224,7 @@ JSON;
     public function testPostInvalidBody()
     {
         $builder = new Builder();
-        $message = $builder->createCall('createFoo', ['body' => ['title' => 12]], 1);
+        $message = $builder->createCall('createFoo', ['payload' => ['title' => 12]], 1);
 
         $response = $this->sendRequest('/system/jsonrpc', 'POST', array(
             'User-Agent' => 'Fusio TestCase',

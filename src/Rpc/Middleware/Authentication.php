@@ -44,7 +44,7 @@ class Authentication
      */
     private $authorization;
 
-    public function __construct(Service\Security\TokenValidator $tokenValidator, string $authorization)
+    public function __construct(Service\Security\TokenValidator $tokenValidator, ?string $authorization)
     {
         $this->tokenValidator = $tokenValidator;
         $this->authorization = $authorization;
