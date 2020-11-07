@@ -133,7 +133,7 @@ class NewInstallation
         return [
             'default' => [
                 '/' => [
-                    'GET' => new Method(Welcome::class, null, [200 => 'Passthru']),
+                    'GET' => new Method(Welcome::class, null, [200 => 'Passthru'], null, null, null, true),
                 ]
             ],
             'backend' => [
