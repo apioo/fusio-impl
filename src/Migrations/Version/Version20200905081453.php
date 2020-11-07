@@ -139,7 +139,7 @@ final class Version20200905081453 extends AbstractMigration
             $cronjobTable->addColumn('status', 'integer', ['default' => Table\Cronjob::STATUS_ACTIVE]);
             $cronjobTable->addColumn('name', 'string', ['length' => 64]);
             $cronjobTable->addColumn('cron', 'string');
-            $cronjobTable->addColumn('action', 'integer', ['notnull' => false]);
+            $cronjobTable->addColumn('action', 'string', ['notnull' => false]);
             $cronjobTable->addColumn('execute_date', 'datetime', ['notnull' => false]);
             $cronjobTable->addColumn('exit_code', 'integer', ['notnull' => false]);
             $cronjobTable->setPrimaryKey(['id']);
