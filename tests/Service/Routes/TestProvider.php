@@ -21,7 +21,8 @@
 
 namespace Fusio\Impl\Tests\Service\Routes;
 
-use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Adapter\Sql\Action\SqlInsert;
+use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -72,7 +73,11 @@ class TestProvider implements ProviderInterface
             ],
         ]);
 
-        $action = $setup->addAction('Provider_Action', SqlTable::class, PhpClass::class, [
+        $selectAction = $setup->addAction('Provider_Action_Select', SqlSelectAll::class, PhpClass::class, [
+            'table' => $configuration->get('table'),
+        ]);
+
+        $insertAction = $setup->addAction('Provider_Action_Insert', SqlInsert::class, PhpClass::class, [
             'table' => $configuration->get('table'),
         ]);
 
@@ -89,7 +94,7 @@ class TestProvider implements ProviderInterface
                         'responses' => [
                             200 => $schemaResponse,
                         ],
-                        'action' => $action,
+                        'action' => $selectAction,
                     ],
                     'POST' => [
                         'active' => true,
@@ -99,7 +104,7 @@ class TestProvider implements ProviderInterface
                         'responses' => [
                             200 => $schemaResponse,
                         ],
-                        'action' => $action,
+                        'action' => $insertAction,
                     ]
                 ],
             ]

@@ -100,7 +100,6 @@ JSON;
             'name' => 'Test-Action',
         ]);
 
-        $this->assertEquals(167, $action['id']);
         $this->assertEquals('Fusio\Adapter\Util\Action\UtilStaticResponse', $action['class']);
         $this->assertEquals(['response' => '{"foo": "bar"}'], Service\Action::unserializeConfig($action['config']));
 

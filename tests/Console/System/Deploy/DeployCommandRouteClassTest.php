@@ -63,7 +63,6 @@ class DeployCommandRouteClassTest extends ControllerDbTestCase
             'name' => 'Fusio_Impl_Tests_Console_System_Action_TestAction',
         ]);
 
-        $this->assertEquals(167, $action['id']);
         $this->assertEquals('Fusio\Impl\Tests\Console\System\Action\TestAction', $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
         $this->assertEquals(null, $action['config']);

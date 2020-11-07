@@ -126,7 +126,7 @@ JSON;
                         'GET' => [
                             'active'   => true,
                             'public'   => true,
-                            'action'   => 'Sql-Table',
+                            'action'   => 'Sql-Select-All',
                             'response' => 'Collection-Schema',
                         ],
                     ],

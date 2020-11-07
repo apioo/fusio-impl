@@ -59,9 +59,15 @@ class ClassCommandTest extends ControllerDbTestCase
 | HTTP-Processor       | Fusio\Adapter\Http\Action\HttpProcessor       |
 | PHP-Processor        | Fusio\Adapter\Php\Action\PhpProcessor         |
 | PHP-Sandbox          | Fusio\Adapter\Php\Action\PhpSandbox           |
-| SQL-Select           | Fusio\Adapter\Sql\Action\SqlSelect            |
-| SQL-Table            | Fusio\Adapter\Sql\Action\SqlTable             |
 | Util-Static-Response | Fusio\Adapter\Util\Action\UtilStaticResponse  |
+| SMTP-Send            | Fusio\Adapter\Smtp\Action\SmtpSend            |
+| SQL-Select-All       | Fusio\Adapter\Sql\Action\SqlSelectAll         |
+| SQL-Select-Row       | Fusio\Adapter\Sql\Action\SqlSelectRow         |
+| SQL-Insert           | Fusio\Adapter\Sql\Action\SqlInsert            |
+| SQL-Update           | Fusio\Adapter\Sql\Action\SqlUpdate            |
+| SQL-Delete           | Fusio\Adapter\Sql\Action\SqlDelete            |
+| SQL-Query-All        | Fusio\Adapter\Sql\Action\Query\SqlQueryAll    |
+| SQL-Query-Row        | Fusio\Adapter\Sql\Action\Query\SqlQueryRow    |
 | Void-Action          | Fusio\Impl\Tests\Adapter\Test\VoidAction      |
 +----------------------+-----------------------------------------------+
 

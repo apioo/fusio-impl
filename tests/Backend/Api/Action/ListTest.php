@@ -84,16 +84,40 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
-            "name": "SQL-Select",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelect"
-        },
-        {
-            "name": "SQL-Table",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
-        },
-        {
             "name": "Util-Static-Response",
             "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse"
+        },
+        {
+            "name": "SMTP-Send",
+            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend"
+        },
+        {
+            "name": "SQL-Select-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll"
+        },
+        {
+            "name": "SQL-Select-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow"
+        },
+        {
+            "name": "SQL-Insert",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert"
+        },
+        {
+            "name": "SQL-Update",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate"
+        },
+        {
+            "name": "SQL-Delete",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete"
+        },
+        {
+            "name": "SQL-Query-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll"
+        },
+        {
+            "name": "SQL-Query-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow"
         },
         {
             "name": "Void-Action",

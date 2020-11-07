@@ -53,7 +53,7 @@ class ExecuteCommand extends Command
         $this
             ->setName('cronjob:execute')
             ->setDescription('Executes a specific cronjob')
-            ->addArgument('cronjob', InputArgument::REQUIRED, 'The cronjob id to execute');
+            ->addArgument('cronjob', InputArgument::REQUIRED, 'The cronjob name to execute');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

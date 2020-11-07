@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
-use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -43,7 +43,7 @@ class EntityTest extends ControllerDbTestCase
     {
         parent::setUp();
 
-        $this->id = Fixture::getId('fusio_action', 'Sql-Table');
+        $this->id = Fixture::getId('fusio_action', 'Sql-Insert');
     }
 
     public function getDataSet()
@@ -76,8 +76,8 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": {$this->id},
     "status": 1,
-    "name": "Sql-Table",
-    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlTable",
+    "name": "Sql-Insert",
+    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
     "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
@@ -151,7 +151,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Bar', SqlTable::class, '{"response":"{\"foo\":\"bar\"}"}');
+        Assert::assertAction('Bar', SqlInsert::class, '{"response":"{\"foo\":\"bar\"}"}');
     }
 
     public function testDelete()

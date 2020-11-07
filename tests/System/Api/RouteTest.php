@@ -61,19 +61,19 @@ class RouteTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "routes": {
-        "/": {
+        "\/": {
             "GET": "Action_Welcome"
         },
-        "/foo": {
-            "GET": "Sql-Table",
-            "POST": "Sql-Table"
+        "\/foo": {
+            "GET": "Sql-Select-All",
+            "POST": "Sql-Insert"
         },
-        "/inspect/:foo": {
-            "DELETE": "Inspect-Action",
+        "\/inspect\/:foo": {
             "GET": "Inspect-Action",
-            "PATCH": "Inspect-Action",
             "POST": "Inspect-Action",
-            "PUT": "Inspect-Action"
+            "PUT": "Inspect-Action",
+            "DELETE": "Inspect-Action",
+            "PATCH": "Inspect-Action"
         }
     }
 }

@@ -21,7 +21,8 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Route;
 
-use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Adapter\Sql\Action\SqlInsert;
+use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -140,7 +141,8 @@ JSON;
         Assert::assertSchema('Provider_Schema_Response', $schema);
 
         // check action
-        Assert::assertAction('Provider_Action', SqlTable::class, '{"table":"foobar"}');
+        Assert::assertAction('Provider_Action_Select', SqlSelectAll::class, '{"table":"foobar"}');
+        Assert::assertAction('Provider_Action_Insert', SqlInsert::class, '{"table":"foobar"}');
 
         // check routes
         Assert::assertRoute('/foo/table', ['foo', 'foo', 'bar'], [[
@@ -156,7 +158,7 @@ JSON;
             'responses'    => [
                 '200'      => 'Provider_Schema_Response'
             ],
-            'action'       => 'Provider_Action',
+            'action'       => 'Provider_Action_Select',
             'costs'        => 0,
         ], [
             'method'       => 'POST',
@@ -171,7 +173,7 @@ JSON;
             'responses'    => [
                 '200'      => 'Provider_Schema_Response'
             ],
-            'action'       => 'Provider_Action',
+            'action'       => 'Provider_Action_Insert',
             'costs'        => 0,
         ]]);
     }
@@ -222,8 +224,16 @@ JSON;
     ],
     "actions": [
         {
-            "name": "Provider_Action",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
+            "name": "Provider_Action_Select",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+            "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+            "config": {
+                "table": "foobar"
+            }
+        },
+        {
+            "name": "Provider_Action_Insert",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
             "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
             "config": {
                 "table": "foobar"
@@ -262,7 +272,7 @@ JSON;
                             "responses": {
                                 "200": 1
                             },
-                            "action": 0
+                            "action": 1
                         }
                     }
                 }

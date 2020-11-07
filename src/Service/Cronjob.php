@@ -169,11 +169,18 @@ class Cronjob
     /**
      * Executes a specific cronjob
      * 
-     * @param integer $cronjobId
+     * @param string|integer $cronjobId
      */
-    public function execute(int $cronjobId)
+    public function execute($cronjobId)
     {
-        $existing = $this->cronjobTable->get($cronjobId);
+        if (is_numeric($cronjobId)) {
+            $existing = $this->cronjobTable->get($cronjobId);
+        } else {
+            $condition = new Condition();
+            $condition->equals('name', $cronjobId);
+            $existing = $this->cronjobTable->getOneBy($condition);
+        }
+
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }

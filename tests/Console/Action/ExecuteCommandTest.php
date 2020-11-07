@@ -47,7 +47,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'action'  => 'Sql-Table',
+            'action'  => 'Sql-Select-All',
         ]);
 
         $actual = $commandTester->getDisplay();
@@ -76,30 +76,6 @@ TEXT;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
-    public function testCommandUriFragments()
-    {
-        $command = Environment::getService('console')->find('action:execute');
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'action'  => 'Sql-Table',
-            '--uriFragments' => 'id=1',
-        ]);
-
-        $actual = $commandTester->getDisplay();
-        $expect = <<<TEXT
-{
-    "id": 1,
-    "title": "foo",
-    "content": "bar",
-    "date": "2015-02-27T19:59:15+00:00"
-}
-TEXT;
-
-        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
-    }
-
     public function testCommandParameters()
     {
         $command = Environment::getService('console')->find('action:execute');
@@ -107,7 +83,7 @@ TEXT;
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'action'  => 'Sql-Table',
+            'action'  => 'Sql-Select-All',
             '--parameters' => 'count=1',
         ]);
 
@@ -138,7 +114,7 @@ TEXT;
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'action'  => 'Sql-Table',
+            'action'  => 'Sql-Insert',
             '--method' => 'POST',
             '--body' => json_encode(['title' => 'bar', 'content' => 'bar', 'date' => date('Y-m-d H:i:s')]),
         ]);

@@ -94,7 +94,7 @@ class EntityTest extends ControllerDbTestCase
                     "responses": {
                         "200": "Collection-Schema"
                     },
-                    "action": "Sql-Table"
+                    "action": "Sql-Select-All"
                 },
                 "POST": {
                     "active": true,
@@ -104,7 +104,7 @@ class EntityTest extends ControllerDbTestCase
                     "responses": {
                         "201": "Passthru"
                     },
-                    "action": "Sql-Table",
+                    "action": "Sql-Insert",
                     "costs": 1
                 }
             }
@@ -271,7 +271,7 @@ JSON;
             'responses'    => [
                 '200'      => 'Collection-Schema'
             ],
-            'action'       => 'Sql-Table',
+            'action'       => 'Sql-Select-All',
             'costs'        => 0,
         ], [
             'method'       => 'POST',
@@ -286,7 +286,7 @@ JSON;
             'responses'    => [
                 '201'      => 'Passthru'
             ],
-            'action'       => 'Sql-Table',
+            'action'       => 'Sql-Insert',
             'costs'        => 1,
         ]]);
     }

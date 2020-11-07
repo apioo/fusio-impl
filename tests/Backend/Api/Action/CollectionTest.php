@@ -69,20 +69,26 @@ class CollectionTest extends ControllerDbTestCase
         
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 166,
+            "id": 167,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
+            "id": 166,
+            "status": 1,
+            "name": "Sql-Insert",
+            "date": "[datetime]"
+        },
+        {
             "id": 165,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
@@ -117,14 +123,20 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
+            "id": 166,
+            "status": 1,
+            "name": "Sql-Insert",
+            "date": "[datetime]"
+        },
+        {
             "id": 165,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Select-All",
             "date": "[datetime]"
         }
     ]
@@ -147,20 +159,26 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 166,
+            "id": 167,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
+            "id": 166,
+            "status": 1,
+            "name": "Sql-Insert",
+            "date": "[datetime]"
+        },
+        {
             "id": 165,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
