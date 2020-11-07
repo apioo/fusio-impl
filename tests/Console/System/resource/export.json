@@ -1,339 +1,92 @@
 {
-  "action": [
+  "scope": [
     {
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
-      "date": "[datetime]",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Inspect-Action"
+      "name": "bar",
+      "description": "Bar access"
     },
     {
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
-      "config": {
-        "connection": 2,
-        "table": "app_news"
-      },
-      "date": "[datetime]",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Sql-Insert"
+      "name": "foo",
+      "description": "Foo access"
     },
     {
-      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
-      "config": {
-        "connection": 2,
-        "table": "app_news"
-      },
-      "date": "[datetime]",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Sql-Select-All"
-    },
-    {
-      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-      "config": {
-        "response": "{\"foo\": \"bar\"}"
-      },
-      "date": "[datetime]",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Util-Static-Response"
-    },
-    {
-      "class": "Fusio\\Impl\\Action\\Welcome",
-      "date": "[datetime]",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "name": "Action_Welcome"
-    }
-  ],
-  "app": [
-    {
-      "date": "[datetime]",
-      "name": "Pending",
-      "parameters": "",
-      "status": 2,
-      "url": "http://google.com",
-      "userId": 2
-    },
-    {
-      "date": "[datetime]",
-      "name": "Foo-App",
-      "parameters": "",
-      "scopes": [
-        "authorization",
-        "foo",
-        "bar"
-      ],
-      "status": 1,
-      "url": "http://google.com",
-      "userId": 2
-    },
-    {
-      "date": "[datetime]",
-      "name": "Consumer",
-      "parameters": "",
-      "scopes": [
-        "consumer",
-        "authorization"
-      ],
-      "status": 1,
-      "url": "http://fusio-project.org",
-      "userId": 1
-    },
-    {
-      "date": "[datetime]",
-      "name": "Backend",
-      "parameters": "",
-      "scopes": [
-        "backend",
-        "authorization"
-      ],
-      "status": 1,
-      "url": "http://fusio-project.org",
-      "userId": 1
+      "name": "default",
+      "description": ""
     }
   ],
   "connection": [
     {
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
+      "status": 1,
       "name": "paypal",
-      "status": 1
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection"
     },
     {
-      "class": "Fusio\\Impl\\Connection\\Native",
+      "status": 1,
       "name": "Test",
-      "status": 1
+      "class": "Fusio\\Impl\\Connection\\Native"
     },
     {
-      "class": "Fusio\\Impl\\Connection\\System",
+      "status": 1,
       "name": "System",
-      "status": 1
-    }
-  ],
-  "cronjob": [
-    {
-      "action": "Sql-Select-All",
-      "cron": "*/30 * * * *",
-      "name": "Test-Cron"
-    }
-  ],
-  "event": [
-    {
-      "description": "Foo event description",
-      "name": "foo-event",
-      "status": 1
-    }
-  ],
-  "rate": [
-    {
-      "allocation": [
-        {
-          "authenticated": true,
-          "id": 4,
-          "rateId": 4,
-          "routeId": 110
-        }
-      ],
-      "name": "gold",
-      "priority": 10,
-      "rateLimit": 16,
-      "timespan": "P1M"
-    },
-    {
-      "allocation": [
-        {
-          "id": 3,
-          "rateId": 3,
-          "routeId": 110
-        }
-      ],
-      "name": "silver",
-      "priority": 5,
-      "rateLimit": 8,
-      "timespan": "P1M"
-    },
-    {
-      "allocation": [
-        {
-          "authenticated": false,
-          "id": 2,
-          "rateId": 2
-        }
-      ],
-      "name": "Default-Anonymous",
-      "priority": 4,
-      "rateLimit": 60,
-      "timespan": "PT1H"
-    },
-    {
-      "allocation": [
-        {
-          "id": 1,
-          "rateId": 1
-        }
-      ],
-      "name": "Default",
-      "priority": 0,
-      "rateLimit": 720,
-      "timespan": "PT1H"
-    }
-  ],
-  "routes": [
-    {
-      "config": [
-        {
-          "methods": {
-            "DELETE": {
-              "action": "Inspect-Action",
-              "active": true,
-              "public": false,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              }
-            },
-            "GET": {
-              "action": "Inspect-Action",
-              "active": true,
-              "public": false,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              }
-            },
-            "PATCH": {
-              "action": "Inspect-Action",
-              "active": true,
-              "public": false,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              }
-            },
-            "POST": {
-              "action": "Inspect-Action",
-              "active": true,
-              "public": false,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              }
-            },
-            "PUT": {
-              "action": "Inspect-Action",
-              "active": true,
-              "public": false,
-              "request": "Passthru",
-              "responses": {
-                "200": "Passthru"
-              }
-            }
-          },
-          "status": 1,
-          "version": 1
-        }
-      ],
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "path": "/inspect/:foo",
-      "scopes": [
-        "foo",
-        "bar"
-      ],
-      "status": 1
-    },
-    {
-      "config": [
-        {
-          "methods": {
-            "GET": {
-              "action": "Sql-Select-All",
-              "active": true,
-              "operationId": "listFoo",
-              "public": true,
-              "responses": {
-                "200": "Collection-Schema"
-              }
-            },
-            "POST": {
-              "action": "Sql-Insert",
-              "active": true,
-              "costs": 1,
-              "operationId": "createFoo",
-              "public": false,
-              "request": "Entry-Schema",
-              "responses": {
-                "201": "Passthru"
-              }
-            }
-          },
-          "status": 4,
-          "version": 1
-        }
-      ],
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "path": "/foo",
-      "scopes": [
-        "bar"
-      ],
-      "status": 1
-    },
-    {
-      "config": [
-        {
-          "methods": {
-            "GET": {
-              "action": "Action_Welcome",
-              "active": true,
-              "public": false,
-              "responses": {
-                "200": "Passthru"
-              }
-            }
-          },
-          "status": 1,
-          "version": 1
-        }
-      ],
-      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
-      "path": "/",
-      "status": 1
+      "class": "Fusio\\Impl\\Connection\\System"
     }
   ],
   "schema": [
     {
-      "form": "{\r\n  \"title\": {\r\n    \"ui:autofocus\": true,\r\n    \"ui:emptyValue\": \"\"\r\n  },\r\n  \"content\": {\r\n    \"ui:widget\": \"textarea\"\r\n  },\r\n  \"date\": {\r\n    \"ui:widget\": \"alt-datetime\"\r\n  }\r\n}",
       "name": "Entry-Schema",
-      "readonly": false,
       "source": {
-        "$ref": "Entry",
         "definitions": {
           "Entry": {
+            "type": "object",
             "properties": {
-              "content": {
-                "type": "string"
-              },
-              "date": {
-                "format": "date-time",
-                "type": "string"
-              },
               "id": {
                 "type": "integer"
               },
               "title": {
                 "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
               }
-            },
-            "type": "object"
+            }
           }
-        }
-      }
+        },
+        "$ref": "Entry"
+      },
+      "form": "{\r\n  \"title\": {\r\n    \"ui:autofocus\": true,\r\n    \"ui:emptyValue\": \"\"\r\n  },\r\n  \"content\": {\r\n    \"ui:widget\": \"textarea\"\r\n  },\r\n  \"date\": {\r\n    \"ui:widget\": \"alt-datetime\"\r\n  }\r\n}",
+      "readonly": false
     },
     {
       "name": "Collection-Schema",
-      "readonly": false,
       "source": {
-        "$ref": "Collection",
         "definitions": {
-          "Collection": {
+          "Entry": {
+            "type": "object",
             "properties": {
-              "entry": {
-                "$ref": "Entry"
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "Collection": {
+            "title": "collection",
+            "type": "object",
+            "properties": {
+              "totalResults": {
+                "type": "integer"
               },
               "itemsPerPage": {
                 "type": "integer"
@@ -341,69 +94,262 @@
               "startIndex": {
                 "type": "integer"
               },
-              "totalResults": {
-                "type": "integer"
+              "entry": {
+                "$ref": "Entry"
               }
-            },
-            "title": "collection",
-            "type": "object"
-          },
-          "Entry": {
-            "properties": {
-              "content": {
-                "type": "string"
-              },
-              "date": {
-                "format": "date-time",
-                "type": "string"
-              },
-              "id": {
-                "type": "integer"
-              },
-              "title": {
-                "type": "string"
-              }
-            },
-            "type": "object"
+            }
           }
-        }
-      }
+        },
+        "$ref": "Collection"
+      },
+      "readonly": false
     },
     {
       "name": "Passthru",
-      "readonly": true,
       "source": {
-        "$ref": "Passthru",
         "definitions": {
           "Passthru": {
             "description": "No schema information available",
             "type": "object"
           }
-        }
-      }
+        },
+        "$ref": "Passthru"
+      },
+      "readonly": true
     }
   ],
-  "scope": [
+  "action": [
     {
-      "description": "Bar access",
-      "name": "bar"
+      "name": "Inspect-Action",
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "date": "[datetime]"
     },
     {
-      "description": "Foo access",
-      "name": "foo"
+      "name": "Sql-Insert",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "connection": 2,
+        "table": "app_news"
+      },
+      "date": "[datetime]"
     },
     {
-      "description": "",
-      "name": "default"
+      "name": "Sql-Select-All",
+      "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "connection": 2,
+        "table": "app_news"
+      },
+      "date": "[datetime]"
+    },
+    {
+      "name": "Util-Static-Response",
+      "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "config": {
+        "response": "{\"foo\": \"bar\"}"
+      },
+      "date": "[datetime]"
+    },
+    {
+      "name": "Action_Welcome",
+      "class": "Fusio\\Impl\\Action\\Welcome",
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "date": "[datetime]"
+    }
+  ],
+  "routes": [
+    {
+      "status": 1,
+      "path": "\/inspect\/:foo",
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "foo",
+        "bar"
+      ],
+      "config": [
+        {
+          "version": 1,
+          "status": 1,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": false,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Inspect-Action"
+            },
+            "POST": {
+              "active": true,
+              "public": false,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Inspect-Action"
+            },
+            "PUT": {
+              "active": true,
+              "public": false,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Inspect-Action"
+            },
+            "DELETE": {
+              "active": true,
+              "public": false,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Inspect-Action"
+            },
+            "PATCH": {
+              "active": true,
+              "public": false,
+              "request": "Passthru",
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Inspect-Action"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "status": 1,
+      "path": "\/foo",
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "scopes": [
+        "bar"
+      ],
+      "config": [
+        {
+          "version": 1,
+          "status": 4,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "operationId": "listFoo",
+              "responses": {
+                "200": "Collection-Schema"
+              },
+              "action": "Sql-Select-All"
+            },
+            "POST": {
+              "active": true,
+              "public": false,
+              "operationId": "createFoo",
+              "request": "Entry-Schema",
+              "responses": {
+                "201": "Passthru"
+              },
+              "action": "Sql-Insert",
+              "costs": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "status": 1,
+      "path": "\/",
+      "controller": "Fusio\\Impl\\Controller\\SchemaApiController",
+      "config": [
+        {
+          "version": 1,
+          "status": 1,
+          "methods": {
+            "GET": {
+              "active": true,
+              "public": true,
+              "responses": {
+                "200": "Passthru"
+              },
+              "action": "Action_Welcome"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "cronjob": [
+    {
+      "name": "Test-Cron",
+      "cron": "*\/30 * * * *",
+      "action": "Sql-Select-All"
+    }
+  ],
+  "rate": [
+    {
+      "priority": 10,
+      "name": "gold",
+      "rateLimit": 16,
+      "timespan": "P1M",
+      "allocation": [
+        {
+          "id": 4,
+          "rateId": 4,
+          "routeId": 110,
+          "authenticated": true
+        }
+      ]
+    },
+    {
+      "priority": 5,
+      "name": "silver",
+      "rateLimit": 8,
+      "timespan": "P1M",
+      "allocation": [
+        {
+          "id": 3,
+          "rateId": 3,
+          "routeId": 110
+        }
+      ]
+    },
+    {
+      "priority": 4,
+      "name": "Default-Anonymous",
+      "rateLimit": 60,
+      "timespan": "PT1H",
+      "allocation": [
+        {
+          "id": 2,
+          "rateId": 2,
+          "authenticated": false
+        }
+      ]
+    },
+    {
+      "priority": 0,
+      "name": "Default",
+      "rateLimit": 720,
+      "timespan": "PT1H",
+      "allocation": [
+        {
+          "id": 1,
+          "rateId": 1
+        }
+      ]
     }
   ],
   "user": [
     {
-      "date": "[datetime]",
-      "email": "developer@localhost.com",
-      "name": "Developer",
-      "points": 10,
       "provider": 1,
+      "status": 1,
+      "name": "Developer",
+      "email": "developer@localhost.com",
+      "points": 10,
       "scopes": [
         "backend",
         "backend.account",
@@ -440,24 +386,24 @@
         "foo",
         "bar"
       ],
-      "status": 1
+      "date": "[datetime]"
     },
     {
-      "date": "[datetime]",
-      "email": "disabled@localhost.com",
-      "name": "Disabled",
       "provider": 1,
+      "status": 2,
+      "name": "Disabled",
+      "email": "disabled@localhost.com",
       "scopes": [
         "authorization"
       ],
-      "status": 2
+      "date": "[datetime]"
     },
     {
-      "date": "[datetime]",
-      "email": "consumer@localhost.com",
-      "name": "Consumer",
-      "points": 100,
       "provider": 1,
+      "status": 0,
+      "name": "Consumer",
+      "email": "consumer@localhost.com",
+      "points": 100,
       "scopes": [
         "consumer",
         "consumer.app",
@@ -472,13 +418,13 @@
         "foo",
         "bar"
       ],
-      "status": 0
+      "date": "[datetime]"
     },
     {
-      "date": "[datetime]",
-      "email": "admin@localhost.com",
-      "name": "Administrator",
       "provider": 1,
+      "status": 1,
+      "name": "Administrator",
+      "email": "admin@localhost.com",
       "scopes": [
         "backend",
         "backend.account",
@@ -515,7 +461,61 @@
         "foo",
         "bar"
       ],
-      "status": 1
+      "date": "[datetime]"
+    }
+  ],
+  "app": [
+    {
+      "userId": 2,
+      "status": 2,
+      "name": "Pending",
+      "url": "http:\/\/google.com",
+      "parameters": "",
+      "date": "[datetime]"
+    },
+    {
+      "userId": 2,
+      "status": 1,
+      "name": "Foo-App",
+      "url": "http:\/\/google.com",
+      "parameters": "",
+      "scopes": [
+        "authorization",
+        "foo",
+        "bar"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "userId": 1,
+      "status": 1,
+      "name": "Consumer",
+      "url": "http:\/\/fusio-project.org",
+      "parameters": "",
+      "scopes": [
+        "consumer",
+        "authorization"
+      ],
+      "date": "[datetime]"
+    },
+    {
+      "userId": 1,
+      "status": 1,
+      "name": "Backend",
+      "url": "http:\/\/fusio-project.org",
+      "parameters": "",
+      "scopes": [
+        "backend",
+        "authorization"
+      ],
+      "date": "[datetime]"
+    }
+  ],
+  "event": [
+    {
+      "status": 1,
+      "name": "foo-event",
+      "description": "Foo event description"
     }
   ]
 }
