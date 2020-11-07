@@ -451,7 +451,7 @@ class DataBag
             'rate_id' => $this->getId('fusio_rate', $rate),
             'route_id' => $route !== null ? $this->getId('fusio_routes', $route) : null,
             'app_id' => $app !== null ? $this->getId('fusio_app', $app) : null,
-            'authenticated' => $authenticated,
+            'authenticated' => $authenticated !== null ? ($authenticated ? 1 : 0) : null,
             'parameters' => $parameters
         ];
     }
