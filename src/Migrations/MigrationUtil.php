@@ -73,41 +73,19 @@ class MigrationUtil
      */
     public static function syncRoutes(Connection $connection, array $routes, \Closure $callback)
     {
-        $scopes = [];
-        $maxId  = (int) $connection->fetchColumn('SELECT MAX(id) AS max_id FROM fusio_routes');
-
         foreach ($routes as $row) {
-            $route = $connection->fetchAssoc('SELECT id, status, priority, methods, controller FROM fusio_routes WHERE path = :path', [
+            $route = $connection->fetchAssoc('SELECT id, category_id, status, priority, methods, controller FROM fusio_routes WHERE path = :path', [
                 'path' => $row['path']
             ]);
 
             if (empty($route)) {
                 // the route does not exist so create it
                 self::insertRow('fusio_routes', $row, $callback);
-
-                $maxId++;
-
-                $scopeId = NewInstallation::getScopeIdFromPath($row['path']);
-                if ($scopeId !== null) {
-                    $scopes[] = [
-                        'scope_id' => $scopeId,
-                        'route_id' => $maxId,
-                        'allow'    => 1,
-                        'methods'  => 'GET|POST|PUT|PATCH|DELETE',
-                    ];
-                }
             } else {
                 // the route exists check whether something has changed
                 $columns = ['status', 'priority', 'controller'];
 
                 self::updateRow('fusio_routes', $row, $route, $columns, $callback);
-            }
-        }
-
-        if (!empty($scopes)) {
-            // add new routes to scopes
-            foreach ($scopes as $row) {
-                self::insertRow('fusio_scope_routes', $row, $callback);
             }
         }
     }
@@ -117,7 +95,7 @@ class MigrationUtil
      * @param array $row
      * @param \Closure $callback
      */
-    public static function insertRow($tableName, array $row, \Closure $callback)
+    public static function insertRow(string $tableName, array $row, \Closure $callback)
     {
         $columnList = [];
         $paramPlaceholders = [];
@@ -143,7 +121,7 @@ class MigrationUtil
      * @param array $columns
      * @param \Closure $callback
      */
-    public static function updateRow($tableName, array $row, array $existing, array $columns, \Closure $callback)
+    public static function updateRow(string $tableName, array $row, array $existing, array $columns, \Closure $callback)
     {
         $parts  = [];
         $params = [];
