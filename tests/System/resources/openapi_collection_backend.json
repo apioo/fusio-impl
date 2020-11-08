@@ -6271,7 +6271,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$generic": "Statistic_Chart_Data"
+              "$ref": "#\/components\/schemas\/Statistic_Chart_Data"
             }
           },
           "series": {
@@ -6281,6 +6281,10 @@
             }
           }
         }
+      },
+      "Statistic_Chart_Data": {
+        "type": "object",
+        "additionalProperties": []
       },
       "Statistic_Count": {
         "type": "object",

@@ -169,7 +169,7 @@
         "data": {
           "type": "array",
           "items": {
-            "$generic": "Statistic_Chart_Data"
+            "$ref": "Statistic_Chart_Data"
           }
         },
         "series": {
@@ -178,6 +178,12 @@
             "type": "string"
           }
         }
+      }
+    },
+    "Statistic_Chart_Data": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     }
   }
