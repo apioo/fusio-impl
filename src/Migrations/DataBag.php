@@ -91,7 +91,7 @@ class DataBag
 
         if (!isset(self::$priorities[$category])) {
             $categoryId = $this->getId('fusio_category', $category);
-            self::$priorities[$category] = $categoryId * 100;
+            self::$priorities[$category] = $categoryId * 1000;
         }
 
         foreach ($routes as $route => $config) {
