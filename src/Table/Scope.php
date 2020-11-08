@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table;
 
 use PSX\Sql\Condition;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -69,7 +70,7 @@ class Scope extends TableAbstract
 
         $condition = new Condition();
         $condition->equals('category_id', $categoryId);
-        $result = $this->getAll(0, 1024, null, null, $condition);
+        $result = $this->getAll(0, 1024, 'name', Sql::SORT_ASC, $condition);
 
         $scopes = [];
         foreach ($result as $row) {
