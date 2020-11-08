@@ -68,7 +68,7 @@ class Scope extends TableAbstract
         $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
 
         $condition = new Condition();
-        $condition->like('category_id', $categoryId);
+        $condition->equals('category_id', $categoryId);
         $result = $this->getAll(0, 1024, null, null, $condition);
 
         $scopes = [];
