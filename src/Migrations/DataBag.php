@@ -84,7 +84,7 @@ class DataBag
 
     public function addRoutes(string $category, array $routes)
     {
-        $prio = 0;
+        $prio = 1;
 
         $this->addCategory($category);
         $this->addScope($category, $category);
