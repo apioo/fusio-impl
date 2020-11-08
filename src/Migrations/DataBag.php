@@ -41,6 +41,8 @@ class DataBag
 {
     private $data;
 
+    private static $priorities = [];
+    
     public function __construct()
     {
         $this->data = [
@@ -84,10 +86,13 @@ class DataBag
 
     public function addRoutes(string $category, array $routes)
     {
-        $prio = 1;
-
         $this->addCategory($category);
         $this->addScope($category, $category);
+
+        if (!isset(self::$priorities[$category])) {
+            $categoryId = $this->getId('fusio_category', $category);
+            self::$priorities[$category] = $categoryId * 100;
+        }
 
         foreach ($routes as $route => $config) {
             if ($category !== 'default') {
@@ -95,7 +100,7 @@ class DataBag
             } else {
                 $path = $route;
             }
-            $this->addRoute($category, $prio, $path, SchemaApiController::class);
+            $this->addRoute($category, self::$priorities[$category], $path, SchemaApiController::class);
 
             foreach ($config as $methodName => $method) {
                 /** @var Method $method */
@@ -156,7 +161,7 @@ class DataBag
                 }
             }
 
-            $prio++;
+            self::$priorities[$category]++;
         }
     }
 
