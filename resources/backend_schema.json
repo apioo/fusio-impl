@@ -1490,10 +1490,8 @@
       "$extends": "Scope"
     },
     "Statistic_Chart_Data": {
-      "type": "array",
-      "items": {
-        "type": "number"
-      }
+      "type": "object",
+      "additionalProperties": true
     },
     "Statistic_Chart": {
       "type": "object",
