@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table;
 
 use PSX\Sql\Condition;
+use PSX\Sql\Sql;
 use PSX\Sql\TableAbstract;
 
 /**
@@ -33,9 +34,8 @@ use PSX\Sql\TableAbstract;
  */
 class Scope extends TableAbstract
 {
-    const TYPE_BACKEND = 'backend';
-    const TYPE_CONSUMER = 'consumer';
-    const TYPE_APP = 'app';
+    const STATUS_ACTIVE  = 1;
+    const STATUS_DELETED = 0;
 
     public function getName()
     {
@@ -46,6 +46,8 @@ class Scope extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'category_id' => self::TYPE_INT,
+            'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'description' => self::TYPE_VARCHAR,
         );
@@ -62,22 +64,13 @@ class Scope extends TableAbstract
         }
     }
 
-    public function getScopesForType(string $type)
+    public function getScopesForCategory(string $category)
     {
-        if ($type === self::TYPE_BACKEND) {
-            $condition = new Condition();
-            $condition->like('name', 'backend%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        } elseif ($type === self::TYPE_CONSUMER) {
-            $condition = new Condition();
-            $condition->like('name', 'consumer%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        } else {
-            $condition = new Condition();
-            $condition->notLike('name', 'backend%');
-            $condition->notLike('name', 'consumer%');
-            $result = $this->getAll(0, 1024, null, null, $condition);
-        }
+        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+
+        $condition = new Condition();
+        $condition->equals('category_id', $categoryId);
+        $result = $this->getAll(0, 1024, 'name', Sql::SORT_ASC, $condition);
 
         $scopes = [];
         foreach ($result as $row) {

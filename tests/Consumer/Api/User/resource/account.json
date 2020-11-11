@@ -1,86 +1,92 @@
 {
-  "path": "\/consumer\/account",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_User_Attributes": {
-        "type": "object",
-        "title": "Consumer User Attributes",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "Consumer_User_Account": {
-        "type": "object",
-        "title": "Consumer User Account",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "attributes": {
-            "$ref": "#\/definitions\/Consumer_User_Attributes"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Consumer_Message": {
-        "type": "object",
-        "title": "Consumer Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_User_Account"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Consumer_User_Account"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
-      }
-    }
-  },
+  "path": "\/consumer\/account",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_User_Get",
+      "security": {
+        "app": [
+          "consumer.user"
+        ]
+      },
+      "tags": [
+        "consumer.user"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Consumer_Model_User_Account"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Consumer_Action_User_Update",
+      "security": {
+        "app": [
+          "consumer.user"
+        ]
+      },
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Account",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "Consumer_Model_User_Account": {
+      "$ref": "User_Account"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "User_Account": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attributes": {
+          "$ref": "User_Attributes"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "User_Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

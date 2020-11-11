@@ -52,8 +52,8 @@ class SMTPTest extends TestCase
         $dispatcher->expects($this->once())
             ->method('send')
             ->with($this->callback(function($message){
-                /** @var \Swift_Mime_Message $message */
-                $this->assertInstanceOf(\Swift_Mime_Message::class, $message);
+                /** @var \Swift_Mime_SimpleMessage $message */
+                $this->assertInstanceOf(\Swift_Mime_SimpleMessage::class, $message);
 
                 $this->assertEquals(['foo@bar.com' => null], $message->getFrom());
                 $this->assertEquals(['bar@foo.com' => null], $message->getTo());

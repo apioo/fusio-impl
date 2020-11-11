@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Cronjob;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Cronjob_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Cronjob_Create
      */
-    protected $cronjobId;
+    private $cronjob;
 
     /**
-     * @var array
+     * @param Cronjob_Create $cronjob
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $cronjobId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($cronjobId, array $record, UserContext $context)
+    public function __construct(Cronjob_Create $cronjob, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->cronjobId = $cronjobId;
-        $this->record    = $record;
+        $this->cronjob = $cronjob;
     }
 
-    public function getCronjobId()
+    /**
+     * @return Cronjob_Create
+     */
+    public function getCronjob(): Cronjob_Create
     {
-        return $this->cronjobId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->cronjob;
     }
 }

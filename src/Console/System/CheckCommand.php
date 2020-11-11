@@ -84,7 +84,6 @@ class CheckCommand extends Command
         switch ($check) {
             case 'user':
                 return $this->checkUser();
-                break;
         }
 
         return null;

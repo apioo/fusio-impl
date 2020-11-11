@@ -23,6 +23,8 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Config_Update;
+use Fusio\Impl\Consumer\Model\User_Register;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Service\User\Mailer;
@@ -57,7 +59,12 @@ class RegisterTest extends ControllerDbTestCase
             $this->newConfig('private_key', true)
         );
 
-        $register->register('new_user', 'user@host.com', 'test1234', 'result');
+        $user = new User_Register();
+        $user->setName('new_user');
+        $user->setEmail('user@host.com');
+        $user->setPassword('test1234');
+        $user->setCaptcha('result');
+        $register->register($user);
 
         // check user
         /** @var \Doctrine\DBAL\Connection $connection */
@@ -84,7 +91,12 @@ class RegisterTest extends ControllerDbTestCase
             $this->newConfig('private_key', false)
         );
 
-        $register->register('new_user', 'user@host.com', 'test1234', 'result');
+        $user = new User_Register();
+        $user->setName('new_user');
+        $user->setEmail('user@host.com');
+        $user->setPassword('test1234');
+        $user->setCaptcha('result');
+        $register->register($user);
 
         // check user
         /** @var \Doctrine\DBAL\Connection $connection */
@@ -111,7 +123,12 @@ class RegisterTest extends ControllerDbTestCase
             $this->newConfig('', true)
         );
 
-        $register->register('new_user', 'user@host.com', 'test1234', 'result');
+        $user = new User_Register();
+        $user->setName('new_user');
+        $user->setEmail('user@host.com');
+        $user->setPassword('test1234');
+        $user->setCaptcha('result');
+        $register->register($user);
 
         // check user
         /** @var \Doctrine\DBAL\Connection $connection */
@@ -128,11 +145,10 @@ class RegisterTest extends ControllerDbTestCase
         $this->assertNotEmpty($user['password']);
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\BadRequestException
-     */
     public function testRegisterInvalidCaptcha()
     {
+        $this->expectException(\PSX\Http\Exception\BadRequestException::class);
+
         $register = new Register(
             Environment::getService('user_service'),
             $this->newCaptchaService(false),
@@ -141,7 +157,12 @@ class RegisterTest extends ControllerDbTestCase
             $this->newConfig('private_key', true)
         );
 
-        $register->register('new_user', 'user@host.com', 'test1234', 'result');
+        $user = new User_Register();
+        $user->setName('new_user');
+        $user->setEmail('user@host.com');
+        $user->setPassword('test1234');
+        $user->setCaptcha('result');
+        $register->register($user);
     }
 
     /**
@@ -157,8 +178,7 @@ class RegisterTest extends ControllerDbTestCase
 
         if ($success) {
             $captcha->expects($this->once())
-                ->method('assertCaptcha')
-                ->willReturn($this->returnValue(true));
+                ->method('assertCaptcha');
         } else {
             $captcha->expects($this->once())
                 ->method('assertCaptcha')
@@ -176,8 +196,13 @@ class RegisterTest extends ControllerDbTestCase
         /** @var Config $config */
         $config = Environment::getService('config_service');
 
-        $config->update($this->getConfigId('recaptcha_secret'), $reCaptchaSecret, UserContext::newAnonymousContext()); 
-        $config->update($this->getConfigId('user_approval'), $userApproval, UserContext::newAnonymousContext()); 
+        $update = new Config_Update();
+        $update->setValue($reCaptchaSecret);
+        $config->update($this->getConfigId('recaptcha_secret'), $update, UserContext::newAnonymousContext());
+
+        $update = new Config_Update();
+        $update->setValue($userApproval);
+        $config->update($this->getConfigId('user_approval'), $update, UserContext::newAnonymousContext()); 
 
         return $config;
     }

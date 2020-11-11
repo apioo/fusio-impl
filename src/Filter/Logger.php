@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Filter;
 
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -43,7 +43,7 @@ class Logger implements FilterInterface
     protected $logService;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 

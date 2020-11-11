@@ -23,11 +23,11 @@ namespace Fusio\Impl\Service\Security;
 
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository\AppInterface;
 use Fusio\Engine\Repository\UserInterface;
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
-use Fusio\Engine\Model;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
 
@@ -72,7 +72,7 @@ class TokenValidator
         $this->userRepository = $userRepository;
     }
 
-    public function assertAuthorization(string $requestMethod, $authorization, Context $context)
+    public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context)
     {
         if ($requestMethod === 'OPTIONS') {
             $needsAuth = false;

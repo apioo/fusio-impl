@@ -39,6 +39,8 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
 use Fusio\Engine\Schema;
 use Fusio\Impl\Factory\Resolver;
+use Fusio\Impl\Provider\ActionProviderParser;
+use Fusio\Impl\Provider\ConnectionProviderParser;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderParser;
 use Fusio\Impl\Repository as ImplRepository;
@@ -55,14 +57,12 @@ use Fusio\Impl\Table;
  */
 trait Engine
 {
-    public function getActionParser(): Parser\ParserInterface
+    public function getActionParser(): ActionProviderParser
     {
-        return new ProviderParser(
+        return new ActionProviderParser(
             $this->get('action_factory'),
             $this->get('form_element_factory'),
-            $this->get('provider_loader'),
-            ProviderConfig::TYPE_ACTION,
-            ActionInterface::class
+            $this->get('provider_loader')
         );
     }
 
@@ -111,14 +111,12 @@ trait Engine
         );
     }
 
-    public function getConnectionParser(): Parser\ParserInterface
+    public function getConnectionParser(): ConnectionProviderParser
     {
-        return new ProviderParser(
+        return new ConnectionProviderParser(
             $this->get('connection_factory'),
             $this->get('form_element_factory'),
-            $this->get('provider_loader'),
-            ProviderConfig::TYPE_CONNECTION,
-            ConnectionInterface::class
+            $this->get('provider_loader')
         );
     }
 
@@ -138,16 +136,6 @@ trait Engine
             $this->get('connection_repository'),
             $this->get('connection_factory')
         );
-    }
-
-    public function getSchemaParser(): Schema\ParserInterface
-    {
-        return new ImplSchema\Parser($this->get('connection'));
-    }
-
-    public function getSchemaLoader(): Schema\LoaderInterface
-    {
-        return new ImplSchema\Loader($this->get('connection'));
     }
 
     public function getAppRepository(): Repository\AppInterface

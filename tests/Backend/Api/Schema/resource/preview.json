@@ -1,40 +1,41 @@
 {
-  "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "schema_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+  "pathParameters": "BackendSchemaPreviewSchema_idPath",
+  "methods": {
+    "POST": {
+      "operationId": "Backend_Action_Schema_GetPreview",
+      "security": {
+        "app": [
+          "backend.schema"
+        ]
       },
-      "Schema_Preview_Response": {
-        "type": "object",
-        "title": "Schema Preview Response",
-        "properties": {
-          "preview": {
-            "type": "string"
-          }
-        }
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Schema_Preview_Response"
+      "tags": [
+        "backend.schema"
+      ],
+      "responses": {
+        "200": "Backend_Model_Schema_Preview_Response"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "POST": {
-      "responses": {
-        "200": "#\/definitions\/POST-200-response"
+  "definitions": {
+    "BackendSchemaPreviewSchema_idPath": {
+      "type": "object",
+      "properties": {
+        "schema_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Schema_Preview_Response": {
+      "$ref": "Schema_Preview_Response"
+    },
+    "Schema_Preview_Response": {
+      "type": "object",
+      "properties": {
+        "preview": {
+          "type": "string"
+        }
       }
     }
   }

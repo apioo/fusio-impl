@@ -41,7 +41,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/log/1', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/log/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -65,7 +65,7 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 1,
     "appId": 3,
-    "routeId": 1,
+    "routeId": 110,
     "ip": "127.0.0.1",
     "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
     "method": "GET",

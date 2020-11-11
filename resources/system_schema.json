@@ -1,0 +1,104 @@
+{
+  "definitions": {
+    "Debug": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "$ref": "Debug_Headers"
+        },
+        "parameters": {
+          "$ref": "Debug_Parameters"
+        },
+        "body": {
+          "$ref": "Debug_Body"
+        }
+      }
+    },
+    "Debug_Headers": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Debug_Parameters": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Debug_Body": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Health": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Health_Check"
+      }
+    },
+    "Health_Check": {
+      "type": "object",
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "$ref": "Route_Path"
+        }
+      }
+    },
+    "Route_Path": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "Route_Method": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "string"
+      }
+    },
+    "Rpc_Response_Success": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "type": "string"
+        },
+        "result": {
+          "$ref": "Rpc_Response_Result"
+        },
+        "id": {
+          "type": "integer"
+        }
+      }
+    },
+    "Rpc_Response_Result": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "$ref": "Schema_TypeSchema"
+        },
+        "form": {
+          "$ref": "Schema_Form"
+        }
+      }
+    },
+    "Schema_TypeSchema": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "Schema_Form": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

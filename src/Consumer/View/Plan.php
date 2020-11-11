@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Plan extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = 0)
+    public function getCollection(int $userId, int $startIndex = 0)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;

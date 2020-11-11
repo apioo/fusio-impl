@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Create;
+use Fusio\Impl\Backend\Model\Plan_Update;
 use Fusio\Impl\Event\Plan\CreatedEvent;
 use Fusio\Impl\Event\Plan\DeletedEvent;
 use Fusio\Impl\Event\Plan\UpdatedEvent;
@@ -60,76 +62,76 @@ class Plan
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($name, $description, $price, $points, $period, UserContext $context)
+    public function create(Plan_Create $plan, UserContext $context)
     {
         // check whether plan exists
-        if ($this->exists($name)) {
+        if ($this->exists($plan->getName())) {
             throw new StatusCode\BadRequestException('Plan already exists');
         }
 
         // create event
         $record = [
             'status'      => Table\Plan::STATUS_ACTIVE,
-            'name'        => $name,
-            'description' => $description,
-            'price'       => $price,
-            'points'      => $points,
-            'period_type' => $period,
+            'name'        => $plan->getName(),
+            'description' => $plan->getDescription(),
+            'price'       => $plan->getPrice(),
+            'points'      => $plan->getPoints(),
+            'period_type' => $plan->getPeriod(),
         ];
 
         $this->planTable->create($record);
 
         // get last insert id
         $planId = $this->planTable->getLastInsertId();
+        $plan->setId($planId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($planId, $record, $context), PlanEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($plan, $context));
 
         return $planId;
     }
 
-    public function update($planId, $name, $description, $price, $points, $period, UserContext $context)
+    public function update(int $planId, Plan_Update $plan, UserContext $context)
     {
-        $plan = $this->planTable->get($planId);
-
-        if (empty($plan)) {
+        $existing = $this->planTable->get($planId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
-        if ($plan['status'] == Table\Event::STATUS_DELETED) {
+        if ($existing['status'] == Table\Event::STATUS_DELETED) {
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
         // update event
         $record = [
-            'id'          => $plan['id'],
-            'name'        => $name,
-            'description' => $description,
-            'price'       => $price,
-            'points'      => $points,
-            'period_type' => $period,
+            'id'          => $existing['id'],
+            'name'        => $plan->getName(),
+            'description' => $plan->getDescription(),
+            'price'       => $plan->getPrice(),
+            'points'      => $plan->getPoints(),
+            'period_type' => $plan->getPeriod(),
         ];
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($plan['id'], $record, $plan, $context), PlanEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
     }
 
-    public function delete($planId, UserContext $context)
+    public function delete(int $planId, UserContext $context)
     {
-        $plan = $this->planTable->get($planId);
+        $existing = $this->planTable->get($planId);
 
-        if (empty($plan)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
         $record = [
-            'id'     => $plan['id'],
+            'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
         ];
 
         $this->planTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($plan['id'], $plan, $context), PlanEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
     
     public function exists(string $name)

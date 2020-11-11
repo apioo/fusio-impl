@@ -1,80 +1,99 @@
 {
-  "path": "\/backend\/event\/$event_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "event_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "title": "Event",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Event"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Event"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/event\/$event_id<[0-9]+>",
+  "pathParameters": "BackendEventEvent_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Event_Get",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Event"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Event_Update",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Event_Delete",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "BackendEventEvent_idPath": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Event": {
+      "$ref": "Event"
+    },
+    "Backend_Model_Event_Update": {
+      "$ref": "Event_Update"
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Update": {
+      "$extends": "Event",
+      "type": "object"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

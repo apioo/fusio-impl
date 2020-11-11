@@ -1,0 +1,183 @@
+{
+  "status": 1,
+  "path": "\/backend\/routes\/$route_id<[0-9]+>",
+  "pathParameters": "BackendRoutesRoute_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Route_Get",
+      "security": {
+        "app": [
+          "backend.route"
+        ]
+      },
+      "tags": [
+        "backend.route"
+      ],
+      "responses": {
+        "200": "Backend_Model_Route"
+      }
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Route_Update",
+      "security": {
+        "app": [
+          "backend.route"
+        ]
+      },
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Update",
+      "responses": {
+        "200": "Model_Message"
+      }
+    },
+    "DELETE": {
+      "operationId": "Backend_Action_Route_Delete",
+      "security": {
+        "app": [
+          "backend.route"
+        ]
+      },
+      "tags": [
+        "backend.route"
+      ],
+      "responses": {
+        "200": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "BackendRoutesRoute_idPath": {
+      "type": "object",
+      "properties": {
+        "route_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Route": {
+      "$ref": "Route"
+    },
+    "Backend_Model_Route_Update": {
+      "$ref": "Route_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "array",
+          "items": {
+            "$ref": "Route_Version"
+          }
+        }
+      }
+    },
+    "Route_Method": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "request": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "responses": {
+          "$ref": "Route_Method_Responses"
+        },
+        "action": {
+          "type": "string"
+        },
+        "costs": {
+          "type": "integer"
+        }
+      }
+    },
+    "Route_Method_Responses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Route_Methods": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "Route_Update": {
+      "$extends": "Route",
+      "type": "object"
+    },
+    "Route_Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "methods": {
+          "$ref": "Route_Methods"
+        }
+      }
+    }
+  }
+}

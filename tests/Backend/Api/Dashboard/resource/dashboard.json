@@ -1,196 +1,189 @@
 {
-  "path": "\/backend\/dashboard",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Statistic_Chart": {
-        "type": "object",
-        "title": "Statistic Chart",
-        "properties": {
-          "labels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
-            }
-          },
-          "series": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
+  "path": "\/backend\/dashboard",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Dashboard_GetAll",
+      "security": {
+        "app": [
+          "backend.dashboard"
+        ]
       },
-      "Dashboard_Apps": {
-        "type": "object",
-        "title": "Dashboard Apps",
-        "properties": {
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Dashboard_App"
-            }
-          }
-        }
-      },
-      "Dashboard_App": {
-        "type": "object",
-        "title": "Dashboard App",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Dashboard_Requests": {
-        "type": "object",
-        "title": "Dashboard Requests",
-        "properties": {
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Dashboard_Request"
-            }
-          }
-        }
-      },
-      "Dashboard_Request": {
-        "type": "object",
-        "title": "Dashboard Request",
-        "properties": {
-          "path": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Dashboard_Users": {
-        "type": "object",
-        "title": "Dashboard Users",
-        "properties": {
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Dashboard_User"
-            }
-          }
-        }
-      },
-      "Dashboard_User": {
-        "type": "object",
-        "title": "Dashboard User",
-        "properties": {
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Dashboard_Transactions": {
-        "type": "object",
-        "title": "Dashboard Transactions",
-        "properties": {
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Dashboard_Transaction"
-            }
-          }
-        }
-      },
-      "Dashboard_Transaction": {
-        "type": "object",
-        "title": "Dashboard Transaction",
-        "properties": {
-          "status": {
-            "type": "string"
-          },
-          "provider": {
-            "type": "string"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Dashboard": {
-        "type": "object",
-        "title": "Dashboard",
-        "properties": {
-          "errorsPerRoute": {
-            "$ref": "#\/definitions\/Statistic_Chart"
-          },
-          "incomingRequests": {
-            "$ref": "#\/definitions\/Statistic_Chart"
-          },
-          "incomingTransactions": {
-            "$ref": "#\/definitions\/Statistic_Chart"
-          },
-          "mostUsedRoutes": {
-            "$ref": "#\/definitions\/Statistic_Chart"
-          },
-          "timePerRoute": {
-            "$ref": "#\/definitions\/Statistic_Chart"
-          },
-          "latestApps": {
-            "$ref": "#\/definitions\/Dashboard_Apps"
-          },
-          "latestRequests": {
-            "$ref": "#\/definitions\/Dashboard_Requests"
-          },
-          "latestUsers": {
-            "$ref": "#\/definitions\/Dashboard_Users"
-          },
-          "latestTransactions": {
-            "$ref": "#\/definitions\/Dashboard_Transactions"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Dashboard"
+      "tags": [
+        "backend.dashboard"
+      ],
+      "responses": {
+        "200": "Backend_Model_Dashboard"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Backend_Model_Dashboard": {
+      "$ref": "Dashboard"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Dashboard": {
+      "type": "object",
+      "properties": {
+        "errorsPerRoute": {
+          "$ref": "Statistic_Chart"
+        },
+        "incomingRequests": {
+          "$ref": "Statistic_Chart"
+        },
+        "incomingTransactions": {
+          "$ref": "Statistic_Chart"
+        },
+        "mostUsedRoutes": {
+          "$ref": "Statistic_Chart"
+        },
+        "timePerRoute": {
+          "$ref": "Statistic_Chart"
+        },
+        "latestApps": {
+          "$ref": "Dashboard_Apps"
+        },
+        "latestRequests": {
+          "$ref": "Dashboard_Requests"
+        },
+        "latestUsers": {
+          "$ref": "Dashboard_Users"
+        },
+        "latestTransactions": {
+          "$ref": "Dashboard_Transactions"
+        }
+      }
+    },
+    "Dashboard_App": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Dashboard_Apps": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Dashboard_App"
+      }
+    },
+    "Dashboard_Request": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Dashboard_Requests": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Dashboard_Request"
+      }
+    },
+    "Dashboard_Transaction": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Dashboard_Transactions": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Dashboard_Transaction"
+      }
+    },
+    "Dashboard_User": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Dashboard_Users": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Dashboard_User"
+      }
+    },
+    "Statistic_Chart": {
+      "type": "object",
+      "properties": {
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "Statistic_Chart_Data"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Statistic_Chart_Data": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     }
   }

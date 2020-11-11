@@ -21,12 +21,16 @@
 
 namespace Fusio\Impl\Console\Schema;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Create;
+use Fusio\Impl\Backend\Model\Schema_Source;
 use Fusio\Impl\Service;
 use PSX\Json\Parser;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * AddCommand
@@ -38,18 +42,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\System\ApiExecutor
+     * @var \Fusio\Impl\Service\Schema
      */
-    protected $apiExecutor;
+    protected $schemaService;
 
     /**
-     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     * @param \Fusio\Impl\Service\Schema $schemaService
      */
-    public function __construct(Service\System\ApiExecutor $apiExecutor)
+    public function __construct(Service\Schema $schemaService)
     {
         parent::__construct();
 
-        $this->apiExecutor = $apiExecutor;
+        $this->schemaService = $schemaService;
     }
 
     protected function configure()
@@ -70,13 +74,33 @@ class AddCommand extends Command
             return 1;
         }
 
-        $response = $this->apiExecutor->request('POST', 'schema', [
-            'name'   => $input->getArgument('name'),
-            'source' => Parser::decode(file_get_contents($file)),
-        ]);
+        $create = new Schema_Create();
+        $create->setName($input->getArgument('name'));
+        $create->setSource($this->parseSource($input->getArgument('file')));
 
-        $output->writeln("");
-        $output->writeln($response->message);
-        $output->writeln("");
+        $this->schemaService->create($create, UserContext::newAnonymousContext());
+
+        $output->writeln('');
+        $output->writeln('Schema successful created');
+        $output->writeln('');
+
+        return 0;
+    }
+
+    private function parseSource(string $file): Schema_Source
+    {
+        $extension = pathinfo($file, PATHINFO_EXTENSION);
+        if (in_array($extension, ['yaml', 'yml'])) {
+            $data = Yaml::parse(file_get_contents($file));
+        } else {
+            $data = Parser::decode(file_get_contents($file));
+        }
+
+        $source = new Schema_Source();
+        foreach ($data as $key => $value) {
+            $source->setProperty($key, $value);
+        }
+
+        return $source;
     }
 }

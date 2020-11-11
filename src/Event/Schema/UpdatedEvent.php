@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,36 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Schema_Update
      */
-    protected $schemaId;
+    private $schema;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
-    /**
-     * @var array
-     */
-    protected $schema;
-
-    /**
-     * @param integer $schemaId
-     * @param array $record
-     * @param array $schema
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($schemaId, array $record, $schema, UserContext $context)
+    public function __construct(Schema_Update $schema, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->schemaId = $schemaId;
-        $this->record   = $record;
-        $this->schema   = $schema;
+        $this->schema = $schema;
+        $this->existing = $existing;
     }
 
-    public function getSchemaId()
-    {
-        return $this->schemaId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getSchema()
+    /**
+     * @return Schema_Update
+     */
+    public function getSchema(): Schema_Update
     {
         return $this->schema;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

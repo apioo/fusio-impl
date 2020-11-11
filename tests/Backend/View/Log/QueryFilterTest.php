@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\View\Log;
 
 use Fusio\Impl\Backend\View\Log\QueryFilter;
+use Fusio\Impl\Tests\Backend\View\FilterTestCase;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,11 +32,11 @@ use PHPUnit\Framework\TestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilterTest extends TestCase
+class QueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from'      => '2015-08-20',
             'to'        => '2015-08-30',
             'routeId'   => 1,
@@ -47,7 +48,7 @@ class QueryFilterTest extends TestCase
             'path'      => '/foo',
             'header'    => 'text/xml',
             'body'      => '<foo />',
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
@@ -81,10 +82,10 @@ class QueryFilterTest extends TestCase
 
     public function testCreateFromLargerToFlip()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from' => '2015-08-30',
             'to'   => '2015-08-20',
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
@@ -92,10 +93,10 @@ class QueryFilterTest extends TestCase
 
     public function testCreateFromToExceeded()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from' => '2014-08-20',
             'to'   => '2015-08-30',
-        ]);
+        ]));
 
         $this->assertEquals('2014-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2014-10-20', $filter->getTo()->format('Y-m-d'));
@@ -103,45 +104,45 @@ class QueryFilterTest extends TestCase
 
     public function testCreateSearchIp()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => '93.223.172.206'
-        ]);
+        ]));
 
         $this->assertEquals('93.223.172.206', $filter->getIp());
     }
 
     public function testCreateSearchPath()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => '/foo/bar'
-        ]);
+        ]));
 
         $this->assertEquals('/foo/bar', $filter->getPath());
     }
 
     public function testCreateSearchMethod()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => 'GET'
-        ]);
+        ]));
 
         $this->assertEquals('GET', $filter->getMethod());
     }
 
     public function testCreateSearchHeader()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => 'User-Agent: Foo'
-        ]);
+        ]));
 
         $this->assertEquals('User-Agent: Foo', $filter->getHeader());
     }
 
     public function testCreateSearchBody()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => '{"foo": "bar"}'
-        ]);
+        ]));
 
         $this->assertEquals('{"foo": "bar"}', $filter->getBody());
     }

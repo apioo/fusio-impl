@@ -42,7 +42,7 @@ class GenerateTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/sdk', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/sdk', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -65,14 +65,14 @@ class GenerateTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "types": {
+        "client-go": null,
         "client-php": null,
         "client-typescript": null,
         "markup-html": null,
         "markup-markdown": null,
-        "spec-jsonschema": null,
         "spec-openapi": null,
         "spec-raml": null,
-        "spec-swagger": null
+        "spec-typeschema": null
     }
 }
 JSON;

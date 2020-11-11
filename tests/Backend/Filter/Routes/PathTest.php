@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Filter\Routes;
 
-use Fusio\Impl\Backend\Filter\Routes\Path;
+use Fusio\Impl\Backend\Filter\Route\Path;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -62,9 +62,8 @@ class PathTest extends TestCase
             ['/foo' . "\x80", false, '%s contains invalid characters inside a path segment'],
             ['/backend', false, '%s uses a path segment which is reserved for the system'],
             ['/consumer', false, '%s uses a path segment which is reserved for the system'],
-            ['/doc', false, '%s uses a path segment which is reserved for the system'],
+            ['/system', false, '%s uses a path segment which is reserved for the system'],
             ['/authorization', false, '%s uses a path segment which is reserved for the system'],
-            ['/export', false, '%s uses a path segment which is reserved for the system'],
         ];
     }
 }

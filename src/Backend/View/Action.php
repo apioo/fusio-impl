@@ -37,7 +37,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Action extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -48,6 +48,7 @@ class Action extends ViewAbstract
         }
 
         $condition = new Condition();
+        $condition->equals('category_id', $categoryId ?: 1);
         $condition->equals('status', Table\Action::STATUS_ACTIVE);
 
         if (!empty($search)) {

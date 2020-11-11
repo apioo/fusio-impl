@@ -1,58 +1,59 @@
 {
-  "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "token_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/app\/token\/$token_id<[0-9]+>",
+  "pathParameters": "BackendAppTokenToken_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_App_Token_Get",
+      "security": {
+        "app": [
+          "backend.app"
+        ]
       },
-      "App_Token": {
-        "type": "object",
-        "title": "App Token",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "expire": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/App_Token"
+      "tags": [
+        "backend.app"
+      ],
+      "responses": {
+        "200": "Backend_Model_App_Token"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "App_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
       }
+    },
+    "BackendAppTokenToken_idPath": {
+      "type": "object",
+      "properties": {
+        "token_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_App_Token": {
+      "$ref": "App_Token"
     }
   }
 }

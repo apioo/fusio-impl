@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Schema extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -47,6 +47,7 @@ class Schema extends ViewAbstract
         }
 
         $condition = new Condition();
+        $condition->equals('category_id', $categoryId ?: 1);
         $condition->equals('status', Table\Schema::STATUS_ACTIVE);
 
         if (!empty($search)) {
@@ -74,7 +75,7 @@ class Schema extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'source' => 'source',
-            'form' => 'form',
+            'form' => $this->fieldJson('form'),
         ]);
 
         return $this->build($definition);
@@ -92,8 +93,7 @@ class Schema extends ViewAbstract
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
-            'cache' => 'cache',
-            'form' => 'form',
+            'form' => $this->fieldJson('form'),
         ]);
 
         return $this->build($definition);

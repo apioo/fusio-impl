@@ -21,6 +21,10 @@
 
 namespace Fusio\Impl\Console\Connection;
 
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Action_Config;
+use Fusio\Impl\Backend\Model\Connection_Config;
+use Fusio\Impl\Backend\Model\Connection_Create;
 use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,18 +41,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Service\System\ApiExecutor
+     * @var \Fusio\Impl\Service\Connection
      */
-    protected $apiExecutor;
+    protected $connectionService;
 
     /**
-     * @param \Fusio\Impl\Service\System\ApiExecutor $apiExecutor
+     * @param \Fusio\Impl\Service\Connection $connectionService
      */
-    public function __construct(Service\System\ApiExecutor $apiExecutor)
+    public function __construct(Service\Connection $connectionService)
     {
         parent::__construct();
 
-        $this->apiExecutor = $apiExecutor;
+        $this->connectionService = $connectionService;
     }
 
     protected function configure()
@@ -63,22 +67,34 @@ class AddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $response = $this->apiExecutor->request('POST', 'connection', [
-            'name' => $input->getArgument('name'),
-            'class' => $input->getArgument('class'),
-            'config' => $this->parseConfig($input->getArgument('config')),
-        ]);
+        $create = new Connection_Create();
+        $create->setName($input->getArgument('name'));
+        $create->setClass($input->getArgument('class'));
+        $create->setConfig($this->parseConfig($input->getArgument('config')));
 
-        $output->writeln("");
-        $output->writeln($response->message);
-        $output->writeln("");
+        $this->connectionService->create($create, UserContext::newAnonymousContext());
+
+        $output->writeln('');
+        $output->writeln('Connection successful created');
+        $output->writeln('');
+
+        return 0;
     }
 
-    protected function parseConfig($config)
+    protected function parseConfig(?string $raw): ?Connection_Config
     {
-        $data = [];
-        parse_str($config, $data);
+        if (empty($raw)) {
+            return null;
+        }
 
-        return $data;
+        $config = new Connection_Config();
+        $data = [];
+        parse_str($raw, $data);
+
+        foreach ($data as $key => $value) {
+            $config->setProperty($key, $value);
+        }
+
+        return $config;
     }
 }

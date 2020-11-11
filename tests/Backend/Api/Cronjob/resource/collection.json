@@ -1,135 +1,164 @@
 {
-  "path": "\/backend\/cronjob",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
+  "definitions": {
+    "Backend_Model_Cronjob_Collection": {
+      "$ref": "Cronjob_Collection"
+    },
+    "Backend_Model_Cronjob_Create": {
+      "$ref": "Cronjob_Create"
+    },
+    "Collection": {
+      "properties": {
+        "entry": {
+          "items": {
+            "$generic": "T"
           },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Cronjob": {
-        "type": "object",
-        "title": "Cronjob",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "cron": {
-            "type": "string"
-          },
-          "action": {
-            "type": "integer"
-          },
-          "executeDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "exitCode": {
-            "type": "integer"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Cronjob_Error"
-            }
-          }
+          "type": "array"
         },
-        "required": [
-          "name",
-          "cron",
-          "action"
-        ]
-      },
-      "Cronjob_Error": {
-        "type": "object",
-        "title": "Cronjob Error",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
+        "startIndex": {
+          "type": "integer"
+        },
+        "totalResults": {
+          "type": "integer"
         }
       },
-      "Cronjob_Collection": {
-        "type": "object",
-        "title": "Cronjob Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Cronjob"
-            }
-          }
+      "type": "object"
+    },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Collection_Query": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        },
+        "startIndex": {
+          "type": "integer"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Cronjob_Collection"
+      "type": "object"
+    },
+    "Cronjob": {
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "cron": {
+          "type": "string"
+        },
+        "errors": {
+          "items": {
+            "$ref": "Cronjob_Error"
+          },
+          "type": "array"
+        },
+        "executeDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
+        }
       },
-      "POST-request": {
-        "$ref": "#\/definitions\/Cronjob"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
+      "type": "object"
+    },
+    "Cronjob_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Cronjob"
       }
+    },
+    "Cronjob_Create": {
+      "$extends": "Cronjob",
+      "required": [
+        "name",
+        "cron",
+        "action"
+      ],
+      "type": "object"
+    },
+    "Cronjob_Error": {
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "trace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Cronjob_GetAll",
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Cronjob_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Cronjob_Create",
+      "request": "Backend_Model_Cronjob_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
-      }
+        "201": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
     }
-  }
+  },
+  "path": "/backend/cronjob",
+  "status": 1
 }

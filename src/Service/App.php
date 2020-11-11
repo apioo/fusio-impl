@@ -23,6 +23,8 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\App_Create;
+use Fusio\Impl\Backend\Model\App_Update;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
@@ -90,21 +92,21 @@ class App
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create($userId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)
+    public function create(App_Create $app, UserContext $context)
     {
         // check whether app exists
         $condition  = new Condition();
-        $condition->equals('user_id', $userId);
+        $condition->equals('user_id', $app->getUserId());
         $condition->notEquals('status', Table\App::STATUS_DELETED);
-        $condition->equals('name', $name);
+        $condition->equals('name', $app->getName());
 
-        $app = $this->appTable->getOneBy($condition);
-
-        if (!empty($app)) {
+        $existing = $this->appTable->getOneBy($condition);
+        if (!empty($existing)) {
             throw new StatusCode\BadRequestException('App already exists');
         }
 
         // parse parameters
+        $parameters = $app->getParameters();
         if ($parameters !== null) {
             $parameters = $this->parseParameters($parameters);
         }
@@ -117,10 +119,10 @@ class App
             $this->appTable->beginTransaction();
 
             $record = [
-                'user_id'    => $userId,
-                'status'     => $status,
-                'name'       => $name,
-                'url'        => $url,
+                'user_id'    => $app->getUserId(),
+                'status'     => $app->getStatus(),
+                'name'       => $app->getName(),
+                'url'        => $app->getUrl(),
                 'parameters' => $parameters,
                 'app_key'    => $appKey,
                 'app_secret' => $appSecret,
@@ -130,7 +132,9 @@ class App
             $this->appTable->create($record);
 
             $appId = $this->appTable->getLastInsertId();
+            $app->setId($appId);
 
+            $scopes = $app->getScopes();
             if ($scopes !== null) {
                 // insert scopes
                 $this->insertScopes($appId, $scopes);
@@ -143,49 +147,50 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($appId, $record, $scopes, $context), AppEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($app, $context));
 
         return $appId;
     }
 
-    public function update($appId, $status, $name, $url, $parameters = null, array $scopes = null, UserContext $context)
+    public function update(int $appId, App_Update $app, UserContext $context)
     {
-        $app = $this->appTable->get($appId);
-
-        if (empty($app)) {
+        $existing = $this->appTable->get($appId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['status'] == Table\App::STATUS_DELETED) {
+        if ($existing['status'] == Table\App::STATUS_DELETED) {
             throw new StatusCode\GoneException('App was deleted');
         }
 
         // parse parameters
+        $parameters = $app->getParameters();
         if ($parameters !== null) {
             $parameters = $this->parseParameters($parameters);
         } else {
-            $parameters = $app['parameters'];
+            $parameters = $existing['parameters'];
         }
 
         try {
             $this->appTable->beginTransaction();
 
             $record = [
-                'id'         => $app['id'],
-                'status'     => $status,
-                'name'       => $name,
-                'url'        => $url,
+                'id'         => $existing['id'],
+                'status'     => $app->getStatus(),
+                'name'       => $app->getName(),
+                'url'        => $app->getUrl(),
                 'parameters' => $parameters,
             ];
 
             $this->appTable->update($record);
 
+            $scopes = $app->getScopes();
             if ($scopes !== null) {
                 // delete existing scopes
-                $this->appScopeTable->deleteAllFromApp($app['id']);
+                $this->appScopeTable->deleteAllFromApp($existing['id']);
 
                 // insert scopes
-                $this->insertScopes($app['id'], $scopes);
+                $this->insertScopes($existing['id'], $scopes);
             }
 
             $this->appTable->commit();
@@ -195,32 +200,32 @@ class App
             throw $e;
         }
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($appId, $record, $scopes, $app, $context), AppEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($app, $existing, $context));
     }
 
-    public function delete($appId, UserContext $context)
+    public function delete(int $appId, UserContext $context)
     {
-        $app = $this->appTable->get($appId);
+        $existing = $this->appTable->get($appId);
 
-        if (empty($app)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['status'] == Table\App::STATUS_DELETED) {
+        if ($existing['status'] == Table\App::STATUS_DELETED) {
             throw new StatusCode\GoneException('App was deleted');
         }
 
         $record = [
-            'id'     => $app['id'],
+            'id'     => $existing['id'],
             'status' => Table\App::STATUS_DELETED,
         ];
 
         $this->appTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($appId, $app, $context), AppEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
-    protected function insertScopes($appId, $scopes)
+    protected function insertScopes(int $appId, array $scopes)
     {
         if (!empty($scopes) && is_array($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);

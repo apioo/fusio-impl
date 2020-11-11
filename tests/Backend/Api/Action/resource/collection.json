@@ -1,150 +1,145 @@
 {
-  "path": "\/backend\/action",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Action": {
-        "type": "object",
-        "title": "Action",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "class": {
-            "type": "string"
-          },
-          "engine": {
-            "type": "string"
-          },
-          "config": {
-            "$ref": "#\/definitions\/Action_Config"
-          }
+  "definitions": {
+    "Action": {
+      "properties": {
+        "class": {
+          "type": "string"
         },
-        "required": [
-          "name",
-          "config"
-        ]
-      },
-      "Action_Config": {
-        "type": "object",
-        "title": "Action Config",
-        "additionalProperties": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "number"
-            },
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            },
-            {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "maxItems": 16
-            }
-          ]
+        "config": {
+          "$ref": "Action_Config"
         },
-        "maxProperties": 16
-      },
-      "Action_Collection": {
-        "type": "object",
-        "title": "Action Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Action"
-            }
-          }
+        "engine": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Action_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Action"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
+      "type": "object"
+    },
+    "Action_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Action"
       }
+    },
+    "Action_Config": {
+      "additionalProperties": {
+        "type": "any"
+      },
+      "type": "object"
+    },
+    "Action_Create": {
+      "$extends": "Action",
+      "required": [
+        "name",
+        "config"
+      ],
+      "type": "object"
+    },
+    "Backend_Model_Action_Collection": {
+      "$ref": "Action_Collection"
+    },
+    "Backend_Model_Action_Create": {
+      "$ref": "Action_Create"
+    },
+    "Collection": {
+      "properties": {
+        "entry": {
+          "items": {
+            "$generic": "T"
+          },
+          "type": "array"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "totalResults": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Collection_Query": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        },
+        "startIndex": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Action_GetAll",
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Action_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Action_Create",
+      "request": "Backend_Model_Action_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
-      }
+        "201": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
     }
-  }
+  },
+  "path": "/backend/action",
+  "status": 1
 }

@@ -48,7 +48,7 @@ class SMTP implements SenderInterface
      */
     public function send($dispatcher, Message $message)
     {
-        $msg = \Swift_Message::newInstance();
+        $msg = new \Swift_Message();
         $msg->setFrom([$message->getFrom()]);
         $msg->setTo($message->getTo());
         $msg->setSubject($message->getSubject());

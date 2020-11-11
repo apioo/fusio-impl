@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Action;
 
-use Fusio\Adapter\Sql\Action\SqlTable;
+use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -37,6 +37,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_action', 'Sql-Insert');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -44,7 +53,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/action/3', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/action/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -57,19 +66,19 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/action/3', 'GET', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
+        $expect = <<<JSON
 {
-    "id": 3,
+    "id": {$this->id},
     "status": 1,
-    "name": "Sql-Table",
-    "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable",
-    "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+    "name": "Sql-Insert",
+    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
+    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
         "table": "app_news"
@@ -86,7 +95,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/action/10', 'GET', array(
+        $response = $this->sendRequest('/backend/action/999', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -106,7 +115,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/3', 'POST', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -120,7 +129,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/action/3', 'PUT', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -142,7 +151,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Bar', SqlTable::class, '{"response":"{\"foo\":\"bar\"}"}');
+        Assert::assertAction('Bar', SqlInsert::class, '{"response":"{\"foo\":\"bar\"}"}');
     }
 
     public function testDelete()
@@ -151,17 +160,15 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->delete('fusio_routes_response')
             ->getSQL();
-
         Environment::getService('connection')->executeUpdate($sql);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->delete('fusio_routes_method')
             ->where('action = :action')
             ->getSQL();
+        Environment::getService('connection')->executeUpdate($sql, ['action' => $this->id]);
 
-        Environment::getService('connection')->executeUpdate($sql, ['action' => 3]);
-
-        $response = $this->sendRequest('/backend/action/3', 'DELETE', array(
+        $response = $this->sendRequest('/backend/action/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -181,36 +188,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_action')
-            ->where('id = 3')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(3, $row['id']);
         $this->assertEquals(0, $row['status']);
-    }
-
-    public function testDeleteInUse()
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
-        $response = $this->sendRequest('/backend/action/3', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Cannot delete action because a route depends on it"
-}
-JSON;
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

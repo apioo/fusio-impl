@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Backend\View\Audit;
 
+use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
 
 /**
@@ -110,15 +111,15 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(array $parameters)
+    public static function create(RequestInterface $request)
     {
-        $filter  = parent::create($parameters);
-        $appId   = isset($parameters['appId']) ? $parameters['appId'] : null;
-        $userId  = isset($parameters['userId']) ? $parameters['userId'] : null;
-        $event   = isset($parameters['event']) ? $parameters['event'] : null;
-        $ip      = isset($parameters['ip']) ? $parameters['ip'] : null;
-        $message = isset($parameters['message']) ? $parameters['message'] : null;
-        $search  = isset($parameters['search']) ? $parameters['search'] : null;
+        $filter  = parent::create($request);
+        $appId   = $request->get('appId');
+        $userId  = $request->get('userId');
+        $event   = $request->get('event');
+        $ip      = $request->get('ip');
+        $message = $request->get('message');
+        $search  = $request->get('search');
 
         // parse search if available
         if (!empty($search)) {

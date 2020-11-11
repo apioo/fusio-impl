@@ -1,153 +1,114 @@
 {
-  "path": "\/backend\/action\/form",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "class": {
-            "type": "string"
-          }
+  "definitions": {
+    "Form_Container": {
+      "properties": {
+        "element": {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "Form_Element_Input"
+              },
+              {
+                "$ref": "Form_Element_Select"
+              },
+              {
+                "$ref": "Form_Element_Tag"
+              },
+              {
+                "$ref": "Form_Element_TextArea"
+              }
+            ]
+          },
+          "type": "array"
         }
       },
-      "Input": {
-        "type": "object",
-        "title": "input",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Form_Element": {
+      "properties": {
+        "element": {
+          "type": "string"
+        },
+        "help": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
         }
       },
-      "Select": {
-        "type": "object",
-        "title": "select",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "options": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Option"
-            }
-          }
+      "required": [
+        "element"
+      ],
+      "type": "object"
+    },
+    "Form_Element_Input": {
+      "$extends": "Form_Element",
+      "properties": {
+        "type": {
+          "type": "string"
         }
       },
-      "Option": {
-        "type": "object",
-        "title": "option",
-        "properties": {
-          "key": {
-            "type": "string"
+      "type": "object"
+    },
+    "Form_Element_Select": {
+      "$extends": "Form_Element",
+      "properties": {
+        "options": {
+          "items": {
+            "$ref": "Form_Element_Select_Option"
           },
-          "value": {
-            "type": "string"
-          }
+          "type": "array"
         }
       },
-      "Tag": {
-        "type": "object",
-        "title": "tag",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Form_Element_Select_Option": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
         }
       },
-      "Textarea": {
-        "type": "object",
-        "title": "textarea",
-        "properties": {
-          "element": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "help": {
-            "type": "string"
-          },
-          "mode": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Form_Element_Tag": {
+      "$extends": "Form_Element",
+      "type": "object"
+    },
+    "Form_Element_TextArea": {
+      "$extends": "Form_Element",
+      "properties": {
+        "mode": {
+          "type": "string"
         }
       },
-      "Container": {
-        "type": "object",
-        "title": "container",
-        "properties": {
-          "element": {
-            "type": "array",
-            "items": {
-              "oneOf": [
-                {
-                  "$ref": "#\/definitions\/Input"
-                },
-                {
-                  "$ref": "#\/definitions\/Select"
-                },
-                {
-                  "$ref": "#\/definitions\/Tag"
-                },
-                {
-                  "$ref": "#\/definitions\/Textarea"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Container"
-      }
+      "type": "object"
+    },
+    "Model_Form_Container": {
+      "$ref": "Form_Container"
     }
   },
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Action_GetForm",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Model_Form_Container"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
     }
-  }
+  },
+  "path": "/backend/action/form",
+  "status": 1
 }

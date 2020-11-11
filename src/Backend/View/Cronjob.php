@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Cronjob extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -47,6 +47,7 @@ class Cronjob extends ViewAbstract
         }
 
         $condition = new Condition();
+        $condition->equals('category_id', $categoryId ?: 1);
         $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
 
         if (!empty($search)) {
@@ -59,6 +60,7 @@ class Cronjob extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'cron' => 'cron',
                 'executeDate' => $this->fieldDateTime('execute_date'),
@@ -73,9 +75,10 @@ class Cronjob extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Cronjob::class), 'get'], [$id], [
             'id' => 'id',
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'cron' => 'cron',
-            'action' => $this->fieldInteger('action'),
+            'action' => 'action',
             'executeDate' => $this->fieldDateTime('execute_date'),
             'exitCode' => $this->fieldInteger('exit_code'),
             'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'getByCronjob_id'], [new Reference('id')], [

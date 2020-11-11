@@ -29,9 +29,9 @@ use Fusio\Engine\Parameters;
 use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Consumer\Model\Transaction_Prepare_Request;
 use Fusio\Impl\Event\Transaction\ExecutedEvent;
 use Fusio\Impl\Event\Transaction\PreparedEvent;
-use Fusio\Impl\Event\TransactionEvents;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
@@ -106,30 +106,29 @@ class Transaction
 
     /**
      * @param string $name
-     * @param integer $invoiceId
-     * @param string $returnUrl
+     * @param Transaction_Prepare_Request $prepare
      * @param \Fusio\Impl\Authorization\UserContext $context
      * @return string
      */
-    public function prepare($name, $invoiceId, $returnUrl, UserContext $context)
+    public function prepare(string $name, Transaction_Prepare_Request $prepare, UserContext $context)
     {
         $provider = $this->providerFactory->factory($name);
-
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $product    = $this->getProduct($invoiceId);
+        $product    = $this->getProduct($prepare->getInvoiceId());
         $connection = $this->connector->getConnection($name);
 
         // validate return url
+        $returnUrl = $prepare->getReturnUrl();
         if (empty($returnUrl) || !filter_var($returnUrl, FILTER_VALIDATE_URL)) {
             throw new StatusCode\BadRequestException('Invalid return url');
         }
 
         // create transaction
         $transaction = new TransactionModel();
-        $transaction->setInvoiceId($invoiceId);
+        $transaction->setInvoiceId($prepare->getInvoiceId());
         $transaction->setProvider($name);
         $transaction->setTransactionId(Uuid::pseudoRandom());
         $transaction->setReturnUrl($returnUrl);
@@ -163,7 +162,7 @@ class Transaction
             $this->updateTransaction($transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(new PreparedEvent($transaction), TransactionEvents::PREPARE);
+            $this->eventDispatcher->dispatch(new PreparedEvent($transaction));
 
             $this->transactionTable->commit();
 
@@ -204,7 +203,7 @@ class Transaction
             $this->updateTransaction($transaction);
 
             // trigger event
-            $this->eventDispatcher->dispatch(new ExecutedEvent($transaction), TransactionEvents::EXECUTE);
+            $this->eventDispatcher->dispatch(new ExecutedEvent($transaction));
 
             $this->transactionTable->commit();
 

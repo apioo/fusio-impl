@@ -1,93 +1,102 @@
 {
-  "path": "\/backend\/statistic\/errors_per_route",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "from": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "to": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/statistic\/errors_per_route",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Statistic_GetErrorsPerRoute",
+      "security": {
+        "app": [
+          "backend.statistic"
+        ]
       },
-      "Statistic_Chart": {
-        "type": "object",
-        "title": "Statistic Chart",
-        "properties": {
-          "labels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "array",
-              "items": {
-                "type": "number"
-              }
-            }
-          },
-          "series": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Statistic_Chart"
+      "tags": [
+        "backend.statistic"
+      ],
+      "queryParameters": "Backend_Model_Log_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Statistic_Count"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Backend_Model_Log_Collection_Query": {
+      "$ref": "Log_Collection_Query"
+    },
+    "Backend_Model_Statistic_Count": {
+      "$ref": "Statistic_Count"
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Log_Collection_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Statistic_Count": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        }
       }
     }
   }

@@ -1,0 +1,294 @@
+{
+  "status": 1,
+  "path": "\/backend\/import\/:format",
+  "pathParameters": "BackendImportFormatPath",
+  "methods": {
+    "POST": {
+      "operationId": "Backend_Action_Import_Format",
+      "security": {
+        "app": [
+          "backend.import"
+        ]
+      },
+      "tags": [
+        "backend.import"
+      ],
+      "request": "Backend_Model_Import_Request",
+      "responses": {
+        "200": "Backend_Model_Adapter"
+      }
+    }
+  },
+  "definitions": {
+    "Action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Action_Config"
+        }
+      }
+    },
+    "Action_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Adapter": {
+      "type": "object",
+      "properties": {
+        "actionClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connectionClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "paymentClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "userClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "routesClass": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "connection": {
+          "type": "array",
+          "items": {
+            "$ref": "Connection"
+          }
+        },
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "Schema"
+          }
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "$ref": "Action"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Route"
+          }
+        }
+      }
+    },
+    "BackendImportFormatPath": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Adapter": {
+      "$ref": "Adapter"
+    },
+    "Backend_Model_Import_Request": {
+      "$ref": "Import_Request"
+    },
+    "Connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Connection_Config"
+        }
+      }
+    },
+    "Connection_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16
+    },
+    "Import_Request": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "array",
+          "items": {
+            "$ref": "Route_Version"
+          }
+        }
+      }
+    },
+    "Route_Method": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "request": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "responses": {
+          "$ref": "Route_Method_Responses"
+        },
+        "action": {
+          "type": "string"
+        },
+        "costs": {
+          "type": "integer"
+        }
+      }
+    },
+    "Route_Method_Responses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Route_Methods": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "Route_Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "methods": {
+          "$ref": "Route_Methods"
+        }
+      }
+    },
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "source": {
+          "$ref": "Schema_Source"
+        },
+        "form": {
+          "$ref": "Schema_Form"
+        }
+      }
+    },
+    "Schema_Form": {
+      "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_Source": {
+      "description": "Contains the TypeSchema specification",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    }
+  }
+}

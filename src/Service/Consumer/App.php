@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Consumer\Model\App_Create;
+use Fusio\Impl\Consumer\Model\App_Update;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -77,64 +79,55 @@ class App
         $this->userScopeTable = $userScopeTable;
     }
 
-    public function create($name, $url, array $scopes = null, UserContext $context)
+    public function create(App_Create $app, UserContext $context)
     {
-        $userId = $context->getUserId();
+        $this->assertName($app->getName());
+        $this->assertUrl($app->getUrl());
+        $this->assertMaxAppCount($context->getUserId());
 
-        // validate data
-        $this->assertName($name);
-        $this->assertUrl($url);
-        $this->assertMaxAppCount($userId);
-
-        $scopes = $this->getValidUserScopes($userId, $scopes);
+        $scopes = $this->getValidUserScopes($context->getUserId(), $app->getScopes());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
         $appApproval = $this->configService->getValue('app_approval');
 
-        $this->appService->create(
-            $userId,
-            $appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING,
-            $name,
-            $url,
-            null,
-            $scopes,
-            $context
-        );
+        $backendApp = new \Fusio\Impl\Backend\Model\App_Create();
+        $backendApp->setUserId($context->getUserId());
+        $backendApp->setStatus($appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING);
+        $backendApp->setName($app->getName());
+        $backendApp->setUrl($app->getUrl());
+        $backendApp->setScopes($scopes);
+
+        $this->appService->create($backendApp, $context);
     }
 
-    public function update($appId, $name, $url, array $scopes = null, UserContext $context)
+    public function update(int $appId, App_Update $app, UserContext $context)
     {
-        $userId = $context->getUserId();
-        $app    = $this->appTable->get($appId);
-
-        if (empty($app)) {
+        $existing = $this->appTable->get($appId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['user_id'] != $userId) {
+        if ($existing['user_id'] != $context->getUserId()) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
         // validate data
-        $this->assertName($name);
-        $this->assertUrl($url);
+        $this->assertName($app->getName());
+        $this->assertUrl($app->getUrl());
 
-        $scopes = $this->getValidUserScopes($userId, $scopes);
+        $scopes = $this->getValidUserScopes($context->getUserId(), $app->getScopes());
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
-        $this->appService->update(
-            $appId,
-            $app['status'],
-            $name,
-            $url,
-            null,
-            $scopes,
-            $context
-        );
+        $backendApp = new \Fusio\Impl\Backend\Model\App_Update();
+        $backendApp->setName($app->getName());
+        $backendApp->setUrl($app->getUrl());
+        $backendApp->setScopes($scopes);
+
+        $this->appService->update($appId, $backendApp, $context);
     }
 
     public function delete($appId, UserContext $context)

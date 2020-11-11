@@ -1,12 +1,16 @@
 {
-  "title": "author",
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
+  "definitions": {
+    "Author": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
     }
-  }
+  },
+  "$ref": "Author"
 }

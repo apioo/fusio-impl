@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Consumer\Model\User_Activate;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -55,9 +56,9 @@ class Activate
         $this->tokenService = $tokenService;
     }
 
-    public function activate($token)
+    public function activate(User_Activate $activate)
     {
-        $userId = $this->tokenService->getUser($token);
+        $userId = $this->tokenService->getUser($activate->getToken());
         if (!empty($userId)) {
             $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::newAnonymousContext());
         } else {

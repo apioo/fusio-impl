@@ -53,6 +53,7 @@ class Response extends TableAbstract
             'status' => self::TYPE_INT,
             'code' => self::TYPE_INT,
             'attempts' => self::TYPE_INT,
+            'error' => self::TYPE_VARCHAR,
             'execute_date' => self::TYPE_DATETIME,
             'insert_date' => self::TYPE_DATETIME,
         );

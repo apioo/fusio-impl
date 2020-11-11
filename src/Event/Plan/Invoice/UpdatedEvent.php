@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Plan_Invoice_Update
      */
-    protected $invoiceId;
+    private $invoice;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Plan_Invoice_Update $invoice
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $invoice;
-
-    /**
-     * @param integer $invoiceId
-     * @param array $record
-     * @param array $invoice
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($invoiceId, array $record, $invoice, UserContext $context)
+    public function __construct(Plan_Invoice_Update $invoice, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->invoiceId = $invoiceId;
-        $this->record    = $record;
-        $this->invoice   = $invoice;
+        $this->invoice  = $invoice;
+        $this->existing = $existing;
     }
 
-    public function getInvoiceId()
-    {
-        return $this->invoiceId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getInvoice()
+    /**
+     * @return Plan_Invoice_Update
+     */
+    public function getInvoice(): Plan_Invoice_Update
     {
         return $this->invoice;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

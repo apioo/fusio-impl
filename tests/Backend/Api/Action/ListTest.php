@@ -41,7 +41,7 @@ class ListTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/action/list', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/action/list', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -84,12 +84,36 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Php\\Action\\PhpSandbox"
         },
         {
-            "name": "SQL-Select",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelect"
+            "name": "SMTP-Send",
+            "class": "Fusio\\Adapter\\Smtp\\Action\\SmtpSend"
         },
         {
-            "name": "SQL-Table",
-            "class": "Fusio\\Adapter\\Sql\\Action\\SqlTable"
+            "name": "SQL-Select-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll"
+        },
+        {
+            "name": "SQL-Select-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectRow"
+        },
+        {
+            "name": "SQL-Insert",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert"
+        },
+        {
+            "name": "SQL-Update",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlUpdate"
+        },
+        {
+            "name": "SQL-Delete",
+            "class": "Fusio\\Adapter\\Sql\\Action\\SqlDelete"
+        },
+        {
+            "name": "SQL-Query-All",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryAll"
+        },
+        {
+            "name": "SQL-Query-Row",
+            "class": "Fusio\\Adapter\\Sql\\Action\\Query\\SqlQueryRow"
         },
         {
             "name": "Util-Static-Response",

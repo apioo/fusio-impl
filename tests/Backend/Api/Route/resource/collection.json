@@ -1,0 +1,214 @@
+{
+  "status": 1,
+  "path": "\/backend\/routes",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Route_GetAll",
+      "security": {
+        "app": [
+          "backend.route"
+        ]
+      },
+      "tags": [
+        "backend.route"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
+      "responses": {
+        "200": "Backend_Model_Route_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Route_Create",
+      "security": {
+        "app": [
+          "backend.route"
+        ]
+      },
+      "tags": [
+        "backend.route"
+      ],
+      "request": "Backend_Model_Route_Create",
+      "responses": {
+        "201": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Route_Collection": {
+      "$ref": "Route_Collection"
+    },
+    "Backend_Model_Route_Create": {
+      "$ref": "Route_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Route": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "controller": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "type": "array",
+          "items": {
+            "$ref": "Route_Version"
+          }
+        }
+      }
+    },
+    "Route_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Route"
+      }
+    },
+    "Route_Create": {
+      "$extends": "Route",
+      "type": "object",
+      "required": [
+        "path",
+        "config"
+      ]
+    },
+    "Route_Method": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "operationId": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "request": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "responses": {
+          "$ref": "Route_Method_Responses"
+        },
+        "action": {
+          "type": "string"
+        },
+        "costs": {
+          "type": "integer"
+        }
+      }
+    },
+    "Route_Method_Responses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "Route_Methods": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "Route_Method"
+      }
+    },
+    "Route_Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "methods": {
+          "$ref": "Route_Methods"
+        }
+      }
+    }
+  }
+}

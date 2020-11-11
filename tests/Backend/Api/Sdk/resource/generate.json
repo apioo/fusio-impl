@@ -1,64 +1,73 @@
 {
-  "path": "\/backend\/sdk",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Sdk_Types": {
-        "type": "object",
-        "title": "Sdk Types",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "Sdk_Generate": {
-        "type": "object",
-        "title": "Sdk Generate",
-        "properties": {
-          "format": {
-            "type": "string"
-          },
-          "config": {
-            "type": "string"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Sdk_Types"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Sdk_Generate"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/sdk",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Sdk_GetAll",
+      "security": {
+        "app": [
+          "backend.sdk"
+        ]
+      },
+      "tags": [
+        "backend.sdk"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Sdk_Types"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Sdk_Generate",
+      "security": {
+        "app": [
+          "backend.sdk"
+        ]
+      },
+      "tags": [
+        "backend.sdk"
+      ],
+      "request": "Backend_Model_Sdk_Generate",
       "responses": {
-        "200": "#\/definitions\/POST-200-response"
+        "200": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Sdk_Generate": {
+      "$ref": "Sdk_Generate"
+    },
+    "Backend_Model_Sdk_Types": {
+      "$ref": "Sdk_Types"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Sdk_Generate": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "config": {
+          "type": "string"
+        }
+      }
+    },
+    "Sdk_Types": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     }
   }

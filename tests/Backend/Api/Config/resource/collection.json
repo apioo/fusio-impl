@@ -1,90 +1,99 @@
 {
-  "path": "\/backend\/config",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
+  "definitions": {
+    "Backend_Model_Config_Collection": {
+      "$ref": "Config_Collection"
+    },
+    "Collection": {
+      "properties": {
+        "entry": {
+          "items": {
+            "$generic": "T"
           },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
+          "type": "array"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "totalResults": {
+          "type": "integer"
         }
       },
-      "Config": {
-        "type": "object",
-        "title": "Config",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              },
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
+      "type": "object"
+    },
+    "Collection_Query": {
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        },
+        "startIndex": {
+          "type": "integer"
         }
       },
-      "Config_Collection": {
-        "type": "object",
-        "title": "Config Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Config"
+      "type": "object"
+    },
+    "Config": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
             }
-          }
+          ]
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Config_Collection"
+      "type": "object"
+    },
+    "Config_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Config"
       }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
     }
   },
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Config_GetAll",
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Config_Collection"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
     }
-  }
+  },
+  "path": "/backend/config",
+  "status": 1
 }

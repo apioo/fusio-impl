@@ -83,7 +83,7 @@ class Mailer implements MailerInterface
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
         if (!$dispatcher) {
-            $dispatcher = \Swift_Mailer::newInstance($this->createTransport());
+            $dispatcher = new \Swift_Mailer($this->createTransport());
         }
 
         $from = $this->configService->getValue('mail_sender');
@@ -134,7 +134,7 @@ class Mailer implements MailerInterface
             $mailer = $this->config['fusio_mailer'];
             if (!empty($mailer)) {
                 if ($mailer['transport'] == 'smtp') {
-                    $transport = \Swift_SmtpTransport::newInstance($mailer['host'], $mailer['port']);
+                    $transport = new \Swift_SmtpTransport($mailer['host'], $mailer['port']);
                     if (isset($mailer['encryption'])) {
                         $transport->setEncryption($mailer['encryption']);
                     }
@@ -146,9 +146,9 @@ class Mailer implements MailerInterface
                 }
             }
 
-            return \Swift_MailTransport::newInstance();
+            return new \Swift_SendmailTransport();
         } else {
-            return \Swift_NullTransport::newInstance();
+            return new \Swift_NullTransport();
         }
     }
 }

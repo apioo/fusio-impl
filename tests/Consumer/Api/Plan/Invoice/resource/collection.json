@@ -1,65 +1,90 @@
 {
-  "path": "\/consumer\/plan\/invoice",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_Plan_Invoice": {
-        "type": "object",
-        "title": "Consumer Plan Invoice",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "payDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "insertDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
+  "path": "\/consumer\/plan\/invoice",
+  "methods": {
+    "GET": {
+      "operationId": "Consumer_Action_Plan_Invoice_GetAll",
+      "security": {
+        "app": [
+          "consumer.plan"
+        ]
       },
-      "Consumer_Plan_Invoice_Collection": {
-        "type": "object",
-        "title": "Consumer Plan Invoice Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_Plan_Invoice"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Plan_Invoice_Collection"
+      "tags": [
+        "consumer.plan"
+      ],
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Consumer_Model_Plan_Invoice_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Plan_Invoice_Collection": {
+      "$ref": "Plan_Invoice_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Plan_Invoice": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "payDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "insertDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Plan_Invoice_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Plan_Invoice"
       }
     }
   }

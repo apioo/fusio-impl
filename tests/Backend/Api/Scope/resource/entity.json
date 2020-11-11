@@ -1,101 +1,119 @@
 {
-  "path": "\/backend\/scope\/$scope_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "scope_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Scope_Route": {
-        "type": "object",
-        "title": "Scope Route",
-        "properties": {
-          "routeId": {
-            "type": "integer"
-          },
-          "allow": {
-            "type": "boolean"
-          },
-          "methods": {
-            "type": "string"
-          }
-        }
-      },
-      "Scope": {
-        "type": "object",
-        "title": "Scope",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          },
-          "routes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Scope_Route"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Scope"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Scope"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/scope\/$scope_id<[0-9]+>",
+  "pathParameters": "BackendScopeScope_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Scope_Get",
+      "security": {
+        "app": [
+          "backend.scope"
+        ]
+      },
+      "tags": [
+        "backend.scope"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Scope"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Scope_Update",
+      "security": {
+        "app": [
+          "backend.scope"
+        ]
+      },
+      "tags": [
+        "backend.scope"
+      ],
+      "request": "Backend_Model_Scope_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Scope_Delete",
+      "security": {
+        "app": [
+          "backend.scope"
+        ]
+      },
+      "tags": [
+        "backend.scope"
+      ],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "BackendScopeScope_idPath": {
+      "type": "object",
+      "properties": {
+        "scope_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Scope": {
+      "$ref": "Scope"
+    },
+    "Backend_Model_Scope_Update": {
+      "$ref": "Scope_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Scope_Route"
+          }
+        }
+      }
+    },
+    "Scope_Route": {
+      "type": "object",
+      "properties": {
+        "routeId": {
+          "type": "integer"
+        },
+        "allow": {
+          "type": "boolean"
+        },
+        "methods": {
+          "type": "string"
+        }
+      }
+    },
+    "Scope_Update": {
+      "$extends": "Scope",
+      "type": "object"
     }
   }
 }

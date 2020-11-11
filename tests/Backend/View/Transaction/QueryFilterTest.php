@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\View\Transaction;
 
 use Fusio\Impl\Backend\View\Transaction\QueryFilter;
+use Fusio\Impl\Tests\Backend\View\FilterTestCase;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,17 +32,17 @@ use PHPUnit\Framework\TestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilterTest extends TestCase
+class QueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from'      => '2015-08-20',
             'to'        => '2015-08-30',
             'invoiceId' => 1,
             'status'    => 1,
             'provider'  => 'paypal',
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));

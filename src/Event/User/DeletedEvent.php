@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * DeletedEvent
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class DeletedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var RecordInterface
      */
-    protected $userId;
+    private $existing;
 
     /**
-     * @var array
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $user;
-
-    /**
-     * @param integer $userId
-     * @param array $user
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($userId, $user, UserContext $context)
+    public function __construct(RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->userId = $userId;
-        $this->user   = $user;
+        $this->existing = $existing;
     }
 
-    public function getUserId()
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
     {
-        return $this->userId;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
+        return $this->existing;
     }
 }

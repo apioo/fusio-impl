@@ -1,137 +1,155 @@
 {
-  "path": "\/backend\/app\/$app_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "app_id": {
-            "type": "integer"
-          }
+  "definitions": {
+    "App": {
+      "properties": {
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "tokens": {
+          "items": {
+            "$ref": "App_Token"
+          },
+          "type": "array"
+        },
+        "url": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
         }
       },
-      "App_Token": {
-        "type": "object",
-        "title": "App Token",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "expire": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
+      "type": "object"
+    },
+    "App_Token": {
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
         }
       },
-      "App": {
-        "type": "object",
-        "title": "App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/App_Token"
-            }
-          }
+      "type": "object"
+    },
+    "App_Update": {
+      "$extends": "App",
+      "type": "object"
+    },
+    "BackendAppApp_idPath": {
+      "properties": {
+        "app_id": {
+          "type": "string"
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Backend_Model_App": {
+      "$ref": "App"
+    },
+    "Backend_Model_App_Update": {
+      "$ref": "App_Update"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/App"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/App"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
-    "GET": {
+    "DELETE": {
+      "operationId": "Backend_Action_App_Delete",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.app"
+        ]
+      },
+      "tags": [
+        "backend.app"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_App_Get",
+      "responses": {
+        "200": "Backend_Model_App"
+      },
+      "security": {
+        "app": [
+          "backend.app"
+        ]
+      },
+      "tags": [
+        "backend.app"
+      ]
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_App_Update",
+      "request": "Backend_Model_App_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
-      }
-    },
-    "DELETE": {
-      "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.app"
+        ]
+      },
+      "tags": [
+        "backend.app"
+      ]
     }
-  }
+  },
+  "path": "/backend/app/$app_id<[0-9]+>",
+  "pathParameters": "BackendAppApp_idPath",
+  "status": 1
 }

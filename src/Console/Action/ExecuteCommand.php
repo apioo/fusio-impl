@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Console\Action;
 
+use Fusio\Impl\Backend\Model\Action_Execute_Request;
+use Fusio\Impl\Backend\Model\Action_Execute_Request_Body;
 use Fusio\Impl\Service\Action\Executor;
 use Fusio\Impl\Table;
 use PSX\Data\Record\Transformer;
@@ -72,8 +74,8 @@ class ExecuteCommand extends Command
             ->addOption('uriFragments', 'f', InputOption::VALUE_REQUIRED, 'Uri fragments as url encoded string "key=value"')
             ->addOption('parameters', 'p', InputOption::VALUE_REQUIRED, 'Query parameters as url encoded string "key=value"')
             ->addOption('headers', 'e', InputOption::VALUE_REQUIRED, 'Headers as url encoded string "key=value"')
-            ->addOption('body', 'b', InputOption::VALUE_REQUIRED, 'Body as json input use "-" for stdin')
-            ->addArgument('action', InputArgument::REQUIRED, 'Action name or id');
+            ->addOption('body', 'b', InputOption::VALUE_REQUIRED, 'Body as json input use "-" for stdin or a file path')
+            ->addArgument('action', InputArgument::REQUIRED, 'Action name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -81,14 +83,14 @@ class ExecuteCommand extends Command
         $actionId = $this->getActionId($input->getArgument('action'));
         $body     = $this->getBody($input->getOption('body'));
 
-        $response = $this->executor->execute(
-            $actionId,
-            $input->getOption('method') ?: 'GET',
-            $input->getOption('uriFragments') ?: null,
-            $input->getOption('parameters') ?: null,
-            $input->getOption('headers') ?: null,
-            $body
-        );
+        $request = new Action_Execute_Request();
+        $request->setMethod($input->getOption('method') ?: 'GET');
+        $request->setUriFragments($input->getOption('uriFragments') ?: null);
+        $request->setParameters($input->getOption('parameters') ?: null);
+        $request->setHeaders($input->getOption('headers') ?: null);
+        $request->setBody($body);
+
+        $response = $this->executor->execute($actionId, $request);
 
         if ($response !== null) {
             $data = Transformer::toStdClass($response->getBody());
@@ -118,16 +120,24 @@ class ExecuteCommand extends Command
         }
     }
 
-    private function getBody($body)
+    private function getBody($body): ?Action_Execute_Request_Body
     {
-        if ($body !== null) {
-            if ($body == '-') {
-                $body = stream_get_contents(STDIN);
-            }
-
-            return Transformer::toRecord(Parser::decode($body));
-        } else {
+        if (empty($body)) {
             return null;
         }
+
+        if ($body == '-') {
+            $body = stream_get_contents(STDIN);
+        } elseif (is_file($body)) {
+            $body = file_get_contents($body);
+        }
+
+        $record = Parser::decode($body);
+        $body = new Action_Execute_Request_Body();
+        foreach ($record as $key => $value) {
+            $body->setProperty($key, $value);
+        }
+
+        return $body;
     }
 }

@@ -42,7 +42,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/plan', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/plan', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -69,6 +69,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Plan A",
             "description": "",
             "price": 39.99,
@@ -77,6 +78,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "status": 1,
             "name": "Plan B",
             "description": "",
             "price": 49.99,

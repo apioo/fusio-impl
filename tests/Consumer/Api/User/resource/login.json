@@ -1,79 +1,75 @@
 {
-  "path": "\/consumer\/login",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_User_Login": {
-        "type": "object",
-        "title": "Consumer User Login",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "Consumer_User_JWT": {
-        "type": "object",
-        "title": "Consumer User JWT",
-        "properties": {
-          "token": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "Consumer_User_Refresh": {
-        "type": "object",
-        "title": "Consumer User Refresh",
-        "properties": {
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Consumer_User_Login"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Consumer_User_JWT"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Consumer_User_Refresh"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Consumer_User_JWT"
-      }
-    }
-  },
+  "path": "\/consumer\/login",
   "methods": {
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Consumer_Action_User_Login",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Login",
       "responses": {
-        "200": "#\/definitions\/POST-200-response"
+        "200": "Consumer_Model_User_JWT"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Consumer_Action_User_Refresh",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Refresh",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Consumer_Model_User_JWT"
+      }
+    }
+  },
+  "definitions": {
+    "Consumer_Model_User_JWT": {
+      "$ref": "User_JWT"
+    },
+    "Consumer_Model_User_Login": {
+      "$ref": "User_Login"
+    },
+    "Consumer_Model_User_Refresh": {
+      "$ref": "User_Refresh"
+    },
+    "User_JWT": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "expires_in": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "User_Login": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "User_Refresh": {
+      "type": "object",
+      "properties": {
+        "refresh_token": {
+          "type": "string"
+        }
       }
     }
   }

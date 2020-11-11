@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Event extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -46,7 +46,8 @@ class Event extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Event::STATUS_ACTIVE, Table\Event::STATUS_INTERNAL]);
+        $condition->equals('category_id', $categoryId ?: 1);
+        $condition->in('status', [Table\Event::STATUS_ACTIVE]);
 
         if (!empty($search)) {
             $condition->like('name', '%' . $search . '%');
@@ -58,6 +59,7 @@ class Event extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'status' => $this->fieldInteger('status'),
                 'name' => 'name',
                 'description' => 'description',
             ]),
@@ -70,6 +72,7 @@ class Event extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Event::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
+            'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'description' => 'description',
         ]);

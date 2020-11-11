@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\User;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Service\User as ServiceUser;
 use Fusio\Impl\Service\User\ValidatorTrait;
 use RuntimeException;
@@ -146,15 +147,17 @@ class AddCommand extends Command
         }
 
         // create user
-        $this->userService->create(
-            $status,
-            $name,
-            $email,
-            $password,
-            $scopes,
-            UserContext::newCommandContext()
-        );
+        $create = new User_Create();
+        $create->setStatus($status);
+        $create->setName($name);
+        $create->setEmail($email);
+        $create->setPassword($password);
+        $create->setScopes($scopes);
+
+        $this->userService->create($create, UserContext::newCommandContext());
 
         $output->writeln('Created user ' . $name . ' successful');
+
+        return 0;
     }
 }

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Filter;
 
-use Fusio\Impl\Loader\Context;
+use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
@@ -44,13 +44,13 @@ class RequestLimit implements FilterInterface
     protected $rateService;
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
     /**
      * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Loader\Context $context
+     * @param \Fusio\Impl\Framework\Loader\Context $context
      */
     public function __construct(Service\Rate $rateService, Context $context)
     {

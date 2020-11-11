@@ -1,137 +1,155 @@
 {
-  "path": "\/backend\/rate",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Rate": {
-        "type": "object",
-        "title": "Rate",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "priority": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "rateLimit": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "timespan": {
-            "type": "string",
-            "format": "duration"
-          },
-          "allocation": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Rate_Allocation"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "rateLimit",
-          "timespan"
-        ]
-      },
-      "Rate_Allocation": {
-        "type": "object",
-        "title": "Rate Allocation",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "authenticated": {
-            "type": "boolean"
-          },
-          "parameters": {
-            "type": "string"
-          }
-        }
-      },
-      "Rate_Collection": {
-        "type": "object",
-        "title": "Rate Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Rate"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Rate_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Rate"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/rate",
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Rate_GetAll",
+      "security": {
+        "app": [
+          "backend.rate"
+        ]
+      },
+      "tags": [
+        "backend.rate"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Rate_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Rate_Create",
+      "security": {
+        "app": [
+          "backend.rate"
+        ]
+      },
+      "tags": [
+        "backend.rate"
+      ],
+      "request": "Backend_Model_Rate_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Rate_Collection": {
+      "$ref": "Rate_Collection"
+    },
+    "Backend_Model_Rate_Create": {
+      "$ref": "Rate_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Rate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "rateLimit": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "timespan": {
+          "format": "duration",
+          "type": "string"
+        },
+        "allocation": {
+          "type": "array",
+          "items": {
+            "$ref": "Rate_Allocation"
+          }
+        }
+      }
+    },
+    "Rate_Allocation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "authenticated": {
+          "type": "boolean"
+        },
+        "parameters": {
+          "type": "string"
+        }
+      }
+    },
+    "Rate_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Rate"
+      }
+    },
+    "Rate_Create": {
+      "$extends": "Rate",
+      "type": "object",
+      "required": [
+        "name"
+      ]
     }
   }
 }

@@ -1,99 +1,129 @@
 {
-  "path": "\/backend\/event",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "title": "Event",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ]
-      },
-      "Event_Collection": {
-        "type": "object",
-        "title": "Event Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Event"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Event_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Event"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/event",
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Event_GetAll",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Event_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Event_Create",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Event_Collection": {
+      "$ref": "Event_Collection"
+    },
+    "Backend_Model_Event_Create": {
+      "$ref": "Event_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Category_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Event"
+      }
+    },
+    "Event_Create": {
+      "$extends": "Event",
+      "type": "object",
+      "required": [
+        "name"
+      ]
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Category_Query": {
+      "$ref": "Collection_Category_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

@@ -41,7 +41,7 @@ class ExecuteTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/action/execute/3', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/action/execute/3', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -66,7 +66,7 @@ class ExecuteTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/action/execute/4', 'POST', array(
+        $response = $this->sendRequest('/backend/action/execute/System_Action_GetDebug', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -80,22 +80,24 @@ class ExecuteTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "statusCode": 200,
-    "headers": {},
     "body": {
-        "method": "GET",
+        "body": {},
+        "class": "Fusio\\Engine\\Request\\HttpRequest",
         "headers": {
             "content-type": [
-                "application\/json"
+                "application/json"
             ]
         },
-        "uri_fragments": {
-            "news_id": "10"
-        },
+        "method": "GET",
         "parameters": {
             "count": "10"
+        },
+        "uriFragments": {
+            "news_id": "10"
         }
-    }
+    },
+    "headers": {},
+    "statusCode": 200
 }
 JSON;
 

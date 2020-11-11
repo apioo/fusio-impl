@@ -62,7 +62,6 @@ class AddCommandTest extends ControllerDbTestCase
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, status, name, class, engine, config FROM fusio_action ORDER BY id DESC');
 
-        $this->assertEquals(5, $action['id']);
         $this->assertEquals(1, $action['status']);
         $this->assertEquals('foobar', $action['name']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);
@@ -88,7 +87,6 @@ class AddCommandTest extends ControllerDbTestCase
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, status, name, class, engine, config FROM fusio_action ORDER BY id DESC');
 
-        $this->assertEquals(5, $action['id']);
         $this->assertEquals(1, $action['status']);
         $this->assertEquals('foobar', $action['name']);
         $this->assertEquals(UtilStaticResponse::class, $action['class']);

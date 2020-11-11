@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Tests\Service\Routes;
 
-use Fusio\Impl\Service\Routes\Config;
+use Fusio\Impl\Service\Route\Config;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Scope_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,59 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Scope_Update
      */
-    protected $scopeId;
+    private $scope;
+    
+    /**
+     * @var RecordInterface
+     */
+    private $existing;
 
     /**
-     * @var array
+     * @param Scope_Update $scope
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @var array
-     */
-    protected $routes;
-
-    /**
-     * @var array
-     */
-    protected $scope;
-
-    /**
-     * @param integer $scopeId
-     * @param array $record
-     * @param array $routes
-     * @param array $scope
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($scopeId, array $record, $routes, $scope, UserContext $context)
+    public function __construct(Scope_Update $scope, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->scopeId = $scopeId;
-        $this->record  = $record;
-        $this->routes  = $routes;
-        $this->scope   = $scope;
+        $this->scope = $scope;
+        $this->existing = $existing;
     }
 
-    public function getScopeId()
-    {
-        return $this->scopeId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getRoutes()
-    {
-        return $this->routes;
-    }
-
-    public function getScope()
+    /**
+     * @return Scope_Update
+     */
+    public function getScope(): Scope_Update
     {
         return $this->scope;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

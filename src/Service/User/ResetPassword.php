@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Consumer\Model\User_Email;
+use Fusio\Impl\Consumer\Model\User_PasswordReset;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -76,11 +78,11 @@ class ResetPassword
         $this->userTable      = $userTable;
     }
 
-    public function resetPassword(string $email, ?string $captcha)
+    public function resetPassword(User_Email $reset)
     {
-        $this->captchaService->assertCaptcha($captcha);
+        $this->captchaService->assertCaptcha($reset->getCaptcha());
 
-        $user = $this->userTable->getOneByEmail($email);
+        $user = $this->userTable->getOneByEmail($reset->getEmail());
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -96,14 +98,14 @@ class ResetPassword
         $this->mailerService->sendResetPasswordMail($token, $user['name'], $user['email']);
     }
 
-    public function changePassword(string $token, string $newPassword)
+    public function changePassword(User_PasswordReset $reset)
     {
-        $userId = $this->tokenService->getUser($token);
+        $userId = $this->tokenService->getUser($reset->getToken());
         if (empty($userId)) {
             throw new StatusCode\NotFoundException('Invalid token provided');
         }
 
-        $result = $this->userTable->changePassword($userId, null, $newPassword, false);
+        $result = $this->userTable->changePassword($userId, null, $reset->getNewPassword(), false);
         if (!$result) {
             throw new StatusCode\BadRequestException('Could not change password');
         }

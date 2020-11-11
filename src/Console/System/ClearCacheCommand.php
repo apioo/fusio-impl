@@ -71,5 +71,7 @@ class ClearCacheCommand extends Command
         $this->engineCache->clear();
 
         $output->writeln('Cache cleared');
+
+        return 0;
     }
 }

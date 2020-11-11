@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Event_Subscription_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Event_Subscription_Create
      */
-    protected $subscriptionId;
+    private $subscription;
 
     /**
-     * @var array
+     * @param Event_Subscription_Create $subscription
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $subscriptionId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($subscriptionId, array $record, UserContext $context)
+    public function __construct(Event_Subscription_Create $subscription, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->subscriptionId = $subscriptionId;
-        $this->record         = $record;
+        $this->subscription = $subscription;
     }
 
-    public function getSubscriptionId()
+    /**
+     * @return Event_Subscription_Create
+     */
+    public function getSubscription(): Event_Subscription_Create
     {
-        return $this->subscriptionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->subscription;
     }
 }

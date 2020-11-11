@@ -22,20 +22,21 @@
 namespace Fusio\Impl\Migrations;
 
 use Fusio\Adapter;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
-use Fusio\Impl\Connection\System;
+use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Controller\SchemaApiController;
-use Fusio\Impl\Export;
-use Fusio\Impl\Schema\Parser;
+use Fusio\Impl\Model\Collection_Category_Query;
+use Fusio\Impl\Model\Collection_Query;
+use Fusio\Impl\Model\Form_Container;
+use Fusio\Impl\Model\Message;
+use Fusio\Impl\System;
 use Fusio\Impl\Table;
-use PSX\Api\Resource;
 use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
+use PSX\Framework\Schema\Passthru;
 
 /**
  * NewInstallation
@@ -46,387 +47,471 @@ use PSX\Framework\Controller\Tool;
  */
 class NewInstallation
 {
-    public static function getData()
+    private static $data;
+
+    public static function getData(): DataBag
     {
+        if (self::$data) {
+            return self::$data;
+        }
+
         $backendAppKey     = TokenGenerator::generateAppKey();
         $backendAppSecret  = TokenGenerator::generateAppSecret();
         $consumerAppKey    = TokenGenerator::generateAppKey();
         $consumerAppSecret = TokenGenerator::generateAppSecret();
         $password          = \password_hash(TokenGenerator::generateUserPassword(), PASSWORD_DEFAULT);
 
-        $parser = new Parser();
-        $now    = new \DateTime();
-        $schema = self::getPassthruSchema();
-        $cache  = $parser->parse($schema);
+        $bag = new DataBag();
+        $bag->addCategory('default');
+        $bag->addCategory('backend');
+        $bag->addCategory('consumer');
+        $bag->addCategory('system');
+        $bag->addCategory('authorization');
+        $bag->addUser('Administrator', 'admin@localhost.com', $password);
+        $bag->addApp('Administrator', 'Backend', 'http://fusio-project.org', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Consumer', 'http://fusio-project.org', $consumerAppKey, $consumerAppSecret);
+        $bag->addScope('backend', 'backend', 'Global access to the backend API');
+        $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
+        $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
+        $bag->addAppScope('Backend', 'backend');
+        $bag->addAppScope('Backend', 'authorization');
+        $bag->addAppScope('Consumer', 'consumer');
+        $bag->addAppScope('Consumer', 'authorization');
+        $bag->addConfig('app_approval', Table\Config::FORM_BOOLEAN, 0, 'If true the status of a new app is PENDING so that an administrator has to manually activate the app');
+        $bag->addConfig('app_consumer', Table\Config::FORM_NUMBER, 16, 'The max amount of apps a consumer can register');
+        $bag->addConfig('authorization_url', Table\Config::FORM_STRING, '', 'Url where the user can authorize for the OAuth2 flow');
+        $bag->addConfig('consumer_subscription', Table\Config::FORM_NUMBER, 8, 'The max amount of subscriptions a consumer can add');
+        $bag->addConfig('info_title', Table\Config::FORM_STRING, 'Fusio', 'The title of the application');
+        $bag->addConfig('info_description', Table\Config::FORM_STRING, '', 'A short description of the application. CommonMark syntax MAY be used for rich text representation');
+        $bag->addConfig('info_tos', Table\Config::FORM_STRING, '', 'A URL to the Terms of Service for the API. MUST be in the format of a URL');
+        $bag->addConfig('info_contact_name', Table\Config::FORM_STRING, '', 'The identifying name of the contact person/organization');
+        $bag->addConfig('info_contact_url', Table\Config::FORM_STRING, '', 'The URL pointing to the contact information. MUST be in the format of a URL');
+        $bag->addConfig('info_contact_email', Table\Config::FORM_STRING, '', 'The email address of the contact person/organization. MUST be in the format of an email address');
+        $bag->addConfig('info_license_name', Table\Config::FORM_STRING, '', 'The license name used for the API');
+        $bag->addConfig('info_license_url', Table\Config::FORM_STRING, '', 'A URL to the license used for the API. MUST be in the format of a URL');
+        $bag->addConfig('mail_register_subject', Table\Config::FORM_STRING, 'Fusio registration', 'Subject of the activation mail');
+        $bag->addConfig('mail_register_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}', 'Body of the activation mail');
+        $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail');
+        $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
+        $bag->addConfig('mail_sender', Table\Config::FORM_STRING, '', 'Email address which is used in the "From" header');
+        $bag->addConfig('provider_facebook_secret', Table\Config::FORM_STRING, '', 'Facebook app secret');
+        $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
+        $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
+        $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
+        $bag->addConfig('scopes_default', Table\Config::FORM_STRING, 'authorization,consumer', 'If a user registers through the consumer API the following scopes are assigned');
+        $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
+        $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional a SMTP connection which is used as mailer');
+        $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional a HTTP or message queue connection which is used to dispatch events');
+        $bag->addConfig('user_pw_length', Table\Config::FORM_NUMBER, 8, 'Minimal required password length');
+        $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
+        $bag->addConnection('System', ConnectionSystem::class);
+        $bag->addRate('Default', 0, 720, 'PT1H');
+        $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
+        $bag->addRateAllocation('Default');
+        $bag->addRateAllocation('Default-Anonymous', null, null, 0);
+        $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
+        $bag->addRoute('consumer', 0, '/consumer/token', Consumer\Authorization\Token::class);
+        $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
+        $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
+        $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
+        $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
+        $bag->addRoute('authorization', 0, '/authorization/token', Authorization\Token::class);
+        $bag->addSchema('default', 'Passthru', Passthru::class);
+        $bag->addUserScope('Administrator', 'backend');
+        $bag->addUserScope('Administrator', 'consumer');
+        $bag->addUserScope('Administrator', 'authorization');
 
-        $data = [
-            'fusio_user' => [
-                ['status' => 1, 'name' => 'Administrator', 'email' => 'admin@localhost.com', 'password' => $password, 'points' => null, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_action' => [
-                ['status' => 1, 'name' => 'Welcome', 'class' => Welcome::class, 'engine' => PhpClass::class, 'config' => null, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_app' => [
-                ['user_id' => 1, 'status' => 1, 'name' => 'Backend',  'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $backendAppKey, 'app_secret' => $backendAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
-                ['user_id' => 1, 'status' => 1, 'name' => 'Consumer', 'url' => 'http://fusio-project.org', 'parameters' => '', 'app_key' => $consumerAppKey, 'app_secret' => $consumerAppSecret, 'date' => $now->format('Y-m-d H:i:s')],
-            ],
-            'fusio_audit' => [
-            ],
-            'fusio_config' => [
-                ['name' => 'app_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'If true the status of a new app is PENDING so that an administrator has to manually activate the app', 'value' => 0],
-                ['name' => 'app_consumer', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The max amount of apps a consumer can register', 'value' => 16],
+        foreach (self::getRoutes() as $category => $routes) {
+            $bag->addRoutes($category, $routes);
+        }
 
-                ['name' => 'authorization_url', 'type' => Table\Config::FORM_STRING, 'description' => 'Url where the user can authorize for the OAuth2 flow', 'value' => ''],
+        return self::$data = $bag;
+    }
 
-                ['name' => 'consumer_subscription', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The max amount of subscriptions a consumer can add', 'value' => 8],
-
-                ['name' => 'info_title', 'type' => Table\Config::FORM_STRING, 'description' => 'The title of the application', 'value' => 'Fusio'],
-                ['name' => 'info_description', 'type' => Table\Config::FORM_STRING, 'description' => 'A short description of the application. CommonMark syntax MAY be used for rich text representation', 'value' => ''],
-                ['name' => 'info_tos', 'type' => Table\Config::FORM_STRING, 'description' => 'A URL to the Terms of Service for the API. MUST be in the format of a URL', 'value' => ''],
-                ['name' => 'info_contact_name', 'type' => Table\Config::FORM_STRING, 'description' => 'The identifying name of the contact person/organization', 'value' => ''],
-                ['name' => 'info_contact_url', 'type' => Table\Config::FORM_STRING, 'description' => 'The URL pointing to the contact information. MUST be in the format of a URL', 'value' => ''],
-                ['name' => 'info_contact_email', 'type' => Table\Config::FORM_STRING, 'description' => 'The email address of the contact person/organization. MUST be in the format of an email address', 'value' => ''],
-                ['name' => 'info_license_name', 'type' => Table\Config::FORM_STRING, 'description' => 'The license name used for the API', 'value' => ''],
-                ['name' => 'info_license_url', 'type' => Table\Config::FORM_STRING, 'description' => 'A URL to the license used for the API. MUST be in the format of a URL', 'value' => ''],
-
-                ['name' => 'mail_register_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the activation mail', 'value' => 'Fusio registration'],
-                ['name' => 'mail_register_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the activation mail', 'value' => 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}'],
-                ['name' => 'mail_pw_reset_subject', 'type' => Table\Config::FORM_STRING, 'description' => 'Subject of the password reset mail', 'value' => 'Fusio password reset'],
-                ['name' => 'mail_pw_reset_body', 'type' => Table\Config::FORM_TEXT, 'description' => 'Body of the password reset mail', 'value' => 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.'],
-                ['name' => 'mail_sender', 'type' => Table\Config::FORM_STRING, 'description' => 'Email address which is used in the "From" header', 'value' => ''],
-
-                ['name' => 'provider_facebook_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Facebook app secret', 'value' => ''],
-                ['name' => 'provider_google_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'Google app secret', 'value' => ''],
-                ['name' => 'provider_github_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'GitHub app secret', 'value' => ''],
-
-                ['name' => 'recaptcha_secret', 'type' => Table\Config::FORM_STRING, 'description' => 'ReCaptcha secret', 'value' => ''],
-
-                ['name' => 'scopes_default', 'type' => Table\Config::FORM_STRING, 'description' => 'If a user registers through the consumer API the following scopes are assigned', 'value' => 'authorization,consumer'],
-                ['name' => 'points_default', 'type' => Table\Config::FORM_NUMBER, 'description' => 'The default amount of points which a user receives if he registers', 'value' => 0],
-
-                ['name' => 'system_mailer', 'type' => Table\Config::FORM_STRING, 'description' => 'Optional a SMTP connection which is used as mailer', 'value' => ''],
-                ['name' => 'system_dispatcher', 'type' => Table\Config::FORM_STRING, 'description' => 'Optional a HTTP or message queue connection which is used to dispatch events', 'value' => ''],
-
-                ['name' => 'user_pw_length', 'type' => Table\Config::FORM_NUMBER, 'description' => 'Minimal required password length', 'value' => 8],
-                ['name' => 'user_approval', 'type' => Table\Config::FORM_BOOLEAN, 'description' => 'Whether the user needs to activate the account through an email', 'value' => 1],
+    private static function getRoutes(): array
+    {
+        return [
+            'default' => [
+                '/' => [
+                    'GET' => new Method(Welcome::class, null, [200 => 'Passthru'], null, null, null, true),
+                ]
             ],
-            'fusio_connection' => [
-                ['status' => 1, 'name' => 'System', 'class' => System::class, 'config' => null],
+            'backend' => [
+                '/account' => [
+                    'GET' => new Method(Backend\Action\Account\Get::class, null, [200 => Backend\Model\User::class], null, 'backend.account'),
+                    'PUT' => new Method(Backend\Action\Account\Update::class, Backend\Model\User_Update::class, [200 => Message::class], null, 'backend.account'),
+                ],
+                '/account/change_password' => [
+                    'PUT' => new Method(Backend\Action\Account\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'backend.account'),
+                ],
+                '/action' => [
+                    'GET' => new Method(Backend\Action\Action\GetAll::class, null, [200 => Backend\Model\Action_Collection::class], Collection_Category_Query::class, 'backend.action'),
+                    'POST' => new Method(Backend\Action\Action\Create::class, Backend\Model\Action_Create::class, [201 => Message::class], null, 'backend.action', 'fusio.action.create'),
+                ],
+                '/action/list' => [
+                    'GET' => new Method(Backend\Action\Action\GetIndex::class, null, [200 => Backend\Model\Action_Index::class], null, 'backend.action'),
+                ],
+                '/action/form' => [
+                    'GET' => new Method(Backend\Action\Action\GetForm::class, null, [200 => Form_Container::class], null, 'backend.action'),
+                ],
+                '/action/execute/:action_id' => [
+                    'POST' => new Method(Backend\Action\Action\Execute::class, Backend\Model\Action_Execute_Request::class, [200 => Backend\Model\Action_Execute_Response::class], null, 'backend.action'),
+                ],
+                '/action/$action_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Action\Get::class, null, [200 => Backend\Model\Action::class], null, 'backend.action'),
+                    'PUT' => new Method(Backend\Action\Action\Update::class, Backend\Model\Action_Update::class, [200 => Message::class], null, 'backend.action', 'fusio.action.update'),
+                    'DELETE' => new Method(Backend\Action\Action\Delete::class, null, [200 => Message::class], null, 'backend.action', 'fusio.action.delete'),
+                ],
+                '/app/token' => [
+                    'GET' => new Method(Backend\Action\App\Token\GetAll::class, null, [200 => Backend\Model\App_Token_Collection::class], Backend\Model\App_Token_Collection_Query::class, 'backend.app'),
+                ],
+                '/app/token/$token_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\App\Token\Get::class, null, [200 => Backend\Model\App_Token::class], null, 'backend.app'),
+                ],
+                '/app' => [
+                    'GET' => new Method(Backend\Action\App\GetAll::class, null, [200 => Backend\Model\App_Collection::class], Collection_Query::class, 'backend.app'),
+                    'POST' => new Method(Backend\Action\App\Create::class, Backend\Model\App_Create::class, [201 => Message::class], null, 'backend.app', 'fusio.app.create'),
+                ],
+                '/app/$app_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\App\Get::class, null, [200 => Backend\Model\App::class], null, 'backend.app'),
+                    'PUT' => new Method(Backend\Action\App\Update::class, Backend\Model\App_Update::class, [200 => Message::class], null, 'backend.app', 'fusio.app.update'),
+                    'DELETE' => new Method(Backend\Action\App\Delete::class, null, [200 => Message::class], null, 'backend.app', 'fusio.app.delete'),
+                ],
+                '/app/$app_id<[0-9]+>/token/:token_id' => [
+                    'DELETE' => new Method(Backend\Action\App\DeleteToken::class, null, [200 => Message::class], null, 'backend.app'),
+                ],
+                '/audit' => [
+                    'GET' => new Method(Backend\Action\Audit\GetAll::class, null, [200 => Backend\Model\Audit_Collection::class], Backend\Model\Audit_Collection_Query::class, 'backend.audit'),
+                ],
+                '/audit/$audit_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Audit\Get::class, null, [200 => Backend\Model\Audit::class], null, 'backend.audit'),
+                ],
+                '/config' => [
+                    'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Backend\Model\Config_Collection::class], Collection_Query::class, 'backend.config'),
+                ],
+                '/config/$config_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Config\Get::class, null, [200 => Backend\Model\Config::class], null, 'backend.config'),
+                    'PUT' => new Method(Backend\Action\Config\Update::class, Backend\Model\Config_Update::class, [200 => Message::class], null, 'backend.config'),
+                ],
+                '/connection' => [
+                    'GET' => new Method(Backend\Action\Connection\GetAll::class, null, [200 => Backend\Model\Connection_Collection::class], Collection_Query::class, 'backend.connection'),
+                    'POST' => new Method(Backend\Action\Connection\Create::class, Backend\Model\Connection_Create::class, [201 => Message::class], null, 'backend.connection', 'fusio.connection.create'),
+                ],
+                '/connection/list' => [
+                    'GET' => new Method(Backend\Action\Connection\GetIndex::class, null, [200 => Backend\Model\Connection_Index::class], null, 'backend.connection'),
+                ],
+                '/connection/form' => [
+                    'GET' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], null, 'backend.connection'),
+                ],
+                '/connection/$connection_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Backend\Model\Connection::class], null, 'backend.connection'),
+                    'PUT' => new Method(Backend\Action\Connection\Update::class, Backend\Model\Connection_Update::class, [200 => Message::class], null, 'backend.connection', 'fusio.connection.update'),
+                    'DELETE' => new Method(Backend\Action\Connection\Delete::class, null, [200 => Message::class], null, 'backend.connection', 'fusio.connection.delete'),
+                ],
+                '/cronjob' => [
+                    'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Backend\Model\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
+                    'POST' => new Method(Backend\Action\Cronjob\Create::class, Backend\Model\Cronjob_Create::class, [201 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.create'),
+                ],
+                '/cronjob/$cronjob_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Cronjob\Get::class, null, [200 => Backend\Model\Cronjob::class], null, 'backend.cronjob'),
+                    'PUT' => new Method(Backend\Action\Cronjob\Update::class, Backend\Model\Cronjob_Update::class, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.update'),
+                    'DELETE' => new Method(Backend\Action\Cronjob\Delete::class, null, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.delete'),
+                ],
+                '/dashboard' => [
+                    'GET' => new Method(Backend\Action\Dashboard\GetAll::class, null, [200 => Backend\Model\Dashboard::class], null, 'backend.dashboard'),
+                ],
+                '/event/subscription' => [
+                    'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Backend\Model\Event_Subscription_Collection::class], Collection_Query::class, 'backend.event'),
+                    'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Backend\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.subscription.create'),
+                ],
+                '/event/subscription/$subscription_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Event\Subscription\Get::class, null, [200 => Backend\Model\Event_Subscription::class], null, 'backend.event'),
+                    'PUT' => new Method(Backend\Action\Event\Subscription\Update::class, Backend\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.update'),
+                    'DELETE' => new Method(Backend\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.delete'),
+                ],
+                '/event' => [
+                    'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Backend\Model\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
+                    'POST' => new Method(Backend\Action\Event\Create::class, Backend\Model\Event_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.create'),
+                ],
+                '/event/$event_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Event\Get::class, null, [200 => Backend\Model\Event::class], null, 'backend.event'),
+                    'PUT' => new Method(Backend\Action\Event\Update::class, Backend\Model\Event_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.update'),
+                    'DELETE' => new Method(Backend\Action\Event\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.delete'),
+                ],
+                '/import/:format' => [
+                    'POST' => new Method(Backend\Action\Import\Format::class, Backend\Model\Import_Request::class, [200 => Backend\Model\Adapter::class], null, 'backend.import'),
+                ],
+                '/import/process' => [
+                    'POST' => new Method(Backend\Action\Import\Process::class, Backend\Model\Adapter::class, [200 => Backend\Model\Import_Response::class], null, 'backend.import'),
+                ],
+                '/log/error' => [
+                    'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Backend\Model\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),
+                ],
+                '/log/error/$error_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Log\Error\Get::class, null, [200 => Backend\Model\Log_Error::class], null, 'backend.log'),
+                ],
+                '/log' => [
+                    'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Backend\Model\Log_Collection::class], Backend\Model\Log_Collection_Query::class, 'backend.log'),
+                ],
+                '/log/$log_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Log\Get::class, null, [200 => Backend\Model\Log::class], null, 'backend.log'),
+                ],
+                '/marketplace' => [
+                    'GET' => new Method(Backend\Action\Marketplace\GetAll::class, null, [200 => Backend\Model\Marketplace_Collection::class], null, 'backend.marketplace'),
+                    'POST' => new Method(Backend\Action\Marketplace\Install::class, Backend\Model\Marketplace_Install::class, [201 => Backend\Model\Marketplace_Install::class], null, 'backend.marketplace'),
+                ],
+                '/marketplace/:app_name' => [
+                    'GET' => new Method(Backend\Action\Marketplace\Get::class, null, [200 => Backend\Model\Marketplace_Local_App::class], null, 'backend.marketplace'),
+                    'PUT' => new Method(Backend\Action\Marketplace\Update::class, null, [200 => Message::class], null, 'backend.marketplace'),
+                    'DELETE' => new Method(Backend\Action\Marketplace\Remove::class, null, [200 => Message::class], null, 'backend.marketplace'),
+                ],
+                '/plan/contract' => [
+                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Backend\Model\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Contract\Create::class, Backend\Model\Plan_Contract_Create::class, [201 => Message::class], null, 'backend.plan'),
+                ],
+                '/plan/contract/$contract_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Plan\Contract\Get::class, null, [200 => Backend\Model\Plan_Contract::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Contract\Update::class, Backend\Model\Plan_Contract_Update::class, [200 => Message::class], null, 'backend.plan'),
+                    'DELETE' => new Method(Backend\Action\Plan\Contract\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
+                ],
+                '/plan/invoice' => [
+                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Backend\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Invoice\Create::class, Backend\Model\Plan_Invoice_Create::class, [201 => Message::class], null, 'backend.plan'),
+                ],
+                '/plan/invoice/$invoice_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Plan\Invoice\Get::class, null, [200 => Backend\Model\Plan_Invoice::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Invoice\Update::class, Backend\Model\Plan_Invoice_Update::class, [200 => Message::class], null, 'backend.plan'),
+                    'DELETE' => new Method(Backend\Action\Plan\Invoice\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
+                ],
+                '/plan' => [
+                    'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Backend\Model\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Create::class, Backend\Model\Plan_Create::class, [201 => Message::class], null, 'backend.plan', 'fusio.plan.create'),
+                ],
+                '/plan/$plan_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Plan\Get::class, null, [200 => Backend\Model\Plan::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Update::class, Backend\Model\Plan_Update::class, [200 => Message::class], null, 'backend.plan', 'fusio.plan.update'),
+                    'DELETE' => new Method(Backend\Action\Plan\Delete::class, null, [200 => Message::class], null, 'backend.plan', 'fusio.plan.delete'),
+                ],
+                '/rate' => [
+                    'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Backend\Model\Rate_Collection::class], Collection_Query::class, 'backend.rate'),
+                    'POST' => new Method(Backend\Action\Rate\Create::class, Backend\Model\Rate_Create::class, [201 => Message::class], null, 'backend.rate', 'fusio.rate.create'),
+                ],
+                '/rate/$rate_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Rate\Get::class, null, [200 => Backend\Model\Rate::class], null, 'backend.rate'),
+                    'PUT' => new Method(Backend\Action\Rate\Update::class, Backend\Model\Rate_Update::class, [200 => Message::class], null, 'backend.rate', 'fusio.rate.update'),
+                    'DELETE' => new Method(Backend\Action\Rate\Delete::class, null, [200 => Message::class], null, 'backend.rate', 'fusio.rate.delete'),
+                ],
+                '/routes' => [
+                    'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Backend\Model\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),
+                    'POST' => new Method(Backend\Action\Route\Create::class, Backend\Model\Route_Create::class, [201 => Message::class], null, 'backend.route', 'fusio.route.create'),
+                ],
+                '/routes/provider' => [
+                    'GET' => new Method(Backend\Action\Route\Provider\Index::class, null, [200 => Backend\Model\Route_Index_Providers::class], null, 'backend.route'),
+                ],
+                '/routes/provider/:provider' => [
+                    'GET' => new Method(Backend\Action\Route\Provider\Form::class, null, [200 => Form_Container::class], null, 'backend.route'),
+                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Backend\Model\Route_Provider::class, [201 => Message::class], null, 'backend.route'),
+                    'PUT' => new Method(Backend\Action\Route\Provider\Changelog::class, Backend\Model\Route_Provider_Config::class, [200 => Backend\Model\Route_Provider_Changelog::class], null, 'backend.route'),
+                ],
+                '/routes/$route_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Route\Get::class, null, [200 => Backend\Model\Route::class], null, 'backend.route'),
+                    'PUT' => new Method(Backend\Action\Route\Update::class, Backend\Model\Route_Update::class, [200 => Message::class], null, 'backend.route', 'fusio.route.update'),
+                    'DELETE' => new Method(Backend\Action\Route\Delete::class, null, [200 => Message::class], null, 'backend.route', 'fusio.route.delete'),
+                ],
+                '/schema' => [
+                    'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Backend\Model\Schema_Collection::class], Collection_Category_Query::class, 'backend.schema'),
+                    'POST' => new Method(Backend\Action\Schema\Create::class, Backend\Model\Schema_Create::class, [201 => Message::class], null, 'backend.schema', 'fusio.schema.create'),
+                ],
+                '/schema/preview/$schema_id<[0-9]+>' => [
+                    'POST' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Backend\Model\Schema_Preview_Response::class], null, 'backend.schema'),
+                ],
+                '/schema/form/$schema_id<[0-9]+>' => [
+                    'PUT' => new Method(Backend\Action\Schema\Form::class, Backend\Model\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
+                ],
+                '/schema/$schema_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Schema\Get::class, null, [200 => Backend\Model\Schema::class], null, 'backend.schema'),
+                    'PUT' => new Method(Backend\Action\Schema\Update::class, Backend\Model\Schema_Update::class, [200 => Message::class], null, 'backend.schema', 'fusio.schema.update'),
+                    'DELETE' => new Method(Backend\Action\Schema\Delete::class, null, [200 => Message::class], null, 'backend.schema', 'fusio.schema.delete'),
+                ],
+                '/scope' => [
+                    'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Backend\Model\Scope_Collection::class], Collection_Category_Query::class, 'backend.scope'),
+                    'POST' => new Method(Backend\Action\Scope\Create::class, Backend\Model\Scope_Create::class, [201 => Message::class], null, 'backend.scope', 'fusio.scope.create'),
+                ],
+                '/scope/$scope_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Scope\Get::class, null, [200 => Backend\Model\Scope::class], null, 'backend.scope'),
+                    'PUT' => new Method(Backend\Action\Scope\Update::class, Backend\Model\Scope_Update::class, [200 => Message::class], null, 'backend.scope', 'fusio.scope.update'),
+                    'DELETE' => new Method(Backend\Action\Scope\Delete::class, null, [200 => Message::class], null, 'backend.scope', 'fusio.scope.delete'),
+                ],
+                '/sdk' => [
+                    'GET' => new Method(Backend\Action\Sdk\GetAll::class, null, [200 => Backend\Model\Sdk_Types::class], null, 'backend.sdk'),
+                    'POST' => new Method(Backend\Action\Sdk\Generate::class, Backend\Model\Sdk_Generate::class, [200 => Message::class], null, 'backend.sdk'),
+                ],
+                '/statistic/count_requests' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/errors_per_route' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/incoming_requests' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/incoming_transactions' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Transaction_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/issued_tokens' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\App_Token_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/most_used_apps' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/most_used_routes' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/time_average' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/time_per_route' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/statistic/used_points' => [
+                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Plan_Usage_Collection_Query::class, 'backend.statistic'),
+                ],
+                '/transaction' => [
+                    'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Backend\Model\Transaction_Collection::class], Backend\Model\Transaction_Collection_Query::class, 'backend.transaction'),
+                ],
+                '/transaction/$transaction_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Transaction\Get::class, null, [200 => Backend\Model\Transaction::class], null, 'backend.transaction'),
+                ],
+                '/user' => [
+                    'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Backend\Model\User_Collection::class], Collection_Query::class, 'backend.user'),
+                    'POST' => new Method(Backend\Action\User\Create::class, Backend\Model\User_Create::class, [201 => Message::class], null, 'backend.user', 'fusio.user.create'),
+                ],
+                '/user/$user_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\User\Get::class, null, [200 => Backend\Model\User::class], null, 'backend.user'),
+                    'PUT' => new Method(Backend\Action\User\Update::class, Backend\Model\User_Update::class, [200 => Message::class], null, 'backend.user', 'fusio.user.update'),
+                    'DELETE' => new Method(Backend\Action\User\Delete::class, null, [200 => Message::class], null, 'backend.user', 'fusio.user.delete'),
+                ],
             ],
-            'fusio_cronjob' => [
+            'consumer' => [
+                '/app' => [
+                    'GET' => new Method(Consumer\Action\App\GetAll::class, null, [200 => Consumer\Model\App_Collection::class], Collection_Query::class, 'consumer.app'),
+                    'POST' => new Method(Consumer\Action\App\Create::class, Consumer\Model\App_Create::class, [201 => Message::class], null, 'consumer.app'),
+                ],
+                '/app/$app_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\App\Get::class, null, [200 => Consumer\Model\App::class], null, 'consumer.app'),
+                    'PUT' => new Method(Consumer\Action\App\Update::class, Consumer\Model\App_Update::class, [200 => Message::class], null, 'consumer.app'),
+                    'DELETE' => new Method(Consumer\Action\App\Delete::class, null, [200 => Message::class], null, 'consumer.app'),
+                ],
+                '/event' => [
+                    'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Consumer\Model\Event_Collection::class], Collection_Query::class, 'consumer.event'),
+                ],
+                '/grant' => [
+                    'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Consumer\Model\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
+                ],
+                '/grant/$grant_id<[0-9]+>' => [
+                    'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [204 => Message::class], null, 'consumer.grant'),
+                ],
+                '/plan/contract' => [
+                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Consumer\Model\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
+                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, Consumer\Model\Plan_Order_Request::class, [201 => Consumer\Model\Plan_Order_Response::class], null, 'consumer.plan'),
+                ],
+                '/plan/contract/$contract_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Consumer\Model\Plan_Contract::class], null, 'consumer.plan'),
+                ],
+                '/plan/invoice' => [
+                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Consumer\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'consumer.plan'),
+                ],
+                '/plan/invoice/$invoice_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Plan\Invoice\Get::class, null, [200 => Consumer\Model\Plan_Invoice::class], null, 'consumer.plan'),
+                ],
+                '/plan' => [
+                    'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Consumer\Model\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),
+                ],
+                '/plan/$plan_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Plan\Get::class, null, [200 => Consumer\Model\Plan::class], null, 'consumer.plan'),
+                ],
+                '/scope' => [
+                    'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Consumer\Model\Scope_Collection::class], Collection_Query::class, 'consumer.scope'),
+                ],
+                '/subscription' => [
+                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.subscription'),
+                    'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Consumer\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'consumer.subscription'),
+                ],
+                '/subscription/$subscription_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Event\Subscription\Get::class, null, [200 => Consumer\Model\Event_Subscription::class], null, 'consumer.subscription'),
+                    'PUT' => new Method(Consumer\Action\Event\Subscription\Update::class, Consumer\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'consumer.subscription'),
+                    'DELETE' => new Method(Consumer\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'consumer.subscription'),
+                ],
+                '/transaction' => [
+                    'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
+                ],
+                '/transaction/execute/:transaction_id' => [
+                    'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),
+                ],
+                '/transaction/prepare/:provider' => [
+                    'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Consumer\Model\Transaction_Prepare_Request::class, [200 => Consumer\Model\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
+                ],
+                '/transaction/$transaction_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Transaction\Get::class, null, [200 => Consumer\Model\Transaction::class], null, 'consumer.transaction'),
+                ],
+                '/account' => [
+                    'GET' => new Method(Consumer\Action\User\Get::class, null, [200 => Consumer\Model\User_Account::class], null, 'consumer.user'),
+                    'PUT' => new Method(Consumer\Action\User\Update::class, Consumer\Model\User_Account::class, [200 => Message::class], null, 'consumer.user'),
+                ],
+                '/account/change_password' => [
+                    'PUT' => new Method(Consumer\Action\User\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'consumer.user'),
+                ],
+                '/activate' => [
+                    'POST' => new Method(Consumer\Action\User\Activate::class, Consumer\Model\User_Activate::class, [200 => Message::class], null, 'consumer.user', null, true),
+                ],
+                '/authorize' => [
+                    'GET' => new Method(Consumer\Action\User\GetApp::class, null, [200 => Consumer\Model\Authorize_Meta::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Authorize::class, Consumer\Model\Authorize_Request::class, [200 => Consumer\Model\Authorize_Response::class], null, 'consumer.user', null, true),
+                ],
+                '/login' => [
+                    'POST' => new Method(Consumer\Action\User\Login::class, Consumer\Model\User_Login::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\Refresh::class, Consumer\Model\User_Refresh::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                ],
+                '/provider/:provider' => [
+                    'POST' => new Method(Consumer\Action\User\Provider::class, Consumer\Model\User_Provider::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                ],
+                '/register' => [
+                    'POST' => new Method(Consumer\Action\User\Register::class, Consumer\Model\User_Register::class, [200 => Message::class], null, 'consumer.user', null, true),
+                ],
+                '/password_reset' => [
+                    'POST' => new Method(Consumer\Action\User\ResetPassword\Request::class, Consumer\Model\User_Email::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\ResetPassword\Execute::class, Consumer\Model\User_PasswordReset::class, [200 => Message::class], null, 'consumer.user', null, true),
+                ],
             ],
-            'fusio_event' => [
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.action.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.action.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.action.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.app.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.app.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.app.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.connection.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.connection.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.connection.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.cronjob.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.cronjob.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.cronjob.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.subscription.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.subscription.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.event.subscription.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.plan.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.plan.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.plan.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.rate.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.rate.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.rate.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.routes.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.routes.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.routes.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.schema.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.schema.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.schema.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.scope.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.scope.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.scope.update', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.user.create', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.user.delete', 'description' => ''],
-                ['status' => Table\Event::STATUS_INTERNAL, 'name' => 'fusio.user.update', 'description' => ''],
+            'system' => [
+                '/route' => [
+                    'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class], null, null, null, true),
+                ],
+                '/invoke/:method' => [
+                    'POST' => new Method(System\Action\Invoke::class, 'Passthru', [200 => 'Passthru'], null, null, null),
+                ],
+                '/health' => [
+                    'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class], null, null, null, true),
+                ],
+                '/debug' => [
+                    'GET' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
+                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                    'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
+                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                ],
+                '/schema/:name' => [
+                    'GET' => new Method(System\Action\GetSchema::class, null, [200 => System\Model\Schema::class], null, null, null, true),
+                ],
             ],
-            'fusio_log' => [
-            ],
-            'fusio_plan' => [
-            ],
-            'fusio_plan_contract' => [
-            ],
-            'fusio_plan_invoice' => [
-            ],
-            'fusio_provider' => [
-            ],
-            'fusio_rate' => [
-                ['status' => 1, 'priority' => 0, 'name' => 'Default', 'rate_limit' => 720, 'timespan' => 'PT1H'],
-                ['status' => 1, 'priority' => 4, 'name' => 'Default-Anonymous', 'rate_limit' => 60, 'timespan' => 'PT1H'],
-            ],
-            'fusio_routes' => [
-                ['status' => 1, 'priority' => 0x10000000 | 67, 'methods' => 'ANY', 'path' => '/backend/account/change_password',             'controller' => Backend\Api\Account\ChangePassword::class],
-                ['status' => 1, 'priority' => 0x10000000 | 66, 'methods' => 'ANY', 'path' => '/backend/action',                              'controller' => Backend\Api\Action\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 65, 'methods' => 'ANY', 'path' => '/backend/action/list',                         'controller' => Backend\Api\Action\Index::class],
-                ['status' => 1, 'priority' => 0x10000000 | 64, 'methods' => 'ANY', 'path' => '/backend/action/form',                         'controller' => Backend\Api\Action\Form::class],
-                ['status' => 1, 'priority' => 0x10000000 | 63, 'methods' => 'ANY', 'path' => '/backend/action/execute/$action_id<[0-9]+>',   'controller' => Backend\Api\Action\Execute::class],
-                ['status' => 1, 'priority' => 0x10000000 | 62, 'methods' => 'ANY', 'path' => '/backend/action/$action_id<[0-9]+>',           'controller' => Backend\Api\Action\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 61, 'methods' => 'ANY', 'path' => '/backend/app/token',                           'controller' => Backend\Api\App\Token\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 60, 'methods' => 'ANY', 'path' => '/backend/app/token/$token_id<[0-9]+>',         'controller' => Backend\Api\App\Token\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 59, 'methods' => 'ANY', 'path' => '/backend/app',                                 'controller' => Backend\Api\App\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 58, 'methods' => 'ANY', 'path' => '/backend/app/$app_id<[0-9]+>',                 'controller' => Backend\Api\App\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 57, 'methods' => 'ANY', 'path' => '/backend/app/$app_id<[0-9]+>/token/:token_id', 'controller' => Backend\Api\App\Token::class],
-                ['status' => 1, 'priority' => 0x10000000 | 56, 'methods' => 'ANY', 'path' => '/backend/audit',                               'controller' => Backend\Api\Audit\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 55, 'methods' => 'ANY', 'path' => '/backend/audit/$audit_id<[0-9]+>',             'controller' => Backend\Api\Audit\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 54, 'methods' => 'ANY', 'path' => '/backend/config',                              'controller' => Backend\Api\Config\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 53, 'methods' => 'ANY', 'path' => '/backend/config/$config_id<[0-9]+>',           'controller' => Backend\Api\Config\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 52, 'methods' => 'ANY', 'path' => '/backend/connection',                          'controller' => Backend\Api\Connection\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 51, 'methods' => 'ANY', 'path' => '/backend/connection/list',                     'controller' => Backend\Api\Connection\Index::class],
-                ['status' => 1, 'priority' => 0x10000000 | 50, 'methods' => 'ANY', 'path' => '/backend/connection/form',                     'controller' => Backend\Api\Connection\Form::class],
-                ['status' => 1, 'priority' => 0x10000000 | 49, 'methods' => 'ANY', 'path' => '/backend/connection/$connection_id<[0-9]+>',   'controller' => Backend\Api\Connection\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 48, 'methods' => 'ANY', 'path' => '/backend/cronjob',                             'controller' => Backend\Api\Cronjob\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 47, 'methods' => 'ANY', 'path' => '/backend/cronjob/$cronjob_id<[0-9]+>',         'controller' => Backend\Api\Cronjob\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 46, 'methods' => 'ANY', 'path' => '/backend/dashboard',                           'controller' => Backend\Api\Dashboard\Dashboard::class],
-                ['status' => 1, 'priority' => 0x10000000 | 45, 'methods' => 'ANY', 'path' => '/backend/event/subscription',                  'controller' => Backend\Api\Event\Subscription\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 44, 'methods' => 'ANY', 'path' => '/backend/event/subscription/$subscription_id<[0-9]+>', 'controller' => Backend\Api\Event\Subscription\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 43, 'methods' => 'ANY', 'path' => '/backend/event',                               'controller' => Backend\Api\Event\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 42, 'methods' => 'ANY', 'path' => '/backend/event/$event_id<[0-9]+>',             'controller' => Backend\Api\Event\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 41, 'methods' => 'ANY', 'path' => '/backend/import/process',                      'controller' => Backend\Api\Import\Process::class],
-                ['status' => 1, 'priority' => 0x10000000 | 40, 'methods' => 'ANY', 'path' => '/backend/import/:format',                      'controller' => Backend\Api\Import\Format::class],
-                ['status' => 1, 'priority' => 0x10000000 | 39, 'methods' => 'ANY', 'path' => '/backend/log/error',                           'controller' => Backend\Api\Log\Error\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 38, 'methods' => 'ANY', 'path' => '/backend/log/error/$error_id<[0-9]+>',         'controller' => Backend\Api\Log\Error\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 37, 'methods' => 'ANY', 'path' => '/backend/log',                                 'controller' => Backend\Api\Log\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 36, 'methods' => 'ANY', 'path' => '/backend/log/$log_id<[0-9]+>',                 'controller' => Backend\Api\Log\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 35, 'methods' => 'ANY', 'path' => '/backend/marketplace',                         'controller' => Backend\Api\Marketplace\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 34, 'methods' => 'ANY', 'path' => '/backend/marketplace/:app_name',               'controller' => Backend\Api\Marketplace\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 33, 'methods' => 'ANY', 'path' => '/backend/plan/contract',                       'controller' => Backend\Api\Plan\Contract\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 32, 'methods' => 'ANY', 'path' => '/backend/plan/contract/$contract_id<[0-9]+>',  'controller' => Backend\Api\Plan\Contract\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 31, 'methods' => 'ANY', 'path' => '/backend/plan/invoice',                        'controller' => Backend\Api\Plan\Invoice\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 30, 'methods' => 'ANY', 'path' => '/backend/plan/invoice/$invoice_id<[0-9]+>',    'controller' => Backend\Api\Plan\Invoice\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 29, 'methods' => 'ANY', 'path' => '/backend/plan',                                'controller' => Backend\Api\Plan\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 28, 'methods' => 'ANY', 'path' => '/backend/plan/$plan_id<[0-9]+>',               'controller' => Backend\Api\Plan\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 27, 'methods' => 'ANY', 'path' => '/backend/rate',                                'controller' => Backend\Api\Rate\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 26, 'methods' => 'ANY', 'path' => '/backend/rate/$rate_id<[0-9]+>',               'controller' => Backend\Api\Rate\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 25, 'methods' => 'ANY', 'path' => '/backend/routes',                              'controller' => Backend\Api\Routes\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 24, 'methods' => 'ANY', 'path' => '/backend/routes/provider',                     'controller' => Backend\Api\Routes\Index::class],
-                ['status' => 1, 'priority' => 0x10000000 | 23, 'methods' => 'ANY', 'path' => '/backend/routes/provider/:provider',           'controller' => Backend\Api\Routes\Provider::class],
-                ['status' => 1, 'priority' => 0x10000000 | 22, 'methods' => 'ANY', 'path' => '/backend/routes/$route_id<[0-9]+>',            'controller' => Backend\Api\Routes\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 21, 'methods' => 'ANY', 'path' => '/backend/schema',                              'controller' => Backend\Api\Schema\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 20, 'methods' => 'ANY', 'path' => '/backend/schema/preview/$schema_id<[0-9]+>',   'controller' => Backend\Api\Schema\Preview::class],
-                ['status' => 1, 'priority' => 0x10000000 | 19, 'methods' => 'ANY', 'path' => '/backend/schema/form/$schema_id<[0-9]+>',      'controller' => Backend\Api\Schema\Form::class],
-                ['status' => 1, 'priority' => 0x10000000 | 18, 'methods' => 'ANY', 'path' => '/backend/schema/$schema_id<[0-9]+>',           'controller' => Backend\Api\Schema\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 17, 'methods' => 'ANY', 'path' => '/backend/scope',                               'controller' => Backend\Api\Scope\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 16, 'methods' => 'ANY', 'path' => '/backend/scope/$scope_id<[0-9]+>',             'controller' => Backend\Api\Scope\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 15, 'methods' => 'ANY', 'path' => '/backend/sdk',                                 'controller' => Backend\Api\Sdk\Generate::class],
-                ['status' => 1, 'priority' => 0x10000000 | 14, 'methods' => 'ANY', 'path' => '/backend/statistic/count_requests',            'controller' => Backend\Api\Statistic\CountRequests::class],
-                ['status' => 1, 'priority' => 0x10000000 | 13, 'methods' => 'ANY', 'path' => '/backend/statistic/errors_per_route',          'controller' => Backend\Api\Statistic\ErrorsPerRoute::class],
-                ['status' => 1, 'priority' => 0x10000000 | 12, 'methods' => 'ANY', 'path' => '/backend/statistic/incoming_requests',         'controller' => Backend\Api\Statistic\IncomingRequests::class],
-                ['status' => 1, 'priority' => 0x10000000 | 11, 'methods' => 'ANY', 'path' => '/backend/statistic/incoming_transactions',     'controller' => Backend\Api\Statistic\IncomingTransactions::class],
-                ['status' => 1, 'priority' => 0x10000000 | 10, 'methods' => 'ANY', 'path' => '/backend/statistic/issued_tokens',             'controller' => Backend\Api\Statistic\IssuedTokens::class],
-                ['status' => 1, 'priority' => 0x10000000 | 9,  'methods' => 'ANY', 'path' => '/backend/statistic/most_used_apps',            'controller' => Backend\Api\Statistic\MostUsedApps::class],
-                ['status' => 1, 'priority' => 0x10000000 | 8,  'methods' => 'ANY', 'path' => '/backend/statistic/most_used_routes',          'controller' => Backend\Api\Statistic\MostUsedRoutes::class],
-                ['status' => 1, 'priority' => 0x10000000 | 7,  'methods' => 'ANY', 'path' => '/backend/statistic/time_average',              'controller' => Backend\Api\Statistic\TimeAverage::class],
-                ['status' => 1, 'priority' => 0x10000000 | 6,  'methods' => 'ANY', 'path' => '/backend/statistic/time_per_route',            'controller' => Backend\Api\Statistic\TimePerRoute::class],
-                ['status' => 1, 'priority' => 0x10000000 | 5,  'methods' => 'ANY', 'path' => '/backend/statistic/used_points',               'controller' => Backend\Api\Statistic\UsedPoints::class],
-                ['status' => 1, 'priority' => 0x10000000 | 4,  'methods' => 'ANY', 'path' => '/backend/transaction',                         'controller' => Backend\Api\Transaction\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 3,  'methods' => 'ANY', 'path' => '/backend/transaction/$transaction_id<[0-9]+>', 'controller' => Backend\Api\Transaction\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 2,  'methods' => 'ANY', 'path' => '/backend/user',                                'controller' => Backend\Api\User\Collection::class],
-                ['status' => 1, 'priority' => 0x10000000 | 1,  'methods' => 'ANY', 'path' => '/backend/user/$user_id<[0-9]+>',               'controller' => Backend\Api\User\Entity::class],
-                ['status' => 1, 'priority' => 0x10000000 | 0,  'methods' => 'ANY', 'path' => '/backend/token',                               'controller' => Backend\Authorization\Token::class],
-
-                ['status' => 1, 'priority' => 0x8000000 | 26, 'methods' => 'ANY', 'path' => '/consumer/app',                                 'controller' => Consumer\Api\App\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 25, 'methods' => 'ANY', 'path' => '/consumer/app/$app_id<[0-9]+>',                 'controller' => Consumer\Api\App\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 24, 'methods' => 'ANY', 'path' => '/consumer/event',                               'controller' => Consumer\Api\Event\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 23, 'methods' => 'ANY', 'path' => '/consumer/grant',                               'controller' => Consumer\Api\Grant\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 22, 'methods' => 'ANY', 'path' => '/consumer/grant/$grant_id<[0-9]+>',             'controller' => Consumer\Api\Grant\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 21, 'methods' => 'ANY', 'path' => '/consumer/plan/contract',                       'controller' => Consumer\Api\Plan\Contract\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 20, 'methods' => 'ANY', 'path' => '/consumer/plan/contract/$contract_id<[0-9]+>',  'controller' => Consumer\Api\Plan\Contract\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 19, 'methods' => 'ANY', 'path' => '/consumer/plan/invoice',                        'controller' => Consumer\Api\Plan\Invoice\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 18, 'methods' => 'ANY', 'path' => '/consumer/plan/invoice/$invoice_id<[0-9]+>',    'controller' => Consumer\Api\Plan\Invoice\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 17, 'methods' => 'ANY', 'path' => '/consumer/plan',                                'controller' => Consumer\Api\Plan\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 16, 'methods' => 'ANY', 'path' => '/consumer/plan/$plan_id<[0-9]+>',               'controller' => Consumer\Api\Plan\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 15, 'methods' => 'ANY', 'path' => '/consumer/scope',                               'controller' => Consumer\Api\Scope\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 14, 'methods' => 'ANY', 'path' => '/consumer/subscription',                        'controller' => Consumer\Api\Event\Subscription\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 13, 'methods' => 'ANY', 'path' => '/consumer/subscription/$subscription_id<[0-9]+>', 'controller' => Consumer\Api\Event\Subscription\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 12, 'methods' => 'ANY', 'path' => '/consumer/transaction',                         'controller' => Consumer\Api\Transaction\Collection::class],
-                ['status' => 1, 'priority' => 0x8000000 | 11, 'methods' => 'ANY', 'path' => '/consumer/transaction/execute/:transaction_id', 'controller' => Consumer\Api\Transaction\Execute::class],
-                ['status' => 1, 'priority' => 0x8000000 | 10,  'methods' => 'ANY', 'path' => '/consumer/transaction/prepare/:provider',       'controller' => Consumer\Api\Transaction\Prepare::class],
-                ['status' => 1, 'priority' => 0x8000000 | 9,  'methods' => 'ANY', 'path' => '/consumer/transaction/$transaction_id<[0-9]+>', 'controller' => Consumer\Api\Transaction\Entity::class],
-                ['status' => 1, 'priority' => 0x8000000 | 8,  'methods' => 'ANY', 'path' => '/consumer/account',                             'controller' => Consumer\Api\User\Account::class],
-                ['status' => 1, 'priority' => 0x8000000 | 7,  'methods' => 'ANY', 'path' => '/consumer/activate',                            'controller' => Consumer\Api\User\Activate::class],
-                ['status' => 1, 'priority' => 0x8000000 | 6,  'methods' => 'ANY', 'path' => '/consumer/authorize',                           'controller' => Consumer\Api\User\Authorize::class],
-                ['status' => 1, 'priority' => 0x8000000 | 5,  'methods' => 'ANY', 'path' => '/consumer/account/change_password',             'controller' => Consumer\Api\User\ChangePassword::class],
-                ['status' => 1, 'priority' => 0x8000000 | 4,  'methods' => 'ANY', 'path' => '/consumer/login',                               'controller' => Consumer\Api\User\Login::class],
-                ['status' => 1, 'priority' => 0x8000000 | 3,  'methods' => 'ANY', 'path' => '/consumer/provider/:provider',                  'controller' => Consumer\Api\User\Provider::class],
-                ['status' => 1, 'priority' => 0x8000000 | 2,  'methods' => 'ANY', 'path' => '/consumer/register',                            'controller' => Consumer\Api\User\Register::class],
-                ['status' => 1, 'priority' => 0x8000000 | 1,  'methods' => 'ANY', 'path' => '/consumer/password_reset',                      'controller' => Consumer\Api\User\PasswordReset::class],
-                ['status' => 1, 'priority' => 0x8000000 | 0,  'methods' => 'ANY', 'path' => '/consumer/token',                               'controller' => Consumer\Authorization\Token::class],
-
-                ['status' => 1, 'priority' => 0x4000000 | 2,   'methods' => 'ANY', 'path' => '/authorization/revoke',                        'controller' => Authorization\Revoke::class],
-                ['status' => 1, 'priority' => 0x4000000 | 1,   'methods' => 'ANY', 'path' => '/authorization/token',                         'controller' => Authorization\Token::class],
-                ['status' => 1, 'priority' => 0x4000000 | 0,   'methods' => 'ANY', 'path' => '/authorization/whoami',                        'controller' => Authorization\Whoami::class],
-
-                ['status' => 1, 'priority' => 0x2000000 | 1,   'methods' => 'GET', 'path' => '/doc',                                         'controller' => Tool\Documentation\IndexController::class],
-                ['status' => 1, 'priority' => 0x2000000 | 0,   'methods' => 'GET', 'path' => '/doc/:version/*path',                          'controller' => Tool\Documentation\DetailController::class],
-
-                ['status' => 1, 'priority' => 0x1000000 | 5,   'methods' => 'ANY', 'path' => '/export/routes',                               'controller' => Export\Api\Routes::class],
-                ['status' => 1, 'priority' => 0x1000000 | 4,   'methods' => 'ANY', 'path' => '/export/jsonrpc',                              'controller' => Export\Api\JsonRpc::class],
-                ['status' => 1, 'priority' => 0x1000000 | 3,   'methods' => 'ANY', 'path' => '/export/health',                               'controller' => Export\Api\Health::class],
-                ['status' => 1, 'priority' => 0x1000000 | 2,   'methods' => 'ANY', 'path' => '/export/debug',                                'controller' => Export\Api\Debug::class],
-                ['status' => 1, 'priority' => 0x1000000 | 1,   'methods' => 'ANY', 'path' => '/export/schema/:name',                         'controller' => Export\Api\Schema::class],
-                ['status' => 1, 'priority' => 0x1000000 | 0,   'methods' => 'GET', 'path' => '/export/:type/:version/*path',                 'controller' => Generator\GeneratorController::class],
-
-                ['status' => 1, 'priority' => 0,               'methods' => 'ANY', 'path' => '/',                                            'controller' => SchemaApiController::class],
-            ],
-            'fusio_schema' => [
-                ['status' => 1, 'name' => 'Passthru', 'source' => $schema, 'cache' => $cache, 'form' => null]
-            ],
-            'fusio_scope' => [
-                ['name' => 'backend', 'description' => 'Global access to the backend API'],
-                ['name' => 'consumer', 'description' => 'Global access to the consumer API'],
-                ['name' => 'authorization', 'description' => 'Authorization API endpoint'],
-                ['name' => 'backend.account', 'description' => 'Option to change the password of your account'],
-                ['name' => 'backend.action', 'description' => 'View and manage actions'],
-                ['name' => 'backend.app', 'description' => 'View and manage apps'],
-                ['name' => 'backend.audit', 'description' => 'View audits'],
-                ['name' => 'backend.config', 'description' => 'View and edit config entries'],
-                ['name' => 'backend.connection', 'description' => 'View and manage connections'],
-                ['name' => 'backend.cronjob', 'description' => 'View and manage cronjob entries'],
-                ['name' => 'backend.dashboard', 'description' => 'View dashboard statistic'],
-                ['name' => 'backend.event', 'description' => 'View and manage events'],
-                ['name' => 'backend.import', 'description' => 'Execute import'],
-                ['name' => 'backend.log', 'description' => 'View logs'],
-                ['name' => 'backend.marketplace', 'description' => 'View and manage apps from the marketplace'],
-                ['name' => 'backend.plan', 'description' => 'View and manage plans'],
-                ['name' => 'backend.rate', 'description' => 'View and manage rates'],
-                ['name' => 'backend.routes', 'description' => 'View and manage routes'],
-                ['name' => 'backend.schema', 'description' => 'View and manage schemas'],
-                ['name' => 'backend.scope', 'description' => 'View and manage scopes'],
-                ['name' => 'backend.sdk', 'description' => 'Generate client SDKs'],
-                ['name' => 'backend.statistic', 'description' => 'View statistics'],
-                ['name' => 'backend.transaction', 'description' => 'View transactions'],
-                ['name' => 'backend.user', 'description' => 'View and manage users'],
-                ['name' => 'consumer.app', 'description' => 'View and manage your apps'],
-                ['name' => 'consumer.event', 'description' => 'View and manage your events'],
-                ['name' => 'consumer.grant', 'description' => 'View and manage your grants'],
-                ['name' => 'consumer.plan', 'description' => 'View available plans'],
-                ['name' => 'consumer.scope', 'description' => 'View available scopes'],
-                ['name' => 'consumer.subscription', 'description' => 'View and manage your subscriptions'],
-                ['name' => 'consumer.transaction', 'description' => 'Execute transactions'],
-                ['name' => 'consumer.user', 'description' => 'Edit your account settings'],
-            ],
-            'fusio_transaction' => [
-            ],
-
-            'fusio_app_code' => [
-            ],
-            'fusio_app_scope' => [
-                ['app_id' => 1, 'scope_id' => 1],
-                ['app_id' => 1, 'scope_id' => 3],
-                ['app_id' => 2, 'scope_id' => 2],
-                ['app_id' => 2, 'scope_id' => 3],
-            ],
-            'fusio_app_token' => [
-            ],
-            'fusio_cronjob_error' => [
-            ],
-            'fusio_event_subscription' => [
-            ],
-            'fusio_event_trigger' => [
-            ],
-            'fusio_event_response' => [
-            ],
-            'fusio_log_error' => [
-            ],
-            'fusio_plan_usage' => [
-            ],
-            'fusio_rate_allocation' => [
-                ['rate_id' => 1, 'route_id' => null, 'app_id' => null, 'authenticated' => null, 'parameters' => null],
-                ['rate_id' => 2, 'route_id' => null, 'app_id' => null, 'authenticated' => 0, 'parameters' => null],
-            ],
-            'fusio_routes_method' => [
-            ],
-            'fusio_routes_response' => [
-            ],
-            'fusio_scope_routes' => [
-            ],
-            'fusio_user_grant' => [
-            ],
-            'fusio_user_scope' => [
-                ['user_id' => 1, 'scope_id' => 1],
-                ['user_id' => 1, 'scope_id' => 2],
-                ['user_id' => 1, 'scope_id' => 3],
-            ],
-            'fusio_user_attribute' => [
+            'authorization' => [
+                '/revoke' => [
+                    'POST' => new Method(Authorization\Action\Revoke::class, null, [200 => Message::class], null, 'authorization'),
+                ],
+                '/whoami' => [
+                    'GET' => new Method(Authorization\Action\GetWhoami::class, null, [200 => Backend\Model\User::class], null, 'authorization'),
+                ],
             ],
         ];
-
-        // routes method
-        $lastRouteId = count($data['fusio_routes']);
-        $data['fusio_routes_method'][] = ['route_id' => $lastRouteId, 'method' => 'GET', 'version' => 1, 'status' => Resource::STATUS_DEVELOPMENT, 'active' => 1, 'public' => 1, 'parameters' => null, 'request' => null, 'action' => 1, 'costs' => null];
-        $data['fusio_routes_response'][] = ['method_id' => 1, 'code' => 200, 'response' => 1];
-
-        // scope routes
-        foreach ($data['fusio_routes'] as $index => $row) {
-            $scopeId = self::getScopeIdFromPath($row['path'], $data['fusio_scope']);
-            if ($scopeId !== null) {
-                $data['fusio_scope_routes'][] = ['scope_id' => $scopeId, 'route_id' => $index + 1, 'allow' => 1, 'methods' => 'GET|POST|PUT|PATCH|DELETE'];
-            }
-        }
-
-        return $data;
-    }
-
-    private static function getPassthruSchema()
-    {
-        return json_encode([
-            'id' => 'http://fusio-project.org',
-            'title' => 'passthru',
-            'type' => 'object',
-            'description' => 'No schema was specified.',
-            'additionalProperties' => true,
-        ], JSON_PRETTY_PRINT);
-    }
-
-    public static function getScopeIdFromPath($path, array $scopes = null)
-    {
-        if (!empty($scopes)) {
-            $parts = array_values(array_filter(explode('/', $path)));
-
-            $id = null;
-            if (count($parts) > 1) {
-                $id = self::findScope($scopes, $parts[0] . '.' . $parts[1]);
-            } elseif (count($parts) > 0) {
-                $id = self::findScope($scopes, $parts[0]);
-            }
-
-            if ($id !== null) {
-                return $id;
-            }
-        }
-
-        if (strpos($path, '/backend') === 0) {
-            return 1;
-        } elseif (strpos($path, '/consumer') === 0) {
-            return 2;
-        } elseif (strpos($path, '/authorization') === 0) {
-            return 3;
-        }
-
-        return null;
-    }
-
-    private static function findScope(array $scopes, string $name)
-    {
-        foreach ($scopes as $index => $scope) {
-            if ($scope['name'] == $name) {
-                return $index + 1;
-            }
-        }
-
-        return null;
     }
 }

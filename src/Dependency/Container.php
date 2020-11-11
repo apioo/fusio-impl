@@ -29,21 +29,21 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\EventListener\WebhookListener;
-use Fusio\Impl\Loader\Context;
-use Fusio\Impl\Loader\DatabaseRoutes;
-use Fusio\Impl\Loader\Filter\ExternalFilter;
-use Fusio\Impl\Loader\Filter\InternalFilter;
-use Fusio\Impl\Loader\GeneratorFactory;
-use Fusio\Impl\Loader\ResourceListing;
-use Fusio\Impl\Loader\RoutingParser;
+use Fusio\Impl\Framework\Api\GeneratorFactory;
+use Fusio\Impl\Framework\Api\ResourceListing;
+use Fusio\Impl\Framework\Filter;
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
+use Fusio\Impl\Framework\Loader\RoutingParser\DatabaseParser;
 use Fusio\Impl\Mail;
 use Fusio\Impl\Provider\ProviderLoader;
 use Fusio\Impl\Provider\ProviderWriter;
+use Fusio\Impl\Rpc\InvokerFactory;
+use Fusio\Impl\Schema;
 use Fusio\Impl\Table;
 use PSX\Api\Console as ApiConsole;
 use PSX\Api\GeneratorFactoryInterface;
 use PSX\Api\Listing\CachedListing;
-use PSX\Api\Listing\FilterFactory;
 use PSX\Api\Listing\FilterFactoryInterface;
 use PSX\Api\ListingInterface;
 use PSX\Framework\Console as FrameworkConsole;
@@ -51,6 +51,7 @@ use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Schema\Console as SchemaConsole;
+use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -72,12 +73,12 @@ class Container extends DefaultContainer
 
     public function getRoutingParser(): RoutingParserInterface
     {
-        return new DatabaseRoutes($this->get('connection'));
+        return new DatabaseParser($this->get('connection'));
     }
 
     public function getLoaderLocationFinder(): LocationFinderInterface
     {
-        return new RoutingParser($this->get('connection'));
+        return new DatabaseFinder($this->get('connection'));
     }
 
     public function getResourceListing(): ListingInterface
@@ -93,10 +94,8 @@ class Container extends DefaultContainer
 
     public function getListingFilterFactory(): FilterFactoryInterface
     {
-        $filter = new FilterFactory();
-        $filter->addFilter('internal', new InternalFilter());
-        $filter->addFilter('external', new ExternalFilter());
-        $filter->setDefault('external');
+        $filter = new Filter\FilterFactory($this->get('connection'));
+        $filter->setDefault('default');
 
         return $filter;
     }
@@ -170,13 +169,40 @@ class Container extends DefaultContainer
         return new ProviderWriter($this->get('connection'));
     }
 
+    public function getSchemaParserImportResolver(): ImportResolver
+    {
+        $resolver = ImportResolver::createDefault($this->get('http_client'));
+        $resolver->addResolver('schema', new Schema\Parser\Resolver\Database($this->get('connection')));
+
+        return $resolver;
+    }
+
+    public function getSchemaLoader(): Schema\Loader
+    {
+        return new Schema\Loader(
+            $this->get('connection'),
+            $this->get('schema_manager')
+        );
+    }
+
+    public function getRpcInvokerFactory(): InvokerFactory
+    {
+        return new InvokerFactory(
+            $this->get('action_invoker_service'),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
+            $this->get('schema_loader'),
+            $this->get('security_token_validator'),
+            $this->get('rate_service')
+        );
+    }
+
     protected function appendConsoleCommands(Application $application)
     {
         // psx commands
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
         $application->add(new FrameworkConsole\ServeCommand($this));
         $application->add(new FrameworkConsole\Container\ListCommand($this->get('container_inspector')));
-        $application->add(new FrameworkConsole\Container\BuildCommand($this, $this->get('annotation_reader_factory')->factory('PSX\Dependency\Annotation')));
+        $application->add(new FrameworkConsole\Container\BuildCommand($this, $this->get('annotation_reader_factory')->factory('PSX\Dependency\Annotation'), $this->get('config')));
 
         $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
         $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
@@ -185,16 +211,16 @@ class Container extends DefaultContainer
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
         // fusio commands
-        $application->add(new Console\Action\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Action\AddCommand($this->get('action_service')));
         $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
         $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
         $application->add(new Console\Action\ExecuteCommand($this->get('action_executor_service'), $this->get('table_manager')->getTable(Table\Action::class)));
         $application->add(new Console\Action\ListCommand($this->get('table_manager')->getTable(View\Action::class)));
 
-        $application->add(new Console\App\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\App\AddCommand($this->get('app_service')));
         $application->add(new Console\App\ListCommand($this->get('table_manager')->getTable(View\App::class)));
 
-        $application->add(new Console\Connection\AddCommand($this->get('system_api_executor_service')));
+        $application->add(new Console\Connection\AddCommand($this->get('connection_service')));
         $application->add(new Console\Connection\ClassCommand($this->get('connection_parser')));
         $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
         $application->add(new Console\Connection\ListCommand($this->get('table_manager')->getTable(View\Connection::class)));
@@ -219,8 +245,8 @@ class Container extends DefaultContainer
 
         $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
 
-        $application->add(new Console\Schema\AddCommand($this->get('system_api_executor_service')));
-        $application->add(new Console\Schema\ExportCommand($this->get('connection')));
+        $application->add(new Console\Schema\AddCommand($this->get('schema_service')));
+        $application->add(new Console\Schema\ExportCommand($this->get('schema_loader')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
 
         $application->add(new Console\System\CheckCommand($this->get('connection')));

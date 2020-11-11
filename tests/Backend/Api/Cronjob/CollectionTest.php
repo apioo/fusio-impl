@@ -43,7 +43,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/cronjob', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/cronjob', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -70,6 +70,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Test-Cron",
             "cron": "*\/30 * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
@@ -99,6 +100,7 @@ JSON;
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Test-Cron",
             "cron": "*\/30 * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
@@ -128,6 +130,7 @@ JSON;
     "entry": [
         {
             "id": 1,
+            "status": 1,
             "name": "Test-Cron",
             "cron": "*\/30 * * * *",
             "executeDate": "2015-02-27T19:59:15Z",
@@ -151,7 +154,7 @@ JSON;
         ), json_encode([
             'name' => 'New-Cron',
             'cron' => '5 * * * *',
-            'action' => 3,
+            'action' => 'Sql-Table',
         ]));
 
         $body   = (string) $response->getBody();
@@ -179,7 +182,7 @@ JSON;
         $this->assertEquals(2, $row['id']);
         $this->assertEquals('New-Cron', $row['name']);
         $this->assertEquals('5 * * * *', $row['cron']);
-        $this->assertEquals(3, $row['action']);
+        $this->assertEquals('Sql-Table', $row['action']);
 
         // check generated cron file
         $actual = CronFile::get();

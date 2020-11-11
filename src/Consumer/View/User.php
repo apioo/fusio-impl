@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class User extends ViewAbstract
 {
-    public function getEntity($id, array $userAttributes = null)
+    public function getEntity(int $id, array $userAttributes = null)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),

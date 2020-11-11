@@ -1,0 +1,78 @@
+{
+  "definitions": {
+    "Collection": {
+      "properties": {
+        "entry": {
+          "$ref": "Entry"
+        },
+        "itemsPerPage": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "totalResults": {
+          "type": "integer"
+        }
+      },
+      "title": "collection",
+      "type": "object"
+    },
+    "Collection-Schema": {
+      "$ref": "Collection"
+    },
+    "Entry": {
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Entry-Schema": {
+      "$ref": "Entry"
+    },
+    "Passthru": {
+      "description": "No schema information available",
+      "type": "object"
+    }
+  },
+  "methods": {
+    "GET": {
+      "operationId": "listFoo",
+      "responses": {
+        "200": "Collection-Schema"
+      },
+      "tags": [
+        "bar"
+      ]
+    },
+    "POST": {
+      "operationId": "createFoo",
+      "request": "Entry-Schema",
+      "responses": {
+        "201": "Passthru"
+      },
+      "security": {
+        "app": [
+          "bar"
+        ]
+      },
+      "tags": [
+        "bar"
+      ]
+    }
+  },
+  "path": "/foo",
+  "status": 4
+}

@@ -73,17 +73,23 @@ class RegisterCommandTest extends ControllerDbTestCase
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
-            Adapter\Graphql\Action\GraphqlProcessor::class,
+            Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
-            Adapter\Sql\Action\SqlSelect::class,
-            Adapter\Sql\Action\SqlTable::class,
+            Adapter\Smtp\Action\SmtpSend::class,
+            Adapter\Sql\Action\SqlSelectAll::class,
+            Adapter\Sql\Action\SqlSelectRow::class,
+            Adapter\Sql\Action\SqlInsert::class,
+            Adapter\Sql\Action\SqlUpdate::class,
+            Adapter\Sql\Action\SqlDelete::class,
+            Adapter\Sql\Action\Query\SqlQueryAll::class,
+            Adapter\Sql\Action\Query\SqlQueryRow::class,
             Adapter\Util\Action\UtilStaticResponse::class,
             VoidAction::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
@@ -98,7 +104,7 @@ class RegisterCommandTest extends ControllerDbTestCase
             VoidConnection::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -110,7 +116,7 @@ class RegisterCommandTest extends ControllerDbTestCase
         $this->assertNotEmpty($connection['config']);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Adapter-Schema',
         ]);
 
@@ -133,26 +139,23 @@ class RegisterCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, engine, config FROM fusio_action WHERE name = :name', [
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
         $this->assertEquals(PhpClass::class, $action['engine']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/void',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
@@ -163,15 +166,14 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('Adapter-Schema', $methods[0]['request']);
+        $this->assertEquals('Void-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -180,7 +182,7 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 
     public function testCommandAutoConfirm()
@@ -205,17 +207,23 @@ JSON;
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
             Adapter\File\Action\FileProcessor::class,
-            Adapter\Graphql\Action\GraphqlProcessor::class,
+            Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
             Adapter\Php\Action\PhpProcessor::class,
             Adapter\Php\Action\PhpSandbox::class,
-            Adapter\Sql\Action\SqlSelect::class,
-            Adapter\Sql\Action\SqlTable::class,
+            Adapter\Smtp\Action\SmtpSend::class,
+            Adapter\Sql\Action\SqlSelectAll::class,
+            Adapter\Sql\Action\SqlSelectRow::class,
+            Adapter\Sql\Action\SqlInsert::class,
+            Adapter\Sql\Action\SqlUpdate::class,
+            Adapter\Sql\Action\SqlDelete::class,
+            Adapter\Sql\Action\Query\SqlQueryAll::class,
+            Adapter\Sql\Action\Query\SqlQueryRow::class,
             Adapter\Util\Action\UtilStaticResponse::class,
             VoidAction::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
@@ -230,7 +238,7 @@ JSON;
             VoidConnection::class,
         ];
 
-        $this->assertEquals($actual, $expect);
+        $this->assertEquals($expect, $actual);
 
         // check connection
         $connection = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_connection WHERE name = :name', [
@@ -242,7 +250,7 @@ JSON;
         $this->assertNotEmpty($connection['config']);
 
         // check schema
-        $schema = $this->connection->fetchAssoc('SELECT id, source, cache FROM fusio_schema WHERE name = :name', [
+        $schema = $this->connection->fetchAssoc('SELECT id, source FROM fusio_schema WHERE name = :name', [
             'name' => 'Adapter-Schema',
         ]);
 
@@ -265,25 +273,22 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(4, $schema['id']);
+        $this->assertEquals(142, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
-        $this->assertInstanceOf(SchemaInterface::class, Service\Schema::unserializeCache($schema['cache']));
 
         // check action
         $action = $this->connection->fetchAssoc('SELECT id, class, config FROM fusio_action WHERE name = :name', [
             'name' => 'Void-Action',
         ]);
 
-        $this->assertEquals(5, $action['id']);
         $this->assertEquals(VoidAction::class, $action['class']);
-        $this->assertEquals(['foo' => 'bar', 'connection' => 4], Service\Action::unserializeConfig($action['config']));
+        $this->assertEquals(['foo' => 'bar', 'connection' => 'Adapter-Connection'], Service\Action::unserializeConfig($action['config']));
 
         // check routes
         $route = $this->connection->fetchAssoc('SELECT id, status, methods, controller FROM fusio_routes WHERE path = :path', [
             'path' => '/void',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
@@ -294,15 +299,14 @@ JSON;
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
         $this->assertEquals(1, $methods[0]['active']);
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
-        $this->assertEquals(4, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('Adapter-Schema', $methods[0]['request']);
+        $this->assertEquals('Void-Action', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -311,6 +315,6 @@ JSON;
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 }

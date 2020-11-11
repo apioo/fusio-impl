@@ -34,7 +34,7 @@ use PSX\Http\Filter\UserAgentEnforcer;
 trait ProtectionTrait
 {
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 

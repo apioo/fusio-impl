@@ -21,21 +21,17 @@
 
 namespace Fusio\Impl\Controller;
 
-use Fusio\Engine\Context as EngineContext;
-use Fusio\Engine\Repository;
+use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
-use Fusio\Impl\Export;
 use Fusio\Impl\Filter\AssertMethod;
 use Fusio\Impl\Filter\Authentication;
 use Fusio\Impl\Filter\Logger;
 use Fusio\Impl\Filter\RequestLimit;
-use Fusio\Impl\Record\PassthruRecord;
 use PSX\Api\DocumentedInterface;
-use PSX\Api\Resource;
 use PSX\Api\Resource\MethodAbstract;
+use PSX\Api\SpecificationInterface;
 use PSX\Framework\Controller\SchemaApiAbstract;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
@@ -51,10 +47,10 @@ use PSX\Record\RecordInterface;
  */
 class SchemaApiController extends SchemaApiAbstract implements DocumentedInterface
 {
-    const SCHEMA_PASSTHRU = 'passthru';
+    private const SCHEMA_PASSTHRU = 'Passthru';
 
     /**
-     * @var \Fusio\Impl\Loader\Context
+     * @var \Fusio\Impl\Framework\Loader\Context
      */
     protected $context;
 
@@ -72,7 +68,13 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Routes\Method
+     * @var \Fusio\Impl\Schema\Loader
+     */
+    protected $schemaLoader;
+
+    /**
+     * @Inject
+     * @var \Fusio\Impl\Service\Route\Method
      */
     protected $routesMethodService;
 
@@ -102,9 +104,9 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
     /**
      * @Inject
-     * @var \Fusio\Impl\Service\Plan\Payer
+     * @var \Fusio\Impl\Service\Action\Invoker
      */
-    protected $planPayerService;
+    protected $actionInvokerService;
 
     /**
      * @return array
@@ -145,15 +147,15 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      * based on the data. If the route is in production mode read the schema
      * from the cache else resolve it
      *
-     * @param integer $version
-     * @return \PSX\Api\Resource|null
+     * @param string|null $version
+     * @return SpecificationInterface
      */
-    public function getDocumentation($version = null)
+    public function getDocumentation(string $version = null): ?SpecificationInterface
     {
         return $this->routesMethodService->getDocumentation(
             $this->context->getRouteId(),
-            $version,
-            $this->context->getPath()
+            $this->context->getPath(),
+            $version
         );
     }
 
@@ -166,7 +168,7 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
         $methods = $this->routesMethodService->getRequestSchemas($this->context->getRouteId(), '*');
         foreach ($methods as $methodName => $schemaId) {
-            $url = $this->reverseRouter->getUrl(Export\Api\Schema::class, ['name' => $schemaId]);
+            $url = $this->config->get('psx_url') . $this->config->get('psx_dispatch') . '/system/schema/' . $schemaId;
             $response->addHeader('Link', '<' . $url . '>; rel="' . strtolower($methodName) . '-schema"');
         }
     }
@@ -217,10 +219,11 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
     protected function parseRequest(RequestInterface $request, MethodAbstract $method)
     {
         if ($method->hasRequest()) {
-            if ($method->getRequest()->getDefinition()->getTitle() == self::SCHEMA_PASSTHRU) {
+            if ($method->getRequest() == self::SCHEMA_PASSTHRU) {
                 return new PassthruRecord($this->requestReader->getBody($request));
             } else {
-                return $this->requestReader->getBodyAs($request, $method->getRequest(), $this->getValidator($method));
+                $schema = $this->schemaLoader->getSchema($method->getRequest());
+                return $this->requestReader->getBodyAs($request, $schema, $this->getValidator($method));
             }
         } else {
             return new Record();
@@ -234,9 +237,6 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      */
     private function executeAction($record, HttpContextInterface $httpContext)
     {
-        $baseUrl  = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-        $context  = new EngineContext($this->context->getRouteId(), $baseUrl, $this->context->getApp(), $this->context->getUser());
-
         if (!$record instanceof RecordInterface) {
             // in case the record is not an RecordInterface, this means the
             // schema traverser has produced a different instance we put the
@@ -245,45 +245,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
             $record = new PassthruRecord($record);
         }
 
-        $request  = new Request($httpContext, $record);
-        $response = null;
-        $method   = $this->context->getMethod();
-        $actionId = $method['action'];
-        $costs    = (int) $method['costs'];
-        $cache    = $method['action_cache'];
+        $request = new Request\HttpRequest($httpContext, $record);
 
-        if ($costs > 0) {
-            // as anonymous user it is not possible to pay
-            if ($this->context->getUser()->isAnonymous()) {
-                throw new StatusCode\ForbiddenException('This action costs points because of this you must be authenticated in order to call this action');
-            }
-
-            // in case the method has assigned costs check whether the user has
-            // enough points
-            $remaining = $this->context->getUser()->getPoints() - $costs;
-            if ($remaining < 0) {
-                throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);
-            }
-
-            $this->planPayerService->pay($costs, $context);
-        }
-
-        if ($actionId > 0) {
-            if ($method['status'] != Resource::STATUS_DEVELOPMENT && !empty($cache)) {
-                // if the method is not in dev mode we load the action from the
-                // cache
-                $this->processor->push(Repository\ActionMemory::fromJson($cache));
-
-                $response = $this->processor->execute($actionId, $request, $context);
-
-                $this->processor->pop();
-            } else {
-                $response = $this->processor->execute($actionId, $request, $context);
-            }
-        } else {
-            throw new StatusCode\ServiceUnavailableException('No action provided');
-        }
-
-        return $response;
+        return $this->actionInvokerService->invoke($request, $this->context);
     }
 }

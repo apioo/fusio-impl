@@ -1,90 +1,103 @@
 {
-  "path": "\/backend\/config\/$config_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "config_id": {
-            "type": "integer"
-          }
+  "definitions": {
+    "BackendConfigConfig_idPath": {
+      "properties": {
+        "config_id": {
+          "type": "string"
         }
       },
-      "Config": {
-        "type": "object",
-        "title": "Config",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "type": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              },
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          }
+      "type": "object"
+    },
+    "Backend_Model_Config": {
+      "$ref": "Config"
+    },
+    "Backend_Model_Config_Update": {
+      "$ref": "Config_Update"
+    },
+    "Config": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Config_Update": {
+      "$extends": "Config",
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Config"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Config"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Config_Get",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Config"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Config_Update",
+      "request": "Backend_Model_Config_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ]
     }
-  }
+  },
+  "path": "/backend/config/$config_id<[0-9]+>",
+  "pathParameters": "BackendConfigConfig_idPath",
+  "status": 1
 }

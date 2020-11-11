@@ -63,8 +63,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
             'name' => 'httpbin_org_get',
         ]);
 
-        $this->assertEquals(5, $action['id']);
-        $this->assertContains('http://httpbin.org/get', $action['class']);
+        $this->assertEquals('http://httpbin.org/get', $action['class']);
         $this->assertEquals(HttpUrl::class, $action['engine']);
         $this->assertEquals(null, $action['config']);
 
@@ -73,7 +72,6 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
             'path' => '/bar',
         ]);
 
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $route['id']);
         $this->assertEquals(1, $route['status']);
         $this->assertEquals('ANY', $route['methods']);
         $this->assertEquals(SchemaApiController::class, $route['controller']);
@@ -84,7 +82,6 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
         ]);
 
         $this->assertEquals(1, count($methods));
-        $this->assertEquals(Fixture::getLastRouteId() + 3, $methods[0]['route_id']);
         $this->assertEquals('GET', $methods[0]['method']);
         $this->assertEquals(1, $methods[0]['version']);
         $this->assertEquals(Resource::STATUS_DEVELOPMENT, $methods[0]['status']);
@@ -92,7 +89,7 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
         $this->assertEquals(1, $methods[0]['public']);
         $this->assertEquals(null, $methods[0]['parameters']);
         $this->assertEquals(null, $methods[0]['request']);
-        $this->assertEquals(5, $methods[0]['action']);
+        $this->assertEquals('httpbin_org_get', $methods[0]['action']);
 
         // check responses
         $responses = $this->connection->fetchAll('SELECT method_id, code, response FROM fusio_routes_response WHERE method_id = :method_id', [
@@ -101,6 +98,6 @@ class DeployCommandRouteHttpTest extends ControllerDbTestCase
 
         $this->assertEquals(1, count($responses));
         $this->assertEquals(200, $responses[0]['code']);
-        $this->assertEquals(1, $responses[0]['response']);
+        $this->assertEquals('Passthru', $responses[0]['response']);
     }
 }

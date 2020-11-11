@@ -37,7 +37,7 @@ use PSX\Sql\ViewAbstract;
  */
 class App extends ViewAbstract
 {
-    public function getCollection($userId, $startIndex = 0, $search = null)
+    public function getCollection(int $userId, int $startIndex = 0, ?string $search = null)
     {
         $condition = new Condition();
         $condition->equals('user_id', $userId);

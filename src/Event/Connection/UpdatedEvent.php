@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Connection;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Connection_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Connection_Update
      */
-    protected $connectionId;
+    private $connection;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Connection_Update $connection
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $connection;
-
-    /**
-     * @param integer $connectionId
-     * @param array $record
-     * @param array $connection
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($connectionId, array $record, $connection, UserContext $context)
+    public function __construct(Connection_Update $connection, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->connectionId = $connectionId;
-        $this->record       = $record;
-        $this->connection   = $connection;
+        $this->connection = $connection;
+        $this->existing   = $existing;
     }
 
-    public function getConnectionId()
-    {
-        return $this->connectionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getConnection()
+    /**
+     * @return Connection_Update
+     */
+    public function getConnection(): Connection_Update
     {
         return $this->connection;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

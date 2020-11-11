@@ -1,114 +1,132 @@
 {
-  "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "cronjob_id": {
-            "type": "integer"
-          }
+  "definitions": {
+    "BackendCronjobCronjob_idPath": {
+      "properties": {
+        "cronjob_id": {
+          "type": "string"
         }
       },
-      "Cronjob_Error": {
-        "type": "object",
-        "title": "Cronjob Error",
-        "properties": {
-          "message": {
-            "type": "string"
+      "type": "object"
+    },
+    "Backend_Model_Cronjob": {
+      "$ref": "Cronjob"
+    },
+    "Backend_Model_Cronjob_Update": {
+      "$ref": "Cronjob_Update"
+    },
+    "Cronjob": {
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "cron": {
+          "type": "string"
+        },
+        "errors": {
+          "items": {
+            "$ref": "Cronjob_Error"
           },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
+          "type": "array"
+        },
+        "executeDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
         }
       },
-      "Cronjob": {
-        "type": "object",
-        "title": "Cronjob",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "cron": {
-            "type": "string"
-          },
-          "action": {
-            "type": "integer"
-          },
-          "executeDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "exitCode": {
-            "type": "integer"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Cronjob_Error"
-            }
-          }
+      "type": "object"
+    },
+    "Cronjob_Error": {
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "trace": {
+          "type": "string"
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Cronjob_Update": {
+      "$extends": "Cronjob",
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Cronjob"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Cronjob"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
-    "GET": {
+    "DELETE": {
+      "operationId": "Backend_Action_Cronjob_Delete",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_Cronjob_Get",
+      "responses": {
+        "200": "Backend_Model_Cronjob"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Cronjob_Update",
+      "request": "Backend_Model_Cronjob_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
-      }
-    },
-    "DELETE": {
-      "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ]
     }
-  }
+  },
+  "path": "/backend/cronjob/$cronjob_id<[0-9]+>",
+  "pathParameters": "BackendCronjobCronjob_idPath",
+  "status": 1
 }

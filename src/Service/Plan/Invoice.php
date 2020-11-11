@@ -23,6 +23,8 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Update;
 use Fusio\Impl\Event\Plan\Invoice\CreatedEvent;
 use Fusio\Impl\Event\Plan\Invoice\DeletedEvent;
 use Fusio\Impl\Event\Plan\Invoice\PayedEvent;
@@ -78,19 +80,18 @@ class Invoice
     /**
      * Creates an invoice for the provided contract id
      * 
-     * @param integer $contractId
-     * @param \DateTime $startDate
+     * @param Plan_Invoice_Create $invoice
      * @param \Fusio\Impl\Authorization\UserContext $context
      * @param integer $prevId
      */
-    public function create($contractId, \DateTime $startDate, UserContext $context, $prevId = null)
+    public function create(Plan_Invoice_Create $invoice, UserContext $context, $prevId = null)
     {
-        $contract = $this->contractTable->get($contractId);
+        $contract = $this->contractTable->get($invoice->getContractId());
         if (empty($contract)) {
             throw new \InvalidArgumentException('Invalid contract id');
         }
 
-        $from = (clone $startDate)->setTime(0, 0, 0);
+        $from = (clone $invoice->getStartDate())->setTime(0, 0, 0);
         $to   = (new DateCalculator())->calculate($from, $contract['period_type']);
 
         $displayId = $this->generateInvoiceId($contract['user_id']);
@@ -113,51 +114,50 @@ class Invoice
         $this->invoiceTable->create($record);
 
         $invoiceId = $this->invoiceTable->getLastInsertId();
+        $invoice->setId($invoiceId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($contractId, $record, $context), InvoiceEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($invoice, $context));
 
         return (int) $invoiceId;
     }
 
-    public function update($invoiceId, $status, UserContext $context)
+    public function update(int $invoiceId, Plan_Invoice_Update $invoice, UserContext $context)
     {
-        $invoice = $this->invoiceTable->get($invoiceId);
-
-        if (empty($invoice)) {
+        $existing = $this->invoiceTable->get($invoiceId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find invoice');
         }
 
-        if ($invoice['status'] == Table\Plan\Invoice::STATUS_DELETED) {
+        if ($existing['status'] == Table\Plan\Invoice::STATUS_DELETED) {
             throw new StatusCode\GoneException('Invoice was deleted');
         }
 
         // update invoice
         $record = [
-            'id'     => $invoice['id'],
-            'status' => $status,
+            'id'     => $existing['id'],
+            'status' => $invoice->getStatus(),
         ];
 
         $this->invoiceTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($invoiceId, $record, $invoice, $context), InvoiceEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($invoice, $existing, $context));
     }
 
     public function delete($invoiceId, UserContext $context)
     {
-        $invoice = $this->invoiceTable->get($invoiceId);
-
-        if (empty($invoice)) {
+        $existing = $this->invoiceTable->get($invoiceId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find invoice');
         }
 
         $record = [
-            'id'     => $invoice['id'],
+            'id'     => $existing['id'],
             'status' => Table\Plan\Invoice::STATUS_DELETED,
         ];
 
         $this->invoiceTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($invoiceId, $invoice, $context), InvoiceEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     /**
@@ -206,7 +206,7 @@ class Invoice
 
         // dispatch payed event
         $context = UserContext::newContext($contract['user_id'], 2);
-        $this->eventDispatcher->dispatch(new PayedEvent($invoice['id'], $invoice, $transaction, $context), InvoiceEvents::PAYED);
+        $this->eventDispatcher->dispatch(new PayedEvent($invoice['id'], $invoice, $transaction, $context));
     }
 
     /**

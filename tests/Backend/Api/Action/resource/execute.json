@@ -1,93 +1,94 @@
 {
-  "path": "\/backend\/action\/execute\/$action_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "action_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Action_Request_Body": {
-        "type": "object",
-        "title": "Action Request Body",
-        "additionalProperties": true
-      },
-      "Action_Request": {
-        "type": "object",
-        "title": "Action Request",
-        "properties": {
-          "method": {
-            "type": "string",
-            "pattern": "GET|POST|PUT|PATCH|DELETE"
-          },
-          "uriFragments": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "headers": {
-            "type": "string"
-          },
-          "body": {
-            "$ref": "#\/definitions\/Action_Request_Body"
-          }
+  "definitions": {
+    "Action_Execute_Request": {
+      "properties": {
+        "body": {
+          "$ref": "Action_Execute_Request_Body"
         },
-        "required": [
-          "method"
-        ]
-      },
-      "Action_Response_Headers": {
-        "type": "object",
-        "title": "Action Response Headers",
-        "additionalProperties": {
+        "headers": {
+          "type": "string"
+        },
+        "method": {
+          "pattern": "GET|POST|PUT|PATCH|DELETE",
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "uriFragments": {
           "type": "string"
         }
       },
-      "Action_Response_Body": {
-        "type": "object",
-        "title": "Action Response Body",
-        "additionalProperties": true
+      "required": [
+        "method"
+      ],
+      "type": "object"
+    },
+    "Action_Execute_Request_Body": {
+      "additionalProperties": {
+        "type": "any"
       },
-      "Action_Response": {
-        "type": "object",
-        "title": "Action Response",
-        "properties": {
-          "statusCode": {
-            "type": "integer"
-          },
-          "headers": {
-            "$ref": "#\/definitions\/Action_Response_Headers"
-          },
-          "body": {
-            "$ref": "#\/definitions\/Action_Response_Body"
-          }
+      "type": "object"
+    },
+    "Action_Execute_Response": {
+      "properties": {
+        "body": {
+          "$ref": "Action_Execute_Response_Body"
+        },
+        "headers": {
+          "$ref": "Action_Execute_Response_Headers"
+        },
+        "statusCode": {
+          "type": "integer"
         }
       },
-      "POST-request": {
-        "$ref": "#\/definitions\/Action_Request"
+      "type": "object"
+    },
+    "Action_Execute_Response_Body": {
+      "additionalProperties": {
+        "type": "any"
       },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Action_Response"
-      }
+      "type": "object"
+    },
+    "Action_Execute_Response_Headers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "BackendActionExecuteAction_idPath": {
+      "properties": {
+        "action_id": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Backend_Model_Action_Execute_Request": {
+      "$ref": "Action_Execute_Request"
+    },
+    "Backend_Model_Action_Execute_Response": {
+      "$ref": "Action_Execute_Response"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Action_Execute",
+      "request": "Backend_Model_Action_Execute_Request",
       "responses": {
-        "200": "#\/definitions\/POST-200-response"
-      }
+        "200": "Backend_Model_Action_Execute_Response"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
     }
-  }
+  },
+  "path": "/backend/action/execute/:action_id",
+  "pathParameters": "BackendActionExecuteAction_idPath",
+  "status": 1
 }

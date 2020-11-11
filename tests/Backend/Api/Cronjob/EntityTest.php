@@ -44,7 +44,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/cronjob/1', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/cronjob/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -66,9 +66,10 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<JSON
 {
     "id": 1,
+    "status": 1,
     "name": "Test-Cron",
     "cron": "*\/30 * * * *",
-    "action": 3,
+    "action": "Sql-Select-All",
     "executeDate": "2015-02-27T19:59:15Z",
     "exitCode": 0,
     "errors": [
@@ -132,7 +133,7 @@ JSON;
         ), json_encode([
             'name' => 'Foo-Cron',
             'cron' => '10 * * * *',
-            'action' => 4,
+            'action' => 'Inspect',
         ]));
 
         $body   = (string) $response->getBody();
@@ -160,7 +161,7 @@ JSON;
         $this->assertEquals(1, $row['id']);
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
-        $this->assertEquals(4, $row['action']);
+        $this->assertEquals('Inspect', $row['action']);
 
         // check generated cron file
         $actual = CronFile::get();

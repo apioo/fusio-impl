@@ -43,7 +43,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/schema/1', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/schema/1', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -68,12 +68,9 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Passthru",
     "source": {
-        "id": "http:\/\/fusio-project.org",
-        "title": "passthru",
-        "type": "object",
-        "description": "No schema was specified.",
-        "additionalProperties": true
-    }
+        "$class": "PSX\\Framework\\Schema\\Passthru"
+    },
+    "readonly": true
 }
 JSON;
 
@@ -85,7 +82,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/backend/schema/10', 'GET', array(
+        $response = $this->sendRequest('/backend/schema/200', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -120,8 +117,6 @@ JSON;
     public function testPut()
     {
         $schema = [
-            'id' => 'http://phpsx.org#',
-            'title' => 'test',
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -162,8 +157,6 @@ JSON;
     public function testPutForm()
     {
         $schema = [
-            'id' => 'http://phpsx.org#',
-            'title' => 'test',
             'type' => 'object',
             'properties' => [
                 'title' => [
@@ -206,7 +199,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Form-Schema', json_encode($schema), json_encode($form));
+        Assert::assertSchema('Form-Schema', \json_encode($schema), \json_encode($form));
     }
 
     public function testDelete()
@@ -252,27 +245,5 @@ JSON;
 
         $this->assertEquals(2, $row['id']);
         $this->assertEquals(0, $row['status']);
-    }
-
-    public function testDeleteInUse()
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
-        $response = $this->sendRequest('/backend/schema/2', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Cannot delete schema because a route depends on it"
-}
-JSON;
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 }

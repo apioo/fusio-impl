@@ -6,32 +6,38 @@ connection:
 schema:
   Parameters: >
     {
-      "id": "http:\/\/phpsx.org#",
-      "title": "test",
-      "type": "object",
-      "properties": {
-        "count": {
-          "type": "integer"
+      "definitions": {
+        "Parameters": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer"
+            }
+          }
         }
-      }
+      },
+      "$ref": "Parameters"
     }
   Request-Schema: >
     {
-      "id": "http:\/\/phpsx.org#",
-      "title": "test",
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "content": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "date-time"
+      "definitions": {
+        "Request-Schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
         }
-      }
+      },
+      "$ref": "Request-Schema"
     }
   Response-Schema: !include schema.json
   Error-Schema: !include schema.json

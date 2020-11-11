@@ -34,7 +34,7 @@ use PSX\Framework\Config\Config;
  */
 class WebServerTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

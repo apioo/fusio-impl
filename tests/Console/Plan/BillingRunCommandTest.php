@@ -52,7 +52,7 @@ class BillingRunCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertContains('Execution successful', $actual);
+        $this->assertStringContainsString('Execution successful', $actual);
 
         $result = $this->connection->fetchAll('SELECT * FROM fusio_plan_invoice ORDER BY id ASC');
 

@@ -52,13 +52,13 @@ class ListCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
         $expect = <<<TEXT
-+----+-------------------+
-| ID | Name              |
-+----+-------------------+
-| 3  | Entry-Schema      |
-| 2  | Collection-Schema |
-| 1  | Passthru          |
-+----+-------------------+
++-----+-------------------+
+| ID  | Name              |
++-----+-------------------+
+| 141 | Entry-Schema      |
+| 140 | Collection-Schema |
+| 1   | Passthru          |
++-----+-------------------+
 
 TEXT;
 

@@ -1,0 +1,6541 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fusio",
+    "version": "1"
+  },
+  "servers": [
+    {
+      "url": "http:\/\/127.0.0.1\/"
+    }
+  ],
+  "paths": {
+    "\/backend\/user\/{user_id}": {
+      "get": {
+        "tags": [
+          "backend.user"
+        ],
+        "operationId": "Backend_Action_User_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.user"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.user"
+        ],
+        "operationId": "Backend_Action_User_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_User_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.user"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.user"
+        ],
+        "operationId": "Backend_Action_User_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.user"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/user": {
+      "get": {
+        "tags": [
+          "backend.user"
+        ],
+        "operationId": "Backend_Action_User_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_User_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.user"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.user"
+        ],
+        "operationId": "Backend_Action_User_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_User_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.user"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/transaction\/{transaction_id}": {
+      "get": {
+        "tags": [
+          "backend.transaction"
+        ],
+        "operationId": "Backend_Action_Transaction_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Transaction"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.transaction"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "transaction_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/transaction": {
+      "get": {
+        "tags": [
+          "backend.transaction"
+        ],
+        "operationId": "Backend_Action_Transaction_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Transaction_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.transaction"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/used_points": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetUsedPoints",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/time_per_route": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetTimePerRoute",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/time_average": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetTimeAverage",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/most_used_routes": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetMostUsedRoutes",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/most_used_apps": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetMostUsedApps",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/issued_tokens": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetIssuedTokens",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/incoming_transactions": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetIncomingTransactions",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/incoming_requests": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetIncomingRequests",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/errors_per_route": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetErrorsPerRoute",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/statistic\/count_requests": {
+      "get": {
+        "tags": [
+          "backend.statistic"
+        ],
+        "operationId": "Backend_Action_Statistic_GetCountRequests",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.statistic"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/sdk": {
+      "get": {
+        "tags": [
+          "backend.sdk"
+        ],
+        "operationId": "Backend_Action_Sdk_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Sdk_Types"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.sdk"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.sdk"
+        ],
+        "operationId": "Backend_Action_Sdk_Generate",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Sdk_Generate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.sdk"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/scope\/{scope_id}": {
+      "get": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Scope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Scope_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "scope_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/scope": {
+      "get": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Scope_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/schema\/{schema_id}": {
+      "get": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Schema"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/schema\/form\/{schema_id}": {
+      "put": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_Form",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Form"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/schema\/preview\/{schema_id}": {
+      "post": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_GetPreview",
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Schema_Preview_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "schema_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/schema": {
+      "get": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Schema_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.schema"
+        ],
+        "operationId": "Backend_Action_Schema_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.schema"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/routes\/{route_id}": {
+      "get": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Route"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Route_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "route_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/routes\/provider\/{provider}": {
+      "get": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Provider_Form",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Provider_Changelog",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider_Config"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider_Changelog"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Provider_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/routes\/provider": {
+      "get": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Provider_Index",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Index_Providers"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/routes": {
+      "get": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.route"
+        ],
+        "operationId": "Backend_Action_Route_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Route_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.route"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/rate\/{rate_id}": {
+      "get": {
+        "tags": [
+          "backend.rate"
+        ],
+        "operationId": "Backend_Action_Rate_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Rate"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.rate"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.rate"
+        ],
+        "operationId": "Backend_Action_Rate_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Rate_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.rate"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.rate"
+        ],
+        "operationId": "Backend_Action_Rate_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.rate"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "rate_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/rate": {
+      "get": {
+        "tags": [
+          "backend.rate"
+        ],
+        "operationId": "Backend_Action_Rate_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Rate_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.rate"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.rate"
+        ],
+        "operationId": "Backend_Action_Rate_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Rate_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.rate"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/plan\/{plan_id}": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "plan_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/plan": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/plan\/invoice\/{invoice_id}": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Invoice_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Invoice_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Invoice_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "invoice_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/plan\/invoice": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Invoice_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Invoice_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/plan\/contract\/{contract_id}": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Contract_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Contract_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Contract_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "contract_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/plan\/contract": {
+      "get": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Contract_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.plan"
+        ],
+        "operationId": "Backend_Action_Plan_Contract_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.plan"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/marketplace\/{app_name}": {
+      "get": {
+        "tags": [
+          "backend.marketplace"
+        ],
+        "operationId": "Backend_Action_Marketplace_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Local_App"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.marketplace"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.marketplace"
+        ],
+        "operationId": "Backend_Action_Marketplace_Update",
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.marketplace"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.marketplace"
+        ],
+        "operationId": "Backend_Action_Marketplace_Remove",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.marketplace"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "app_name",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/marketplace": {
+      "get": {
+        "tags": [
+          "backend.marketplace"
+        ],
+        "operationId": "Backend_Action_Marketplace_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.marketplace"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.marketplace"
+        ],
+        "operationId": "Backend_Action_Marketplace_Install",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Install"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Install"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.marketplace"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/log\/{log_id}": {
+      "get": {
+        "tags": [
+          "backend.log"
+        ],
+        "operationId": "Backend_Action_Log_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Log"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.log"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "log_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/log": {
+      "get": {
+        "tags": [
+          "backend.log"
+        ],
+        "operationId": "Backend_Action_Log_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.log"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/log\/error\/{error_id}": {
+      "get": {
+        "tags": [
+          "backend.log"
+        ],
+        "operationId": "Backend_Action_Log_Error_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.log"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "error_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/log\/error": {
+      "get": {
+        "tags": [
+          "backend.log"
+        ],
+        "operationId": "Backend_Action_Log_Error_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Error_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.log"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/import\/process": {
+      "post": {
+        "tags": [
+          "backend.import"
+        ],
+        "operationId": "Backend_Action_Import_Process",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Adapter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Import_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.import"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/import\/{format}": {
+      "post": {
+        "tags": [
+          "backend.import"
+        ],
+        "operationId": "Backend_Action_Import_Format",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Import_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Adapter"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.import"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "format",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/event\/{event_id}": {
+      "get": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Event"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Event_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "event_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/event": {
+      "get": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Event_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/event\/subscription\/{subscription_id}": {
+      "get": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Subscription_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Subscription_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Subscription_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "subscription_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/event\/subscription": {
+      "get": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Subscription_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.event"
+        ],
+        "operationId": "Backend_Action_Event_Subscription_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.event"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/dashboard": {
+      "get": {
+        "tags": [
+          "backend.dashboard"
+        ],
+        "operationId": "Backend_Action_Dashboard_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Dashboard"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.dashboard"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/cronjob\/{cronjob_id}": {
+      "get": {
+        "tags": [
+          "backend.cronjob"
+        ],
+        "operationId": "Backend_Action_Cronjob_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Cronjob"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.cronjob"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.cronjob"
+        ],
+        "operationId": "Backend_Action_Cronjob_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.cronjob"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.cronjob"
+        ],
+        "operationId": "Backend_Action_Cronjob_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.cronjob"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "cronjob_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/cronjob": {
+      "get": {
+        "tags": [
+          "backend.cronjob"
+        ],
+        "operationId": "Backend_Action_Cronjob_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.cronjob"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.cronjob"
+        ],
+        "operationId": "Backend_Action_Cronjob_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.cronjob"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/connection\/{connection_id}": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Connection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Connection_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "connection_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/connection\/form": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_GetForm",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/connection\/list": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_GetIndex",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Connection_Index"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/connection": {
+      "get": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Connection_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.connection"
+        ],
+        "operationId": "Backend_Action_Connection_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Connection_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.connection"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/config\/{config_id}": {
+      "get": {
+        "tags": [
+          "backend.config"
+        ],
+        "operationId": "Backend_Action_Config_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Config"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.config"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.config"
+        ],
+        "operationId": "Backend_Action_Config_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Config_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.config"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "config_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/config": {
+      "get": {
+        "tags": [
+          "backend.config"
+        ],
+        "operationId": "Backend_Action_Config_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Config_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.config"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/audit\/{audit_id}": {
+      "get": {
+        "tags": [
+          "backend.audit"
+        ],
+        "operationId": "Backend_Action_Audit_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Audit"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.audit"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "audit_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/audit": {
+      "get": {
+        "tags": [
+          "backend.audit"
+        ],
+        "operationId": "Backend_Action_Audit_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Audit_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.audit"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/app\/{app_id}\/token\/{token_id}": {
+      "delete": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_DeleteToken",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "token_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/app\/{app_id}": {
+      "get": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_App"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_App_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "app_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/app": {
+      "get": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_App_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_App_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/app\/token\/{token_id}": {
+      "get": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Token_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_App_Token"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "token_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/app\/token": {
+      "get": {
+        "tags": [
+          "backend.app"
+        ],
+        "operationId": "Backend_Action_App_Token_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_App_Token_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.app"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/action\/{action_id}": {
+      "get": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Action"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Action_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "action_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/action\/execute\/{action_id}": {
+      "post": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_Execute",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Action_Execute_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Execute_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "action_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/action\/form": {
+      "get": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_GetForm",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/action\/list": {
+      "get": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_GetIndex",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Index"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/action": {
+      "get": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.action"
+        ],
+        "operationId": "Backend_Action_Action_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Action_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.action"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/account\/change_password": {
+      "put": {
+        "tags": [
+          "backend.account"
+        ],
+        "operationId": "Backend_Action_Account_ChangePassword",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Account_ChangePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.account"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/account": {
+      "get": {
+        "tags": [
+          "backend.account"
+        ],
+        "operationId": "Backend_Action_Account_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.account"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.account"
+        ],
+        "operationId": "Backend_Action_Account_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_User_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.account"
+            ]
+          }
+        ]
+      }
+    },
+    "\/backend\/token": {
+      "post": {
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/OAuth2_Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "POST 400 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/OAuth2_Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account_ChangePassword": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "verifyPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          }
+        }
+      },
+      "Action": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "class": {
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Action_Config"
+          }
+        }
+      },
+      "Action_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Action_Config": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Action_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Action"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "config"
+            ]
+          }
+        ]
+      },
+      "Action_Execute_Request": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "pattern": "GET|POST|PUT|PATCH|DELETE"
+          },
+          "uriFragments": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "string"
+          },
+          "body": {
+            "$ref": "#\/components\/schemas\/Action_Execute_Request_Body"
+          }
+        },
+        "required": [
+          "method"
+        ]
+      },
+      "Action_Execute_Request_Body": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Action_Execute_Response": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer"
+          },
+          "headers": {
+            "$ref": "#\/components\/schemas\/Action_Execute_Response_Headers"
+          },
+          "body": {
+            "$ref": "#\/components\/schemas\/Action_Execute_Response_Body"
+          }
+        }
+      },
+      "Action_Execute_Response_Body": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Action_Execute_Response_Headers": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Action_Index": {
+        "type": "object",
+        "properties": {
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Action_Index_Entry"
+            }
+          }
+        }
+      },
+      "Action_Index_Entry": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Action_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Action"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Adapter": {
+        "type": "object",
+        "properties": {
+          "actionClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "connectionClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "paymentClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "userClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "routesClass": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "connection": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection"
+            }
+          },
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          },
+          "action": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Action"
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Route"
+            }
+          }
+        }
+      },
+      "App": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "appKey": {
+            "type": "string"
+          },
+          "appSecret": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App_Token"
+            }
+          }
+        }
+      },
+      "App_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "App_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          {
+            "type": "object",
+            "required": [
+              "userId",
+              "name",
+              "url",
+              "scopes"
+            ]
+          }
+        ]
+      },
+      "App_Token": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "expire": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "App_Token_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "App_Token_Collection_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "userId": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "integer"
+              },
+              "scope": {
+                "type": "string"
+              },
+              "ip": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "App_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Audit": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "app": {
+            "$ref": "#\/components\/schemas\/App"
+          },
+          "user": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "event": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "content": {
+            "$ref": "#\/components\/schemas\/Audit_Object"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Audit_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Audit_Collection_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "userId": {
+                "type": "integer"
+              },
+              "event": {
+                "type": "string"
+              },
+              "ip": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Audit_Object": {
+        "description": "A key value object containing the changes",
+        "type": "object",
+        "additionalProperties": []
+      },
+      "BackendActionAction_idPath": {
+        "type": "object",
+        "properties": {
+          "action_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendActionExecuteAction_idPath": {
+        "type": "object",
+        "properties": {
+          "action_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendAppApp_idPath": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendAppApp_idTokenToken_idPath": {
+        "type": "object",
+        "properties": {
+          "app_id": {
+            "type": "string"
+          },
+          "token_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendAppTokenToken_idPath": {
+        "type": "object",
+        "properties": {
+          "token_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendAuditAudit_idPath": {
+        "type": "object",
+        "properties": {
+          "audit_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendConfigConfig_idPath": {
+        "type": "object",
+        "properties": {
+          "config_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendConnectionConnection_idPath": {
+        "type": "object",
+        "properties": {
+          "connection_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendCronjobCronjob_idPath": {
+        "type": "object",
+        "properties": {
+          "cronjob_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendEventEvent_idPath": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendEventSubscriptionSubscription_idPath": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendImportFormatPath": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendLogErrorError_idPath": {
+        "type": "object",
+        "properties": {
+          "error_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendLogLog_idPath": {
+        "type": "object",
+        "properties": {
+          "log_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendMarketplaceApp_namePath": {
+        "type": "object",
+        "properties": {
+          "app_name": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendPlanContractContract_idPath": {
+        "type": "object",
+        "properties": {
+          "contract_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendPlanInvoiceInvoice_idPath": {
+        "type": "object",
+        "properties": {
+          "invoice_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendPlanPlan_idPath": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendRateRate_idPath": {
+        "type": "object",
+        "properties": {
+          "rate_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendRoutesProviderProviderPath": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendRoutesRoute_idPath": {
+        "type": "object",
+        "properties": {
+          "route_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendSchemaFormSchema_idPath": {
+        "type": "object",
+        "properties": {
+          "schema_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendSchemaPreviewSchema_idPath": {
+        "type": "object",
+        "properties": {
+          "schema_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendSchemaSchema_idPath": {
+        "type": "object",
+        "properties": {
+          "schema_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendScopeScope_idPath": {
+        "type": "object",
+        "properties": {
+          "scope_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendTransactionTransaction_idPath": {
+        "type": "object",
+        "properties": {
+          "transaction_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendUserUser_idPath": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "Backend_Model_Account_ChangePassword": {
+        "$ref": "#\/components\/schemas\/Account_ChangePassword"
+      },
+      "Backend_Model_Action": {
+        "$ref": "#\/components\/schemas\/Action"
+      },
+      "Backend_Model_Action_Collection": {
+        "$ref": "#\/components\/schemas\/Action_Collection"
+      },
+      "Backend_Model_Action_Create": {
+        "$ref": "#\/components\/schemas\/Action_Create"
+      },
+      "Backend_Model_Action_Execute_Request": {
+        "$ref": "#\/components\/schemas\/Action_Execute_Request"
+      },
+      "Backend_Model_Action_Execute_Response": {
+        "$ref": "#\/components\/schemas\/Action_Execute_Response"
+      },
+      "Backend_Model_Action_Index": {
+        "$ref": "#\/components\/schemas\/Action_Index"
+      },
+      "Backend_Model_Action_Update": {
+        "$ref": "#\/components\/schemas\/Action_Update"
+      },
+      "Backend_Model_Adapter": {
+        "$ref": "#\/components\/schemas\/Adapter"
+      },
+      "Backend_Model_App": {
+        "$ref": "#\/components\/schemas\/App"
+      },
+      "Backend_Model_App_Collection": {
+        "$ref": "#\/components\/schemas\/App_Collection"
+      },
+      "Backend_Model_App_Create": {
+        "$ref": "#\/components\/schemas\/App_Create"
+      },
+      "Backend_Model_App_Token": {
+        "$ref": "#\/components\/schemas\/App_Token"
+      },
+      "Backend_Model_App_Token_Collection": {
+        "$ref": "#\/components\/schemas\/App_Token_Collection"
+      },
+      "Backend_Model_App_Token_Collection_Query": {
+        "$ref": "#\/components\/schemas\/App_Token_Collection_Query"
+      },
+      "Backend_Model_App_Update": {
+        "$ref": "#\/components\/schemas\/App_Update"
+      },
+      "Backend_Model_Audit": {
+        "$ref": "#\/components\/schemas\/Audit"
+      },
+      "Backend_Model_Audit_Collection": {
+        "$ref": "#\/components\/schemas\/Audit_Collection"
+      },
+      "Backend_Model_Audit_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Audit_Collection_Query"
+      },
+      "Backend_Model_Config": {
+        "$ref": "#\/components\/schemas\/Config"
+      },
+      "Backend_Model_Config_Collection": {
+        "$ref": "#\/components\/schemas\/Config_Collection"
+      },
+      "Backend_Model_Config_Update": {
+        "$ref": "#\/components\/schemas\/Config_Update"
+      },
+      "Backend_Model_Connection": {
+        "$ref": "#\/components\/schemas\/Connection"
+      },
+      "Backend_Model_Connection_Collection": {
+        "$ref": "#\/components\/schemas\/Connection_Collection"
+      },
+      "Backend_Model_Connection_Create": {
+        "$ref": "#\/components\/schemas\/Connection_Create"
+      },
+      "Backend_Model_Connection_Index": {
+        "$ref": "#\/components\/schemas\/Connection_Index"
+      },
+      "Backend_Model_Connection_Update": {
+        "$ref": "#\/components\/schemas\/Connection_Update"
+      },
+      "Backend_Model_Cronjob": {
+        "$ref": "#\/components\/schemas\/Cronjob"
+      },
+      "Backend_Model_Cronjob_Collection": {
+        "$ref": "#\/components\/schemas\/Cronjob_Collection"
+      },
+      "Backend_Model_Cronjob_Create": {
+        "$ref": "#\/components\/schemas\/Cronjob_Create"
+      },
+      "Backend_Model_Cronjob_Update": {
+        "$ref": "#\/components\/schemas\/Cronjob_Update"
+      },
+      "Backend_Model_Dashboard": {
+        "$ref": "#\/components\/schemas\/Dashboard"
+      },
+      "Backend_Model_Event": {
+        "$ref": "#\/components\/schemas\/Event"
+      },
+      "Backend_Model_Event_Collection": {
+        "$ref": "#\/components\/schemas\/Event_Collection"
+      },
+      "Backend_Model_Event_Create": {
+        "$ref": "#\/components\/schemas\/Event_Create"
+      },
+      "Backend_Model_Event_Subscription": {
+        "$ref": "#\/components\/schemas\/Event_Subscription"
+      },
+      "Backend_Model_Event_Subscription_Collection": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
+      },
+      "Backend_Model_Event_Subscription_Create": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Create"
+      },
+      "Backend_Model_Event_Subscription_Update": {
+        "$ref": "#\/components\/schemas\/Event_Subscription_Update"
+      },
+      "Backend_Model_Event_Update": {
+        "$ref": "#\/components\/schemas\/Event_Update"
+      },
+      "Backend_Model_Import_Request": {
+        "$ref": "#\/components\/schemas\/Import_Request"
+      },
+      "Backend_Model_Import_Response": {
+        "$ref": "#\/components\/schemas\/Import_Response"
+      },
+      "Backend_Model_Log": {
+        "$ref": "#\/components\/schemas\/Log"
+      },
+      "Backend_Model_Log_Collection": {
+        "$ref": "#\/components\/schemas\/Log_Collection"
+      },
+      "Backend_Model_Log_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Log_Collection_Query"
+      },
+      "Backend_Model_Log_Error": {
+        "$ref": "#\/components\/schemas\/Log_Error"
+      },
+      "Backend_Model_Log_Error_Collection": {
+        "$ref": "#\/components\/schemas\/Log_Error_Collection"
+      },
+      "Backend_Model_Marketplace_Collection": {
+        "$ref": "#\/components\/schemas\/Marketplace_Collection"
+      },
+      "Backend_Model_Marketplace_Install": {
+        "$ref": "#\/components\/schemas\/Marketplace_Install"
+      },
+      "Backend_Model_Marketplace_Local_App": {
+        "$ref": "#\/components\/schemas\/Marketplace_Local_App"
+      },
+      "Backend_Model_Plan": {
+        "$ref": "#\/components\/schemas\/Plan"
+      },
+      "Backend_Model_Plan_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Collection"
+      },
+      "Backend_Model_Plan_Contract": {
+        "$ref": "#\/components\/schemas\/Plan_Contract"
+      },
+      "Backend_Model_Plan_Contract_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
+      },
+      "Backend_Model_Plan_Contract_Create": {
+        "$ref": "#\/components\/schemas\/Plan_Contract_Create"
+      },
+      "Backend_Model_Plan_Contract_Update": {
+        "$ref": "#\/components\/schemas\/Plan_Contract_Update"
+      },
+      "Backend_Model_Plan_Create": {
+        "$ref": "#\/components\/schemas\/Plan_Create"
+      },
+      "Backend_Model_Plan_Invoice": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice"
+      },
+      "Backend_Model_Plan_Invoice_Collection": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
+      },
+      "Backend_Model_Plan_Invoice_Create": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice_Create"
+      },
+      "Backend_Model_Plan_Invoice_Update": {
+        "$ref": "#\/components\/schemas\/Plan_Invoice_Update"
+      },
+      "Backend_Model_Plan_Update": {
+        "$ref": "#\/components\/schemas\/Plan_Update"
+      },
+      "Backend_Model_Plan_Usage_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Plan_Usage_Collection_Query"
+      },
+      "Backend_Model_Rate": {
+        "$ref": "#\/components\/schemas\/Rate"
+      },
+      "Backend_Model_Rate_Collection": {
+        "$ref": "#\/components\/schemas\/Rate_Collection"
+      },
+      "Backend_Model_Rate_Create": {
+        "$ref": "#\/components\/schemas\/Rate_Create"
+      },
+      "Backend_Model_Rate_Update": {
+        "$ref": "#\/components\/schemas\/Rate_Update"
+      },
+      "Backend_Model_Route": {
+        "$ref": "#\/components\/schemas\/Route"
+      },
+      "Backend_Model_Route_Collection": {
+        "$ref": "#\/components\/schemas\/Route_Collection"
+      },
+      "Backend_Model_Route_Create": {
+        "$ref": "#\/components\/schemas\/Route_Create"
+      },
+      "Backend_Model_Route_Index_Providers": {
+        "$ref": "#\/components\/schemas\/Route_Index_Providers"
+      },
+      "Backend_Model_Route_Provider": {
+        "$ref": "#\/components\/schemas\/Route_Provider"
+      },
+      "Backend_Model_Route_Provider_Changelog": {
+        "$ref": "#\/components\/schemas\/Route_Provider_Changelog"
+      },
+      "Backend_Model_Route_Provider_Config": {
+        "$ref": "#\/components\/schemas\/Route_Provider_Config"
+      },
+      "Backend_Model_Route_Update": {
+        "$ref": "#\/components\/schemas\/Route_Update"
+      },
+      "Backend_Model_Schema": {
+        "$ref": "#\/components\/schemas\/Schema"
+      },
+      "Backend_Model_Schema_Collection": {
+        "$ref": "#\/components\/schemas\/Schema_Collection"
+      },
+      "Backend_Model_Schema_Create": {
+        "$ref": "#\/components\/schemas\/Schema_Create"
+      },
+      "Backend_Model_Schema_Form": {
+        "$ref": "#\/components\/schemas\/Schema_Form"
+      },
+      "Backend_Model_Schema_Preview_Response": {
+        "$ref": "#\/components\/schemas\/Schema_Preview_Response"
+      },
+      "Backend_Model_Schema_Update": {
+        "$ref": "#\/components\/schemas\/Schema_Update"
+      },
+      "Backend_Model_Scope": {
+        "$ref": "#\/components\/schemas\/Scope"
+      },
+      "Backend_Model_Scope_Collection": {
+        "$ref": "#\/components\/schemas\/Scope_Collection"
+      },
+      "Backend_Model_Scope_Create": {
+        "$ref": "#\/components\/schemas\/Scope_Create"
+      },
+      "Backend_Model_Scope_Update": {
+        "$ref": "#\/components\/schemas\/Scope_Update"
+      },
+      "Backend_Model_Sdk_Generate": {
+        "$ref": "#\/components\/schemas\/Sdk_Generate"
+      },
+      "Backend_Model_Sdk_Types": {
+        "$ref": "#\/components\/schemas\/Sdk_Types"
+      },
+      "Backend_Model_Statistic_Count": {
+        "$ref": "#\/components\/schemas\/Statistic_Count"
+      },
+      "Backend_Model_Transaction": {
+        "$ref": "#\/components\/schemas\/Transaction"
+      },
+      "Backend_Model_Transaction_Collection": {
+        "$ref": "#\/components\/schemas\/Transaction_Collection"
+      },
+      "Backend_Model_Transaction_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Transaction_Collection_Query"
+      },
+      "Backend_Model_User": {
+        "$ref": "#\/components\/schemas\/User"
+      },
+      "Backend_Model_User_Collection": {
+        "$ref": "#\/components\/schemas\/User_Collection"
+      },
+      "Backend_Model_User_Create": {
+        "$ref": "#\/components\/schemas\/User_Create"
+      },
+      "Backend_Model_User_Update": {
+        "$ref": "#\/components\/schemas\/User_Update"
+      },
+      "Collection": {
+        "type": "object",
+        "properties": {
+          "totalResults": {
+            "type": "integer"
+          },
+          "startIndex": {
+            "type": "integer"
+          },
+          "entry": {
+            "type": "array",
+            "items": {
+              "$generic": "T"
+            }
+          }
+        }
+      },
+      "Collection_Category_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "categoryId": {
+                "type": "integer"
+              }
+            }
+          }
+        ]
+      },
+      "Collection_Query": {
+        "type": "object",
+        "properties": {
+          "startIndex": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "search": {
+            "type": "string"
+          }
+        }
+      },
+      "Config": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        }
+      },
+      "Config_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Config_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Config"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Connection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "class": {
+            "type": "string"
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Connection_Config"
+          }
+        }
+      },
+      "Connection_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Connection_Config": {
+        "type": "object",
+        "additionalProperties": [],
+        "maxProperties": 16
+      },
+      "Connection_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Connection"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Connection_Index": {
+        "type": "object",
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Connection_Index_Entry"
+            }
+          }
+        }
+      },
+      "Connection_Index_Entry": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
+      "Connection_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Connection"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Cronjob": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "executeDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "exitCode": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Cronjob_Error"
+            }
+          }
+        }
+      },
+      "Cronjob_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Cronjob_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Cronjob"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "cron",
+              "action"
+            ]
+          }
+        ]
+      },
+      "Cronjob_Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "trace": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          }
+        }
+      },
+      "Cronjob_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Cronjob"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Dashboard": {
+        "type": "object",
+        "properties": {
+          "errorsPerRoute": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "incomingRequests": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "incomingTransactions": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "mostUsedRoutes": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "timePerRoute": {
+            "$ref": "#\/components\/schemas\/Statistic_Chart"
+          },
+          "latestApps": {
+            "$ref": "#\/components\/schemas\/Dashboard_Apps"
+          },
+          "latestRequests": {
+            "$ref": "#\/components\/schemas\/Dashboard_Requests"
+          },
+          "latestUsers": {
+            "$ref": "#\/components\/schemas\/Dashboard_Users"
+          },
+          "latestTransactions": {
+            "$ref": "#\/components\/schemas\/Dashboard_Transactions"
+          }
+        }
+      },
+      "Dashboard_App": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Dashboard_Apps": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Dashboard_Request": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Dashboard_Requests": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Dashboard_Transaction": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Dashboard_Transactions": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Dashboard_User": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Dashboard_Users": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Event": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Event_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Event"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "Event_Subscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "eventId": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "endpoint": {
+            "type": "string"
+          }
+        }
+      },
+      "Event_Subscription_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Event_Subscription_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Event_Subscription"
+          },
+          {
+            "type": "object",
+            "required": [
+              "eventId",
+              "userId",
+              "endpoint"
+            ]
+          }
+        ]
+      },
+      "Event_Subscription_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Event_Subscription"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Event_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Event"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Form_Container": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#\/components\/schemas\/Form_Element_Input"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Form_Element_Select"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Form_Element_Tag"
+                },
+                {
+                  "$ref": "#\/components\/schemas\/Form_Element_TextArea"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Form_Element": {
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "help": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "element"
+        ]
+      },
+      "Form_Element_Input": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Form_Element"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Form_Element_Select": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Form_Element"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "options": {
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/Form_Element_Select_Option"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Form_Element_Select_Option": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Form_Element_Tag": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Form_Element"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Form_Element_TextArea": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Form_Element"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Import_Request": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "string"
+          }
+        }
+      },
+      "Import_Response": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Log_Error"
+            }
+          }
+        }
+      },
+      "Log_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Log_Collection_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "routeId": {
+                "type": "integer"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "userId": {
+                "type": "integer"
+              },
+              "ip": {
+                "type": "string"
+              },
+              "userAgent": {
+                "type": "string"
+              },
+              "method": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "header": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Log_Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "integer"
+          },
+          "trace": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          }
+        }
+      },
+      "Log_Error_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Marketplace_App": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "screenshot": {
+            "type": "string"
+          },
+          "website": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "sha1Hash": {
+            "type": "string"
+          }
+        }
+      },
+      "Marketplace_Collection": {
+        "type": "object",
+        "properties": {
+          "apps": {
+            "$ref": "#\/components\/schemas\/Marketplace_Collection_Apps"
+          }
+        }
+      },
+      "Marketplace_Collection_Apps": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Marketplace_Remote_App"
+        }
+      },
+      "Marketplace_Install": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Marketplace_Local_App": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Marketplace_App"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "remote": {
+                "$ref": "#\/components\/schemas\/Marketplace_App"
+              }
+            }
+          }
+        ]
+      },
+      "Marketplace_Remote_App": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Marketplace_App"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "local": {
+                "$ref": "#\/components\/schemas\/Marketplace_App"
+              }
+            }
+          }
+        ]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Model_Collection_Category_Query": {
+        "$ref": "#\/components\/schemas\/Collection_Category_Query"
+      },
+      "Model_Collection_Query": {
+        "$ref": "#\/components\/schemas\/Collection_Query"
+      },
+      "Model_Form_Container": {
+        "$ref": "#\/components\/schemas\/Form_Container"
+      },
+      "Model_Message": {
+        "$ref": "#\/components\/schemas\/Message"
+      },
+      "OAuth2_Access_Token": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Authorization_Code": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "authorization_code",
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redirect_uri": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "code"
+        ]
+      },
+      "OAuth2_Client_Credentials": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "client_credentials",
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type"
+        ]
+      },
+      "OAuth2_Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "OAuth2_Password": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "password",
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "username",
+          "password"
+        ]
+      },
+      "OAuth2_Refresh_Token": {
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "const": "refresh_token",
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "OAuth2_Request": {
+        "oneOf": [
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Password"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
+          },
+          {
+            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
+          }
+        ]
+      },
+      "Plan": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
+          }
+        }
+      },
+      "Plan_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Contract": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "user": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "plan": {
+            "$ref": "#\/components\/schemas\/Plan"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "period": {
+            "type": "integer"
+          },
+          "insertDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Plan_Contract_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Contract_Create": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "planId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "userId",
+          "planId"
+        ]
+      },
+      "Plan_Contract_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Plan_Contract"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Plan_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Plan"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "price"
+            ]
+          }
+        ]
+      },
+      "Plan_Invoice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "contractId": {
+            "type": "integer"
+          },
+          "user": {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          "transactionId": {
+            "type": "integer"
+          },
+          "prevId": {
+            "type": "integer"
+          },
+          "displayId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "fromDate": {
+            "format": "date",
+            "type": "string"
+          },
+          "toDate": {
+            "format": "date",
+            "type": "string"
+          },
+          "payDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "insertDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Plan_Invoice_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Plan_Invoice_Create": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "contractId": {
+            "type": "integer"
+          },
+          "startDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "contractId",
+          "startDate"
+        ]
+      },
+      "Plan_Invoice_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Plan_Invoice"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Plan_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Plan"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Plan_Usage_Collection_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "routeId": {
+                "type": "integer"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "userId": {
+                "type": "integer"
+              },
+              "search": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Rate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "rateLimit": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "timespan": {
+            "format": "duration",
+            "type": "string"
+          },
+          "allocation": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Rate_Allocation"
+            }
+          }
+        }
+      },
+      "Rate_Allocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "authenticated": {
+            "type": "boolean"
+          },
+          "parameters": {
+            "type": "string"
+          }
+        }
+      },
+      "Rate_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Rate_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Rate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "Rate_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Rate"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Route": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "path": {
+            "type": "string"
+          },
+          "controller": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Route_Version"
+            }
+          }
+        }
+      },
+      "Route_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Route_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Route"
+          },
+          {
+            "type": "object",
+            "required": [
+              "path",
+              "config"
+            ]
+          }
+        ]
+      },
+      "Route_Index_Providers": {
+        "type": "object",
+        "properties": {
+          "providers": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Route_Provider"
+            }
+          }
+        }
+      },
+      "Route_Method": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string"
+          },
+          "operationId": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "string"
+          },
+          "request": {
+            "type": "string"
+          },
+          "response": {
+            "type": "string"
+          },
+          "responses": {
+            "$ref": "#\/components\/schemas\/Route_Method_Responses"
+          },
+          "action": {
+            "type": "string"
+          },
+          "costs": {
+            "type": "integer"
+          }
+        }
+      },
+      "Route_Method_Responses": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Route_Methods": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#\/components\/schemas\/Route_Method"
+        }
+      },
+      "Route_Provider": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "$ref": "#\/components\/schemas\/Route_Provider_Config"
+          }
+        }
+      },
+      "Route_Provider_Changelog": {
+        "type": "object",
+        "properties": {
+          "schemas": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Schema"
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Action"
+            }
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Route"
+            }
+          }
+        }
+      },
+      "Route_Provider_Config": {
+        "type": "object",
+        "additionalProperties": [],
+        "maxProperties": 16
+      },
+      "Route_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Route"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Route_Version": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "methods": {
+            "$ref": "#\/components\/schemas\/Route_Methods"
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+          },
+          "source": {
+            "$ref": "#\/components\/schemas\/Schema_Source"
+          },
+          "form": {
+            "$ref": "#\/components\/schemas\/Schema_Form"
+          }
+        }
+      },
+      "Schema_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Schema_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Schema"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "Schema_Form": {
+        "description": "Contains a UI vocabulary to describe the UI of the schema",
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Schema_Preview_Response": {
+        "type": "object",
+        "properties": {
+          "preview": {
+            "type": "string"
+          }
+        }
+      },
+      "Schema_Source": {
+        "description": "Contains the TypeSchema specification",
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Schema_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Schema"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Scope": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "description": {
+            "type": "string"
+          },
+          "routes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope_Route"
+            }
+          }
+        }
+      },
+      "Scope_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Scope_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Scope"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "Scope_Route": {
+        "type": "object",
+        "properties": {
+          "routeId": {
+            "type": "integer"
+          },
+          "allow": {
+            "type": "boolean"
+          },
+          "methods": {
+            "type": "string"
+          }
+        }
+      },
+      "Scope_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Scope"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Sdk_Generate": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string"
+          },
+          "config": {
+            "type": "string"
+          }
+        }
+      },
+      "Sdk_Types": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "Statistic_Chart": {
+        "type": "object",
+        "properties": {
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Statistic_Chart_Data"
+            }
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Statistic_Chart_Data": {
+        "type": "object",
+        "additionalProperties": []
+      },
+      "Statistic_Count": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "from": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "to": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "updateDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "insertDate": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Transaction_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Transaction_Collection_Query": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Collection_Query"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "to": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "planId": {
+                "type": "integer"
+              },
+              "userId": {
+                "type": "integer"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "status": {
+                "type": "integer"
+              },
+              "provider": {
+                "type": "string"
+              },
+              "search": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+          },
+          "email": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/App"
+            }
+          },
+          "attributes": {
+            "$ref": "#\/components\/schemas\/User_Attributes"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "User_Attributes": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "User_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "User_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "password": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "status",
+              "name",
+              "email",
+              "password"
+            ]
+          }
+        ]
+      },
+      "User_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/User"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "app": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "bar": "Bar access",
+              "foo": "Foo access",
+              "default": ""
+            }
+          }
+        }
+      },
+      "backend": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "backend.user": "",
+              "backend.transaction": "",
+              "backend.statistic": "",
+              "backend.sdk": "",
+              "backend.scope": "",
+              "backend.schema": "",
+              "backend.route": "",
+              "backend.rate": "",
+              "backend.plan": "",
+              "backend.marketplace": "",
+              "backend.log": "",
+              "backend.import": "",
+              "backend.event": "",
+              "backend.dashboard": "",
+              "backend.cronjob": "",
+              "backend.connection": "",
+              "backend.config": "",
+              "backend.audit": "",
+              "backend.app": "",
+              "backend.action": "",
+              "backend.account": "",
+              "backend": ""
+            }
+          }
+        }
+      },
+      "consumer": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "consumer.user": "",
+              "consumer.transaction": "",
+              "consumer.subscription": "",
+              "consumer.scope": "",
+              "consumer.plan": "",
+              "consumer.grant": "",
+              "consumer.event": "",
+              "consumer.app": "",
+              "consumer": ""
+            }
+          }
+        }
+      }
+    }
+  }
+}

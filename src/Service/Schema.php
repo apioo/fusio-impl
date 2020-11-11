@@ -21,18 +21,21 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Engine\Schema\ParserInterface;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Schema_Create;
+use Fusio\Impl\Backend\Model\Schema_Form;
+use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;
-use Fusio\Impl\Event\SchemaEvents;
+use Fusio\Impl\Schema\Loader;
+use Fusio\Impl\Schema\Parser;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
+use PSX\Record\RecordInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
 use PSX\Sql\Condition;
-use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -50,14 +53,14 @@ class Schema
     protected $schemaTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
     protected $routesMethodTable;
 
     /**
-     * @var \Fusio\Engine\Schema\ParserInterface
+     * @var \Fusio\Impl\Schema\Loader
      */
-    protected $schemaParser;
+    protected $schemaLoader;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -66,99 +69,92 @@ class Schema
 
     /**
      * @param \Fusio\Impl\Table\Schema $schemaTable
-     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
-     * @param \Fusio\Engine\Schema\ParserInterface $schemaParser
+     * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
+     * @param \Fusio\Impl\Schema\Loader $schemaLoader
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Schema $schemaTable, Table\Routes\Method $routesMethodTable, ParserInterface $schemaParser, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
         $this->routesMethodTable = $routesMethodTable;
-        $this->schemaParser      = $schemaParser;
+        $this->schemaLoader      = $schemaLoader;
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create($name, $source, UserContext $context)
+    public function create(Schema_Create $schema, UserContext $context)
     {
-        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $name)) {
+        if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
             throw new StatusCode\BadRequestException('Invalid schema name');
         }
 
         // check whether schema exists
-        if ($this->exists($name)) {
-            throw new StatusCode\BadRequestException('Connection already exists');
+        if ($this->exists($schema->getName())) {
+            throw new StatusCode\BadRequestException('Schema already exists');
         }
 
         // create schema
         $record = [
             'status' => Table\Schema::STATUS_ACTIVE,
-            'name'   => $name,
-            'source' => $source,
-            'cache'  => $this->schemaParser->parse(json_encode($source)),
+            'name'   => $schema->getName(),
+            'source' => $this->parseSource($schema->getSource()),
+            'form'   => $this->parseForm($schema->getForm()),
         ];
 
         $this->schemaTable->create($record);
 
         $schemaId = $this->schemaTable->getLastInsertId();
+        $schema->setId($schemaId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($schemaId, $record, $context), SchemaEvents::CREATE);
-        
+        $this->eventDispatcher->dispatch(new CreatedEvent($schema, $context));
+
         return $schemaId;
     }
 
-    public function update($schemaId, $name, $source, $form, UserContext $context)
+    public function update(int $schemaId, Schema_Update $schema, UserContext $context)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (empty($schema)) {
+        $existing = $this->schemaTable->get($schemaId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
         $record = [
-            'id'     => $schema['id'],
-            'name'   => $name,
-            'source' => $source,
-            'form'   => $form,
-            'cache'  => $this->schemaParser->parse(json_encode($source)),
+            'id'     => $existing['id'],
+            'name'   => $schema->getName(),
+            'source' => $this->parseSource($schema->getSource()),
+            'form'   => $this->parseForm($schema->getForm()),
         ];
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($schemaId, $record, $schema, $context), SchemaEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
     }
 
-    public function delete($schemaId, UserContext $context)
+    public function delete(int $schemaId, UserContext $context)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (empty($schema)) {
+        $existing = $this->schemaTable->get($schemaId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        // check whether we have routes which depend on this schema
-        if ($this->routesMethodTable->hasSchema($schemaId)) {
-            throw new StatusCode\BadRequestException('Cannot delete schema because a route depends on it');
-        }
-
         $record = [
-            'id'     => $schema['id'],
+            'id'     => $existing['id'],
             'status' => Table\Schema::STATUS_DELETED,
         ];
 
         $this->schemaTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($schemaId, $schema, $context), SchemaEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
-    public function updateForm($schemaId, $form, UserContext $context)
+    public function updateForm($schemaId, Schema_Form $form, UserContext $context)
     {
         $schema = $this->schemaTable->get($schemaId);
 
@@ -172,27 +168,19 @@ class Schema
 
         $record = [
             'id'   => $schema['id'],
-            'form' => $form,
+            'form' => $this->parseForm($form),
         ];
 
         $this->schemaTable->update($record);
     }
 
-    public function getHtmlPreview($schemaId)
+    public function generatePreview($schemaId)
     {
-        $schema = $this->schemaTable->get($schemaId);
-
-        if (!empty($schema)) {
-            $generator = new Generator\Html();
-            $schema    = self::unserializeCache($schema['cache']);
-
-            if ($schema instanceof SchemaInterface) {
-                return $generator->generate($schema);
-            } else {
-                throw new RuntimeException('Invalid schema');
-            }
+        $schema = $this->schemaLoader->getSchema($schemaId);
+        if ($schema instanceof SchemaInterface) {
+            return (new Generator\Html())->generate($schema);
         } else {
-            throw new StatusCode\NotFoundException('Invalid schema id');
+            throw new StatusCode\BadRequestException('Invalid schema');
         }
     }
 
@@ -217,29 +205,26 @@ class Schema
         }
     }
 
-    /**
-     * @param \PSX\Schema\SchemaInterface|null $schema
-     * @return string|null
-     */
-    public static function serializeCache(SchemaInterface $schema = null)
+    private function parseSource(?RecordInterface $source): ?string
     {
-        if ($schema === null) {
+        if ($source instanceof RecordInterface) {
+            $class = $source->getProperty('$class');
+            if (is_string($class)) {
+                return $class;
+            } else {
+                return \json_encode($source, JSON_PRETTY_PRINT);
+            }
+        } else {
             return null;
         }
-
-        return base64_encode(serialize($schema));
     }
 
-    /**
-     * @param string|null $data
-     * @return \PSX\Schema\SchemaInterface|null
-     */
-    public static function unserializeCache($data)
+    private function parseForm(?RecordInterface $source): ?string
     {
-        if ($data === null) {
+        if ($source instanceof RecordInterface) {
+            return \json_encode($source, JSON_PRETTY_PRINT);
+        } else {
             return null;
         }
-
-        return unserialize(base64_decode($data));
     }
 }

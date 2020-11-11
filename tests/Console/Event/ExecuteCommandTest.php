@@ -72,7 +72,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
         $actual = $commandTester->getDisplay();
 
-        $this->assertContains('Execution successful', $actual);
+        $this->assertStringContainsString('Execution successful', $actual);
 
         $responses = $this->connection->fetchAll('SELECT trigger_id, subscription_id, status, code, attempts FROM fusio_event_response ORDER BY trigger_id ASC, subscription_id ASC');
 

@@ -32,9 +32,8 @@ use PSX\Sql\TableAbstract;
  */
 class Event extends TableAbstract
 {
-    const STATUS_ACTIVE   = 1;
-    const STATUS_DELETED  = 0;
-    const STATUS_INTERNAL = 2;
+    const STATUS_ACTIVE  = 1;
+    const STATUS_DELETED = 0;
 
     public function getName()
     {
@@ -45,6 +44,7 @@ class Event extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'category_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'description' => self::TYPE_VARCHAR,

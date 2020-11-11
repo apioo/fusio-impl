@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Connection;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Connection_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Connection_Create
      */
-    protected $connectionId;
+    private $connection;
 
     /**
-     * @var array
+     * @param Connection_Create $connection
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $connectionId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($connectionId, array $record, UserContext $context)
+    public function __construct(Connection_Create $connection, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->connectionId = $connectionId;
-        $this->record       = $record;
+        $this->connection = $connection;
     }
 
-    public function getConnectionId()
+    /**
+     * @return Connection_Create
+     */
+    public function getConnection(): Connection_Create
     {
-        return $this->connectionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->connection;
     }
 }

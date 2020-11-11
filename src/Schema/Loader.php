@@ -22,10 +22,12 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\Schema\LoaderInterface;
 use Fusio\Impl\Service;
+use PSX\Framework\Schema\Passthru;
 use PSX\Schema\SchemaInterface;
-use RuntimeException;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\Parser\TypeSchema;
+use PSX\Schema\SchemaManagerInterface;
 
 /**
  * Loader
@@ -34,33 +36,52 @@ use RuntimeException;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Loader implements LoaderInterface
+class Loader
 {
+    /**
+     * @var Connection
+     */
     protected $connection;
 
-    public function __construct(Connection $connection)
+    /**
+     * @var SchemaManagerInterface
+     */
+    private $schemaManager;
+
+    public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
     {
         $this->connection = $connection;
+        $this->schemaManager = $schemaManager;
     }
 
-    public function getSchema($schemaId)
+    public function getSchema($schemaId): SchemaInterface
     {
-        $row = $this->connection->fetchAssoc('SELECT name, cache FROM fusio_schema WHERE id = :id', array('id' => $schemaId));
+        $source = $this->getSource($schemaId);
+        return $this->schemaManager->getSchema($source);
+    }
 
-        if (!empty($row)) {
-            $cache = isset($row['cache']) ? $row['cache'] : null;
+    private function getSource($schemaId): string
+    {
+        if (is_numeric($schemaId)) {
+            $column = 'id';
+        } else {
+            $column = 'name';
+        }
 
-            if (!empty($cache)) {
-                $cache = Service\Schema::unserializeCache($cache);
+        $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
+        $source = $row['source'] ?? null;
 
-                if ($cache instanceof SchemaInterface) {
-                    return $cache;
-                }
+        if (strpos($source, '{') !== false) {
+            // in case the source is a schema write it to a file
+            $hash = md5($source);
+            $schemaFile = PSX_PATH_CACHE . '/schema-' . $row['name'] . '-' . $hash . '.json';
+            if (!is_file($schemaFile) || md5_file($schemaFile) !== $hash) {
+                file_put_contents($schemaFile, $source);
             }
 
-            throw new RuntimeException(sprintf('Schema %s cache not available', $row['name']));
-        } else {
-            throw new RuntimeException('Invalid schema reference ' . $schemaId);
+            $source = $schemaFile;
         }
+
+        return $source;
     }
 }

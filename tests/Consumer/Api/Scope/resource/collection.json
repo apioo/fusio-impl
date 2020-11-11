@@ -1,55 +1,80 @@
 {
-  "path": "\/consumer\/scope",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_Scope": {
-        "type": "object",
-        "title": "Consumer Scope",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "description": {
-            "type": "string"
-          }
-        }
+  "path": "\/consumer\/scope",
+  "methods": {
+    "GET": {
+      "operationId": "Consumer_Action_Scope_GetAll",
+      "security": {
+        "app": [
+          "consumer.scope"
+        ]
       },
-      "Consumer_Scope_Collection": {
-        "type": "object",
-        "title": "Consumer Scope Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_Scope"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Scope_Collection"
+      "tags": [
+        "consumer.scope"
+      ],
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Consumer_Model_Scope_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Scope_Collection": {
+      "$ref": "Scope_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Scope_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Scope"
       }
     }
   }

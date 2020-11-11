@@ -46,7 +46,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/action', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/action', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -69,24 +69,30 @@ class CollectionTest extends ControllerDbTestCase
         
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 4,
+            "id": 167,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 3,
+            "id": 166,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 2,
+            "id": 165,
+            "status": 1,
+            "name": "Sql-Select-All",
+            "date": "[datetime]"
+        },
+        {
+            "id": 164,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"
@@ -94,7 +100,7 @@ class CollectionTest extends ControllerDbTestCase
         {
             "id": 1,
             "status": 1,
-            "name": "Welcome",
+            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]
@@ -117,14 +123,20 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 1,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 3,
+            "id": 166,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Insert",
+            "date": "[datetime]"
+        },
+        {
+            "id": 165,
+            "status": 1,
+            "name": "Sql-Select-All",
             "date": "[datetime]"
         }
     ]
@@ -147,24 +159,30 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 4,
+            "id": 167,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 3,
+            "id": 166,
             "status": 1,
-            "name": "Sql-Table",
+            "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 2,
+            "id": 165,
+            "status": 1,
+            "name": "Sql-Select-All",
+            "date": "[datetime]"
+        },
+        {
+            "id": 164,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"
@@ -172,7 +190,7 @@ JSON;
         {
             "id": 1,
             "status": 1,
-            "name": "Welcome",
+            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]

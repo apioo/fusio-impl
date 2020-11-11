@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\View\Plan\Usage;
 
 use Fusio\Impl\Backend\View\Plan\Usage\QueryFilter;
+use Fusio\Impl\Tests\Backend\View\FilterTestCase;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,17 +32,17 @@ use PHPUnit\Framework\TestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilterTest extends TestCase
+class QueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from'    => '2015-08-20',
             'to'      => '2015-08-30',
             'routeId' => 1,
             'appId'   => 1,
             'userId'  => 1,
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));

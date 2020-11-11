@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Plan_Update
      */
-    protected $planId;
+    private $plan;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Plan_Update $plan
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $plan;
-
-    /**
-     * @param integer $planId
-     * @param array $record
-     * @param array $plan
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($planId, array $record, $plan, UserContext $context)
+    public function __construct(Plan_Update $plan, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->planId = $planId;
-        $this->record = $record;
-        $this->plan   = $plan;
+        $this->plan = $plan;
+        $this->existing = $existing;
     }
 
-    public function getPlanId()
-    {
-        return $this->planId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getPlan()
+    /**
+     * @return Plan_Update
+     */
+    public function getPlan(): Plan_Update
     {
         return $this->plan;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

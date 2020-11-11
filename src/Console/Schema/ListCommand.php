@@ -60,12 +60,13 @@ class ListCommand extends Command
             ->setDescription('Lists available schema')
             ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list')
             ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Count of the list')
+            ->addOption('category', 'r', InputOption::VALUE_OPTIONAL, 'Category', 1)
             ->addArgument('search', InputArgument::OPTIONAL, 'Search value');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->schemaView->getCollection($input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
+        $result = $this->schemaView->getCollection($input->getOption('category'), $input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
         $rows   = [];
         $entry  = $result->entry ?? [];
 
@@ -79,5 +80,7 @@ class ListCommand extends Command
             ->setRows($rows);
 
         $table->render();
+
+        return 0;
     }
 }

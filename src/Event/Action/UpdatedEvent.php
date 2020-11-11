@@ -22,7 +22,9 @@
 namespace Fusio\Impl\Event\Action;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Action_Update;
 use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
  * UpdatedEvent
@@ -34,47 +36,41 @@ use Fusio\Impl\Event\EventAbstract;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Action_Update
      */
-    protected $actionId;
+    private $action;
 
     /**
-     * @var array
+     * @var RecordInterface
      */
-    protected $record;
+    private $existing;
 
     /**
-     * @var array
+     * @param Action_Update $action
+     * @param RecordInterface $existing
+     * @param UserContext $context
      */
-    protected $action;
-
-    /**
-     * @param integer $actionId
-     * @param array $record
-     * @param array $action
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($actionId, array $record, $action, UserContext $context)
+    public function __construct(Action_Update $action, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->actionId = $actionId;
-        $this->record   = $record;
         $this->action   = $action;
+        $this->existing = $existing;
     }
 
-    public function getActionId()
-    {
-        return $this->actionId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
-    }
-
-    public function getAction()
+    /**
+     * @return Action_Update
+     */
+    public function getAction(): Action_Update
     {
         return $this->action;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
     }
 }

@@ -41,7 +41,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/consumer/scope', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/consumer/scope', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -63,32 +63,17 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 2,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 1,
-            "name": "backend",
-            "description": "Global access to the backend API"
-        },
-        {
-            "id": 2,
-            "name": "consumer",
-            "description": "Global access to the consumer API"
-        },
-        {
-            "id": 3,
-            "name": "authorization",
-            "description": "Authorization API endpoint"
-        },
-        {
-            "id": 33,
+            "id": 35,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 34,
+            "id": 36,
             "name": "bar",
             "description": "Bar access"
         }

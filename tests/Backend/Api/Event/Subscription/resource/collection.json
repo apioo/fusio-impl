@@ -1,103 +1,124 @@
 {
-  "path": "\/backend\/event\/subscription",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
-      },
-      "Event_Subscription": {
-        "type": "object",
-        "title": "Event Subscription",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "eventId": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "endpoint": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "eventId",
-          "userId",
-          "endpoint"
-        ]
-      },
-      "Event_Subscription_Collection": {
-        "type": "object",
-        "title": "Event Subscription Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Event_Subscription"
-            }
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Event_Subscription_Collection"
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Event_Subscription"
-      },
-      "POST-201-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
+  "path": "\/backend\/event\/subscription",
   "methods": {
     "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
+      "operationId": "Backend_Action_Event_Subscription_GetAll",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
+      "queryParameters": "Model_Collection_Query",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Event_Subscription_Collection"
       }
     },
     "POST": {
-      "request": "#\/definitions\/POST-request",
+      "operationId": "Backend_Action_Event_Subscription_Create",
+      "security": {
+        "app": [
+          "backend.event"
+        ]
+      },
+      "tags": [
+        "backend.event"
+      ],
+      "request": "Backend_Model_Event_Subscription_Create",
       "responses": {
-        "201": "#\/definitions\/POST-201-response"
+        "201": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Event_Subscription_Collection": {
+      "$ref": "Event_Subscription_Collection"
+    },
+    "Backend_Model_Event_Subscription_Create": {
+      "$ref": "Event_Subscription_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Subscription": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "eventId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      }
+    },
+    "Event_Subscription_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Event_Subscription"
+      }
+    },
+    "Event_Subscription_Create": {
+      "$extends": "Event_Subscription",
+      "type": "object",
+      "required": [
+        "eventId",
+        "userId",
+        "endpoint"
+      ]
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

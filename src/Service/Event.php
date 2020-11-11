@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Event_Create;
+use Fusio\Impl\Backend\Model\Event_Update;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
@@ -60,70 +62,69 @@ class Event
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create($name, $description, UserContext $context)
+    public function create(Event_Create $event, UserContext $context)
     {
         // check whether event exists
-        if ($this->exists($name)) {
+        if ($this->exists($event->getName())) {
             throw new StatusCode\BadRequestException('Event already exists');
         }
 
         // create event
         $record = [
             'status'      => Table\Event::STATUS_ACTIVE,
-            'name'        => $name,
-            'description' => $description,
+            'name'        => $event->getName(),
+            'description' => $event->getDescription(),
         ];
 
         $this->eventTable->create($record);
 
         // get last insert id
         $eventId = $this->eventTable->getLastInsertId();
+        $event->setId($eventId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($eventId, $record, $context), EventEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($event, $context));
 
         return $eventId;
     }
 
-    public function update($eventId, $name, $description, UserContext $context)
+    public function update(int $eventId, Event_Update $event, UserContext $context)
     {
-        $event = $this->eventTable->get($eventId);
-
-        if (empty($event)) {
+        $existing = $this->eventTable->get($eventId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
-        if ($event['status'] == Table\Event::STATUS_DELETED) {
+        if ($existing['status'] == Table\Event::STATUS_DELETED) {
             throw new StatusCode\GoneException('Event was deleted');
         }
 
         // update event
         $record = [
-            'id'          => $event['id'],
-            'name'        => $name,
-            'description' => $description,
+            'id'          => $existing['id'],
+            'name'        => $event->getName(),
+            'description' => $event->getDescription(),
         ];
 
         $this->eventTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($event['id'], $record, $event, $context), EventEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
     }
 
-    public function delete($eventId, UserContext $context)
+    public function delete(int $eventId, UserContext $context)
     {
-        $event = $this->eventTable->get($eventId);
-
-        if (empty($event)) {
+        $existing = $this->eventTable->get($eventId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
         $record = [
-            'id'     => $event['id'],
+            'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
         ];
 
         $this->eventTable->update($record);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($event['id'], $event, $context), EventEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function exists(string $name)

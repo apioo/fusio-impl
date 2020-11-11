@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Marketplace_Install;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;
@@ -76,8 +77,11 @@ class InstallCommand extends Command
             $this->remoteRepository->setSslVerify(false);
         }
 
+        $install = new Marketplace_Install();
+        $install->setName($input->getArgument('name'));
+
         try {
-            $app = $this->installer->install($input->getArgument('name'), UserContext::newAnonymousContext());
+            $app = $this->installer->install($install, UserContext::newAnonymousContext());
 
             $output->writeln('');
             $output->writeln('Installed app ' . $app->getName());
@@ -87,5 +91,7 @@ class InstallCommand extends Command
             $output->writeln($e->getMessage());
             $output->writeln('');
         }
+
+        return 0;
     }
 }

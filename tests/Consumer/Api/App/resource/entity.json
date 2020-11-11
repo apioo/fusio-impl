@@ -1,108 +1,141 @@
 {
-  "path": "\/consumer\/app\/$app_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "app_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Consumer_App": {
-        "type": "object",
-        "title": "Consumer App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[A-z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string",
-            "minLength": 8
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "name",
-          "url",
-          "scopes"
-        ]
-      },
-      "Consumer_Message": {
-        "type": "object",
-        "title": "Consumer Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_App"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Consumer_App"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/consumer\/app\/$app_id<[0-9]+>",
+  "pathParameters": "ConsumerAppApp_idPath",
   "methods": {
     "GET": {
+      "operationId": "Consumer_Action_App_Get",
+      "security": {
+        "app": [
+          "consumer.app"
+        ]
+      },
+      "tags": [
+        "consumer.app"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Consumer_Model_App"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Consumer_Action_App_Update",
+      "security": {
+        "app": [
+          "consumer.app"
+        ]
+      },
+      "tags": [
+        "consumer.app"
+      ],
+      "request": "Consumer_Model_App_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Consumer_Action_App_Delete",
+      "security": {
+        "app": [
+          "consumer.app"
+        ]
+      },
+      "tags": [
+        "consumer.app"
+      ],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "App_Update": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string",
+          "minLength": 8
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "scopes"
+      ]
+    },
+    "ConsumerAppApp_idPath": {
+      "type": "object",
+      "properties": {
+        "app_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_App": {
+      "$ref": "App"
+    },
+    "Consumer_Model_App_Update": {
+      "$ref": "App_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   }
 }

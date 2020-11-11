@@ -1,99 +1,188 @@
 {
-  "path": "\/backend\/audit\/$audit_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "audit_id": {
-            "type": "integer"
-          }
+  "definitions": {
+    "App": {
+      "properties": {
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "tokens": {
+          "items": {
+            "$ref": "App_Token"
+          },
+          "type": "array"
+        },
+        "url": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
         }
       },
-      "Audit_App": {
-        "type": "object",
-        "title": "Audit App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "App_Token": {
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
         }
       },
-      "Audit_User": {
-        "type": "object",
-        "title": "Audit User",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Audit": {
+      "properties": {
+        "app": {
+          "$ref": "App"
+        },
+        "content": {
+          "$ref": "Audit_Object"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "event": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "User"
         }
       },
-      "Audit_Object": {
-        "type": "object",
-        "title": "Audit Object",
-        "description": "A key value object containing the changes",
-        "additionalProperties": true
+      "type": "object"
+    },
+    "Audit_Object": {
+      "additionalProperties": {
+        "type": "any"
       },
-      "Audit": {
-        "type": "object",
-        "title": "Audit",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "app": {
-            "$ref": "#\/definitions\/Audit_App"
-          },
-          "user": {
-            "$ref": "#\/definitions\/Audit_User"
-          },
-          "event": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "content": {
-            "$ref": "#\/definitions\/Audit_Object"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
+      "description": "A key value object containing the changes",
+      "type": "object"
+    },
+    "BackendAuditAudit_idPath": {
+      "properties": {
+        "audit_id": {
+          "type": "string"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Audit"
-      }
+      "type": "object"
+    },
+    "Backend_Model_Audit": {
+      "$ref": "Audit"
+    },
+    "User": {
+      "properties": {
+        "apps": {
+          "items": {
+            "$ref": "App"
+          },
+          "type": "array"
+        },
+        "attributes": {
+          "$ref": "User_Attributes"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$",
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "User_Attributes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Audit_Get",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Audit"
+      },
+      "security": {
+        "app": [
+          "backend.audit"
+        ]
+      },
+      "tags": [
+        "backend.audit"
+      ]
     }
-  }
+  },
+  "path": "/backend/audit/$audit_id<[0-9]+>",
+  "pathParameters": "BackendAuditAudit_idPath",
+  "status": 1
 }

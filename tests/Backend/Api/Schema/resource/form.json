@@ -1,53 +1,55 @@
 {
-  "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "schema_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/schema\/form\/$schema_id<[0-9]+>",
+  "pathParameters": "BackendSchemaFormSchema_idPath",
+  "methods": {
+    "PUT": {
+      "operationId": "Backend_Action_Schema_Form",
+      "security": {
+        "app": [
+          "backend.schema"
+        ]
       },
-      "Schema_Form": {
-        "type": "object",
-        "title": "Schema Form",
-        "description": "Contains a JsonSchema UI vocabulary to describe the UI of the schema",
-        "additionalProperties": true
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Schema_Form"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
+      "tags": [
+        "backend.schema"
+      ],
+      "request": "Backend_Model_Schema_Form",
+      "responses": {
+        "200": "Model_Message"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "PUT": {
-      "request": "#\/definitions\/PUT-request",
-      "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+  "definitions": {
+    "BackendSchemaFormSchema_idPath": {
+      "type": "object",
+      "properties": {
+        "schema_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Schema_Form": {
+      "$ref": "Schema_Form"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Schema_Form": {
+      "description": "Contains a UI vocabulary to describe the UI of the schema",
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
       }
     }
   }

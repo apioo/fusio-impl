@@ -1,57 +1,58 @@
 {
-  "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "transaction_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
+  "pathParameters": "BackendTransactionTransaction_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Transaction_Get",
+      "security": {
+        "app": [
+          "backend.transaction"
+        ]
       },
-      "Transaction": {
-        "type": "object",
-        "title": "Transaction",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "updateDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "insertDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Transaction"
+      "tags": [
+        "backend.transaction"
+      ],
+      "responses": {
+        "200": "Backend_Model_Transaction"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "BackendTransactionTransaction_idPath": {
+      "type": "object",
+      "properties": {
+        "transaction_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Transaction": {
+      "$ref": "Transaction"
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "updateDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "insertDate": {
+          "format": "date-time",
+          "type": "string"
+        }
       }
     }
   }

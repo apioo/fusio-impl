@@ -1,88 +1,107 @@
 {
-  "path": "\/backend\/plan\/$plan_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "plan_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "Plan": {
-        "type": "object",
-        "title": "Plan",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Plan"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Plan"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/plan\/$plan_id<[0-9]+>",
+  "pathParameters": "BackendPlanPlan_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Plan_Get",
+      "security": {
+        "app": [
+          "backend.plan"
+        ]
+      },
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_Plan"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Plan_Update",
+      "security": {
+        "app": [
+          "backend.plan"
+        ]
+      },
+      "tags": [
+        "backend.plan"
+      ],
+      "request": "Backend_Model_Plan_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_Plan_Delete",
+      "security": {
+        "app": [
+          "backend.plan"
+        ]
+      },
+      "tags": [
+        "backend.plan"
+      ],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "BackendPlanPlan_idPath": {
+      "type": "object",
+      "properties": {
+        "plan_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Plan": {
+      "$ref": "Plan"
+    },
+    "Backend_Model_Plan_Update": {
+      "$ref": "Plan_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        }
+      }
+    },
+    "Plan_Update": {
+      "$extends": "Plan",
+      "type": "object"
     }
   }
 }

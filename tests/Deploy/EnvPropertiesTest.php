@@ -105,20 +105,18 @@ YAML;
         $this->assertEquals($expect, $actual, $actual);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testReplaceUnknownType()
     {
+        $this->expectException(\RuntimeException::class);
+
         $envProperties = $this->newEnvProperties();
         $envProperties->replace('dbname: "${foo.FOO}"', []);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testReplaceUnknownKey()
     {
+        $this->expectException(\RuntimeException::class);
+
         $envProperties = $this->newEnvProperties();
         $envProperties->replace('dbname: "${env.FOO}"', [
             'baz' => 'bar'

@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\Schema;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service;
 use PSX\Schema\Generator;
 use PSX\Schema\SchemaInterface;
@@ -40,48 +41,31 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExportCommand extends Command
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Loader
      */
-    protected $connection;
+    private $schemaLoader;
 
-    public function __construct(Connection $connection)
+    public function __construct(Loader $schemaLoader)
     {
         parent::__construct();
 
-        $this->connection = $connection;
+        $this->schemaLoader = $schemaLoader;
     }
 
     protected function configure()
     {
         $this
             ->setName('schema:export')
-            ->setDescription('Returns the complete json schema of a given schema name')
+            ->setDescription('Returns the complete TypeSchema of a given schema name')
             ->addArgument('name', InputArgument::REQUIRED, 'Name of the json schema');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name   = $input->getArgument('name');
-        $column = is_numeric($name) ? 'id' : 'name';
-
-        $sql = $this->connection->createQueryBuilder()
-            ->select('id', 'cache')
-            ->from('fusio_schema')
-            ->where($column . ' = :name')
-            ->getSQL();
-
-        $row = $this->connection->fetchAssoc($sql, ['name' => $name]);
-
-        if (!empty($row)) {
-            $generator = new Generator\JsonSchema();
-            $schema    = Service\Schema::unserializeCache($row['cache']);
-
-            if ($schema instanceof SchemaInterface) {
-                $output->writeln($generator->generate($schema));
-            } else {
-                $output->writeln('Invalid schema name');
-                return 1;
-            }
+        $schema = $this->schemaLoader->getSchema($input->getArgument('name'));
+        if ($schema instanceof SchemaInterface) {
+            $output->writeln((new Generator\TypeSchema())->generate($schema));
+            return 0;
         } else {
             $output->writeln('Invalid schema name');
             return 1;

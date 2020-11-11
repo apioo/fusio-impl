@@ -1,86 +1,86 @@
 {
-  "path": "\/backend\/log\/$log_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "log_id": {
-            "type": "integer"
-          }
-        }
+  "path": "\/backend\/log\/$log_id<[0-9]+>",
+  "pathParameters": "BackendLogLog_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Log_Get",
+      "security": {
+        "app": [
+          "backend.log"
+        ]
       },
-      "Log_Error": {
-        "type": "object",
-        "title": "Log Error",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "title": "Log",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Log_Error"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Log"
+      "tags": [
+        "backend.log"
+      ],
+      "responses": {
+        "200": "Backend_Model_Log"
       }
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "BackendLogLog_idPath": {
+      "type": "object",
+      "properties": {
+        "log_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Log": {
+      "$ref": "Log"
+    },
+    "Log": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "Log_Error"
+          }
+        }
+      }
+    },
+    "Log_Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "integer"
+        },
+        "trace": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        }
       }
     }
   }

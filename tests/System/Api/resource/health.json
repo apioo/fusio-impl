@@ -1,0 +1,29 @@
+{
+  "status": 1,
+  "path": "\/system\/health",
+  "methods": {
+    "GET": {
+      "operationId": "System_Action_GetHealth",
+      "tags": [],
+      "responses": {
+        "200": "System_Model_Health_Check"
+      }
+    }
+  },
+  "definitions": {
+    "Health_Check": {
+      "type": "object",
+      "properties": {
+        "healthy": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "System_Model_Health_Check": {
+      "$ref": "Health_Check"
+    }
+  }
+}

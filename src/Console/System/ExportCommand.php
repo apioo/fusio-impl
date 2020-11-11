@@ -57,5 +57,7 @@ class ExportCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln($this->exportService->export());
+
+        return 0;
     }
 }

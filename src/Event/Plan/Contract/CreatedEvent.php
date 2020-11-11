@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Plan\Contract;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Contract_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Plan_Contract_Create
      */
-    protected $contractId;
+    private $contract;
 
     /**
-     * @var array
+     * @param Plan_Contract_Create $contract
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $contractId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($contractId, array $record, UserContext $context)
+    public function __construct(Plan_Contract_Create $contract, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->contractId = $contractId;
-        $this->record     = $record;
+        $this->contract = $contract;
     }
 
-    public function getContractId()
+    /**
+     * @return Plan_Contract_Create
+     */
+    public function getContract(): Plan_Contract_Create
     {
-        return $this->contractId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->contract;
     }
 }

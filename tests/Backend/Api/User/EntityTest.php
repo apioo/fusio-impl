@@ -36,6 +36,15 @@ use PSX\Framework\Test\Environment;
  */
 class EntityTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_user', 'Consumer');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -43,7 +52,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/user/2', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/user/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -56,7 +65,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/user/2', 'GET', array(
+        $response = $this->sendRequest('/backend/user/' . $this->id, 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -144,7 +153,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/user/3', 'POST', array(
+        $response = $this->sendRequest('/backend/user/' . $this->id, 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -158,11 +167,11 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/user/4', 'PUT', array(
+        $response = $this->sendRequest('/backend/user/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => 1,
+            'status' => User::STATUS_ADMINISTRATOR,
             'name'   => 'bar',
             'email'  => 'bar@bar.com',
             'scopes' => ['bar'],
@@ -183,14 +192,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'name', 'email')
             ->from('fusio_user')
-            ->where('id = 4')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
         $this->assertEquals('bar@bar.com', $row['email']);
@@ -202,17 +208,17 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
 
         $this->assertEquals([[
-            'user_id'  => 4,
-            'scope_id' => 34,
+            'user_id'  => 2,
+            'scope_id' => 36,
         ]], $scopes);
     }
 
     public function testPutAttributes()
     {
-        $response = $this->sendRequest('/backend/user/4', 'PUT', array(
+        $response = $this->sendRequest('/backend/user/' . $this->id, 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -241,14 +247,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status', 'name', 'email')
             ->from('fusio_user')
-            ->where('id = 4')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(4, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
         $this->assertEquals('bar@bar.com', $row['email']);
@@ -260,21 +263,21 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
+        $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
 
         $this->assertEquals([[
-            'user_id'  => 4,
-            'scope_id' => 34,
+            'user_id'  => 2,
+            'scope_id' => 36,
         ]], $scopes);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('name', 'value')
             ->from('fusio_user_attribute')
-            ->where('user_id = :user_id')
+            ->where('user_id = ' . $this->id)
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $attributes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 4]);
+        $attributes = Environment::getService('connection')->fetchAll($sql);
 
         $this->assertEquals([[
             'name'  => 'last_name',
@@ -287,7 +290,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/user/4', 'DELETE', array(
+        $response = $this->sendRequest('/backend/user/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -307,14 +310,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_user')
-            ->where('id = 4')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(4, $row['id']);
         $this->assertEquals(User::STATUS_DELETED, $row['status']);
     }
 }

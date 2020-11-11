@@ -1,46 +1,47 @@
 {
-  "path": "\/backend\/connection\/list",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Connection_Connection": {
-        "type": "object",
-        "title": "Connection Connection",
-        "properties": {
-          "name": {
-            "type": "string"
+  "definitions": {
+    "Backend_Model_Connection_Index": {
+      "$ref": "Connection_Index"
+    },
+    "Connection_Index": {
+      "properties": {
+        "connections": {
+          "items": {
+            "$ref": "Connection_Index_Entry"
           },
-          "class": {
-            "type": "string"
-          }
+          "type": "array"
         }
       },
-      "Connection_Index": {
-        "type": "object",
-        "title": "Connection Index",
-        "properties": {
-          "connections": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Connection_Connection"
-            }
-          }
+      "type": "object"
+    },
+    "Connection_Index_Entry": {
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Connection_Index"
-      }
+      "type": "object"
     }
   },
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Connection_GetIndex",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Connection_Index"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
     }
-  }
+  },
+  "path": "/backend/connection/list",
+  "status": 1
 }

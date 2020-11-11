@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Tests\Controller;
 
-use Firebase\JWT\JWT;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Api\Resource;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -37,6 +36,15 @@ use PSX\Json\Parser;
  */
 class SqlTableTest extends ControllerDbTestCase
 {
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->id = Fixture::getId('fusio_routes', '/foo');
+    }
+
     public function getDataSet()
     {
         return Fixture::getDataSet();
@@ -106,7 +114,7 @@ JSON;
 
         foreach ($statuuus as $key => $status) {
             // update the route status
-            $response = $this->sendRequest('/backend/routes/' . (Fixture::getLastRouteId() + 1), 'PUT', array(
+            $response = $this->sendRequest('/backend/routes/' . $this->id, 'PUT', array(
                 'User-Agent'    => 'Fusio TestCase',
                 'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
             ), json_encode([
@@ -118,8 +126,8 @@ JSON;
                         'GET' => [
                             'active'   => true,
                             'public'   => true,
-                            'action'   => 3,
-                            'response' => 2,
+                            'action'   => 'Sql-Select-All',
+                            'response' => 'Collection-Schema',
                         ],
                     ],
                 ]],
@@ -129,7 +137,7 @@ JSON;
             $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Routes successful updated"
+    "message": "Route successful updated"
 }
 JSON;
 
@@ -482,7 +490,7 @@ JSON;
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
-            'link' => ['<http://127.0.0.1/export/schema/3>; rel="post-schema"'],
+            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -540,7 +548,7 @@ JSON;
             'access-control-allow-origin' => ['*'],
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
-            'link' => ['<http://127.0.0.1/export/schema/3>; rel="post-schema"'],
+            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
             'access-control-expose-headers' => ['*'],
         ];
 

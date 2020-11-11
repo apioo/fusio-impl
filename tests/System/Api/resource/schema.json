@@ -1,0 +1,50 @@
+{
+  "status": 1,
+  "path": "\/system\/schema\/:name",
+  "pathParameters": "SystemSchemaNamePath",
+  "methods": {
+    "GET": {
+      "operationId": "System_Action_GetSchema",
+      "tags": [],
+      "responses": {
+        "200": "System_Model_Schema"
+      }
+    }
+  },
+  "definitions": {
+    "Schema": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "$ref": "Schema_TypeSchema"
+        },
+        "form": {
+          "$ref": "Schema_Form"
+        }
+      }
+    },
+    "Schema_Form": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Schema_TypeSchema": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "SystemSchemaNamePath": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "System_Model_Schema": {
+      "$ref": "Schema"
+    }
+  }
+}

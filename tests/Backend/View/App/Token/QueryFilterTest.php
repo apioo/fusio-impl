@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Tests\Backend\View\App\Token;
 
 use Fusio\Impl\Backend\View\App\Token\QueryFilter;
-use PHPUnit\Framework\TestCase;
+use Fusio\Impl\Tests\Backend\View\FilterTestCase;
 
 /**
  * QueryFilterTest
@@ -31,11 +31,11 @@ use PHPUnit\Framework\TestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueryFilterTest extends TestCase
+class QueryFilterTest extends FilterTestCase
 {
     public function testCreate()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from'      => '2015-08-20',
             'to'        => '2015-08-30',
             'appId'     => 1,
@@ -43,7 +43,7 @@ class QueryFilterTest extends TestCase
             'status'    => 1,
             'scope'     => 'foo',
             'ip'        => '127.0.0.1',
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
@@ -69,10 +69,10 @@ class QueryFilterTest extends TestCase
 
     public function testCreateFromLargerToFlip()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from' => '2015-08-30',
             'to'   => '2015-08-20',
-        ]);
+        ]));
 
         $this->assertEquals('2015-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2015-08-30', $filter->getTo()->format('Y-m-d'));
@@ -80,10 +80,10 @@ class QueryFilterTest extends TestCase
 
     public function testCreateFromToExceeded()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'from' => '2014-08-20',
             'to'   => '2015-08-30',
-        ]);
+        ]));
 
         $this->assertEquals('2014-08-20', $filter->getFrom()->format('Y-m-d'));
         $this->assertEquals('2014-10-20', $filter->getTo()->format('Y-m-d'));
@@ -91,18 +91,18 @@ class QueryFilterTest extends TestCase
 
     public function testCreateSearchIp()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => '93.223.172.206'
-        ]);
+        ]));
 
         $this->assertEquals('93.223.172.206', $filter->getIp());
     }
 
     public function testCreateSearchScope()
     {
-        $filter = QueryFilter::create([
+        $filter = QueryFilter::create($this->createRequest([
             'search' => 'foo'
-        ]);
+        ]));
 
         $this->assertEquals('foo', $filter->getScope());
     }

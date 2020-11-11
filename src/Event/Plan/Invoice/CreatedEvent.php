@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -34,35 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var integer
+     * @var Plan_Invoice_Create
      */
-    protected $invoiceId;
+    private $invoice;
 
     /**
-     * @var array
+     * @param Plan_Invoice_Create $invoice
+     * @param UserContext $context
      */
-    protected $record;
-
-    /**
-     * @param integer $invoiceId
-     * @param array $record
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($invoiceId, array $record, UserContext $context)
+    public function __construct(Plan_Invoice_Create $invoice, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->invoiceId = $invoiceId;
-        $this->record     = $record;
+        $this->invoice = $invoice;
     }
 
-    public function getInvoiceId()
+    /**
+     * @return Plan_Invoice_Create
+     */
+    public function getInvoice(): Plan_Invoice_Create
     {
-        return $this->invoiceId;
-    }
-
-    public function getRecord()
-    {
-        return $this->record;
+        return $this->invoice;
     }
 }

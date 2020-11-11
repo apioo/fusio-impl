@@ -1,50 +1,46 @@
 {
-  "path": "\/consumer\/activate",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_User_Activate": {
-        "type": "object",
-        "title": "Consumer User Activate",
-        "properties": {
-          "token": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "token"
-        ]
-      },
-      "Consumer_Message": {
-        "type": "object",
-        "title": "Consumer Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "POST-request": {
-        "$ref": "#\/definitions\/Consumer_User_Activate"
-      },
-      "POST-200-response": {
-        "$ref": "#\/definitions\/Consumer_Message"
+  "path": "\/consumer\/activate",
+  "methods": {
+    "POST": {
+      "operationId": "Consumer_Action_User_Activate",
+      "tags": [
+        "consumer.user"
+      ],
+      "request": "Consumer_Model_User_Activate",
+      "responses": {
+        "200": "Model_Message"
       }
     }
   },
-  "methods": {
-    "POST": {
-      "request": "#\/definitions\/POST-request",
-      "responses": {
-        "200": "#\/definitions\/POST-200-response"
+  "definitions": {
+    "Consumer_Model_User_Activate": {
+      "$ref": "User_Activate"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
       }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "User_Activate": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "token"
+      ]
     }
   }
 }

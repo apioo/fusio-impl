@@ -1,65 +1,88 @@
 {
-  "path": "\/consumer\/transaction",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Consumer_Transaction": {
-        "type": "object",
-        "title": "Consumer Transaction",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "updateDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "insertDate": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
+  "path": "\/consumer\/transaction",
+  "methods": {
+    "GET": {
+      "operationId": "Consumer_Action_Transaction_GetAll",
+      "security": {
+        "app": [
+          "consumer.transaction"
+        ]
       },
-      "Consumer_Transaction_Collection": {
-        "type": "object",
-        "title": "Consumer Transaction Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Consumer_Transaction"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Consumer_Transaction_Collection"
+      "tags": [
+        "consumer.transaction"
+      ],
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Consumer_Model_Transaction_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Model_Transaction_Collection": {
+      "$ref": "Transaction_Collection"
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "transactionId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "updateDate": {
+          "type": "integer"
+        },
+        "insertDate": {
+          "type": "integer"
+        }
+      }
+    },
+    "Transaction_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Transaction"
       }
     }
   }

@@ -44,11 +44,10 @@ class DateCalculatorTest extends TestCase
         $this->assertEquals($expect, $endDate->format('Y-m-d'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCalculateInvalidInterval()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         (new DateCalculator())->calculate(new \DateTime(), 10);
     }
 

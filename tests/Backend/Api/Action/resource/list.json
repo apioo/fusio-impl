@@ -1,46 +1,47 @@
 {
-  "path": "\/backend\/action\/list",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "Action_Action": {
-        "type": "object",
-        "title": "Action Action",
-        "properties": {
-          "name": {
-            "type": "string"
+  "definitions": {
+    "Action_Index": {
+      "properties": {
+        "actions": {
+          "items": {
+            "$ref": "Action_Index_Entry"
           },
-          "class": {
-            "type": "string"
-          }
+          "type": "array"
         }
       },
-      "Action_Index": {
-        "type": "object",
-        "title": "Action Index",
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Action_Action"
-            }
-          }
+      "type": "object"
+    },
+    "Action_Index_Entry": {
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Action_Index"
-      }
+      "type": "object"
+    },
+    "Backend_Model_Action_Index": {
+      "$ref": "Action_Index"
     }
   },
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_Action_GetIndex",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Backend_Model_Action_Index"
+      },
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ]
     }
-  }
+  },
+  "path": "/backend/action/list",
+  "status": 1
 }

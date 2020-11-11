@@ -42,7 +42,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/user', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/user', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -251,11 +251,11 @@ JSON;
         $this->assertEquals([[
             'id'       => 17,
             'user_id'  => 6,
-            'scope_id' => 33,
+            'scope_id' => 35,
         ], [
             'id'       => 16,
             'user_id'  => 6,
-            'scope_id' => 34,
+            'scope_id' => 36,
         ]], $routes);
     }
 

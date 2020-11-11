@@ -21,18 +21,22 @@
 
 namespace Fusio\Impl\Service;
 
+use Fusio\Adapter\Php\Action\PhpSandbox;
 use Fusio\Engine\Action\LifecycleInterface;
 use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model;
+use Fusio\Impl\Backend\Model\Action_Create;
+use Fusio\Impl\Backend\Model\Action_Update;
 use Fusio\Impl\Event\Action\CreatedEvent;
 use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
-use Fusio\Impl\Event\ActionEvents;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\Config as FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -49,61 +53,73 @@ class Action
     /**
      * @var \Fusio\Impl\Table\Action
      */
-    protected $actionTable;
+    private $actionTable;
 
     /**
-     * @var \Fusio\Impl\Table\Routes\Method
+     * @var \Fusio\Impl\Table\Route\Method
      */
-    protected $routesMethodTable;
+    private $routeMethodTable;
 
     /**
      * @var \Fusio\Engine\Factory\ActionInterface
      */
-    protected $actionFactory;
+    private $actionFactory;
+
+    /**
+     * @var \PSX\Framework\Config\Config
+     */
+    private $config;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Action $actionTable
-     * @param \Fusio\Impl\Table\Routes\Method $routesMethodTable
+     * @param \Fusio\Impl\Table\Route\Method $routeMethodTable
      * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
+     * @param \PSX\Framework\Config\Config $config
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(Table\Action $actionTable, Table\Routes\Method $routesMethodTable, Factory\ActionInterface $actionFactory, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, FrameworkConfig $config, EventDispatcherInterface $eventDispatcher)
     {
-        $this->actionTable       = $actionTable;
-        $this->routesMethodTable = $routesMethodTable;
-        $this->actionFactory     = $actionFactory;
-        $this->eventDispatcher   = $eventDispatcher;
+        $this->actionTable      = $actionTable;
+        $this->routeMethodTable = $routeMethodTable;
+        $this->actionFactory    = $actionFactory;
+        $this->config           = $config;
+        $this->eventDispatcher  = $eventDispatcher;
     }
 
-    public function create($name, $class, $engine, $config, UserContext $context)
+    public function create(Action_Create $action, UserContext $context)
     {
+        $this->assertSandboxAccess($action);
+
         // check whether action exists
-        if ($this->exists($name)) {
+        if ($this->exists($action->getName())) {
             throw new StatusCode\BadRequestException('Action already exists');
         }
 
+        $engine = $action->getEngine();
+        $class  = $action->getClass();
         if (empty($engine)) {
             $engine = EngineDetector::getEngine($class);
         }
 
         // check source
-        $parameters = new Parameters($config ?: []);
+        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onCreate($name, $parameters);
+            $handler->onCreate($action->getName(), $parameters);
         }
 
         // create action
         $record = [
             'status' => Table\Action::STATUS_ACTIVE,
-            'name'   => $name,
+            'name'   => $action->getName(),
             'class'  => $class,
             'engine' => $engine,
             'config' => self::serializeConfig($config),
@@ -113,46 +129,51 @@ class Action
         $this->actionTable->create($record);
 
         $actionId = $this->actionTable->getLastInsertId();
+        $action->setId($actionId);
 
-        $this->eventDispatcher->dispatch(new CreatedEvent($actionId, $record, $context), ActionEvents::CREATE);
+        $this->eventDispatcher->dispatch(new CreatedEvent($action, $context));
 
         return $actionId;
     }
 
-    public function update($actionId, $name, $class, $engine, $config, UserContext $context)
+    public function update(int $actionId, Action_Update $action, UserContext $context)
     {
-        $action = $this->actionTable->get($actionId);
+        $this->assertSandboxAccess($action);
 
-        if (empty($action)) {
+        $existing = $this->actionTable->get($actionId);
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($action['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing['status'] == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
         // in case the class is empty use the existing class
+        $class = $action->getClass();
         if (empty($class)) {
-            $class = $action['class'];
+            $class = $existing['class'];
         }
 
+        $engine = $action->getEngine();
         if (empty($engine)) {
-            $engine = $action['engine'];
+            $engine = $existing['engine'];
         }
 
         // check source
-        $parameters = new Parameters($config ?: []);
+        $config     = $action->getConfig() ? $action->getConfig()->getProperties() : [];
+        $parameters = new Parameters($config);
         $handler    = $this->newAction($class, $engine);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onUpdate($name, $parameters);
+            $handler->onUpdate($action->getName(), $parameters);
         }
 
         // update action
         $record = [
-            'id'     => $action['id'],
-            'name'   => $name,
+            'id'     => $existing['id'],
+            'name'   => $action->getName(),
             'class'  => $class,
             'engine' => $engine,
             'config' => self::serializeConfig($config),
@@ -161,41 +182,36 @@ class Action
 
         $this->actionTable->update($record);
 
-        $this->eventDispatcher->dispatch(new UpdatedEvent($actionId, $record, $action, $context), ActionEvents::UPDATE);
+        $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
     }
 
-    public function delete($actionId, UserContext $context)
+    public function delete(int $actionId, UserContext $context)
     {
-        $action = $this->actionTable->get($actionId);
+        $existing = $this->actionTable->get($actionId);
 
-        if (empty($action)) {
+        if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($action['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing['status'] == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        // check depending
-        if ($this->routesMethodTable->hasAction($actionId)) {
-            throw new StatusCode\BadRequestException('Cannot delete action because a route depends on it');
-        }
-
-        $config     = self::unserializeConfig($action['config']);
+        $config     = self::unserializeConfig($existing['config']);
         $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($action['class'], $action['engine']);
+        $handler    = $this->newAction($existing['class'], $existing['engine']);
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onDelete($action['name'], $parameters);
+            $handler->onDelete($existing['name'], $parameters);
         }
 
         $this->actionTable->update([
-            'id'     => $action['id'],
+            'id'     => $existing['id'],
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
-        $this->eventDispatcher->dispatch(new DeletedEvent($actionId, $action, $context), ActionEvents::DELETE);
+        $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
     }
 
     public function exists(string $name)
@@ -238,6 +254,15 @@ class Action
         }
 
         return $action;
+    }
+
+    private function assertSandboxAccess(Model\Action $record)
+    {
+        $class = ltrim($record->getClass(), '\\');
+
+        if (!$this->config->get('fusio_php_sandbox') && strcasecmp($class, PhpSandbox::class) == 0) {
+            throw new StatusCode\BadRequestException('Usage of the PHP sandbox feature is disabled. To activate it set the key "fusio_php_sandbox" in the configuration.php file to "true"');
+        }
     }
 
     /**

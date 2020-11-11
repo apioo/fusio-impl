@@ -61,5 +61,7 @@ class CleanCommand extends Command
         $this->connection->executeUpdate('DELETE FROM fusio_app_token WHERE expire < ' . $now);
 
         $output->writeln('Clean up successful!');
+
+        return 0;
     }
 }

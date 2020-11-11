@@ -1,145 +1,162 @@
 {
-  "path": "\/backend\/log",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "GET-query": {
-        "type": "object",
-        "title": "GetQuery",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "from": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "to": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "routeId": {
-            "type": "integer"
-          },
-          "appId": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "search": {
-            "type": "string"
-          }
-        }
+  "path": "\/backend\/log",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Log_GetAll",
+      "security": {
+        "app": [
+          "backend.log"
+        ]
       },
-      "Log": {
-        "type": "object",
-        "title": "Log",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "userAgent": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "header": {
-            "type": "string"
-          },
-          "body": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Log_Error"
-            }
-          }
-        }
-      },
-      "Log_Error": {
-        "type": "object",
-        "title": "Log Error",
-        "properties": {
-          "message": {
-            "type": "string"
-          },
-          "trace": {
-            "type": "string"
-          },
-          "file": {
-            "type": "string"
-          },
-          "line": {
-            "type": "integer"
-          }
-        }
-      },
-      "Log_Collection": {
-        "type": "object",
-        "title": "Log Collection",
-        "properties": {
-          "totalResults": {
-            "type": "integer"
-          },
-          "startIndex": {
-            "type": "integer"
-          },
-          "entry": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/Log"
-            }
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Log_Collection"
+      "tags": [
+        "backend.log"
+      ],
+      "queryParameters": "Backend_Model_Log_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Log_Collection"
       }
     }
   },
-  "methods": {
-    "GET": {
-      "queryParameters": "#\/definitions\/GET-query",
-      "responses": {
-        "200": "#\/definitions\/GET-200-response"
+  "definitions": {
+    "Backend_Model_Log_Collection": {
+      "$ref": "Log_Collection"
+    },
+    "Backend_Model_Log_Collection_Query": {
+      "$ref": "Log_Collection_Query"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Log": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "Log_Error"
+          }
+        }
+      }
+    },
+    "Log_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Log"
+      }
+    },
+    "Log_Collection_Query": {
+      "$extends": "Collection_Query",
+      "type": "object",
+      "properties": {
+        "from": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "to": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "routeId": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Log_Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "integer"
+        },
+        "trace": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer"
+        }
       }
     }
   }

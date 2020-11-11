@@ -1,124 +1,109 @@
 {
-  "path": "\/backend\/connection\/$connection_id<[0-9]+>",
-  "version": "*",
-  "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "connection_id": {
-            "type": "integer"
-          }
+  "definitions": {
+    "BackendConnectionConnection_idPath": {
+      "properties": {
+        "connection_id": {
+          "type": "string"
         }
       },
-      "Connection_Config": {
-        "type": "object",
-        "title": "Connection Config",
-        "additionalProperties": {
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "number"
-            },
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            },
-            {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "maxItems": 16
-            }
-          ]
+      "type": "object"
+    },
+    "Backend_Model_Connection": {
+      "$ref": "Connection"
+    },
+    "Backend_Model_Connection_Update": {
+      "$ref": "Connection_Update"
+    },
+    "Connection": {
+      "properties": {
+        "class": {
+          "type": "string"
         },
-        "maxProperties": 16
-      },
-      "Connection": {
-        "type": "object",
-        "title": "Connection",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-          },
-          "class": {
-            "type": "string"
-          },
-          "config": {
-            "$ref": "#\/definitions\/Connection_Config"
-          }
+        "config": {
+          "$ref": "Connection_Config"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
+          "type": "string"
         }
       },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
+      "type": "object"
+    },
+    "Connection_Config": {
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16,
+      "type": "object"
+    },
+    "Connection_Update": {
+      "$extends": "Connection",
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
         }
       },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/Connection"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/Connection"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
+      "type": "object"
+    },
+    "Model_Message": {
+      "$ref": "Message"
     }
   },
-  "pathParameters": "#\/definitions\/path-template",
   "methods": {
-    "GET": {
+    "DELETE": {
+      "operationId": "Backend_Action_Connection_Delete",
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
+    },
+    "GET": {
+      "operationId": "Backend_Action_Connection_Get",
+      "responses": {
+        "200": "Backend_Model_Connection"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_Connection_Update",
+      "request": "Backend_Model_Connection_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
-      }
-    },
-    "DELETE": {
-      "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
-      }
+        "200": "Model_Message"
+      },
+      "security": {
+        "app": [
+          "backend.connection"
+        ]
+      },
+      "tags": [
+        "backend.connection"
+      ]
     }
-  }
+  },
+  "path": "/backend/connection/$connection_id<[0-9]+>",
+  "pathParameters": "BackendConnectionConnection_idPath",
+  "status": 1
 }

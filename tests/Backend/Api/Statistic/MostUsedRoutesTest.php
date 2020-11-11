@@ -41,7 +41,7 @@ class MostUsedRoutesTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/doc/*/backend/statistic/most_used_routes', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/statistic/most_used_routes', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -130,7 +130,7 @@ class MostUsedRoutesTest extends ControllerDbTestCase
         ]
     ],
     "series": [
-        "\/backend\/account\/change_password"
+        "\/foo"
     ]
 }
 JSON;

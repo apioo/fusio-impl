@@ -1,185 +1,201 @@
 {
-  "path": "\/backend\/user\/$user_id<[0-9]+>",
-  "version": "*",
   "status": 1,
-  "description": null,
-  "schema": {
-    "$schema": "http:\/\/json-schema.org\/draft-04\/schema#",
-    "id": "urn:schema.phpsx.org#",
-    "definitions": {
-      "path-template": {
-        "type": "object",
-        "title": "path",
-        "properties": {
-          "user_id": {
-            "type": "integer"
-          }
-        }
-      },
-      "App": {
-        "type": "object",
-        "title": "App",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "userId": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-          },
-          "url": {
-            "type": "string"
-          },
-          "parameters": {
-            "type": "string"
-          },
-          "appKey": {
-            "type": "string"
-          },
-          "appSecret": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/App_Token"
-            }
-          }
-        }
-      },
-      "App_Token": {
-        "type": "object",
-        "title": "App Token",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "ip": {
-            "type": "string"
-          },
-          "expire": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "User_Attributes": {
-        "type": "object",
-        "title": "User Attributes",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "User": {
-        "type": "object",
-        "title": "User",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
-          },
-          "email": {
-            "type": "string"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "scopes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "apps": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/definitions\/App"
-            }
-          },
-          "attributes": {
-            "$ref": "#\/definitions\/User_Attributes"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "title": "Message",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "GET-200-response": {
-        "$ref": "#\/definitions\/User"
-      },
-      "PUT-request": {
-        "$ref": "#\/definitions\/User"
-      },
-      "PUT-200-response": {
-        "$ref": "#\/definitions\/Message"
-      },
-      "DELETE-200-response": {
-        "$ref": "#\/definitions\/Message"
-      }
-    }
-  },
-  "pathParameters": "#\/definitions\/path-template",
+  "path": "\/backend\/user\/$user_id<[0-9]+>",
+  "pathParameters": "BackendUserUser_idPath",
   "methods": {
     "GET": {
+      "operationId": "Backend_Action_User_Get",
+      "security": {
+        "app": [
+          "backend.user"
+        ]
+      },
+      "tags": [
+        "backend.user"
+      ],
       "responses": {
-        "200": "#\/definitions\/GET-200-response"
+        "200": "Backend_Model_User"
       }
     },
     "PUT": {
-      "request": "#\/definitions\/PUT-request",
+      "operationId": "Backend_Action_User_Update",
+      "security": {
+        "app": [
+          "backend.user"
+        ]
+      },
+      "tags": [
+        "backend.user"
+      ],
+      "request": "Backend_Model_User_Update",
       "responses": {
-        "200": "#\/definitions\/PUT-200-response"
+        "200": "Model_Message"
       }
     },
     "DELETE": {
+      "operationId": "Backend_Action_User_Delete",
+      "security": {
+        "app": [
+          "backend.user"
+        ]
+      },
+      "tags": [
+        "backend.user"
+      ],
       "responses": {
-        "200": "#\/definitions\/DELETE-200-response"
+        "200": "Model_Message"
       }
+    }
+  },
+  "definitions": {
+    "App": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "appKey": {
+          "type": "string"
+        },
+        "appSecret": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "App_Token"
+          }
+        }
+      }
+    },
+    "App_Token": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "token": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "expire": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "BackendUserUser_idPath": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_User": {
+      "$ref": "User"
+    },
+    "Backend_Model_User_Update": {
+      "$ref": "User_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "$ref": "App"
+          }
+        },
+        "attributes": {
+          "$ref": "User_Attributes"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "User_Attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "User_Update": {
+      "$extends": "User",
+      "type": "object"
     }
   }
 }

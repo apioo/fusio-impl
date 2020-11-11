@@ -30,7 +30,6 @@ return [
         \Fusio\Adapter\Http\Action\HttpProcessor::class,
         \Fusio\Adapter\Php\Action\PhpProcessor::class,
         \Fusio\Adapter\Php\Action\PhpSandbox::class,
-        \Fusio\Adapter\Sql\Action\SqlTable::class,
         \Fusio\Adapter\Util\Action\UtilStaticResponse::class,
         \stdClass::class,
     ],
