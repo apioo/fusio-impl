@@ -10,6 +10,7 @@ services:
 before_install:
   - phpenv config-add tests/config.ini
   - if [ $TRAVIS_PHP_VERSION == '7.2' ]; then phpenv config-rm xdebug.ini; fi;
+  - if [ $TRAVIS_PHP_VERSION -ne '7.4' ]; then composer self-update --rollback; fi;
 install:
   - composer install
 before_script:
