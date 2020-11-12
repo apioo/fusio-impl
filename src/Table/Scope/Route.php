@@ -70,8 +70,9 @@ class Route extends TableAbstract
                   FROM fusio_scope_routes routes
             INNER JOIN fusio_scope scope
                     ON scope.id = routes.scope_id
-                 WHERE route_id = :id
-                   AND allow = 1';
+                 WHERE routes.route_id = :id
+                   AND routes.allow = 1
+              ORDER BY routes.id ASC';
 
         return $this->connection->fetchAll($sql, ['id' => $routeId]);
     }
@@ -83,8 +84,9 @@ class Route extends TableAbstract
                   FROM fusio_scope_routes routes
             INNER JOIN fusio_scope scope
                     ON scope.id = routes.scope_id
-                 WHERE route_id = :id
-                   AND allow = 1';
+                 WHERE routes.route_id = :id
+                   AND routes.allow = 1
+              ORDER BY routes.id ASC';
 
         $result = $this->connection->fetchAll($sql, ['id' => $routeId]);
         $scopes = [];
