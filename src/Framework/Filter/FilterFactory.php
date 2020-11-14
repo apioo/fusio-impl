@@ -23,6 +23,7 @@ namespace Fusio\Impl\Framework\Filter;
 
 use Doctrine\DBAL\Connection;
 use PSX\Api\Listing\FilterFactory as PSXFilterFactory;
+use PSX\Api\Listing\FilterInterface;
 
 /**
  * FilterFactory
@@ -38,19 +39,38 @@ class FilterFactory extends PSXFilterFactory
      */
     private $connection;
 
+    /**
+     * @var bool
+     */
+    private $loaded = false;
+
     public function __construct(Connection $connection)
     {
         parent::__construct();
 
         $this->connection = $connection;
-        $this->load();
     }
-    
+
+    /**
+     * @inheritdoc
+     */
+    public function getFilter(string $name): ?FilterInterface
+    {
+        $this->load();
+        return parent::getFilter($name);
+    }
+
     private function load()
     {
+        if ($this->loaded) {
+            return;
+        }
+
         $result = $this->connection->fetchAll('SELECT id, name FROM fusio_category');
         foreach ($result as $row) {
             $this->addFilter($row['name'], new Filter($row['name']));
         }
+
+        $this->loaded = true;
     }
 }
