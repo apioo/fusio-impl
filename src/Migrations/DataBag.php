@@ -594,6 +594,13 @@ class DataBag
         throw new \RuntimeException('Could not find name ' . $name . ' for type ' . $type);
     }
 
+    public function replace(string $type, $name, $key, $value): void
+    {
+        if (isset($this->data[$type][$name][$key])) {
+            $this->data[$type][$name][$key] = $value;
+        }
+    }
+
     private function hasId(string $type, $name): bool
     {
         try {
