@@ -22,11 +22,8 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Service;
-use PSX\Framework\Schema\Passthru;
+use PSX\Schema\InvalidSchemaException;
 use PSX\Schema\SchemaInterface;
-use PSX\Schema\SchemaManager;
-use PSX\Schema\Parser\TypeSchema;
 use PSX\Schema\SchemaManagerInterface;
 
 /**
@@ -41,7 +38,7 @@ class Loader
     /**
      * @var Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var SchemaManagerInterface
@@ -60,6 +57,12 @@ class Loader
         return $this->schemaManager->getSchema($source);
     }
 
+    /**
+     * @param string|integer $schemaId
+     * @return string
+     * @throws InvalidSchemaException
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function getSource($schemaId): string
     {
         if (is_numeric($schemaId)) {
@@ -70,6 +73,10 @@ class Loader
 
         $row = $this->connection->fetchAssoc('SELECT name, source FROM fusio_schema WHERE ' . $column . ' = :id', array('id' => $schemaId));
         $source = $row['source'] ?? null;
+
+        if ($source === null) {
+            throw new InvalidSchemaException('Provided schema ' . $schemaId . ' does not exist');
+        }
 
         if (strpos($source, '{') !== false) {
             // in case the source is a schema write it to a file
