@@ -70,17 +70,21 @@ class NameGenerator
             if (preg_match('/^[a-zA-Z0-9\-\_]{3,255}$/', $source)) {
                 return $source;
             } else {
-                return self::getNameFromJsonSchema($source);
+                return self::getNameFromSchema($source);
             }
         } elseif (is_array($source)) {
-            return self::getNameFromJsonSchema(json_encode($source));
+            return self::getNameFromSchema(json_encode($source));
         } else {
             throw new RuntimeException('Schema should be a string containing an "!include" directive pointing to a JsonSchema file');
         }
     }
 
-    private static function getNameFromJsonSchema($schema)
+    private static function getNameFromSchema(string $schema)
     {
+        if (class_exists($schema)) {
+            return preg_replace('/[^a-zA-Z0-9\-\_]/', '_', $schema);
+        }
+
         $data = json_decode($schema);
 
         if (!$data instanceof \stdClass) {
