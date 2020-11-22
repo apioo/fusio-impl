@@ -25,7 +25,9 @@ use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Framework\Loader\LocationFinder\DatabaseFinder;
 use Fusio\Impl\Migrations\NewInstallation;
+use Fusio\Impl\Table\Category;
 use Fusio\Impl\Tests\DbTestCase;
+use PSX\Framework\Test\Environment;
 use PSX\Http\Request;
 use PSX\Http\RequestInterface;
 use PSX\Uri\Uri;
@@ -61,7 +63,7 @@ class RoutingParserTest extends DbTestCase
         $request = new Request(new Uri($path), $method);
         $context = new Context();
 
-        $parser  = new DatabaseFinder($this->connection);
+        $parser  = new DatabaseFinder($this->connection, Environment::getService('table_manager')->getTable(Category::class));
         $request = $parser->resolve($request, $context);
 
         $this->assertInstanceOf(RequestInterface::class, $request);
@@ -97,7 +99,7 @@ class RoutingParserTest extends DbTestCase
         $request = new Request(new Uri($path), $method);
         $context = new Context();
 
-        $parser  = new DatabaseFinder($this->connection);
+        $parser  = new DatabaseFinder($this->connection, Environment::getService('table_manager')->getTable(Category::class));
         $request = $parser->resolve($request, $context);
 
         $this->assertEmpty($request);

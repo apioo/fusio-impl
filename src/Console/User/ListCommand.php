@@ -65,7 +65,12 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->userView->getCollection($input->getOption('startIndex'), $input->getOption('count'), $input->getArgument('search'));
+        $result = $this->userView->getCollection(
+            (int) $input->getOption('startIndex'),
+            (int) $input->getOption('count'),
+            $input->getArgument('search')
+        );
+
         $rows   = [];
         $entry  = $result->entry ?? [];
 

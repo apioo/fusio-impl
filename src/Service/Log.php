@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Table;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
@@ -47,16 +48,23 @@ class Log
     private $connection;
 
     /**
+     * @var Table\Category
+     */
+    private $categoryTable;
+
+    /**
      * @var array
      */
     private $stack;
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param DBALConnection $connection
+     * @param Table\Category $categoryTable
      */
-    public function __construct(DBALConnection $connection)
+    public function __construct(DBALConnection $connection, Table\Category $categoryTable)
     {
         $this->connection = $connection;
+        $this->categoryTable = $categoryTable;
         $this->stack = [];
     }
 
@@ -76,16 +84,17 @@ class Log
         }
 
         $this->connection->insert('fusio_log', array(
-            'route_id'   => $context->getRouteId(),
-            'app_id'     => $context->getAppId(),
-            'user_id'    => $context->getUserId(),
-            'ip'         => $remoteIp,
-            'user_agent' => $userAgent,
-            'method'     => $method,
-            'path'       => $path,
-            'header'     => $request !== null ? $this->getHeadersAsString($request) : '',
-            'body'       => $request !== null ? $this->getBodyAsString($request) : '',
-            'date'       => $now->format('Y-m-d H:i:s'),
+            'category_id' => $this->categoryTable->getCategoryIdForPath($path),
+            'route_id'    => $context->getRouteId(),
+            'app_id'      => $context->getAppId(),
+            'user_id'     => $context->getUserId(),
+            'ip'          => $remoteIp,
+            'user_agent'  => $userAgent,
+            'method'      => $method,
+            'path'        => $path,
+            'header'      => $request !== null ? $this->getHeadersAsString($request) : '',
+            'body'        => $request !== null ? $this->getBodyAsString($request) : '',
+            'date'        => $now->format('Y-m-d H:i:s'),
         ));
 
         $this->stack[self::$level][self::LOG_ID] = $this->connection->lastInsertId();

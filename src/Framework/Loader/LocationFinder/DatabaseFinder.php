@@ -23,6 +23,7 @@ namespace Fusio\Impl\Framework\Loader\LocationFinder;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Table\Route as TableRoutes;
+use Fusio\Impl\Table\Category as TableCategory;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\PathMatcher;
@@ -40,14 +41,21 @@ class DatabaseFinder implements LocationFinderInterface
     /**
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
+     * @var TableCategory
      */
-    public function __construct(Connection $connection)
+    private $categoryTable;
+
+    /**
+     * @param Connection $connection
+     * @param TableCategory $categoryTable
+     */
+    public function __construct(Connection $connection, TableCategory $categoryTable)
     {
         $this->connection = $connection;
+        $this->categoryTable = $categoryTable;
     }
 
     /**
@@ -68,7 +76,7 @@ class DatabaseFinder implements LocationFinderInterface
         $path   = $request->getUri()->getPath();
         $params = ['status' => TableRoutes::STATUS_ACTIVE];
 
-        $categoryId = $this->getCategoryId($path);
+        $categoryId = $this->categoryTable->getCategoryIdForPath($path);
         $sql.= 'AND category_id = :category_id ';
         $params['category_id'] = $categoryId;
 
@@ -93,22 +101,5 @@ class DatabaseFinder implements LocationFinderInterface
         }
 
         return null;
-    }
-
-    private function getCategoryId(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
-        }
-
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
     }
 }

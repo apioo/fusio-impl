@@ -78,7 +78,10 @@ class Container extends DefaultContainer
 
     public function getLoaderLocationFinder(): LocationFinderInterface
     {
-        return new DatabaseFinder($this->get('connection'));
+        return new DatabaseFinder(
+            $this->get('connection'),
+            $this->get('table_manager')->getTable(Table\Category::class)
+        );
     }
 
     public function getResourceListing(): ListingInterface
