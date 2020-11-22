@@ -48,7 +48,7 @@ class Log extends ViewAbstract
         }
 
         $condition = $filter->getCondition();
-        $condition->equals('category_id', $categoryId);
+        $condition->equals('category_id', $categoryId ?: 1);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
