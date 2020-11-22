@@ -205,6 +205,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_log')) {
             $logTable = $schema->createTable('fusio_log');
             $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $logTable->addColumn('category_id', 'integer', ['default' => 1]);
             $logTable->addColumn('route_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
             $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
