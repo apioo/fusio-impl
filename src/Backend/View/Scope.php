@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Scope extends ViewAbstract
 {
-    public function getCollection(int $categoryId, ?int $startIndex = null, ?int $count = null, ?string $search = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;

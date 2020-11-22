@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, $search = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;

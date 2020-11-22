@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Transaction extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, QueryFilter $filter)
+    public function getCollection(int $startIndex, int $count, QueryFilter $filter)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;

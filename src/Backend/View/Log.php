@@ -37,7 +37,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Log extends ViewAbstract
 {
-    public function getCollection($startIndex = null, $count = null, QueryFilter $filter)
+    public function getCollection(int $categoryId, int $startIndex, int $count, QueryFilter $filter)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -48,6 +48,7 @@ class Log extends ViewAbstract
         }
 
         $condition = $filter->getCondition();
+        $condition->equals('category_id', $categoryId);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
