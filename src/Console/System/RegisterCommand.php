@@ -103,7 +103,7 @@ class RegisterCommand extends Command
                 if (strpos($definition, '${connection}') !== false) {
                     $output->writeLn('The adapter requires a connection.');
 
-                    $result = $this->connectionView->getCollection();
+                    $result = $this->connectionView->getCollection(0, 64);
                     foreach ($result->entry as $connection) {
                         $output->writeln($connection->id . ': ' . $connection->name);
                     }
