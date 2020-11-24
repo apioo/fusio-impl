@@ -233,6 +233,8 @@ class Rate
         $past->sub(new \DateInterval($timespan));
 
         $condition = new Condition();
+        // we count only requests to the default category
+        $condition->equals('category_id', 1);
 
         if ($app->isAnonymous()) {
             $condition->equals('ip', $ip);
