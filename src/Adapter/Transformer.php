@@ -40,6 +40,7 @@ use PSX\Schema\DefinitionsInterface;
 use PSX\Schema\Generator;
 use PSX\Schema\Schema;
 use PSX\Schema\SchemaResolver;
+use PSX\Schema\TypeFactory;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -110,11 +111,11 @@ class Transformer
         $definitions = $specification->getDefinitions();
 
         foreach ($definitions->getTypes(DefinitionsInterface::SELF_NAMESPACE) as $name => $type) {
-            $schema = new Schema($type, clone $definitions);
+            $schema = new Schema(TypeFactory::getReference($name), clone $definitions);
             (new SchemaResolver())->resolve($schema);
 
-            $result = $this->generator->toArray($type, $definitions);
-            $source = Schema_Source::fromArray($result);
+            $result = $this->generator->generate($schema);
+            $source = Schema_Source::from(\json_decode($result));
 
             $schema = new Schema_Create();
             $schema->setName($name);

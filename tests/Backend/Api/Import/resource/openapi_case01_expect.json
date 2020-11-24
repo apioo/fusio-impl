@@ -1,106 +1,88 @@
 {
-  "routes": [
-    {
-      "path": "\/pets",
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "parameters": "PetsGetQuery",
-              "responses": {
-                "200": "Pets"
-              },
-              "action": "pets-listPets-GET"
-            },
-            "POST": {
-              "active": true,
-              "public": true,
-              "responses": {},
-              "action": "pets-createPets-POST"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "path": "\/pets\/:petId",
-      "config": [
-        {
-          "version": 1,
-          "status": 4,
-          "methods": {
-            "GET": {
-              "active": true,
-              "public": true,
-              "parameters": "PetsPetIdGetQuery",
-              "responses": {
-                "200": "Pets"
-              },
-              "action": "pets-_petId-showPetById-GET"
-            }
-          }
-        }
-      ]
-    }
-  ],
   "action": [
     {
-      "name": "pets-listPets-GET",
       "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
-        "statusCode": "200",
-        "response": "{\"message\":\"Test implementation\"}"
-      }
+        "response": "{\"message\":\"Test implementation\"}",
+        "statusCode": "200"
+      },
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "pets-listPets-GET"
     },
     {
-      "name": "pets-createPets-POST",
       "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
-        "statusCode": "200",
-        "response": "{\"message\":\"Test implementation\"}"
-      }
+        "response": "{\"message\":\"Test implementation\"}",
+        "statusCode": "200"
+      },
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "pets-createPets-POST"
     },
     {
-      "name": "pets-_petId-showPetById-GET",
       "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
-        "statusCode": "200",
-        "response": "{\"message\":\"Test implementation\"}"
-      }
+        "response": "{\"message\":\"Test implementation\"}",
+        "statusCode": "200"
+      },
+      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
+      "name": "pets-_petId-showPetById-GET"
+    }
+  ],
+  "routes": [
+    {
+      "config": [
+        {
+          "methods": {
+            "GET": {
+              "action": "pets-listPets-GET",
+              "active": true,
+              "parameters": "PetsGetQuery",
+              "public": true,
+              "responses": {
+                "200": "Pets"
+              }
+            },
+            "POST": {
+              "action": "pets-createPets-POST",
+              "active": true,
+              "public": true,
+              "responses": {}
+            }
+          },
+          "status": 4,
+          "version": 1
+        }
+      ],
+      "path": "/pets"
+    },
+    {
+      "config": [
+        {
+          "methods": {
+            "GET": {
+              "action": "pets-_petId-showPetById-GET",
+              "active": true,
+              "parameters": "PetsPetIdGetQuery",
+              "public": true,
+              "responses": {
+                "200": "Pets"
+              }
+            }
+          },
+          "status": 4,
+          "version": 1
+        }
+      ],
+      "path": "/pets/:petId"
     }
   ],
   "schema": [
     {
       "name": "Pet",
       "source": {
+        "$ref": "Pet",
         "definitions": {
-          "Error": {
-            "title": "Error",
-            "type": "object",
-            "properties": {
-              "code": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "code",
-              "message"
-            ]
-          },
           "Pet": {
-            "title": "Pet",
-            "type": "object",
             "properties": {
               "id": {
                 "format": "int64",
@@ -116,79 +98,19 @@
             "required": [
               "id",
               "name"
-            ]
-          },
-          "Pets": {
-            "title": "Pets",
-            "type": "array",
-            "items": {
-              "$ref": "Pet"
-            }
-          },
-          "PetsGetQuery": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "required": []
-          },
-          "PetsPetIdGetQuery": {
-            "type": "object",
-            "properties": {
-              "petId": {
-                "type": "string"
-              }
-            },
-            "required": []
+            ],
+            "title": "Pet",
+            "type": "object"
           }
-        },
-        "title": "Pet",
-        "type": "object",
-        "properties": {
-          "id": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "tag": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "name"
-        ]
+        }
       }
     },
     {
       "name": "Pets",
       "source": {
+        "$ref": "Pets",
         "definitions": {
-          "Error": {
-            "title": "Error",
-            "type": "object",
-            "properties": {
-              "code": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "code",
-              "message"
-            ]
-          },
           "Pet": {
-            "title": "Pet",
-            "type": "object",
             "properties": {
               "id": {
                 "format": "int64",
@@ -204,49 +126,26 @@
             "required": [
               "id",
               "name"
-            ]
+            ],
+            "title": "Pet",
+            "type": "object"
           },
           "Pets": {
-            "title": "Pets",
-            "type": "array",
             "items": {
               "$ref": "Pet"
-            }
-          },
-          "PetsGetQuery": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "format": "int32",
-                "type": "integer"
-              }
             },
-            "required": []
-          },
-          "PetsPetIdGetQuery": {
-            "type": "object",
-            "properties": {
-              "petId": {
-                "type": "string"
-              }
-            },
-            "required": []
+            "title": "Pets",
+            "type": "array"
           }
-        },
-        "title": "Pets",
-        "type": "array",
-        "items": {
-          "$ref": "Pet"
         }
       }
     },
     {
       "name": "Error",
       "source": {
+        "$ref": "Error",
         "definitions": {
           "Error": {
-            "title": "Error",
-            "type": "object",
             "properties": {
               "code": {
                 "format": "int32",
@@ -259,11 +158,11 @@
             "required": [
               "code",
               "message"
-            ]
+            ],
+            "title": "Error",
+            "type": "object"
           },
           "Pet": {
-            "title": "Pet",
-            "type": "object",
             "properties": {
               "id": {
                 "format": "int64",
@@ -279,76 +178,19 @@
             "required": [
               "id",
               "name"
-            ]
-          },
-          "Pets": {
-            "title": "Pets",
-            "type": "array",
-            "items": {
-              "$ref": "Pet"
-            }
-          },
-          "PetsGetQuery": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "required": []
-          },
-          "PetsPetIdGetQuery": {
-            "type": "object",
-            "properties": {
-              "petId": {
-                "type": "string"
-              }
-            },
-            "required": []
+            ],
+            "title": "Pet",
+            "type": "object"
           }
-        },
-        "title": "Error",
-        "type": "object",
-        "properties": {
-          "code": {
-            "format": "int32",
-            "type": "integer"
-          },
-          "message": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "code",
-          "message"
-        ]
+        }
       }
     },
     {
       "name": "PetsGetQuery",
       "source": {
+        "$ref": "PetsGetQuery",
         "definitions": {
-          "Error": {
-            "title": "Error",
-            "type": "object",
-            "properties": {
-              "code": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "code",
-              "message"
-            ]
-          },
           "Pet": {
-            "title": "Pet",
-            "type": "object",
             "properties": {
               "id": {
                 "format": "int64",
@@ -364,69 +206,29 @@
             "required": [
               "id",
               "name"
-            ]
-          },
-          "Pets": {
-            "title": "Pets",
-            "type": "array",
-            "items": {
-              "$ref": "Pet"
-            }
+            ],
+            "title": "Pet",
+            "type": "object"
           },
           "PetsGetQuery": {
-            "type": "object",
             "properties": {
               "limit": {
                 "format": "int32",
                 "type": "integer"
               }
             },
-            "required": []
-          },
-          "PetsPetIdGetQuery": {
-            "type": "object",
-            "properties": {
-              "petId": {
-                "type": "string"
-              }
-            },
-            "required": []
+            "required": [],
+            "type": "object"
           }
-        },
-        "type": "object",
-        "properties": {
-          "limit": {
-            "format": "int32",
-            "type": "integer"
-          }
-        },
-        "required": []
+        }
       }
     },
     {
       "name": "PetsPetIdGetQuery",
       "source": {
+        "$ref": "PetsPetIdGetQuery",
         "definitions": {
-          "Error": {
-            "title": "Error",
-            "type": "object",
-            "properties": {
-              "code": {
-                "format": "int32",
-                "type": "integer"
-              },
-              "message": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "code",
-              "message"
-            ]
-          },
           "Pet": {
-            "title": "Pet",
-            "type": "object",
             "properties": {
               "id": {
                 "format": "int64",
@@ -442,42 +244,20 @@
             "required": [
               "id",
               "name"
-            ]
-          },
-          "Pets": {
-            "title": "Pets",
-            "type": "array",
-            "items": {
-              "$ref": "Pet"
-            }
-          },
-          "PetsGetQuery": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "required": []
+            ],
+            "title": "Pet",
+            "type": "object"
           },
           "PetsPetIdGetQuery": {
-            "type": "object",
             "properties": {
               "petId": {
                 "type": "string"
               }
             },
-            "required": []
+            "required": [],
+            "type": "object"
           }
-        },
-        "type": "object",
-        "properties": {
-          "petId": {
-            "type": "string"
-          }
-        },
-        "required": []
+        }
       }
     }
   ]
