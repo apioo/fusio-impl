@@ -38,12 +38,13 @@ class LatestRequests extends ViewAbstract
                          log.ip,
                          log.date
                     FROM fusio_log log
+                   WHERE log.category_id = :category_id
                 ORDER BY log.date DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
-            'entry' => $this->doCollection($sql, [], [
+            'entry' => $this->doCollection($sql, ['category_id' => 1], [
                 'path' => 'path',
                 'ip' => 'ip',
                 'date' => $this->fieldDateTime('date'),
