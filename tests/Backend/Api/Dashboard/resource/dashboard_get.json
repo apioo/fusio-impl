@@ -381,11 +381,6 @@
   "latestRequests": {
     "entry": [
       {
-        "path": "\/backend\/dashboard?from=2015-06-01T00:00:00&to=2015-06-30T23:59:59",
-        "ip": "127.0.0.1",
-        "date": "[datetime]"
-      },
-      {
         "path": "\/bar",
         "ip": "127.0.0.1",
         "date": "[datetime]"
