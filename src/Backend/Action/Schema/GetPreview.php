@@ -49,7 +49,7 @@ class GetPreview extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $body = $this->schemaService->generatePreview(
-            (int) $request->get('schema_id')
+            $request->get('schema_id')
         );
 
         return [

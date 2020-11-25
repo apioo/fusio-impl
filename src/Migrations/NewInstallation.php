@@ -322,7 +322,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Backend\Model\Schema_Collection::class], Collection_Category_Query::class, 'backend.schema'),
                     'POST' => new Method(Backend\Action\Schema\Create::class, Backend\Model\Schema_Create::class, [201 => Message::class], null, 'backend.schema', 'fusio.schema.create'),
                 ],
-                '/schema/preview/$schema_id<[0-9]+>' => [
+                '/schema/preview/:schema_id' => [
                     'POST' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Backend\Model\Schema_Preview_Response::class], null, 'backend.schema'),
                 ],
                 '/schema/form/$schema_id<[0-9]+>' => [
