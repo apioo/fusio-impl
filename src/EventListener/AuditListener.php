@@ -627,10 +627,6 @@ class AuditListener implements EventSubscriberInterface
             $content->setPassword('******');
         }
 
-        if ($content instanceof \JsonSerializable) {
-            return json_encode($content);
-        }
-
         return null;
     }
 
