@@ -134,7 +134,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+      "path": "\/backend\/schema\/preview\/:schema_id",
       "methods": [
         "ANY"
       ],

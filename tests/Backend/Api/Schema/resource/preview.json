@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/schema\/preview\/$schema_id<[0-9]+>",
+  "path": "\/backend\/schema\/preview\/:schema_id",
   "pathParameters": "BackendSchemaPreviewSchema_idPath",
   "methods": {
     "POST": {
