@@ -78,6 +78,9 @@ class EntityTest extends ControllerDbTestCase
     "event": "app.update",
     "ip": "127.0.0.1",
     "message": "Created schema foo",
+    "content": {
+        "foo": "bar"
+    },
     "date": "2015-06-25T22:49:09Z"
 }
 JSON;

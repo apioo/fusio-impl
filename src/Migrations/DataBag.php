@@ -246,7 +246,7 @@ class DataBag
             'event' => $event,
             'ip' => '127.0.0.1',
             'message' => $message,
-            'content' => null,
+            'content' => '{"foo": "bar"}',
             'date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
         ];
     }
