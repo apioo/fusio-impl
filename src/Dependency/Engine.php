@@ -21,10 +21,9 @@
 
 namespace Fusio\Impl\Dependency;
 
-use Fusio\Engine\ActionInterface;
+use Fusio\Engine\Action;
 use Fusio\Engine\Cache;
 use Fusio\Engine\CacheInterface;
-use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
@@ -32,19 +31,15 @@ use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
 use Fusio\Engine\Logger;
 use Fusio\Engine\LoggerInterface;
-use Fusio\Engine\Parser;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
-use Fusio\Engine\Schema;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Provider\ActionProviderParser;
 use Fusio\Impl\Provider\ConnectionProviderParser;
-use Fusio\Impl\Provider\ProviderConfig;
-use Fusio\Impl\Provider\ProviderParser;
 use Fusio\Impl\Repository as ImplRepository;
-use Fusio\Impl\Schema as ImplSchema;
+use Fusio\Impl\Service\Action\Queue;
 use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Table;
 
@@ -77,6 +72,13 @@ trait Engine
         return $factory;
     }
 
+    public function getActionQueue(): Action\QueueInterface
+    {
+        return new Queue\Producer(
+            $this->get('connection')
+        );
+    }
+
     public function getEngineLogger(): LoggerInterface
     {
         $logger = new Logger('engine');
@@ -99,7 +101,8 @@ trait Engine
     {
         return new Processor(
             $this->get('action_repository'),
-            $this->get('action_factory')
+            $this->get('action_factory'),
+            $this->get('action_queue')
         );
     }
 

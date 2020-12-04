@@ -28,11 +28,22 @@ final class Version20200905081453 extends AbstractMigration
             $actionTable->addColumn('status', 'integer', ['default' => Table\Action::STATUS_ACTIVE]);
             $actionTable->addColumn('name', 'string', ['length' => 255]);
             $actionTable->addColumn('class', 'string', ['length' => 255]);
+            $actionTable->addColumn('async', 'boolean', ['default' => false]);
             $actionTable->addColumn('engine', 'string', ['length' => 255, 'notnull' => false]);
             $actionTable->addColumn('config', 'text', ['notnull' => false]);
             $actionTable->addColumn('date', 'datetime');
             $actionTable->setPrimaryKey(['id']);
             $actionTable->addUniqueIndex(['name']);
+        }
+
+        if (!$schema->hasTable('fusio_action_queue')) {
+            $actionQueueTable = $schema->createTable('fusio_action_queue');
+            $actionQueueTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $actionQueueTable->addColumn('action', 'string', ['length' => 255]);
+            $actionQueueTable->addColumn('request', 'text');
+            $actionQueueTable->addColumn('context', 'text');
+            $actionQueueTable->addColumn('date', 'datetime');
+            $actionQueueTable->setPrimaryKey(['id']);
         }
 
         if (!$schema->hasTable('fusio_app')) {
@@ -99,7 +110,6 @@ final class Version20200905081453 extends AbstractMigration
             $auditTable->addColumn('content', 'text', ['notnull' => false]);
             $auditTable->addColumn('date', 'datetime');
             $auditTable->setPrimaryKey(['id']);
-            $auditTable->addOption('engine', 'MyISAM');
         }
 
         if (!$schema->hasTable('fusio_category')) {
@@ -155,7 +165,6 @@ final class Version20200905081453 extends AbstractMigration
             $cronjobErrorTable->addColumn('file', 'string', ['length' => 255]);
             $cronjobErrorTable->addColumn('line', 'integer');
             $cronjobErrorTable->setPrimaryKey(['id']);
-            $cronjobErrorTable->addOption('engine', 'MyISAM');
         }
 
         if (!$schema->hasTable('fusio_event')) {
@@ -165,6 +174,7 @@ final class Version20200905081453 extends AbstractMigration
             $eventTable->addColumn('status', 'integer');
             $eventTable->addColumn('name', 'string', ['length' => 64]);
             $eventTable->addColumn('description', 'string', ['length' => 255]);
+            $eventTable->addColumn('schema', 'string', ['notnull' => false]);
             $eventTable->setPrimaryKey(['id']);
         }
 
@@ -218,7 +228,6 @@ final class Version20200905081453 extends AbstractMigration
             $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
             $logTable->addColumn('date', 'datetime');
             $logTable->setPrimaryKey(['id']);
-            $logTable->addOption('engine', 'MyISAM');
         }
 
         if (!$schema->hasTable('fusio_log_error')) {
@@ -230,7 +239,6 @@ final class Version20200905081453 extends AbstractMigration
             $logErrorTable->addColumn('file', 'string', ['length' => 255]);
             $logErrorTable->addColumn('line', 'integer');
             $logErrorTable->setPrimaryKey(['id']);
-            $logErrorTable->addOption('engine', 'MyISAM');
         }
 
         if (!$schema->hasTable('fusio_plan')) {
@@ -284,7 +292,6 @@ final class Version20200905081453 extends AbstractMigration
             $planUsageTable->addColumn('points', 'integer');
             $planUsageTable->addColumn('insert_date', 'datetime');
             $planUsageTable->setPrimaryKey(['id']);
-            $planUsageTable->addOption('engine', 'MyISAM');
         }
 
         if (!$schema->hasTable('fusio_provider')) {

@@ -54,6 +54,7 @@ class ActionDatabase implements Repository\ActionInterface
         $sql = 'SELECT id,
                        name,
                        class,
+                       async,
                        engine,
                        config,
                        date
@@ -88,6 +89,7 @@ class ActionDatabase implements Repository\ActionInterface
         $sql = 'SELECT id,
                        name,
                        class,
+                       async,
                        engine,
                        config,
                        date
@@ -108,8 +110,9 @@ class ActionDatabase implements Repository\ActionInterface
         $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
 
         $action = new Action();
-        $action->setId($row['id']);
+        $action->setId((int) $row['id']);
         $action->setName($row['name']);
+        $action->setAsync((bool) $row['async']);
         $action->setClass($row['class']);
         $action->setEngine($row['engine']);
         $action->setConfig($config);

@@ -142,6 +142,14 @@ trait Services
         );
     }
 
+    public function getActionQueueConsumerService(): Service\Action\Queue\Consumer
+    {
+        return new Service\Action\Queue\Consumer(
+            $this->get('processor'),
+            $this->get('connection')
+        );
+    }
+
     public function getAppService(): Service\App
     {
         return new Service\App(
