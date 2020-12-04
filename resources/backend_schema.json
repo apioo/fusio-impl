@@ -39,6 +39,9 @@
         "class": {
           "type": "string"
         },
+        "async": {
+          "type": "boolean"
+        },
         "engine": {
           "type": "string"
         },

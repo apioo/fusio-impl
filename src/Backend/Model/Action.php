@@ -25,6 +25,10 @@ class Action implements \JsonSerializable
      */
     protected $class;
     /**
+     * @var bool|null
+     */
+    protected $async;
+    /**
      * @var string|null
      */
     protected $engine;
@@ -89,6 +93,20 @@ class Action implements \JsonSerializable
         return $this->class;
     }
     /**
+     * @param bool|null $async
+     */
+    public function setAsync(?bool $async) : void
+    {
+        $this->async = $async;
+    }
+    /**
+     * @return bool|null
+     */
+    public function getAsync() : ?bool
+    {
+        return $this->async;
+    }
+    /**
      * @param string|null $engine
      */
     public function setEngine(?string $engine) : void
@@ -118,7 +136,7 @@ class Action implements \JsonSerializable
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'status' => $this->status, 'name' => $this->name, 'class' => $this->class, 'engine' => $this->engine, 'config' => $this->config), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'status' => $this->status, 'name' => $this->name, 'class' => $this->class, 'async' => $this->async, 'engine' => $this->engine, 'config' => $this->config), static function ($value) : bool {
             return $value !== null;
         });
     }
