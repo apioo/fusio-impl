@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\Action\Queue;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Processor;
+use Fusio\Impl\Repository\ActionDatabase;
 
 /**
  * Consumer
@@ -52,6 +53,10 @@ class Consumer
     public function execute()
     {
         $platform = $this->connection->getDatabasePlatform();
+
+        $repository = new ActionDatabase($this->connection);
+        $repository->setAsync(false);
+        $this->processor->push($repository);
 
         while (true) {
             $sql = 'SELECT id, action, request, context FROM fusio_action_queue ORDER BY id ASC';

@@ -39,7 +39,12 @@ class ActionDatabase implements Repository\ActionInterface
     /**
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
+
+    /**
+     * @var bool
+     */
+    private $async = true;
 
     /**
      * @param \Doctrine\DBAL\Connection $connection
@@ -105,6 +110,11 @@ class ActionDatabase implements Repository\ActionInterface
         }
     }
 
+    public function setAsync(bool $async): void
+    {
+        $this->async = $async;
+    }
+
     protected function newAction(array $row)
     {
         $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
@@ -112,7 +122,7 @@ class ActionDatabase implements Repository\ActionInterface
         $action = new Action();
         $action->setId((int) $row['id']);
         $action->setName($row['name']);
-        $action->setAsync((bool) $row['async']);
+        $action->setAsync($this->async ? (bool) $row['async'] : false);
         $action->setClass($row['class']);
         $action->setEngine($row['engine']);
         $action->setConfig($config);
