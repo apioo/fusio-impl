@@ -288,11 +288,6 @@ class Action
             return null;
         }
 
-        // BC check whether data is PHP serialized
-        if (substr($data, 0, 2) === 'a:') {
-            return \unserialize($data);
-        }
-
         return \json_decode($data, true);
     }
 }
