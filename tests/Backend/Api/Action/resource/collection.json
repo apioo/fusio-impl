@@ -1,28 +1,65 @@
 {
+  "status": 1,
+  "path": "\/backend\/action",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Action_GetAll",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "queryParameters": "Model_Collection_Category_Query",
+      "responses": {
+        "200": "Backend_Model_Action_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Action_Create",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "request": "Backend_Model_Action_Create",
+      "responses": {
+        "201": "Model_Message"
+      }
+    }
+  },
   "definitions": {
     "Action": {
+      "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
         "class": {
           "type": "string"
         },
-        "config": {
-          "$ref": "Action_Config"
+        "async": {
+          "type": "boolean"
         },
         "engine": {
           "type": "string"
         },
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
-          "type": "string"
-        },
-        "status": {
-          "type": "integer"
+        "config": {
+          "$ref": "Action_Config"
         }
-      },
-      "type": "object"
+      }
     },
     "Action_Collection": {
       "$ref": "Collection",
@@ -31,18 +68,18 @@
       }
     },
     "Action_Config": {
+      "type": "object",
       "additionalProperties": {
         "type": "any"
-      },
-      "type": "object"
+      }
     },
     "Action_Create": {
       "$extends": "Action",
+      "type": "object",
       "required": [
         "name",
         "config"
-      ],
-      "type": "object"
+      ]
     },
     "Backend_Model_Action_Collection": {
       "$ref": "Action_Collection"
@@ -51,55 +88,55 @@
       "$ref": "Action_Create"
     },
     "Collection": {
+      "type": "object",
       "properties": {
-        "entry": {
-          "items": {
-            "$generic": "T"
-          },
-          "type": "array"
+        "totalResults": {
+          "type": "integer"
         },
         "startIndex": {
           "type": "integer"
         },
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
         }
-      },
-      "type": "object"
+      }
     },
     "Collection_Category_Query": {
       "$extends": "Collection_Query",
+      "type": "object",
       "properties": {
         "categoryId": {
           "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "Collection_Query": {
+      "type": "object",
       "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
         "count": {
           "type": "integer"
         },
         "search": {
           "type": "string"
-        },
-        "startIndex": {
-          "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "Message": {
+      "type": "object",
       "properties": {
-        "message": {
-          "type": "string"
-        },
         "success": {
           "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Model_Collection_Category_Query": {
       "$ref": "Collection_Category_Query"
@@ -107,39 +144,5 @@
     "Model_Message": {
       "$ref": "Message"
     }
-  },
-  "methods": {
-    "GET": {
-      "operationId": "Backend_Action_Action_GetAll",
-      "queryParameters": "Model_Collection_Category_Query",
-      "responses": {
-        "200": "Backend_Model_Action_Collection"
-      },
-      "security": {
-        "app": [
-          "backend.action"
-        ]
-      },
-      "tags": [
-        "backend.action"
-      ]
-    },
-    "POST": {
-      "operationId": "Backend_Action_Action_Create",
-      "request": "Backend_Model_Action_Create",
-      "responses": {
-        "201": "Model_Message"
-      },
-      "security": {
-        "app": [
-          "backend.action"
-        ]
-      },
-      "tags": [
-        "backend.action"
-      ]
-    }
-  },
-  "path": "/backend/action",
-  "status": 1
+  }
 }

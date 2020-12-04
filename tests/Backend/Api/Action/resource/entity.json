@@ -1,46 +1,97 @@
 {
+  "status": 1,
+  "path": "\/backend\/action\/$action_id<[0-9]+>",
+  "pathParameters": "BackendActionAction_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Action_Get",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "responses": {
+        "200": "Backend_Model_Action"
+      }
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Action_Update",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "request": "Backend_Model_Action_Update",
+      "responses": {
+        "200": "Model_Message"
+      }
+    },
+    "DELETE": {
+      "operationId": "Backend_Action_Action_Delete",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "responses": {
+        "200": "Model_Message"
+      }
+    }
+  },
   "definitions": {
     "Action": {
+      "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
         "class": {
           "type": "string"
         },
-        "config": {
-          "$ref": "Action_Config"
+        "async": {
+          "type": "boolean"
         },
         "engine": {
           "type": "string"
         },
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$",
-          "type": "string"
-        },
-        "status": {
-          "type": "integer"
+        "config": {
+          "$ref": "Action_Config"
         }
-      },
-      "type": "object"
+      }
     },
     "Action_Config": {
+      "type": "object",
       "additionalProperties": {
         "type": "any"
-      },
-      "type": "object"
+      }
     },
     "Action_Update": {
       "$extends": "Action",
       "type": "object"
     },
     "BackendActionAction_idPath": {
+      "type": "object",
       "properties": {
         "action_id": {
           "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Backend_Model_Action": {
       "$ref": "Action"
@@ -49,66 +100,18 @@
       "$ref": "Action_Update"
     },
     "Message": {
+      "type": "object",
       "properties": {
-        "message": {
-          "type": "string"
-        },
         "success": {
           "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Model_Message": {
       "$ref": "Message"
     }
-  },
-  "methods": {
-    "DELETE": {
-      "operationId": "Backend_Action_Action_Delete",
-      "responses": {
-        "200": "Model_Message"
-      },
-      "security": {
-        "app": [
-          "backend.action"
-        ]
-      },
-      "tags": [
-        "backend.action"
-      ]
-    },
-    "GET": {
-      "operationId": "Backend_Action_Action_Get",
-      "responses": {
-        "200": "Backend_Model_Action"
-      },
-      "security": {
-        "app": [
-          "backend.action"
-        ]
-      },
-      "tags": [
-        "backend.action"
-      ]
-    },
-    "PUT": {
-      "operationId": "Backend_Action_Action_Update",
-      "request": "Backend_Model_Action_Update",
-      "responses": {
-        "200": "Model_Message"
-      },
-      "security": {
-        "app": [
-          "backend.action"
-        ]
-      },
-      "tags": [
-        "backend.action"
-      ]
-    }
-  },
-  "path": "/backend/action/$action_id<[0-9]+>",
-  "pathParameters": "BackendActionAction_idPath",
-  "status": 1
+  }
 }

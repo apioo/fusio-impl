@@ -48,6 +48,7 @@ class Action extends TableAbstract
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
             'class' => self::TYPE_VARCHAR,
+            'async' => self::TYPE_BOOLEAN,
             'engine' => self::TYPE_VARCHAR,
             'config' => self::TYPE_TEXT,
             'date' => self::TYPE_DATETIME,

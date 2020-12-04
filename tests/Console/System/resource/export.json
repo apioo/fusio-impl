@@ -127,12 +127,14 @@
     {
       "name": "Inspect-Action",
       "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\InspectAction",
+      "async": false,
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "date": "[datetime]"
     },
     {
       "name": "Sql-Insert",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlInsert",
+      "async": false,
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "connection": 2,
@@ -143,6 +145,7 @@
     {
       "name": "Sql-Select-All",
       "class": "Fusio\\Adapter\\Sql\\Action\\SqlSelectAll",
+      "async": false,
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "connection": 2,
@@ -153,6 +156,7 @@
     {
       "name": "Util-Static-Response",
       "class": "Fusio\\Adapter\\Util\\Action\\UtilStaticResponse",
+      "async": false,
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "config": {
         "response": "{\"foo\": \"bar\"}"
@@ -162,6 +166,7 @@
     {
       "name": "Action_Welcome",
       "class": "Fusio\\Impl\\Action\\Welcome",
+      "async": false,
       "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
       "date": "[datetime]"
     }

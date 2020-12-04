@@ -77,6 +77,7 @@ class Action extends ViewAbstract
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
             'class' => 'class',
+            'async' => 'async',
             'engine' => 'engine',
             'config' => $this->fieldCallback('config', function ($config) {
                 return Service\Action::unserializeConfig($config);

@@ -78,6 +78,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "name": "Sql-Insert",
     "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
+    "async": false,
     "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
     "config": {
         "connection": 2,
