@@ -21,7 +21,7 @@ return array(
     // the database. NOTE IF YOU CHANGE THE KEY FUSIO CAN NO LONGER READ ANY 
     // DATA WHICH WAS ENCRYPTED BEFORE. BECAUSE OF THAT IT IS RECOMMENDED TO 
     // CHANGE THE KEY ONLY BEFORE THE INSTALLATION
-    'fusio_project_key'       => '42eec18ffdbffc9fda6110dcc705d6ce',
+    'fusio_project_key'       => 'def00000f4f7679c90443d462c56b38cfff71ed3640fdad55dec8c7e0f3b213dee7c67daefc8e890a1b959ff849a09632d89b07fbf75e5fc2987df15ff0831923540548c',
 
     // Indicates whether the PHP sandbox feature is enabled. If yes it is
     // possible to create an action at the backend which contains PHP code. This
