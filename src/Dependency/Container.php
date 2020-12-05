@@ -52,6 +52,8 @@ use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Schema\Console as SchemaConsole;
 use PSX\Schema\Parser\TypeSchema\ImportResolver;
+use PSX\Schema\SchemaManager;
+use PSX\Schema\SchemaManagerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command as SymfonyCommand;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -185,6 +187,16 @@ class Container extends DefaultContainer
         return new Schema\Loader(
             $this->get('connection'),
             $this->get('schema_manager')
+        );
+    }
+
+    public function getSchemaManager(): SchemaManagerInterface
+    {
+        return new SchemaManager(
+            $this->get('annotation_reader_factory')->factory('PSX\Schema\Annotation'),
+            $this->get('cache'),
+            $this->get('config')->get('psx_debug'),
+            $this->get('schema_parser_import_resolver')
         );
     }
 
