@@ -70,8 +70,7 @@ class ImportCommand extends Command
         $this
             ->setName('system:import')
             ->setDescription('Import system data from a JSON structure')
-            ->addArgument('file', InputArgument::REQUIRED, 'Path to the JSON file')
-            ->addArgument('format', InputArgument::OPTIONAL, 'Optional the format i.e. openapi, raml, swagger');
+            ->addArgument('file', InputArgument::REQUIRED, 'Path to the JSON file');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -87,14 +86,7 @@ class ImportCommand extends Command
         }
 
         try {
-            $format = $input->getArgument('format');
-            $schema = file_get_contents($file);
-
-            if (!empty($format)) {
-                $import = Transformer::fromSchema($format, $schema);
-            } else {
-                $import = file_get_contents($file);
-            }
+            $import = file_get_contents($file);
 
             $this->connection->beginTransaction();
 
