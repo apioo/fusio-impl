@@ -53,6 +53,11 @@ class Database implements ResolverInterface
 
         $definitions = [];
         foreach ($result as $row) {
+            if (strpos($row['source'], '{') === false) {
+                // in case source is a class skip
+                continue;
+            }
+
             $data = Parser::decode($row['source']);
             if (isset($data->definitions)) {
                 $definitions = array_merge($definitions, (array) $data->definitions);
