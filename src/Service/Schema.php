@@ -92,18 +92,31 @@ class Schema
             throw new StatusCode\BadRequestException('Schema already exists');
         }
 
-        // create schema
-        $record = [
-            'status' => Table\Schema::STATUS_ACTIVE,
-            'name'   => $schema->getName(),
-            'source' => $this->parseSource($schema->getSource()),
-            'form'   => $this->parseForm($schema->getForm()),
-        ];
+        try {
+            $this->schemaTable->beginTransaction();
 
-        $this->schemaTable->create($record);
+            // create schema
+            $record = [
+                'status' => Table\Schema::STATUS_ACTIVE,
+                'name'   => $schema->getName(),
+                'source' => $this->parseSource($schema->getSource()),
+                'form'   => $this->parseForm($schema->getForm()),
+            ];
 
-        $schemaId = $this->schemaTable->getLastInsertId();
-        $schema->setId($schemaId);
+            $this->schemaTable->create($record);
+
+            $schemaId = $this->schemaTable->getLastInsertId();
+            $schema->setId($schemaId);
+
+            // check whether we can load the schema
+            $this->schemaLoader->getSchema($schema->getName());
+
+            $this->schemaTable->commit();
+        } catch (\Throwable $e) {
+            $this->schemaTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($schema, $context));
 
@@ -121,14 +134,27 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = [
-            'id'     => $existing['id'],
-            'name'   => $schema->getName(),
-            'source' => $this->parseSource($schema->getSource()),
-            'form'   => $this->parseForm($schema->getForm()),
-        ];
+        try {
+            $this->schemaTable->beginTransaction();
 
-        $this->schemaTable->update($record);
+            $record = [
+                'id'     => $existing['id'],
+                'name'   => $schema->getName(),
+                'source' => $this->parseSource($schema->getSource()),
+                'form'   => $this->parseForm($schema->getForm()),
+            ];
+
+            $this->schemaTable->update($record);
+
+            // check whether we can load the schema
+            $this->schemaLoader->getSchema($schema->getName());
+
+            $this->schemaTable->commit();
+        } catch (\Throwable $e) {
+            $this->schemaTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
     }
