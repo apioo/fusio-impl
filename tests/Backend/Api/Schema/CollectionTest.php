@@ -21,11 +21,13 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Schema;
 
+use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use PSX\Schema\SchemaInterface;
 
 /**
  * CollectionTest
@@ -160,17 +162,22 @@ JSON;
         $schema = <<<'JSON'
 {
     "$import": {
-        "self": "schema:///Entry-Schema"
+        "entry": "schema:///Entry-Schema"
     },
-    "type": "object",
-    "properties": {
-        "title": {
-            "type": "string"
-        },
-        "foo": {
-            "$ref": "Entry-Schema"
+    "definitions": {
+        "Bar": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "foo": {
+                    "$ref": "entry:Entry-Schema"
+                }
+            }
         }
-    }
+    },
+    "$ref": "Bar"
 }
 JSON;
 
@@ -195,6 +202,14 @@ JSON;
 
         // check database
         Assert::assertSchema('Bar-Schema', $schema);
+
+        // test schema
+        /** @var Loader $schemaLoader */
+        $schemaLoader = Environment::getService('schema_loader');
+        $schema = $schemaLoader->getSchema('Bar-Schema');
+
+        $this->assertInstanceOf(SchemaInterface::class, $schema);
+        $this->assertEquals(['entry:Entry', 'self:Bar'], array_keys($schema->getDefinitions()->getAllTypes()));
     }
 
     public function testPut()

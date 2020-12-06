@@ -37,7 +37,7 @@ class Database implements ResolverInterface
     /**
      * @var Connection
      */
-    protected $connection;
+    private $connection;
 
     public function __construct(Connection $connection)
     {
@@ -49,7 +49,7 @@ class Database implements ResolverInterface
      */
     public function resolve(Uri $uri, ?string $basePath = null): \stdClass
     {
-        $result = $this->connection->fetchAll('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => $uri->getPath()]);
+        $result = $this->connection->fetchAll('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
 
         $definitions = [];
         foreach ($result as $row) {
@@ -60,7 +60,7 @@ class Database implements ResolverInterface
         }
 
         return (object) [
-            'definitions' => $definitions,
+            'definitions' => (object) $definitions,
         ];
     }
 }
