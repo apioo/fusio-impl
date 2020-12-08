@@ -309,7 +309,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "routeId": 110,
+          "routeId": 108,
           "authenticated": true
         }
       ]
@@ -323,7 +323,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "routeId": 110
+          "routeId": 108
         }
       ]
     },
@@ -371,7 +371,6 @@
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
-        "backend.import",
         "backend.log",
         "backend.marketplace",
         "backend.plan",
@@ -446,7 +445,6 @@
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
-        "backend.import",
         "backend.log",
         "backend.marketplace",
         "backend.plan",

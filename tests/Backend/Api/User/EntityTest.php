@@ -212,7 +212,7 @@ JSON;
 
         $this->assertEquals([[
             'user_id'  => 2,
-            'scope_id' => 36,
+            'scope_id' => 35,
         ]], $scopes);
     }
 
@@ -267,7 +267,7 @@ JSON;
 
         $this->assertEquals([[
             'user_id'  => 2,
-            'scope_id' => 36,
+            'scope_id' => 35,
         ]], $scopes);
 
         $sql = Environment::getService('connection')->createQueryBuilder()

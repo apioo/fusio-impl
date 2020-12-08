@@ -161,22 +161,6 @@
         }
       }
     },
-    "\/system\/doc": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Documentation_Index"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "\/system\/invoke\/{method}": {
       "post": {
         "operationId": "System_Action_Invoke",
@@ -219,6 +203,39 @@
         }
       ]
     },
+    "\/system\/route": {
+      "get": {
+        "operationId": "System_Action_GetAllRoute",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Route"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/doc": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Documentation_Index"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "\/system\/doc\/{version}\/{path}": {
       "get": {
         "responses": {
@@ -252,23 +269,6 @@
           }
         }
       ]
-    },
-    "\/system\/route": {
-      "get": {
-        "operationId": "System_Action_GetAllRoute",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Route"
-                }
-              }
-            }
-          }
-        }
-      }
     },
     "\/system\/jsonrpc": {
       "post": {
@@ -564,8 +564,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           },
           "clientCredentials": {
@@ -573,8 +573,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           },
           "authorizationCode": {
@@ -583,8 +583,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           }
         }
@@ -596,28 +596,27 @@
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "backend.user": "",
-              "backend.transaction": "",
-              "backend.statistic": "",
-              "backend.sdk": "",
-              "backend.scope": "",
-              "backend.schema": "",
-              "backend.route": "",
-              "backend.rate": "",
-              "backend.plan": "",
-              "backend.marketplace": "",
-              "backend.log": "",
-              "backend.import": "",
-              "backend.event": "",
-              "backend.dashboard": "",
-              "backend.cronjob": "",
-              "backend.connection": "",
-              "backend.config": "",
-              "backend.audit": "",
-              "backend.app": "",
-              "backend.action": "",
+              "backend": "",
               "backend.account": "",
-              "backend": ""
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": ""
             }
           }
         }
@@ -629,15 +628,15 @@
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "consumer.user": "",
-              "consumer.transaction": "",
-              "consumer.subscription": "",
-              "consumer.scope": "",
-              "consumer.plan": "",
-              "consumer.grant": "",
-              "consumer.event": "",
+              "consumer": "",
               "consumer.app": "",
-              "consumer": ""
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": ""
             }
           }
         }
