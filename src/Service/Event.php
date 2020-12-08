@@ -74,6 +74,7 @@ class Event
             'status'      => Table\Event::STATUS_ACTIVE,
             'name'        => $event->getName(),
             'description' => $event->getDescription(),
+            'schema'      => $event->getSchema(),
         ];
 
         $this->eventTable->create($record);
@@ -103,6 +104,7 @@ class Event
             'id'          => $existing['id'],
             'name'        => $event->getName(),
             'description' => $event->getDescription(),
+            'schema'      => $event->getSchema(),
         ];
 
         $this->eventTable->update($record);
