@@ -68,12 +68,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 36,
+            "id": 35,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 35,
+            "id": 34,
             "name": "foo",
             "description": "Foo access"
         },
@@ -105,7 +105,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 35,
+            "id": 34,
             "name": "foo",
             "description": "Foo access"
         }
@@ -132,12 +132,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 36,
+            "id": 35,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 35,
+            "id": 34,
             "name": "foo",
             "description": "Foo access"
         },
@@ -195,7 +195,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(37, $row['id']);
+        $this->assertEquals(36, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 
@@ -211,13 +211,13 @@ JSON;
         $this->assertEquals([[
             'id'       => 99,
             'scope_id' => 36,
-            'route_id' => 111,
+            'route_id' => 109,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'id'       => 97,
+            'id'       => 98,
             'scope_id' => 36,
-            'route_id' => 110,
+            'route_id' => 108,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);

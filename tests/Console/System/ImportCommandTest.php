@@ -92,7 +92,7 @@ class ImportCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(139, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action
@@ -170,44 +170,6 @@ JSON;
         $this->assertEquals('New-Schema', $responses[0]['response']);
         $this->assertEquals(500, $responses[1]['code']);
         $this->assertEquals('Error-Schema', $responses[1]['response']);
-    }
-
-    public function testCommandOpenAPI()
-    {
-        $command = Environment::getService('console')->find('system:import');
-
-        $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'command' => $command->getName(),
-            'file'    => __DIR__ . '/resource/openapi.json',
-            'format'  => 'openapi'
-        ]);
-
-        $display = $commandTester->getDisplay();
-
-        $this->assertRegExp('/Import successful!/', $display, $display);
-
-        // check schema
-        $actual = $this->fetchList('SELECT name FROM fusio_schema');
-
-        $this->assertContains('Error', $actual);
-        $this->assertContains('Pet', $actual);
-        $this->assertContains('Pets', $actual);
-        $this->assertContains('PetsGetQuery', $actual);
-        $this->assertContains('PetsPetIdGetQuery', $actual);
-
-        // check action
-        $actual = $this->fetchList('SELECT name FROM fusio_action');
-
-        $this->assertContains('pets-_petId-showPetById-GET', $actual);
-        $this->assertContains('pets-createPets-POST', $actual);
-        $this->assertContains('pets-listPets-GET', $actual);
-
-        // check routes
-        $actual = $this->fetchList('SELECT path FROM fusio_routes');
-
-        $this->assertContains('/pets', $actual);
-        $this->assertContains('/pets/:petId', $actual);
     }
 
     private function fetchList($sql)
