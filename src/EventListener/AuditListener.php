@@ -627,7 +627,7 @@ class AuditListener implements EventSubscriberInterface
             $content->setPassword('******');
         }
 
-        return null;
+        return $content;
     }
 
     public static function getSubscribedEvents()
