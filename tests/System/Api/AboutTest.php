@@ -19,20 +19,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Grant;
+namespace Fusio\Impl\Tests\System\Api;
 
+use Fusio\Impl\Base;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 
 /**
- * CollectionTest
+ * AboutTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class CollectionTest extends ControllerDbTestCase
+class AboutTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -41,41 +42,52 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/consumer/grant', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        $response = $this->sendRequest('/system/doc/*/system/about', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
         ));
 
         $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/collection.json');
+        $expect = file_get_contents(__DIR__ . '/resource/about.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/grant', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        $response = $this->sendRequest('/system/about', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
         ));
 
-        $body = (string) $response->getBody();
-
-        $expect = <<<'JSON'
+        $version = Base::getVersion();
+        $body    = (string) $response->getBody();
+        $expect  = <<<JSON
 {
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
+    "apiVersion": "{$version}",
+    "title": "Fusio",
+    "links": [
         {
-            "id": 1,
-            "allow": 1,
-            "createDate": "2015-02-27T19:59:15Z",
-            "app": {
-                "id": 1,
-                "name": "Backend",
-                "url": "https:\/\/www.fusio-project.org"
-            }
+            "rel": "root",
+            "href": "http:\/\/127.0.0.1\/"
+        },
+        {
+            "rel": "openapi",
+            "href": "http:\/\/127.0.0.1\/system\/export\/openapi\/*\/*"
+        },
+        {
+            "rel": "jsonrpc",
+            "href": "http:\/\/127.0.0.1\/system\/jsonrpc"
+        },
+        {
+            "rel": "oauth2",
+            "href": "http:\/\/127.0.0.1\/authorization\/token"
+        },
+        {
+            "rel": "whoami",
+            "href": "http:\/\/127.0.0.1\/authorization\/whoami"
+        },
+        {
+            "rel": "about",
+            "href": "https:\/\/www.fusio-project.org"
         }
     ]
 }
@@ -87,9 +99,8 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/grant', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        $response = $this->sendRequest('/system/about', 'POST', array(
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -101,9 +112,8 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/grant', 'PUT', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        $response = $this->sendRequest('/system/about', 'PUT', array(
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));
@@ -115,9 +125,8 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/grant', 'DELETE', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
+        $response = $this->sendRequest('/system/about', 'DELETE', array(
+            'User-Agent' => 'Fusio TestCase',
         ), json_encode([
             'foo' => 'bar',
         ]));

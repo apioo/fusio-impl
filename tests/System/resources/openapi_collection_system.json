@@ -161,48 +161,6 @@
         }
       }
     },
-    "\/system\/invoke\/{method}": {
-      "post": {
-        "operationId": "System_Action_Invoke",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Passthru"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "method",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "\/system\/route": {
       "get": {
         "operationId": "System_Action_GetAllRoute",
@@ -213,6 +171,23 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/System_Model_Route"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/about": {
+      "get": {
+        "operationId": "System_Action_GetAbout",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_About"
                 }
               }
             }
@@ -307,6 +282,55 @@
   },
   "components": {
     "schemas": {
+      "About": {
+        "type": "object",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "termsOfService": {
+            "type": "string"
+          },
+          "contactName": {
+            "type": "string"
+          },
+          "contactUrl": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string"
+          },
+          "licenseName": {
+            "type": "string"
+          },
+          "licenseUrl": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/About_Link"
+            }
+          }
+        }
+      },
+      "About_Link": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
+      },
       "Debug": {
         "type": "object",
         "properties": {
@@ -526,14 +550,6 @@
         "type": "object",
         "additionalProperties": []
       },
-      "SystemInvokeMethodPath": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string"
-          }
-        }
-      },
       "SystemSchemaNamePath": {
         "type": "object",
         "properties": {
@@ -541,6 +557,9 @@
             "type": "string"
           }
         }
+      },
+      "System_Model_About": {
+        "$ref": "#\/components\/schemas\/About"
       },
       "System_Model_Debug": {
         "$ref": "#\/components\/schemas\/Debug"

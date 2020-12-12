@@ -264,7 +264,7 @@
     },
     "\/": {
       "get": {
-        "operationId": "Action_Welcome",
+        "operationId": "System_Action_GetAbout",
         "responses": {
           "200": {
             "description": "GET 200 Response",

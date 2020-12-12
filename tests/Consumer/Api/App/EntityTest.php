@@ -75,10 +75,9 @@ class EntityTest extends ControllerDbTestCase
     "userId": 1,
     "status": 1,
     "name": "Consumer",
-    "url": "http:\/\/fusio-project.org",
+    "url": "https:\/\/www.fusio-project.org",
     "appKey": "[app_key]",
     "appSecret": "[app_secret]",
-    "date": "[datetime]",
     "scopes": [
         "consumer",
         "authorization"
@@ -109,7 +108,8 @@ class EntityTest extends ControllerDbTestCase
             "expire": "[datetime]",
             "date": "[datetime]"
         }
-    ]
+    ],
+    "date": "[datetime]"
 }
 JSON;
 

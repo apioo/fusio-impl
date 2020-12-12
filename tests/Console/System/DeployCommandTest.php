@@ -438,7 +438,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(139, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check routes
@@ -511,7 +511,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(140, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -571,7 +571,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(139, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 

@@ -162,13 +162,6 @@
         "response": "{\"foo\": \"bar\"}"
       },
       "date": "[datetime]"
-    },
-    {
-      "name": "Action_Welcome",
-      "class": "Fusio\\Impl\\Action\\Welcome",
-      "async": false,
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "date": "[datetime]"
     }
   ],
   "routes": [
@@ -285,7 +278,7 @@
               "responses": {
                 "200": "Passthru"
               },
-              "action": "Action_Welcome"
+              "action": "System_Action_GetAbout"
             }
           }
         }
@@ -498,7 +491,7 @@
       "userId": 1,
       "status": 1,
       "name": "Consumer",
-      "url": "http:\/\/fusio-project.org",
+      "url": "https:\/\/www.fusio-project.org",
       "parameters": "",
       "scopes": [
         "consumer",
@@ -510,7 +503,7 @@
       "userId": 1,
       "status": 1,
       "name": "Backend",
-      "url": "http:\/\/fusio-project.org",
+      "url": "https:\/\/www.fusio-project.org",
       "parameters": "",
       "scopes": [
         "backend",

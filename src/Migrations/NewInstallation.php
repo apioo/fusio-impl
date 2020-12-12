@@ -22,7 +22,6 @@
 namespace Fusio\Impl\Migrations;
 
 use Fusio\Adapter;
-use Fusio\Impl\Action\Welcome;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
@@ -68,8 +67,8 @@ class NewInstallation
         $bag->addCategory('system');
         $bag->addCategory('authorization');
         $bag->addUser('Administrator', 'admin@localhost.com', $password);
-        $bag->addApp('Administrator', 'Backend', 'http://fusio-project.org', $backendAppKey, $backendAppSecret);
-        $bag->addApp('Administrator', 'Consumer', 'http://fusio-project.org', $consumerAppKey, $consumerAppSecret);
+        $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
+        $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
         $bag->addScope('consumer', 'consumer', 'Global access to the consumer API');
         $bag->addScope('authorization', 'authorization', 'Authorization API endpoint');
@@ -133,7 +132,7 @@ class NewInstallation
         return [
             'default' => [
                 '/' => [
-                    'GET' => new Method(Welcome::class, null, [200 => 'Passthru'], null, null, null, true),
+                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => 'Passthru'], null, null, null, true),
                 ]
             ],
             'backend' => [
@@ -478,11 +477,11 @@ class NewInstallation
                 ],
             ],
             'system' => [
+                '/about' => [
+                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => System\Model\About::class], null, null, null, true),
+                ],
                 '/route' => [
                     'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class], null, null, null, true),
-                ],
-                '/invoke/:method' => [
-                    'POST' => new Method(System\Action\Invoke::class, 'Passthru', [200 => 'Passthru'], null, null, null),
                 ],
                 '/health' => [
                     'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class], null, null, null, true),
