@@ -132,7 +132,7 @@ class NewInstallation
         return [
             'default' => [
                 '/' => [
-                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => 'Passthru'], null, null, null, true),
+                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => System\Model\About::class], null, null, null, true),
                 ]
             ],
             'backend' => [

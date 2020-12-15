@@ -230,13 +230,9 @@ JSON;
                 "additionalProperties": {
                     "type": "string"
                 }
-            },
-            "User_Update": {
-                "$extends": "User",
-                "type": "object"
             }
         },
-        "$ref": "User_Update"
+        "$ref": "User"
     },
     "form": null
 }

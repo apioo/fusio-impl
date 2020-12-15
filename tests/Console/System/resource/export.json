@@ -276,7 +276,7 @@
               "active": true,
               "public": true,
               "responses": {
-                "200": "Passthru"
+                "200": "System_Model_About"
               },
               "action": "System_Action_GetAbout"
             }
