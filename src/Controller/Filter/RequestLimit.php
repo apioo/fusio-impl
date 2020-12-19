@@ -19,53 +19,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Filter;
+namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Service\Security\TokenValidator;
-use PSX\Http\Exception\UnauthorizedException;
+use Fusio\Impl\Service;
+use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * Authentication
+ * RequestLimit
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Authentication implements FilterInterface
+class RequestLimit implements FilterInterface
 {
     /**
-     * @var \Fusio\Impl\Service\Security\TokenValidator
+     * @var \Fusio\Impl\Service\Rate
      */
-    protected $tokenValidator;
+    private $rateService;
 
     /**
      * @var \Fusio\Impl\Framework\Loader\Context
      */
-    protected $context;
+    private $context;
 
-    public function __construct(TokenValidator $tokenValidator, Context $context)
+    /**
+     * @param \Fusio\Impl\Service\Rate $rateService
+     * @param \Fusio\Impl\Framework\Loader\Context $context
+     */
+    public function __construct(Service\Rate $rateService, Context $context)
     {
-        $this->tokenValidator = $tokenValidator;
-        $this->context        = $context;
+        $this->rateService   = $rateService;
+        $this->context       = $context;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $success = $this->tokenValidator->assertAuthorization(
-            $request->getMethod(),
-            $request->getHeader('Authorization'),
-            $this->context
+        $success = $this->rateService->assertLimit(
+            $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $this->context->getRouteId(),
+            $this->context->getApp(),
+            $response
         );
 
         if ($success) {
             $filterChain->handle($request, $response);
         } else {
-            throw new UnauthorizedException('Could not authorize request', 'Bearer');
+            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
         }
     }
 }

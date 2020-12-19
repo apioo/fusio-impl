@@ -19,59 +19,53 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Filter;
+namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Service;
+use Fusio\Impl\Service\Security\TokenValidator;
+use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * Logger
+ * Authentication
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Logger implements FilterInterface
+class Authentication implements FilterInterface
 {
     /**
-     * @var \Fusio\Impl\Service\Log
+     * @var \Fusio\Impl\Service\Security\TokenValidator
      */
-    protected $logService;
+    private $tokenValidator;
 
     /**
      * @var \Fusio\Impl\Framework\Loader\Context
      */
-    protected $context;
+    private $context;
 
-    public function __construct(Service\Log $logService, Context $context)
+    public function __construct(TokenValidator $tokenValidator, Context $context)
     {
-        $this->logService = $logService;
-        $this->context    = $context;
+        $this->tokenValidator = $tokenValidator;
+        $this->context        = $context;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $this->logService->log(
-            $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+        $success = $this->tokenValidator->assertAuthorization(
             $request->getMethod(),
-            $request->getRequestTarget(),
-            $request->getHeader('User-Agent'),
-            $this->context,
-            $request
+            $request->getHeader('Authorization'),
+            $this->context
         );
 
-        try {
+        if ($success) {
             $filterChain->handle($request, $response);
-        } catch (\Throwable $e) {
-            $this->logService->error($e);
-
-            throw $e;
-        } finally {
-            $this->logService->finish();
+        } else {
+            throw new UnauthorizedException('Could not authorize request', 'Bearer');
         }
     }
 }

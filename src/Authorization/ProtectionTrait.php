@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Authorization;
 
-use Fusio\Impl\Filter\Authentication;
+use Fusio\Impl\Controller\Filter\Authentication;
 use PSX\Http\Filter\UserAgentEnforcer;
 
 /**

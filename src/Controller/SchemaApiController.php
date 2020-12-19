@@ -23,10 +23,6 @@ namespace Fusio\Impl\Controller;
 
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
-use Fusio\Impl\Filter\AssertMethod;
-use Fusio\Impl\Filter\Authentication;
-use Fusio\Impl\Filter\Logger;
-use Fusio\Impl\Filter\RequestLimit;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Api\SpecificationInterface;
@@ -119,22 +115,22 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         // identifies the client
         $filter[] = new UserAgentEnforcer();
 
-        $filter[] = new AssertMethod(
+        $filter[] = new Filter\AssertMethod(
             $this->routesMethodService,
             $this->context
         );
 
-        $filter[] = new Authentication(
+        $filter[] = new Filter\Authentication(
             $this->securityTokenValidator,
             $this->context
         );
 
-        $filter[] = new RequestLimit(
+        $filter[] = new Filter\RequestLimit(
             $this->rateService,
             $this->context
         );
 
-        $filter[] = new Logger(
+        $filter[] = new Filter\Logger(
             $this->logService,
             $this->context
         );

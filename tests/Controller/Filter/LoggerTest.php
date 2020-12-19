@@ -19,11 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Filter;
+namespace Fusio\Impl\Tests\Controller\Filter;
 
 use Fusio\Engine\Model\App;
 use Fusio\Engine\Model\User;
-use Fusio\Impl\Filter\Logger;
+use Fusio\Impl\Controller\Filter\Logger;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Tests\DbTestCase;
 use PSX\Framework\Test\Environment;

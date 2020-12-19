@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Filter;
+namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
@@ -42,12 +42,12 @@ class AssertMethod implements FilterInterface
     /**
      * @var \Fusio\Impl\Service\Route\Method
      */
-    protected $routesMethodService;
+    private $routesMethodService;
 
     /**
      * @var \Fusio\Impl\Framework\Loader\Context
      */
-    protected $context;
+    private $context;
 
     /**
      * @param \Fusio\Impl\Service\Route\Method $routesMethodService

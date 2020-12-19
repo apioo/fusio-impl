@@ -19,61 +19,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Filter;
+namespace Fusio\Impl\Controller\Filter;
 
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
-use PSX\Http\Exception as StatusCode;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * RequestLimit
+ * Logger
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class RequestLimit implements FilterInterface
+class Logger implements FilterInterface
 {
     /**
-     * @var \Fusio\Impl\Service\Rate
+     * @var \Fusio\Impl\Service\Log
      */
-    protected $rateService;
+    private $logService;
 
     /**
      * @var \Fusio\Impl\Framework\Loader\Context
      */
-    protected $context;
+    private $context;
 
-    /**
-     * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Framework\Loader\Context $context
-     */
-    public function __construct(Service\Rate $rateService, Context $context)
+    public function __construct(Service\Log $logService, Context $context)
     {
-        $this->rateService   = $rateService;
-        $this->context       = $context;
+        $this->logService = $logService;
+        $this->context    = $context;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $success = $this->rateService->assertLimit(
+        $this->logService->log(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
-            $this->context->getRouteId(),
-            $this->context->getApp(),
-            $response
+            $request->getMethod(),
+            $request->getRequestTarget(),
+            $request->getHeader('User-Agent'),
+            $this->context,
+            $request
         );
 
-        if ($success) {
+        try {
             $filterChain->handle($request, $response);
-        } else {
-            throw new StatusCode\ClientErrorException('Rate limit exceeded', 429);
+        } catch (\Throwable $e) {
+            $this->logService->error($e);
+
+            throw $e;
+        } finally {
+            $this->logService->finish();
         }
     }
 }
