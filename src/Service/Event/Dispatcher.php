@@ -37,12 +37,12 @@ class Dispatcher implements DispatcherInterface
     /**
      * @var \Fusio\Impl\Table\Event
      */
-    protected $eventTable;
+    private $eventTable;
 
     /**
      * @var \Fusio\Impl\Table\Event\Trigger
      */
-    protected $triggerTable;
+    private $triggerTable;
 
     /**
      * @param \Fusio\Impl\Table\Event $eventTable

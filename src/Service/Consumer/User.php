@@ -39,7 +39,7 @@ class User
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $userService;
+    private $userService;
 
     /**
      * @param \Fusio\Impl\Service\User $userService

@@ -37,17 +37,17 @@ class Grant
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Grant
      */
-    protected $userGrantTable;
+    private $userGrantTable;
 
     /**
      * @var \Fusio\Impl\Table\App\Token
      */
-    protected $appTokenTable;
+    private $appTokenTable;
 
     /**
      * @param \Fusio\Impl\Table\App $appTable

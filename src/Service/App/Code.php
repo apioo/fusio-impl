@@ -36,7 +36,7 @@ class Code
     /**
      * @var \Fusio\Impl\Table\App\Code
      */
-    protected $appCodeTable;
+    private $appCodeTable;
 
     /**
      * @param \Fusio\Impl\Table\App\Code $appCodeTable

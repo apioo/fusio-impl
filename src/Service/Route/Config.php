@@ -44,22 +44,22 @@ class Config
     /**
      * @var \Fusio\Impl\Table\Route\Method
      */
-    protected $methodTable;
+    private $methodTable;
 
     /**
      * @var \Fusio\Impl\Table\Route\Response
      */
-    protected $responseTable;
+    private $responseTable;
 
     /**
      * @var \PSX\Api\ListingInterface
      */
-    protected $listing;
+    private $listing;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Route\Method $methodTable

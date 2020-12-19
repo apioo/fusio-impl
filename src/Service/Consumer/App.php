@@ -41,27 +41,27 @@ class App
     /**
      * @var \Fusio\Impl\Service\App
      */
-    protected $appService;
+    private $appService;
 
     /**
      * @var \Fusio\Impl\Service\Config
      */
-    protected $configService;
+    private $configService;
 
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var \Fusio\Impl\Table\Scope
      */
-    protected $scopeTable;
+    private $scopeTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Scope
      */
-    protected $userScopeTable;
+    private $userScopeTable;
 
     /**
      * @param \Fusio\Impl\Service\App $appService

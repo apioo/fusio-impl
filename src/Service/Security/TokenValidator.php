@@ -53,16 +53,18 @@ class TokenValidator
     /**
      * @var \Fusio\Engine\Repository\AppInterface
      */
-    protected $appRepository;
+    private $appRepository;
 
     /**
      * @var \Fusio\Engine\Repository\UserInterface
      */
-    protected $userRepository;
+    private $userRepository;
 
     /**
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param Connection $connection
      * @param string $projectKey
+     * @param AppInterface $appRepository
+     * @param UserInterface $userRepository
      */
     public function __construct(Connection $connection, string $projectKey, AppInterface $appRepository, UserInterface $userRepository)
     {

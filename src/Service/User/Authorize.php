@@ -42,32 +42,32 @@ class Authorize
     /**
      * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appTokenService;
+    private $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
      */
-    protected $scopeService;
+    private $scopeService;
 
     /**
      * @var \Fusio\Impl\Service\App\Code
      */
-    protected $appCodeService;
+    private $appCodeService;
 
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Grant
      */
-    protected $userGrantTable;
+    private $userGrantTable;
 
     /**
      * @var \PSX\Framework\Config\Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @param \Fusio\Impl\Service\App\Token $appTokenService

@@ -44,7 +44,7 @@ class WebServer
     /**
      * @var \PSX\Framework\Config\Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @param \PSX\Framework\Config\Config $config

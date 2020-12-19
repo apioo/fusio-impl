@@ -37,17 +37,17 @@ class Payer
     /**
      * @var \Fusio\Impl\Table\User
      */
-    protected $userTable;
+    private $userTable;
 
     /**
      * @var \Fusio\Impl\Table\Plan\Usage
      */
-    protected $usageTable;
+    private $usageTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\User $userTable

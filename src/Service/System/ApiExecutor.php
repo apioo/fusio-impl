@@ -48,22 +48,22 @@ class ApiExecutor
     /**
      * @var \PSX\Framework\Dispatch\Dispatch
      */
-    protected $dispatch;
+    private $dispatch;
 
     /**
      * @var \Doctrine\DBAL\Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var string
      */
-    protected $accessToken;
+    private $accessToken;
 
     /**
      * @param \PSX\Framework\Dispatch\Dispatch $dispatch

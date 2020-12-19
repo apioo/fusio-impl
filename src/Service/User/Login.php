@@ -39,17 +39,17 @@ class Login
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $userService;
+    private $userService;
 
     /**
      * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appTokenService;
+    private $appTokenService;
 
     /**
      * @var \PSX\Framework\Config\Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @param \Fusio\Impl\Service\User $userService

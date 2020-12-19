@@ -61,7 +61,7 @@ class Invoice
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Plan\Contract $contractTable
