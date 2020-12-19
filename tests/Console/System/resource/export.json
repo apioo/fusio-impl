@@ -17,17 +17,24 @@
     {
       "status": 1,
       "name": "paypal",
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection"
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
+      "config": {
+        "foo": "bar"
+      }
     },
     {
       "status": 1,
       "name": "Test",
-      "class": "Fusio\\Impl\\Connection\\Native"
+      "class": "Fusio\\Impl\\Connection\\Native",
+      "config": {
+        "foo": "bar"
+      }
     },
     {
       "status": 1,
       "name": "System",
-      "class": "Fusio\\Impl\\Connection\\System"
+      "class": "Fusio\\Impl\\Connection\\System",
+      "config": {}
     }
   ],
   "schema": [
