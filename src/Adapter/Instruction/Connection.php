@@ -32,17 +32,26 @@ use Fusio\Impl\Adapter\InstructionAbstract;
  */
 class Connection extends InstructionAbstract
 {
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return 'Connection';
     }
 
-    public function getKey()
+    /**
+     * @inheritDoc
+     */
+    public function getKey(): string
     {
         return 'connection';
     }
 
-    public function getDescription()
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
     {
         return isset($this->payload->name) ? $this->payload->name : null;
     }

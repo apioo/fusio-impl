@@ -32,17 +32,26 @@ use Fusio\Impl\Adapter\InstructionAbstract;
  */
 class Schema extends InstructionAbstract
 {
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return 'Schema';
     }
 
-    public function getKey()
+    /**
+     * @inheritDoc
+     */
+    public function getKey(): string
     {
         return 'schema';
     }
 
-    public function getDescription()
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
     {
         return isset($this->payload->name) ? $this->payload->name : null;
     }

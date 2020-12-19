@@ -41,17 +41,26 @@ class ProviderClass extends InstructionAbstract
         $this->type = $type;
     }
 
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return ucfirst($this->type) . ' Class';
     }
 
-    public function getKey()
+    /**
+     * @inheritDoc
+     */
+    public function getKey(): string
     {
         return $this->type . 'Class';
     }
 
-    public function getDescription()
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
     {
         return $this->payload;
     }
