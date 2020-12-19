@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Service;
 
-use Defuse\Crypto\Crypto;
-use Defuse\Crypto\Key;
 use Fusio\Engine\Connection\DeploymentInterface;
 use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
@@ -36,7 +34,6 @@ use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Json\Parser;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -114,7 +111,7 @@ class Connection
             'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $connection->getName(),
             'class'  => $connection->getClass(),
-            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
+            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->create($record);
@@ -155,7 +152,7 @@ class Connection
         // update connection
         $record = [
             'id'     => $existing['id'],
-            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
+            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->update($record);
@@ -175,7 +172,7 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config = self::decryptConfig($existing['config'], $this->secretKey);
+        $config = Connection\Encrypter::decrypt($existing['config'], $this->secretKey);
 
         $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($existing['class']);
@@ -234,35 +231,5 @@ class Connection
                 throw new StatusCode\BadRequestException('Could not connect to remote service');
             }
         }
-    }
-
-    public static function encryptConfig($config, $secretKey)
-    {
-        if (empty($config)) {
-            return null;
-        }
-
-        return Crypto::encrypt(
-            Parser::encode($config),
-            Key::loadFromAsciiSafeString($secretKey)
-        );
-    }
-
-    public static function decryptConfig($data, $secretKey)
-    {
-        if (empty($data)) {
-            return [];
-        }
-
-        if (is_resource($data)) {
-            $data = stream_get_contents($data, -1, 0);
-        }
-
-        $config = Crypto::decrypt(
-            $data,
-            Key::loadFromAsciiSafeString($secretKey)
-        );
-
-        return Parser::decode($config, true);
     }
 }

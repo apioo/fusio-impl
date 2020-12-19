@@ -90,7 +90,7 @@ class Connection extends ViewAbstract
             'name' => 'name',
             'class' => 'class',
             'config' => $this->fieldCallback('config', function ($config, $row) use ($secretKey, $connectionParser) {
-                $config = Service\Connection::decryptConfig($config, $secretKey);
+                $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
                 if (!empty($config) && is_array($config)) {
