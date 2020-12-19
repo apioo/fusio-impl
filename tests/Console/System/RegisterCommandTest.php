@@ -139,7 +139,7 @@ class RegisterCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action
@@ -273,7 +273,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action

@@ -72,21 +72,21 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 36,
+    "id": 35,
     "name": "bar",
     "description": "Bar access",
     "routes": [
         {
-            "id": 99,
-            "scopeId": 36,
-            "routeId": 111,
+            "id": 97,
+            "scopeId": 35,
+            "routeId": 109,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 97,
-            "scopeId": 36,
-            "routeId": 110,
+            "id": 95,
+            "scopeId": 35,
+            "routeId": 108,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
@@ -201,7 +201,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(35, $row['id']);
+        $this->assertEquals(34, $row['id']);
     }
 
     public function testDeleteAppScopeAssigned()
@@ -229,7 +229,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(36, $row['id']);
+        $this->assertEquals(35, $row['id']);
     }
 
     public function testDeleteUserScopeAssigned()
@@ -257,6 +257,6 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(36, $row['id']);
+        $this->assertEquals(35, $row['id']);
     }
 }

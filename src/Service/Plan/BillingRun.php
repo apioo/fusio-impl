@@ -59,7 +59,7 @@ class BillingRun
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService

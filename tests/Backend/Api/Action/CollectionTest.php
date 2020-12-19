@@ -69,38 +69,32 @@ class CollectionTest extends ControllerDbTestCase
         
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 167,
+            "id": 164,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 166,
+            "id": 163,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 165,
+            "id": 162,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 164,
+            "id": 161,
             "status": 1,
             "name": "Util-Static-Response",
-            "date": "[datetime]"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]
@@ -128,13 +122,13 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 166,
+            "id": 163,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 165,
+            "id": 162,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
@@ -159,38 +153,32 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 167,
+            "id": 164,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 166,
+            "id": 163,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 165,
+            "id": 162,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 164,
+            "id": 161,
             "status": 1,
             "name": "Util-Static-Response",
-            "date": "[datetime]"
-        },
-        {
-            "id": 1,
-            "status": 1,
-            "name": "Action_Welcome",
             "date": "[datetime]"
         }
     ]

@@ -42,12 +42,12 @@ class Resolver
     /**
      * @var \Fusio\Engine\Connector
      */
-    protected $connector;
+    private $connector;
 
     /**
      * @var \Fusio\Impl\Service\Config
      */
-    protected $configService;
+    private $configService;
 
     /**
      * @param \Fusio\Engine\Connector $connector

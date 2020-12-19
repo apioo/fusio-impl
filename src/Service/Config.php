@@ -41,12 +41,12 @@ class Config
     /**
      * @var \Fusio\Impl\Table\Config
      */
-    protected $configTable;
+    private $configTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Config $configTable

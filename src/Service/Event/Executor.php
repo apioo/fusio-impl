@@ -39,32 +39,32 @@ class Executor
     /**
      * @var \Fusio\Impl\Table\Event\Trigger
      */
-    protected $triggerTable;
+    private $triggerTable;
 
     /**
      * @var \Fusio\Impl\Table\Event\Subscription
      */
-    protected $subscriptionTable;
+    private $subscriptionTable;
 
     /**
      * @var \Fusio\Impl\Table\Event\Response
      */
-    protected $responseTable;
+    private $responseTable;
 
     /**
      * @var \PSX\Http\Client\ClientInterface
      */
-    protected $httpClient;
+    private $httpClient;
 
     /**
      * @var \Fusio\Impl\Service\Connection\Resolver
      */
-    protected $resolver;
+    private $resolver;
 
     /**
      * @var \Fusio\Impl\Service\Event\SenderFactory
      */
-    protected $senderFactory;
+    private $senderFactory;
 
     /**
      * @param \Fusio\Impl\Table\Event\Trigger $triggerTable

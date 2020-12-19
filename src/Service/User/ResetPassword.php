@@ -40,27 +40,27 @@ class ResetPassword
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $userService;
+    private $userService;
 
     /**
      * @var \Fusio\Impl\Service\User\Captcha
      */
-    protected $captchaService;
+    private $captchaService;
 
     /**
      * @var \Fusio\Impl\Service\User\Token
      */
-    protected $tokenService;
+    private $tokenService;
 
     /**
      * @var \Fusio\Impl\Service\User\Mailer
      */
-    protected $mailerService;
+    private $mailerService;
 
     /**
      * @var \Fusio\Impl\Table\User
      */
-    protected $userTable;
+    private $userTable;
 
     /**
      * @param \Fusio\Impl\Service\User $userService

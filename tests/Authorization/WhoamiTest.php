@@ -65,7 +65,6 @@ class WhoamiTest extends ControllerDbTestCase
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
-        "backend.import",
         "backend.log",
         "backend.marketplace",
         "backend.plan",

@@ -48,22 +48,22 @@ class Rate
     /**
      * @var \Fusio\Impl\Table\Rate
      */
-    protected $rateTable;
+    private $rateTable;
 
     /**
      * @var \Fusio\Impl\Table\Rate\Allocation
      */
-    protected $rateAllocationTable;
+    private $rateAllocationTable;
 
     /**
      * @var \Fusio\Impl\Table\Log
      */
-    protected $logTable;
+    private $logTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Rate $rateTable

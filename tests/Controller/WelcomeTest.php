@@ -49,12 +49,32 @@ class WelcomeTest extends ControllerDbTestCase
         $body    = (string) $response->getBody();
         $expect  = <<<JSON
 {
-    "message": "Congratulations the installation of Fusio was successful",
     "apiVersion": "{$version}",
+    "title": "Fusio",
     "links": [
         {
+            "rel": "root",
+            "href": "http:\/\/127.0.0.1\/"
+        },
+        {
+            "rel": "openapi",
+            "href": "http:\/\/127.0.0.1\/system\/export\/openapi\/*\/*"
+        },
+        {
+            "rel": "jsonrpc",
+            "href": "http:\/\/127.0.0.1\/system\/jsonrpc"
+        },
+        {
+            "rel": "oauth2",
+            "href": "http:\/\/127.0.0.1\/authorization\/token"
+        },
+        {
+            "rel": "whoami",
+            "href": "http:\/\/127.0.0.1\/authorization\/whoami"
+        },
+        {
             "rel": "about",
-            "name": "http:\/\/fusio-project.org"
+            "href": "https:\/\/www.fusio-project.org"
         }
     ]
 }

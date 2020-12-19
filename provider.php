@@ -61,7 +61,7 @@ return [
         \Fusio\Impl\Provider\User\Google::class,
     ],
     'routes' => [
-        \Fusio\Impl\Tests\Service\Routes\TestProvider::class,
+        \Fusio\Impl\Tests\Service\Route\TestProvider::class,
     ],
 ];
 

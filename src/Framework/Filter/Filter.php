@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
-use Fusio\Impl\Backend\Filter\Route\Path;
+use Fusio\Impl\Service\Route\Validator;
 use PSX\Api\Listing\FilterInterface;
 
 /**
@@ -49,7 +49,7 @@ class Filter implements FilterInterface
             $parts = explode('/', $path);
             $name  = $parts[1] ?? null;
 
-            return !in_array($name, self::getReserved());
+            return !in_array($name, Validator::getReserved());
         } else {
             return substr($path, 0, strlen($this->getId()) + 1) === '/' . $this->getId();
         }
@@ -58,18 +58,5 @@ class Filter implements FilterInterface
     public function getId(): string
     {
         return $this->id;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getReserved(): array
-    {
-        return [
-            'backend',
-            'consumer',
-            'system',
-            'authorization',
-        ];
     }
 }

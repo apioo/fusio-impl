@@ -2173,90 +2173,6 @@
         ]
       }
     },
-    "\/backend\/import\/process": {
-      "post": {
-        "tags": [
-          "backend.import"
-        ],
-        "operationId": "Backend_Action_Import_Process",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Adapter"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Import_Response"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.import"
-            ]
-          }
-        ]
-      }
-    },
-    "\/backend\/import\/{format}": {
-      "post": {
-        "tags": [
-          "backend.import"
-        ],
-        "operationId": "Backend_Action_Import_Format",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Import_Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Adapter"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "backend.import"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "format",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "\/backend\/event\/{event_id}": {
       "get": {
         "tags": [
@@ -3955,65 +3871,6 @@
           }
         ]
       },
-      "Adapter": {
-        "type": "object",
-        "properties": {
-          "actionClass": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "connectionClass": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "paymentClass": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "userClass": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "routesClass": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "connection": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Connection"
-            }
-          },
-          "schema": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Schema"
-            }
-          },
-          "action": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Action"
-            }
-          },
-          "routes": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Route"
-            }
-          }
-        }
-      },
       "App": {
         "type": "object",
         "properties": {
@@ -4322,14 +4179,6 @@
           }
         }
       },
-      "BackendImportFormatPath": {
-        "type": "object",
-        "properties": {
-          "format": {
-            "type": "string"
-          }
-        }
-      },
       "BackendLogErrorError_idPath": {
         "type": "object",
         "properties": {
@@ -4474,9 +4323,6 @@
       "Backend_Model_Action_Update": {
         "$ref": "#\/components\/schemas\/Action_Update"
       },
-      "Backend_Model_Adapter": {
-        "$ref": "#\/components\/schemas\/Adapter"
-      },
       "Backend_Model_App": {
         "$ref": "#\/components\/schemas\/App"
       },
@@ -4569,12 +4415,6 @@
       },
       "Backend_Model_Event_Update": {
         "$ref": "#\/components\/schemas\/Event_Update"
-      },
-      "Backend_Model_Import_Request": {
-        "$ref": "#\/components\/schemas\/Import_Request"
-      },
-      "Backend_Model_Import_Response": {
-        "$ref": "#\/components\/schemas\/Import_Response"
       },
       "Backend_Model_Log": {
         "$ref": "#\/components\/schemas\/Log"
@@ -5090,6 +4930,9 @@
           },
           "description": {
             "type": "string"
+          },
+          "schema": {
+            "type": "string"
           }
         }
       },
@@ -5276,31 +5119,6 @@
             }
           }
         ]
-      },
-      "Import_Request": {
-        "type": "object",
-        "properties": {
-          "schema": {
-            "type": "string"
-          }
-        }
-      },
-      "Import_Response": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
       },
       "Log": {
         "type": "object",
@@ -6503,7 +6321,6 @@
               "backend.cronjob": "",
               "backend.dashboard": "",
               "backend.event": "",
-              "backend.import": "",
               "backend.log": "",
               "backend.marketplace": "",
               "backend.plan": "",

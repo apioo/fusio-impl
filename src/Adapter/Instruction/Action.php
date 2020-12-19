@@ -32,17 +32,26 @@ use Fusio\Impl\Adapter\InstructionAbstract;
  */
 class Action extends InstructionAbstract
 {
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return 'Action';
     }
 
-    public function getKey()
+    /**
+     * @inheritDoc
+     */
+    public function getKey(): string
     {
         return 'action';
     }
 
-    public function getDescription()
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
     {
         return isset($this->payload->name) ? $this->payload->name : null;
     }

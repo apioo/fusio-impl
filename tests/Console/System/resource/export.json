@@ -17,17 +17,24 @@
     {
       "status": 1,
       "name": "paypal",
-      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection"
+      "class": "Fusio\\Impl\\Tests\\Adapter\\Test\\PaypalConnection",
+      "config": {
+        "foo": "bar"
+      }
     },
     {
       "status": 1,
       "name": "Test",
-      "class": "Fusio\\Impl\\Connection\\Native"
+      "class": "Fusio\\Impl\\Connection\\Native",
+      "config": {
+        "foo": "bar"
+      }
     },
     {
       "status": 1,
       "name": "System",
-      "class": "Fusio\\Impl\\Connection\\System"
+      "class": "Fusio\\Impl\\Connection\\System",
+      "config": {}
     }
   ],
   "schema": [
@@ -162,13 +169,6 @@
         "response": "{\"foo\": \"bar\"}"
       },
       "date": "[datetime]"
-    },
-    {
-      "name": "Action_Welcome",
-      "class": "Fusio\\Impl\\Action\\Welcome",
-      "async": false,
-      "engine": "Fusio\\Engine\\Factory\\Resolver\\PhpClass",
-      "date": "[datetime]"
     }
   ],
   "routes": [
@@ -283,9 +283,9 @@
               "active": true,
               "public": true,
               "responses": {
-                "200": "Passthru"
+                "200": "System_Model_About"
               },
-              "action": "Action_Welcome"
+              "action": "System_Action_GetAbout"
             }
           }
         }
@@ -309,7 +309,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "routeId": 110,
+          "routeId": 108,
           "authenticated": true
         }
       ]
@@ -323,7 +323,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "routeId": 110
+          "routeId": 108
         }
       ]
     },
@@ -371,7 +371,6 @@
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
-        "backend.import",
         "backend.log",
         "backend.marketplace",
         "backend.plan",
@@ -446,7 +445,6 @@
         "backend.cronjob",
         "backend.dashboard",
         "backend.event",
-        "backend.import",
         "backend.log",
         "backend.marketplace",
         "backend.plan",
@@ -500,7 +498,7 @@
       "userId": 1,
       "status": 1,
       "name": "Consumer",
-      "url": "http:\/\/fusio-project.org",
+      "url": "https:\/\/www.fusio-project.org",
       "parameters": "",
       "scopes": [
         "consumer",
@@ -512,7 +510,7 @@
       "userId": 1,
       "status": 1,
       "name": "Backend",
-      "url": "http:\/\/fusio-project.org",
+      "url": "https:\/\/www.fusio-project.org",
       "parameters": "",
       "scopes": [
         "backend",

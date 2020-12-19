@@ -211,12 +211,12 @@ JSON;
         ]);
 
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(35, $responses[0]['id']);
+        $this->assertEquals(34, $responses[0]['id']);
         $this->assertEquals('foo', $responses[0]['name']);
         $this->assertEquals('Foo access', $responses[0]['description']);
         $this->assertEquals(1, $responses[0]['allow']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[0]['methods']);
-        $this->assertEquals(36, $responses[1]['id']);
+        $this->assertEquals(35, $responses[1]['id']);
         $this->assertEquals('bar', $responses[1]['name']);
         $this->assertEquals('Bar access', $responses[1]['description']);
         $this->assertEquals(1, $responses[1]['allow']);
@@ -438,7 +438,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check routes
@@ -511,7 +511,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(143, $schema['id']);
+        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -571,7 +571,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(142, $schema['id']);
+        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -649,7 +649,7 @@ JSON;
             'name' => 'Foo-Scope',
         ]);
 
-        $this->assertEquals(37, $scope['id']);
+        $this->assertEquals(36, $scope['id']);
         $this->assertEquals('Foo-Scope', $scope['name']);
         $this->assertEquals('Foo scope', $scope['description']);
     }

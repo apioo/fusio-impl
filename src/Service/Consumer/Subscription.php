@@ -41,22 +41,22 @@ class Subscription
     /**
      * @var \Fusio\Impl\Service\Event\Subscription
      */
-    protected $subscriptionService;
+    private $subscriptionService;
 
     /**
      * @var \Fusio\Impl\Service\Config
      */
-    protected $configService;
+    private $configService;
 
     /**
      * @var \Fusio\Impl\Table\Event\Subscription
      */
-    protected $subscriptionTable;
+    private $subscriptionTable;
 
     /**
      * @var \Fusio\Impl\Table\Event
      */
-    protected $eventTable;
+    private $eventTable;
 
     /**
      * @param \Fusio\Impl\Service\Event\Subscription $subscriptionService

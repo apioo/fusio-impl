@@ -39,22 +39,22 @@ class Order
     /**
      * @var \Fusio\Impl\Service\Plan\Contract
      */
-    protected $contractService;
+    private $contractService;
 
     /**
      * @var \Fusio\Impl\Service\Plan\Invoice
      */
-    protected $invoiceService;
+    private $invoiceService;
 
     /**
      * @var \Fusio\Impl\Table\Plan
      */
-    protected $planTable;
+    private $planTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Service\Plan\Contract $contractService

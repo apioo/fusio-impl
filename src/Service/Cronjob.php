@@ -47,32 +47,32 @@ class Cronjob
     /**
      * @var \Fusio\Impl\Table\Cronjob
      */
-    protected $cronjobTable;
+    private $cronjobTable;
 
     /**
      * @var \Fusio\Impl\Table\Cronjob\Error
      */
-    protected $errorTable;
+    private $errorTable;
 
     /**
      * @var \Fusio\Impl\Service\Action\Executor
      */
-    protected $executorService;
+    private $executorService;
 
     /**
      * @var string
      */
-    protected $cronFile;
+    private $cronFile;
 
     /**
      * @var string
      */
-    protected $cronExec;
+    private $cronExec;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Cronjob $cronjobTable
@@ -94,6 +94,8 @@ class Cronjob
 
     public function create(Cronjob_Create $cronjob, UserContext $context)
     {
+        Cronjob\Validator::assertCron($cronjob->getCron());
+
         // check whether cronjob exists
         if ($this->exists($cronjob->getName())) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
@@ -120,6 +122,8 @@ class Cronjob
 
     public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context)
     {
+        Cronjob\Validator::assertCron($cronjob->getCron());
+
         $existing = $this->cronjobTable->get($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');

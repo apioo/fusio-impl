@@ -161,6 +161,40 @@
         }
       }
     },
+    "\/system\/route": {
+      "get": {
+        "operationId": "System_Action_GetAllRoute",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_Route"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "\/system\/about": {
+      "get": {
+        "operationId": "System_Action_GetAbout",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/System_Model_About"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "\/system\/doc": {
       "get": {
         "responses": {
@@ -176,48 +210,6 @@
           }
         }
       }
-    },
-    "\/system\/invoke\/{method}": {
-      "post": {
-        "operationId": "System_Action_Invoke",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Passthru"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "method",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
     },
     "\/system\/doc\/{version}\/{path}": {
       "get": {
@@ -252,23 +244,6 @@
           }
         }
       ]
-    },
-    "\/system\/route": {
-      "get": {
-        "operationId": "System_Action_GetAllRoute",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Route"
-                }
-              }
-            }
-          }
-        }
-      }
     },
     "\/system\/jsonrpc": {
       "post": {
@@ -307,6 +282,55 @@
   },
   "components": {
     "schemas": {
+      "About": {
+        "type": "object",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "termsOfService": {
+            "type": "string"
+          },
+          "contactName": {
+            "type": "string"
+          },
+          "contactUrl": {
+            "type": "string"
+          },
+          "contactEmail": {
+            "type": "string"
+          },
+          "licenseName": {
+            "type": "string"
+          },
+          "licenseUrl": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/About_Link"
+            }
+          }
+        }
+      },
+      "About_Link": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
+      },
       "Debug": {
         "type": "object",
         "properties": {
@@ -526,14 +550,6 @@
         "type": "object",
         "additionalProperties": []
       },
-      "SystemInvokeMethodPath": {
-        "type": "object",
-        "properties": {
-          "method": {
-            "type": "string"
-          }
-        }
-      },
       "SystemSchemaNamePath": {
         "type": "object",
         "properties": {
@@ -541,6 +557,9 @@
             "type": "string"
           }
         }
+      },
+      "System_Model_About": {
+        "$ref": "#\/components\/schemas\/About"
       },
       "System_Model_Debug": {
         "$ref": "#\/components\/schemas\/Debug"
@@ -564,8 +583,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           },
           "clientCredentials": {
@@ -573,8 +592,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           },
           "authorizationCode": {
@@ -583,8 +602,8 @@
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
               "bar": "Bar access",
-              "foo": "Foo access",
-              "default": ""
+              "default": "",
+              "foo": "Foo access"
             }
           }
         }
@@ -596,28 +615,27 @@
             "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "backend.user": "",
-              "backend.transaction": "",
-              "backend.statistic": "",
-              "backend.sdk": "",
-              "backend.scope": "",
-              "backend.schema": "",
-              "backend.route": "",
-              "backend.rate": "",
-              "backend.plan": "",
-              "backend.marketplace": "",
-              "backend.log": "",
-              "backend.import": "",
-              "backend.event": "",
-              "backend.dashboard": "",
-              "backend.cronjob": "",
-              "backend.connection": "",
-              "backend.config": "",
-              "backend.audit": "",
-              "backend.app": "",
-              "backend.action": "",
+              "backend": "",
               "backend.account": "",
-              "backend": ""
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": ""
             }
           }
         }
@@ -629,15 +647,15 @@
             "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "consumer.user": "",
-              "consumer.transaction": "",
-              "consumer.subscription": "",
-              "consumer.scope": "",
-              "consumer.plan": "",
-              "consumer.grant": "",
-              "consumer.event": "",
+              "consumer": "",
               "consumer.app": "",
-              "consumer": ""
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": ""
             }
           }
         }

@@ -21,6 +21,10 @@ class Event implements \JsonSerializable
      */
     protected $description;
     /**
+     * @var string|null
+     */
+    protected $schema;
+    /**
      * @param int|null $id
      */
     public function setId(?int $id) : void
@@ -62,9 +66,23 @@ class Event implements \JsonSerializable
     {
         return $this->description;
     }
+    /**
+     * @param string|null $schema
+     */
+    public function setSchema(?string $schema) : void
+    {
+        $this->schema = $schema;
+    }
+    /**
+     * @return string|null
+     */
+    public function getSchema() : ?string
+    {
+        return $this->schema;
+    }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'name' => $this->name, 'description' => $this->description), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'name' => $this->name, 'description' => $this->description, 'schema' => $this->schema), static function ($value) : bool {
             return $value !== null;
         });
     }

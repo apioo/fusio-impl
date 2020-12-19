@@ -274,20 +274,6 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/import\/process",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/import\/:format",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
       "path": "\/backend\/event\/$event_id<[0-9]+>",
       "methods": [
         "ANY"

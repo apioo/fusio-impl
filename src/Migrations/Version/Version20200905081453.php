@@ -78,7 +78,7 @@ final class Version20200905081453 extends AbstractMigration
             $appTokenTable->addColumn('status', 'integer', ['default' => 1]);
             $appTokenTable->addColumn('token', 'string', ['length' => 512]);
             $appTokenTable->addColumn('refresh', 'string', ['length' => 255, 'notnull' => false]);
-            $appTokenTable->addColumn('scope', 'string', ['length' => 255]);
+            $appTokenTable->addColumn('scope', 'string', ['length' => 1023]);
             $appTokenTable->addColumn('ip', 'string', ['length' => 40]);
             $appTokenTable->addColumn('expire', 'datetime', ['notnull' => false]);
             $appTokenTable->addColumn('date', 'datetime');

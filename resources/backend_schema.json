@@ -696,6 +696,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "schema": {
+          "type": "string"
         }
       }
     },
@@ -747,31 +750,6 @@
     },
     "Event_Subscription_Update": {
       "$extends": "Event_Subscription"
-    },
-    "Import_Request": {
-      "type": "object",
-      "properties": {
-        "schema": {
-          "type": "string"
-        }
-      }
-    },
-    "Import_Response": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        },
-        "result": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
     },
     "Log": {
       "type": "object",

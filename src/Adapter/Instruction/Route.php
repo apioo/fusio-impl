@@ -32,17 +32,26 @@ use Fusio\Impl\Adapter\InstructionAbstract;
  */
 class Route extends InstructionAbstract
 {
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return 'Route';
     }
 
-    public function getKey()
+    /**
+     * @inheritDoc
+     */
+    public function getKey(): string
     {
         return 'routes';
     }
 
-    public function getDescription()
+    /**
+     * @inheritDoc
+     */
+    public function getDescription(): ?string
     {
         $path   = isset($this->payload->path)   ? $this->payload->path   : null;
         $config = isset($this->payload->config) ? $this->payload->config : null;

@@ -26,7 +26,9 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Provider\ConnectionProviderParser;
 use Fusio\Impl\Table;
+use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
 
@@ -40,19 +42,33 @@ use PSX\Sql\TableManagerInterface;
 class Get extends ActionAbstract
 {
     /**
-     * @var View\Action
+     * @var View\Connection
      */
     private $table;
 
-    public function __construct(TableManagerInterface $tableManager)
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var ConnectionProviderParser
+     */
+    private $connectionParser;
+
+    public function __construct(TableManagerInterface $tableManager, Config $config, ConnectionProviderParser $connectionParser)
     {
         $this->table = $tableManager->getTable(View\Connection::class);
+        $this->config = $config;
+        $this->connectionParser = $connectionParser;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $connection = $this->table->getEntity(
-            (int) $request->get('connection_id')
+        $connection = $this->table->getEntityWithConfig(
+            (int) $request->get('connection_id'),
+            $this->config->get('fusio_project_key'),
+            $this->connectionParser
         );
 
         if (empty($connection)) {

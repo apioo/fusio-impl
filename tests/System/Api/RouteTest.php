@@ -62,7 +62,7 @@ class RouteTest extends ControllerDbTestCase
 {
     "routes": {
         "\/": {
-            "GET": "Action_Welcome"
+            "GET": "System_Action_GetAbout"
         },
         "\/foo": {
             "GET": "Sql-Select-All",

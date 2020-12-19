@@ -47,32 +47,32 @@ class App
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var \Fusio\Impl\Table\Scope
      */
-    protected $scopeTable;
+    private $scopeTable;
 
     /**
      * @var \Fusio\Impl\Table\App\Scope
      */
-    protected $appScopeTable;
+    private $appScopeTable;
 
     /**
      * @var \Fusio\Impl\Table\App\Token
      */
-    protected $appTokenTable;
+    private $appTokenTable;
 
     /**
      * @var string
      */
-    protected $tokenSecret;
+    private $tokenSecret;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\App $appTable

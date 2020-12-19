@@ -47,19 +47,19 @@ abstract class InstructionAbstract
      *
      * @return string
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * Returns the key of the payload
      *
      * @return string
      */
-    abstract public function getKey();
+    abstract public function getKey(): string;
 
     /**
      * Returns a description what the payload does
      *
-     * @return string
+     * @return string|null
      */
-    abstract public function getDescription();
+    abstract public function getDescription(): ?string;
 }
