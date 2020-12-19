@@ -34,8 +34,6 @@ use Fusio\Impl\Event\User\DeletedEvent;
 use Fusio\Impl\Event\User\FailedAuthenticationEvent;
 use Fusio\Impl\Event\User\UpdatedEvent;
 use Fusio\Impl\Service;
-use Fusio\Impl\Service\User\PasswordComplexity;
-use Fusio\Impl\Service\User\ValidatorTrait;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
@@ -51,42 +49,40 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class User
 {
-    use ValidatorTrait;
-
     /**
      * @var \Fusio\Impl\Table\Scope
      */
-    protected $scopeTable;
+    private $scopeTable;
 
     /**
      * @var \Fusio\Impl\Table\User
      */
-    protected $userTable;
+    private $userTable;
 
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Scope
      */
-    protected $userScopeTable;
+    private $userScopeTable;
 
     /**
      * @var \Fusio\Impl\Service\Config
      */
-    protected $configService;
+    private $configService;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @var array|null
      */
-    protected $userAttributes;
+    private $userAttributes;
 
     /**
      * @param \Fusio\Impl\Table\User $userTable
@@ -163,7 +159,7 @@ class User
 
     public function assertPasswordComplexity($password)
     {
-        PasswordComplexity::assert($password, $this->configService->getValue('user_pw_length'));
+        Service\User\Validator::assertPassword($password, $this->configService->getValue('user_pw_length'));
     }
 
     public function create(User_Create $user, UserContext $context)
@@ -179,9 +175,9 @@ class User
         }
 
         // check values
-        $this->assertName($user->getName());
-        $this->assertEmail($user->getEmail());
-        $this->assertPasswordComplexity($user->getPassword());
+        User\Validator::assertName($user->getName());
+        User\Validator::assertEmail($user->getEmail());
+        User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
 
         try {
             $this->userTable->beginTransaction();
@@ -233,10 +229,10 @@ class User
         $remote->setName(str_replace(' ', '.', $remote->getName()));
 
         // check values
-        $this->assertName($remote->getName());
+        User\Validator::assertName($remote->getName());
 
         if (!empty($remote->getEmail())) {
-            $this->assertEmail($remote->getEmail());
+            User\Validator::assertEmail($remote->getEmail());
         }
 
         try {
@@ -295,8 +291,8 @@ class User
         }
 
         // check values
-        $this->assertName($user->getName());
-        $this->assertEmail($user->getEmail());
+        User\Validator::assertName($user->getName());
+        User\Validator::assertEmail($user->getEmail());
 
         try {
             $this->userTable->beginTransaction();
@@ -391,7 +387,7 @@ class User
         }
 
         // assert password complexity
-        $this->assertPasswordComplexity($changePassword->getNewPassword());
+        User\Validator::assertPassword($changePassword->getNewPassword(), $this->configService->getValue('user_pw_length'));
 
         // change password
         $result = $this->userTable->changePassword($userId, $changePassword->getOldPassword(), $changePassword->getNewPassword());

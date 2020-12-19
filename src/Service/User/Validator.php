@@ -24,15 +24,48 @@ namespace Fusio\Impl\Service\User;
 use PSX\Http\Exception as StatusCode;
 
 /**
- * PasswordComplexity
+ * Validator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PasswordComplexity
+class Validator
 {
-    public static function assert($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null)
+    public static function assertStatus($status)
+    {
+        if (preg_match('/^0|1$/', $status)) {
+            return (int) $status;
+        } else {
+            throw new StatusCode\BadRequestException('Status must be either 0 or 1');
+        }
+    }
+
+    public static function assertName($name)
+    {
+        if (empty($name)) {
+            throw new StatusCode\BadRequestException('Name must not be empty');
+        }
+
+        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $name)) {
+            return $name;
+        } else {
+            throw new StatusCode\BadRequestException('Name must be between 3 and 32 signs and use only the characters (a-zA-Z0-9-_.)');
+        }
+    }
+
+    public static function assertEmail($email)
+    {
+        if (empty($email)) {
+            throw new StatusCode\BadRequestException('Email must not be empty');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new StatusCode\BadRequestException('Invalid email format');
+        }
+    }
+
+    public static function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null)
     {
         if (empty($password)) {
             throw new StatusCode\BadRequestException('Password must not be empty');

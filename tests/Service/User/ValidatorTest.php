@@ -21,25 +21,25 @@
 
 namespace Fusio\Impl\Tests\Service\User;
 
-use Fusio\Impl\Service\User\PasswordComplexity;
+use Fusio\Impl\Service\User\Validator;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\BadRequestException;
 
 /**
- * PasswordComplexityTest
+ * ValidatorTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PasswordComplexityTest extends TestCase
+class ValidatorTest extends TestCase
 {
     /**
      * @dataProvider assertProvider
      */
-    public function testAssert($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
+    public function testAssertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
     {
-        $result = PasswordComplexity::assert($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        $result = Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
 
         $this->assertEquals(true, $result);
     }
@@ -47,12 +47,12 @@ class PasswordComplexityTest extends TestCase
     /**
      * @dataProvider assertProviderFail
      */
-    public function testAssertFail($password, $minLength, $minAlpha, $minNumeric, $minSpecial, $exceptionMessage)
+    public function testAssertPasswordFail($password, $minLength, $minAlpha, $minNumeric, $minSpecial, $exceptionMessage)
     {
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage($exceptionMessage);
 
-        PasswordComplexity::assert($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
     }
 
     public function assertProvider()

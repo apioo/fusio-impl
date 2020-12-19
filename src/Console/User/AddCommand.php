@@ -24,7 +24,6 @@ namespace Fusio\Impl\Console\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Service\User as ServiceUser;
-use Fusio\Impl\Service\User\ValidatorTrait;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,8 +40,6 @@ use Symfony\Component\Console\Question\Question;
  */
 class AddCommand extends Command
 {
-    use ValidatorTrait;
-
     protected $userService;
 
     public function __construct(ServiceUser $userService)
@@ -73,12 +70,12 @@ class AddCommand extends Command
         if ($status === null) {
             $question = new Question('Choose the status of the account [0=Consumer, 1=Administrator]: ');
             $question->setValidator(function ($value) {
-                return $this->assertStatus($value);
+                return ServiceUser\Validator::assertStatus($value);
             });
 
             $status = $helper->ask($input, $output, $question);
         } else {
-            $status = $this->assertStatus($status);
+            $status = ServiceUser\Validator::assertStatus($status);
         }
 
         // username
@@ -86,13 +83,13 @@ class AddCommand extends Command
         if ($name === null) {
             $question = new Question('Enter the username: ');
             $question->setValidator(function ($value) {
-                $this->assertName($value);
+                ServiceUser\Validator::assertName($value);
                 return $value;
             });
 
             $name = $helper->ask($input, $output, $question);
         } else {
-            $this->assertName($name);
+            ServiceUser\Validator::assertName($name);
         }
 
         // email
@@ -100,13 +97,13 @@ class AddCommand extends Command
         if ($email === null) {
             $question = new Question('Enter the email: ');
             $question->setValidator(function ($value) {
-                $this->assertEmail($value);
+                ServiceUser\Validator::assertEmail($value);
                 return $value;
             });
 
             $email = $helper->ask($input, $output, $question);
         } else {
-            $this->assertEmail($email);
+            ServiceUser\Validator::assertEmail($email);
         }
 
         // password
