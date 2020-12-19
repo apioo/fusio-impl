@@ -46,27 +46,27 @@ class Scope
     /**
      * @var \Fusio\Impl\Table\Scope
      */
-    protected $scopeTable;
+    private $scopeTable;
 
     /**
      * @var \Fusio\Impl\Table\Scope\Route
      */
-    protected $scopeRouteTable;
+    private $scopeRouteTable;
 
     /**
      * @var \Fusio\Impl\Table\App\Scope
      */
-    protected $appScopeTable;
+    private $appScopeTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Scope
      */
-    protected $userScopeTable;
+    private $userScopeTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Scope $scopeTable

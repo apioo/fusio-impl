@@ -54,22 +54,22 @@ class Connection
     /**
      * @var \Fusio\Impl\Table\Connection
      */
-    protected $connectionTable;
+    private $connectionTable;
 
     /**
      * @var \Fusio\Engine\Factory\Connection
      */
-    protected $connectionFactory;
+    private $connectionFactory;
 
     /**
      * @var string
      */
-    protected $secretKey;
+    private $secretKey;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Connection $connectionTable

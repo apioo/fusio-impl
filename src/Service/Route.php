@@ -47,27 +47,27 @@ class Route
     /**
      * @var \Fusio\Impl\Table\Route
      */
-    protected $routesTable;
+    private $routesTable;
 
     /**
      * @var \Fusio\Impl\Table\Route\Method
      */
-    protected $methodTable;
+    private $methodTable;
 
     /**
      * @var \Fusio\Impl\Service\Scope
      */
-    protected $scopeService;
+    private $scopeService;
 
     /**
      * @var \Fusio\Impl\Service\Route\Config
      */
-    protected $configService;
+    private $configService;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Route $routesTable

@@ -50,22 +50,22 @@ class Schema
     /**
      * @var \Fusio\Impl\Table\Schema
      */
-    protected $schemaTable;
+    private $schemaTable;
 
     /**
      * @var \Fusio\Impl\Table\Route\Method
      */
-    protected $routesMethodTable;
+    private $routesMethodTable;
 
     /**
      * @var \Fusio\Impl\Schema\Loader
      */
-    protected $schemaLoader;
+    private $schemaLoader;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Schema $schemaTable

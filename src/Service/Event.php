@@ -45,12 +45,12 @@ class Event
     /**
      * @var \Fusio\Impl\Table\Event
      */
-    protected $eventTable;
+    private $eventTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Impl\Table\Event $eventTable

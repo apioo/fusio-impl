@@ -40,22 +40,22 @@ class Health
     /**
      * @var \Fusio\Impl\Service\Connection 
      */
-    protected $connectionService;
+    private $connectionService;
 
     /**
      * @var \Fusio\Impl\Table\Connection 
      */
-    protected $connectionTable;
+    private $connectionTable;
 
     /**
      * @var \Fusio\Engine\Factory\Connection
      */
-    protected $connectionFactory;
+    private $connectionFactory;
 
     /**
      * @var string
      */
-    protected $secretKey;
+    private $secretKey;
 
     /**
      * @param \Fusio\Impl\Service\Connection $connectionService

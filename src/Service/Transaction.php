@@ -52,37 +52,37 @@ class Transaction
     /**
      * @var \Fusio\Engine\ConnectorInterface
      */
-    protected $connector;
+    private $connector;
 
     /**
      * @var \Fusio\Impl\Service\Plan\Invoice
      */
-    protected $invoiceService;
+    private $invoiceService;
 
     /**
      * @var \Fusio\Impl\Provider\ProviderFactory
      */
-    protected $providerFactory;
+    private $providerFactory;
 
     /**
      * @var \PSX\Framework\Config\Config $config
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Fusio\Impl\Table\Plan\Invoice
      */
-    protected $invoiceTable;
+    private $invoiceTable;
 
     /**
      * @var \Fusio\Impl\Table\Transaction
      */
-    protected $transactionTable;
+    private $transactionTable;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * @param \Fusio\Engine\ConnectorInterface $connector
