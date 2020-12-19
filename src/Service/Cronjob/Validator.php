@@ -19,23 +19,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Filter\Cronjob;
+namespace Fusio\Impl\Service\Cronjob;
 
-use PSX\Validate\FilterAbstract;
+use Fusio\Impl\Framework\Filter\Filter;
+use PSX\Http\Exception as StatusCode;
 
 /**
- * Cron
+ * Validator
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Cron extends FilterAbstract
+class Validator
 {
     /**
      * @var array
      */
-    protected $special = [
+    private static $special = [
         '@reboot',
         '@yearly',
         '@annually',
@@ -49,7 +50,7 @@ class Cron extends FilterAbstract
     /**
      * @var array
      */
-    protected $rules = [
+    private static $rules = [
         [0, 59],
         [0, 23],
         [1, 31],
@@ -60,7 +61,7 @@ class Cron extends FilterAbstract
     /**
      * @var array
      */
-    protected $convert = [
+    private static $convert = [
         null,
         null,
         null,
@@ -71,7 +72,7 @@ class Cron extends FilterAbstract
     /**
      * @var array
      */
-    protected $fields = [
+    private static $fields = [
         'minute',
         'hour',
         'day',
@@ -80,56 +81,38 @@ class Cron extends FilterAbstract
     ];
 
     /**
-     * @var string
+     * @param string $cron
+     * @return void
      */
-    protected $errorMessage = '%s is not a valid cron expression';
-
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    public function apply($value)
+    public static function assertCron(string $cron): void
     {
-        if (!empty($value)) {
-            if (in_array($value, $this->special)) {
-                return $value;
-            }
-
-            $value = preg_replace('/\s+/', ' ', $value);
-            $parts = explode(' ', $value);
-
-            if (count($parts) != count($this->rules)) {
-                $this->errorMessage = '%s must have exactly ' . count($this->rules) . ' space separated fields';
-                return false;
-            }
-
-            $result = [];
-            foreach ($parts as $index => $part) {
-                list($min, $max) = $this->rules[$index];
-
-                try {
-                    $result[] = $this->validateField($part, $min, $max, $this->convert[$index]);
-                } catch (\InvalidArgumentException $e) {
-                    $this->errorMessage = '%s ' . $this->fields[$index] . ' ' . $e->getMessage();
-                    return false;
-                }
-            }
-
-            return implode(' ', $result);
+        if (empty($cron)) {
+            throw new StatusCode\BadRequestException('Cron must not be empty');
         }
 
-        return false;
+        if (in_array($cron, self::$special)) {
+            return;
+        }
+
+        $cron = preg_replace('/\s+/', ' ', $cron);
+        $parts = explode(' ', $cron);
+
+        if (count($parts) != count(self::$rules)) {
+            throw new StatusCode\BadRequestException('Cron must have exactly ' . count(self::$rules) . ' space separated fields');
+        }
+
+        foreach ($parts as $index => $part) {
+            [$min, $max] = self::$rules[$index];
+
+            try {
+                self::validateField($part, $min, $max, self::$convert[$index]);
+            } catch (\InvalidArgumentException $e) {
+                throw new StatusCode\BadRequestException('Cron ' . self::$fields[$index] . ' ' . $e->getMessage());
+            }
+        }
     }
 
-    /**
-     * @return string
-     */
-    public function getErrorMessage()
-    {
-        return $this->errorMessage;
-    }
-
-    private function validateField($field, $min, $max, array $convert = null)
+    private static function validateField($field, $min, $max, array $convert = null)
     {
         $parts = explode(',', $field);
         $entry = [];
@@ -144,21 +127,21 @@ class Cron extends FilterAbstract
             } elseif (preg_match('/^([0-9]+)$/', $part, $matches)) {
                 $num = (int) $matches[1];
 
-                $this->validateRange($num, $min, $max);
+                self::validateRange($num, $min, $max);
 
                 $entry[] = $num;
             } elseif (preg_match('/^([0-9]+)\-([0-9]+)$/', $part, $matches)){
                 $from = (int) $matches[1];
                 $to   = (int) $matches[2];
 
-                $this->validateRange($from, $min, $max);
-                $this->validateRange($to, $min, $max);
+                self::validateRange($from, $min, $max);
+                self::validateRange($to, $min, $max);
 
                 $entry[] = $from . '-' . $to;
             } elseif (preg_match('/^(\*)\/([0-9]+)$/', $part, $matches)) {
                 $step = (int) $matches[2];
 
-                $this->validateRange($step, $min, $max);
+                self::validateRange($step, $min, $max);
 
                 $entry[] = '*/' . $step;
             } elseif (preg_match('/^([0-9]+)\-([0-9]+)\/([0-9]+)$/', $part, $matches)) {
@@ -166,9 +149,9 @@ class Cron extends FilterAbstract
                 $to   = (int) $matches[2];
                 $step = (int) $matches[3];
 
-                $this->validateRange($from, $min, $max);
-                $this->validateRange($to, $min, $max);
-                $this->validateRange($step, $min, $max);
+                self::validateRange($from, $min, $max);
+                self::validateRange($to, $min, $max);
+                self::validateRange($step, $min, $max);
 
                 $entry[] = $from . '-' . $to . '/' . $step;
             } elseif ($convert !== null) {
@@ -183,11 +166,9 @@ class Cron extends FilterAbstract
         if (empty($entry)) {
             throw new \InvalidArgumentException('is not valid');
         }
-
-        return implode(',', $entry);
     }
 
-    private function validateRange($value, $min, $max)
+    private static function validateRange(int $value, int $min, int $max): void
     {
         if ($value < $min) {
             throw new \InvalidArgumentException('must be greater or equal ' . $min);

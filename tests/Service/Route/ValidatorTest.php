@@ -19,51 +19,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Filter\Routes;
+namespace Fusio\Impl\Tests\Service\Route;
 
 use Fusio\Impl\Backend\Filter\Route\Path;
+use Fusio\Impl\Service\Route\Validator;
 use PHPUnit\Framework\TestCase;
+use PSX\Http\Exception\BadRequestException;
 
 /**
- * PathTest
+ * ValidatorTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PathTest extends TestCase
+class ValidatorTest extends TestCase
 {
     /**
      * @dataProvider pathProvider
      */
-    public function testApply($path, $expect, $errorMessage)
+    public function testAssertPath(string $path, bool $expect, ?string $errorMessage)
     {
-        $filter = new Path();
+        try {
+            Validator::assertPath($path);
 
-        $this->assertEquals($expect, $filter->apply($path));
-
-        if ($expect === false) {
-            $this->assertEquals($errorMessage, $filter->getErrorMessage());
+            $this->assertTrue($expect);
+        } catch (BadRequestException $e) {
+            $this->assertFalse($expect);
+            $this->assertEquals($errorMessage, $e->getMessage());
         }
     }
 
-    public function pathProvider()
+    public function pathProvider(): array
     {
         return [
-            ['', false, '%s is not a valid path'],
-            ['foo', false, '%s must start with a /'],
+            ['', false, 'Path must not be empty'],
+            ['foo', false, 'Path must start with a /'],
             ['/', true, null],
-            ['//', false, '%s has an empty path segment'],
+            ['//', false, 'Path has an empty path segment'],
             ['/foo', true, null],
             ['/foo/:bar', true, null],
             ['/foo/$bar<[0-9]+>', true, null],
             ['/foo/!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~', true, null],
-            ['/foo' . "\x20\x7F", false, '%s contains invalid characters inside a path segment'],
-            ['/foo' . "\x80", false, '%s contains invalid characters inside a path segment'],
-            ['/backend', false, '%s uses a path segment which is reserved for the system'],
-            ['/consumer', false, '%s uses a path segment which is reserved for the system'],
-            ['/system', false, '%s uses a path segment which is reserved for the system'],
-            ['/authorization', false, '%s uses a path segment which is reserved for the system'],
+            ['/foo' . "\x20\x7F", false, 'Path contains invalid characters inside a path segment'],
+            ['/foo' . "\x80", false, 'Path contains invalid characters inside a path segment'],
+            ['/backend', false, 'Path uses a path segment which is reserved for the system'],
+            ['/consumer', false, 'Path uses a path segment which is reserved for the system'],
+            ['/system', false, 'Path uses a path segment which is reserved for the system'],
+            ['/authorization', false, 'Path uses a path segment which is reserved for the system'],
         ];
     }
 }

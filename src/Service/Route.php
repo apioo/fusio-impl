@@ -87,6 +87,8 @@ class Route
 
     public function create(Route_Create $route, UserContext $context)
     {
+        Route\Validator::assertPath($route->getPath());
+
         // check whether route exists
         if ($this->exists($route->getPath())) {
             throw new StatusCode\BadRequestException('Route already exists');

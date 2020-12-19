@@ -94,6 +94,8 @@ class Cronjob
 
     public function create(Cronjob_Create $cronjob, UserContext $context)
     {
+        Cronjob\Validator::assertCron($cronjob->getCron());
+
         // check whether cronjob exists
         if ($this->exists($cronjob->getName())) {
             throw new StatusCode\BadRequestException('Cronjob already exists');
@@ -120,6 +122,8 @@ class Cronjob
 
     public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context)
     {
+        Cronjob\Validator::assertCron($cronjob->getCron());
+
         $existing = $this->cronjobTable->get($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
