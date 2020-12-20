@@ -21,9 +21,8 @@
 
 namespace Fusio\Impl\Service\Connection;
 
-use Defuse\Crypto\Crypto;
-use Defuse\Crypto\Key;
 use PSX\Json\Parser;
+use PSX\OpenSsl\OpenSsl;
 
 /**
  * Encrypter
@@ -40,10 +39,13 @@ class Encrypter
             return null;
         }
 
-        return Crypto::encrypt(
-            Parser::encode($config),
-            Key::loadFromAsciiSafeString($secretKey)
-        );
+        $method = self::getMethodForKey($secretKey);
+
+        $iv   = random_bytes(openssl_cipher_iv_length($method));
+        $data = Parser::encode($config);
+        $data = OpenSsl::encrypt($data, $method, $secretKey, OPENSSL_RAW_DATA, $iv);
+
+        return base64_encode($iv) . '.' . base64_encode($data);
     }
 
     public static function decrypt($data, string $secretKey)
@@ -56,11 +58,27 @@ class Encrypter
             $data = stream_get_contents($data, -1, 0);
         }
 
-        $config = Crypto::decrypt(
-            $data,
-            Key::loadFromAsciiSafeString($secretKey)
-        );
+        $parts = explode('.', $data, 2);
+        if (count($parts) !== 2) {
+            return [];
+        }
 
-        return Parser::decode($config, true);
+        [$iv, $data] = $parts;
+
+        $method = self::getMethodForKey($secretKey);
+        $config = OpenSsl::decrypt(base64_decode($data), $method, $secretKey, OPENSSL_RAW_DATA, base64_decode($iv));
+        $config = Parser::decode($config, true);
+
+        return $config;
+    }
+
+    private static function getMethodForKey(string $secretKey): string
+    {
+        $len = strlen($secretKey);
+        if ($len >= 16) {
+            return 'AES-128-CBC';
+        } else {
+            throw new \RuntimeException('Length of provided secret key is to short must be at least 16 bytes');
+        }
     }
 }
