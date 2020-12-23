@@ -99,7 +99,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
 
     protected function newConnection(array $row)
     {
-        $config = !empty($row['config']) ? ConnectionService::decryptConfig($row['config'], $this->secretKey) : [];
+        $config = !empty($row['config']) ? ConnectionService\Encrypter::decrypt($row['config'], $this->secretKey) : [];
 
         $connection = new Connection();
         $connection->setId($row['id']);

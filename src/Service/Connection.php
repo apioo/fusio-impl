@@ -32,11 +32,8 @@ use Fusio\Impl\Backend\Model\Connection_Update;
 use Fusio\Impl\Event\Connection\CreatedEvent;
 use Fusio\Impl\Event\Connection\DeletedEvent;
 use Fusio\Impl\Event\Connection\UpdatedEvent;
-use Fusio\Impl\Event\ConnectionEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
-use PSX\Json\Parser;
-use PSX\OpenSsl\OpenSsl;
 use PSX\Sql\Condition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -49,8 +46,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Connection
 {
-    const CIPHER_METHOD = 'AES-128-CBC';
-
     /**
      * @var \Fusio\Impl\Table\Connection
      */
@@ -116,7 +111,7 @@ class Connection
             'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $connection->getName(),
             'class'  => $connection->getClass(),
-            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
+            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->create($record);
@@ -157,7 +152,7 @@ class Connection
         // update connection
         $record = [
             'id'     => $existing['id'],
-            'config' => self::encryptConfig($parameters->toArray(), $this->secretKey),
+            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
         ];
 
         $this->connectionTable->update($record);
@@ -177,7 +172,7 @@ class Connection
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config = self::decryptConfig($existing['config'], $this->secretKey);
+        $config = Connection\Encrypter::decrypt($existing['config'], $this->secretKey);
 
         $parameters = new Parameters($config ?: []);
         $factory    = $this->connectionFactory->factory($existing['class']);
@@ -235,42 +230,6 @@ class Connection
             if (!$ping) {
                 throw new StatusCode\BadRequestException('Could not connect to remote service');
             }
-        }
-    }
-
-    public static function encryptConfig($config, $secretKey)
-    {
-        if (empty($config)) {
-            return null;
-        }
-
-        $iv   = OpenSsl::randomPseudoBytes(openssl_cipher_iv_length(self::CIPHER_METHOD));
-        $data = Parser::encode($config);
-        $data = OpenSsl::encrypt($data, self::CIPHER_METHOD, $secretKey, OPENSSL_RAW_DATA, $iv);
-
-        return base64_encode($iv) . '.' . base64_encode($data);
-    }
-
-    public static function decryptConfig($data, $secretKey)
-    {
-        if (empty($data)) {
-            return [];
-        }
-
-        if (is_resource($data)) {
-            $data = stream_get_contents($data, -1, 0);
-        }
-
-        $parts = explode('.', $data, 2);
-        if (count($parts) == 2) {
-            [$iv, $data] = $parts;
-
-            $config = OpenSsl::decrypt(base64_decode($data), self::CIPHER_METHOD, $secretKey, OPENSSL_RAW_DATA, base64_decode($iv));
-            $config = Parser::decode($config, true);
-
-            return $config;
-        } else {
-            return [];
         }
     }
 }

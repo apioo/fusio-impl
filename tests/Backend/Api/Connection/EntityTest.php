@@ -157,7 +157,7 @@ JSON;
         $this->assertNotEmpty($row['config']);
 
         $projectKey = Environment::getService('config')->get('fusio_project_key');
-        $newConfig  = Connection::decryptConfig($row['config'], $projectKey);
+        $newConfig  = Connection\Encrypter::decrypt($row['config'], $projectKey);
 
         $this->assertEquals($config, $newConfig);
 
