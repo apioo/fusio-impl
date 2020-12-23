@@ -306,7 +306,7 @@ class Container extends DefaultContainer
     protected function appendDefaultConfig()
     {
         return array_merge(parent::appendDefaultConfig(), array(
-            'fusio_project_key'      => 'def00000f4f7679c90443d462c56b38cfff71ed3640fdad55dec8c7e0f3b213dee7c67daefc8e890a1b959ff849a09632d89b07fbf75e5fc2987df15ff0831923540548c',
+            'fusio_project_key'      => '42eec18ffdbffc9fda6110dcc705d6ce',
             'fusio_app_per_consumer' => 16,
             'fusio_app_approval'     => false,
             'fusio_grant_implicit'   => true,

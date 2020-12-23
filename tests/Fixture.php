@@ -77,7 +77,7 @@ class Fixture
         $expire = new \DateTime();
         $expire->add(new \DateInterval('P1M'));
 
-        $secretKey = 'def00000f4f7679c90443d462c56b38cfff71ed3640fdad55dec8c7e0f3b213dee7c67daefc8e890a1b959ff849a09632d89b07fbf75e5fc2987df15ff0831923540548c';
+        $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
         $data->addUser('Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_CONSUMER, '2015-02-27 19:59:15');
         $data->addUser('Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED, '2015-02-27 19:59:15');
