@@ -79,6 +79,10 @@ class PushCommand extends Command
             throw new \RuntimeException('Invalid base dir');
         }
 
+        if (!is_file($baseDir . '/configuration.php')) {
+            throw new \RuntimeException('Looks like base dir is not a valid Fusio folder');
+        }
+
         try {
             $output->writeln('Pushing ...');
 

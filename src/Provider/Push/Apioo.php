@@ -66,14 +66,6 @@ class Apioo implements ProviderInterface
      */
     public function push(string $basePath)
     {
-        if (!is_dir($basePath)) {
-            throw new \RuntimeException('Base path is not a folder');
-        }
-
-        if (!is_file($basePath . '/.fusio.yml')) {
-            throw new \RuntimeException('Looks like path is not a valid Fusio folder');
-        }
-
         $host = $this->config->get('fusio_provider_host');
         $key  = $this->config->get('fusio_provider_key');
 
