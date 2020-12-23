@@ -58,7 +58,10 @@ class Executor implements ExecutorInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function execute(int $routeId, string $method, string $path, array $uriFragments, array $headers, ?string $body = null): ResponseInterface
+    /**
+     * @inheritDoc
+     */
+    public function execute(array $method, string $httpMethod, string $path, array $uriFragments, array $headers, ?string $body = null): ResponseInterface
     {
         // we dont need to use the routing of the framework
         $this->container->set('loader_location_finder', new StaticFinder());
@@ -67,9 +70,9 @@ class Executor implements ExecutorInterface
         $context->setParameters($uriFragments);
         $context->setPath($path);
         $context->setSource(SchemaApiController::class);
-        $context->setRouteId($routeId);
+        $context->setRouteId($method['route_id']);
 
-        $request  = new Request(new Uri($path), $method, $headers, $body);
+        $request  = new Request(new Uri($path), $httpMethod, $headers, $body);
         $response = (new ResponseFactory())->createResponse();
 
         return $this->dispatcher->route($request, $response, $context);
