@@ -78,7 +78,7 @@ class Encrypter
         if ($len >= 16) {
             return 'AES-128-CBC';
         } else {
-            throw new \RuntimeException('Length of provided secret key is to short must be at least 16 bytes');
+            throw new \RuntimeException('Length of provided secret key is too short must be at least 16 bytes');
         }
     }
 }
