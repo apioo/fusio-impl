@@ -261,6 +261,8 @@ class Container extends DefaultContainer
 
         $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
 
+        $application->add(new Console\Push\PushCommand($this->get('provider_loader'), $this->get('container_autowire_resolver')));
+
         $application->add(new Console\Schema\AddCommand($this->get('schema_service')));
         $application->add(new Console\Schema\ExportCommand($this->get('schema_loader')));
         $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
