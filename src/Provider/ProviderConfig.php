@@ -37,6 +37,7 @@ class ProviderConfig extends Config
     const TYPE_PAYMENT = 'payment';
     const TYPE_USER = 'user';
     const TYPE_ROUTES = 'routes';
+    const TYPE_PUSH = 'push';
 
     /**
      * @param array $config
@@ -50,7 +51,7 @@ class ProviderConfig extends Config
      * @param string $type
      * @return array
      */
-    public function getClasses($type)
+    public function getClasses(string $type)
     {
         return $this->get($type);
     }
@@ -60,7 +61,7 @@ class ProviderConfig extends Config
      * @param string $name
      * @return string|null
      */
-    public function getClass($type, $name)
+    public function getClass(string $type, string $name)
     {
         return $this->get($type)[$name] ?? null;
     }
@@ -100,6 +101,7 @@ class ProviderConfig extends Config
             self::TYPE_PAYMENT,
             self::TYPE_USER,
             self::TYPE_ROUTES,
+            self::TYPE_PUSH,
         ];
     }
 }

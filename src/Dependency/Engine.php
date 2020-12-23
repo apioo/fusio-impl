@@ -35,9 +35,12 @@ use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
 use Fusio\Engine\Response;
+use Fusio\Engine\Serverless;
 use Fusio\Impl\Factory\Resolver;
 use Fusio\Impl\Provider\ActionProviderParser;
 use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Impl\Provider\Push\Serverless\Executor;
+use Fusio\Impl\Provider\Push\Serverless\Generator;
 use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue;
 use Fusio\Impl\Service\Event\Dispatcher;
@@ -162,5 +165,20 @@ trait Engine
     public function getEngineResponse(): Response\FactoryInterface
     {
         return new Response\Factory();
+    }
+
+    public function getServerlessExecutor(): Serverless\ExecutorInterface
+    {
+        return new Executor(
+            $this,
+            $this->get('dispatcher')
+        );
+    }
+
+    public function getServerlessGenerator(): Serverless\GeneratorInterface
+    {
+        return new Generator(
+            $this->get('connection')
+        );
     }
 }

@@ -58,7 +58,7 @@ class ProviderFactory
      * @param string $type
      * @param string $instanceOf
      */
-    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver, $type, $instanceOf)
+    public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver, string $type, string $instanceOf)
     {
         $this->loader     = $loader;
         $this->resolver   = $resolver;

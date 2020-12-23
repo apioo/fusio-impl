@@ -56,7 +56,7 @@ class ProviderParser extends ParserAbstract
      * @param string $type
      * @param string $instanceOf
      */
-    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader, $type, $instanceOf)
+    public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader, string $type, string $instanceOf)
     {
         parent::__construct($factory, $elementFactory);
 
