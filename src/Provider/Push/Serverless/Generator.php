@@ -85,7 +85,7 @@ class Generator implements GeneratorInterface
             $functions[$method['action']] = $function;
 
             $actionFile = $basePath . '/' . $targetDir . '/' . $method['action'] . '.php';
-            $bytes = file_put_contents($actionFile, $this->generateCode((int) $method['route_id'], $stub));
+            $bytes = file_put_contents($actionFile, $this->generateCode($method, $stub));
 
             yield 'Generated handler ' . $actionFile . ' wrote ' . $bytes . ' bytes';
         }
@@ -105,15 +105,20 @@ class Generator implements GeneratorInterface
         yield 'Wrote serverless.yaml ' . $bytes . ' bytes';
     }
 
-    private function generateCode(int $routeId, string $stub): string
+    private function generateCode(array $method, string $stub): string
     {
+        $method['id'] = (int) $method['id'];
+        $method['route_id'] = (int) $method['route_id'];
+        $method['status'] = (int) $method['status'];
+        $method['public'] = (bool) $method['public'];
+
         $return = '<?php' . "\n";
         $return.= '// Fusio handler to execute a specific route' . "\n";
         $return.= '// Automatically generated on ' . date('Y-m-d') . "\n";
         $return.= 'require __DIR__ . "/../vendor/autoload.php";' . "\n";
         $return.= '$container = require_once(__DIR__ . "/../container.php");' . "\n";
         $return.= '\PSX\Framework\Bootstrap::setupEnvironment($container->get("config"));' . "\n";
-        $return.= '$routeId = ' . $routeId . ';' . "\n";
+        $return.= '$method = ' . var_export($method, true) . ';' . "\n";
         $return.= "\n";
         $return.= $stub;
         $return.= "\n";
@@ -127,15 +132,13 @@ class Generator implements GeneratorInterface
                        method.route_id,
                        method.method,
                        method.status,
-                       method.active,
                        method.public,
-                       method.description,
-                       method.request,
                        method.action,
                        routes.path
                   FROM fusio_routes_method method
             INNER JOIN fusio_routes routes
                     ON routes.id = method.route_id
+                 WHERE method.active = 1
               ORDER BY method.id DESC';
 
         return $this->connection->fetchAll($sql);
