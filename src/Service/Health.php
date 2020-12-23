@@ -84,7 +84,7 @@ class Health
         $result = $this->connectionTable->getAll(0, 1024, null, null, $condition);
         foreach ($result as $row) {
             $factory    = $this->connectionFactory->factory($row['class']);
-            $parameters = Service\Connection::decryptConfig($row['class'], $this->secretKey);
+            $parameters = Service\Connection\Encrypter::decrypt($row['config'], $this->secretKey);
             $connection = $factory->getConnection(new Parameters($parameters));
 
             if ($factory instanceof PingableInterface) {
