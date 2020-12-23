@@ -171,7 +171,7 @@ trait Engine
     {
         return new Executor(
             $this,
-            $this->get('dispatcher')
+            $this->get('dispatch')
         );
     }
 
