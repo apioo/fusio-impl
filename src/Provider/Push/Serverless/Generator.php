@@ -100,7 +100,7 @@ class Generator implements GeneratorInterface
         ];
 
         $file = $basePath . '/serverless.yaml';
-        $bytes = file_put_contents($file, Yaml::dump($yaml));
+        $bytes = file_put_contents($file, Yaml::dump($yaml, 8));
 
         yield 'Wrote serverless.yaml ' . $bytes . ' bytes';
     }
@@ -135,7 +135,8 @@ class Generator implements GeneratorInterface
                        routes.path
                   FROM fusio_routes_method method
             INNER JOIN fusio_routes routes
-                    ON routes.id = method.route_id';
+                    ON routes.id = method.route_id
+              ORDER BY method.id DESC';
 
         return $this->connection->fetchAll($sql);
     }
