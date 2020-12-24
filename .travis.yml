@@ -1,16 +1,14 @@
 language: php
 php:
-  - 7.2
   - 7.3
   - 7.4
+  - 8.0
 sudo: false
 services:
   - mysql
   - postgresql
 before_install:
   - phpenv config-add tests/config.ini
-  - if [ $TRAVIS_PHP_VERSION == '7.2' ]; then phpenv config-rm xdebug.ini; fi;
-  - if [ $TRAVIS_PHP_VERSION -ne '7.4' ]; then composer self-update --rollback; fi;
 install:
   - composer install
 before_script:

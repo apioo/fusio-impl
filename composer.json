@@ -12,11 +12,11 @@
   ],
   "config": {
     "platform": {
-      "php": "7.2.5"
+      "php": "7.3"
     }
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.3",
     "psx/framework": "^5.0",
     "psx/openssl": "^1.0",
     "psx/cloudevents": "^0.1",
