@@ -48,5 +48,11 @@ return [
         \Fusio\Impl\Provider\User\Google::class,
         \stdClass::class,
     ],
+    'routes' => [
+        \stdClass::class,
+    ],
+    'push' => [
+        \stdClass::class,
+    ],
 ];
 

@@ -73,7 +73,11 @@ class ProviderLoaderTest extends DbTestCase
                 'stdclass' => \stdClass::class,
             ],
             'routes' => [
-                'sqltable' => \Fusio\Adapter\Sql\Routes\SqlTable::class
+                'sqltable' => \Fusio\Adapter\Sql\Routes\SqlTable::class,
+                'stdclass' => \stdClass::class,
+            ],
+            'push' => [
+                'stdclass' => \stdClass::class,
             ],
         ];
 
