@@ -10,13 +10,8 @@
       "homepage": "http://christoph.kappestein.com"
     }
   ],
-  "config": {
-    "platform": {
-      "php": "7.3"
-    }
-  },
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.2",
     "psx/framework": "^5.0",
     "psx/openssl": "^1.0",
     "psx/cloudevents": "^0.1",
