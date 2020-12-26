@@ -26,7 +26,7 @@
     "fusio/adapter-util": "^4.0",
     "firebase/php-jwt": "^5.0",
     "swiftmailer/swiftmailer": "^6.2",
-    "doctrine/migrations": "^2.2",
+    "doctrine/migrations": "^3.0",
     "ocramius/package-versions": "^1.2",
     "symfony/filesystem": "^4.0|^5.0"
   },
