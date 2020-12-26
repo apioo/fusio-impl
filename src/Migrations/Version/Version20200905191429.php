@@ -61,4 +61,12 @@ final class Version20200905191429 extends AbstractMigration
             }
         }
     }
+
+    /**
+     * @see https://github.com/doctrine/migrations/issues/1104
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }

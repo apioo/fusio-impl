@@ -570,4 +570,12 @@ final class Version20200905081453 extends AbstractMigration
         $schema->dropTable('fusio_user_grant');
         $schema->dropTable('fusio_user_scope');
     }
+
+    /**
+     * @see https://github.com/doctrine/migrations/issues/1104
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
