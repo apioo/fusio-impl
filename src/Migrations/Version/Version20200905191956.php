@@ -35,4 +35,12 @@ final class Version20200905191956 extends AbstractMigration
 
         $schema->dropTable('app_news');
     }
+
+    /**
+     * @see https://github.com/doctrine/migrations/issues/1104
+     */
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
