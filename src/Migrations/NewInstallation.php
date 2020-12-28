@@ -66,7 +66,9 @@ class NewInstallation
         $bag->addCategory('consumer');
         $bag->addCategory('system');
         $bag->addCategory('authorization');
-        $bag->addUser('Administrator', 'admin@localhost.com', $password);
+        $bag->addRole('backend', 'Backend');
+        $bag->addRole('consumer', 'Consumer');
+        $bag->addUser('Backend', 'Administrator', 'admin@localhost.com', $password);
         $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
         $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
@@ -97,7 +99,7 @@ class NewInstallation
         $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
-        $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
+        $bag->addConfig('role_default', Table\Config::FORM_NUMBER, 2, 'Default role which a user gets assigned on registration');
         $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
         $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional a SMTP connection which is used as mailer');
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional a HTTP or message queue connection which is used to dispatch events');
@@ -108,10 +110,8 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, 0);
-        $bag->addRole('backend', 'Administrator');
-        $bag->addRole('consumer', 'Consumer');
-        $bag->addRoleScope('Administrator', 'backend');
-        $bag->addRoleScope('Administrator', 'authorization');
+        $bag->addRoleScope('Backend', 'backend');
+        $bag->addRoleScope('Backend', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
