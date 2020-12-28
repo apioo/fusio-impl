@@ -288,10 +288,11 @@ class User
 
             // update user
             $record = [
-                'id'     => $existing['id'],
-                'status' => $user->getStatus(),
-                'name'   => $user->getName(),
-                'email'  => $user->getEmail(),
+                'id'      => $existing['id'],
+                'role_id' => $user->getRoleId(),
+                'status'  => $user->getStatus(),
+                'name'    => $user->getName(),
+                'email'   => $user->getEmail(),
             ];
 
             $this->userTable->update($record);
