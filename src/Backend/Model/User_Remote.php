@@ -25,10 +25,6 @@ class User_Remote implements \JsonSerializable
      */
     protected $email;
     /**
-     * @var array<string>|null
-     */
-    protected $scopes;
-    /**
      * @param string|null $provider
      */
     public function setProvider(?string $provider) : void
@@ -84,23 +80,9 @@ class User_Remote implements \JsonSerializable
     {
         return $this->email;
     }
-    /**
-     * @param array<string>|null $scopes
-     */
-    public function setScopes(?array $scopes) : void
-    {
-        $this->scopes = $scopes;
-    }
-    /**
-     * @return array<string>|null
-     */
-    public function getScopes() : ?array
-    {
-        return $this->scopes;
-    }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('provider' => $this->provider, 'remoteId' => $this->remoteId, 'name' => $this->name, 'email' => $this->email, 'scopes' => $this->scopes), static function ($value) : bool {
+        return (object) array_filter(array('provider' => $this->provider, 'remoteId' => $this->remoteId, 'name' => $this->name, 'email' => $this->email), static function ($value) : bool {
             return $value !== null;
         });
     }
