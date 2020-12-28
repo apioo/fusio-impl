@@ -85,7 +85,7 @@ class Register
         $status   = Table\User::STATUS_DISABLED;
         $approval = $this->configService->getValue('user_approval');
         if (!$approval) {
-            $status = Table\User::STATUS_CONSUMER;
+            $status = Table\User::STATUS_ACTIVE;
         }
 
         $scopes = $this->userService->getDefaultScopes();
