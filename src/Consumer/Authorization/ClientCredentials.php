@@ -77,29 +77,29 @@ class ClientCredentials extends ClientCredentialsAbstract
             $credentials->getClientSecret()
         );
 
-        if (!empty($userId)) {
-            if (empty($scope)) {
-                $scopes = ['consumer', 'authorization'];
-            } else {
-                $scopes = Service\Scope::split($scope);
-            }
-
-            // scopes
-            $scopes = $this->userService->getValidScopes($userId, $scopes);
-            if (empty($scopes)) {
-                throw new InvalidScopeException('No valid scope given');
-            }
-
-            // generate access token
-            return $this->appTokenService->generateAccessToken(
-                App::CONSUMER,
-                $userId,
-                $scopes,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireConsumer)
-            );
-        } else {
+        if (empty($userId)) {
             throw new InvalidClientException('Unknown credentials');
         }
+
+        if (empty($scope)) {
+            $scopes = ['consumer', 'authorization'];
+        } else {
+            $scopes = Service\Scope::split($scope);
+        }
+
+        // scopes
+        $scopes = $this->userService->getValidScopes($userId, $scopes);
+        if (empty($scopes)) {
+            throw new InvalidScopeException('No valid scope given');
+        }
+
+        // generate access token
+        return $this->appTokenService->generateAccessToken(
+            App::CONSUMER,
+            $userId,
+            $scopes,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->expireConsumer)
+        );
     }
 }
