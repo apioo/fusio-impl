@@ -1,0 +1,127 @@
+{
+  "status": 1,
+  "path": "\/backend\/role",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Role_GetAll",
+      "security": {
+        "app": [
+          "backend.role"
+        ]
+      },
+      "tags": [
+        "backend.role"
+      ],
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Role_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Role_Create",
+      "security": {
+        "app": [
+          "backend.role"
+        ]
+      },
+      "tags": [
+        "backend.role"
+      ],
+      "request": "Backend_Model_Role_Create",
+      "responses": {
+        "201": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Role_Collection": {
+      "$ref": "Role_Collection"
+    },
+    "Backend_Model_Role_Create": {
+      "$ref": "Role_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "categoryId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Role_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Role"
+      }
+    },
+    "Role_Create": {
+      "$extends": "Role",
+      "type": "object",
+      "required": [
+        "categoryId",
+        "name"
+      ]
+    }
+  }
+}
