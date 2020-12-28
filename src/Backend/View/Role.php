@@ -70,7 +70,7 @@ class Role extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Rate::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Role::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'categoryId' => $this->fieldInteger('category_id'),
             'status' => $this->fieldInteger('status'),
