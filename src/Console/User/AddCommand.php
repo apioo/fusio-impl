@@ -136,7 +136,7 @@ class AddCommand extends Command
 
         // scopes
         if ($status === 0) {
-            $scopes = ['consumer', 'authorization'];
+            $scopes = $this->userService->getDefaultScopes();
         } elseif ($status === 1) {
             $scopes = ['backend', 'consumer', 'authorization'];
         } else {
