@@ -189,6 +189,14 @@ trait Services
         );
     }
 
+    public function getCategoryService(): Service\Category
+    {
+        return new Service\Category(
+            $this->get('table_manager')->getTable(Table\Category::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
     public function getConfigService(): Service\Config
     {
         return new Service\Config(
@@ -369,6 +377,16 @@ trait Services
         return new Service\Sdk(
             $this->get('console'),
             $this->get('config')
+        );
+    }
+
+    public function getRoleService(): Service\Role
+    {
+        return new Service\Role(
+            $this->get('table_manager')->getTable(Table\Role::class),
+            $this->get('table_manager')->getTable(Table\Role\Scope::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('event_dispatcher')
         );
     }
 
