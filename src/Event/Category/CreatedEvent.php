@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Category;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Role_Create;
+use Fusio\Impl\Backend\Model\Category_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**
@@ -35,26 +35,26 @@ use Fusio\Impl\Event\EventAbstract;
 class CreatedEvent extends EventAbstract
 {
     /**
-     * @var Role_Create
+     * @var Category_Create
      */
-    private $role;
+    private $category;
 
     /**
-     * @param Role_Create $role
+     * @param Category_Create $category
      * @param \Fusio\Impl\Authorization\UserContext $context
      */
-    public function __construct(Role_Create $role, UserContext $context)
+    public function __construct(Category_Create $category, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->role = $role;
+        $this->category = $category;
     }
 
     /**
-     * @return Role_Create
+     * @return Category_Create
      */
-    public function getRole(): Role_Create
+    public function getCategory(): Category_Create
     {
-        return $this->role;
+        return $this->category;
     }
 }

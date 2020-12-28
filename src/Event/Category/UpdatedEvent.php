@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Category;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Role_Update;
+use Fusio\Impl\Backend\Model\Category_Update;
 use Fusio\Impl\Event\EventAbstract;
 use PSX\Record\RecordInterface;
 
@@ -36,9 +36,9 @@ use PSX\Record\RecordInterface;
 class UpdatedEvent extends EventAbstract
 {
     /**
-     * @var Role_Update
+     * @var Category_Update
      */
-    private $role;
+    private $category;
 
     /**
      * @var RecordInterface
@@ -46,24 +46,24 @@ class UpdatedEvent extends EventAbstract
     private $existing;
 
     /**
-     * @param Role_Update $role
+     * @param Category_Update $category
      * @param RecordInterface $existing
      * @param UserContext $context
      */
-    public function __construct(Role_Update $role, RecordInterface $existing, UserContext $context)
+    public function __construct(Category_Update $category, RecordInterface $existing, UserContext $context)
     {
         parent::__construct($context);
 
-        $this->role     = $role;
+        $this->category = $category;
         $this->existing = $existing;
     }
 
     /**
-     * @return Role_Update
+     * @return Category_Update
      */
-    public function getRole(): Role_Update
+    public function getCategory(): Category_Update
     {
-        return $this->role;
+        return $this->category;
     }
 
     /**
