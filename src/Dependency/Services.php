@@ -43,8 +43,8 @@ trait Services
         return new Service\User(
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\Scope::class),
-            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('table_manager')->getTable(Table\Role\Scope::class),
             $this->get('config_service'),
             $this->get('event_dispatcher'),
             $this->get('config')->get('fusio_user_attributes')
@@ -539,6 +539,7 @@ trait Services
             $this->get('user_service'),
             $this->get('app_token_service'),
             $factory,
+            $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('config')
         );
     }
