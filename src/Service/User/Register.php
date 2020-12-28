@@ -88,15 +88,12 @@ class Register
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $scopes = $this->userService->getDefaultScopes();
-
         $user = new User_Create();
         $user->setRoleId((int) $this->configService->getValue('role_default'));
         $user->setStatus($status);
         $user->setName($register->getName());
         $user->setEmail($register->getEmail());
         $user->setPassword($register->getPassword());
-        $user->setScopes($scopes);
 
         $userId = $this->userService->create($user, UserContext::newAnonymousContext());
 
