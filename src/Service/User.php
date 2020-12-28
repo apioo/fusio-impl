@@ -184,6 +184,7 @@ class User
 
             // create user
             $record = [
+                'role_id'  => $user->getRoleId(),
                 'provider' => ProviderInterface::PROVIDER_SYSTEM,
                 'status'   => $user->getStatus(),
                 'name'     => $user->getName(),
@@ -240,8 +241,9 @@ class User
 
             // create user
             $record = [
+                'role_id'   => (int) $this->configService->getValue('role_default'),
                 'provider'  => $remote->getProvider(),
-                'status'    => Table\User::STATUS_CONSUMER,
+                'status'    => Table\User::STATUS_ACTIVE,
                 'remote_id' => $remote->getRemoteId(),
                 'name'      => $remote->getName(),
                 'email'     => $remote->getEmail(),
