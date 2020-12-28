@@ -14,6 +14,10 @@ class User implements \JsonSerializable
     /**
      * @var int|null
      */
+    protected $roleId;
+    /**
+     * @var int|null
+     */
     protected $status;
     /**
      * @var string|null
@@ -57,6 +61,20 @@ class User implements \JsonSerializable
     public function getId() : ?int
     {
         return $this->id;
+    }
+    /**
+     * @param int|null $roleId
+     */
+    public function setRoleId(?int $roleId) : void
+    {
+        $this->roleId = $roleId;
+    }
+    /**
+     * @return int|null
+     */
+    public function getRoleId() : ?int
+    {
+        return $this->roleId;
     }
     /**
      * @param int|null $status
@@ -172,7 +190,7 @@ class User implements \JsonSerializable
     }
     public function jsonSerialize()
     {
-        return (object) array_filter(array('id' => $this->id, 'status' => $this->status, 'name' => $this->name, 'email' => $this->email, 'points' => $this->points, 'scopes' => $this->scopes, 'apps' => $this->apps, 'attributes' => $this->attributes, 'date' => $this->date), static function ($value) : bool {
+        return (object) array_filter(array('id' => $this->id, 'roleId' => $this->roleId, 'status' => $this->status, 'name' => $this->name, 'email' => $this->email, 'points' => $this->points, 'scopes' => $this->scopes, 'apps' => $this->apps, 'attributes' => $this->attributes, 'date' => $this->date), static function ($value) : bool {
             return $value !== null;
         });
     }
