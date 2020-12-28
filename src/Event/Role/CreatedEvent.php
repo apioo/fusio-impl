@@ -19,50 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Event\Role;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Role_Create;
+use Fusio\Impl\Event\EventAbstract;
 
 /**
- * Category
+ * CreatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Category extends TableAbstract
+class CreatedEvent extends EventAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    /**
+     * @var Role_Create
+     */
+    private $role;
 
-    public function getName()
+    /**
+     * @param Role_Create $role
+     * @param \Fusio\Impl\Authorization\UserContext $context
+     */
+    public function __construct(Role_Create $role, UserContext $context)
     {
-        return 'fusio_category';
+        parent::__construct($context);
+
+        $this->role = $role;
     }
 
-    public function getColumns()
+    /**
+     * @return Role_Create
+     */
+    public function getRole(): Role_Create
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-        );
-    }
-
-    public function getCategoryIdForPath(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
-        }
-
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
+        return $this->role;
     }
 }

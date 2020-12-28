@@ -254,6 +254,7 @@ class DataBag
     public function addCategory(string $category)
     {
         $this->data['fusio_category'][$category] = [
+            'status' => Table\Category::STATUS_ACTIVE,
             'name' => $category,
         ];
     }
@@ -458,6 +459,22 @@ class DataBag
             'app_id' => $app !== null ? $this->getId('fusio_app', $app) : null,
             'authenticated' => $authenticated !== null ? ($authenticated ? 1 : 0) : null,
             'parameters' => $parameters
+        ];
+    }
+
+    public function addRole(string $category, string $name)
+    {
+        $this->data['fusio_role'][$name] = [
+            'category_id' => $this->getId('fusio_category', $category),
+            'name' => $name,
+        ];
+    }
+
+    public function addRoleScope(string $role, string $scope)
+    {
+        $this->data['fusio_role_scope'][] = [
+            'role_id' => $this->getId('fusio_role', $role),
+            'scope_id' => $this->getId('fusio_scope', $scope),
         ];
     }
 

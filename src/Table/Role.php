@@ -24,45 +24,29 @@ namespace Fusio\Impl\Table;
 use PSX\Sql\TableAbstract;
 
 /**
- * Category
+ * Role
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Category extends TableAbstract
+class Role extends TableAbstract
 {
     const STATUS_ACTIVE  = 1;
     const STATUS_DELETED = 0;
 
     public function getName()
     {
-        return 'fusio_category';
+        return 'fusio_role';
     }
 
     public function getColumns()
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'category_id' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'name' => self::TYPE_VARCHAR,
         );
-    }
-
-    public function getCategoryIdForPath(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
-        }
-
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
     }
 }

@@ -19,50 +19,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Event\Role;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Role_Update;
+use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
- * Category
+ * UpdatedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Category extends TableAbstract
+class UpdatedEvent extends EventAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    /**
+     * @var Role_Update
+     */
+    private $role;
 
-    public function getName()
+    /**
+     * @var RecordInterface
+     */
+    private $existing;
+
+    /**
+     * @param Role_Update $role
+     * @param RecordInterface $existing
+     * @param UserContext $context
+     */
+    public function __construct(Role_Update $role, RecordInterface $existing, UserContext $context)
     {
-        return 'fusio_category';
+        parent::__construct($context);
+
+        $this->role     = $role;
+        $this->existing = $existing;
     }
 
-    public function getColumns()
+    /**
+     * @return Role_Update
+     */
+    public function getRole(): Role_Update
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-        );
+        return $this->role;
     }
 
-    public function getCategoryIdForPath(string $path): int
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
     {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
-        }
-
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
+        return $this->existing;
     }
 }

@@ -26,6 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -42,15 +43,21 @@ class GetAll extends ActionAbstract
      */
     private $table;
 
+    /**
+     * @var Table\User
+     */
+    private $userTable;
+
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Schema::class);
+        $this->userTable = $tableManager->getTable(Table\User::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getCollection(
-            (int) $request->get('categoryId'),
+            $this->userTable->getCategoryForUser($context->getUser()->getId()),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
             $request->get('search')

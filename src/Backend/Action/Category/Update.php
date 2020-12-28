@@ -19,48 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Action;
+namespace Fusio\Impl\Backend\Action\Category;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
-use Fusio\Impl\Table;
-use PSX\Sql\TableManagerInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Backend\Model\Category_Update;
+use Fusio\Impl\Service\Category;
 
 /**
- * GetAll
+ * Update
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class GetAll extends ActionAbstract
+class Update extends ActionAbstract
 {
     /**
-     * @var View\Action
+     * @var Category
      */
-    private $table;
+    private $categoryService;
 
-    /**
-     * @var Table\User
-     */
-    private $userTable;
-
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(Category $categoryService)
     {
-        $this->table = $tableManager->getTable(View\Action::class);
-        $this->userTable = $tableManager->getTable(Table\User::class);
+        $this->categoryService = $categoryService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return $this->table->getCollection(
-            $this->userTable->getCategoryForUser($context->getUser()->getId()),
-            (int) $request->get('startIndex'),
-            (int) $request->get('count'),
-            $request->get('search')
+        $body = $request->getPayload();
+
+        assert($body instanceof Category_Update);
+
+        $this->categoryService->update(
+            (int) $request->get('category_id'),
+            $body,
+            UserContext::newActionContext($context)
         );
+
+        return [
+            'success' => true,
+            'message' => 'Category successful updated',
+        ];
     }
 }

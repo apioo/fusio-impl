@@ -19,50 +19,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Backend\Action\Role;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Role;
 
 /**
- * Category
+ * Delete
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Category extends TableAbstract
+class Delete extends ActionAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    /**
+     * @var Role
+     */
+    private $roleService;
 
-    public function getName()
+    public function __construct(Role $roleService)
     {
-        return 'fusio_category';
+        $this->roleService = $roleService;
     }
 
-    public function getColumns()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
+        $this->roleService->delete(
+            (int) $request->get('role_id'),
+            UserContext::newActionContext($context)
         );
-    }
 
-    public function getCategoryIdForPath(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
-        }
-
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
-        }
-
-        return $categoryId;
+        return [
+            'success' => true,
+            'message' => 'Role successful deleted',
+        ];
     }
 }

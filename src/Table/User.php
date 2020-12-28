@@ -46,6 +46,7 @@ class User extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'role_id' => self::TYPE_INT,
             'provider' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'remote_id' => self::TYPE_VARCHAR,
@@ -129,5 +130,26 @@ class User extends TableAbstract
                 'id' => $row['id']
             ]);
         }
+    }
+
+    /**
+     * Returns the category id assigned to the users role
+     * 
+     * @param int $userId
+     * @return int
+     */
+    public function getCategoryForUser(int $userId): int
+    {
+        $user = $this->get($userId);
+        if (empty($user)) {
+            return 0;
+        }
+
+        $categoryId = $this->connection->fetchOne('SELECT category_id FROM fusio_role WHERE role_id = :role_id', ['role_id' => $user['role_id']]);
+        if (empty($categoryId)) {
+            return 0;
+        }
+
+        return (int) $categoryId;
     }
 }

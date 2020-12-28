@@ -19,50 +19,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Backend\Action\Role;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Category
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Category extends TableAbstract
+class Get extends ActionAbstract
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    /**
+     * @var View\Role
+     */
+    private $table;
 
-    public function getName()
+    public function __construct(TableManagerInterface $tableManager)
     {
-        return 'fusio_category';
+        $this->table = $tableManager->getTable(View\Role::class);
     }
 
-    public function getColumns()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
+        $role = $this->table->getEntity(
+            (int) $request->get('role_id')
         );
-    }
 
-    public function getCategoryIdForPath(string $path): int
-    {
-        $parts = explode('/', $path);
-        $category = $parts[1] ?? null;
-
-        if ($category === null) {
-            return 1;
+        if (empty($role)) {
+            throw new StatusCode\NotFoundException('Could not find role');
         }
 
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-        if (empty($categoryId)) {
-            return 1;
+        if ($role['status'] == Table\Rate::STATUS_DELETED) {
+            throw new StatusCode\GoneException('Role was deleted');
         }
 
-        return $categoryId;
+        return $role;
     }
 }
