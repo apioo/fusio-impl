@@ -28,6 +28,7 @@ use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Consumer\Model\User_Provider;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 
@@ -56,6 +57,11 @@ class Provider
     private $providerFactory;
 
     /**
+     * @var \Fusio\Impl\Table\User\Scope
+     */
+    private $scopeTable;
+
+    /**
      * @var \PSX\Framework\Config\Config
      */
     private $config;
@@ -64,13 +70,15 @@ class Provider
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
+     * @param \Fusio\Impl\Table\User\Scope $scopeTable
      * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Table\User\Scope $scopeTable, Config $config)
     {
         $this->userService     = $userService;
         $this->appTokenService = $appTokenService;
         $this->providerFactory = $providerFactory;
+        $this->scopeTable      = $scopeTable;
         $this->config          = $config;
     }
 
@@ -87,16 +95,16 @@ class Provider
         $user     = $provider->requestUser($request->getCode(), $request->getClientId(), $request->getRedirectUri());
 
         if ($user instanceof User) {
-            $scopes = $this->userService->getDefaultScopes();
-
             $remote = new User_Remote();
             $remote->setProvider($provider->getId());
             $remote->setRemoteId($user->getId());
             $remote->setName($user->getName());
             $remote->setEmail($user->getEmail());
-            $remote->setScopes($scopes);
 
             $userId = $this->userService->createRemote($remote, UserContext::newAnonymousContext());
+
+            // get scopes for user
+            $scopes = $this->scopeTable->getAvailableScopes($userId);
 
             // @TODO this is the consumer app. Probably we need a better way to
             // define this id
