@@ -28,7 +28,6 @@ use Fusio\Impl\Backend\Model\Cronjob_Update;
 use Fusio\Impl\Event\Cronjob\CreatedEvent;
 use Fusio\Impl\Event\Cronjob\DeletedEvent;
 use Fusio\Impl\Event\Cronjob\UpdatedEvent;
-use Fusio\Impl\Event\CronjobEvents;
 use Fusio\Impl\Service\Action\Executor;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;

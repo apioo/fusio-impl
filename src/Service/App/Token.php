@@ -28,7 +28,6 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
-use Fusio\Impl\Event\AppEvents;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Framework\Util\Uuid;

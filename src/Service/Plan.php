@@ -27,7 +27,6 @@ use Fusio\Impl\Backend\Model\Plan_Update;
 use Fusio\Impl\Event\Plan\CreatedEvent;
 use Fusio\Impl\Event\Plan\DeletedEvent;
 use Fusio\Impl\Event\Plan\UpdatedEvent;
-use Fusio\Impl\Event\PlanEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;

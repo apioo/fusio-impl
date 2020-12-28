@@ -28,7 +28,6 @@ use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Event\Route\CreatedEvent;
 use Fusio\Impl\Event\Route\DeletedEvent;
 use Fusio\Impl\Event\Route\UpdatedEvent;
-use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;

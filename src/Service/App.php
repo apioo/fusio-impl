@@ -28,7 +28,6 @@ use Fusio\Impl\Backend\Model\App_Update;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
-use Fusio\Impl\Event\AppEvents;
 use Fusio\Impl\Table;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
