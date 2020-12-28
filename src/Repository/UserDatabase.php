@@ -48,14 +48,12 @@ class UserDatabase implements Repository\UserInterface
                        status,
                        name
                   FROM fusio_user
-                 WHERE status = :status_admin
-                    OR status = :status_consumer
+                 WHERE status = :status
               ORDER BY id DESC';
 
         $users  = [];
         $result = $this->connection->fetchAll($sql, [
-            'status_admin'    => Table\User::STATUS_ADMINISTRATOR,
-            'status_consumer' => Table\User::STATUS_CONSUMER,
+            'status' => Table\User::STATUS_ACTIVE,
         ]);
 
         foreach ($result as $row) {

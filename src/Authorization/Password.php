@@ -100,8 +100,7 @@ class Password extends PasswordAbstract
             // check user
             $userId = $this->userService->authenticateUser(
                 $username,
-                $password,
-                [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]
+                $password
             );
 
             // check whether user is valid

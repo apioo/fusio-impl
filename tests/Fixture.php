@@ -79,9 +79,9 @@ class Fixture
 
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
-        $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_CONSUMER, '2015-02-27 19:59:15');
+        $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, '2015-02-27 19:59:15');
         $data->addUser('Consumer', 'Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED, '2015-02-27 19:59:15');
-        $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ADMINISTRATOR, '2015-02-27 19:59:15');
+        $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE, '2015-02-27 19:59:15');
         $data->addUser('Backend', 'Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED, '2015-02-27 19:59:15');
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');

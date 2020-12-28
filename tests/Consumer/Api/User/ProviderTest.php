@@ -271,7 +271,7 @@ class ProviderTest extends ControllerDbTestCase
 
         $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $row['user_id']]);
 
-        $this->assertEquals(User::STATUS_CONSUMER, $row['status']);
+        $this->assertEquals(User::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($provider, $row['provider']);
         $this->assertEquals('1', $row['remote_id']);
         $this->assertEquals('octocat', $row['name']);

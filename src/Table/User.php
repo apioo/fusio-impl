@@ -32,10 +32,9 @@ use PSX\Sql\TableAbstract;
  */
 class User extends TableAbstract
 {
-    const STATUS_CONSUMER      = 0;
-    const STATUS_ADMINISTRATOR = 1;
-    const STATUS_DISABLED      = 2;
-    const STATUS_DELETED       = 3;
+    const STATUS_DISABLED = 2;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_DELETED  = 0;
 
     public function getName()
     {

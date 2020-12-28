@@ -55,7 +55,7 @@ class AddCommand extends Command
             ->setName('user:add')
             ->setAliases(['adduser'])
             ->setDescription('Adds a new user account')
-            ->addOption('status', 's', InputOption::VALUE_OPTIONAL, 'Status of the account [0=Consumer, 1=Administrator]')
+            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Status of the account [0=Consumer, 1=Administrator]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
@@ -65,17 +65,13 @@ class AddCommand extends Command
     {
         $helper = $this->getHelper('question');
 
-        // status
-        $status = $input->getOption('status');
-        if ($status === null) {
-            $question = new Question('Choose the status of the account [0=Consumer, 1=Administrator]: ');
-            $question->setValidator(function ($value) {
-                return ServiceUser\Validator::assertStatus($value);
-            });
-
-            $status = $helper->ask($input, $output, $question);
+        // role
+        $role = $input->getOption('role');
+        if ($role === null) {
+            $question = new Question('Choose the status of the account [1=Backend, 2=Consumer]: ');
+            $role = (int) $helper->ask($input, $output, $question);
         } else {
-            $status = ServiceUser\Validator::assertStatus($status);
+            $role = (int) $role;
         }
 
         // username
@@ -134,22 +130,12 @@ class AddCommand extends Command
             $this->userService->assertPasswordComplexity($password);
         }
 
-        // scopes
-        if ($status === 0) {
-            $scopes = $this->userService->getDefaultScopes();
-        } elseif ($status === 1) {
-            $scopes = ['backend', 'consumer', 'authorization'];
-        } else {
-            $scopes = [];
-        }
-
         // create user
         $create = new User_Create();
-        $create->setStatus($status);
+        $create->setRoleId($role);
         $create->setName($name);
         $create->setEmail($email);
         $create->setPassword($password);
-        $create->setScopes($scopes);
 
         $this->userService->create($create, UserContext::newCommandContext());
 

@@ -171,7 +171,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => User::STATUS_ADMINISTRATOR,
+            'roleId' => 2,
+            'status' => User::STATUS_ACTIVE,
             'name'   => 'bar',
             'email'  => 'bar@bar.com',
             'scopes' => ['bar'],
@@ -190,13 +191,14 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'email')
+            ->select('id', 'role_id', 'status', 'name', 'email')
             ->from('fusio_user')
             ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
+        $this->assertEquals(2, $row['role_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
         $this->assertEquals('bar@bar.com', $row['email']);

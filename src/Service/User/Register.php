@@ -91,6 +91,7 @@ class Register
         $scopes = $this->userService->getDefaultScopes();
 
         $user = new User_Create();
+        $user->setRoleId((int) $this->configService->getValue('role_default'));
         $user->setStatus($status);
         $user->setName($register->getName());
         $user->setEmail($register->getEmail());

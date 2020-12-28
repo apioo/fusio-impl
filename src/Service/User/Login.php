@@ -65,7 +65,7 @@ class Login
 
     public function login(User_Login $login)
     {
-        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword(), [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
+        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword());
         if ($userId > 0) {
             $scopes = $login->getScopes();
             if (empty($scopes)) {

@@ -32,15 +32,6 @@ use PSX\Http\Exception as StatusCode;
  */
 class Validator
 {
-    public static function assertStatus($status)
-    {
-        if (preg_match('/^0|1$/', $status)) {
-            return (int) $status;
-        } else {
-            throw new StatusCode\BadRequestException('Status must be either 0 or 1');
-        }
-    }
-
     public static function assertName($name)
     {
         if (empty($name)) {

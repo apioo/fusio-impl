@@ -110,10 +110,9 @@ class User
      *
      * @param string $username
      * @param string $password
-     * @param array $status
      * @return integer|null
      */
-    public function authenticateUser($username, $password, array $status)
+    public function authenticateUser($username, $password)
     {
         if (empty($password)) {
             return null;
@@ -128,7 +127,7 @@ class User
 
         $condition = new Condition();
         $condition->equals($column, $username);
-        $condition->in('status', $status);
+        $condition->equals('status', Table\User::STATUS_ACTIVE);
 
         $user = $this->userTable->getOneBy($condition);
 
@@ -136,14 +135,6 @@ class User
             // we can authenticate only local users
             if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
                 return null;
-            }
-
-            if ($user['status'] == Table\User::STATUS_DISABLED) {
-                throw new StatusCode\BadRequestException('The assigned account is disabled');
-            }
-
-            if ($user['status'] == Table\User::STATUS_DELETED) {
-                throw new StatusCode\BadRequestException('The assigned account is deleted');
             }
 
             // check password

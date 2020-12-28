@@ -74,8 +74,7 @@ class ClientCredentials extends ClientCredentialsAbstract
     {
         $userId = $this->userService->authenticateUser(
             $credentials->getClientId(),
-            $credentials->getClientSecret(),
-            [User::STATUS_ADMINISTRATOR, User::STATUS_CONSUMER]
+            $credentials->getClientSecret()
         );
 
         if (!empty($userId)) {
