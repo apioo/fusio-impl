@@ -59,7 +59,7 @@ class Get extends ActionAbstract
             throw new StatusCode\NotFoundException('Could not find category');
         }
 
-        if ($category['status'] == Table\Rate::STATUS_DELETED) {
+        if ($category['status'] == Table\Category::STATUS_DELETED) {
             throw new StatusCode\GoneException('Category was deleted');
         }
 

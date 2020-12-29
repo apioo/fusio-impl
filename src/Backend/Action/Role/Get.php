@@ -59,7 +59,7 @@ class Get extends ActionAbstract
             throw new StatusCode\NotFoundException('Could not find role');
         }
 
-        if ($role['status'] == Table\Rate::STATUS_DELETED) {
+        if ($role['status'] == Table\Role::STATUS_DELETED) {
             throw new StatusCode\GoneException('Role was deleted');
         }
 
