@@ -152,8 +152,8 @@ class Fixture
             ]
         ]);
 
-        $data->addLog('Foo-App', '/foo');
-        $data->addLog('Foo-App', '/foo');
+        $data->addLog('default', 'Foo-App', '/foo');
+        $data->addLog('default', 'Foo-App', '/foo');
         $data->addLogError(0);
         $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', '/foo');
