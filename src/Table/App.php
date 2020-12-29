@@ -37,9 +37,6 @@ class App extends TableAbstract
     const STATUS_DEACTIVATED = 0x3;
     const STATUS_DELETED     = 0x4;
 
-    const BACKEND  = 1;
-    const CONSUMER = 2;
-
     public function getName()
     {
         return 'fusio_app';
