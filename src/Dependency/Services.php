@@ -403,8 +403,7 @@ trait Services
     public function getLogService(): Service\Log
     {
         return new Service\Log(
-            $this->get('connection'),
-            $this->get('table_manager')->getTable(Table\Category::class)
+            $this->get('connection')
         );
     }
 

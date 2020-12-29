@@ -56,11 +56,11 @@ class IncomingRequests extends ViewAbstract
         $sql = '  SELECT COUNT(log.id) AS cnt,
                          DATE(log.date) AS date
                     FROM fusio_log log
-                   WHERE log.category_id = :category_id
+                   WHERE log.category_id = ?
                      AND ' . $expression . '
                 GROUP BY DATE(log.date)';
 
-        $result = $this->connection->fetchAll($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
+        $result = $this->connection->fetchAll($sql, array_merge([$categoryId], $condition->getValues()));
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

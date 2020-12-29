@@ -32,8 +32,14 @@ use PSX\Framework\Loader\RoutingCollection as PSXRoutingCollection;
  */
 class RoutingCollection extends PSXRoutingCollection
 {
-    public function add(array $methods, $path, $source, $routeId = null)
+    public function add(array $methods, $path, $source, $routeId = null, $categoryId = null)
     {
-        $this->routings[] = [$methods, $path, $source, $routeId];
+        $this->routings[] = [
+            $methods,
+            $path,
+            $source,
+            $routeId,
+            $categoryId
+        ];
     }
 }

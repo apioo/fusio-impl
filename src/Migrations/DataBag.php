@@ -345,9 +345,10 @@ class DataBag
         ];
     }
 
-    public function addLog(string $app, string $route)
+    public function addLog(string $category, string $app, string $route)
     {
         $this->data['fusio_log'][] = [
+            'category_id' => $this->getId('fusio_category', $category),
             'app_id' => $this->getId('fusio_app', $app),
             'route_id' => $this->getId('fusio_routes', $route),
             'ip' => '127.0.0.1',

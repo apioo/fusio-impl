@@ -41,7 +41,7 @@ class TimePerRoute extends ViewAbstract
         // get the most slowest routes and build data structure
         $sql = '    SELECT log.route_id
                       FROM fusio_log log
-                     WHERE log.category_id = :category_id
+                     WHERE log.category_id = ?
                        AND log.route_id IS NOT NULL
                        AND log.execution_time IS NOT NULL
                        AND ' . $expression . '
@@ -50,7 +50,7 @@ class TimePerRoute extends ViewAbstract
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result   = $this->connection->fetchAll($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
+        $result   = $this->connection->fetchAll($sql, array_merge([$categoryId], $condition->getValues()));
         $routeIds = array();
         $data     = [];
         $series   = [];

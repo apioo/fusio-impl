@@ -62,6 +62,7 @@ class DatabaseParser implements RoutingParserInterface
     {
         if ($this->collection === null) {
             $sql = 'SELECT id,
+                           category_id,
                            methods,
                            path,
                            controller
@@ -81,7 +82,7 @@ class DatabaseParser implements RoutingParserInterface
             $result     = $this->connection->fetchAll($sql, $params);
 
             foreach ($result as $row) {
-                $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id']);
+                $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id'], $row['category_id']);
             }
 
             $this->collection = $collection;

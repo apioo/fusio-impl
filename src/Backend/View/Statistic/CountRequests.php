@@ -40,10 +40,10 @@ class CountRequests extends ViewAbstract
 
         $sql = 'SELECT COUNT(log.id) AS cnt
                   FROM fusio_log log
-                 WHERE log.category_id = :category_id
+                 WHERE log.category_id = ?
                    AND ' . $expression;
 
-        $row = $this->connection->fetchAssoc($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
+        $row = $this->connection->fetchAssoc($sql, array_merge([$categoryId], $condition->getValues()));
 
         return [
             'count' => (int) $row['cnt'],

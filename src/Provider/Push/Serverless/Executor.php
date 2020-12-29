@@ -71,6 +71,7 @@ class Executor implements ExecutorInterface
         $context->setPath($path);
         $context->setSource(SchemaApiController::class);
         $context->setRouteId($method['route_id']);
+        $context->setCategoryId($method['category_id']);
 
         $request  = new Request(new Uri($path), $httpMethod, $headers, $body);
         $response = (new ResponseFactory())->createResponse();
