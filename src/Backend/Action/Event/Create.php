@@ -55,6 +55,7 @@ class Create extends ActionAbstract
         assert($body instanceof Event_Create);
 
         $this->eventService->create(
+            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

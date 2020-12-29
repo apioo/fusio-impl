@@ -64,14 +64,9 @@ class Scope extends TableAbstract
         }
     }
 
-    public function getScopesForCategory(string $category)
+    public function getAvailableScopes()
     {
-        $categoryId = (int) $this->connection->fetchColumn('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
-
-        $condition = new Condition();
-        $condition->equals('category_id', $categoryId);
-        $result = $this->getAll(0, 1024, 'name', Sql::SORT_ASC, $condition);
-
+        $result = $this->getAll(0, 1024, 'name', Sql::SORT_ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row['name']] = $row['description'];

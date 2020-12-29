@@ -28,7 +28,6 @@ use Fusio\Impl\Backend\Model\Scope_Update;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;
-use Fusio\Impl\Event\ScopeEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -84,7 +83,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Scope_Create $scope, UserContext $context)
+    public function create(int $categoryId, Scope_Create $scope, UserContext $context)
     {
         // check whether scope exists
         if ($this->exists($scope->getName())) {
@@ -96,6 +95,7 @@ class Scope
 
             // create scope
             $record = [
+                'category_id' => $categoryId,
                 'name'        => $scope->getName(),
                 'description' => $scope->getDescription() ?? '',
             ];
@@ -120,7 +120,7 @@ class Scope
         return $scopeId;
     }
 
-    public function createFromRoute(int $routeId, array $scopeNames, UserContext $context)
+    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context)
     {
         // remove all scopes from this route
         $this->scopeRouteTable->deleteAllFromRoute($routeId);
@@ -148,7 +148,7 @@ class Scope
                 $scope->setName($scopeName);
                 $scope->setRoutes([$route]);
 
-                $this->create($scope, $context);
+                $this->create($categoryId, $scope, $context);
             }
         }
     }
@@ -239,16 +239,21 @@ class Scope
      * Returns all scope names which are valid for the app and the user. The
      * scopes are a comma separated list
      *
-     * @param integer $appId
-     * @param integer $userId
+     * @param integer|null $appId
+     * @param integer|null $userId
      * @param string $scopes
      * @return array
      */
-    public function getValidScopes($appId, $userId, $scopes)
+    public function getValidScopes(string $scopes, ?int $appId, ?int $userId)
     {
         $scopes = self::split($scopes);
-        $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
-        $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+
+        if ($appId !== null) {
+            $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
+        }
+        if ($userId !== null) {
+            $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+        }
 
         return $scopes;
     }

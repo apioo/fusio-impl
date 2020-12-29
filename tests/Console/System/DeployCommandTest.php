@@ -206,17 +206,15 @@ JSON;
         $this->assertEquals('Error-Schema', $responses[1]['response']);
 
         // check scopes
-        $responses = $this->connection->fetchAll('SELECT fusio_scope.id, name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scope_id WHERE route_id = :route_id ORDER BY fusio_scope.id ASC', [
+        $responses = $this->connection->fetchAll('SELECT name, description, allow, methods FROM fusio_scope_routes INNER JOIN fusio_scope ON fusio_scope.id = fusio_scope_routes.scope_id WHERE route_id = :route_id ORDER BY fusio_scope.id ASC', [
             'route_id' => $route['id'],
         ]);
 
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(34, $responses[0]['id']);
         $this->assertEquals('foo', $responses[0]['name']);
         $this->assertEquals('Foo access', $responses[0]['description']);
         $this->assertEquals(1, $responses[0]['allow']);
         $this->assertEquals('GET|POST|PUT|PATCH|DELETE', $responses[0]['methods']);
-        $this->assertEquals(35, $responses[1]['id']);
         $this->assertEquals('bar', $responses[1]['name']);
         $this->assertEquals('Bar access', $responses[1]['description']);
         $this->assertEquals(1, $responses[1]['allow']);
@@ -251,7 +249,6 @@ JSON;
         // check event
         $event = $this->connection->fetchAssoc('SELECT id, name, description FROM fusio_event WHERE name = :name', ['name' => 'New-Event']);
 
-        $this->assertEquals(38, $event['id']);
         $this->assertEquals('New-Event', $event['name']);
         $this->assertEquals('A description of the event', $event['description']);
     }
@@ -438,7 +435,6 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check routes
@@ -511,7 +507,6 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(141, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -571,7 +566,6 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source'], $schema['source']);
     }
 
@@ -621,7 +615,6 @@ JSON;
             'name' => 'Foo-User',
         ]);
 
-        $this->assertEquals(6, $user['id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(1, $user['status']);
         $this->assertEmpty($user['remote_id']);
@@ -649,7 +642,6 @@ JSON;
             'name' => 'Foo-Scope',
         ]);
 
-        $this->assertEquals(36, $scope['id']);
         $this->assertEquals('Foo-Scope', $scope['name']);
         $this->assertEquals('Foo scope', $scope['description']);
     }

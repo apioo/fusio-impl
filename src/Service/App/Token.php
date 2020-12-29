@@ -28,7 +28,6 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\App\GeneratedTokenEvent;
 use Fusio\Impl\Event\App\RemovedTokenEvent;
-use Fusio\Impl\Event\AppEvents;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Framework\Util\Uuid;
@@ -287,7 +286,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid user');
         }
 
-        if ($user['status'] != Table\User::STATUS_ADMINISTRATOR && $user['status'] != Table\User::STATUS_CONSUMER) {
+        if ($user['status'] != Table\User::STATUS_ACTIVE) {
             throw new StatusCode\BadRequestException('Invalid user status');
         }
 

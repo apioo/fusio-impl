@@ -27,7 +27,6 @@ use Fusio\Impl\Backend\Model\Event_Subscription_Update;
 use Fusio\Impl\Event\Event\Subscription\CreatedEvent;
 use Fusio\Impl\Event\Event\Subscription\DeletedEvent;
 use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
-use Fusio\Impl\Event\Event\SubscriptionEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

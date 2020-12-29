@@ -28,6 +28,7 @@ use Fusio\Impl\Backend\Model\User_Remote;
 use Fusio\Impl\Consumer\Model\User_Provider;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 
@@ -87,16 +88,16 @@ class Provider
         $user     = $provider->requestUser($request->getCode(), $request->getClientId(), $request->getRedirectUri());
 
         if ($user instanceof User) {
-            $scopes = $this->userService->getDefaultScopes();
-
             $remote = new User_Remote();
             $remote->setProvider($provider->getId());
             $remote->setRemoteId($user->getId());
             $remote->setName($user->getName());
             $remote->setEmail($user->getEmail());
-            $remote->setScopes($scopes);
 
             $userId = $this->userService->createRemote($remote, UserContext::newAnonymousContext());
+
+            // get scopes for user
+            $scopes = $this->userService->getAvailableScopes($userId);
 
             // @TODO this is the consumer app. Probably we need a better way to
             // define this id
@@ -107,7 +108,7 @@ class Provider
                 $userId,
                 $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->config->get('fusio_expire_consumer'))
+                new \DateInterval($this->config->get('fusio_expire_token'))
             );
 
             return $token->getAccessToken();

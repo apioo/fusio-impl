@@ -78,7 +78,7 @@ class AddCommand extends Command
         $create->setName($input->getArgument('name'));
         $create->setSource($this->parseSource($input->getArgument('file')));
 
-        $this->schemaService->create($create, UserContext::newAnonymousContext());
+        $this->schemaService->create(1, $create, UserContext::newAnonymousContext());
 
         $output->writeln('');
         $output->writeln('Schema successful created');

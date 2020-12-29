@@ -65,7 +65,7 @@ class Login
 
     public function login(User_Login $login)
     {
-        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword(), [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]);
+        $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword());
         if ($userId > 0) {
             $scopes = $login->getScopes();
             if (empty($scopes)) {
@@ -81,7 +81,7 @@ class Login
                 $userId,
                 $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->config->get('fusio_expire_consumer'))
+                new \DateInterval($this->config->get('fusio_expire_token'))
             );
         }
 
@@ -96,7 +96,7 @@ class Login
             $appId,
             $refresh->getRefresh_token(),
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-            new \DateInterval($this->config->get('fusio_expire_consumer')),
+            new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))
         );
     }

@@ -29,7 +29,6 @@ use Fusio\Impl\Backend\Model\Rate_Update;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;
-use Fusio\Impl\Event\RateEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\ResponseInterface;

@@ -60,7 +60,7 @@ class Activate
     {
         $userId = $this->tokenService->getUser($activate->getToken());
         if (!empty($userId)) {
-            $this->userService->changeStatus($userId, Table\User::STATUS_CONSUMER, UserContext::newAnonymousContext());
+            $this->userService->changeStatus($userId, Table\User::STATUS_ACTIVE, UserContext::newAnonymousContext());
         } else {
             throw new StatusCode\BadRequestException('Token is expired');
         }

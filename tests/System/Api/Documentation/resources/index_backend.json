@@ -176,6 +176,20 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/role\/$role_id<[0-9]+>",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/role",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/rate\/$rate_id<[0-9]+>",
       "methods": [
         "ANY"
@@ -365,6 +379,20 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/category\/$category_id<[0-9]+>",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/category",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/audit\/$audit_id<[0-9]+>",
       "methods": [
         "ANY"
@@ -457,13 +485,6 @@
     },
     {
       "path": "\/backend\/account",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/token",
       "methods": [
         "ANY"
       ],

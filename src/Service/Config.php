@@ -24,7 +24,6 @@ namespace Fusio\Impl\Service;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\Config_Update;
 use Fusio\Impl\Event\Config\UpdatedEvent;
-use Fusio\Impl\Event\ConfigEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

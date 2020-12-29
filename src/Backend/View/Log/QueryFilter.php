@@ -128,9 +128,6 @@ class QueryFilter extends QueryFilterAbstract
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
 
-        // use only the default category
-        $condition->equals($alias . 'category_id', 1);
-
         if (!empty($this->routeId)) {
             $condition->equals($alias . 'route_id', $this->routeId);
         }

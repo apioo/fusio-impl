@@ -81,7 +81,7 @@ class AddCommand extends Command
         $create->setEngine($engine);
         $create->setConfig($this->parseConfig($input->getArgument('config')));
 
-        $this->actionService->create($create, UserContext::newAnonymousContext());
+        $this->actionService->create(1, $create, UserContext::newAnonymousContext());
 
         $output->writeln('');
         $output->writeln('Action successful created');

@@ -215,6 +215,7 @@ class LoggerTest extends DbTestCase
 
         $context = new Context();
         $context->setRouteId(1);
+        $context->setCategoryId(1);
         $context->setApp($app);
         $context->setUser($user);
 

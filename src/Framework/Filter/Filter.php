@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Framework\Filter;
 
-use Fusio\Impl\Service\Route\Validator;
 use PSX\Api\Listing\FilterInterface;
 
 /**
@@ -34,29 +33,29 @@ use PSX\Api\Listing\FilterInterface;
 class Filter implements FilterInterface
 {
     /**
-     * @var string
+     * @var int
      */
     private $id;
 
-    public function __construct(string $id)
+    public function __construct(int $id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function match(string $path): bool
     {
-        if ($this->getId() === 'default') {
-            $parts = explode('/', $path);
-            $name  = $parts[1] ?? null;
-
-            return !in_array($name, Validator::getReserved());
-        } else {
-            return substr($path, 0, strlen($this->getId()) + 1) === '/' . $this->getId();
-        }
+        // we dont need to filter any values since we already filter at the query
+        return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getId(): string
     {
-        return $this->id;
+        return '' . $this->id;
     }
 }

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Impl\Table\App;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\ClientCredentialsAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
@@ -42,35 +43,35 @@ class ClientCredentials extends ClientCredentialsAbstract
     /**
      * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appTokenService;
+    private $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
      */
-    protected $scopeService;
+    private $scopeService;
 
     /**
-     * @var \Fusio\Impl\Table\App
+     * @var \Fusio\Impl\Service\User
      */
-    protected $appTable;
+    private $userService;
 
     /**
      * @var string
      */
-    protected $expireApp;
+    private $expireToken;
 
     /**
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param string $expireApp
+     * @param \Fusio\Impl\Service\User $userService
+     * @param string $expireToken
      */
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App $appTable, $expireApp)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, string $expireToken)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
-        $this->appTable        = $appTable;
-        $this->expireApp       = $expireApp;
+        $this->userService     = $userService;
+        $this->expireToken     = $expireToken;
     }
 
     /**
@@ -80,39 +81,29 @@ class ClientCredentials extends ClientCredentialsAbstract
      */
     protected function generate(Credentials $credentials, $scope)
     {
-        $condition = new Condition();
-        $condition->equals('app_key', $credentials->getClientId());
-        $condition->equals('app_secret', $credentials->getClientSecret());
-        $condition->equals('status', Table\App::STATUS_ACTIVE);
-
-        $app = $this->appTable->getOneBy($condition);
-
-        if (!empty($app)) {
-            // use app user id this means only the owner of the app can use this
-            // grant type to generate an access token
-            $userId = $app['user_id'];
-
-            // check whether user is valid
-            if (empty($userId)) {
-                throw new InvalidGrantException('Unknown user');
-            }
-
-            // validate scopes
-            $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope);
-            if (empty($scopes)) {
-                throw new InvalidScopeException('No valid scope given');
-            }
-
-            // generate access token
-            return $this->appTokenService->generateAccessToken(
-                $app['id'],
-                $userId,
-                $scopes,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireApp)
-            );
-        } else {
+        $userId = $this->userService->authenticateUser($credentials->getClientId(), $credentials->getClientSecret());
+        if (empty($userId)) {
             throw new InvalidClientException('Unknown credentials');
         }
+
+        if (empty($scope)) {
+            // as fallback simply use all scopes assigned to the user
+            $scope = implode(',', $this->userService->getAvailableScopes($userId));
+        }
+
+        // validate scopes
+        $scopes = $this->scopeService->getValidScopes($scope, null, $userId);
+        if (empty($scopes)) {
+            throw new InvalidScopeException('No valid scope given');
+        }
+
+        // generate access token
+        return $this->appTokenService->generateAccessToken(
+            1,
+            $userId,
+            $scopes,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->expireToken)
+        );
     }
 }

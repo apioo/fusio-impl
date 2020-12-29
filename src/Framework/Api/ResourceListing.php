@@ -39,6 +39,7 @@ class ResourceListing extends ControllerDocumentation
         $context->setPath($route[1]);
         $context->setSource($route[2]);
         $context->setRouteId($route[3]);
+        $context->setCategoryId($route[4]);
 
         return $context;
     }

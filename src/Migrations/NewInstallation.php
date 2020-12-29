@@ -66,7 +66,9 @@ class NewInstallation
         $bag->addCategory('consumer');
         $bag->addCategory('system');
         $bag->addCategory('authorization');
-        $bag->addUser('Administrator', 'admin@localhost.com', $password);
+        $bag->addRole('default', 'Backend');
+        $bag->addRole('default', 'Consumer');
+        $bag->addUser('Backend', 'Administrator', 'admin@localhost.com', $password);
         $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
         $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
@@ -97,7 +99,7 @@ class NewInstallation
         $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
-        $bag->addConfig('scopes_default', Table\Config::FORM_STRING, 'authorization,consumer', 'If a user registers through the consumer API the following scopes are assigned');
+        $bag->addConfig('role_default', Table\Config::FORM_NUMBER, 2, 'Default role which a user gets assigned on registration');
         $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
         $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional a SMTP connection which is used as mailer');
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional a HTTP or message queue connection which is used to dispatch events');
@@ -108,8 +110,10 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, 0);
-        $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
-        $bag->addRoute('consumer', 0, '/consumer/token', Consumer\Authorization\Token::class);
+        $bag->addRoleScope('Backend', 'backend');
+        $bag->addRoleScope('Backend', 'authorization');
+        $bag->addRoleScope('Consumer', 'consumer');
+        $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
         $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
@@ -184,6 +188,15 @@ class NewInstallation
                 ],
                 '/audit/$audit_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Audit\Get::class, null, [200 => Backend\Model\Audit::class], null, 'backend.audit'),
+                ],
+                '/category' => [
+                    'GET' => new Method(Backend\Action\Category\GetAll::class, null, [200 => Backend\Model\Category_Collection::class], Collection_Query::class, 'backend.category'),
+                    'POST' => new Method(Backend\Action\Category\Create::class, Backend\Model\Category_Create::class, [201 => Message::class], null, 'backend.category', 'fusio.category.create'),
+                ],
+                '/category/$category_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Category\Get::class, null, [200 => Backend\Model\Category::class], null, 'backend.category'),
+                    'PUT' => new Method(Backend\Action\Category\Update::class, Backend\Model\Category_Update::class, [200 => Message::class], null, 'backend.category', 'fusio.category.update'),
+                    'DELETE' => new Method(Backend\Action\Category\Delete::class, null, [200 => Message::class], null, 'backend.category', 'fusio.category.delete'),
                 ],
                 '/config' => [
                     'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Backend\Model\Config_Collection::class], Collection_Query::class, 'backend.config'),
@@ -293,6 +306,15 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Rate\Get::class, null, [200 => Backend\Model\Rate::class], null, 'backend.rate'),
                     'PUT' => new Method(Backend\Action\Rate\Update::class, Backend\Model\Rate_Update::class, [200 => Message::class], null, 'backend.rate', 'fusio.rate.update'),
                     'DELETE' => new Method(Backend\Action\Rate\Delete::class, null, [200 => Message::class], null, 'backend.rate', 'fusio.rate.delete'),
+                ],
+                '/role' => [
+                    'GET' => new Method(Backend\Action\Role\GetAll::class, null, [200 => Backend\Model\Role_Collection::class], Collection_Query::class, 'backend.role'),
+                    'POST' => new Method(Backend\Action\Role\Create::class, Backend\Model\Role_Create::class, [201 => Message::class], null, 'backend.role', 'fusio.role.create'),
+                ],
+                '/role/$role_id<[0-9]+>' => [
+                    'GET' => new Method(Backend\Action\Role\Get::class, null, [200 => Backend\Model\Role::class], null, 'backend.role'),
+                    'PUT' => new Method(Backend\Action\Role\Update::class, Backend\Model\Role_Update::class, [200 => Message::class], null, 'backend.role', 'fusio.role.update'),
+                    'DELETE' => new Method(Backend\Action\Role\Delete::class, null, [200 => Message::class], null, 'backend.role', 'fusio.role.delete'),
                 ],
                 '/routes' => [
                     'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Backend\Model\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),

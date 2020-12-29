@@ -19,22 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Authorization;
+namespace Fusio\Impl\Backend\Action\Role;
 
-use PSX\Framework\Oauth2\TokenAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Token
+ * GetAll
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Token extends TokenAbstract
+class GetAll extends ActionAbstract
 {
     /**
-     * @Inject("backend_grant_type_factory")
-     * @var \PSX\Framework\Oauth2\GrantTypeFactory
+     * @var View\Role
      */
-    protected $grantTypeFactory;
+    private $table;
+
+    public function __construct(TableManagerInterface $tableManager)
+    {
+        $this->table = $tableManager->getTable(View\Role::class);
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    {
+        return $this->table->getCollection(
+            (int) $request->get('startIndex'),
+            (int) $request->get('count'),
+            $request->get('search')
+        );
+    }
 }

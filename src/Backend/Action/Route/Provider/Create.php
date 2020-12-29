@@ -58,6 +58,7 @@ class Create extends ActionAbstract
 
         $this->providerService->create(
             $request->get('provider'),
+            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

@@ -27,7 +27,6 @@ use Fusio\Impl\Backend\Model\Event_Update;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;
-use Fusio\Impl\Event\EventEvents;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -62,7 +61,7 @@ class Event
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create(Event_Create $event, UserContext $context)
+    public function create(int $categoryId, Event_Create $event, UserContext $context)
     {
         // check whether event exists
         if ($this->exists($event->getName())) {
@@ -71,6 +70,7 @@ class Event
 
         // create event
         $record = [
+            'category_id' => $categoryId,
             'status'      => Table\Event::STATUS_ACTIVE,
             'name'        => $event->getName(),
             'description' => $event->getDescription(),

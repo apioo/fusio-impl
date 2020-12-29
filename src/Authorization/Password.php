@@ -42,42 +42,42 @@ class Password extends PasswordAbstract
     /**
      * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appTokenService;
+    private $appTokenService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
      */
-    protected $scopeService;
+    private $scopeService;
 
     /**
      * @var \Fusio\Impl\Service\User
      */
-    protected $userService;
+    private $userService;
 
     /**
      * @var \Fusio\Impl\Table\App
      */
-    protected $appTable;
+    private $appTable;
 
     /**
      * @var string
      */
-    protected $expireApp;
+    private $expireToken;
 
     /**
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Table\App $appTable
-     * @param string $expireApp
+     * @param string $expireToken
      */
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, $expireApp)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, string $expireToken)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->userService     = $userService;
         $this->appTable        = $appTable;
-        $this->expireApp       = $expireApp;
+        $this->expireToken     = $expireToken;
     }
 
     /**
@@ -95,36 +95,34 @@ class Password extends PasswordAbstract
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->getOneBy($condition);
-
-        if (!empty($app)) {
-            // check user
-            $userId = $this->userService->authenticateUser(
-                $username,
-                $password,
-                [Table\User::STATUS_ADMINISTRATOR, Table\User::STATUS_CONSUMER]
-            );
-
-            // check whether user is valid
-            if (empty($userId)) {
-                throw new InvalidGrantException('Unknown user');
-            }
-
-            // validate scopes
-            $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $scope);
-            if (empty($scopes)) {
-                throw new InvalidScopeException('No valid scope given');
-            }
-
-            // generate access token
-            return $this->appTokenService->generateAccessToken(
-                $app['id'],
-                $userId,
-                $scopes,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireApp)
-            );
-        } else {
+        if (empty($app)) {
             throw new InvalidClientException('Unknown credentials');
         }
+
+        // check user
+        $userId = $this->userService->authenticateUser($username, $password);
+        if (empty($userId)) {
+            throw new InvalidGrantException('Unknown user');
+        }
+
+        if (empty($scope)) {
+            // as fallback simply use all scopes assigned to the user
+            $scope = implode(',', $this->userService->getAvailableScopes($userId));
+        }
+
+        // validate scopes
+        $scopes = $this->scopeService->getValidScopes($scope, (int) $app['id'], $userId);
+        if (empty($scopes)) {
+            throw new InvalidScopeException('No valid scope given');
+        }
+
+        // generate access token
+        return $this->appTokenService->generateAccessToken(
+            $app['id'],
+            $userId,
+            $scopes,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->expireToken)
+        );
     }
 }

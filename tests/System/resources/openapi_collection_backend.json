@@ -1260,6 +1260,165 @@
         ]
       }
     },
+    "\/backend\/role\/{role_id}": {
+      "get": {
+        "tags": [
+          "backend.role"
+        ],
+        "operationId": "Backend_Action_Role_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Role"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.role"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.role"
+        ],
+        "operationId": "Backend_Action_Role_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Role_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.role"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.role"
+        ],
+        "operationId": "Backend_Action_Role_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.role"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "role_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/role": {
+      "get": {
+        "tags": [
+          "backend.role"
+        ],
+        "operationId": "Backend_Action_Role_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Role_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.role"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.role"
+        ],
+        "operationId": "Backend_Action_Role_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Role_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.role"
+            ]
+          }
+        ]
+      }
+    },
     "\/backend\/rate\/{rate_id}": {
       "get": {
         "tags": [
@@ -2989,6 +3148,165 @@
         ]
       }
     },
+    "\/backend\/category\/{category_id}": {
+      "get": {
+        "tags": [
+          "backend.category"
+        ],
+        "operationId": "Backend_Action_Category_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Category"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.category"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.category"
+        ],
+        "operationId": "Backend_Action_Category_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Category_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.category"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.category"
+        ],
+        "operationId": "Backend_Action_Category_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.category"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "category_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/category": {
+      "get": {
+        "tags": [
+          "backend.category"
+        ],
+        "operationId": "Backend_Action_Category_GetAll",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Category_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.category"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.category"
+        ],
+        "operationId": "Backend_Action_Category_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Model_Category_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Model_Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.category"
+            ]
+          }
+        ]
+      }
+    },
     "\/backend\/audit\/{audit_id}": {
       "get": {
         "tags": [
@@ -3679,42 +3997,6 @@
           }
         ]
       }
-    },
-    "\/backend\/token": {
-      "post": {
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/OAuth2_Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "POST 400 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Error"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -4139,6 +4421,14 @@
           }
         }
       },
+      "BackendCategoryCategory_idPath": {
+        "type": "object",
+        "properties": {
+          "category_id": {
+            "type": "string"
+          }
+        }
+      },
       "BackendConfigConfig_idPath": {
         "type": "object",
         "properties": {
@@ -4231,6 +4521,14 @@
         "type": "object",
         "properties": {
           "rate_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BackendRoleRole_idPath": {
+        "type": "object",
+        "properties": {
+          "role_id": {
             "type": "string"
           }
         }
@@ -4352,6 +4650,18 @@
       },
       "Backend_Model_Audit_Collection_Query": {
         "$ref": "#\/components\/schemas\/Audit_Collection_Query"
+      },
+      "Backend_Model_Category": {
+        "$ref": "#\/components\/schemas\/Category"
+      },
+      "Backend_Model_Category_Collection": {
+        "$ref": "#\/components\/schemas\/Category_Collection"
+      },
+      "Backend_Model_Category_Create": {
+        "$ref": "#\/components\/schemas\/Category_Create"
+      },
+      "Backend_Model_Category_Update": {
+        "$ref": "#\/components\/schemas\/Category_Update"
       },
       "Backend_Model_Config": {
         "$ref": "#\/components\/schemas\/Config"
@@ -4491,6 +4801,18 @@
       "Backend_Model_Rate_Update": {
         "$ref": "#\/components\/schemas\/Rate_Update"
       },
+      "Backend_Model_Role": {
+        "$ref": "#\/components\/schemas\/Role"
+      },
+      "Backend_Model_Role_Collection": {
+        "$ref": "#\/components\/schemas\/Role_Collection"
+      },
+      "Backend_Model_Role_Create": {
+        "$ref": "#\/components\/schemas\/Role_Create"
+      },
+      "Backend_Model_Role_Update": {
+        "$ref": "#\/components\/schemas\/Role_Update"
+      },
       "Backend_Model_Route": {
         "$ref": "#\/components\/schemas\/Route"
       },
@@ -4574,6 +4896,44 @@
       },
       "Backend_Model_User_Update": {
         "$ref": "#\/components\/schemas\/User_Update"
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          }
+        }
+      },
+      "Category_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Category_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Category"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "Category_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Category"
+          },
+          {
+            "type": "object"
+          }
+        ]
       },
       "Collection": {
         "type": "object",
@@ -5327,135 +5687,6 @@
       "Model_Message": {
         "$ref": "#\/components\/schemas\/Message"
       },
-      "OAuth2_Access_Token": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Authorization_Code": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "authorization_code",
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "redirect_uri": {
-            "type": "string"
-          },
-          "client_id": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "code"
-        ]
-      },
-      "OAuth2_Client_Credentials": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "client_credentials",
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type"
-        ]
-      },
-      "OAuth2_Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "error_description": {
-            "type": "string"
-          },
-          "error_uri": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Password": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "password",
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "username",
-          "password"
-        ]
-      },
-      "OAuth2_Refresh_Token": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "refresh_token",
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "refresh_token"
-        ]
-      },
-      "OAuth2_Request": {
-        "oneOf": [
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Password"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
-          }
-        ]
-      },
       "Plan": {
         "type": "object",
         "properties": {
@@ -5749,6 +5980,54 @@
         "allOf": [
           {
             "$ref": "#\/components\/schemas\/Rate"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "categoryId": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Role_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Role_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Role"
+          },
+          {
+            "type": "object",
+            "required": [
+              "categoryId",
+              "name"
+            ]
+          }
+        ]
+      },
+      "Role_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Role"
           },
           {
             "type": "object"
@@ -6195,6 +6474,9 @@
           "id": {
             "type": "integer"
           },
+          "roleId": {
+            "type": "integer"
+          },
           "status": {
             "type": "integer"
           },
@@ -6278,44 +6560,13 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          },
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          },
-          "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          }
-        }
-      },
-      "backend": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
+              "authorization": "",
               "backend": "",
               "backend.account": "",
               "backend.action": "",
               "backend.app": "",
               "backend.audit": "",
+              "backend.category": "",
               "backend.config": "",
               "backend.connection": "",
               "backend.cronjob": "",
@@ -6325,24 +6576,15 @@
               "backend.marketplace": "",
               "backend.plan": "",
               "backend.rate": "",
+              "backend.role": "",
               "backend.route": "",
               "backend.schema": "",
               "backend.scope": "",
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
-              "backend.user": ""
-            }
-          }
-        }
-      },
-      "consumer": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
+              "backend.user": "",
+              "bar": "Bar access",
               "consumer": "",
               "consumer.app": "",
               "consumer.event": "",
@@ -6351,7 +6593,97 @@
               "consumer.scope": "",
               "consumer.subscription": "",
               "consumer.transaction": "",
-              "consumer.user": ""
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "authorization": "",
+              "backend": "",
+              "backend.account": "",
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.category": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.role": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": "",
+              "bar": "Bar access",
+              "consumer": "",
+              "consumer.app": "",
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "authorization": "",
+              "backend": "",
+              "backend.account": "",
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.category": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.role": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": "",
+              "bar": "Bar access",
+              "consumer": "",
+              "consumer.app": "",
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
             }
           }
         }

@@ -65,14 +65,13 @@ class EntityTest extends ControllerDbTestCase
 {
     "id": 1,
     "appId": 3,
-    "routeId": 108,
+    "routeId": 110,
     "ip": "127.0.0.1",
     "userAgent": "Mozilla\/5.0 (Windows NT 6.3; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/43.0.2357.130 Safari\/537.36",
     "method": "GET",
     "path": "\/bar",
     "header": "Accept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,*\/*;q=0.8",
     "body": "foobar",
-    "date": "2015-06-25T22:49:09Z",
     "errors": [
         {
             "message": "Syntax error, malformed JSON",
@@ -80,7 +79,8 @@ class EntityTest extends ControllerDbTestCase
             "file": "[file]",
             "line": 74
         }
-    ]
+    ],
+    "date": "2015-06-25T22:49:09Z"
 }
 JSON;
 

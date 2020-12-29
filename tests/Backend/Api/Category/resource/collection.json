@@ -1,0 +1,117 @@
+{
+  "status": 1,
+  "path": "\/backend\/category",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Category_GetAll",
+      "security": {
+        "app": [
+          "backend.category"
+        ]
+      },
+      "tags": [
+        "backend.category"
+      ],
+      "queryParameters": "Model_Collection_Query",
+      "responses": {
+        "200": "Backend_Model_Category_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Category_Create",
+      "security": {
+        "app": [
+          "backend.category"
+        ]
+      },
+      "tags": [
+        "backend.category"
+      ],
+      "request": "Backend_Model_Category_Create",
+      "responses": {
+        "201": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Category_Collection": {
+      "$ref": "Category_Collection"
+    },
+    "Backend_Model_Category_Create": {
+      "$ref": "Category_Create"
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        }
+      }
+    },
+    "Category_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Category"
+      }
+    },
+    "Category_Create": {
+      "$extends": "Category",
+      "type": "object",
+      "required": [
+        "name"
+      ]
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Collection_Query": {
+      "$ref": "Collection_Query"
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    }
+  }
+}

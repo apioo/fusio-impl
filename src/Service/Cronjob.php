@@ -28,7 +28,6 @@ use Fusio\Impl\Backend\Model\Cronjob_Update;
 use Fusio\Impl\Event\Cronjob\CreatedEvent;
 use Fusio\Impl\Event\Cronjob\DeletedEvent;
 use Fusio\Impl\Event\Cronjob\UpdatedEvent;
-use Fusio\Impl\Event\CronjobEvents;
 use Fusio\Impl\Service\Action\Executor;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -92,7 +91,7 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Cronjob_Create $cronjob, UserContext $context)
+    public function create(int $categoryId, Cronjob_Create $cronjob, UserContext $context)
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
@@ -103,10 +102,11 @@ class Cronjob
 
         // create cronjob
         $record = [
-            'status' => Table\Cronjob::STATUS_ACTIVE,
-            'name'   => $cronjob->getName(),
-            'cron'   => $cronjob->getCron(),
-            'action' => $cronjob->getAction(),
+            'category_id' => $categoryId,
+            'status'      => Table\Cronjob::STATUS_ACTIVE,
+            'name'        => $cronjob->getName(),
+            'cron'        => $cronjob->getCron(),
+            'action'      => $cronjob->getAction(),
         ];
 
         $this->cronjobTable->create($record);

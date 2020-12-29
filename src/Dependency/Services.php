@@ -43,8 +43,8 @@ trait Services
         return new Service\User(
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\Scope::class),
-            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
+            $this->get('table_manager')->getTable(Table\Role\Scope::class),
             $this->get('config_service'),
             $this->get('event_dispatcher'),
             $this->get('config')->get('fusio_user_attributes')
@@ -185,6 +185,14 @@ trait Services
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\App\Token::class),
             $this->get('config'),
+            $this->get('event_dispatcher')
+        );
+    }
+
+    public function getCategoryService(): Service\Category
+    {
+        return new Service\Category(
+            $this->get('table_manager')->getTable(Table\Category::class),
             $this->get('event_dispatcher')
         );
     }
@@ -372,6 +380,16 @@ trait Services
         );
     }
 
+    public function getRoleService(): Service\Role
+    {
+        return new Service\Role(
+            $this->get('table_manager')->getTable(Table\Role::class),
+            $this->get('table_manager')->getTable(Table\Role\Scope::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
     public function getRateService(): Service\Rate
     {
         return new Service\Rate(
@@ -385,8 +403,7 @@ trait Services
     public function getLogService(): Service\Log
     {
         return new Service\Log(
-            $this->get('connection'),
-            $this->get('table_manager')->getTable(Table\Category::class)
+            $this->get('connection')
         );
     }
 

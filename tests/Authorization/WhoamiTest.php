@@ -51,6 +51,7 @@ class WhoamiTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 1,
+    "roleId": 1,
     "status": 1,
     "name": "Administrator",
     "email": "admin@localhost.com",
@@ -60,6 +61,7 @@ class WhoamiTest extends ControllerDbTestCase
         "backend.action",
         "backend.app",
         "backend.audit",
+        "backend.category",
         "backend.config",
         "backend.connection",
         "backend.cronjob",
@@ -69,6 +71,7 @@ class WhoamiTest extends ControllerDbTestCase
         "backend.marketplace",
         "backend.plan",
         "backend.rate",
+        "backend.role",
         "backend.route",
         "backend.schema",
         "backend.scope",

@@ -29,7 +29,6 @@ use Fusio\Impl\Event\Plan\Invoice\CreatedEvent;
 use Fusio\Impl\Event\Plan\Invoice\DeletedEvent;
 use Fusio\Impl\Event\Plan\Invoice\PayedEvent;
 use Fusio\Impl\Event\Plan\Invoice\UpdatedEvent;
-use Fusio\Impl\Event\Plan\InvoiceEvents;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PSX\Http\Exception as StatusCode;

@@ -39,32 +39,37 @@ class Context extends FrameworkContext
     /**
      * @var integer
      */
-    protected $routeId;
-
-    /**
-     * @var \Fusio\Engine\Model\AppInterface
-     */
-    protected $app;
-
-    /**
-     * @var \Fusio\Engine\Model\UserInterface
-     */
-    protected $user;
-
-    /**
-     * @var \Fusio\Engine\Model\TokenInterface
-     */
-    protected $token;
+    private $routeId;
 
     /**
      * @var integer
      */
-    protected $logId;
+    private $categoryId;
+
+    /**
+     * @var \Fusio\Engine\Model\AppInterface
+     */
+    private $app;
+
+    /**
+     * @var \Fusio\Engine\Model\UserInterface
+     */
+    private $user;
+
+    /**
+     * @var \Fusio\Engine\Model\TokenInterface
+     */
+    private $token;
+
+    /**
+     * @var integer
+     */
+    private $logId;
 
     /**
      * @var array
      */
-    protected $method;
+    private $method;
 
     /**
      * @var \Fusio\Impl\Authorization\UserContext
@@ -85,6 +90,22 @@ class Context extends FrameworkContext
     public function setRouteId($routeId)
     {
         $this->routeId = $routeId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
     }
 
     /**

@@ -85,18 +85,17 @@ class RefreshToken extends RefreshTokenAbstract
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
         $app = $this->appTable->getOneBy($condition);
-
-        if (!empty($app)) {
-            // refresh access token
-            return $this->appTokenService->refreshAccessToken(
-                $app['id'],
-                $refreshToken,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireApp),
-                new \DateInterval($this->expireRefresh)
-            );
-        } else {
+        if (empty($app)) {
             throw new ServerErrorException('Unknown credentials');
         }
+
+        // refresh access token
+        return $this->appTokenService->refreshAccessToken(
+            $app['id'],
+            $refreshToken,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->expireApp),
+            new \DateInterval($this->expireRefresh)
+        );
     }
 }

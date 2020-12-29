@@ -95,6 +95,7 @@ class DatabaseFinder implements LocationFinderInterface
                 $context->setPath($row['path']);
                 $context->setSource($row['controller']);
                 $context->setRouteId($row['id']);
+                $context->setCategoryId($row['category_id']);
 
                 return $request;
             }

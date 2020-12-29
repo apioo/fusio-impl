@@ -111,6 +111,7 @@ class Generator implements GeneratorInterface
         $method['route_id'] = (int) $method['route_id'];
         $method['status'] = (int) $method['status'];
         $method['public'] = (bool) $method['public'];
+        $method['category_id'] = (int) $method['category_id'];
 
         $return = '<?php' . "\n";
         $return.= '// Fusio handler to execute a specific route' . "\n";
@@ -134,11 +135,13 @@ class Generator implements GeneratorInterface
                        method.status,
                        method.public,
                        method.action,
+                       routes.category_id,
                        routes.path
                   FROM fusio_routes_method method
             INNER JOIN fusio_routes routes
                     ON routes.id = method.route_id
                  WHERE method.active = 1
+                   AND routes.status = 1
               ORDER BY method.id DESC';
 
         return $this->connection->fetchAll($sql);

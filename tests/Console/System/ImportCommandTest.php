@@ -92,7 +92,6 @@ class ImportCommandTest extends ControllerDbTestCase
 }
 JSON;
 
-        $this->assertEquals(140, $schema['id']);
         $this->assertJsonStringEqualsJsonString($source, $schema['source']);
 
         // check action

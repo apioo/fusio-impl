@@ -41,42 +41,42 @@ class AuthorizationCode extends AuthorizationCodeAbstract
     /**
      * @var \Fusio\Impl\Service\App\Code
      */
-    protected $appCodeService;
+    private $appCodeService;
 
     /**
      * @var \Fusio\Impl\Service\Scope
      */
-    protected $scopeService;
+    private $scopeService;
 
     /**
      * @var \Fusio\Impl\Service\App\Token
      */
-    protected $appTokenService;
+    private $appTokenService;
 
     /**
      * @var \Fusio\Impl\Table\App\Code
      */
-    protected $appCodeTable;
+    private $appCodeTable;
 
     /**
      * @var string
      */
-    protected $expireApp;
+    private $expireToken;
 
     /**
      * @param \Fusio\Impl\Service\App\Code $appCodeService
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Table\App\Code $appCodeTable
-     * @param string $expireApp
+     * @param string $expireToken
      */
-    public function __construct(Service\App\Code $appCodeService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, $expireApp)
+    public function __construct(Service\App\Code $appCodeService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, string $expireToken)
     {
         $this->appCodeService  = $appCodeService;
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->appCodeTable    = $appCodeTable;
-        $this->expireApp       = $expireApp;
+        $this->expireToken     = $expireToken;
     }
 
     /**
@@ -95,29 +95,29 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $redirectUri ?: ''
         );
 
-        if (!empty($code)) {
-            // check whether the code is older then 30 minutes. After that we
-            // can not exchange it for an access token
-            if (time() - strtotime($code['date']) > 60 * 30) {
-                throw new InvalidGrantException('Code is expired');
-            }
-
-            // scopes
-            $scopes = $this->scopeService->getValidScopes($code['app_id'], $code['user_id'], $code['scope']);
-            if (empty($scopes)) {
-                throw new InvalidScopeException('No valid scope given');
-            }
-
-            // generate access token
-            return $this->appTokenService->generateAccessToken(
-                $code['app_id'],
-                $code['user_id'],
-                $scopes,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->expireApp)
-            );
-        } else {
+        if (empty($code)) {
             throw new InvalidClientException('Unknown credentials');
         }
+
+        // check whether the code is older then 30 minutes. After that we
+        // can not exchange it for an access token
+        if (time() - strtotime($code['date']) > 60 * 30) {
+            throw new InvalidGrantException('Code is expired');
+        }
+
+        // scopes
+        $scopes = $this->scopeService->getValidScopes($code['scope'], (int) $code['app_id'], (int) $code['user_id']);
+        if (empty($scopes)) {
+            throw new InvalidScopeException('No valid scope given');
+        }
+
+        // generate access token
+        return $this->appTokenService->generateAccessToken(
+            $code['app_id'],
+            $code['user_id'],
+            $scopes,
+            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            new \DateInterval($this->expireToken)
+        );
     }
 }

@@ -128,7 +128,7 @@ class Provider
         $this->routes = [];
     }
 
-    public function create(string $provider, Route_Provider $config, UserContext $context)
+    public function create(string $provider, int $categoryId, Route_Provider $config, UserContext $context)
     {
         $provider = $this->providerFactory->factory($provider);
         if (!$provider instanceof ProviderInterface) {
@@ -149,9 +149,9 @@ class Provider
         $this->connection->beginTransaction();
 
         try {
-            $this->createSchemas($setup->getSchemas(), $context);
-            $this->createActions($setup->getActions(), $context);
-            $this->createRoutes($setup->getRoutes(), $basePath, $scopes, $context);
+            $this->createSchemas($categoryId, $setup->getSchemas(), $context);
+            $this->createActions($categoryId, $setup->getActions(), $context);
+            $this->createRoutes($categoryId, $setup->getRoutes(), $basePath, $scopes, $context);
 
             $this->connection->commit();
         } catch (\Throwable $e) {
@@ -195,7 +195,7 @@ class Provider
         ];
     }
 
-    private function createSchemas(array $schemas, UserContext $context)
+    private function createSchemas(int $categoryId, array $schemas, UserContext $context)
     {
         $schema = $this->schemaManager->getSchema(Schema_Create::class);
 
@@ -206,14 +206,14 @@ class Provider
 
             $id = $this->schemaService->exists($record->getName());
             if (!$id) {
-                $this->schemaService->create($record, $context);
+                $this->schemaService->create($categoryId, $record, $context);
             }
 
             $this->schemas[$index] = $record->getName();
         }
     }
 
-    private function createActions(array $actions, UserContext $context)
+    private function createActions(int $categoryId, array $actions, UserContext $context)
     {
         $schema = $this->schemaManager->getSchema(Action_Create::class);
 
@@ -224,14 +224,14 @@ class Provider
 
             $id = $this->actionService->exists($record->getName());
             if (!$id) {
-                $this->actionService->create($record, $context);
+                $this->actionService->create($categoryId, $record, $context);
             }
 
             $this->actions[$index] = $record->getName();
         }
     }
 
-    private function createRoutes(array $routes, $basePath, $scopes, UserContext $context)
+    private function createRoutes(int $categoryId, array $routes, $basePath, $scopes, UserContext $context)
     {
         $scopes = $scopes ?: [];
         $schema = $this->schemaManager->getSchema(Route_Create::class);
@@ -253,7 +253,7 @@ class Provider
 
             $id = $this->routeService->exists($record->getPath());
             if (!$id) {
-                $id = $this->routeService->create($record, $context);
+                $id = $this->routeService->create($categoryId, $record, $context);
             }
 
             $this->routes[$index] = $id;

@@ -28,7 +28,6 @@ use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Event\Route\CreatedEvent;
 use Fusio\Impl\Event\Route\DeletedEvent;
 use Fusio\Impl\Event\Route\UpdatedEvent;
-use Fusio\Impl\Event\RoutesEvents;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -85,7 +84,7 @@ class Route
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Route_Create $route, UserContext $context)
+    public function create(int $categoryId, Route_Create $route, UserContext $context)
     {
         Route\Validator::assertPath($route->getPath());
 
@@ -113,11 +112,12 @@ class Route
 
             // create route
             $record = [
-                'status'     => Table\Route::STATUS_ACTIVE,
-                'priority'   => $route->getPriority(),
-                'methods'    => 'ANY',
-                'path'       => $route->getPath(),
-                'controller' => $route->getController(),
+                'category_id' => $categoryId,
+                'status'      => Table\Route::STATUS_ACTIVE,
+                'priority'    => $route->getPriority(),
+                'methods'     => 'ANY',
+                'path'        => $route->getPath(),
+                'controller'  => $route->getController(),
             ];
 
             $this->routesTable->create($record);
@@ -129,11 +129,11 @@ class Route
             // assign scopes
             $scopes = $route->getScopes();
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($routeId, $scopes, $context);
+                $this->scopeService->createFromRoute($categoryId, $routeId, $scopes, $context);
             }
 
             // handle config
-            $this->configService->handleConfig($route->getId(), $route->getPath(), $route->getConfig(), $context);
+            $this->configService->handleConfig($categoryId, $route->getId(), $route->getPath(), $route->getConfig(), $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -179,11 +179,11 @@ class Route
             // assign scopes
             $scopes = $route->getScopes();
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($existing['id'], $scopes, $context);
+                $this->scopeService->createFromRoute($existing['category_id'], $existing['id'], $scopes, $context);
             }
 
             // handle config
-            $this->configService->handleConfig($existing['id'], $existing['path'], $route->getConfig(), $context);
+            $this->configService->handleConfig($existing['category_id'], $existing['id'], $existing['path'], $route->getConfig(), $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
