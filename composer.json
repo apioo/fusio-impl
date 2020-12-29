@@ -10,6 +10,11 @@
       "homepage": "http://christoph.kappestein.com"
     }
   ],
+  "scripts": {
+    "tests": "@php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml tests",
+    "generate": "@php gen_model.php",
+    "psalm": "@php vendor/vimeo/psalm/psalm"
+  },
   "require": {
     "php": ">=7.2",
     "psx/framework": "^5.0",
