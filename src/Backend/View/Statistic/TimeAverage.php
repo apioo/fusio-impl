@@ -33,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class TimeAverage extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -56,10 +56,11 @@ class TimeAverage extends ViewAbstract
         $sql = '  SELECT AVG(log.execution_time / 1000) AS exec_time,
                          DATE(log.date) AS date
                     FROM fusio_log log
-                   WHERE ' . $expression . '
+                   WHERE log.category_id = :category_id
+                     AND ' . $expression . '
                 GROUP BY DATE(log.date)';
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAll($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

@@ -33,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class IncomingRequests extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -56,10 +56,11 @@ class IncomingRequests extends ViewAbstract
         $sql = '  SELECT COUNT(log.id) AS cnt,
                          DATE(log.date) AS date
                     FROM fusio_log log
-                   WHERE ' . $expression . '
+                   WHERE log.category_id = :category_id
+                     AND ' . $expression . '
                 GROUP BY DATE(log.date)';
 
-        $result = $this->connection->fetchAll($sql, $condition->getValues());
+        $result = $this->connection->fetchAll($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
 
         foreach ($result as $row) {
             if (isset($data[$row['date']])) {

@@ -33,7 +33,7 @@ use PSX\Sql\ViewAbstract;
  */
 class TimePerRoute extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
@@ -41,15 +41,16 @@ class TimePerRoute extends ViewAbstract
         // get the most slowest routes and build data structure
         $sql = '    SELECT log.route_id
                       FROM fusio_log log
-                     WHERE ' . $expression . '
+                     WHERE log.category_id = :category_id
                        AND log.route_id IS NOT NULL
                        AND log.execution_time IS NOT NULL
+                       AND ' . $expression . '
                   GROUP BY log.route_id
                   ORDER BY SUM(log.execution_time) DESC';
 
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
-        $result   = $this->connection->fetchAll($sql, $condition->getValues());
+        $result   = $this->connection->fetchAll($sql, array_merge(['category_id' => $categoryId], $condition->getValues()));
         $routeIds = array();
         $data     = [];
         $series   = [];
