@@ -24,6 +24,7 @@ namespace Fusio\Impl\Dependency;
 use Doctrine\DBAL;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Fusio\Impl\Authorization;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
 use Fusio\Impl\Console;
@@ -50,6 +51,7 @@ use PSX\Framework\Console as FrameworkConsole;
 use PSX\Framework\Dependency\DefaultContainer;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
+use PSX\Framework\Oauth2\GrantTypeFactory;
 use PSX\Schema\Console as SchemaConsole;
 use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use PSX\Schema\SchemaManager;
@@ -69,7 +71,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Container extends DefaultContainer
 {
-    use Authorization;
     use Engine;
     use Services;
 
@@ -103,6 +104,43 @@ class Container extends DefaultContainer
         $filter->setDefault('default');
 
         return $filter;
+    }
+
+    public function getGrantTypeFactory(): GrantTypeFactory
+    {
+        $factory = new GrantTypeFactory();
+
+        $factory->add(new Authorization\Password(
+            $this->get('app_token_service'),
+            $this->get('scope_service'),
+            $this->get('user_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('config')->get('fusio_expire_token')
+        ));
+
+        $factory->add(new Authorization\AuthorizationCode(
+            $this->get('app_code_service'),
+            $this->get('app_token_service'),
+            $this->get('scope_service'),
+            $this->get('table_manager')->getTable(Table\App\Code::class),
+            $this->get('config')->get('fusio_expire_token')
+        ));
+
+        $factory->add(new Authorization\ClientCredentials(
+            $this->get('app_token_service'),
+            $this->get('scope_service'),
+            $this->get('user_service'),
+            $this->get('config')->get('fusio_expire_token')
+        ));
+
+        $factory->add(new Authorization\RefreshToken(
+            $this->get('app_token_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
+            $this->get('config')->get('fusio_expire_token'),
+            $this->get('config')->get('fusio_expire_refresh')
+        ));
+
+        return $factory;
     }
 
     public function getGeneratorFactory(): GeneratorFactoryInterface
@@ -311,11 +349,8 @@ class Container extends DefaultContainer
             'fusio_project_key'      => '42eec18ffdbffc9fda6110dcc705d6ce',
             'fusio_app_per_consumer' => 16,
             'fusio_app_approval'     => false,
-            'fusio_grant_implicit'   => true,
-            'fusio_expire_implicit'  => 'PT1H',
-            'fusio_expire_app'       => 'P2D',
-            'fusio_expire_backend'   => 'PT1H',
-            'fusio_expire_consumer'  => 'PT1H',
+            'fusio_expire_token'     => 'P2D',
+            'fusio_expire_refresh'   => 'P3D',
 
             'psx_context_factory'    => function(){
                 return new Context();

@@ -238,16 +238,21 @@ class Scope
      * Returns all scope names which are valid for the app and the user. The
      * scopes are a comma separated list
      *
-     * @param integer $appId
-     * @param integer $userId
+     * @param integer|null $appId
+     * @param integer|null $userId
      * @param string $scopes
      * @return array
      */
-    public function getValidScopes($appId, $userId, $scopes)
+    public function getValidScopes(string $scopes, ?int $appId, ?int $userId)
     {
         $scopes = self::split($scopes);
-        $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
-        $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+
+        if ($appId !== null) {
+            $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
+        }
+        if ($userId !== null) {
+            $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
+        }
 
         return $scopes;
     }

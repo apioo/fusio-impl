@@ -59,8 +59,6 @@ class GeneratorFactory extends ApiGeneratorFactory
     protected function configure(GeneratorInterface $generator)
     {
         if ($generator instanceof Generator\Spec\OpenAPIAbstract) {
-            $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
-
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
             $generator->setDescription($this->configService->getValue('info_description') ?: null);
             $generator->setTermsOfService($this->configService->getValue('info_tos') ?: null);
@@ -70,22 +68,14 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
-            $appScopes = $this->scopeTable->getScopesForCategory('default');
-            $backendScopes = $this->scopeTable->getScopesForCategory('backend');
-            $consumerScopes = $this->scopeTable->getScopesForCategory('consumer');
+            $scopes     = $this->scopeTable->getAvailableScopes();
+            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
+            $tokenUrl   = $this->url . '/' . $this->dispatch . 'authorization/token';
+            $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
 
-            $authUrl  = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
-            $tokenUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
-
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, $refreshUrl, $appScopes);
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $appScopes);
-            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_PASSWORD, null, $tokenUrl, $refreshUrl, $appScopes);
-
-            $tokenUrl = $this->url . '/' . $this->dispatch . 'backend/token';
-            $generator->setAuthorizationFlow(Authorization::BACKEND, Generator\Spec\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $backendScopes);
-
-            $tokenUrl = $this->url . '/' . $this->dispatch . 'consumer/token';
-            $generator->setAuthorizationFlow(Authorization::CONSUMER, Generator\Spec\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $consumerScopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_AUTHORIZATION_CODE, $authUrl, $tokenUrl, $refreshUrl, $scopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_CLIENT_CREDENTIALS, null, $tokenUrl, $refreshUrl, $scopes);
+            $generator->setAuthorizationFlow(Authorization::APP, Generator\Spec\OpenAPIAbstract::FLOW_PASSWORD, null, $tokenUrl, $refreshUrl, $scopes);
         } elseif ($generator instanceof Generator\Spec\Raml) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
         }

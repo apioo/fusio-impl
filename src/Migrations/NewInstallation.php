@@ -114,8 +114,6 @@ class NewInstallation
         $bag->addRoleScope('Backend', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoleScope('Consumer', 'authorization');
-        $bag->addRoute('backend', 0, '/backend/token', Backend\Authorization\Token::class);
-        $bag->addRoute('consumer', 0, '/consumer/token', Consumer\Authorization\Token::class);
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
         $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);

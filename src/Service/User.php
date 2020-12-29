@@ -130,19 +130,20 @@ class User
         $condition->equals('status', Table\User::STATUS_ACTIVE);
 
         $user = $this->userTable->getOneBy($condition);
+        if (empty($user)) {
+            return null;
+        }
 
-        if (!empty($user)) {
-            // we can authenticate only local users
-            if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
-                return null;
-            }
+        // we can authenticate only local users
+        if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
+            return null;
+        }
 
-            // check password
-            if (password_verify($password, $user['password'])) {
-                return $user['id'];
-            } else {
-                $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
-            }
+        // check password
+        if (password_verify($password, $user['password'])) {
+            return (int) $user['id'];
+        } else {
+            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
         }
 
         return null;

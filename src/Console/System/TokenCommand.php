@@ -114,7 +114,7 @@ class TokenCommand extends Command
             throw new RuntimeException('Invalid user');
         }
 
-        $scopes = $this->scopeService->getValidScopes($app['id'], $user['id'], $scopes);
+        $scopes = $this->scopeService->getValidScopes($scopes, (int) $app['id'], (int) $user['id']);
         $ip     = '127.0.0.1';
         $expire = new DateInterval($expire);
 

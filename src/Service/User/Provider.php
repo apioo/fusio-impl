@@ -108,7 +108,7 @@ class Provider
                 $userId,
                 $scopes,
                 isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->config->get('fusio_expire_consumer'))
+                new \DateInterval($this->config->get('fusio_expire_token'))
             );
 
             return $token->getAccessToken();
