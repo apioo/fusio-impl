@@ -65,7 +65,7 @@ class AddCommand extends Command
             ->setName('user:add')
             ->setAliases(['adduser'])
             ->setDescription('Adds a new user account')
-            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Status of the account [0=Consumer, 1=Administrator]')
+            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Backend, 2=Consumer]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
