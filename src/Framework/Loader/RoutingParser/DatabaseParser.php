@@ -58,7 +58,7 @@ class DatabaseParser implements RoutingParserInterface
     /**
      * @inheritDoc
      */
-    public function getCollection(?FilterInterface $filter = null): RoutingCollection
+    public function getCollection(?FilterInterface $filter = null)
     {
         $key = $filter !== null ? $filter->getId() : '0';
 
