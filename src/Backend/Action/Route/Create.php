@@ -55,6 +55,7 @@ class Create extends ActionAbstract
         assert($body instanceof Route_Create);
 
         $this->routeService->create(
+            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

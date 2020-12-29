@@ -43,21 +43,15 @@ class GetIncomingRequests extends ActionAbstract
      */
     private $table;
 
-    /**
-     * @var Table\User
-     */
-    private $userTable;
-
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\IncomingRequests::class);
-        $this->userTable = $tableManager->getTable(Table\User::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getView(
-            $this->userTable->getCategoryForUser($context->getUser()->getId()),
+            $context->getUser()->getCategoryId(),
             View\Log\QueryFilter::create($request)
         );
     }

@@ -70,6 +70,7 @@ class UserDatabase implements Repository\UserInterface
         }
 
         $sql = 'SELECT id,
+                       role_id,
                        status,
                        name,
                        email,
@@ -86,15 +87,27 @@ class UserDatabase implements Repository\UserInterface
         }
     }
 
-    protected function newUser(array $row)
+    private function newUser(array $row)
     {
         $user = new User();
         $user->setId($row['id']);
+        $user->setRoleId($row['role_id']);
+        $user->setCategoryId($this->getCategoryForRole($row['role_id']));
         $user->setStatus($row['status']);
         $user->setName($row['name']);
         $user->setEmail($row['email']);
         $user->setPoints($row['points']);
 
         return $user;
+    }
+
+    private function getCategoryForRole($roleId): int
+    {
+        $categoryId = $this->connection->fetchOne('SELECT category_id FROM fusio_role WHERE id = :id', ['id' => $roleId]);
+        if (empty($categoryId)) {
+            return 0;
+        }
+
+        return (int) $categoryId;
     }
 }

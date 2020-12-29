@@ -83,11 +83,6 @@ class GetAll extends ActionAbstract
      */
     private $latestTransactions;
 
-    /**
-     * @var Table\User
-     */
-    private $userTable;
-
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->errorsPerRoute = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
@@ -99,7 +94,6 @@ class GetAll extends ActionAbstract
         $this->latestRequests = $tableManager->getTable(View\Dashboard\LatestRequests::class);
         $this->latestUsers = $tableManager->getTable(View\Dashboard\LatestUsers::class);
         $this->latestTransactions = $tableManager->getTable(View\Dashboard\LatestTransactions::class);
-        $this->userTable = $tableManager->getTable(Table\User::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
@@ -107,16 +101,14 @@ class GetAll extends ActionAbstract
         $logFilter = View\Log\QueryFilter::create($request);
         $transactionFilter = View\Transaction\QueryFilter::create($request);
 
-        $categoryId = $this->userTable->getCategoryForUser($context->getUser()->getId());
-
         return [
-            'errorsPerRoute' => $this->errorsPerRoute->getView($categoryId, $logFilter),
-            'incomingRequests' => $this->incomingRequests->getView($categoryId, $logFilter),
+            'errorsPerRoute' => $this->errorsPerRoute->getView($context->getUser()->getCategoryId(), $logFilter),
+            'incomingRequests' => $this->incomingRequests->getView($context->getUser()->getCategoryId(), $logFilter),
             'incomingTransactions' => $this->incomingTransactions->getView($transactionFilter),
-            'mostUsedRoutes' => $this->mostUsedRoutes->getView($categoryId, $logFilter),
-            'timePerRoute' => $this->timePerRoute->getView($categoryId, $logFilter),
+            'mostUsedRoutes' => $this->mostUsedRoutes->getView($context->getUser()->getCategoryId(), $logFilter),
+            'timePerRoute' => $this->timePerRoute->getView($context->getUser()->getCategoryId(), $logFilter),
             'latestApps' => $this->latestApps->getView(),
-            'latestRequests' => $this->latestRequests->getView($categoryId),
+            'latestRequests' => $this->latestRequests->getView($context->getUser()->getCategoryId()),
             'latestUsers' => $this->latestUsers->getView(),
             'latestTransactions' => $this->latestTransactions->getView(),
         ];

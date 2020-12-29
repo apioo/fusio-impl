@@ -61,7 +61,7 @@ class Event
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create(Event_Create $event, UserContext $context)
+    public function create(int $categoryId, Event_Create $event, UserContext $context)
     {
         // check whether event exists
         if ($this->exists($event->getName())) {
@@ -70,6 +70,7 @@ class Event
 
         // create event
         $record = [
+            'category_id' => $categoryId,
             'status'      => Table\Event::STATUS_ACTIVE,
             'name'        => $event->getName(),
             'description' => $event->getDescription(),

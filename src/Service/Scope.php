@@ -83,7 +83,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Scope_Create $scope, UserContext $context)
+    public function create(int $categoryId, Scope_Create $scope, UserContext $context)
     {
         // check whether scope exists
         if ($this->exists($scope->getName())) {
@@ -95,6 +95,7 @@ class Scope
 
             // create scope
             $record = [
+                'category_id' => $categoryId,
                 'name'        => $scope->getName(),
                 'description' => $scope->getDescription() ?? '',
             ];
@@ -119,7 +120,7 @@ class Scope
         return $scopeId;
     }
 
-    public function createFromRoute(int $routeId, array $scopeNames, UserContext $context)
+    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context)
     {
         // remove all scopes from this route
         $this->scopeRouteTable->deleteAllFromRoute($routeId);
@@ -147,7 +148,7 @@ class Scope
                 $scope->setName($scopeName);
                 $scope->setRoutes([$route]);
 
-                $this->create($scope, $context);
+                $this->create($categoryId, $scope, $context);
             }
         }
     }

@@ -55,6 +55,7 @@ class Create extends ActionAbstract
         assert($body instanceof Scope_Create);
 
         $this->scopeService->create(
+            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

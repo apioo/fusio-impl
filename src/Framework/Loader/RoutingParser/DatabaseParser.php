@@ -58,37 +58,39 @@ class DatabaseParser implements RoutingParserInterface
     /**
      * @inheritDoc
      */
-    public function getCollection(?FilterInterface $filter = null)
+    public function getCollection(?FilterInterface $filter = null): RoutingCollection
     {
-        if ($this->collection === null) {
-            $sql = 'SELECT id,
-                           category_id,
-                           methods,
-                           path,
-                           controller
-                      FROM fusio_routes
-                     WHERE status = :status';
+        $key = $filter !== null ? $filter->getId() : '0';
 
-            $params = ['status' => TableRoutes::STATUS_ACTIVE];
-
-            if ($filter instanceof Filter) {
-                $sql.= ' AND category_id = :category_id';
-                $params['category_id'] = $filter->getId();
-            }
-
-            $sql.= ' ORDER BY priority DESC';
-            
-            $collection = new RoutingCollection();
-            $result     = $this->connection->fetchAll($sql, $params);
-
-            foreach ($result as $row) {
-                $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id'], $row['category_id']);
-            }
-
-            $this->collection = $collection;
+        if (isset($this->collection[$key])) {
+            return $this->collection[$key];
         }
 
-        return $this->collection;
+        $sql = 'SELECT routes.id,
+                       routes.category_id,
+                       routes.methods,
+                       routes.path,
+                       routes.controller
+                  FROM fusio_routes routes
+                 WHERE routes.status = :status';
+
+        $params = ['status' => TableRoutes::STATUS_ACTIVE];
+
+        if ($filter instanceof Filter) {
+            $sql.= ' AND category_id = :category_id';
+            $params['category_id'] = $filter->getId();
+        }
+
+        $sql.= ' ORDER BY priority DESC';
+
+        $collection = new RoutingCollection();
+        $result     = $this->connection->fetchAll($sql, $params);
+
+        foreach ($result as $row) {
+            $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id'], $row['category_id']);
+        }
+
+        return $this->collection[$key] = $collection;
     }
 
     public function clear()

@@ -43,21 +43,15 @@ class GetAll extends ActionAbstract
      */
     private $table;
 
-    /**
-     * @var Table\User
-     */
-    private $userTable;
-
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Cronjob::class);
-        $this->userTable = $tableManager->getTable(Table\User::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getCollection(
-            $this->userTable->getCategoryForUser($context->getUser()->getId()),
+            $context->getUser()->getCategoryId(),
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
             $request->get('search')

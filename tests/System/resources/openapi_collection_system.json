@@ -269,14 +269,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "backend": [
-              "backend"
-            ]
-          }
-        ]
+        }
       }
     }
   },
