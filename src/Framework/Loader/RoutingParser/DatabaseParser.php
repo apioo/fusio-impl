@@ -22,8 +22,10 @@
 namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Framework\Filter\Filter;
 use Fusio\Impl\Framework\Loader\RoutingCollection;
 use Fusio\Impl\Table\Route as TableRoutes;
+use PSX\Api\Listing\FilterInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
@@ -54,9 +56,9 @@ class DatabaseParser implements RoutingParserInterface
     }
 
     /**
-     * @return \PSX\Framework\Loader\RoutingCollection
+     * @inheritDoc
      */
-    public function getCollection()
+    public function getCollection(?FilterInterface $filter = null)
     {
         if ($this->collection === null) {
             $sql = 'SELECT id,
@@ -64,11 +66,19 @@ class DatabaseParser implements RoutingParserInterface
                            path,
                            controller
                       FROM fusio_routes
-                     WHERE status = :status
-                  ORDER BY priority DESC';
+                     WHERE status = :status';
 
+            $params = ['status' => TableRoutes::STATUS_ACTIVE];
+
+            if ($filter instanceof Filter) {
+                $sql.= ' AND category_id = :category_id';
+                $params['category_id'] = $filter->getId();
+            }
+
+            $sql.= ' ORDER BY priority DESC';
+            
             $collection = new RoutingCollection();
-            $result     = $this->connection->fetchAll($sql, ['status' => TableRoutes::STATUS_ACTIVE]);
+            $result     = $this->connection->fetchAll($sql, $params);
 
             foreach ($result as $row) {
                 $collection->add(explode('|', $row['methods']), $row['path'], $row['controller'], $row['id']);
