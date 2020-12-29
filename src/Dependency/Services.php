@@ -539,7 +539,6 @@ trait Services
             $this->get('user_service'),
             $this->get('app_token_service'),
             $factory,
-            $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('config')
         );
     }

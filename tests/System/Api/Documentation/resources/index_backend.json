@@ -176,6 +176,20 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/role\/$role_id<[0-9]+>",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/role",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/rate\/$rate_id<[0-9]+>",
       "methods": [
         "ANY"
@@ -359,6 +373,20 @@
     },
     {
       "path": "\/backend\/config",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/category\/$category_id<[0-9]+>",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/category",
       "methods": [
         "ANY"
       ],

@@ -47,7 +47,7 @@ class AddCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--status' => '1',
+            '--role' => '1',
             '--username' => 'bar',
             '--email' => 'bar@bar.com',
             '--password' => 'test1234!',
@@ -58,9 +58,9 @@ class AddCommandTest extends ControllerDbTestCase
         $this->assertStringContainsString('Created user bar successful', $actual);
 
         // check user
-        $user = $this->connection->fetchAssoc('SELECT id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
+        $user = $this->connection->fetchAssoc('SELECT role_id, provider, status, remote_id, name, email, password FROM fusio_user ORDER BY id DESC');
 
-        $this->assertEquals(6, $user['id']);
+        $this->assertEquals(1, $user['role_id']);
         $this->assertEquals(1, $user['provider']);
         $this->assertEquals(1, $user['status']);
         $this->assertEquals(null, $user['remote_id']);

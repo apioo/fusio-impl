@@ -24,6 +24,7 @@ namespace Fusio\Impl\Console\User;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -142,6 +143,7 @@ class AddCommand extends Command
         // create user
         $create = new User_Create();
         $create->setRoleId($role);
+        $create->setStatus(Table\User::STATUS_ACTIVE);
         $create->setName($name);
         $create->setEmail($email);
         $create->setPassword($password);

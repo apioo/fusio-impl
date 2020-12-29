@@ -69,13 +69,13 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
-            "categoryId": 2,
+            "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
             "id": 2,
-            "categoryId": 3,
+            "categoryId": 1,
             "status": 1,
             "name": "Consumer"
         }
@@ -103,7 +103,7 @@ JSON;
     "entry": [
         {
             "id": 1,
-            "categoryId": 2,
+            "categoryId": 1,
             "status": 1,
             "name": "Backend"
         }
@@ -131,13 +131,13 @@ JSON;
     "entry": [
         {
             "id": 1,
-            "categoryId": 2,
+            "categoryId": 1,
             "status": 1,
             "name": "Backend"
         },
         {
             "id": 2,
-            "categoryId": 3,
+            "categoryId": 1,
             "status": 1,
             "name": "Consumer"
         }

@@ -165,6 +165,10 @@ class User
         User\Validator::assertEmail($user->getEmail());
         User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
 
+        if ($user->getRoleId() === null) {
+            throw new StatusCode\BadRequestException('No role provided');
+        }
+
         try {
             $this->userTable->beginTransaction();
 
@@ -269,6 +273,10 @@ class User
         $existing = $this->userTable->get($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
+        }
+
+        if ($user->getRoleId() === null) {
+            $user->setRoleId((int) $existing['role_id']);
         }
 
         if ($user->getStatus() === null) {

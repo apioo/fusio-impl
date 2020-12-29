@@ -73,7 +73,7 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<JSON
 {
     "id": 2,
-    "categoryId": 3,
+    "categoryId": 1,
     "status": 1,
     "name": "Consumer",
     "scopes": [

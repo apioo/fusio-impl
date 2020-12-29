@@ -116,7 +116,7 @@ class ActivateTest extends ControllerDbTestCase
         $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 6]);
 
         $this->assertEquals(1, $row['provider']);
-        $this->assertEquals(0, $row['status']);
+        $this->assertEquals(1, $row['status']);
         $this->assertEquals('', $row['remote_id']);
         $this->assertEquals('baz', $row['name']);
         $this->assertEquals('baz@localhost.com', $row['email']);

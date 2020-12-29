@@ -71,6 +71,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 4,
+            "roleId": 1,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -79,6 +80,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 3,
+            "roleId": 2,
             "provider": 1,
             "status": 2,
             "name": "Disabled",
@@ -87,14 +89,16 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
+            "roleId": 2,
             "provider": 1,
-            "status": 0,
+            "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
             "date": "[datetime]"
         },
         {
             "id": 1,
+            "roleId": 1,
             "provider": 1,
             "status": 1,
             "name": "Administrator",
@@ -127,6 +131,7 @@ JSON;
     "entry": [
         {
             "id": 4,
+            "roleId": 1,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -159,6 +164,7 @@ JSON;
     "entry": [
         {
             "id": 4,
+            "roleId": 1,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -167,6 +173,7 @@ JSON;
         },
         {
             "id": 3,
+            "roleId": 2,
             "provider": 1,
             "status": 2,
             "name": "Disabled",
@@ -175,14 +182,16 @@ JSON;
         },
         {
             "id": 2,
+            "roleId": 2,
             "provider": 1,
-            "status": 0,
+            "status": 1,
             "name": "Consumer",
             "email": "consumer@localhost.com",
             "date": "[datetime]"
         },
         {
             "id": 1,
+            "roleId": 1,
             "provider": 1,
             "status": 1,
             "name": "Administrator",
@@ -203,11 +212,11 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
+            'roleId'   => 1,
             'status'   => 0,
             'name'     => 'test',
             'email'    => 'test@localhost.com',
             'password' => 'fooo123!',
-            'scopes'   => ['foo', 'bar'],
         ]));
 
         $body = (string) $response->getBody();
@@ -248,15 +257,7 @@ JSON;
 
         $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
 
-        $this->assertEquals([[
-            'id'       => 17,
-            'user_id'  => 6,
-            'scope_id' => 34,
-        ], [
-            'id'       => 16,
-            'user_id'  => 6,
-            'scope_id' => 35,
-        ]], $routes);
+        $this->assertEquals(24, count($routes));
     }
 
     public function testPostNameExists()

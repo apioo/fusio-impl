@@ -144,7 +144,7 @@ class User extends TableAbstract
             return 0;
         }
 
-        $categoryId = $this->connection->fetchOne('SELECT category_id FROM fusio_role WHERE role_id = :role_id', ['role_id' => $user['role_id']]);
+        $categoryId = $this->connection->fetchOne('SELECT category_id FROM fusio_role WHERE id = :id', ['id' => $user['role_id']]);
         if (empty($categoryId)) {
             return 0;
         }

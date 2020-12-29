@@ -59,6 +59,7 @@ class User extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\User::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
+                'roleId' => $this->fieldInteger('role_id'),
                 'provider' => 'provider',
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -74,6 +75,7 @@ class User extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
+            'roleId' => $this->fieldInteger('role_id'),
             'provider' => $this->fieldInteger('provider'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',

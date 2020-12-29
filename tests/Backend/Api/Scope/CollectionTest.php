@@ -68,12 +68,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 35,
+            "id": 37,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 34,
+            "id": 36,
             "name": "foo",
             "description": "Foo access"
         },
@@ -105,7 +105,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 34,
+            "id": 36,
             "name": "foo",
             "description": "Foo access"
         }
@@ -132,12 +132,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 35,
+            "id": 37,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 34,
+            "id": 36,
             "name": "foo",
             "description": "Foo access"
         },
@@ -195,29 +195,27 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(36, $row['id']);
+        $this->assertEquals(38, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'scope_id', 'route_id', 'allow', 'methods')
+            ->select('scope_id', 'route_id', 'allow', 'methods')
             ->from('fusio_scope_routes')
             ->where('scope_id = :scope_id')
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 36]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 38]);
 
         $this->assertEquals([[
-            'id'       => 99,
-            'scope_id' => 36,
-            'route_id' => 109,
+            'scope_id' => 38,
+            'route_id' => 113,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'id'       => 98,
-            'scope_id' => 36,
-            'route_id' => 108,
+            'scope_id' => 38,
+            'route_id' => 112,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);

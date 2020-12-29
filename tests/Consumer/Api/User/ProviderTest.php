@@ -258,7 +258,7 @@ class ProviderTest extends ControllerDbTestCase
         $this->assertEquals(1, $row['status']);
         $this->assertNotEmpty($row['token']);
         $this->assertEquals('eb9a3e30-9c88-5525-b229-903113421324', $token->sub);
-        $this->assertEquals('authorization,consumer', $row['scope']);
+        $this->assertEquals('consumer,consumer.app,consumer.event,consumer.grant,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization', $row['scope']);
         $this->assertEquals('127.0.0.1', $row['ip']);
         $this->assertNotEmpty($row['expire']);
 

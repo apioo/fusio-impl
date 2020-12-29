@@ -57,11 +57,6 @@ class Provider
     private $providerFactory;
 
     /**
-     * @var \Fusio\Impl\Table\User\Scope
-     */
-    private $scopeTable;
-
-    /**
      * @var \PSX\Framework\Config\Config
      */
     private $config;
@@ -70,15 +65,13 @@ class Provider
      * @param \Fusio\Impl\Service\User $userService
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
-     * @param \Fusio\Impl\Table\User\Scope $scopeTable
      * @param \PSX\Framework\Config\Config $config
      */
-    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Table\User\Scope $scopeTable, Config $config)
+    public function __construct(Service\User $userService, Service\App\Token $appTokenService, ProviderFactory $providerFactory, Config $config)
     {
         $this->userService     = $userService;
         $this->appTokenService = $appTokenService;
         $this->providerFactory = $providerFactory;
-        $this->scopeTable      = $scopeTable;
         $this->config          = $config;
     }
 
@@ -104,7 +97,7 @@ class Provider
             $userId = $this->userService->createRemote($remote, UserContext::newAnonymousContext());
 
             // get scopes for user
-            $scopes = $this->scopeTable->getAvailableScopes($userId);
+            $scopes = $this->userService->getAvailableScopes($userId);
 
             // @TODO this is the consumer app. Probably we need a better way to
             // define this id

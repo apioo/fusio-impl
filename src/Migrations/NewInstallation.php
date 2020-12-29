@@ -66,8 +66,8 @@ class NewInstallation
         $bag->addCategory('consumer');
         $bag->addCategory('system');
         $bag->addCategory('authorization');
-        $bag->addRole('backend', 'Backend');
-        $bag->addRole('consumer', 'Consumer');
+        $bag->addRole('default', 'Backend');
+        $bag->addRole('default', 'Consumer');
         $bag->addUser('Backend', 'Administrator', 'admin@localhost.com', $password);
         $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
         $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);

@@ -191,6 +191,9 @@ JSON;
                     "id": {
                         "type": "integer"
                     },
+                    "roleId": {
+                        "type": "integer"
+                    },
                     "status": {
                         "type": "integer"
                     },

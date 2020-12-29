@@ -50,7 +50,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,authorization');
+        $this->assertAccessToken($response, 'backend,authorization', 4);
     }
 
     public function testPostSpecificScope()
@@ -62,7 +62,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend.action');
+        $this->assertAccessToken($response, 'backend.action', 4);
     }
 
     public function testPostEmail()
@@ -74,7 +74,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,authorization');
+        $this->assertAccessToken($response, 'backend,authorization', 4);
     }
 
     /**
@@ -89,17 +89,8 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $body = (string) $response->getBody();
-        
-        $expect = <<<JSON
-{
-    "error": "invalid_client",
-    "error_description": "Unknown credentials"
-}
-JSON;
-
-        $this->assertEquals(401, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+        // we receive only the authorization scope since out user has not the backend scope
+        $this->assertAccessToken($response, 'authorization', 2);
     }
 
     /**
@@ -127,7 +118,7 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    private function assertAccessToken(ResponseInterface $response, string $scope)
+    private function assertAccessToken(ResponseInterface $response, string $scope, int $userId)
     {
         $body = (string) $response->getBody();
         $data = Parser::decode($body, true);
@@ -148,7 +139,7 @@ JSON;
         $row = $this->connection->fetchAssoc('SELECT app_id, user_id, status, token, scope, expire, date FROM fusio_app_token WHERE token = :token', ['token' => $data['access_token']]);
 
         $this->assertEquals(1, $row['app_id']);
-        $this->assertEquals(4, $row['user_id']);
+        $this->assertEquals($userId, $row['user_id']);
         $this->assertEquals(Token::STATUS_ACTIVE, $row['status']);
         $this->assertEquals($data['access_token'], $row['token']);
         $this->assertEquals($scope, $row['scope']);

@@ -261,14 +261,14 @@ JSON;
             "id": 10,
             "type": 1,
             "name": "info_contact_email",
-            "description": "The email address of the contact person/organization. MUST be in the format of an email address",
+            "description": "The email address of the contact person\/organization. MUST be in the format of an email address",
             "value": ""
         },
         {
             "id": 8,
             "type": 1,
             "name": "info_contact_name",
-            "description": "The identifying name of the contact person/organization",
+            "description": "The identifying name of the contact person\/organization",
             "value": ""
         },
         {
@@ -318,7 +318,7 @@ JSON;
             "type": 6,
             "name": "mail_pw_reset_body",
             "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\nhttp://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}\n\nPlease ignore this email if you have not requested a password reset."
+            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#password_reset?token={token}\n\nPlease ignore this email if you have not requested a password reset."
         },
         {
             "id": 15,
@@ -332,7 +332,7 @@ JSON;
             "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
-            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}"
+            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
         },
         {
             "id": 13,
@@ -385,10 +385,10 @@ JSON;
         },
         {
             "id": 22,
-            "type": 1,
-            "name": "scopes_default",
-            "description": "If a user registers through the consumer API the following scopes are assigned",
-            "value": "authorization,consumer"
+            "type": 3,
+            "name": "role_default",
+            "description": "Default role which a user gets assigned on registration",
+            "value": "2"
         },
         {
             "id": 25,

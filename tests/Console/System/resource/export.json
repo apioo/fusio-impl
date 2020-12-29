@@ -309,7 +309,7 @@
         {
           "id": 4,
           "rateId": 4,
-          "routeId": 108,
+          "routeId": 112,
           "authenticated": true
         }
       ]
@@ -323,7 +323,7 @@
         {
           "id": 3,
           "rateId": 3,
-          "routeId": 108
+          "routeId": 112
         }
       ]
     },
@@ -355,6 +355,7 @@
   ],
   "user": [
     {
+      "roleId": 1,
       "provider": 1,
       "status": 1,
       "name": "Developer",
@@ -366,6 +367,7 @@
         "backend.action",
         "backend.app",
         "backend.audit",
+        "backend.category",
         "backend.config",
         "backend.connection",
         "backend.cronjob",
@@ -375,6 +377,7 @@
         "backend.marketplace",
         "backend.plan",
         "backend.rate",
+        "backend.role",
         "backend.route",
         "backend.schema",
         "backend.scope",
@@ -398,6 +401,7 @@
       "date": "[datetime]"
     },
     {
+      "roleId": 2,
       "provider": 1,
       "status": 2,
       "name": "Disabled",
@@ -408,8 +412,9 @@
       "date": "[datetime]"
     },
     {
+      "roleId": 2,
       "provider": 1,
-      "status": 0,
+      "status": 1,
       "name": "Consumer",
       "email": "consumer@localhost.com",
       "points": 100,
@@ -430,6 +435,7 @@
       "date": "[datetime]"
     },
     {
+      "roleId": 1,
       "provider": 1,
       "status": 1,
       "name": "Administrator",
@@ -440,6 +446,7 @@
         "backend.action",
         "backend.app",
         "backend.audit",
+        "backend.category",
         "backend.config",
         "backend.connection",
         "backend.cronjob",
@@ -449,6 +456,7 @@
         "backend.marketplace",
         "backend.plan",
         "backend.rate",
+        "backend.role",
         "backend.route",
         "backend.schema",
         "backend.scope",
