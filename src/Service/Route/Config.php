@@ -80,11 +80,12 @@ class Config
      * method can only change if it is in development mode. In every other
      * case we can only change the status
      *
+     * @param integer $categoryId
      * @param integer $routeId
      * @param string $path
      * @param Route_Version[] $versions
      */
-    public function handleConfig(int $routeId, string $path, array $versions, UserContext $context)
+    public function handleConfig(int $categoryId, int $routeId, string $path, array $versions, UserContext $context)
     {
         $availableMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
 
@@ -144,8 +145,8 @@ class Config
 
         // invalidate resource cache
         if ($this->listing instanceof CachedListing) {
-            $this->listing->invalidateResourceIndex(new Filter('default'));
-            $this->listing->invalidateResourceCollection(null, new Filter('default'));
+            $this->listing->invalidateResourceIndex(new Filter($categoryId));
+            $this->listing->invalidateResourceCollection(null, new Filter($categoryId));
             $this->listing->invalidateResource($path);
         }
     }

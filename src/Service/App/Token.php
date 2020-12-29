@@ -286,7 +286,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid user');
         }
 
-        if ($user['status'] != Table\User::STATUS_ADMINISTRATOR && $user['status'] != Table\User::STATUS_CONSUMER) {
+        if ($user['status'] != Table\User::STATUS_ACTIVE) {
             throw new StatusCode\BadRequestException('Invalid user status');
         }
 

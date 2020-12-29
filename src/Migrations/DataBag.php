@@ -179,7 +179,7 @@ class DataBag
     {
         $this->data['fusio_action'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
-            'status' => 1,
+            'status' => Table\Action::STATUS_ACTIVE,
             'name' => $name,
             'class' => $class,
             'engine' => PhpClass::class,
@@ -254,6 +254,7 @@ class DataBag
     public function addCategory(string $category)
     {
         $this->data['fusio_category'][$category] = [
+            'status' => Table\Category::STATUS_ACTIVE,
             'name' => $category,
         ];
     }
@@ -344,9 +345,10 @@ class DataBag
         ];
     }
 
-    public function addLog(string $app, string $route)
+    public function addLog(string $category, string $app, string $route)
     {
         $this->data['fusio_log'][] = [
+            'category_id' => $this->getId('fusio_category', $category),
             'app_id' => $this->getId('fusio_app', $app),
             'route_id' => $this->getId('fusio_routes', $route),
             'ip' => '127.0.0.1',
@@ -461,11 +463,28 @@ class DataBag
         ];
     }
 
+    public function addRole(string $category, string $name)
+    {
+        $this->data['fusio_role'][$name] = [
+            'category_id' => $this->getId('fusio_category', $category),
+            'status' => Table\Role::STATUS_ACTIVE,
+            'name' => $name,
+        ];
+    }
+
+    public function addRoleScope(string $role, string $scope)
+    {
+        $this->data['fusio_role_scope'][] = [
+            'role_id' => $this->getId('fusio_role', $role),
+            'scope_id' => $this->getId('fusio_scope', $scope),
+        ];
+    }
+
     public function addRoute(string $category, int $prio, string $path, string $controller)
     {
         $this->data['fusio_routes'][$path] = [
             'category_id' => self::getId('fusio_category', $category),
-            'status' => 1,
+            'status' => Table\Route::STATUS_ACTIVE,
             'priority' => $prio,
             'methods' => 'ANY',
             'path' => $path,
@@ -503,7 +522,7 @@ class DataBag
     {
         $this->data['fusio_schema'][$name] = [
             'category_id' => self::getId('fusio_category', $category),
-            'status' => 1,
+            'status' => Table\Schema::STATUS_ACTIVE,
             'name' => $name,
             'source' => $source,
             'form' => $form
@@ -529,9 +548,10 @@ class DataBag
         ];
     }
 
-    public function addUser(string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ADMINISTRATOR, ?string $date = null)
+    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $date = null)
     {
         $this->data['fusio_user'][$name] = [
+            'role_id' => self::getId('fusio_role', $role),
             'status' => $status,
             'name' => $name,
             'email' => $email,

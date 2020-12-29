@@ -1,0 +1,105 @@
+{
+  "status": 1,
+  "path": "\/backend\/role\/$role_id<[0-9]+>",
+  "pathParameters": "BackendRoleRole_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Role_Get",
+      "security": {
+        "app": [
+          "backend.role"
+        ]
+      },
+      "tags": [
+        "backend.role"
+      ],
+      "responses": {
+        "200": "Backend_Model_Role"
+      }
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Role_Update",
+      "security": {
+        "app": [
+          "backend.role"
+        ]
+      },
+      "tags": [
+        "backend.role"
+      ],
+      "request": "Backend_Model_Role_Update",
+      "responses": {
+        "200": "Model_Message"
+      }
+    },
+    "DELETE": {
+      "operationId": "Backend_Action_Role_Delete",
+      "security": {
+        "app": [
+          "backend.role"
+        ]
+      },
+      "tags": [
+        "backend.role"
+      ],
+      "responses": {
+        "200": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "BackendRoleRole_idPath": {
+      "type": "object",
+      "properties": {
+        "role_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Role": {
+      "$ref": "Role"
+    },
+    "Backend_Model_Role_Update": {
+      "$ref": "Role_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "categoryId": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Role_Update": {
+      "$extends": "Role",
+      "type": "object"
+    }
+  }
+}

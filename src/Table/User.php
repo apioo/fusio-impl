@@ -32,10 +32,9 @@ use PSX\Sql\TableAbstract;
  */
 class User extends TableAbstract
 {
-    const STATUS_CONSUMER      = 0;
-    const STATUS_ADMINISTRATOR = 1;
-    const STATUS_DISABLED      = 2;
-    const STATUS_DELETED       = 3;
+    const STATUS_DISABLED = 2;
+    const STATUS_ACTIVE   = 1;
+    const STATUS_DELETED  = 0;
 
     public function getName()
     {
@@ -46,6 +45,7 @@ class User extends TableAbstract
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
+            'role_id' => self::TYPE_INT,
             'provider' => self::TYPE_INT,
             'status' => self::TYPE_INT,
             'remote_id' => self::TYPE_VARCHAR,

@@ -55,6 +55,7 @@ class Create extends ActionAbstract
         assert($body instanceof Cronjob_Create);
 
         $this->cronjobService->create(
+            $context->getUser()->getCategoryId(),
             $body,
             UserContext::newActionContext($context)
         );

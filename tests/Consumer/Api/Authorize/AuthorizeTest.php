@@ -69,12 +69,12 @@ class AuthorizeTest extends ControllerDbTestCase
     "url": "http:\/\/google.com",
     "scopes": [
         {
-            "id": 34,
+            "id": 36,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 35,
+            "id": 37,
             "name": "bar",
             "description": "Bar access"
         }
@@ -449,7 +449,7 @@ JSON;
 
     private function getExpireTimes($timestamps = true)
     {
-        $expireTime = strtotime('+1 hour');
+        $expireTime = strtotime('+2 days');
         $timeRange  = [$expireTime - 1, $expireTime];
 
         if (!$timestamps) {

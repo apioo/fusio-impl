@@ -76,8 +76,9 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 2,
+    "roleId": 2,
     "provider": 1,
-    "status": 0,
+    "status": 1,
     "name": "Consumer",
     "email": "consumer@localhost.com",
     "points": 100,
@@ -100,7 +101,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 5,
             "status": 3,
             "name": "Deactivated",
-            "url": "http://google.com",
+            "url": "http:\/\/google.com",
             "appKey": "f46af464-f7eb-4d04-8661-13063a30826b",
             "date": "[datetime]"
         },
@@ -108,7 +109,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 4,
             "status": 2,
             "name": "Pending",
-            "url": "http://google.com",
+            "url": "http:\/\/google.com",
             "appKey": "7c14809c-544b-43bd-9002-23e1c2de6067",
             "date": "[datetime]"
         },
@@ -116,7 +117,7 @@ class EntityTest extends ControllerDbTestCase
             "id": 3,
             "status": 1,
             "name": "Foo-App",
-            "url": "http://google.com",
+            "url": "http:\/\/google.com",
             "appKey": "5347307d-d801-4075-9aaa-a21a29a448c5",
             "date": "[datetime]"
         }
@@ -171,7 +172,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'status' => User::STATUS_ADMINISTRATOR,
+            'roleId' => 2,
+            'status' => User::STATUS_ACTIVE,
             'name'   => 'bar',
             'email'  => 'bar@bar.com',
             'scopes' => ['bar'],
@@ -190,13 +192,14 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'email')
+            ->select('id', 'role_id', 'status', 'name', 'email')
             ->from('fusio_user')
             ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
+        $this->assertEquals(2, $row['role_id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar', $row['name']);
         $this->assertEquals('bar@bar.com', $row['email']);
@@ -212,7 +215,7 @@ JSON;
 
         $this->assertEquals([[
             'user_id'  => 2,
-            'scope_id' => 35,
+            'scope_id' => 37,
         ]], $scopes);
     }
 
@@ -267,7 +270,7 @@ JSON;
 
         $this->assertEquals([[
             'user_id'  => 2,
-            'scope_id' => 35,
+            'scope_id' => 37,
         ]], $scopes);
 
         $sql = Environment::getService('connection')->createQueryBuilder()

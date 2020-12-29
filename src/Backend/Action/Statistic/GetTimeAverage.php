@@ -26,6 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
+use Fusio\Impl\Table;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -50,6 +51,7 @@ class GetTimeAverage extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getView(
+            $context->getUser()->getCategoryId(),
             View\Log\QueryFilter::create($request)
         );
     }

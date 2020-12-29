@@ -91,7 +91,7 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Cronjob_Create $cronjob, UserContext $context)
+    public function create(int $categoryId, Cronjob_Create $cronjob, UserContext $context)
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
@@ -102,10 +102,11 @@ class Cronjob
 
         // create cronjob
         $record = [
-            'status' => Table\Cronjob::STATUS_ACTIVE,
-            'name'   => $cronjob->getName(),
-            'cron'   => $cronjob->getCron(),
-            'action' => $cronjob->getAction(),
+            'category_id' => $categoryId,
+            'status'      => Table\Cronjob::STATUS_ACTIVE,
+            'name'        => $cronjob->getName(),
+            'cron'        => $cronjob->getCron(),
+            'action'      => $cronjob->getAction(),
         ];
 
         $this->cronjobTable->create($record);

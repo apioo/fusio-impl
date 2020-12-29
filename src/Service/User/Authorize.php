@@ -124,7 +124,7 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($app['id'], $userId, $request->getScope());
+        $scopes = $this->scopeService->getValidScopes($request->getScope(), (int) $app['id'], (int) $userId);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
@@ -136,11 +136,6 @@ class Authorize
         $state = $request->getState();
         if ($request->getAllow()) {
             if ($request->getResponseType() == 'token') {
-                // check whether implicit grant is allowed
-                if ($this->config['fusio_grant_implicit'] !== true) {
-                    throw new StatusCode\BadRequestException('Token response type is not supported');
-                }
-
                 // redirect uri is required for token types
                 if (!$redirectUri instanceof Uri) {
                     throw new StatusCode\BadRequestException('Redirect uri is required');
@@ -152,7 +147,7 @@ class Authorize
                     $userId,
                     $scopes,
                     isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                    new \DateInterval($this->config->get('fusio_expire_implicit'))
+                    new \DateInterval($this->config->get('fusio_expire_token'))
                 );
 
                 $parameters = $accessToken->getProperties();

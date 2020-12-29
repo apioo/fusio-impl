@@ -1,0 +1,96 @@
+{
+  "status": 1,
+  "path": "\/backend\/category\/$category_id<[0-9]+>",
+  "pathParameters": "BackendCategoryCategory_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Category_Get",
+      "security": {
+        "app": [
+          "backend.category"
+        ]
+      },
+      "tags": [
+        "backend.category"
+      ],
+      "responses": {
+        "200": "Backend_Model_Category"
+      }
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Category_Update",
+      "security": {
+        "app": [
+          "backend.category"
+        ]
+      },
+      "tags": [
+        "backend.category"
+      ],
+      "request": "Backend_Model_Category_Update",
+      "responses": {
+        "200": "Model_Message"
+      }
+    },
+    "DELETE": {
+      "operationId": "Backend_Action_Category_Delete",
+      "security": {
+        "app": [
+          "backend.category"
+        ]
+      },
+      "tags": [
+        "backend.category"
+      ],
+      "responses": {
+        "200": "Model_Message"
+      }
+    }
+  },
+  "definitions": {
+    "BackendCategoryCategory_idPath": {
+      "type": "object",
+      "properties": {
+        "category_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Model_Category": {
+      "$ref": "Category"
+    },
+    "Backend_Model_Category_Update": {
+      "$ref": "Category_Update"
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        }
+      }
+    },
+    "Category_Update": {
+      "$extends": "Category",
+      "type": "object"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Model_Message": {
+      "$ref": "Message"
+    }
+  }
+}

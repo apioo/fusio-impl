@@ -1172,42 +1172,6 @@
           }
         ]
       }
-    },
-    "\/consumer\/token": {
-      "post": {
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/OAuth2_Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "POST 400 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Error"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -1744,135 +1708,6 @@
       "Model_Message": {
         "$ref": "#\/components\/schemas\/Message"
       },
-      "OAuth2_Access_Token": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Authorization_Code": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "authorization_code",
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "redirect_uri": {
-            "type": "string"
-          },
-          "client_id": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "code"
-        ]
-      },
-      "OAuth2_Client_Credentials": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "client_credentials",
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type"
-        ]
-      },
-      "OAuth2_Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "error_description": {
-            "type": "string"
-          },
-          "error_uri": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Password": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "password",
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "username",
-          "password"
-        ]
-      },
-      "OAuth2_Refresh_Token": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "refresh_token",
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "refresh_token"
-        ]
-      },
-      "OAuth2_Request": {
-        "oneOf": [
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Password"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
-          }
-        ]
-      },
       "Plan": {
         "type": "object",
         "properties": {
@@ -2212,44 +2047,13 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          },
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          },
-          "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
-            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
-              "bar": "Bar access",
-              "default": "",
-              "foo": "Foo access"
-            }
-          }
-        }
-      },
-      "backend": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/backend\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
+              "authorization": "",
               "backend": "",
               "backend.account": "",
               "backend.action": "",
               "backend.app": "",
               "backend.audit": "",
+              "backend.category": "",
               "backend.config": "",
               "backend.connection": "",
               "backend.cronjob": "",
@@ -2259,24 +2063,15 @@
               "backend.marketplace": "",
               "backend.plan": "",
               "backend.rate": "",
+              "backend.role": "",
               "backend.route": "",
               "backend.schema": "",
               "backend.scope": "",
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
-              "backend.user": ""
-            }
-          }
-        }
-      },
-      "consumer": {
-        "type": "oauth2",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "http:\/\/127.0.0.1\/consumer\/token",
-            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
-            "scopes": {
+              "backend.user": "",
+              "bar": "Bar access",
               "consumer": "",
               "consumer.app": "",
               "consumer.event": "",
@@ -2285,7 +2080,97 @@
               "consumer.scope": "",
               "consumer.subscription": "",
               "consumer.transaction": "",
-              "consumer.user": ""
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
+            }
+          },
+          "clientCredentials": {
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "authorization": "",
+              "backend": "",
+              "backend.account": "",
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.category": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.role": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": "",
+              "bar": "Bar access",
+              "consumer": "",
+              "consumer.app": "",
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
+            "scopes": {
+              "authorization": "",
+              "backend": "",
+              "backend.account": "",
+              "backend.action": "",
+              "backend.app": "",
+              "backend.audit": "",
+              "backend.category": "",
+              "backend.config": "",
+              "backend.connection": "",
+              "backend.cronjob": "",
+              "backend.dashboard": "",
+              "backend.event": "",
+              "backend.log": "",
+              "backend.marketplace": "",
+              "backend.plan": "",
+              "backend.rate": "",
+              "backend.role": "",
+              "backend.route": "",
+              "backend.schema": "",
+              "backend.scope": "",
+              "backend.sdk": "",
+              "backend.statistic": "",
+              "backend.transaction": "",
+              "backend.user": "",
+              "bar": "Bar access",
+              "consumer": "",
+              "consumer.app": "",
+              "consumer.event": "",
+              "consumer.grant": "",
+              "consumer.plan": "",
+              "consumer.scope": "",
+              "consumer.subscription": "",
+              "consumer.transaction": "",
+              "consumer.user": "",
+              "default": "",
+              "foo": "Foo access",
+              "system": ""
             }
           }
         }

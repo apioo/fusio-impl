@@ -31,6 +31,4 @@ namespace Fusio\Impl\Authorization;
 class Authorization
 {
     const APP = 'app';
-    const BACKEND = 'backend';
-    const CONSUMER = 'consumer';
 }

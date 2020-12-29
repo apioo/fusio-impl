@@ -115,6 +115,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_category')) {
             $categoryTable = $schema->createTable('fusio_category');
             $categoryTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $categoryTable->addColumn('status', 'integer');
             $categoryTable->addColumn('name', 'string', ['length' => 64]);
             $categoryTable->setPrimaryKey(['id']);
             $categoryTable->addUniqueIndex(['name']);
@@ -324,6 +325,24 @@ final class Version20200905081453 extends AbstractMigration
             $rateAllocationTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_role')) {
+            $roleTable = $schema->createTable('fusio_role');
+            $roleTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $roleTable->addColumn('category_id', 'integer');
+            $roleTable->addColumn('status', 'integer');
+            $roleTable->addColumn('name', 'string');
+            $roleTable->setPrimaryKey(['id']);
+        }
+
+        if (!$schema->hasTable('fusio_role_scope')) {
+            $roleScopeTable = $schema->createTable('fusio_role_scope');
+            $roleScopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $roleScopeTable->addColumn('role_id', 'integer');
+            $roleScopeTable->addColumn('scope_id', 'integer');
+            $roleScopeTable->setPrimaryKey(['id']);
+            $roleScopeTable->addUniqueIndex(['role_id', 'scope_id']);
+        }
+
         if (!$schema->hasTable('fusio_routes')) {
             $routesTable = $schema->createTable('fusio_routes');
             $routesTable->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -417,6 +436,7 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_user')) {
             $userTable = $schema->createTable('fusio_user');
             $userTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $userTable->addColumn('role_id', 'integer');
             $userTable->addColumn('provider', 'integer', ['default' => ProviderInterface::PROVIDER_SYSTEM]);
             $userTable->addColumn('status', 'integer');
             $userTable->addColumn('remote_id', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
@@ -506,6 +526,15 @@ final class Version20200905081453 extends AbstractMigration
             $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_app'), ['app_id'], ['id'], [], 'rate_allocation_app_id');
         }
 
+        if (isset($roleTable)) {
+            $roleTable->addForeignKeyConstraint($schema->getTable('fusio_category'), ['category_id'], ['id'], [], 'role_category_id');
+        }
+
+        if (isset($roleScopeTable)) {
+            $roleScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'role_scope_scope_id');
+            $roleScopeTable->addForeignKeyConstraint($schema->getTable('fusio_role'), ['role_id'], ['id'], [], 'role_scope_role_id');
+        }
+
         if (isset($routesMethodTable)) {
             $routesMethodTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'routes_method_route_id');
         }
@@ -559,6 +588,8 @@ final class Version20200905081453 extends AbstractMigration
         $schema->dropTable('fusio_provider');
         $schema->dropTable('fusio_rate');
         $schema->dropTable('fusio_rate_allocation');
+        $schema->dropTable('fusio_role');
+        $schema->dropTable('fusio_role_scope');
         $schema->dropTable('fusio_routes');
         $schema->dropTable('fusio_routes_method');
         $schema->dropTable('fusio_routes_response');

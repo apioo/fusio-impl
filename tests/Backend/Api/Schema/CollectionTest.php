@@ -71,12 +71,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 139,
+            "id": 147,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 138,
+            "id": 146,
             "status": 1,
             "name": "Collection-Schema"
         },
@@ -108,7 +108,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 139,
+            "id": 147,
             "status": 1,
             "name": "Entry-Schema"
         }
@@ -135,12 +135,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 139,
+            "id": 147,
             "status": 1,
             "name": "Entry-Schema"
         },
         {
-            "id": 138,
+            "id": 146,
             "status": 1,
             "name": "Collection-Schema"
         },

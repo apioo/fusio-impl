@@ -81,7 +81,7 @@ class Schema
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(Schema_Create $schema, UserContext $context)
+    public function create(int $categoryId, Schema_Create $schema, UserContext $context)
     {
         if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
             throw new StatusCode\BadRequestException('Invalid schema name');
@@ -97,10 +97,11 @@ class Schema
 
             // create schema
             $record = [
-                'status' => Table\Schema::STATUS_ACTIVE,
-                'name'   => $schema->getName(),
-                'source' => $this->parseSource($schema->getSource()),
-                'form'   => $this->parseForm($schema->getForm()),
+                'category_id' => $categoryId,
+                'status'      => Table\Schema::STATUS_ACTIVE,
+                'name'        => $schema->getName(),
+                'source'      => $this->parseSource($schema->getSource()),
+                'form'        => $this->parseForm($schema->getForm()),
             ];
 
             $this->schemaTable->create($record);

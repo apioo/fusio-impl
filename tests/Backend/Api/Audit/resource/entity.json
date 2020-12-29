@@ -1,7 +1,46 @@
 {
+  "status": 1,
+  "path": "\/backend\/audit\/$audit_id<[0-9]+>",
+  "pathParameters": "BackendAuditAudit_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Audit_Get",
+      "security": {
+        "app": [
+          "backend.audit"
+        ]
+      },
+      "tags": [
+        "backend.audit"
+      ],
+      "responses": {
+        "200": "Backend_Model_Audit"
+      }
+    }
+  },
   "definitions": {
     "App": {
+      "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "userId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "url": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
         "appKey": {
           "type": "string"
         },
@@ -12,82 +51,59 @@
           "format": "date-time",
           "type": "string"
         },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tokens": {
+          "type": "array",
+          "items": {
+            "$ref": "App_Token"
+          }
+        }
+      }
+    },
+    "App_Token": {
+      "type": "object",
+      "properties": {
         "id": {
           "type": "integer"
         },
-        "name": {
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
+        "token": {
           "type": "string"
         },
-        "parameters": {
+        "scope": {
           "type": "string"
         },
-        "scopes": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "tokens": {
-          "items": {
-            "$ref": "App_Token"
-          },
-          "type": "array"
-        },
-        "url": {
-          "type": "string"
-        },
-        "userId": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "App_Token": {
-      "properties": {
-        "date": {
-          "format": "date-time",
+        "ip": {
           "type": "string"
         },
         "expire": {
           "format": "date-time",
           "type": "string"
         },
-        "id": {
-          "type": "integer"
-        },
-        "ip": {
-          "type": "string"
-        },
-        "scope": {
-          "type": "string"
-        },
-        "token": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Audit": {
-      "properties": {
-        "app": {
-          "$ref": "App"
-        },
-        "content": {
-          "$ref": "Audit_Object"
-        },
         "date": {
           "format": "date-time",
           "type": "string"
+        }
+      }
+    },
+    "Audit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "app": {
+          "$ref": "App"
+        },
+        "user": {
+          "$ref": "User"
         },
         "event": {
           "type": "string"
-        },
-        "id": {
-          "type": "integer"
         },
         "ip": {
           "type": "string"
@@ -95,37 +111,66 @@
         "message": {
           "type": "string"
         },
-        "user": {
-          "$ref": "User"
+        "content": {
+          "$ref": "Audit_Object"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Audit_Object": {
+      "description": "A key value object containing the changes",
+      "type": "object",
       "additionalProperties": {
         "type": "any"
-      },
-      "description": "A key value object containing the changes",
-      "type": "object"
+      }
     },
     "BackendAuditAudit_idPath": {
+      "type": "object",
       "properties": {
         "audit_id": {
           "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Backend_Model_Audit": {
       "$ref": "Audit"
     },
     "User": {
+      "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "roleId": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$"
+        },
+        "email": {
+          "type": "string"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "apps": {
+          "type": "array",
           "items": {
             "$ref": "App"
-          },
-          "type": "array"
+          }
         },
         "attributes": {
           "$ref": "User_Attributes"
@@ -133,56 +178,14 @@
         "date": {
           "format": "date-time",
           "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "pattern": "^[a-zA-Z0-9\\-\\_\\.]{3,32}$",
-          "type": "string"
-        },
-        "points": {
-          "type": "integer"
-        },
-        "scopes": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "status": {
-          "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "User_Attributes": {
+      "type": "object",
       "additionalProperties": {
         "type": "string"
-      },
-      "type": "object"
+      }
     }
-  },
-  "methods": {
-    "GET": {
-      "operationId": "Backend_Action_Audit_Get",
-      "responses": {
-        "200": "Backend_Model_Audit"
-      },
-      "security": {
-        "app": [
-          "backend.audit"
-        ]
-      },
-      "tags": [
-        "backend.audit"
-      ]
-    }
-  },
-  "path": "/backend/audit/$audit_id<[0-9]+>",
-  "pathParameters": "BackendAuditAudit_idPath",
-  "status": 1
+  }
 }

@@ -50,24 +50,24 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class User
 {
     /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    private $scopeTable;
-
-    /**
      * @var \Fusio\Impl\Table\User
      */
     private $userTable;
 
     /**
-     * @var \Fusio\Impl\Table\App
+     * @var \Fusio\Impl\Table\Scope
      */
-    private $appTable;
+    private $scopeTable;
 
     /**
      * @var \Fusio\Impl\Table\User\Scope
      */
     private $userScopeTable;
+
+    /**
+     * @var \Fusio\Impl\Table\Role\Scope
+     */
+    private $roleScopeTable;
 
     /**
      * @var \Fusio\Impl\Service\Config
@@ -87,18 +87,18 @@ class User
     /**
      * @param \Fusio\Impl\Table\User $userTable
      * @param \Fusio\Impl\Table\Scope $scopeTable
-     * @param \Fusio\Impl\Table\App $appTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
+     * @param \Fusio\Impl\Table\Role\Scope $roleScopeTable
      * @param \Fusio\Impl\Service\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param array|null $userAttributes
      */
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\App $appTable, Table\User\Scope $userScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, array $userAttributes = null)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, array $userAttributes = null)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
-        $this->appTable        = $appTable;
         $this->userScopeTable  = $userScopeTable;
+        $this->roleScopeTable  = $roleScopeTable;
         $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
         $this->userAttributes  = $userAttributes;
@@ -110,10 +110,9 @@ class User
      *
      * @param string $username
      * @param string $password
-     * @param array $status
      * @return integer|null
      */
-    public function authenticateUser($username, $password, array $status)
+    public function authenticateUser($username, $password)
     {
         if (empty($password)) {
             return null;
@@ -128,38 +127,26 @@ class User
 
         $condition = new Condition();
         $condition->equals($column, $username);
-        $condition->in('status', $status);
+        $condition->equals('status', Table\User::STATUS_ACTIVE);
 
         $user = $this->userTable->getOneBy($condition);
+        if (empty($user)) {
+            return null;
+        }
 
-        if (!empty($user)) {
-            // we can authenticate only local users
-            if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
-                return null;
-            }
+        // we can authenticate only local users
+        if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
+            return null;
+        }
 
-            if ($user['status'] == Table\User::STATUS_DISABLED) {
-                throw new StatusCode\BadRequestException('The assigned account is disabled');
-            }
-
-            if ($user['status'] == Table\User::STATUS_DELETED) {
-                throw new StatusCode\BadRequestException('The assigned account is deleted');
-            }
-
-            // check password
-            if (password_verify($password, $user['password'])) {
-                return $user['id'];
-            } else {
-                $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
-            }
+        // check password
+        if (password_verify($password, $user['password'])) {
+            return (int) $user['id'];
+        } else {
+            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
         }
 
         return null;
-    }
-
-    public function assertPasswordComplexity($password)
-    {
-        Service\User\Validator::assertPassword($password, $this->configService->getValue('user_pw_length'));
     }
 
     public function create(User_Create $user, UserContext $context)
@@ -179,11 +166,16 @@ class User
         User\Validator::assertEmail($user->getEmail());
         User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
 
+        if ($user->getRoleId() === null) {
+            throw new StatusCode\BadRequestException('No role provided');
+        }
+
         try {
             $this->userTable->beginTransaction();
 
             // create user
             $record = [
+                'role_id'  => $user->getRoleId(),
                 'provider' => ProviderInterface::PROVIDER_SYSTEM,
                 'status'   => $user->getStatus(),
                 'name'     => $user->getName(),
@@ -199,7 +191,7 @@ class User
             $user->setId($userId);
 
             // add scopes
-            $this->insertScopes($userId, $user->getScopes());
+            $this->insertScopesByRole($userId, $user->getRoleId());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -238,10 +230,13 @@ class User
         try {
             $this->userTable->beginTransaction();
 
+            $roleId = (int) $this->configService->getValue('role_default');
+
             // create user
             $record = [
+                'role_id'   => $roleId,
                 'provider'  => $remote->getProvider(),
-                'status'    => Table\User::STATUS_CONSUMER,
+                'status'    => Table\User::STATUS_ACTIVE,
                 'remote_id' => $remote->getRemoteId(),
                 'name'      => $remote->getName(),
                 'email'     => $remote->getEmail(),
@@ -255,7 +250,7 @@ class User
             $userId = $this->userTable->getLastInsertId();
 
             // add scopes
-            $this->insertScopes($userId, $remote->getScopes());
+            $this->insertScopesByRole($userId, $roleId);
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -268,7 +263,6 @@ class User
         $user->setId($userId);
         $user->setName($remote->getName());
         $user->setEmail($remote->getEmail());
-        $user->setScopes($remote->getScopes());
 
         $this->eventDispatcher->dispatch(new CreatedEvent($user, $context));
 
@@ -280,6 +274,10 @@ class User
         $existing = $this->userTable->get($userId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find user');
+        }
+
+        if ($user->getRoleId() === null) {
+            $user->setRoleId((int) $existing['role_id']);
         }
 
         if ($user->getStatus() === null) {
@@ -299,10 +297,11 @@ class User
 
             // update user
             $record = [
-                'id'     => $existing['id'],
-                'status' => $user->getStatus(),
-                'name'   => $user->getName(),
-                'email'  => $user->getEmail(),
+                'id'      => $existing['id'],
+                'role_id' => $user->getRoleId(),
+                'status'  => $user->getStatus(),
+                'name'    => $user->getName(),
+                'email'   => $user->getEmail(),
             ];
 
             $this->userTable->update($record);
@@ -411,28 +410,22 @@ class User
         return Table\Scope::getNames($this->userScopeTable->getAvailableScopes($userId));
     }
 
-    /**
-     * Returns the default scopes which every new user gets automatically
-     * assigned
-     * 
-     * @return array
-     */
-    public function getDefaultScopes()
-    {
-        $scopes = $this->configService->getValue('scopes_default');
-
-        return array_filter(array_map('trim', Service\Scope::split($scopes)), function ($scope) {
-            // we filter out the backend scope since this would be a major
-            // security issue
-            return !empty($scope) && $scope != 'backend';
-        });
-    }
-
     protected function insertScopes(int $userId, array $scopes)
     {
-        if (!empty($scopes) && is_array($scopes)) {
-            $scopes = $this->scopeTable->getValidScopes($scopes);
+        $scopes = $this->scopeTable->getValidScopes($scopes);
 
+        foreach ($scopes as $scope) {
+            $this->userScopeTable->create(array(
+                'user_id'  => $userId,
+                'scope_id' => $scope['id'],
+            ));
+        }
+    }
+
+    protected function insertScopesByRole(int $userId, int $roleId)
+    {
+        $scopes = $this->roleScopeTable->getAvailableScopes($roleId);
+        if (!empty($scopes)) {
             foreach ($scopes as $scope) {
                 $this->userScopeTable->create(array(
                     'user_id'  => $userId,

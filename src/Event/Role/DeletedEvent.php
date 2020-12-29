@@ -19,22 +19,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Authorization;
+namespace Fusio\Impl\Event\Role;
 
-use PSX\Framework\Oauth2\TokenAbstract;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Event\EventAbstract;
+use PSX\Record\RecordInterface;
 
 /**
- * Token
+ * DeletedEvent
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Token extends TokenAbstract
+class DeletedEvent extends EventAbstract
 {
     /**
-     * @Inject("consumer_grant_type_factory")
-     * @var \PSX\Framework\Oauth2\GrantTypeFactory
+     * @var RecordInterface
      */
-    protected $grantTypeFactory;
+    private $existing;
+
+    /**
+     * @param RecordInterface $existing
+     * @param UserContext $context
+     */
+    public function __construct(RecordInterface $existing, UserContext $context)
+    {
+        parent::__construct($context);
+
+        $this->existing = $existing;
+    }
+
+    /**
+     * @return RecordInterface
+     */
+    public function getExisting(): RecordInterface
+    {
+        return $this->existing;
+    }
 }

@@ -33,16 +33,17 @@ use PSX\Sql\ViewAbstract;
  */
 class CountRequests extends ViewAbstract
 {
-    public function getView(Log\QueryFilter $filter)
+    public function getView(int $categoryId, Log\QueryFilter $filter)
     {
         $condition  = $filter->getCondition('log');
         $expression = $condition->getExpression($this->connection->getDatabasePlatform());
 
         $sql = 'SELECT COUNT(log.id) AS cnt
                   FROM fusio_log log
-                 WHERE ' . $expression;
+                 WHERE log.category_id = ?
+                   AND ' . $expression;
 
-        $row = $this->connection->fetchAssoc($sql, $condition->getValues());
+        $row = $this->connection->fetchAssoc($sql, array_merge([$categoryId], $condition->getValues()));
 
         return [
             'count' => (int) $row['cnt'],

@@ -23,7 +23,8 @@ namespace Fusio\Impl\Console\User;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\User_Create;
-use Fusio\Impl\Service\User as ServiceUser;
+use Fusio\Impl\Service;
+use Fusio\Impl\Table;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,13 +41,22 @@ use Symfony\Component\Console\Question\Question;
  */
 class AddCommand extends Command
 {
-    protected $userService;
+    /**
+     * @var Service\User 
+     */
+    private $userService;
 
-    public function __construct(ServiceUser $userService)
+    /**
+     * @var Service\Config 
+     */
+    private $configService;
+
+    public function __construct(Service\User $userService, Service\Config $configService)
     {
         parent::__construct();
 
-        $this->userService = $userService;
+        $this->userService   = $userService;
+        $this->configService = $configService;
     }
 
     protected function configure()
@@ -55,7 +65,7 @@ class AddCommand extends Command
             ->setName('user:add')
             ->setAliases(['adduser'])
             ->setDescription('Adds a new user account')
-            ->addOption('status', 's', InputOption::VALUE_OPTIONAL, 'Status of the account [0=Consumer, 1=Administrator]')
+            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Backend, 2=Consumer]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
@@ -65,17 +75,13 @@ class AddCommand extends Command
     {
         $helper = $this->getHelper('question');
 
-        // status
-        $status = $input->getOption('status');
-        if ($status === null) {
-            $question = new Question('Choose the status of the account [0=Consumer, 1=Administrator]: ');
-            $question->setValidator(function ($value) {
-                return ServiceUser\Validator::assertStatus($value);
-            });
-
-            $status = $helper->ask($input, $output, $question);
+        // role
+        $role = $input->getOption('role');
+        if ($role === null) {
+            $question = new Question('Choose the role of the account [1=Backend, 2=Consumer]: ');
+            $role = (int) $helper->ask($input, $output, $question);
         } else {
-            $status = ServiceUser\Validator::assertStatus($status);
+            $role = (int) $role;
         }
 
         // username
@@ -83,13 +89,13 @@ class AddCommand extends Command
         if ($name === null) {
             $question = new Question('Enter the username: ');
             $question->setValidator(function ($value) {
-                ServiceUser\Validator::assertName($value);
+                Service\User\Validator::assertName($value);
                 return $value;
             });
 
             $name = $helper->ask($input, $output, $question);
         } else {
-            ServiceUser\Validator::assertName($name);
+            Service\User\Validator::assertName($name);
         }
 
         // email
@@ -97,13 +103,13 @@ class AddCommand extends Command
         if ($email === null) {
             $question = new Question('Enter the email: ');
             $question->setValidator(function ($value) {
-                ServiceUser\Validator::assertEmail($value);
+                Service\User\Validator::assertEmail($value);
                 return $value;
             });
 
             $email = $helper->ask($input, $output, $question);
         } else {
-            ServiceUser\Validator::assertEmail($email);
+            Service\User\Validator::assertEmail($email);
         }
 
         // password
@@ -112,7 +118,7 @@ class AddCommand extends Command
             $question = new Question('Enter the password: ');
             $question->setHidden(true);
             $question->setValidator(function ($value) {
-                $this->userService->assertPasswordComplexity($value);
+                Service\User\Validator::assertPassword($value, $this->configService->getValue('user_pw_length'));
                 return $value;
             });
 
@@ -131,25 +137,16 @@ class AddCommand extends Command
 
             $helper->ask($input, $output, $question);
         } else {
-            $this->userService->assertPasswordComplexity($password);
-        }
-
-        // scopes
-        if ($status === 0) {
-            $scopes = $this->userService->getDefaultScopes();
-        } elseif ($status === 1) {
-            $scopes = ['backend', 'consumer', 'authorization'];
-        } else {
-            $scopes = [];
+            Service\User\Validator::assertPassword($password, $this->configService->getValue('user_pw_length'));
         }
 
         // create user
         $create = new User_Create();
-        $create->setStatus($status);
+        $create->setRoleId($role);
+        $create->setStatus(Table\User::STATUS_ACTIVE);
         $create->setName($name);
         $create->setEmail($email);
         $create->setPassword($password);
-        $create->setScopes($scopes);
 
         $this->userService->create($create, UserContext::newCommandContext());
 

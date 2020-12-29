@@ -91,7 +91,7 @@ class Action
         $this->eventDispatcher  = $eventDispatcher;
     }
 
-    public function create(Action_Create $action, UserContext $context)
+    public function create(int $categoryId, Action_Create $action, UserContext $context)
     {
         $this->assertSandboxAccess($action);
 
@@ -118,13 +118,14 @@ class Action
 
         // create action
         $record = [
-            'status' => Table\Action::STATUS_ACTIVE,
-            'name'   => $action->getName(),
-            'class'  => $class,
-            'async'  => $action->getAsync(),
-            'engine' => $engine,
-            'config' => self::serializeConfig($config),
-            'date'   => new \DateTime(),
+            'category_id' => $categoryId,
+            'status'      => Table\Action::STATUS_ACTIVE,
+            'name'        => $action->getName(),
+            'class'       => $class,
+            'async'       => $action->getAsync(),
+            'engine'      => $engine,
+            'config'      => self::serializeConfig($config),
+            'date'        => new \DateTime(),
         ];
 
         $this->actionTable->create($record);

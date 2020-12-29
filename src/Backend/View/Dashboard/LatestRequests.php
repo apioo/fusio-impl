@@ -32,7 +32,7 @@ use PSX\Sql\ViewAbstract;
  */
 class LatestRequests extends ViewAbstract
 {
-    public function getView()
+    public function getView(int $categoryId)
     {
         $sql = '  SELECT log.path,
                          log.ip,
@@ -44,7 +44,7 @@ class LatestRequests extends ViewAbstract
         $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery($sql, 6);
 
         $definition = [
-            'entry' => $this->doCollection($sql, ['category_id' => 1], [
+            'entry' => $this->doCollection($sql, ['category_id' => $categoryId], [
                 'path' => 'path',
                 'ip' => 'ip',
                 'date' => $this->fieldDateTime('date'),

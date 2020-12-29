@@ -72,21 +72,21 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 35,
+    "id": 37,
     "name": "bar",
     "description": "Bar access",
     "routes": [
         {
-            "id": 97,
-            "scopeId": 35,
-            "routeId": 109,
+            "id": 101,
+            "scopeId": 37,
+            "routeId": 111,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 95,
-            "scopeId": 35,
-            "routeId": 108,
+            "id": 99,
+            "scopeId": 37,
+            "routeId": 110,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
@@ -194,14 +194,12 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id')
             ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $this->id]);
 
-        $this->assertEquals(34, $row['id']);
+        $this->assertEmpty($row);
     }
 
     public function testDeleteAppScopeAssigned()
@@ -222,14 +220,12 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id')
             ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $this->id]);
 
-        $this->assertEquals(35, $row['id']);
+        $this->assertNotEmpty($row);
     }
 
     public function testDeleteUserScopeAssigned()
@@ -250,13 +246,11 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id')
             ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => $this->id]);
 
-        $this->assertEquals(35, $row['id']);
+        $this->assertNotEmpty($row);
     }
 }

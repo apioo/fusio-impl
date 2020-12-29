@@ -68,7 +68,7 @@ class FilterFactory extends PSXFilterFactory
 
         $result = $this->connection->fetchAll('SELECT id, name FROM fusio_category');
         foreach ($result as $row) {
-            $this->addFilter($row['name'], new Filter($row['name']));
+            $this->addFilter($row['name'], new Filter((int) $row['id']));
         }
 
         $this->loaded = true;

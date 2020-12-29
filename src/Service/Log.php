@@ -23,7 +23,6 @@ namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Impl\Framework\Loader\Context;
-use Fusio\Impl\Table;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
@@ -48,23 +47,16 @@ class Log
     private $connection;
 
     /**
-     * @var Table\Category
-     */
-    private $categoryTable;
-
-    /**
      * @var array
      */
     private $stack;
 
     /**
      * @param DBALConnection $connection
-     * @param Table\Category $categoryTable
      */
-    public function __construct(DBALConnection $connection, Table\Category $categoryTable)
+    public function __construct(DBALConnection $connection)
     {
         $this->connection = $connection;
-        $this->categoryTable = $categoryTable;
         $this->stack = [];
     }
 
@@ -84,7 +76,7 @@ class Log
         }
 
         $this->connection->insert('fusio_log', array(
-            'category_id' => $this->categoryTable->getCategoryIdForPath($path),
+            'category_id' => $context->getCategoryId(),
             'route_id'    => $context->getRouteId(),
             'app_id'      => $context->getAppId(),
             'user_id'     => $context->getUserId(),
