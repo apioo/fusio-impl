@@ -487,7 +487,7 @@ JSON;
     public function providerDebugStatus()
     {
         return [
-            //[true],
+            [true],
             [false],
         ];
     }
