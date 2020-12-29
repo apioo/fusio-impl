@@ -449,7 +449,7 @@ JSON;
 
     private function getExpireTimes($timestamps = true)
     {
-        $expireTime = strtotime('+1 hour');
+        $expireTime = strtotime('+2 days');
         $timeRange  = [$expireTime - 1, $expireTime];
 
         if (!$timestamps) {

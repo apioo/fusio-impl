@@ -79,14 +79,14 @@ class EntityTest extends ControllerDbTestCase
         {
             "id": 101,
             "scopeId": 37,
-            "routeId": 113,
+            "routeId": 111,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
             "id": 99,
             "scopeId": 37,
-            "routeId": 112,
+            "routeId": 110,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
