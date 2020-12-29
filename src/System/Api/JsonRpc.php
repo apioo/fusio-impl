@@ -69,7 +69,6 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
         $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
 
         $post = $builder->addMethod('POST');
-        $post->setSecurity(Authorization::BACKEND, ['backend']);
         $post->setDescription('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification');
         $post->setRequest(Passthru::class);
         $post->addResponse(200, Model\Rpc_Response_Success::class);
