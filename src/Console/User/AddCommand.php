@@ -65,7 +65,7 @@ class AddCommand extends Command
             ->setName('user:add')
             ->setAliases(['adduser'])
             ->setDescription('Adds a new user account')
-            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Backend, 2=Consumer]')
+            ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Administrator, 2=Backend, 3=Consumer]')
             ->addOption('username', 'u', InputOption::VALUE_OPTIONAL, 'The username')
             ->addOption('email', 'e', InputOption::VALUE_OPTIONAL, 'The email')
             ->addOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The password');
@@ -78,7 +78,7 @@ class AddCommand extends Command
         // role
         $role = $input->getOption('role');
         if ($role === null) {
-            $question = new Question('Choose the role of the account [1=Backend, 2=Consumer]: ');
+            $question = new Question('Choose the role of the account [1=Administrator, 2=Backend, 3=Consumer]: ');
             $role = (int) $helper->ask($input, $output, $question);
         } else {
             $role = (int) $role;
