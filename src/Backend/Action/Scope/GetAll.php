@@ -49,8 +49,13 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
+        $categoryId = (int) $request->get('categoryId');
+        if (empty($categoryId)) {
+            $categoryId = $context->getUser()->getCategoryId();
+        }
+
         return $this->table->getCollection(
-            (int) $request->get('categoryId'),
+            $categoryId,
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
             $request->get('search')
