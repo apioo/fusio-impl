@@ -60,6 +60,7 @@ class DataBag
             'fusio_plan_contract' => [],
             'fusio_plan_invoice' => [],
             'fusio_provider' => [],
+            'fusio_role' => [],
             'fusio_rate' => [],
             'fusio_routes' => [],
             'fusio_schema' => [],
@@ -81,6 +82,7 @@ class DataBag
             'fusio_user_grant' => [],
             'fusio_user_scope' => [],
             'fusio_user_attribute' => [],
+            'fusio_role_scope' => [],
         ];
     }
 
@@ -474,7 +476,7 @@ class DataBag
 
     public function addRoleScope(string $role, string $scope)
     {
-        $this->data['fusio_role_scope'][] = [
+        $this->data['fusio_role_scope'][$role . $scope] = [
             'role_id' => $this->getId('fusio_role', $role),
             'scope_id' => $this->getId('fusio_scope', $scope),
         ];

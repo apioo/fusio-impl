@@ -113,6 +113,13 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/scope\/categories",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/scope",
       "methods": [
         "ANY"

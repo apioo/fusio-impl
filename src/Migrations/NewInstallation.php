@@ -66,9 +66,10 @@ class NewInstallation
         $bag->addCategory('consumer');
         $bag->addCategory('system');
         $bag->addCategory('authorization');
+        $bag->addRole('default', 'Administrator');
         $bag->addRole('default', 'Backend');
         $bag->addRole('default', 'Consumer');
-        $bag->addUser('Backend', 'Administrator', 'admin@localhost.com', $password);
+        $bag->addUser('Administrator', 'Administrator', 'admin@localhost.com', $password);
         $bag->addApp('Administrator', 'Backend', 'https://www.fusio-project.org', $backendAppKey, $backendAppSecret);
         $bag->addApp('Administrator', 'Consumer', 'https://www.fusio-project.org', $consumerAppKey, $consumerAppSecret);
         $bag->addScope('backend', 'backend', 'Global access to the backend API');
@@ -99,7 +100,7 @@ class NewInstallation
         $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
-        $bag->addConfig('role_default', Table\Config::FORM_NUMBER, 2, 'Default role which a user gets assigned on registration');
+        $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
         $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
         $bag->addConfig('system_mailer', Table\Config::FORM_STRING, '', 'Optional a SMTP connection which is used as mailer');
         $bag->addConfig('system_dispatcher', Table\Config::FORM_STRING, '', 'Optional a HTTP or message queue connection which is used to dispatch events');
@@ -110,10 +111,13 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, 0);
-        $bag->addRoleScope('Backend', 'backend');
+        $bag->addRoleScope('Administrator', 'authorization');
+        $bag->addRoleScope('Administrator', 'backend');
+        $bag->addRoleScope('Administrator', 'consumer');
         $bag->addRoleScope('Backend', 'authorization');
-        $bag->addRoleScope('Consumer', 'consumer');
+        $bag->addRoleScope('Backend', 'backend');
         $bag->addRoleScope('Consumer', 'authorization');
+        $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
         $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
@@ -351,6 +355,9 @@ class NewInstallation
                 '/scope' => [
                     'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Backend\Model\Scope_Collection::class], Collection_Category_Query::class, 'backend.scope'),
                     'POST' => new Method(Backend\Action\Scope\Create::class, Backend\Model\Scope_Create::class, [201 => Message::class], null, 'backend.scope', 'fusio.scope.create'),
+                ],
+                '/scope/categories' => [
+                    'GET' => new Method(Backend\Action\Scope\GetCategories::class, null, [200 => Backend\Model\Scope_Categories::class], null, 'backend.scope'),
                 ],
                 '/scope/$scope_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Scope\Get::class, null, [200 => Backend\Model\Scope::class], null, 'backend.scope'),

@@ -45,6 +45,7 @@ trait Services
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('table_manager')->getTable(Table\User\Scope::class),
             $this->get('table_manager')->getTable(Table\Role\Scope::class),
+            $this->get('table_manager')->getTable(Table\Role::class),
             $this->get('config_service'),
             $this->get('event_dispatcher'),
             $this->get('config')->get('fusio_user_attributes')
@@ -549,7 +550,8 @@ trait Services
             $this->get('user_captcha_service'),
             $this->get('user_token_service'),
             $this->get('user_mailer_service'),
-            $this->get('config_service')
+            $this->get('config_service'),
+            $this->get('table_manager')->getTable(Table\Role::class)
         );
     }
 

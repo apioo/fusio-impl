@@ -68,13 +68,13 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 111,
+            "id": 112,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 110,
+            "id": 111,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -108,7 +108,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 111,
+            "id": 112,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -136,13 +136,13 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 111,
+            "id": 112,
             "status": 1,
             "path": "\/inspect\/:foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 110,
+            "id": 111,
             "status": 1,
             "path": "\/foo",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"

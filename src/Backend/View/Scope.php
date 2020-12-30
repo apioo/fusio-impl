@@ -84,4 +84,22 @@ class Scope extends ViewAbstract
 
         return $this->build($definition);
     }
+
+    public function getCategories()
+    {
+        $definition = [
+            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'getAll'], [0, 1024, 'name', Sql::SORT_ASC], [
+                'id' => $this->fieldInteger('id'),
+                'name' => 'name',
+                'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'getByCategory_id'], [new Reference('id'), null, 0, 1024, 'name', Sql::SORT_ASC], [
+                    'id' => $this->fieldInteger('id'),
+                    'name' => 'name',
+                    'description' => 'description',
+                ])
+            ]),
+        ];
+
+        return $this->build($definition);
+    }
+
 }

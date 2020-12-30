@@ -64,7 +64,7 @@ class AccountTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "id": 4,
-    "roleId": 1,
+    "roleId": 2,
     "provider": 1,
     "status": 1,
     "name": "Developer",

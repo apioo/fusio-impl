@@ -63,7 +63,7 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -71,10 +71,16 @@ class CollectionTest extends ControllerDbTestCase
             "id": 1,
             "categoryId": 1,
             "status": 1,
-            "name": "Backend"
+            "name": "Administrator"
         },
         {
             "id": 2,
+            "categoryId": 1,
+            "status": 1,
+            "name": "Backend"
+        },
+        {
+            "id": 3,
             "categoryId": 1,
             "status": 1,
             "name": "Consumer"
@@ -102,7 +108,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 1,
+            "id": 2,
             "categoryId": 1,
             "status": 1,
             "name": "Backend"
@@ -125,7 +131,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 2,
+    "totalResults": 3,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -133,10 +139,16 @@ JSON;
             "id": 1,
             "categoryId": 1,
             "status": 1,
-            "name": "Backend"
+            "name": "Administrator"
         },
         {
             "id": 2,
+            "categoryId": 1,
+            "status": 1,
+            "name": "Backend"
+        },
+        {
+            "id": 3,
             "categoryId": 1,
             "status": 1,
             "name": "Consumer"

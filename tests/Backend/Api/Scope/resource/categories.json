@@ -1,0 +1,83 @@
+{
+  "status": 1,
+  "path": "\/backend\/scope\/categories",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Scope_GetCategories",
+      "security": {
+        "app": [
+          "backend.scope"
+        ]
+      },
+      "tags": [
+        "backend.scope"
+      ],
+      "responses": {
+        "200": "Backend_Model_Scope_Collection"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Model_Scope_Collection": {
+      "$ref": "Scope_Collection"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Scope_Route"
+          }
+        }
+      }
+    },
+    "Scope_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Scope"
+      }
+    },
+    "Scope_Route": {
+      "type": "object",
+      "properties": {
+        "routeId": {
+          "type": "integer"
+        },
+        "allow": {
+          "type": "boolean"
+        },
+        "methods": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -56,7 +56,8 @@ class RegisterTest extends ControllerDbTestCase
             $this->newCaptchaService(true),
             Environment::getService('user_token_service'),
             $this->newMailer(true),
-            $this->newConfig('private_key', true)
+            $this->newConfig('private_key', true),
+            Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
         $user = new User_Register();
@@ -88,7 +89,8 @@ class RegisterTest extends ControllerDbTestCase
             $this->newCaptchaService(true),
             Environment::getService('user_token_service'),
             $this->newMailer(false),
-            $this->newConfig('private_key', false)
+            $this->newConfig('private_key', false),
+            Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
         $user = new User_Register();
@@ -120,7 +122,8 @@ class RegisterTest extends ControllerDbTestCase
             $this->newCaptchaService(true),
             Environment::getService('user_token_service'),
             $this->newMailer(true),
-            $this->newConfig('', true)
+            $this->newConfig('', true),
+            Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
         $user = new User_Register();
@@ -154,7 +157,8 @@ class RegisterTest extends ControllerDbTestCase
             $this->newCaptchaService(false),
             Environment::getService('user_token_service'),
             $this->newMailer(false),
-            $this->newConfig('private_key', true)
+            $this->newConfig('private_key', true),
+            Environment::getService('table_manager')->getTable(Table\Role::class)
         );
 
         $user = new User_Register();

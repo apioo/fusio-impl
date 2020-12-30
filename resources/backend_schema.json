@@ -1534,6 +1534,48 @@
     "Scope_Update": {
       "$extends": "Scope"
     },
+    "Scope_Categories": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "Scope_Category"
+          }
+        }
+      }
+    },
+    "Scope_Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "$ref": "Scope_Category_Scope"
+          }
+        }
+      }
+    },
+    "Scope_Category_Scope": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
     "Statistic_Chart_Data": {
       "type": "object",
       "additionalProperties": true

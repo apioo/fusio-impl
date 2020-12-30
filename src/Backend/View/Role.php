@@ -75,7 +75,7 @@ class Role extends ViewAbstract
             'categoryId' => $this->fieldInteger('category_id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
-            'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
+            'scopes' => $this->doColumn([$this->getTable(Table\Role\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
         ]);
 
         return $this->build($definition);

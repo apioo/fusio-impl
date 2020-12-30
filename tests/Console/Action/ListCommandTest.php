@@ -55,10 +55,10 @@ class ListCommandTest extends ControllerDbTestCase
 +-----+----------------------+
 | ID  | Name                 |
 +-----+----------------------+
-| 174 | Inspect-Action       |
-| 173 | Sql-Insert           |
-| 172 | Sql-Select-All       |
-| 171 | Util-Static-Response |
+| 175 | Inspect-Action       |
+| 174 | Sql-Insert           |
+| 173 | Sql-Select-All       |
+| 172 | Util-Static-Response |
 +-----+----------------------+
 
 TEXT;

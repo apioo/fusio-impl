@@ -385,10 +385,10 @@ JSON;
         },
         {
             "id": 22,
-            "type": 3,
+            "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
-            "value": "2"
+            "value": "Consumer"
         },
         {
             "id": 25,

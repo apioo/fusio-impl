@@ -26,6 +26,8 @@ use Fusio\Impl\Backend\Model\User_Create;
 use Fusio\Impl\Consumer\Model\User_Register;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
+use PSX\Sql\Condition;
 
 /**
  * Register
@@ -60,6 +62,10 @@ class Register
      * @var \Fusio\Impl\Service\Config
      */
     private $configService;
+    /**
+     * @var Table\Role
+     */
+    private $roleTable;
 
     /**
      * @param \Fusio\Impl\Service\User $userService
@@ -67,14 +73,16 @@ class Register
      * @param \Fusio\Impl\Service\User\Captcha $captchaService
      * @param \Fusio\Impl\Service\User\Token $tokenService
      * @param \Fusio\Impl\Service\User\Mailer $mailerService
+     * @param \Fusio\Impl\Table\Role $roleTable
      */
-    public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Service\Config $configService)
+    public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Service\Config $configService, Table\Role $roleTable)
     {
         $this->userService    = $userService;
         $this->captchaService = $captchaService;
         $this->tokenService   = $tokenService;
         $this->mailerService  = $mailerService;
         $this->configService  = $configService;
+        $this->roleTable      = $roleTable;
     }
 
     public function register(User_Register $register)
@@ -88,8 +96,15 @@ class Register
             $status = Table\User::STATUS_ACTIVE;
         }
 
+        $condition = new Condition();
+        $condition->equals('name', $this->configService->getValue('role_default'));
+        $role = $this->roleTable->getOneBy($condition);
+        if (empty($role)) {
+            throw new StatusCode\InternalServerErrorException('Invalid default role configured');
+        }
+
         $user = new User_Create();
-        $user->setRoleId((int) $this->configService->getValue('role_default'));
+        $user->setRoleId((int) $role['id']);
         $user->setStatus($status);
         $user->setName($register->getName());
         $user->setEmail($register->getEmail());

@@ -71,7 +71,7 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 4,
-            "roleId": 1,
+            "roleId": 2,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -80,7 +80,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 3,
-            "roleId": 2,
+            "roleId": 3,
             "provider": 1,
             "status": 2,
             "name": "Disabled",
@@ -89,7 +89,7 @@ class CollectionTest extends ControllerDbTestCase
         },
         {
             "id": 2,
-            "roleId": 2,
+            "roleId": 3,
             "provider": 1,
             "status": 1,
             "name": "Consumer",
@@ -131,7 +131,7 @@ JSON;
     "entry": [
         {
             "id": 4,
-            "roleId": 1,
+            "roleId": 2,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -164,7 +164,7 @@ JSON;
     "entry": [
         {
             "id": 4,
-            "roleId": 1,
+            "roleId": 2,
             "provider": 1,
             "status": 1,
             "name": "Developer",
@@ -173,7 +173,7 @@ JSON;
         },
         {
             "id": 3,
-            "roleId": 2,
+            "roleId": 3,
             "provider": 1,
             "status": 2,
             "name": "Disabled",
@@ -182,7 +182,7 @@ JSON;
         },
         {
             "id": 2,
-            "roleId": 2,
+            "roleId": 3,
             "provider": 1,
             "status": 1,
             "name": "Consumer",
@@ -257,7 +257,7 @@ JSON;
 
         $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
 
-        $this->assertEquals(24, count($routes));
+        $this->assertEquals(33, count($routes));
     }
 
     public function testPostNameExists()

@@ -662,6 +662,33 @@
         }
       ]
     },
+    "\/backend\/scope\/categories": {
+      "get": {
+        "tags": [
+          "backend.scope"
+        ],
+        "operationId": "Backend_Action_Scope_GetCategories",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.scope"
+            ]
+          }
+        ]
+      }
+    },
     "\/backend\/scope": {
       "get": {
         "tags": [

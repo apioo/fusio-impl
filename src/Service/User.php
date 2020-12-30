@@ -70,6 +70,11 @@ class User
     private $roleScopeTable;
 
     /**
+     * @var \Fusio\Impl\Table\Role
+     */
+    private $roleTable;
+
+    /**
      * @var \Fusio\Impl\Service\Config
      */
     private $configService;
@@ -89,16 +94,18 @@ class User
      * @param \Fusio\Impl\Table\Scope $scopeTable
      * @param \Fusio\Impl\Table\User\Scope $userScopeTable
      * @param \Fusio\Impl\Table\Role\Scope $roleScopeTable
+     * @param \Fusio\Impl\Table\Role $roleTable
      * @param \Fusio\Impl\Service\Config $configService
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param array|null $userAttributes
      */
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, array $userAttributes = null)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, array $userAttributes = null)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
         $this->userScopeTable  = $userScopeTable;
         $this->roleScopeTable  = $roleScopeTable;
+        $this->roleTable       = $roleTable;
         $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
         $this->userAttributes  = $userAttributes;
@@ -230,7 +237,14 @@ class User
         try {
             $this->userTable->beginTransaction();
 
-            $roleId = (int) $this->configService->getValue('role_default');
+            $condition = new Condition();
+            $condition->equals('name', $this->configService->getValue('role_default'));
+            $role = $this->roleTable->getOneBy($condition);
+            if (empty($role)) {
+                throw new StatusCode\InternalServerErrorException('Invalid default role configured');
+            }
+
+            $roleId = (int) $role['id'];
 
             // create user
             $record = [
