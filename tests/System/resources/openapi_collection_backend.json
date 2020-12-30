@@ -674,7 +674,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Categories"
                 }
               }
             }
@@ -4885,6 +4885,9 @@
       "Backend_Model_Scope": {
         "$ref": "#\/components\/schemas\/Scope"
       },
+      "Backend_Model_Scope_Categories": {
+        "$ref": "#\/components\/schemas\/Scope_Categories"
+      },
       "Backend_Model_Scope_Collection": {
         "$ref": "#\/components\/schemas\/Scope_Collection"
       },
@@ -6326,6 +6329,48 @@
             "items": {
               "$ref": "#\/components\/schemas\/Scope_Route"
             }
+          }
+        }
+      },
+      "Scope_Categories": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope_Category"
+            }
+          }
+        }
+      },
+      "Scope_Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/Scope_Category_Scope"
+            }
+          }
+        }
+      },
+      "Scope_Category_Scope": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
           }
         }
       },

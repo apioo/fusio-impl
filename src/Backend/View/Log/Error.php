@@ -64,8 +64,18 @@ class Error extends ViewAbstract
             $builder->setParameters($condition->getValues());
         }
 
+        $countBuilder = $this->connection->createQueryBuilder()
+            ->select(['COUNT(*) AS cnt'])
+            ->from('fusio_log_error', 'error')
+            ->innerJoin('error', 'fusio_log', 'log', 'error.log_id = log.id');
+
+        if ($condition->hasCondition()) {
+            $countBuilder->where($condition->getExpression($this->connection->getDatabasePlatform()));
+            $countBuilder->setParameters($condition->getValues());
+        }
+
         $definition = [
-            'totalResults' => $this->getTable(Table\Log\Error::class)->getCount($condition),
+            'totalResults' => $this->doValue($countBuilder->getSQL(), $countBuilder->getParameters(), $this->fieldInteger('cnt')),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [

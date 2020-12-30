@@ -13,68 +13,52 @@
         "backend.scope"
       ],
       "responses": {
-        "200": "Backend_Model_Scope_Collection"
+        "200": "Backend_Model_Scope_Categories"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Scope_Collection": {
-      "$ref": "Scope_Collection"
+    "Backend_Model_Scope_Categories": {
+      "$ref": "Scope_Categories"
     },
-    "Collection": {
+    "Scope_Categories": {
       "type": "object",
       "properties": {
-        "totalResults": {
-          "type": "integer"
-        },
-        "startIndex": {
-          "type": "integer"
-        },
-        "entry": {
+        "categories": {
           "type": "array",
           "items": {
-            "$generic": "T"
+            "$ref": "Scope_Category"
           }
         }
       }
     },
-    "Scope": {
+    "Scope_Category": {
       "type": "object",
       "properties": {
         "id": {
           "type": "integer"
         },
         "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
-        },
-        "description": {
           "type": "string"
         },
-        "routes": {
+        "scopes": {
           "type": "array",
           "items": {
-            "$ref": "Scope_Route"
+            "$ref": "Scope_Category_Scope"
           }
         }
       }
     },
-    "Scope_Collection": {
-      "$ref": "Collection",
-      "$template": {
-        "T": "Scope"
-      }
-    },
-    "Scope_Route": {
+    "Scope_Category_Scope": {
       "type": "object",
       "properties": {
-        "routeId": {
+        "id": {
           "type": "integer"
         },
-        "allow": {
-          "type": "boolean"
+        "name": {
+          "type": "string"
         },
-        "methods": {
+        "description": {
           "type": "string"
         }
       }
