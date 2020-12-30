@@ -34,7 +34,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Error extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -44,7 +44,8 @@ class Error extends ViewAbstract
             $count = 16;
         }
 
-        $condition  = new Condition();
+        $condition = new Condition();
+        $condition->equals('log.category_id', $categoryId ?: 1);
 
         if (!empty($search)) {
             $condition->like('message', '%' . $search . '%');
