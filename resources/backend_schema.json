@@ -57,8 +57,7 @@
     "Action_Create": {
       "$extends": "Action",
       "required": [
-        "name",
-        "config"
+        "name"
       ]
     },
     "Action_Update": {

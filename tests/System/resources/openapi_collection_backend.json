@@ -4090,8 +4090,7 @@
           {
             "type": "object",
             "required": [
-              "name",
-              "config"
+              "name"
             ]
           }
         ]

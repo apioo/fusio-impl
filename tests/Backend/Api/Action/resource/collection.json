@@ -77,8 +77,7 @@
       "$extends": "Action",
       "type": "object",
       "required": [
-        "name",
-        "config"
+        "name"
       ]
     },
     "Backend_Model_Action_Collection": {
