@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Config extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, $search = null)
+    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -43,6 +43,14 @@ class Config extends ViewAbstract
 
         if (empty($count) || $count < 1 || $count > 1024) {
             $count = 16;
+        }
+
+        if ($sortBy === null) {
+            $sortBy = 'name';
+        }
+
+        if ($sortOrder === null) {
+            $sortOrder = Sql::SORT_ASC;
         }
 
         $condition = new Condition();
@@ -55,7 +63,7 @@ class Config extends ViewAbstract
             'totalResults' => $this->getTable(Table\Config::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'getAll'], [$startIndex, $count, 'name', Sql::SORT_ASC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'type' => $this->fieldInteger('type'),
                 'name' => 'name',

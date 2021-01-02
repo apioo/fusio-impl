@@ -36,7 +36,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Cronjob extends ViewAbstract
 {
-    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null)
+    public function getCollection(int $categoryId, int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -44,6 +44,14 @@ class Cronjob extends ViewAbstract
 
         if (empty($count) || $count < 1 || $count > 1024) {
             $count = 16;
+        }
+
+        if ($sortBy === null) {
+            $sortBy = 'id';
+        }
+
+        if ($sortOrder === null) {
+            $sortOrder = Sql::SORT_DESC;
         }
 
         $condition = new Condition();
@@ -58,7 +66,7 @@ class Cronjob extends ViewAbstract
             'totalResults' => $this->getTable(Table\Cronjob::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',

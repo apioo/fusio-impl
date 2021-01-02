@@ -58,7 +58,9 @@ class GetAll extends ActionAbstract
             $categoryId,
             (int) $request->get('startIndex'),
             (int) $request->get('count'),
-            $request->get('search')
+            $request->get('search'),
+            $request->get('sortBy'),
+            $request->get('sortOrder')
         );
     }
 }
