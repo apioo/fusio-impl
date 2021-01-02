@@ -113,11 +113,11 @@ class Connection extends ViewAbstract
                             }
                         }
                     }
+
+                    return (object) $config;
                 } else {
-                    $config = new \stdClass();
+                    return new \stdClass();
                 }
-                
-                return $config;
             }),
         ]);
 
