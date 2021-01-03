@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\User;
+namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Backend\Model\User_Create;
@@ -39,7 +39,7 @@ use Symfony\Component\Console\Question\Question;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class AddCommand extends Command
+class UserAddCommand extends Command
 {
     /**
      * @var Service\User 
@@ -62,7 +62,7 @@ class AddCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('user:add')
+            ->setName('system:user_add')
             ->setAliases(['adduser'])
             ->setDescription('Adds a new user account')
             ->addOption('role', 'r', InputOption::VALUE_OPTIONAL, 'Role of the account [1=Administrator, 2=Backend, 3=Consumer]')

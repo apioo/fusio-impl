@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Push;
+namespace Fusio\Impl\Console\System;
 
 use Fusio\Engine\Push\ProviderInterface;
 use Fusio\Impl\Provider\ProviderFactory;
@@ -64,7 +64,8 @@ class PushCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('push')
+            ->setName('system:push')
+            ->setAliases(['push'])
             ->setDescription('Pushes this Fusio instance to a cloud provider')
             ->addArgument('provider', InputArgument::REQUIRED, 'Name of the provider')
             ->addArgument('baseDir', InputArgument::OPTIONAL, 'Path to the Fusio directory');

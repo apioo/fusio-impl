@@ -19,71 +19,49 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\User;
+namespace Fusio\Impl\Console\System;
 
-use Fusio\Impl\Backend\View;
+use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ListCommand
+ * CronjobExecuteCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ListCommand extends Command
+class CronjobExecuteCommand extends Command
 {
     /**
-     * @var \Fusio\Impl\Backend\View\User
+     * @var \Fusio\Impl\Service\Cronjob
      */
-    protected $userView;
+    protected $cronjobService;
 
-    /**
-     * @param \Fusio\Impl\Backend\View\User $userView
-     */
-    public function __construct(View\User $userView)
+    public function __construct(Service\Cronjob $cronjobService)
     {
         parent::__construct();
 
-        $this->userView = $userView;
+        $this->cronjobService = $cronjobService;
     }
 
     protected function configure()
     {
         $this
-            ->setName('user:list')
-            ->setDescription('Lists available user')
-            ->addOption('startIndex', 'i', InputOption::VALUE_OPTIONAL, 'Start index of the list')
-            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Count of the list')
-            ->addArgument('search', InputArgument::OPTIONAL, 'Search value');
+            ->setName('system:cronjob_execute')
+            ->setAliases(['cronjob'])
+            ->setDescription('Executes a specific cronjob')
+            ->addArgument('cronjob', InputArgument::REQUIRED, 'The cronjob name to execute');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $result = $this->userView->getCollection(
-            (int) $input->getOption('startIndex'),
-            (int) $input->getOption('count'),
-            $input->getArgument('search')
-        );
+        $this->cronjobService->execute($input->getArgument('cronjob'));
 
-        $rows   = [];
-        $entry  = $result->entry ?? [];
-
-        foreach ($entry as $row) {
-            $rows[] = [$row->id, $row->name];
-        }
-
-        $table = new Table($output);
-        $table
-            ->setHeaders(['ID', 'Name'])
-            ->setRows($rows);
-
-        $table->render();
+        $output->writeln('Execution successful');
 
         return 0;
     }

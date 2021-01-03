@@ -1,9 +1,0 @@
-app:
-  Bar-App:
-    userId: 1
-    status: 1
-    url: "http://foo.com"
-    parameters: "foo=bar"
-    scopes:
-      - foo
-      - authorization
