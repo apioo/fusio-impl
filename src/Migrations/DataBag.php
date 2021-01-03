@@ -281,9 +281,10 @@ class DataBag
         ];
     }
 
-    public function addCronjob(string $name, string $cron, string $action)
+    public function addCronjob(string $category, string $name, string $cron, string $action)
     {
         $this->data['fusio_cronjob'][$name] = [
+            'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Cronjob::STATUS_ACTIVE,
             'name' => $name,
             'cron' => $cron,

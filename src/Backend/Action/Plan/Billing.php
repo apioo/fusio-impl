@@ -19,45 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Backend\Action\Plan;
 
-use Fusio\Impl\Service;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Plan;
 
 /**
- * ExportCommand
+ * Billing
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExportCommand extends Command
+class Billing extends ActionAbstract
 {
     /**
-     * @var \Fusio\Impl\Service\System\Export
+     * @var Plan\BillingRun
      */
-    protected $exportService;
+    private $billingRun;
 
-    public function __construct(Service\System\Export $exportService)
+    public function __construct(Plan\BillingRun $billingRun)
     {
-        parent::__construct();
-
-        $this->exportService = $exportService;
+        $this->billingRun = $billingRun;
     }
 
-    protected function configure()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $this
-            ->setName('system:export')
-            ->setDescription('Output all system data to a JSON structure');
-    }
+        $generator = $this->billingRun->run();
+        $count = 0;
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $output->writeln($this->exportService->export());
+        foreach ($generator as $invoiceId) {
+            $count++;
+        }
 
-        return 0;
+        return [
+            'success' => true,
+            'message' => 'Billing run successful executed',
+        ];
     }
 }

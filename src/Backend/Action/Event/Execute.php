@@ -19,48 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Action;
+namespace Fusio\Impl\Backend\Action\Event;
 
-use Fusio\Impl\Service\Action\Queue\Consumer;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Event;
 
 /**
- * QueueCommand
+ * Execute
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class QueueCommand extends Command
+class Execute extends ActionAbstract
 {
     /**
-     * @var Consumer
+     * @var Event\Executor
      */
-    protected $consumer;
+    private $executor;
 
-    /**
-     * @param Consumer $consumer
-     */
-    public function __construct(Consumer $consumer)
+    public function __construct(Event\Executor $executor)
     {
-        parent::__construct();
-
-        $this->consumer = $consumer;
+        $this->executor = $executor;
     }
 
-    protected function configure()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        $this
-            ->setName('action:queue')
-            ->setDescription('Executes pending async requests');
-    }
+        $this->executor->execute();
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->consumer->execute();
-
-        return 0;
+        return [
+            'success' => true,
+            'message' => 'Event successful executed',
+        ];
     }
 }

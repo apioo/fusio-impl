@@ -19,23 +19,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\Connection;
+namespace Fusio\Impl\Backend\Action\Action;
 
-use Fusio\Impl\Console\ClassCommandAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Action\Queue\Consumer;
 
 /**
- * ClassCommand
+ * Async
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ClassCommand extends ClassCommandAbstract
+class Async extends ActionAbstract
 {
-    protected function configure()
+    /**
+     * @var Consumer
+     */
+    private $consumer;
+
+    public function __construct(Consumer $consumer)
     {
-        $this
-            ->setName('connection:class')
-            ->setDescription('Lists available connection classes');
+        $this->consumer = $consumer;
+    }
+
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    {
+        $this->consumer->execute();
+
+        return [
+            'success' => true,
+            'message' => 'Consumer successful executed',
+        ];
     }
 }
