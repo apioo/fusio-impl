@@ -177,6 +177,7 @@ final class Version20200905081453 extends AbstractMigration
             $eventTable->addColumn('description', 'string', ['length' => 255]);
             $eventTable->addColumn('schema', 'string', ['notnull' => false]);
             $eventTable->setPrimaryKey(['id']);
+            $eventTable->addUniqueIndex(['name']);
         }
 
         if (!$schema->hasTable('fusio_event_response')) {
@@ -252,6 +253,7 @@ final class Version20200905081453 extends AbstractMigration
             $planTable->addColumn('points', 'integer');
             $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
             $planTable->setPrimaryKey(['id']);
+            $planTable->addUniqueIndex(['name']);
         }
 
         if (!$schema->hasTable('fusio_plan_contract')) {
@@ -312,6 +314,7 @@ final class Version20200905081453 extends AbstractMigration
             $rateTable->addColumn('rate_limit', 'integer');
             $rateTable->addColumn('timespan', 'string');
             $rateTable->setPrimaryKey(['id']);
+            $rateTable->addUniqueIndex(['name']);
         }
 
         if (!$schema->hasTable('fusio_rate_allocation')) {
@@ -332,6 +335,7 @@ final class Version20200905081453 extends AbstractMigration
             $roleTable->addColumn('status', 'integer');
             $roleTable->addColumn('name', 'string');
             $roleTable->setPrimaryKey(['id']);
+            $roleTable->addUniqueIndex(['name']);
         }
 
         if (!$schema->hasTable('fusio_role_scope')) {
@@ -353,6 +357,7 @@ final class Version20200905081453 extends AbstractMigration
             $routesTable->addColumn('path', 'string', ['length' => 255]);
             $routesTable->addColumn('controller', 'string', ['length' => 255]);
             $routesTable->setPrimaryKey(['id']);
+            $routesTable->addUniqueIndex(['path']);
             $routesTable->addIndex(['priority']);
         }
 
