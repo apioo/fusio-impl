@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\Adapter;
 
-use Fusio\Impl\Service;
-use PSX\Json\Parser;
+use Fusio\Impl\Provider\ProviderWriter;
 use stdClass;
 
 /**
@@ -36,32 +35,23 @@ use stdClass;
 class Installer
 {
     /**
-     * @var \Fusio\Impl\Service\System\Import
+     * @var ProviderWriter
      */
-    protected $importService;
+    private $providerWriter;
 
-    /**
-     * @param \Fusio\Impl\Service\System\Import $importService
-     */
-    public function __construct(Service\System\Import $importService)
+    public function __construct(ProviderWriter $providerWriter)
     {
-        $this->importService = $importService;
+        $this->providerWriter = $providerWriter;
     }
 
     /**
      * @param array $instructions
-     * @param string|null $basePath
-     * @return \Fusio\Impl\Service\System\Import\Result
      */
-    public function install(array $instructions, $basePath = null)
+    public function install(array $instructions)
     {
         $data = new stdClass();
 
         foreach ($instructions as $instruction) {
-            if ($instruction instanceof Instruction\Route && $basePath !== null) {
-                $instruction->setBasePath($basePath);
-            }
-
             $key   = $instruction->getKey();
             $value = $instruction->getPayload();
 
@@ -72,6 +62,29 @@ class Installer
             array_push($data->$key, $value);
         }
 
-        return $this->importService->import(Parser::encode($data));
+        $this->importProvider($data);
+    }
+
+    /**
+     * @param \stdClass $data
+     */
+    private function importProvider(stdClass $data)
+    {
+        $providerTypes  = $this->providerWriter->getAvailableTypes();
+        $providerConfig = [];
+        $newClasses     = [];
+
+        foreach ($providerTypes as $providerType) {
+            $name    = $providerType . 'Class';
+            $classes = isset($data->{$name}) ? $data->{$name} : null;
+            if (!empty($classes) && is_array($classes)) {
+                $classes    = array_filter($classes, 'class_exists');
+                $newClasses = array_merge($newClasses, $classes);
+
+                $providerConfig[$providerType] = $classes;
+            }
+        }
+
+        $this->providerWriter->write($providerConfig);
     }
 }

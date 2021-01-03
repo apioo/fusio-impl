@@ -24,6 +24,8 @@ namespace Fusio\Impl\Dependency;
 use Doctrine\DBAL;
 use Doctrine\DBAL\Schema\AbstractAsset;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Fusio\Cli\Deploy\EnvReplacer;
+use Fusio\Cli\Setup;
 use Fusio\Impl\Authorization;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Base;
@@ -263,27 +265,23 @@ class Container extends DefaultContainer
 
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
 
-        // fusio commands
-        $application->add(new Console\Action\AddCommand($this->get('action_service')));
-        $application->add(new Console\Action\ClassCommand($this->get('action_parser')));
-        $application->add(new Console\Action\DetailCommand($this->get('action_factory'), $this->get('action_repository'), $this->get('connection_repository')));
-        $application->add(new Console\Action\ExecuteCommand($this->get('action_executor_service'), $this->get('table_manager')->getTable(Table\Action::class)));
-        $application->add(new Console\Action\ListCommand($this->get('table_manager')->getTable(View\Action::class)));
-        $application->add(new Console\Action\QueueCommand($this->get('action_queue_consumer_service')));
+        // fusio cli
+        $transport = new Console\Transport($this->get('dispatch'));
+        $basePath = dirname($this->getParameter('config.file'));
+        $envReplacer = new EnvReplacer();
+        $envReplacer->addProperties('dir', function(){
+            $config = $this->get('config');
+            return [
+                'cache'  => $config->get('psx_path_cache'),
+                'src'    => $config->get('psx_path_src'),
+                'public' => $config->get('psx_path_public'),
+                'apps'   => $config->get('fusio_apps_dir') ?: $config->get('psx_path_public'),
+                'temp'   => sys_get_temp_dir(),
+            ];
+        });
+        Setup::appendCommands($application, $transport, $basePath, $envReplacer, $this->get('schema_parser_import_resolver'));
 
-        $application->add(new Console\App\AddCommand($this->get('app_service')));
-        $application->add(new Console\App\ListCommand($this->get('table_manager')->getTable(View\App::class)));
-
-        $application->add(new Console\Connection\AddCommand($this->get('connection_service')));
-        $application->add(new Console\Connection\ClassCommand($this->get('connection_parser')));
-        $application->add(new Console\Connection\DetailCommand($this->get('connection_factory'), $this->get('action_repository'), $this->get('connection_repository')));
-        $application->add(new Console\Connection\ListCommand($this->get('table_manager')->getTable(View\Connection::class)));
-
-        $application->add(new Console\Cronjob\ExecuteCommand($this->get('cronjob_service')));
-        $application->add(new Console\Cronjob\ListCommand($this->get('table_manager')->getTable(View\Cronjob::class)));
-
-        $application->add(new Console\Event\ExecuteCommand($this->get('event_executor_service')));
-
+        // internal commands
         $application->add(new Console\Marketplace\ListCommand($this->get('marketplace_repository_remote')));
         $application->add(new Console\Marketplace\InstallCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
         $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
@@ -297,27 +295,16 @@ class Container extends DefaultContainer
         $application->add(new Console\Migration\UpToDateCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Console\Migration\VersionCommand($this->get('connection'), $this->get('connector')));
 
-        $application->add(new Console\Plan\BillingRunCommand($this->get('plan_billing_run_service')));
-
-        $application->add(new Console\Push\PushCommand($this->get('provider_loader'), $this->get('container_autowire_resolver')));
-
-        $application->add(new Console\Schema\AddCommand($this->get('schema_service')));
-        $application->add(new Console\Schema\ExportCommand($this->get('schema_loader')));
-        $application->add(new Console\Schema\ListCommand($this->get('table_manager')->getTable(View\Schema::class)));
-
         $application->add(new Console\System\CheckCommand($this->get('connection')));
         $application->add(new Console\System\CleanCommand($this->get('connection')));
         $application->add(new Console\System\ClearCacheCommand($this->get('cache'), $this->get('engine_cache')));
-        $application->add(new Console\System\DeployCommand($this->get('system_deploy_service'), dirname($this->getParameter('config.file')), $this->get('connection'), $this->get('logger')));
-        $application->add(new Console\System\ExportCommand($this->get('system_export_service')));
-        $application->add(new Console\System\ImportCommand($this->get('system_import_service'), $this->get('connection'), $this->get('logger')));
+        $application->add(new Console\System\CronjobExecuteCommand($this->get('cronjob_service')));
         $application->add(new Console\System\LogRotateCommand($this->get('connection')));
-        $application->add(new Console\System\RegisterCommand($this->get('system_import_service'), $this->get('table_manager')->getTable(View\Connection::class), $this->get('connection')));
+        $application->add(new Console\System\PushCommand($this->get('provider_loader'), $this->get('container_autowire_resolver')));
+        $application->add(new Console\System\RegisterCommand($this->get('provider_writer')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_token_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
-
-        $application->add(new Console\User\AddCommand($this->get('user_service'), $this->get('config_service')));
-        $application->add(new Console\User\ListCommand($this->get('table_manager')->getTable(View\User::class)));
+        $application->add(new Console\System\UserAddCommand($this->get('user_service'), $this->get('config_service')));
 
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());

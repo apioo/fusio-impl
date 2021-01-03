@@ -48,34 +48,6 @@ class InstructionParser
             }
         }
 
-        // get connection
-        if (isset($definition->connection) && is_array($definition->connection)) {
-            foreach ($definition->connection as $connection) {
-                $instructions[] = new Instruction\Connection($connection);
-            }
-        }
-
-        // get schema
-        if (isset($definition->schema) && is_array($definition->schema)) {
-            foreach ($definition->schema as $schema) {
-                $instructions[] = new Instruction\Schema($schema);
-            }
-        }
-
-        // get action
-        if (isset($definition->action) && is_array($definition->action)) {
-            foreach ($definition->action as $action) {
-                $instructions[] = new Instruction\Action($action);
-            }
-        }
-
-        // get routes
-        if (isset($definition->routes) && is_array($definition->routes)) {
-            foreach ($definition->routes as $route) {
-                $instructions[] = new Instruction\Route($route);
-            }
-        }
-
         return $instructions;
     }
 }
