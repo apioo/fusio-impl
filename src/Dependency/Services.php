@@ -303,13 +303,6 @@ trait Services
         );
     }
 
-    public function getSystemWebServerService(): Service\System\WebServer
-    {
-        return new Service\System\WebServer(
-            $this->get('config')
-        );
-    }
-
     public function getSchemaService(): Service\Schema
     {
         return new Service\Schema(

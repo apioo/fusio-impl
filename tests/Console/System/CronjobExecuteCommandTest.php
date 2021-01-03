@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\Cronjob;
+namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * ExecuteCommandTest
+ * CronjobExecuteCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class ExecuteCommandTest extends ControllerDbTestCase
+class CronjobExecuteCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('cronjob:execute');
+        $command = Environment::getService('console')->find('cronjob');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -56,7 +56,7 @@ class ExecuteCommandTest extends ControllerDbTestCase
 
         $cronjob = $this->connection->fetchAssoc('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => 'Test-Cron']);
 
-        $this->assertEquals(1, $cronjob['id']);
+        $this->assertEquals(4, $cronjob['id']);
         $this->assertEquals(1, $cronjob['status']);
         $this->assertEquals('Test-Cron', $cronjob['name']);
         $this->assertEquals('*/30 * * * *', $cronjob['cron']);

@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Console\User;
+namespace Fusio\Impl\Tests\Console\System;
 
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\Environment;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * AddCommandTest
+ * UserAddCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class AddCommandTest extends ControllerDbTestCase
+class UserAddCommandTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,7 +42,7 @@ class AddCommandTest extends ControllerDbTestCase
 
     public function testCommand()
     {
-        $command = Environment::getService('console')->find('user:add');
+        $command = Environment::getService('console')->find('adduser');
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
