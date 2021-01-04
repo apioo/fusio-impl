@@ -12,9 +12,9 @@
       "tags": [
         "backend.action"
       ],
-      "queryParameters": "Model_Collection_Category_Query",
+      "queryParameters": "Collection_Category_Query",
       "responses": {
-        "200": "Backend_Model_Action_Collection"
+        "200": "Backend_Action_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.action"
       ],
-      "request": "Backend_Model_Action_Create",
+      "request": "Backend_Action_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
@@ -80,10 +80,10 @@
         "name"
       ]
     },
-    "Backend_Model_Action_Collection": {
+    "Backend_Action_Collection": {
       "$ref": "Action_Collection"
     },
-    "Backend_Model_Action_Create": {
+    "Backend_Action_Create": {
       "$ref": "Action_Create"
     },
     "Collection": {
@@ -136,12 +136,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Category_Query": {
-      "$ref": "Collection_Category_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

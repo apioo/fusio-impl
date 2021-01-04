@@ -14,7 +14,7 @@
         "backend.audit"
       ],
       "responses": {
-        "200": "Backend_Model_Audit"
+        "200": "Backend_Audit"
       }
     }
   },
@@ -135,7 +135,7 @@
         }
       }
     },
-    "Backend_Model_Audit": {
+    "Backend_Audit": {
       "$ref": "Audit"
     },
     "User": {
