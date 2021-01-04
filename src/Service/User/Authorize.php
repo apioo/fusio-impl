@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Consumer\Model\Authorize_Request;
+use Fusio\Model\Consumer\Authorize_Request;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;

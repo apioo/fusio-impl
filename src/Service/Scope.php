@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Scope_Create;
-use Fusio\Impl\Backend\Model\Scope_Route;
-use Fusio\Impl\Backend\Model\Scope_Update;
+use Fusio\Model\Backend\Scope_Create;
+use Fusio\Model\Backend\Scope_Route;
+use Fusio\Model\Backend\Scope_Update;
 use Fusio\Impl\Event\Scope\CreatedEvent;
 use Fusio\Impl\Event\Scope\DeletedEvent;
 use Fusio\Impl\Event\Scope\UpdatedEvent;

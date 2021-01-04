@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\User_Provider;
+use Fusio\Model\Consumer\User_Provider;
 use Fusio\Impl\Service\User\Provider as UserProvider;
 use PSX\Http\Exception as StatusCode;
 

@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Role_Create;
+use Fusio\Model\Backend\Role_Create;
 use Fusio\Impl\Service\Role;
 
 /**

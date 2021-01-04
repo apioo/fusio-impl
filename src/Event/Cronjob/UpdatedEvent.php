@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Cronjob;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Cronjob_Update;
+use Fusio\Model\Backend\Cronjob_Update;
 use Fusio\Impl\Event\EventAbstract;
 use PSX\Record\RecordInterface;
 

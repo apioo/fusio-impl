@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Schema_Update;
+use Fusio\Model\Backend\Schema_Update;
 use Fusio\Impl\Service\Schema;
 
 /**

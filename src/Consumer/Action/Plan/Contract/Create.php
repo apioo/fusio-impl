@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\Plan_Order_Request;
+use Fusio\Model\Consumer\Plan_Order_Request;
 use Fusio\Impl\Service\Plan\Order;
 
 /**

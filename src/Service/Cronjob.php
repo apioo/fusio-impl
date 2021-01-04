@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Action_Execute_Request;
-use Fusio\Impl\Backend\Model\Cronjob_Create;
-use Fusio\Impl\Backend\Model\Cronjob_Update;
+use Fusio\Model\Backend\Action_Execute_Request;
+use Fusio\Model\Backend\Cronjob_Create;
+use Fusio\Model\Backend\Cronjob_Update;
 use Fusio\Impl\Event\Cronjob\CreatedEvent;
 use Fusio\Impl\Event\Cronjob\DeletedEvent;
 use Fusio\Impl\Event\Cronjob\UpdatedEvent;

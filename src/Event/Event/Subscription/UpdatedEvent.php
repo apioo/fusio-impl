@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Event_Subscription_Update;
+use Fusio\Model\Backend\Event_Subscription_Update;
 use Fusio\Impl\Event\EventAbstract;
 use PSX\Record\RecordInterface;
 

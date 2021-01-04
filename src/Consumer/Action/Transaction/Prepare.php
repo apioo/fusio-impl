@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\App_Create;
-use Fusio\Impl\Consumer\Model\Transaction_Prepare_Request;
+use Fusio\Model\Consumer\App_Create;
+use Fusio\Model\Consumer\Transaction_Prepare_Request;
 use Fusio\Impl\Service\Transaction;
 use PSX\Http\Exception as StatusCode;
 

@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Schema_Create;
-use Fusio\Impl\Backend\Model\Schema_Form;
-use Fusio\Impl\Backend\Model\Schema_Update;
+use Fusio\Model\Backend\Schema_Create;
+use Fusio\Model\Backend\Schema_Form;
+use Fusio\Model\Backend\Schema_Update;
 use Fusio\Impl\Event\Schema\CreatedEvent;
 use Fusio\Impl\Event\Schema\DeletedEvent;
 use Fusio\Impl\Event\Schema\UpdatedEvent;

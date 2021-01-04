@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\User_Attributes;
-use Fusio\Impl\Backend\Model\User_Update;
-use Fusio\Impl\Consumer\Model\User_Account;
+use Fusio\Model\Backend\User_Attributes;
+use Fusio\Model\Backend\User_Update;
+use Fusio\Model\Consumer\User_Account;
 use Fusio\Impl\Service;
 
 /**

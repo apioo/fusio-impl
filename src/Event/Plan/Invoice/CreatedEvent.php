@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
+use Fusio\Model\Backend\Plan_Invoice_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**

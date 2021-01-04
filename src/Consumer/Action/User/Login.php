@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\User_Login;
+use Fusio\Model\Consumer\User_Login;
 use Fusio\Impl\Service\User\Login as UserLogin;
 use PSX\Http\Exception as StatusCode;
 use PSX\Oauth2\AccessToken;

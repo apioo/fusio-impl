@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Plan\Contract;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Contract_Update;
+use Fusio\Model\Backend\Plan_Contract_Update;
 use Fusio\Impl\Event\EventAbstract;
 use PSX\Record\RecordInterface;
 

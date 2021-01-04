@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Account_ChangePassword;
+use Fusio\Model\Backend\Account_ChangePassword;
 use Fusio\Impl\Event\EventAbstract;
 
 /**

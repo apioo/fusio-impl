@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\App_Create;
-use Fusio\Impl\Consumer\Model\App_Update;
+use Fusio\Model\Consumer\App_Create;
+use Fusio\Model\Consumer\App_Update;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
@@ -92,7 +92,7 @@ class App
 
         $appApproval = $this->configService->getValue('app_approval');
 
-        $backendApp = new \Fusio\Impl\Backend\Model\App_Create();
+        $backendApp = new \Fusio\Model\Backend\App_Create();
         $backendApp->setUserId($context->getUserId());
         $backendApp->setStatus($appApproval === false ? Table\App::STATUS_ACTIVE : Table\App::STATUS_PENDING);
         $backendApp->setName($app->getName());
@@ -122,7 +122,7 @@ class App
             throw new StatusCode\BadRequestException('Provide at least one valid scope for the app');
         }
 
-        $backendApp = new \Fusio\Impl\Backend\Model\App_Update();
+        $backendApp = new \Fusio\Model\Backend\App_Update();
         $backendApp->setName($app->getName());
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);

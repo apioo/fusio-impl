@@ -23,8 +23,8 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\App_Create;
-use Fusio\Impl\Backend\Model\App_Update;
+use Fusio\Model\Backend\App_Create;
+use Fusio\Model\Backend\App_Update;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;

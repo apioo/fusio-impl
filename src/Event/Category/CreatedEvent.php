@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Category;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Category_Create;
+use Fusio\Model\Backend\Category_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**

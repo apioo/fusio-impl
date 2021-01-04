@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
+use Fusio\Model\Backend\Plan_Invoice_Create;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

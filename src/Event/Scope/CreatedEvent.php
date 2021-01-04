@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Scope_Create;
+use Fusio\Model\Backend\Scope_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**

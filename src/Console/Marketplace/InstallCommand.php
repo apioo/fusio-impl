@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Console\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Marketplace_Install;
+use Fusio\Model\Backend\Marketplace_Install;
 use Fusio\Impl\Service;
 use PSX\Http\Exception\BadRequestException;
 use Symfony\Component\Console\Command\Command;

@@ -23,10 +23,10 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Account_ChangePassword;
-use Fusio\Impl\Backend\Model\User_Create;
-use Fusio\Impl\Backend\Model\User_Remote;
-use Fusio\Impl\Backend\Model\User_Update;
+use Fusio\Model\Backend\Account_ChangePassword;
+use Fusio\Model\Backend\User_Create;
+use Fusio\Model\Backend\User_Remote;
+use Fusio\Model\Backend\User_Update;
 use Fusio\Impl\Event\User\ChangedPasswordEvent;
 use Fusio\Impl\Event\User\ChangedStatusEvent;
 use Fusio\Impl\Event\User\CreatedEvent;

@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Event_Create;
+use Fusio\Model\Backend\Event_Create;
 use Fusio\Impl\Service\Event;
 
 /**

@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Role_Create;
-use Fusio\Impl\Backend\Model\Role_Update;
+use Fusio\Model\Backend\Role_Create;
+use Fusio\Model\Backend\Role_Update;
 use Fusio\Impl\Event\Role\CreatedEvent;
 use Fusio\Impl\Event\Role\DeletedEvent;
 use Fusio\Impl\Event\Role\UpdatedEvent;

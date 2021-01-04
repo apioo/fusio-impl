@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\Authorize_Request;
+use Fusio\Model\Consumer\Authorize_Request;
 use Fusio\Impl\Service\User\Authorize as UserAuthorize;
 
 /**

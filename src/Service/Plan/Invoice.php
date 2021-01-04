@@ -23,8 +23,8 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
-use Fusio\Impl\Backend\Model\Plan_Invoice_Update;
+use Fusio\Model\Backend\Plan_Invoice_Create;
+use Fusio\Model\Backend\Plan_Invoice_Update;
 use Fusio\Impl\Event\Plan\Invoice\CreatedEvent;
 use Fusio\Impl\Event\Plan\Invoice\DeletedEvent;
 use Fusio\Impl\Event\Plan\Invoice\PayedEvent;

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\User_Create;
+use Fusio\Model\Backend\User_Create;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use RuntimeException;

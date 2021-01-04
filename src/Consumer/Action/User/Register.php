@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\Model\User_Register;
+use Fusio\Model\Consumer\User_Register;
 use Fusio\Impl\Service\User\Register as UserRegister;
 
 /**

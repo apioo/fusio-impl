@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Action_Update;
-use Fusio\Impl\Backend\Model\Connection_Update;
+use Fusio\Model\Backend\Action_Update;
+use Fusio\Model\Backend\Connection_Update;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
 

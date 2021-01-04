@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Event\User;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\User_Create;
+use Fusio\Model\Backend\User_Create;
 use Fusio\Impl\Event\EventAbstract;
 
 /**

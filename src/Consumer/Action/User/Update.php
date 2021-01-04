@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\User_Account;
+use Fusio\Model\Consumer\User_Account;
 use Fusio\Impl\Service\Consumer\User;
 
 /**

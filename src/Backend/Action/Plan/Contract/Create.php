@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Contract_Create;
+use Fusio\Model\Backend\Plan_Contract_Create;
 use Fusio\Impl\Service\Plan;
 use Fusio\Impl\Table;
 use PSX\Sql\TableManagerInterface;

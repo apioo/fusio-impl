@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Model\Sdk_Generate;
+use Fusio\Model\Backend\Sdk_Generate;
 use Fusio\Impl\Service\Sdk;
 
 /**
