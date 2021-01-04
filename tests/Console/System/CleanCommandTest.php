@@ -21,10 +21,7 @@
 
 namespace Fusio\Impl\Tests\Console\System;
 
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use Doctrine\DBAL\Schema\Schema;
 use Fusio\Impl\Console\System\CleanCommand;
-use Fusio\Impl\Console\System\LogRotateCommand;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
