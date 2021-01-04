@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Connection;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Connection_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Connection_Create;
 
 /**
  * CreatedEvent

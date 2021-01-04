@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Rate;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Rate_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Rate_Update;
 use PSX\Record\RecordInterface;
 
 /**

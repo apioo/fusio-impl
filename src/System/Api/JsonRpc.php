@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\System\Api;
 
-use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\System\Model;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;

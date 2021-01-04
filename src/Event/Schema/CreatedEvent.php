@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Schema_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Schema_Create;
 
 /**
  * CreatedEvent

@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Route;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Route_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Route_Update;
 use PSX\Record\RecordInterface;
 
 /**

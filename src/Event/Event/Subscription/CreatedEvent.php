@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Event\Subscription;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Event_Subscription_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Event_Subscription_Create;
 
 /**
  * CreatedEvent

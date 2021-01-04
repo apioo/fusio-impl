@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\App;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\App_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\App_Update;
 use PSX\Record\RecordInterface;
 
 /**

@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Plan_Invoice_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Plan_Invoice_Update;
 use PSX\Record\RecordInterface;
 
 /**
