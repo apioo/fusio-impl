@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Consumer\App_Create;
 use Fusio\Impl\Service\Consumer\App;
+use Fusio\Model\Consumer\App_Create;
 
 /**
  * Create

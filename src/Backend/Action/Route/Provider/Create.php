@@ -26,10 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Route_Create;
-use Fusio\Model\Backend\Route_Provider;
-use Fusio\Model\Backend\Route_Provider_Config;
 use Fusio\Impl\Service\Route\Provider;
+use Fusio\Model\Backend\Route_Provider;
 
 /**
  * Create

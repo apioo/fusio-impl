@@ -26,10 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\App_Update;
-use Fusio\Model\Backend\Cronjob_Update;
-use Fusio\Impl\Service\App;
 use Fusio\Impl\Service\Cronjob;
+use Fusio\Model\Backend\Cronjob_Update;
 
 /**
  * Update

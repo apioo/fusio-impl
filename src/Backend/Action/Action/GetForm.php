@@ -25,13 +25,8 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Parser\ParserInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\View;
 use Fusio\Impl\Provider\ActionProviderParser;
-use Fusio\Impl\Table;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetForm

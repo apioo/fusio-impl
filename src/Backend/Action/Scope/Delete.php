@@ -26,8 +26,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Route;
-use Fusio\Impl\Service\Schema;
 use Fusio\Impl\Service\Scope;
 
 /**

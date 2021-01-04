@@ -25,11 +25,8 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Action_Create;
-use Fusio\Model\Backend\Action_Execute_Request;
-use Fusio\Model\Backend\Action_Update;
 use Fusio\Impl\Service\Action;
+use Fusio\Model\Backend\Action_Execute_Request;
 use PSX\Framework\Exception\Converter;
 use PSX\Http\Environment\HttpResponseInterface;
 

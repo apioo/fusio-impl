@@ -26,12 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Route_Update;
-use Fusio\Model\Backend\Schema_Update;
-use Fusio\Model\Backend\Scope_Update;
-use Fusio\Impl\Service\Route;
-use Fusio\Impl\Service\Schema;
 use Fusio\Impl\Service\Scope;
+use Fusio\Model\Backend\Scope_Update;
 
 /**
  * Update

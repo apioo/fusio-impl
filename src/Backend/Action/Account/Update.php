@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\User_Update;
 use Fusio\Impl\Service\User;
+use Fusio\Model\Backend\User_Update;
 
 /**
  * Update

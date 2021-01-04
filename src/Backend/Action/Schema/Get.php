@@ -31,7 +31,6 @@ use Fusio\Impl\Table;
 use PSX\Http\Exception as StatusCode;
 use PSX\Schema\SchemaManagerInterface;
 use PSX\Sql\TableManagerInterface;
-use PSX\Schema\Generator;
 
 /**
  * Get

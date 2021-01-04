@@ -25,8 +25,8 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Model\Consumer\User_PasswordReset;
 use Fusio\Impl\Service\User\ResetPassword as UserResetPassword;
+use Fusio\Model\Consumer\User_PasswordReset;
 
 /**
  * Execute
