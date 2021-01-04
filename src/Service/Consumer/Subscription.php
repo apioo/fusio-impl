@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Consumer\Event_Subscription_Create;
-use Fusio\Model\Consumer\Event_Subscription_Update;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\Event_Subscription_Create;
+use Fusio\Model\Consumer\Event_Subscription_Update;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 

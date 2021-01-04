@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Framework\Loader\LocationFinder;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Table\Route as TableRoutes;
 use Fusio\Impl\Table\Category as TableCategory;
+use Fusio\Impl\Table\Route as TableRoutes;
 use PSX\Framework\Loader\Context;
 use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\PathMatcher;

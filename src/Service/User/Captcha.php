@@ -24,8 +24,8 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Impl\Service;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\PostRequest;
-use PSX\Json\Parser;
 use PSX\Http\Exception as StatusCode;
+use PSX\Json\Parser;
 
 /**
  * Captcha

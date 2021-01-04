@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service;
 use Fusio\Model\Backend\User_Attributes;
 use Fusio\Model\Backend\User_Update;
 use Fusio\Model\Consumer\User_Account;
-use Fusio\Impl\Service;
 
 /**
  * User

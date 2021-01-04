@@ -22,12 +22,12 @@
 namespace Fusio\Impl\Service\Event;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Event_Subscription_Create;
-use Fusio\Model\Backend\Event_Subscription_Update;
 use Fusio\Impl\Event\Event\Subscription\CreatedEvent;
 use Fusio\Impl\Event\Event\Subscription\DeletedEvent;
 use Fusio\Impl\Event\Event\Subscription\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\Event_Subscription_Create;
+use Fusio\Model\Backend\Event_Subscription_Update;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

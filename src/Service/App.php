@@ -23,12 +23,12 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\App_Create;
-use Fusio\Model\Backend\App_Update;
 use Fusio\Impl\Event\App\CreatedEvent;
 use Fusio\Impl\Event\App\DeletedEvent;
 use Fusio\Impl\Event\App\UpdatedEvent;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\App_Create;
+use Fusio\Model\Backend\App_Update;
 use PSX\DateTime\DateTime;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;

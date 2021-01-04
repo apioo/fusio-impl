@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Engine\User\ProviderInterface;
-use Fusio\Model\Consumer\User_Email;
-use Fusio\Model\Consumer\User_PasswordReset;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\User_Email;
+use Fusio\Model\Consumer\User_PasswordReset;
 use PSX\Http\Exception as StatusCode;
 
 /**

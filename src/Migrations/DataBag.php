@@ -27,8 +27,6 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\Plan\Invoice;
-use PSX\Api\Resource;
 
 /**
  * DataBag

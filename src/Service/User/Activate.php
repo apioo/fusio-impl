@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Consumer\User_Activate;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\User_Activate;
 use PSX\Http\Exception as StatusCode;
 
 /**

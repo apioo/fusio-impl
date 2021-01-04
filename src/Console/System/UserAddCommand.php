@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\User_Create;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\User_Create;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

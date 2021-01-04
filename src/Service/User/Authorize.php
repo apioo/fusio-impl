@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Model\Consumer\Authorize_Request;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\Authorize_Request;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;

@@ -23,14 +23,14 @@ namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Plan_Contract_Create;
-use Fusio\Model\Backend\Plan_Contract_Update;
 use Fusio\Impl\Event\Plan\Contract\CreatedEvent;
 use Fusio\Impl\Event\Plan\Contract\DeletedEvent;
 use Fusio\Impl\Event\Plan\Contract\UpdatedEvent;
 use Fusio\Impl\Table;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Fusio\Model\Backend\Plan_Contract_Create;
+use Fusio\Model\Backend\Plan_Contract_Update;
 use PSX\Http\Exception as StatusCode;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Contract
