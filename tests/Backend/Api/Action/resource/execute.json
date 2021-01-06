@@ -1,83 +1,10 @@
 {
-  "definitions": {
-    "Action_Execute_Request": {
-      "properties": {
-        "body": {
-          "$ref": "Action_Execute_Request_Body"
-        },
-        "headers": {
-          "type": "string"
-        },
-        "method": {
-          "pattern": "GET|POST|PUT|PATCH|DELETE",
-          "type": "string"
-        },
-        "parameters": {
-          "type": "string"
-        },
-        "uriFragments": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "method"
-      ],
-      "type": "object"
-    },
-    "Action_Execute_Request_Body": {
-      "additionalProperties": {
-        "type": "any"
-      },
-      "type": "object"
-    },
-    "Action_Execute_Response": {
-      "properties": {
-        "body": {
-          "$ref": "Action_Execute_Response_Body"
-        },
-        "headers": {
-          "$ref": "Action_Execute_Response_Headers"
-        },
-        "statusCode": {
-          "type": "integer"
-        }
-      },
-      "type": "object"
-    },
-    "Action_Execute_Response_Body": {
-      "additionalProperties": {
-        "type": "any"
-      },
-      "type": "object"
-    },
-    "Action_Execute_Response_Headers": {
-      "additionalProperties": {
-        "type": "string"
-      },
-      "type": "object"
-    },
-    "BackendActionExecuteAction_idPath": {
-      "properties": {
-        "action_id": {
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Backend_Model_Action_Execute_Request": {
-      "$ref": "Action_Execute_Request"
-    },
-    "Backend_Model_Action_Execute_Response": {
-      "$ref": "Action_Execute_Response"
-    }
-  },
+  "status": 1,
+  "path": "\/backend\/action\/execute\/:action_id",
+  "pathParameters": "BackendActionExecuteAction_idPath",
   "methods": {
     "POST": {
       "operationId": "Backend_Action_Action_Execute",
-      "request": "Backend_Model_Action_Execute_Request",
-      "responses": {
-        "200": "Backend_Model_Action_Execute_Response"
-      },
       "security": {
         "app": [
           "backend.action"
@@ -85,10 +12,83 @@
       },
       "tags": [
         "backend.action"
-      ]
+      ],
+      "request": "Backend_Action_Execute_Request",
+      "responses": {
+        "200": "Backend_Action_Execute_Response"
+      }
     }
   },
-  "path": "/backend/action/execute/:action_id",
-  "pathParameters": "BackendActionExecuteAction_idPath",
-  "status": 1
+  "definitions": {
+    "Action_Execute_Request": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "pattern": "GET|POST|PUT|PATCH|DELETE"
+        },
+        "uriFragments": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "string"
+        },
+        "body": {
+          "$ref": "Action_Execute_Request_Body"
+        }
+      },
+      "required": [
+        "method"
+      ]
+    },
+    "Action_Execute_Request_Body": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Action_Execute_Response": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "type": "integer"
+        },
+        "headers": {
+          "$ref": "Action_Execute_Response_Headers"
+        },
+        "body": {
+          "$ref": "Action_Execute_Response_Body"
+        }
+      }
+    },
+    "Action_Execute_Response_Body": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Action_Execute_Response_Headers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "BackendActionExecuteAction_idPath": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Action_Execute_Request": {
+      "$ref": "Action_Execute_Request"
+    },
+    "Backend_Action_Execute_Response": {
+      "$ref": "Action_Execute_Response"
+    }
+  }
 }

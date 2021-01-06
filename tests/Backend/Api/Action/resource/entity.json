@@ -14,7 +14,7 @@
         "backend.action"
       ],
       "responses": {
-        "200": "Backend_Model_Action"
+        "200": "Backend_Action"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.action"
       ],
-      "request": "Backend_Model_Action_Update",
+      "request": "Backend_Action_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.action"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -93,10 +93,10 @@
         }
       }
     },
-    "Backend_Model_Action": {
+    "Backend_Action": {
       "$ref": "Action"
     },
-    "Backend_Model_Action_Update": {
+    "Backend_Action_Update": {
       "$ref": "Action_Update"
     },
     "Message": {
@@ -109,9 +109,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

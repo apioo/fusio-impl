@@ -21,10 +21,9 @@
 
 namespace Fusio\Impl\Service\User;
 
-use Fusio\Impl\Consumer\Model\User_Login;
-use Fusio\Impl\Consumer\Model\User_Refresh;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
+use Fusio\Model\Consumer\User_Login;
+use Fusio\Model\Consumer\User_Refresh;
 use PSX\Framework\Config\Config;
 
 /**

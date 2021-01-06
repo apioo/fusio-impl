@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\Event_Subscription_Create;
 use Fusio\Impl\Service\Consumer\Subscription;
+use Fusio\Model\Consumer\Event_Subscription_Create;
 
 /**
  * Create

@@ -25,8 +25,8 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Backend\Model\Route_Provider_Config;
 use Fusio\Impl\Service\Route\Provider;
+use Fusio\Model\Backend\Route_Provider_Config;
 
 /**
  * Changelog

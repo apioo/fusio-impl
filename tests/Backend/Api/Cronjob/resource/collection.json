@@ -1,64 +1,100 @@
 {
+  "status": 1,
+  "path": "\/backend\/cronjob",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Cronjob_GetAll",
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ],
+      "queryParameters": "Collection_Category_Query",
+      "responses": {
+        "200": "Backend_Cronjob_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Cronjob_Create",
+      "security": {
+        "app": [
+          "backend.cronjob"
+        ]
+      },
+      "tags": [
+        "backend.cronjob"
+      ],
+      "request": "Backend_Cronjob_Create",
+      "responses": {
+        "201": "Message"
+      }
+    }
+  },
   "definitions": {
-    "Backend_Model_Cronjob_Collection": {
+    "Backend_Cronjob_Collection": {
       "$ref": "Cronjob_Collection"
     },
-    "Backend_Model_Cronjob_Create": {
+    "Backend_Cronjob_Create": {
       "$ref": "Cronjob_Create"
     },
     "Collection": {
+      "type": "object",
       "properties": {
-        "entry": {
-          "items": {
-            "$generic": "T"
-          },
-          "type": "array"
+        "totalResults": {
+          "type": "integer"
         },
         "startIndex": {
           "type": "integer"
         },
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
         }
-      },
-      "type": "object"
+      }
     },
     "Collection_Category_Query": {
       "$extends": "Collection_Query",
+      "type": "object",
       "properties": {
         "categoryId": {
           "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "Collection_Query": {
+      "type": "object",
       "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
         "count": {
           "type": "integer"
         },
         "search": {
           "type": "string"
-        },
-        "startIndex": {
-          "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "Cronjob": {
+      "type": "object",
       "properties": {
-        "action": {
-          "type": "string"
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$"
         },
         "cron": {
           "type": "string"
         },
-        "errors": {
-          "items": {
-            "$ref": "Cronjob_Error"
-          },
-          "type": "array"
+        "action": {
+          "type": "string"
         },
         "executeDate": {
           "format": "date-time",
@@ -67,15 +103,13 @@
         "exitCode": {
           "type": "integer"
         },
-        "id": {
-          "type": "integer"
-        },
-        "name": {
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,64}$",
-          "type": "string"
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "Cronjob_Error"
+          }
         }
-      },
-      "type": "object"
+      }
     },
     "Cronjob_Collection": {
       "$ref": "Collection",
@@ -85,80 +119,40 @@
     },
     "Cronjob_Create": {
       "$extends": "Cronjob",
+      "type": "object",
       "required": [
         "name",
         "cron",
         "action"
-      ],
-      "type": "object"
+      ]
     },
     "Cronjob_Error": {
+      "type": "object",
       "properties": {
-        "file": {
-          "type": "string"
-        },
-        "line": {
-          "type": "integer"
-        },
         "message": {
           "type": "string"
         },
         "trace": {
           "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Message": {
-      "properties": {
-        "message": {
+        },
+        "file": {
           "type": "string"
         },
+        "line": {
+          "type": "integer"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
         "success": {
           "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
-      },
-      "type": "object"
-    },
-    "Model_Collection_Category_Query": {
-      "$ref": "Collection_Category_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
+      }
     }
-  },
-  "methods": {
-    "GET": {
-      "operationId": "Backend_Action_Cronjob_GetAll",
-      "queryParameters": "Model_Collection_Category_Query",
-      "responses": {
-        "200": "Backend_Model_Cronjob_Collection"
-      },
-      "security": {
-        "app": [
-          "backend.cronjob"
-        ]
-      },
-      "tags": [
-        "backend.cronjob"
-      ]
-    },
-    "POST": {
-      "operationId": "Backend_Action_Cronjob_Create",
-      "request": "Backend_Model_Cronjob_Create",
-      "responses": {
-        "201": "Model_Message"
-      },
-      "security": {
-        "app": [
-          "backend.cronjob"
-        ]
-      },
-      "tags": [
-        "backend.cronjob"
-      ]
-    }
-  },
-  "path": "/backend/cronjob",
-  "status": 1
+  }
 }

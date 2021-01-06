@@ -1,52 +1,72 @@
 {
+  "status": 1,
+  "path": "\/backend\/config",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Config_GetAll",
+      "security": {
+        "app": [
+          "backend.config"
+        ]
+      },
+      "tags": [
+        "backend.config"
+      ],
+      "queryParameters": "Collection_Query",
+      "responses": {
+        "200": "Backend_Config_Collection"
+      }
+    }
+  },
   "definitions": {
-    "Backend_Model_Config_Collection": {
+    "Backend_Config_Collection": {
       "$ref": "Config_Collection"
     },
     "Collection": {
+      "type": "object",
       "properties": {
-        "entry": {
-          "items": {
-            "$generic": "T"
-          },
-          "type": "array"
+        "totalResults": {
+          "type": "integer"
         },
         "startIndex": {
           "type": "integer"
         },
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
         }
-      },
-      "type": "object"
+      }
     },
     "Collection_Query": {
+      "type": "object",
       "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
         "count": {
           "type": "integer"
         },
         "search": {
           "type": "string"
-        },
-        "startIndex": {
-          "type": "integer"
         }
-      },
-      "type": "object"
+      }
     },
     "Config": {
+      "type": "object",
       "properties": {
-        "description": {
-          "type": "string"
-        },
         "id": {
+          "type": "integer"
+        },
+        "type": {
           "type": "integer"
         },
         "name": {
           "type": "string"
         },
-        "type": {
-          "type": "integer"
+        "description": {
+          "type": "string"
         },
         "value": {
           "oneOf": [
@@ -64,36 +84,13 @@
             }
           ]
         }
-      },
-      "type": "object"
+      }
     },
     "Config_Collection": {
       "$ref": "Collection",
       "$template": {
         "T": "Config"
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     }
-  },
-  "methods": {
-    "GET": {
-      "operationId": "Backend_Action_Config_GetAll",
-      "queryParameters": "Model_Collection_Query",
-      "responses": {
-        "200": "Backend_Model_Config_Collection"
-      },
-      "security": {
-        "app": [
-          "backend.config"
-        ]
-      },
-      "tags": [
-        "backend.config"
-      ]
-    }
-  },
-  "path": "/backend/config",
-  "status": 1
+  }
 }

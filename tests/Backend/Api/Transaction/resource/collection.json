@@ -12,17 +12,17 @@
       "tags": [
         "backend.transaction"
       ],
-      "queryParameters": "Backend_Model_Transaction_Collection_Query",
+      "queryParameters": "Backend_Transaction_Collection_Query",
       "responses": {
-        "200": "Backend_Model_Transaction_Collection"
+        "200": "Backend_Transaction_Collection"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Transaction_Collection": {
+    "Backend_Transaction_Collection": {
       "$ref": "Transaction_Collection"
     },
-    "Backend_Model_Transaction_Collection_Query": {
+    "Backend_Transaction_Collection_Query": {
       "$ref": "Transaction_Collection_Query"
     },
     "Collection": {

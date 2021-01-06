@@ -23,7 +23,6 @@ namespace Fusio\Impl\Tests\Backend\View\Plan\Usage;
 
 use Fusio\Impl\Backend\View\Plan\Usage\QueryFilter;
 use Fusio\Impl\Tests\Backend\View\FilterTestCase;
-use PHPUnit\Framework\TestCase;
 
 /**
  * QueryFilterTest

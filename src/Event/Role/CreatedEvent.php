@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Role;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Role_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Role_Create;
 
 /**
  * CreatedEvent

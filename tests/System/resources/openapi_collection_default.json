@@ -271,7 +271,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_About"
+                  "$ref": "#\/components\/schemas\/System_About"
                 }
               }
             }
@@ -385,7 +385,7 @@
         "description": "No schema information available",
         "type": "object"
       },
-      "System_Model_About": {
+      "System_About": {
         "$ref": "#\/components\/schemas\/About"
       }
     },

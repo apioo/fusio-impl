@@ -12,17 +12,17 @@
       "tags": [
         "backend.log"
       ],
-      "queryParameters": "Backend_Model_Log_Collection_Query",
+      "queryParameters": "Backend_Log_Collection_Query",
       "responses": {
-        "200": "Backend_Model_Log_Collection"
+        "200": "Backend_Log_Collection"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Log_Collection": {
+    "Backend_Log_Collection": {
       "$ref": "Log_Collection"
     },
-    "Backend_Model_Log_Collection_Query": {
+    "Backend_Log_Collection_Query": {
       "$ref": "Log_Collection_Query"
     },
     "Collection": {

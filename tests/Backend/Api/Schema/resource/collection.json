@@ -12,9 +12,9 @@
       "tags": [
         "backend.schema"
       ],
-      "queryParameters": "Model_Collection_Category_Query",
+      "queryParameters": "Collection_Category_Query",
       "responses": {
-        "200": "Backend_Model_Schema_Collection"
+        "200": "Backend_Schema_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.schema"
       ],
-      "request": "Backend_Model_Schema_Create",
+      "request": "Backend_Schema_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Schema_Collection": {
+    "Backend_Schema_Collection": {
       "$ref": "Schema_Collection"
     },
-    "Backend_Model_Schema_Create": {
+    "Backend_Schema_Create": {
       "$ref": "Schema_Create"
     },
     "Collection": {
@@ -90,12 +90,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Category_Query": {
-      "$ref": "Collection_Category_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Schema": {
       "type": "object",

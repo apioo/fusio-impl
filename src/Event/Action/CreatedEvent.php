@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Action;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Action_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Action_Create;
 
 /**
  * CreatedEvent

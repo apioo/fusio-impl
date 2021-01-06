@@ -12,9 +12,9 @@
       "tags": [
         "consumer.scope"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_Scope_Collection"
+        "200": "Consumer_Scope_Collection"
       }
     }
   },
@@ -50,11 +50,8 @@
         }
       }
     },
-    "Consumer_Model_Scope_Collection": {
+    "Consumer_Scope_Collection": {
       "$ref": "Scope_Collection"
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     },
     "Scope": {
       "type": "object",

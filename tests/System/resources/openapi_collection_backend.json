@@ -22,7 +22,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                  "$ref": "#\/components\/schemas\/Backend_User"
                 }
               }
             }
@@ -46,7 +46,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_User_Update"
+                "$ref": "#\/components\/schemas\/Backend_User_Update"
               }
             }
           }
@@ -57,7 +57,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -82,7 +82,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -113,13 +113,39 @@
           "backend.user"
         ],
         "operationId": "Backend_Action_User_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_User_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_User_Collection"
                 }
               }
             }
@@ -143,7 +169,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_User_Create"
+                "$ref": "#\/components\/schemas\/Backend_User_Create"
               }
             }
           }
@@ -154,7 +180,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -181,7 +207,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Transaction"
+                  "$ref": "#\/components\/schemas\/Backend_Transaction"
                 }
               }
             }
@@ -218,7 +244,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Transaction_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Transaction_Collection"
                 }
               }
             }
@@ -245,7 +271,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -272,7 +298,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -299,7 +325,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -326,7 +352,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -353,7 +379,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -380,7 +406,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -407,7 +433,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -434,7 +460,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -461,7 +487,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -488,7 +514,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
                 }
               }
             }
@@ -515,7 +541,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Sdk_Types"
+                  "$ref": "#\/components\/schemas\/Backend_Sdk_Types"
                 }
               }
             }
@@ -539,7 +565,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Sdk_Generate"
+                "$ref": "#\/components\/schemas\/Backend_Sdk_Generate"
               }
             }
           }
@@ -550,7 +576,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -577,7 +603,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Scope"
+                  "$ref": "#\/components\/schemas\/Backend_Scope"
                 }
               }
             }
@@ -601,7 +627,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Scope_Update"
+                "$ref": "#\/components\/schemas\/Backend_Scope_Update"
               }
             }
           }
@@ -612,7 +638,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -637,7 +663,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -674,7 +700,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Categories"
+                  "$ref": "#\/components\/schemas\/Backend_Scope_Categories"
                 }
               }
             }
@@ -695,13 +721,23 @@
           "backend.scope"
         ],
         "operationId": "Backend_Action_Scope_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Scope_Collection"
                 }
               }
             }
@@ -725,7 +761,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Scope_Create"
+                "$ref": "#\/components\/schemas\/Backend_Scope_Create"
               }
             }
           }
@@ -736,7 +772,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -763,7 +799,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Schema"
+                  "$ref": "#\/components\/schemas\/Backend_Schema"
                 }
               }
             }
@@ -787,7 +823,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Update"
+                "$ref": "#\/components\/schemas\/Backend_Schema_Update"
               }
             }
           }
@@ -798,7 +834,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -823,7 +859,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -859,7 +895,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Form"
+                "$ref": "#\/components\/schemas\/Backend_Schema_Form"
               }
             }
           }
@@ -870,7 +906,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -907,7 +943,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Schema_Preview_Response"
+                  "$ref": "#\/components\/schemas\/Backend_Schema_Preview_Response"
                 }
               }
             }
@@ -938,13 +974,23 @@
           "backend.schema"
         ],
         "operationId": "Backend_Action_Schema_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Schema_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Schema_Collection"
                 }
               }
             }
@@ -968,7 +1014,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Schema_Create"
+                "$ref": "#\/components\/schemas\/Backend_Schema_Create"
               }
             }
           }
@@ -979,7 +1025,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1006,7 +1052,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Route"
+                  "$ref": "#\/components\/schemas\/Backend_Route"
                 }
               }
             }
@@ -1030,7 +1076,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Route_Update"
+                "$ref": "#\/components\/schemas\/Backend_Route_Update"
               }
             }
           }
@@ -1041,7 +1087,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1066,7 +1112,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1103,7 +1149,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                  "$ref": "#\/components\/schemas\/Form_Container"
                 }
               }
             }
@@ -1127,7 +1173,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider_Config"
+                "$ref": "#\/components\/schemas\/Backend_Route_Provider_Config"
               }
             }
           }
@@ -1138,7 +1184,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider_Changelog"
+                  "$ref": "#\/components\/schemas\/Backend_Route_Provider_Changelog"
                 }
               }
             }
@@ -1162,7 +1208,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Route_Provider"
+                "$ref": "#\/components\/schemas\/Backend_Route_Provider"
               }
             }
           }
@@ -1173,7 +1219,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1210,7 +1256,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Index_Providers"
+                  "$ref": "#\/components\/schemas\/Backend_Route_Index_Providers"
                 }
               }
             }
@@ -1231,13 +1277,23 @@
           "backend.route"
         ],
         "operationId": "Backend_Action_Route_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Route_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Route_Collection"
                 }
               }
             }
@@ -1261,7 +1317,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Route_Create"
+                "$ref": "#\/components\/schemas\/Backend_Route_Create"
               }
             }
           }
@@ -1272,7 +1328,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1299,7 +1355,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Role"
+                  "$ref": "#\/components\/schemas\/Backend_Role"
                 }
               }
             }
@@ -1323,7 +1379,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Role_Update"
+                "$ref": "#\/components\/schemas\/Backend_Role_Update"
               }
             }
           }
@@ -1334,7 +1390,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1359,7 +1415,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1390,13 +1446,39 @@
           "backend.role"
         ],
         "operationId": "Backend_Action_Role_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Role_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Role_Collection"
                 }
               }
             }
@@ -1420,7 +1502,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Role_Create"
+                "$ref": "#\/components\/schemas\/Backend_Role_Create"
               }
             }
           }
@@ -1431,7 +1513,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1458,7 +1540,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Rate"
+                  "$ref": "#\/components\/schemas\/Backend_Rate"
                 }
               }
             }
@@ -1482,7 +1564,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Rate_Update"
+                "$ref": "#\/components\/schemas\/Backend_Rate_Update"
               }
             }
           }
@@ -1493,7 +1575,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1518,7 +1600,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1549,13 +1631,39 @@
           "backend.rate"
         ],
         "operationId": "Backend_Action_Rate_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Rate_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Rate_Collection"
                 }
               }
             }
@@ -1579,7 +1687,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Rate_Create"
+                "$ref": "#\/components\/schemas\/Backend_Rate_Create"
               }
             }
           }
@@ -1590,7 +1698,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1617,7 +1725,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan"
+                  "$ref": "#\/components\/schemas\/Backend_Plan"
                 }
               }
             }
@@ -1641,7 +1749,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Update"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Update"
               }
             }
           }
@@ -1652,7 +1760,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1677,7 +1785,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1708,13 +1816,39 @@
           "backend.plan"
         ],
         "operationId": "Backend_Action_Plan_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Plan_Collection"
                 }
               }
             }
@@ -1738,7 +1872,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Create"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Create"
               }
             }
           }
@@ -1749,7 +1883,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1776,7 +1910,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice"
+                  "$ref": "#\/components\/schemas\/Backend_Plan_Invoice"
                 }
               }
             }
@@ -1800,7 +1934,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Update"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Invoice_Update"
               }
             }
           }
@@ -1811,7 +1945,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1836,7 +1970,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1867,13 +2001,39 @@
           "backend.plan"
         ],
         "operationId": "Backend_Action_Plan_Invoice_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Plan_Invoice_Collection"
                 }
               }
             }
@@ -1897,7 +2057,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Invoice_Create"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Invoice_Create"
               }
             }
           }
@@ -1908,7 +2068,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1935,7 +2095,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract"
+                  "$ref": "#\/components\/schemas\/Backend_Plan_Contract"
                 }
               }
             }
@@ -1959,7 +2119,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Update"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Contract_Update"
               }
             }
           }
@@ -1970,7 +2130,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1995,7 +2155,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2026,13 +2186,39 @@
           "backend.plan"
         ],
         "operationId": "Backend_Action_Plan_Contract_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Plan_Contract_Collection"
                 }
               }
             }
@@ -2056,7 +2242,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Plan_Contract_Create"
+                "$ref": "#\/components\/schemas\/Backend_Plan_Contract_Create"
               }
             }
           }
@@ -2067,7 +2253,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2094,7 +2280,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Local_App"
+                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Local_App"
                 }
               }
             }
@@ -2119,7 +2305,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2144,7 +2330,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2181,7 +2367,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Collection"
                 }
               }
             }
@@ -2205,7 +2391,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Install"
+                "$ref": "#\/components\/schemas\/Backend_Marketplace_Install"
               }
             }
           }
@@ -2216,7 +2402,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Marketplace_Install"
+                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Install"
                 }
               }
             }
@@ -2243,7 +2429,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Log"
+                  "$ref": "#\/components\/schemas\/Backend_Log"
                 }
               }
             }
@@ -2280,7 +2466,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Log_Collection"
                 }
               }
             }
@@ -2307,7 +2493,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Error"
+                  "$ref": "#\/components\/schemas\/Backend_Log_Error"
                 }
               }
             }
@@ -2338,13 +2524,39 @@
           "backend.log"
         ],
         "operationId": "Backend_Action_Log_Error_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Log_Error_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Log_Error_Collection"
                 }
               }
             }
@@ -2371,7 +2583,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Event"
+                  "$ref": "#\/components\/schemas\/Backend_Event"
                 }
               }
             }
@@ -2395,7 +2607,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Event_Update"
+                "$ref": "#\/components\/schemas\/Backend_Event_Update"
               }
             }
           }
@@ -2406,7 +2618,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2431,7 +2643,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2462,13 +2674,23 @@
           "backend.event"
         ],
         "operationId": "Backend_Action_Event_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Event_Collection"
                 }
               }
             }
@@ -2492,7 +2714,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Event_Create"
+                "$ref": "#\/components\/schemas\/Backend_Event_Create"
               }
             }
           }
@@ -2503,7 +2725,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2530,7 +2752,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription"
+                  "$ref": "#\/components\/schemas\/Backend_Event_Subscription"
                 }
               }
             }
@@ -2554,7 +2776,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Update"
+                "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Update"
               }
             }
           }
@@ -2565,7 +2787,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2590,7 +2812,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2621,13 +2843,39 @@
           "backend.event"
         ],
         "operationId": "Backend_Action_Event_Subscription_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Collection"
                 }
               }
             }
@@ -2651,7 +2899,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Event_Subscription_Create"
+                "$ref": "#\/components\/schemas\/Backend_Event_Subscription_Create"
               }
             }
           }
@@ -2662,7 +2910,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2689,7 +2937,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Dashboard"
+                  "$ref": "#\/components\/schemas\/Backend_Dashboard"
                 }
               }
             }
@@ -2716,7 +2964,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Cronjob"
+                  "$ref": "#\/components\/schemas\/Backend_Cronjob"
                 }
               }
             }
@@ -2740,7 +2988,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Update"
+                "$ref": "#\/components\/schemas\/Backend_Cronjob_Update"
               }
             }
           }
@@ -2751,7 +2999,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2776,7 +3024,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2807,13 +3055,23 @@
           "backend.cronjob"
         ],
         "operationId": "Backend_Action_Cronjob_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Cronjob_Collection"
                 }
               }
             }
@@ -2837,7 +3095,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Cronjob_Create"
+                "$ref": "#\/components\/schemas\/Backend_Cronjob_Create"
               }
             }
           }
@@ -2848,7 +3106,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2875,7 +3133,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Connection"
+                  "$ref": "#\/components\/schemas\/Backend_Connection"
                 }
               }
             }
@@ -2899,7 +3157,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Connection_Update"
+                "$ref": "#\/components\/schemas\/Backend_Connection_Update"
               }
             }
           }
@@ -2910,7 +3168,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2935,7 +3193,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -2972,7 +3230,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                  "$ref": "#\/components\/schemas\/Form_Container"
                 }
               }
             }
@@ -2999,7 +3257,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Connection_Index"
+                  "$ref": "#\/components\/schemas\/Backend_Connection_Index"
                 }
               }
             }
@@ -3020,13 +3278,39 @@
           "backend.connection"
         ],
         "operationId": "Backend_Action_Connection_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Connection_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Connection_Collection"
                 }
               }
             }
@@ -3050,7 +3334,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Connection_Create"
+                "$ref": "#\/components\/schemas\/Backend_Connection_Create"
               }
             }
           }
@@ -3061,7 +3345,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3088,7 +3372,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Config"
+                  "$ref": "#\/components\/schemas\/Backend_Config"
                 }
               }
             }
@@ -3112,7 +3396,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Config_Update"
+                "$ref": "#\/components\/schemas\/Backend_Config_Update"
               }
             }
           }
@@ -3123,7 +3407,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3154,13 +3438,39 @@
           "backend.config"
         ],
         "operationId": "Backend_Action_Config_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Config_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Config_Collection"
                 }
               }
             }
@@ -3187,7 +3497,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Category"
+                  "$ref": "#\/components\/schemas\/Backend_Category"
                 }
               }
             }
@@ -3211,7 +3521,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Category_Update"
+                "$ref": "#\/components\/schemas\/Backend_Category_Update"
               }
             }
           }
@@ -3222,7 +3532,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3247,7 +3557,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3278,13 +3588,39 @@
           "backend.category"
         ],
         "operationId": "Backend_Action_Category_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Category_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Category_Collection"
                 }
               }
             }
@@ -3308,7 +3644,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Category_Create"
+                "$ref": "#\/components\/schemas\/Backend_Category_Create"
               }
             }
           }
@@ -3319,7 +3655,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3346,7 +3682,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Audit"
+                  "$ref": "#\/components\/schemas\/Backend_Audit"
                 }
               }
             }
@@ -3383,7 +3719,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Audit_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Audit_Collection"
                 }
               }
             }
@@ -3410,7 +3746,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3455,7 +3791,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_App"
+                  "$ref": "#\/components\/schemas\/Backend_App"
                 }
               }
             }
@@ -3479,7 +3815,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_App_Update"
+                "$ref": "#\/components\/schemas\/Backend_App_Update"
               }
             }
           }
@@ -3490,7 +3826,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3515,7 +3851,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3546,13 +3882,39 @@
           "backend.app"
         ],
         "operationId": "Backend_Action_App_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_App_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_App_Collection"
                 }
               }
             }
@@ -3576,7 +3938,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_App_Create"
+                "$ref": "#\/components\/schemas\/Backend_App_Create"
               }
             }
           }
@@ -3587,7 +3949,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3614,7 +3976,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_App_Token"
+                  "$ref": "#\/components\/schemas\/Backend_App_Token"
                 }
               }
             }
@@ -3651,7 +4013,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_App_Token_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_App_Token_Collection"
                 }
               }
             }
@@ -3678,7 +4040,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Action"
+                  "$ref": "#\/components\/schemas\/Backend_Action"
                 }
               }
             }
@@ -3702,7 +4064,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Action_Update"
+                "$ref": "#\/components\/schemas\/Backend_Action_Update"
               }
             }
           }
@@ -3713,7 +4075,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3738,7 +4100,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3774,7 +4136,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Action_Execute_Request"
+                "$ref": "#\/components\/schemas\/Backend_Action_Execute_Request"
               }
             }
           }
@@ -3785,7 +4147,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Execute_Response"
+                  "$ref": "#\/components\/schemas\/Backend_Action_Execute_Response"
                 }
               }
             }
@@ -3822,7 +4184,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Form_Container"
+                  "$ref": "#\/components\/schemas\/Form_Container"
                 }
               }
             }
@@ -3849,7 +4211,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Index"
+                  "$ref": "#\/components\/schemas\/Backend_Action_Index"
                 }
               }
             }
@@ -3870,13 +4232,23 @@
           "backend.action"
         ],
         "operationId": "Backend_Action_Action_GetAll",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_Action_Collection"
+                  "$ref": "#\/components\/schemas\/Backend_Action_Collection"
                 }
               }
             }
@@ -3900,7 +4272,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Action_Create"
+                "$ref": "#\/components\/schemas\/Backend_Action_Create"
               }
             }
           }
@@ -3911,7 +4283,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3937,7 +4309,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Account_ChangePassword"
+                "$ref": "#\/components\/schemas\/Backend_Account_ChangePassword"
               }
             }
           }
@@ -3948,7 +4320,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -3975,7 +4347,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                  "$ref": "#\/components\/schemas\/Backend_User"
                 }
               }
             }
@@ -3999,7 +4371,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_User_Update"
+                "$ref": "#\/components\/schemas\/Backend_User_Update"
               }
             }
           }
@@ -4010,7 +4382,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -4623,307 +4995,307 @@
           }
         }
       },
-      "Backend_Model_Account_ChangePassword": {
+      "Backend_Account_ChangePassword": {
         "$ref": "#\/components\/schemas\/Account_ChangePassword"
       },
-      "Backend_Model_Action": {
+      "Backend_Action": {
         "$ref": "#\/components\/schemas\/Action"
       },
-      "Backend_Model_Action_Collection": {
+      "Backend_Action_Collection": {
         "$ref": "#\/components\/schemas\/Action_Collection"
       },
-      "Backend_Model_Action_Create": {
+      "Backend_Action_Create": {
         "$ref": "#\/components\/schemas\/Action_Create"
       },
-      "Backend_Model_Action_Execute_Request": {
+      "Backend_Action_Execute_Request": {
         "$ref": "#\/components\/schemas\/Action_Execute_Request"
       },
-      "Backend_Model_Action_Execute_Response": {
+      "Backend_Action_Execute_Response": {
         "$ref": "#\/components\/schemas\/Action_Execute_Response"
       },
-      "Backend_Model_Action_Index": {
+      "Backend_Action_Index": {
         "$ref": "#\/components\/schemas\/Action_Index"
       },
-      "Backend_Model_Action_Update": {
+      "Backend_Action_Update": {
         "$ref": "#\/components\/schemas\/Action_Update"
       },
-      "Backend_Model_App": {
+      "Backend_App": {
         "$ref": "#\/components\/schemas\/App"
       },
-      "Backend_Model_App_Collection": {
+      "Backend_App_Collection": {
         "$ref": "#\/components\/schemas\/App_Collection"
       },
-      "Backend_Model_App_Create": {
+      "Backend_App_Create": {
         "$ref": "#\/components\/schemas\/App_Create"
       },
-      "Backend_Model_App_Token": {
+      "Backend_App_Token": {
         "$ref": "#\/components\/schemas\/App_Token"
       },
-      "Backend_Model_App_Token_Collection": {
+      "Backend_App_Token_Collection": {
         "$ref": "#\/components\/schemas\/App_Token_Collection"
       },
-      "Backend_Model_App_Token_Collection_Query": {
+      "Backend_App_Token_Collection_Query": {
         "$ref": "#\/components\/schemas\/App_Token_Collection_Query"
       },
-      "Backend_Model_App_Update": {
+      "Backend_App_Update": {
         "$ref": "#\/components\/schemas\/App_Update"
       },
-      "Backend_Model_Audit": {
+      "Backend_Audit": {
         "$ref": "#\/components\/schemas\/Audit"
       },
-      "Backend_Model_Audit_Collection": {
+      "Backend_Audit_Collection": {
         "$ref": "#\/components\/schemas\/Audit_Collection"
       },
-      "Backend_Model_Audit_Collection_Query": {
+      "Backend_Audit_Collection_Query": {
         "$ref": "#\/components\/schemas\/Audit_Collection_Query"
       },
-      "Backend_Model_Category": {
+      "Backend_Category": {
         "$ref": "#\/components\/schemas\/Category"
       },
-      "Backend_Model_Category_Collection": {
+      "Backend_Category_Collection": {
         "$ref": "#\/components\/schemas\/Category_Collection"
       },
-      "Backend_Model_Category_Create": {
+      "Backend_Category_Create": {
         "$ref": "#\/components\/schemas\/Category_Create"
       },
-      "Backend_Model_Category_Update": {
+      "Backend_Category_Update": {
         "$ref": "#\/components\/schemas\/Category_Update"
       },
-      "Backend_Model_Config": {
+      "Backend_Config": {
         "$ref": "#\/components\/schemas\/Config"
       },
-      "Backend_Model_Config_Collection": {
+      "Backend_Config_Collection": {
         "$ref": "#\/components\/schemas\/Config_Collection"
       },
-      "Backend_Model_Config_Update": {
+      "Backend_Config_Update": {
         "$ref": "#\/components\/schemas\/Config_Update"
       },
-      "Backend_Model_Connection": {
+      "Backend_Connection": {
         "$ref": "#\/components\/schemas\/Connection"
       },
-      "Backend_Model_Connection_Collection": {
+      "Backend_Connection_Collection": {
         "$ref": "#\/components\/schemas\/Connection_Collection"
       },
-      "Backend_Model_Connection_Create": {
+      "Backend_Connection_Create": {
         "$ref": "#\/components\/schemas\/Connection_Create"
       },
-      "Backend_Model_Connection_Index": {
+      "Backend_Connection_Index": {
         "$ref": "#\/components\/schemas\/Connection_Index"
       },
-      "Backend_Model_Connection_Update": {
+      "Backend_Connection_Update": {
         "$ref": "#\/components\/schemas\/Connection_Update"
       },
-      "Backend_Model_Cronjob": {
+      "Backend_Cronjob": {
         "$ref": "#\/components\/schemas\/Cronjob"
       },
-      "Backend_Model_Cronjob_Collection": {
+      "Backend_Cronjob_Collection": {
         "$ref": "#\/components\/schemas\/Cronjob_Collection"
       },
-      "Backend_Model_Cronjob_Create": {
+      "Backend_Cronjob_Create": {
         "$ref": "#\/components\/schemas\/Cronjob_Create"
       },
-      "Backend_Model_Cronjob_Update": {
+      "Backend_Cronjob_Update": {
         "$ref": "#\/components\/schemas\/Cronjob_Update"
       },
-      "Backend_Model_Dashboard": {
+      "Backend_Dashboard": {
         "$ref": "#\/components\/schemas\/Dashboard"
       },
-      "Backend_Model_Event": {
+      "Backend_Event": {
         "$ref": "#\/components\/schemas\/Event"
       },
-      "Backend_Model_Event_Collection": {
+      "Backend_Event_Collection": {
         "$ref": "#\/components\/schemas\/Event_Collection"
       },
-      "Backend_Model_Event_Create": {
+      "Backend_Event_Create": {
         "$ref": "#\/components\/schemas\/Event_Create"
       },
-      "Backend_Model_Event_Subscription": {
+      "Backend_Event_Subscription": {
         "$ref": "#\/components\/schemas\/Event_Subscription"
       },
-      "Backend_Model_Event_Subscription_Collection": {
+      "Backend_Event_Subscription_Collection": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
       },
-      "Backend_Model_Event_Subscription_Create": {
+      "Backend_Event_Subscription_Create": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Create"
       },
-      "Backend_Model_Event_Subscription_Update": {
+      "Backend_Event_Subscription_Update": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Update"
       },
-      "Backend_Model_Event_Update": {
+      "Backend_Event_Update": {
         "$ref": "#\/components\/schemas\/Event_Update"
       },
-      "Backend_Model_Log": {
+      "Backend_Log": {
         "$ref": "#\/components\/schemas\/Log"
       },
-      "Backend_Model_Log_Collection": {
+      "Backend_Log_Collection": {
         "$ref": "#\/components\/schemas\/Log_Collection"
       },
-      "Backend_Model_Log_Collection_Query": {
+      "Backend_Log_Collection_Query": {
         "$ref": "#\/components\/schemas\/Log_Collection_Query"
       },
-      "Backend_Model_Log_Error": {
+      "Backend_Log_Error": {
         "$ref": "#\/components\/schemas\/Log_Error"
       },
-      "Backend_Model_Log_Error_Collection": {
+      "Backend_Log_Error_Collection": {
         "$ref": "#\/components\/schemas\/Log_Error_Collection"
       },
-      "Backend_Model_Marketplace_Collection": {
+      "Backend_Marketplace_Collection": {
         "$ref": "#\/components\/schemas\/Marketplace_Collection"
       },
-      "Backend_Model_Marketplace_Install": {
+      "Backend_Marketplace_Install": {
         "$ref": "#\/components\/schemas\/Marketplace_Install"
       },
-      "Backend_Model_Marketplace_Local_App": {
+      "Backend_Marketplace_Local_App": {
         "$ref": "#\/components\/schemas\/Marketplace_Local_App"
       },
-      "Backend_Model_Plan": {
+      "Backend_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
       },
-      "Backend_Model_Plan_Collection": {
+      "Backend_Plan_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Collection"
       },
-      "Backend_Model_Plan_Contract": {
+      "Backend_Plan_Contract": {
         "$ref": "#\/components\/schemas\/Plan_Contract"
       },
-      "Backend_Model_Plan_Contract_Collection": {
+      "Backend_Plan_Contract_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
       },
-      "Backend_Model_Plan_Contract_Create": {
+      "Backend_Plan_Contract_Create": {
         "$ref": "#\/components\/schemas\/Plan_Contract_Create"
       },
-      "Backend_Model_Plan_Contract_Update": {
+      "Backend_Plan_Contract_Update": {
         "$ref": "#\/components\/schemas\/Plan_Contract_Update"
       },
-      "Backend_Model_Plan_Create": {
+      "Backend_Plan_Create": {
         "$ref": "#\/components\/schemas\/Plan_Create"
       },
-      "Backend_Model_Plan_Invoice": {
+      "Backend_Plan_Invoice": {
         "$ref": "#\/components\/schemas\/Plan_Invoice"
       },
-      "Backend_Model_Plan_Invoice_Collection": {
+      "Backend_Plan_Invoice_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
       },
-      "Backend_Model_Plan_Invoice_Create": {
+      "Backend_Plan_Invoice_Create": {
         "$ref": "#\/components\/schemas\/Plan_Invoice_Create"
       },
-      "Backend_Model_Plan_Invoice_Update": {
+      "Backend_Plan_Invoice_Update": {
         "$ref": "#\/components\/schemas\/Plan_Invoice_Update"
       },
-      "Backend_Model_Plan_Update": {
+      "Backend_Plan_Update": {
         "$ref": "#\/components\/schemas\/Plan_Update"
       },
-      "Backend_Model_Plan_Usage_Collection_Query": {
+      "Backend_Plan_Usage_Collection_Query": {
         "$ref": "#\/components\/schemas\/Plan_Usage_Collection_Query"
       },
-      "Backend_Model_Rate": {
+      "Backend_Rate": {
         "$ref": "#\/components\/schemas\/Rate"
       },
-      "Backend_Model_Rate_Collection": {
+      "Backend_Rate_Collection": {
         "$ref": "#\/components\/schemas\/Rate_Collection"
       },
-      "Backend_Model_Rate_Create": {
+      "Backend_Rate_Create": {
         "$ref": "#\/components\/schemas\/Rate_Create"
       },
-      "Backend_Model_Rate_Update": {
+      "Backend_Rate_Update": {
         "$ref": "#\/components\/schemas\/Rate_Update"
       },
-      "Backend_Model_Role": {
+      "Backend_Role": {
         "$ref": "#\/components\/schemas\/Role"
       },
-      "Backend_Model_Role_Collection": {
+      "Backend_Role_Collection": {
         "$ref": "#\/components\/schemas\/Role_Collection"
       },
-      "Backend_Model_Role_Create": {
+      "Backend_Role_Create": {
         "$ref": "#\/components\/schemas\/Role_Create"
       },
-      "Backend_Model_Role_Update": {
+      "Backend_Role_Update": {
         "$ref": "#\/components\/schemas\/Role_Update"
       },
-      "Backend_Model_Route": {
+      "Backend_Route": {
         "$ref": "#\/components\/schemas\/Route"
       },
-      "Backend_Model_Route_Collection": {
+      "Backend_Route_Collection": {
         "$ref": "#\/components\/schemas\/Route_Collection"
       },
-      "Backend_Model_Route_Create": {
+      "Backend_Route_Create": {
         "$ref": "#\/components\/schemas\/Route_Create"
       },
-      "Backend_Model_Route_Index_Providers": {
+      "Backend_Route_Index_Providers": {
         "$ref": "#\/components\/schemas\/Route_Index_Providers"
       },
-      "Backend_Model_Route_Provider": {
+      "Backend_Route_Provider": {
         "$ref": "#\/components\/schemas\/Route_Provider"
       },
-      "Backend_Model_Route_Provider_Changelog": {
+      "Backend_Route_Provider_Changelog": {
         "$ref": "#\/components\/schemas\/Route_Provider_Changelog"
       },
-      "Backend_Model_Route_Provider_Config": {
+      "Backend_Route_Provider_Config": {
         "$ref": "#\/components\/schemas\/Route_Provider_Config"
       },
-      "Backend_Model_Route_Update": {
+      "Backend_Route_Update": {
         "$ref": "#\/components\/schemas\/Route_Update"
       },
-      "Backend_Model_Schema": {
+      "Backend_Schema": {
         "$ref": "#\/components\/schemas\/Schema"
       },
-      "Backend_Model_Schema_Collection": {
+      "Backend_Schema_Collection": {
         "$ref": "#\/components\/schemas\/Schema_Collection"
       },
-      "Backend_Model_Schema_Create": {
+      "Backend_Schema_Create": {
         "$ref": "#\/components\/schemas\/Schema_Create"
       },
-      "Backend_Model_Schema_Form": {
+      "Backend_Schema_Form": {
         "$ref": "#\/components\/schemas\/Schema_Form"
       },
-      "Backend_Model_Schema_Preview_Response": {
+      "Backend_Schema_Preview_Response": {
         "$ref": "#\/components\/schemas\/Schema_Preview_Response"
       },
-      "Backend_Model_Schema_Update": {
+      "Backend_Schema_Update": {
         "$ref": "#\/components\/schemas\/Schema_Update"
       },
-      "Backend_Model_Scope": {
+      "Backend_Scope": {
         "$ref": "#\/components\/schemas\/Scope"
       },
-      "Backend_Model_Scope_Categories": {
+      "Backend_Scope_Categories": {
         "$ref": "#\/components\/schemas\/Scope_Categories"
       },
-      "Backend_Model_Scope_Collection": {
+      "Backend_Scope_Collection": {
         "$ref": "#\/components\/schemas\/Scope_Collection"
       },
-      "Backend_Model_Scope_Create": {
+      "Backend_Scope_Create": {
         "$ref": "#\/components\/schemas\/Scope_Create"
       },
-      "Backend_Model_Scope_Update": {
+      "Backend_Scope_Update": {
         "$ref": "#\/components\/schemas\/Scope_Update"
       },
-      "Backend_Model_Sdk_Generate": {
+      "Backend_Sdk_Generate": {
         "$ref": "#\/components\/schemas\/Sdk_Generate"
       },
-      "Backend_Model_Sdk_Types": {
+      "Backend_Sdk_Types": {
         "$ref": "#\/components\/schemas\/Sdk_Types"
       },
-      "Backend_Model_Statistic_Count": {
+      "Backend_Statistic_Count": {
         "$ref": "#\/components\/schemas\/Statistic_Count"
       },
-      "Backend_Model_Transaction": {
+      "Backend_Transaction": {
         "$ref": "#\/components\/schemas\/Transaction"
       },
-      "Backend_Model_Transaction_Collection": {
+      "Backend_Transaction_Collection": {
         "$ref": "#\/components\/schemas\/Transaction_Collection"
       },
-      "Backend_Model_Transaction_Collection_Query": {
+      "Backend_Transaction_Collection_Query": {
         "$ref": "#\/components\/schemas\/Transaction_Collection_Query"
       },
-      "Backend_Model_User": {
+      "Backend_User": {
         "$ref": "#\/components\/schemas\/User"
       },
-      "Backend_Model_User_Collection": {
+      "Backend_User_Collection": {
         "$ref": "#\/components\/schemas\/User_Collection"
       },
-      "Backend_Model_User_Create": {
+      "Backend_User_Create": {
         "$ref": "#\/components\/schemas\/User_Create"
       },
-      "Backend_Model_User_Update": {
+      "Backend_User_Update": {
         "$ref": "#\/components\/schemas\/User_Update"
       },
       "Category": {
@@ -5703,18 +6075,6 @@
             "type": "string"
           }
         }
-      },
-      "Model_Collection_Category_Query": {
-        "$ref": "#\/components\/schemas\/Collection_Category_Query"
-      },
-      "Model_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Collection_Query"
-      },
-      "Model_Form_Container": {
-        "$ref": "#\/components\/schemas\/Form_Container"
-      },
-      "Model_Message": {
-        "$ref": "#\/components\/schemas\/Message"
       },
       "Plan": {
         "type": "object",

@@ -1,6 +1,0 @@
-routes:
-  /bar:
-    methods:
-      GET:
-        public: true
-        action: "Fusio\\Impl\\Tests\\Console\\System\\Action\\TestAction"

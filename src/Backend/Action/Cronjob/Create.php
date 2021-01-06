@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Cronjob_Create;
 use Fusio\Impl\Service\Cronjob;
+use Fusio\Model\Backend\Cronjob_Create;
 
 /**
  * Create

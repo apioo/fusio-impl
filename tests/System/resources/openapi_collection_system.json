@@ -19,7 +19,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Schema"
+                  "$ref": "#\/components\/schemas\/System_Schema"
                 }
               }
             }
@@ -46,7 +46,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                  "$ref": "#\/components\/schemas\/System_Debug"
                 }
               }
             }
@@ -71,7 +71,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                  "$ref": "#\/components\/schemas\/System_Debug"
                 }
               }
             }
@@ -96,7 +96,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                  "$ref": "#\/components\/schemas\/System_Debug"
                 }
               }
             }
@@ -111,7 +111,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                  "$ref": "#\/components\/schemas\/System_Debug"
                 }
               }
             }
@@ -136,7 +136,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Debug"
+                  "$ref": "#\/components\/schemas\/System_Debug"
                 }
               }
             }
@@ -153,7 +153,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Health_Check"
+                  "$ref": "#\/components\/schemas\/System_Health_Check"
                 }
               }
             }
@@ -170,7 +170,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_Route"
+                  "$ref": "#\/components\/schemas\/System_Route"
                 }
               }
             }
@@ -187,7 +187,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/System_Model_About"
+                  "$ref": "#\/components\/schemas\/System_About"
                 }
               }
             }
@@ -551,19 +551,19 @@
           }
         }
       },
-      "System_Model_About": {
+      "System_About": {
         "$ref": "#\/components\/schemas\/About"
       },
-      "System_Model_Debug": {
+      "System_Debug": {
         "$ref": "#\/components\/schemas\/Debug"
       },
-      "System_Model_Health_Check": {
+      "System_Health_Check": {
         "$ref": "#\/components\/schemas\/Health_Check"
       },
-      "System_Model_Route": {
+      "System_Route": {
         "$ref": "#\/components\/schemas\/Route"
       },
-      "System_Model_Schema": {
+      "System_Schema": {
         "$ref": "#\/components\/schemas\/Schema"
       }
     },

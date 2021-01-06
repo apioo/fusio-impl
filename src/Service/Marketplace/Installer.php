@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Marketplace_Install;
+use Fusio\Model\Backend\Marketplace_Install;
 use PSX\Framework\Config\Config;
 use PSX\Http\Client\ClientInterface;
 use PSX\Http\Client\GetRequest;

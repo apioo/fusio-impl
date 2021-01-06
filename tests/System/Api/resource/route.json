@@ -6,7 +6,7 @@
       "operationId": "System_Action_GetAllRoute",
       "tags": [],
       "responses": {
-        "200": "System_Model_Route"
+        "200": "System_Route"
       }
     }
   },
@@ -31,7 +31,7 @@
         "$ref": "Route_Method"
       }
     },
-    "System_Model_Route": {
+    "System_Route": {
       "$ref": "Route"
     }
   }

@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Service;
 
-use Fusio\Impl\Backend\Model\Sdk_Generate;
+use Fusio\Model\Backend\Sdk_Generate;
 use PSX\Api\GeneratorFactory;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Console\Application;

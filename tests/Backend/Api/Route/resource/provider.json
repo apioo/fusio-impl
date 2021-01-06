@@ -14,7 +14,7 @@
         "backend.route"
       ],
       "responses": {
-        "200": "Model_Form_Container"
+        "200": "Form_Container"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Model_Route_Provider",
+      "request": "Backend_Route_Provider",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     },
     "PUT": {
@@ -42,9 +42,9 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Model_Route_Provider_Config",
+      "request": "Backend_Route_Provider_Config",
       "responses": {
-        "200": "Backend_Model_Route_Provider_Changelog"
+        "200": "Backend_Route_Provider_Changelog"
       }
     }
   },
@@ -90,13 +90,13 @@
         }
       }
     },
-    "Backend_Model_Route_Provider": {
+    "Backend_Route_Provider": {
       "$ref": "Route_Provider"
     },
-    "Backend_Model_Route_Provider_Changelog": {
+    "Backend_Route_Provider_Changelog": {
       "$ref": "Route_Provider_Changelog"
     },
-    "Backend_Model_Route_Provider_Config": {
+    "Backend_Route_Provider_Config": {
       "$ref": "Route_Provider_Config"
     },
     "Form_Container": {
@@ -198,12 +198,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Form_Container": {
-      "$ref": "Form_Container"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Route": {
       "type": "object",

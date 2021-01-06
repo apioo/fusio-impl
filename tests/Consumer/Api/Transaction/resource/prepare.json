@@ -13,9 +13,9 @@
       "tags": [
         "consumer.transaction"
       ],
-      "request": "Consumer_Model_Transaction_Prepare_Request",
+      "request": "Consumer_Transaction_Prepare_Request",
       "responses": {
-        "200": "Consumer_Model_Transaction_Prepare_Response"
+        "200": "Consumer_Transaction_Prepare_Response"
       }
     }
   },
@@ -28,10 +28,10 @@
         }
       }
     },
-    "Consumer_Model_Transaction_Prepare_Request": {
+    "Consumer_Transaction_Prepare_Request": {
       "$ref": "Transaction_Prepare_Request"
     },
-    "Consumer_Model_Transaction_Prepare_Response": {
+    "Consumer_Transaction_Prepare_Response": {
       "$ref": "Transaction_Prepare_Response"
     },
     "Transaction_Prepare_Request": {

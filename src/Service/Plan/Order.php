@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Invoice_Create;
-use Fusio\Impl\Consumer\Model\Plan_Order_Request;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\Plan_Invoice_Create;
+use Fusio\Model\Consumer\Plan_Order_Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

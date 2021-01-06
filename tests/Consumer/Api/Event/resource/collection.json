@@ -12,9 +12,9 @@
       "tags": [
         "consumer.event"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_Event_Collection"
+        "200": "Consumer_Event_Collection"
       }
     }
   },
@@ -50,7 +50,7 @@
         }
       }
     },
-    "Consumer_Model_Event_Collection": {
+    "Consumer_Event_Collection": {
       "$ref": "Event_Collection"
     },
     "Event": {
@@ -72,9 +72,6 @@
       "$template": {
         "T": "Event"
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     }
   }
 }

@@ -12,9 +12,9 @@
       "tags": [
         "backend.rate"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_Rate_Collection"
+        "200": "Backend_Rate_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.rate"
       ],
-      "request": "Backend_Model_Rate_Create",
+      "request": "Backend_Rate_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Rate_Collection": {
+    "Backend_Rate_Collection": {
       "$ref": "Rate_Collection"
     },
-    "Backend_Model_Rate_Create": {
+    "Backend_Rate_Create": {
       "$ref": "Rate_Create"
     },
     "Collection": {
@@ -81,12 +81,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Rate": {
       "type": "object",

@@ -27,8 +27,6 @@ use Fusio\Impl\Backend;
 use Fusio\Impl\Consumer;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\Plan\Invoice;
-use PSX\Api\Resource;
 
 /**
  * DataBag
@@ -281,9 +279,10 @@ class DataBag
         ];
     }
 
-    public function addCronjob(string $name, string $cron, string $action)
+    public function addCronjob(string $category, string $name, string $cron, string $action)
     {
         $this->data['fusio_cronjob'][$name] = [
+            'category_id' => $this->getId('fusio_category', $category),
             'status' => Table\Cronjob::STATUS_ACTIVE,
             'name' => $name,
             'cron' => $cron,

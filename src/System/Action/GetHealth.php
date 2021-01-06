@@ -24,14 +24,8 @@ namespace Fusio\Impl\System\Action;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequest;
-use Fusio\Engine\Request\RpcRequest;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Consumer\View;
 use Fusio\Impl\Service\Health;
-use PSX\Framework\Config\Config;
-use PSX\Http\Environment\HttpResponse;
-use PSX\Sql\TableManagerInterface;
 
 /**
  * GetHealth

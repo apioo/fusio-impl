@@ -26,13 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Contract_Update;
-use Fusio\Impl\Backend\Model\Plan_Update;
-use Fusio\Impl\Backend\Model\Route_Update;
-use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Service\Plan;
-use Fusio\Impl\Service\Route;
-use Fusio\Impl\Service\Schema;
+use Fusio\Model\Backend\Plan_Contract_Update;
 
 /**
  * Update

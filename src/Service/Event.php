@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Event_Create;
-use Fusio\Impl\Backend\Model\Event_Update;
+use Fusio\Model\Backend\Event_Create;
+use Fusio\Model\Backend\Event_Update;
 use Fusio\Impl\Event\Event\CreatedEvent;
 use Fusio\Impl\Event\Event\DeletedEvent;
 use Fusio\Impl\Event\Event\UpdatedEvent;

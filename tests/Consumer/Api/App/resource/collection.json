@@ -12,9 +12,9 @@
       "tags": [
         "consumer.app"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_App_Collection"
+        "200": "Consumer_App_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "consumer.app"
       ],
-      "request": "Consumer_Model_App_Create",
+      "request": "Consumer_App_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
@@ -132,10 +132,10 @@
         }
       }
     },
-    "Consumer_Model_App_Collection": {
+    "Consumer_App_Collection": {
       "$ref": "App_Collection"
     },
-    "Consumer_Model_App_Create": {
+    "Consumer_App_Create": {
       "$ref": "App_Create"
     },
     "Message": {
@@ -148,12 +148,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

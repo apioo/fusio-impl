@@ -21,9 +21,9 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Plan\Contract;
 
+use Fusio\Impl\Table;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
-use Fusio\Impl\Table;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 

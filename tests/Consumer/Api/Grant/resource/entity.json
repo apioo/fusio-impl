@@ -14,7 +14,7 @@
         "consumer.grant"
       ],
       "responses": {
-        "204": "Model_Message"
+        "204": "Message"
       }
     }
   },
@@ -37,9 +37,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

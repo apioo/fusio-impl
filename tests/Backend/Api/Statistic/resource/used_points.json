@@ -12,17 +12,17 @@
       "tags": [
         "backend.statistic"
       ],
-      "queryParameters": "Backend_Model_Plan_Usage_Collection_Query",
+      "queryParameters": "Backend_Plan_Usage_Collection_Query",
       "responses": {
-        "200": "Backend_Model_Statistic_Count"
+        "200": "Backend_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Plan_Usage_Collection_Query": {
+    "Backend_Plan_Usage_Collection_Query": {
       "$ref": "Plan_Usage_Collection_Query"
     },
-    "Backend_Model_Statistic_Count": {
+    "Backend_Statistic_Count": {
       "$ref": "Statistic_Count"
     },
     "Collection_Query": {
