@@ -23,8 +23,8 @@ namespace Fusio\Impl\Tests\Service\User;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Config_Update;
-use Fusio\Impl\Consumer\Model\User_Register;
+use Fusio\Model\Backend\Config_Update;
+use Fusio\Model\Consumer\User_Register;
 use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\User\Captcha;
 use Fusio\Impl\Service\User\Mailer;

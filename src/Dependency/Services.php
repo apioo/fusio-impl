@@ -303,55 +303,6 @@ trait Services
         );
     }
 
-    public function getSystemApiExecutorService(): Service\System\ApiExecutor
-    {
-        return new Service\System\ApiExecutor(
-            $this->get('dispatch'),
-            $this->get('connection'),
-            $this->get('logger')
-        );
-    }
-
-    public function getSystemImportService(): Service\System\Import
-    {
-        return new Service\System\Import(
-            $this->get('system_api_executor_service'),
-            $this->get('connection'),
-            $this->get('action_parser'),
-            $this->get('connection_parser'),
-            $this->get('logger'),
-            $this->get('provider_writer')
-        );
-    }
-
-    public function getSystemExportService(): Service\System\Export
-    {
-        return new Service\System\Export(
-            $this->get('system_api_executor_service'),
-            $this->get('connection'),
-            $this->get('action_parser'),
-            $this->get('connection_parser'),
-            $this->get('logger')
-        );
-    }
-
-    public function getSystemDeployService(): Service\System\Deploy
-    {
-        return new Service\System\Deploy(
-            $this->get('system_import_service'),
-            $this->get('system_web_server_service'),
-            new EnvProperties($this->get('config')),
-            $this->get('schema_parser_import_resolver')
-        );
-    }
-
-    public function getSystemWebServerService(): Service\System\WebServer
-    {
-        return new Service\System\WebServer(
-            $this->get('config')
-        );
-    }
-
     public function getSchemaService(): Service\Schema
     {
         return new Service\Schema(

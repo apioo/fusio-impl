@@ -12,7 +12,6 @@
   ],
   "scripts": {
     "tests": "@php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml tests",
-    "generate": "@php gen_model.php",
     "psalm": "@php vendor/vimeo/psalm/psalm"
   },
   "require": {
@@ -20,6 +19,8 @@
     "psx/framework": "^5.0",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^0.1",
+    "fusio/cli": "^0.1",
+    "fusio/model": "^0.1",
     "fusio/engine": "^4.0",
     "fusio/adapter-file": "^4.0",
     "fusio/adapter-graphql": "^4.0",
@@ -32,7 +33,6 @@
     "firebase/php-jwt": "^5.0",
     "swiftmailer/swiftmailer": "^6.2",
     "doctrine/migrations": "^2.3",
-    "ocramius/package-versions": "^1.2",
     "symfony/filesystem": "^4.0|^5.0"
   },
   "require-dev": {

@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service\Route;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Route_Method;
-use Fusio\Impl\Backend\Model\Route_Version;
 use Fusio\Impl\Framework\Filter\Filter;
 use Fusio\Impl\Table;
+use Fusio\Model\Backend\Route_Method;
+use Fusio\Model\Backend\Route_Version;
 use PSX\Api\Listing\CachedListing;
 use PSX\Api\ListingInterface;
 use PSX\Api\Resource;

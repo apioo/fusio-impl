@@ -21,7 +21,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_PasswordReset"
+                "$ref": "#\/components\/schemas\/Consumer_User_PasswordReset"
               }
             }
           }
@@ -32,7 +32,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -49,7 +49,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Email"
+                "$ref": "#\/components\/schemas\/Consumer_User_Email"
               }
             }
           }
@@ -60,7 +60,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -79,7 +79,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Register"
+                "$ref": "#\/components\/schemas\/Consumer_User_Register"
               }
             }
           }
@@ -90,7 +90,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -109,7 +109,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Provider"
+                "$ref": "#\/components\/schemas\/Consumer_User_Provider"
               }
             }
           }
@@ -120,7 +120,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
                 }
               }
             }
@@ -149,7 +149,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Refresh"
+                "$ref": "#\/components\/schemas\/Consumer_User_Refresh"
               }
             }
           }
@@ -160,7 +160,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
                 }
               }
             }
@@ -177,7 +177,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Login"
+                "$ref": "#\/components\/schemas\/Consumer_User_Login"
               }
             }
           }
@@ -188,7 +188,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_User_JWT"
+                  "$ref": "#\/components\/schemas\/Consumer_User_JWT"
                 }
               }
             }
@@ -208,7 +208,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Meta"
+                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Meta"
                 }
               }
             }
@@ -225,7 +225,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Request"
+                "$ref": "#\/components\/schemas\/Consumer_Authorize_Request"
               }
             }
           }
@@ -236,7 +236,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Authorize_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_Authorize_Response"
                 }
               }
             }
@@ -255,7 +255,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Activate"
+                "$ref": "#\/components\/schemas\/Consumer_User_Activate"
               }
             }
           }
@@ -266,7 +266,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -285,7 +285,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Backend_Model_Account_ChangePassword"
+                "$ref": "#\/components\/schemas\/Backend_Account_ChangePassword"
               }
             }
           }
@@ -296,7 +296,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -323,7 +323,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_User_Account"
+                  "$ref": "#\/components\/schemas\/Consumer_User_Account"
                 }
               }
             }
@@ -347,7 +347,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_User_Account"
+                "$ref": "#\/components\/schemas\/Consumer_User_Account"
               }
             }
           }
@@ -358,7 +358,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -385,7 +385,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction"
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction"
                 }
               }
             }
@@ -421,7 +421,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Prepare_Request"
+                "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Request"
               }
             }
           }
@@ -432,7 +432,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Prepare_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Response"
                 }
               }
             }
@@ -489,13 +489,39 @@
           "consumer.transaction"
         ],
         "operationId": "Consumer_Action_Transaction_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Transaction_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Collection"
                 }
               }
             }
@@ -522,7 +548,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription"
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription"
                 }
               }
             }
@@ -546,7 +572,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Update"
+                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Update"
               }
             }
           }
@@ -557,7 +583,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -582,7 +608,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -613,13 +639,39 @@
           "consumer.subscription"
         ],
         "operationId": "Consumer_Action_Event_Subscription_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Collection"
                 }
               }
             }
@@ -643,7 +695,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_Event_Subscription_Create"
+                "$ref": "#\/components\/schemas\/Consumer_Event_Subscription_Create"
               }
             }
           }
@@ -654,7 +706,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -675,13 +727,39 @@
           "consumer.scope"
         ],
         "operationId": "Consumer_Action_Scope_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Scope_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Scope_Collection"
                 }
               }
             }
@@ -708,7 +786,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan"
                 }
               }
             }
@@ -739,13 +817,39 @@
           "consumer.plan"
         ],
         "operationId": "Consumer_Action_Plan_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Collection"
                 }
               }
             }
@@ -772,7 +876,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Invoice"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice"
                 }
               }
             }
@@ -803,13 +907,39 @@
           "consumer.plan"
         ],
         "operationId": "Consumer_Action_Plan_Invoice_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Invoice_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice_Collection"
                 }
               }
             }
@@ -836,7 +966,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Contract"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract"
                 }
               }
             }
@@ -867,13 +997,39 @@
           "consumer.plan"
         ],
         "operationId": "Consumer_Action_Plan_Contract_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Contract_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract_Collection"
                 }
               }
             }
@@ -897,7 +1053,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Order_Request"
+                "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Request"
               }
             }
           }
@@ -908,7 +1064,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Plan_Order_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Response"
                 }
               }
             }
@@ -935,7 +1091,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -966,13 +1122,39 @@
           "consumer.grant"
         ],
         "operationId": "Consumer_Action_Grant_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Grant_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Grant_Collection"
                 }
               }
             }
@@ -993,13 +1175,39 @@
           "consumer.event"
         ],
         "operationId": "Consumer_Action_Event_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_Event_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_Event_Collection"
                 }
               }
             }
@@ -1026,7 +1234,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_App"
+                  "$ref": "#\/components\/schemas\/Consumer_App"
                 }
               }
             }
@@ -1050,7 +1258,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_App_Update"
+                "$ref": "#\/components\/schemas\/Consumer_App_Update"
               }
             }
           }
@@ -1061,7 +1269,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1086,7 +1294,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1117,13 +1325,39 @@
           "consumer.app"
         ],
         "operationId": "Consumer_Action_App_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Model_App_Collection"
+                  "$ref": "#\/components\/schemas\/Consumer_App_Collection"
                 }
               }
             }
@@ -1147,7 +1381,7 @@
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Model_App_Create"
+                "$ref": "#\/components\/schemas\/Consumer_App_Create"
               }
             }
           }
@@ -1158,7 +1392,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -1364,7 +1598,7 @@
           }
         }
       },
-      "Backend_Model_Account_ChangePassword": {
+      "Backend_Account_ChangePassword": {
         "$ref": "#\/components\/schemas\/Account_ChangePassword"
       },
       "Collection": {
@@ -1478,109 +1712,109 @@
           }
         }
       },
-      "Consumer_Model_App": {
+      "Consumer_App": {
         "$ref": "#\/components\/schemas\/App"
       },
-      "Consumer_Model_App_Collection": {
+      "Consumer_App_Collection": {
         "$ref": "#\/components\/schemas\/App_Collection"
       },
-      "Consumer_Model_App_Create": {
+      "Consumer_App_Create": {
         "$ref": "#\/components\/schemas\/App_Create"
       },
-      "Consumer_Model_App_Update": {
+      "Consumer_App_Update": {
         "$ref": "#\/components\/schemas\/App_Update"
       },
-      "Consumer_Model_Authorize_Meta": {
+      "Consumer_Authorize_Meta": {
         "$ref": "#\/components\/schemas\/Authorize_Meta"
       },
-      "Consumer_Model_Authorize_Request": {
+      "Consumer_Authorize_Request": {
         "$ref": "#\/components\/schemas\/Authorize_Request"
       },
-      "Consumer_Model_Authorize_Response": {
+      "Consumer_Authorize_Response": {
         "$ref": "#\/components\/schemas\/Authorize_Response"
       },
-      "Consumer_Model_Event_Collection": {
+      "Consumer_Event_Collection": {
         "$ref": "#\/components\/schemas\/Event_Collection"
       },
-      "Consumer_Model_Event_Subscription": {
+      "Consumer_Event_Subscription": {
         "$ref": "#\/components\/schemas\/Event_Subscription"
       },
-      "Consumer_Model_Event_Subscription_Collection": {
+      "Consumer_Event_Subscription_Collection": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Collection"
       },
-      "Consumer_Model_Event_Subscription_Create": {
+      "Consumer_Event_Subscription_Create": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Create"
       },
-      "Consumer_Model_Event_Subscription_Update": {
+      "Consumer_Event_Subscription_Update": {
         "$ref": "#\/components\/schemas\/Event_Subscription_Update"
       },
-      "Consumer_Model_Grant_Collection": {
+      "Consumer_Grant_Collection": {
         "$ref": "#\/components\/schemas\/Grant_Collection"
       },
-      "Consumer_Model_Plan": {
+      "Consumer_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
       },
-      "Consumer_Model_Plan_Collection": {
+      "Consumer_Plan_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Collection"
       },
-      "Consumer_Model_Plan_Contract": {
+      "Consumer_Plan_Contract": {
         "$ref": "#\/components\/schemas\/Plan_Contract"
       },
-      "Consumer_Model_Plan_Contract_Collection": {
+      "Consumer_Plan_Contract_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
       },
-      "Consumer_Model_Plan_Invoice": {
+      "Consumer_Plan_Invoice": {
         "$ref": "#\/components\/schemas\/Plan_Invoice"
       },
-      "Consumer_Model_Plan_Invoice_Collection": {
+      "Consumer_Plan_Invoice_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
       },
-      "Consumer_Model_Plan_Order_Request": {
+      "Consumer_Plan_Order_Request": {
         "$ref": "#\/components\/schemas\/Plan_Order_Request"
       },
-      "Consumer_Model_Plan_Order_Response": {
+      "Consumer_Plan_Order_Response": {
         "$ref": "#\/components\/schemas\/Plan_Order_Response"
       },
-      "Consumer_Model_Scope_Collection": {
+      "Consumer_Scope_Collection": {
         "$ref": "#\/components\/schemas\/Scope_Collection"
       },
-      "Consumer_Model_Transaction": {
+      "Consumer_Transaction": {
         "$ref": "#\/components\/schemas\/Transaction"
       },
-      "Consumer_Model_Transaction_Collection": {
+      "Consumer_Transaction_Collection": {
         "$ref": "#\/components\/schemas\/Transaction_Collection"
       },
-      "Consumer_Model_Transaction_Prepare_Request": {
+      "Consumer_Transaction_Prepare_Request": {
         "$ref": "#\/components\/schemas\/Transaction_Prepare_Request"
       },
-      "Consumer_Model_Transaction_Prepare_Response": {
+      "Consumer_Transaction_Prepare_Response": {
         "$ref": "#\/components\/schemas\/Transaction_Prepare_Response"
       },
-      "Consumer_Model_User_Account": {
+      "Consumer_User_Account": {
         "$ref": "#\/components\/schemas\/User_Account"
       },
-      "Consumer_Model_User_Activate": {
+      "Consumer_User_Activate": {
         "$ref": "#\/components\/schemas\/User_Activate"
       },
-      "Consumer_Model_User_Email": {
+      "Consumer_User_Email": {
         "$ref": "#\/components\/schemas\/User_Email"
       },
-      "Consumer_Model_User_JWT": {
+      "Consumer_User_JWT": {
         "$ref": "#\/components\/schemas\/User_JWT"
       },
-      "Consumer_Model_User_Login": {
+      "Consumer_User_Login": {
         "$ref": "#\/components\/schemas\/User_Login"
       },
-      "Consumer_Model_User_PasswordReset": {
+      "Consumer_User_PasswordReset": {
         "$ref": "#\/components\/schemas\/User_PasswordReset"
       },
-      "Consumer_Model_User_Provider": {
+      "Consumer_User_Provider": {
         "$ref": "#\/components\/schemas\/User_Provider"
       },
-      "Consumer_Model_User_Refresh": {
+      "Consumer_User_Refresh": {
         "$ref": "#\/components\/schemas\/User_Refresh"
       },
-      "Consumer_Model_User_Register": {
+      "Consumer_User_Register": {
         "$ref": "#\/components\/schemas\/User_Register"
       },
       "Event": {
@@ -1701,12 +1935,6 @@
             "type": "string"
           }
         }
-      },
-      "Model_Collection_Query": {
-        "$ref": "#\/components\/schemas\/Collection_Query"
-      },
-      "Model_Message": {
-        "$ref": "#\/components\/schemas\/Message"
       },
       "Plan": {
         "type": "object",

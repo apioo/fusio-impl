@@ -14,7 +14,7 @@
         "backend.marketplace"
       ],
       "responses": {
-        "200": "Backend_Model_Marketplace_Local_App"
+        "200": "Backend_Marketplace_Local_App"
       }
     },
     "PUT": {
@@ -28,7 +28,7 @@
         "backend.marketplace"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -42,7 +42,7 @@
         "backend.marketplace"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -55,7 +55,7 @@
         }
       }
     },
-    "Backend_Model_Marketplace_Local_App": {
+    "Backend_Marketplace_Local_App": {
       "$ref": "Marketplace_Local_App"
     },
     "Marketplace_App": {
@@ -100,9 +100,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

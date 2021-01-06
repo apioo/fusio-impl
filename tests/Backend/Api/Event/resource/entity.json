@@ -14,7 +14,7 @@
         "backend.event"
       ],
       "responses": {
-        "200": "Backend_Model_Event"
+        "200": "Backend_Event"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Model_Event_Update",
+      "request": "Backend_Event_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.event"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Event": {
+    "Backend_Event": {
       "$ref": "Event"
     },
-    "Backend_Model_Event_Update": {
+    "Backend_Event_Update": {
       "$ref": "Event_Update"
     },
     "Event": {
@@ -94,9 +94,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

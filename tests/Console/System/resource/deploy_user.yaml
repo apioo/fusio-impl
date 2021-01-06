@@ -1,9 +1,0 @@
-user:
-  Foo-User:
-    roleId: 1
-    status: 1
-    email: "foo@bar.com"
-    password: "test1234!"
-    scopes:
-      - foo
-      - authorization

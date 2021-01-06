@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Category_Create;
-use Fusio\Impl\Backend\Model\Category_Update;
+use Fusio\Model\Backend\Category_Create;
+use Fusio\Model\Backend\Category_Update;
 use Fusio\Impl\Event\Category\CreatedEvent;
 use Fusio\Impl\Event\Category\DeletedEvent;
 use Fusio\Impl\Event\Category\UpdatedEvent;

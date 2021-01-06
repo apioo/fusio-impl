@@ -12,17 +12,17 @@
       "tags": [
         "backend.statistic"
       ],
-      "queryParameters": "Backend_Model_Transaction_Collection_Query",
+      "queryParameters": "Backend_Transaction_Collection_Query",
       "responses": {
-        "200": "Backend_Model_Statistic_Count"
+        "200": "Backend_Statistic_Count"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Statistic_Count": {
+    "Backend_Statistic_Count": {
       "$ref": "Statistic_Count"
     },
-    "Backend_Model_Transaction_Collection_Query": {
+    "Backend_Transaction_Collection_Query": {
       "$ref": "Transaction_Collection_Query"
     },
     "Collection_Query": {

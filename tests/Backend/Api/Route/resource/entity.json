@@ -14,7 +14,7 @@
         "backend.route"
       ],
       "responses": {
-        "200": "Backend_Model_Route"
+        "200": "Backend_Route"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Model_Route_Update",
+      "request": "Backend_Route_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.route"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Route": {
+    "Backend_Route": {
       "$ref": "Route"
     },
-    "Backend_Model_Route_Update": {
+    "Backend_Route_Update": {
       "$ref": "Route_Update"
     },
     "Message": {
@@ -72,9 +72,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Route": {
       "type": "object",

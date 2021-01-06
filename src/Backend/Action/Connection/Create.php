@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Action_Create;
-use Fusio\Impl\Backend\Model\Connection_Create;
+use Fusio\Model\Backend\Action_Create;
+use Fusio\Model\Backend\Connection_Create;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
 

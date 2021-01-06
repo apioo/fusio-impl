@@ -14,7 +14,7 @@
         "consumer.transaction"
       ],
       "responses": {
-        "200": "Consumer_Model_Transaction"
+        "200": "Consumer_Transaction"
       }
     }
   },
@@ -27,7 +27,7 @@
         }
       }
     },
-    "Consumer_Model_Transaction": {
+    "Consumer_Transaction": {
       "$ref": "Transaction"
     },
     "Transaction": {

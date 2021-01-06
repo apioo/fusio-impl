@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Schema;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Schema_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Schema_Update;
 use PSX\Record\RecordInterface;
 
 /**

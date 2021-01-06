@@ -24,11 +24,10 @@ namespace Fusio\Impl\Service\User;
 use Fusio\Engine\Model\User;
 use Fusio\Engine\User\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\User_Remote;
-use Fusio\Impl\Consumer\Model\User_Provider;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
-use Fusio\Impl\Table;
+use Fusio\Model\Backend\User_Remote;
+use Fusio\Model\Consumer\User_Provider;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
 

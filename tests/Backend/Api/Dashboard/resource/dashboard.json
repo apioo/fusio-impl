@@ -13,12 +13,12 @@
         "backend.dashboard"
       ],
       "responses": {
-        "200": "Backend_Model_Dashboard"
+        "200": "Backend_Dashboard"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Dashboard": {
+    "Backend_Dashboard": {
       "$ref": "Dashboard"
     },
     "Collection": {

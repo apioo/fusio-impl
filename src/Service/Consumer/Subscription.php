@@ -22,10 +22,10 @@
 namespace Fusio\Impl\Service\Consumer;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\Event_Subscription_Create;
-use Fusio\Impl\Consumer\Model\Event_Subscription_Update;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\Event_Subscription_Create;
+use Fusio\Model\Consumer\Event_Subscription_Update;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
 
@@ -86,7 +86,7 @@ class Subscription
             throw new StatusCode\BadRequestException('Event does not exist');
         }
 
-        $backendSubscription = new \Fusio\Impl\Backend\Model\Event_Subscription_Create();
+        $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Create();
         $backendSubscription->setUserId($context->getUserId());
         $backendSubscription->setEventId($event['id']);
         $backendSubscription->setEndpoint($subscription->getEndpoint());
@@ -105,7 +105,7 @@ class Subscription
             throw new StatusCode\BadRequestException('Subscription does not belong to the user');
         }
 
-        $backendSubscription = new \Fusio\Impl\Backend\Model\Event_Subscription_Update();
+        $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Update();
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
         $this->subscriptionService->update($subscriptionId, $backendSubscription, $context);

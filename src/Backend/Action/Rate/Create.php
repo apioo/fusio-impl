@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Rate_Create;
 use Fusio\Impl\Service\Rate;
+use Fusio\Model\Backend\Rate_Create;
 
 /**
  * Create

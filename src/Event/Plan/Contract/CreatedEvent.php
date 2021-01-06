@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Plan\Contract;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Plan_Contract_Create;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Plan_Contract_Create;
 
 /**
  * CreatedEvent

@@ -22,7 +22,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Model_User"
+                  "$ref": "#\/components\/schemas\/Backend_User"
                 }
               }
             }
@@ -49,7 +49,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Model_Message"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }
@@ -174,7 +174,7 @@
           }
         }
       },
-      "Backend_Model_User": {
+      "Backend_User": {
         "$ref": "#\/components\/schemas\/User"
       },
       "Message": {
@@ -187,9 +187,6 @@
             "type": "string"
           }
         }
-      },
-      "Model_Message": {
-        "$ref": "#\/components\/schemas\/Message"
       },
       "OAuth2_Access_Token": {
         "type": "object",

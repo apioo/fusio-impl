@@ -14,7 +14,7 @@
         "backend.category"
       ],
       "responses": {
-        "200": "Backend_Model_Category"
+        "200": "Backend_Category"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.category"
       ],
-      "request": "Backend_Model_Category_Update",
+      "request": "Backend_Category_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.category"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Category": {
+    "Backend_Category": {
       "$ref": "Category"
     },
-    "Backend_Model_Category_Update": {
+    "Backend_Category_Update": {
       "$ref": "Category_Update"
     },
     "Category": {
@@ -88,9 +88,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

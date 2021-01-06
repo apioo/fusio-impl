@@ -12,9 +12,9 @@
       "tags": [
         "backend.plan"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_Plan_Collection"
+        "200": "Backend_Plan_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.plan"
       ],
-      "request": "Backend_Model_Plan_Create",
+      "request": "Backend_Plan_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Plan_Collection": {
+    "Backend_Plan_Collection": {
       "$ref": "Plan_Collection"
     },
-    "Backend_Model_Plan_Create": {
+    "Backend_Plan_Create": {
       "$ref": "Plan_Create"
     },
     "Collection": {
@@ -81,12 +81,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Plan": {
       "type": "object",

@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Category_Create;
+use Fusio\Model\Backend\Category_Create;
 use Fusio\Impl\Service\Category;
 
 /**

@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Category;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Category_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Category_Update;
 use PSX\Record\RecordInterface;
 
 /**

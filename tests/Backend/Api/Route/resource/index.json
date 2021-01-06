@@ -13,12 +13,12 @@
         "backend.route"
       ],
       "responses": {
-        "200": "Backend_Model_Route_Index_Providers"
+        "200": "Backend_Route_Index_Providers"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Route_Index_Providers": {
+    "Backend_Route_Index_Providers": {
       "$ref": "Route_Index_Providers"
     },
     "Route_Index_Providers": {

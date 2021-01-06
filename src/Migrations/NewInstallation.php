@@ -27,12 +27,13 @@ use Fusio\Impl\Authorization\TokenGenerator;
 use Fusio\Impl\Backend;
 use Fusio\Impl\Connection\System as ConnectionSystem;
 use Fusio\Impl\Consumer;
-use Fusio\Impl\Model\Collection_Category_Query;
-use Fusio\Impl\Model\Collection_Query;
-use Fusio\Impl\Model\Form_Container;
-use Fusio\Impl\Model\Message;
 use Fusio\Impl\System;
 use Fusio\Impl\Table;
+use Fusio\Model;
+use Fusio\Model\Collection_Category_Query;
+use Fusio\Model\Collection_Query;
+use Fusio\Model\Form_Container;
+use Fusio\Model\Message;
 use PSX\Framework\Controller\Generator;
 use PSX\Framework\Controller\Tool;
 use PSX\Framework\Schema\Passthru;
@@ -111,6 +112,12 @@ class NewInstallation
         $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
         $bag->addRateAllocation('Default');
         $bag->addRateAllocation('Default-Anonymous', null, null, 0);
+        $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
+        $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
+        $bag->addAction('backend', 'Backend_Action_Plan_Billing', Backend\Action\Plan\Billing::class);
+        $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
+        $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
+        $bag->addCronjob('backend', 'Billing_Run', '0 0 * * *', 'Backend_Action_Plan_Billing');
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
@@ -140,390 +147,390 @@ class NewInstallation
         return [
             'default' => [
                 '/' => [
-                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => System\Model\About::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => Model\System\About::class], null, null, null, true),
                 ]
             ],
             'backend' => [
                 '/account' => [
-                    'GET' => new Method(Backend\Action\Account\Get::class, null, [200 => Backend\Model\User::class], null, 'backend.account'),
-                    'PUT' => new Method(Backend\Action\Account\Update::class, Backend\Model\User_Update::class, [200 => Message::class], null, 'backend.account'),
+                    'GET' => new Method(Backend\Action\Account\Get::class, null, [200 => Model\Backend\User::class], null, 'backend.account'),
+                    'PUT' => new Method(Backend\Action\Account\Update::class, Model\Backend\User_Update::class, [200 => Message::class], null, 'backend.account'),
                 ],
                 '/account/change_password' => [
-                    'PUT' => new Method(Backend\Action\Account\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'backend.account'),
+                    'PUT' => new Method(Backend\Action\Account\ChangePassword::class, Model\Backend\Account_ChangePassword::class, [200 => Message::class], null, 'backend.account'),
                 ],
                 '/action' => [
-                    'GET' => new Method(Backend\Action\Action\GetAll::class, null, [200 => Backend\Model\Action_Collection::class], Collection_Category_Query::class, 'backend.action'),
-                    'POST' => new Method(Backend\Action\Action\Create::class, Backend\Model\Action_Create::class, [201 => Message::class], null, 'backend.action', 'fusio.action.create'),
+                    'GET' => new Method(Backend\Action\Action\GetAll::class, null, [200 => Model\Backend\Action_Collection::class], Collection_Category_Query::class, 'backend.action'),
+                    'POST' => new Method(Backend\Action\Action\Create::class, Model\Backend\Action_Create::class, [201 => Message::class], null, 'backend.action', 'fusio.action.create'),
                 ],
                 '/action/list' => [
-                    'GET' => new Method(Backend\Action\Action\GetIndex::class, null, [200 => Backend\Model\Action_Index::class], null, 'backend.action'),
+                    'GET' => new Method(Backend\Action\Action\GetIndex::class, null, [200 => Model\Backend\Action_Index::class], null, 'backend.action'),
                 ],
                 '/action/form' => [
                     'GET' => new Method(Backend\Action\Action\GetForm::class, null, [200 => Form_Container::class], null, 'backend.action'),
                 ],
                 '/action/execute/:action_id' => [
-                    'POST' => new Method(Backend\Action\Action\Execute::class, Backend\Model\Action_Execute_Request::class, [200 => Backend\Model\Action_Execute_Response::class], null, 'backend.action'),
+                    'POST' => new Method(Backend\Action\Action\Execute::class, Model\Backend\Action_Execute_Request::class, [200 => Model\Backend\Action_Execute_Response::class], null, 'backend.action'),
                 ],
                 '/action/$action_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Action\Get::class, null, [200 => Backend\Model\Action::class], null, 'backend.action'),
-                    'PUT' => new Method(Backend\Action\Action\Update::class, Backend\Model\Action_Update::class, [200 => Message::class], null, 'backend.action', 'fusio.action.update'),
+                    'GET' => new Method(Backend\Action\Action\Get::class, null, [200 => Model\Backend\Action::class], null, 'backend.action'),
+                    'PUT' => new Method(Backend\Action\Action\Update::class, Model\Backend\Action_Update::class, [200 => Message::class], null, 'backend.action', 'fusio.action.update'),
                     'DELETE' => new Method(Backend\Action\Action\Delete::class, null, [200 => Message::class], null, 'backend.action', 'fusio.action.delete'),
                 ],
                 '/app/token' => [
-                    'GET' => new Method(Backend\Action\App\Token\GetAll::class, null, [200 => Backend\Model\App_Token_Collection::class], Backend\Model\App_Token_Collection_Query::class, 'backend.app'),
+                    'GET' => new Method(Backend\Action\App\Token\GetAll::class, null, [200 => Model\Backend\App_Token_Collection::class], Model\Backend\App_Token_Collection_Query::class, 'backend.app'),
                 ],
                 '/app/token/$token_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\App\Token\Get::class, null, [200 => Backend\Model\App_Token::class], null, 'backend.app'),
+                    'GET' => new Method(Backend\Action\App\Token\Get::class, null, [200 => Model\Backend\App_Token::class], null, 'backend.app'),
                 ],
                 '/app' => [
-                    'GET' => new Method(Backend\Action\App\GetAll::class, null, [200 => Backend\Model\App_Collection::class], Collection_Query::class, 'backend.app'),
-                    'POST' => new Method(Backend\Action\App\Create::class, Backend\Model\App_Create::class, [201 => Message::class], null, 'backend.app', 'fusio.app.create'),
+                    'GET' => new Method(Backend\Action\App\GetAll::class, null, [200 => Model\Backend\App_Collection::class], Collection_Query::class, 'backend.app'),
+                    'POST' => new Method(Backend\Action\App\Create::class, Model\Backend\App_Create::class, [201 => Message::class], null, 'backend.app', 'fusio.app.create'),
                 ],
                 '/app/$app_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\App\Get::class, null, [200 => Backend\Model\App::class], null, 'backend.app'),
-                    'PUT' => new Method(Backend\Action\App\Update::class, Backend\Model\App_Update::class, [200 => Message::class], null, 'backend.app', 'fusio.app.update'),
+                    'GET' => new Method(Backend\Action\App\Get::class, null, [200 => Model\Backend\App::class], null, 'backend.app'),
+                    'PUT' => new Method(Backend\Action\App\Update::class, Model\Backend\App_Update::class, [200 => Message::class], null, 'backend.app', 'fusio.app.update'),
                     'DELETE' => new Method(Backend\Action\App\Delete::class, null, [200 => Message::class], null, 'backend.app', 'fusio.app.delete'),
                 ],
                 '/app/$app_id<[0-9]+>/token/:token_id' => [
                     'DELETE' => new Method(Backend\Action\App\DeleteToken::class, null, [200 => Message::class], null, 'backend.app'),
                 ],
                 '/audit' => [
-                    'GET' => new Method(Backend\Action\Audit\GetAll::class, null, [200 => Backend\Model\Audit_Collection::class], Backend\Model\Audit_Collection_Query::class, 'backend.audit'),
+                    'GET' => new Method(Backend\Action\Audit\GetAll::class, null, [200 => Model\Backend\Audit_Collection::class], Model\Backend\Audit_Collection_Query::class, 'backend.audit'),
                 ],
                 '/audit/$audit_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Audit\Get::class, null, [200 => Backend\Model\Audit::class], null, 'backend.audit'),
+                    'GET' => new Method(Backend\Action\Audit\Get::class, null, [200 => Model\Backend\Audit::class], null, 'backend.audit'),
                 ],
                 '/category' => [
-                    'GET' => new Method(Backend\Action\Category\GetAll::class, null, [200 => Backend\Model\Category_Collection::class], Collection_Query::class, 'backend.category'),
-                    'POST' => new Method(Backend\Action\Category\Create::class, Backend\Model\Category_Create::class, [201 => Message::class], null, 'backend.category', 'fusio.category.create'),
+                    'GET' => new Method(Backend\Action\Category\GetAll::class, null, [200 => Model\Backend\Category_Collection::class], Collection_Query::class, 'backend.category'),
+                    'POST' => new Method(Backend\Action\Category\Create::class, Model\Backend\Category_Create::class, [201 => Message::class], null, 'backend.category', 'fusio.category.create'),
                 ],
                 '/category/$category_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Category\Get::class, null, [200 => Backend\Model\Category::class], null, 'backend.category'),
-                    'PUT' => new Method(Backend\Action\Category\Update::class, Backend\Model\Category_Update::class, [200 => Message::class], null, 'backend.category', 'fusio.category.update'),
+                    'GET' => new Method(Backend\Action\Category\Get::class, null, [200 => Model\Backend\Category::class], null, 'backend.category'),
+                    'PUT' => new Method(Backend\Action\Category\Update::class, Model\Backend\Category_Update::class, [200 => Message::class], null, 'backend.category', 'fusio.category.update'),
                     'DELETE' => new Method(Backend\Action\Category\Delete::class, null, [200 => Message::class], null, 'backend.category', 'fusio.category.delete'),
                 ],
                 '/config' => [
-                    'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Backend\Model\Config_Collection::class], Collection_Query::class, 'backend.config'),
+                    'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Model\Backend\Config_Collection::class], Collection_Query::class, 'backend.config'),
                 ],
                 '/config/$config_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Config\Get::class, null, [200 => Backend\Model\Config::class], null, 'backend.config'),
-                    'PUT' => new Method(Backend\Action\Config\Update::class, Backend\Model\Config_Update::class, [200 => Message::class], null, 'backend.config'),
+                    'GET' => new Method(Backend\Action\Config\Get::class, null, [200 => Model\Backend\Config::class], null, 'backend.config'),
+                    'PUT' => new Method(Backend\Action\Config\Update::class, Model\Backend\Config_Update::class, [200 => Message::class], null, 'backend.config'),
                 ],
                 '/connection' => [
-                    'GET' => new Method(Backend\Action\Connection\GetAll::class, null, [200 => Backend\Model\Connection_Collection::class], Collection_Query::class, 'backend.connection'),
-                    'POST' => new Method(Backend\Action\Connection\Create::class, Backend\Model\Connection_Create::class, [201 => Message::class], null, 'backend.connection', 'fusio.connection.create'),
+                    'GET' => new Method(Backend\Action\Connection\GetAll::class, null, [200 => Model\Backend\Connection_Collection::class], Collection_Query::class, 'backend.connection'),
+                    'POST' => new Method(Backend\Action\Connection\Create::class, Model\Backend\Connection_Create::class, [201 => Message::class], null, 'backend.connection', 'fusio.connection.create'),
                 ],
                 '/connection/list' => [
-                    'GET' => new Method(Backend\Action\Connection\GetIndex::class, null, [200 => Backend\Model\Connection_Index::class], null, 'backend.connection'),
+                    'GET' => new Method(Backend\Action\Connection\GetIndex::class, null, [200 => Model\Backend\Connection_Index::class], null, 'backend.connection'),
                 ],
                 '/connection/form' => [
                     'GET' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], null, 'backend.connection'),
                 ],
                 '/connection/$connection_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Backend\Model\Connection::class], null, 'backend.connection'),
-                    'PUT' => new Method(Backend\Action\Connection\Update::class, Backend\Model\Connection_Update::class, [200 => Message::class], null, 'backend.connection', 'fusio.connection.update'),
+                    'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Model\Backend\Connection::class], null, 'backend.connection'),
+                    'PUT' => new Method(Backend\Action\Connection\Update::class, Model\Backend\Connection_Update::class, [200 => Message::class], null, 'backend.connection', 'fusio.connection.update'),
                     'DELETE' => new Method(Backend\Action\Connection\Delete::class, null, [200 => Message::class], null, 'backend.connection', 'fusio.connection.delete'),
                 ],
                 '/cronjob' => [
-                    'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Backend\Model\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
-                    'POST' => new Method(Backend\Action\Cronjob\Create::class, Backend\Model\Cronjob_Create::class, [201 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.create'),
+                    'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Model\Backend\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
+                    'POST' => new Method(Backend\Action\Cronjob\Create::class, Model\Backend\Cronjob_Create::class, [201 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.create'),
                 ],
                 '/cronjob/$cronjob_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Cronjob\Get::class, null, [200 => Backend\Model\Cronjob::class], null, 'backend.cronjob'),
-                    'PUT' => new Method(Backend\Action\Cronjob\Update::class, Backend\Model\Cronjob_Update::class, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.update'),
+                    'GET' => new Method(Backend\Action\Cronjob\Get::class, null, [200 => Model\Backend\Cronjob::class], null, 'backend.cronjob'),
+                    'PUT' => new Method(Backend\Action\Cronjob\Update::class, Model\Backend\Cronjob_Update::class, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.update'),
                     'DELETE' => new Method(Backend\Action\Cronjob\Delete::class, null, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.delete'),
                 ],
                 '/dashboard' => [
-                    'GET' => new Method(Backend\Action\Dashboard\GetAll::class, null, [200 => Backend\Model\Dashboard::class], null, 'backend.dashboard'),
+                    'GET' => new Method(Backend\Action\Dashboard\GetAll::class, null, [200 => Model\Backend\Dashboard::class], null, 'backend.dashboard'),
                 ],
                 '/event/subscription' => [
-                    'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Backend\Model\Event_Subscription_Collection::class], Collection_Query::class, 'backend.event'),
-                    'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Backend\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.subscription.create'),
+                    'GET' => new Method(Backend\Action\Event\Subscription\GetAll::class, null, [200 => Model\Backend\Event_Subscription_Collection::class], Collection_Query::class, 'backend.event'),
+                    'POST' => new Method(Backend\Action\Event\Subscription\Create::class, Model\Backend\Event_Subscription_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.subscription.create'),
                 ],
                 '/event/subscription/$subscription_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Event\Subscription\Get::class, null, [200 => Backend\Model\Event_Subscription::class], null, 'backend.event'),
-                    'PUT' => new Method(Backend\Action\Event\Subscription\Update::class, Backend\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.update'),
+                    'GET' => new Method(Backend\Action\Event\Subscription\Get::class, null, [200 => Model\Backend\Event_Subscription::class], null, 'backend.event'),
+                    'PUT' => new Method(Backend\Action\Event\Subscription\Update::class, Model\Backend\Event_Subscription_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.update'),
                     'DELETE' => new Method(Backend\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.subscription.delete'),
                 ],
                 '/event' => [
-                    'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Backend\Model\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
-                    'POST' => new Method(Backend\Action\Event\Create::class, Backend\Model\Event_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.create'),
+                    'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Model\Backend\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
+                    'POST' => new Method(Backend\Action\Event\Create::class, Model\Backend\Event_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.create'),
                 ],
                 '/event/$event_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Event\Get::class, null, [200 => Backend\Model\Event::class], null, 'backend.event'),
-                    'PUT' => new Method(Backend\Action\Event\Update::class, Backend\Model\Event_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.update'),
+                    'GET' => new Method(Backend\Action\Event\Get::class, null, [200 => Model\Backend\Event::class], null, 'backend.event'),
+                    'PUT' => new Method(Backend\Action\Event\Update::class, Model\Backend\Event_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.update'),
                     'DELETE' => new Method(Backend\Action\Event\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.delete'),
                 ],
                 '/log/error' => [
-                    'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Backend\Model\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Model\Backend\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),
                 ],
                 '/log/error/$error_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Log\Error\Get::class, null, [200 => Backend\Model\Log_Error::class], null, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\Error\Get::class, null, [200 => Model\Backend\Log_Error::class], null, 'backend.log'),
                 ],
                 '/log' => [
-                    'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Backend\Model\Log_Collection::class], Backend\Model\Log_Collection_Query::class, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\GetAll::class, null, [200 => Model\Backend\Log_Collection::class], Model\Backend\Log_Collection_Query::class, 'backend.log'),
                 ],
                 '/log/$log_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Log\Get::class, null, [200 => Backend\Model\Log::class], null, 'backend.log'),
+                    'GET' => new Method(Backend\Action\Log\Get::class, null, [200 => Model\Backend\Log::class], null, 'backend.log'),
                 ],
                 '/marketplace' => [
-                    'GET' => new Method(Backend\Action\Marketplace\GetAll::class, null, [200 => Backend\Model\Marketplace_Collection::class], null, 'backend.marketplace'),
-                    'POST' => new Method(Backend\Action\Marketplace\Install::class, Backend\Model\Marketplace_Install::class, [201 => Backend\Model\Marketplace_Install::class], null, 'backend.marketplace'),
+                    'GET' => new Method(Backend\Action\Marketplace\GetAll::class, null, [200 => Model\Backend\Marketplace_Collection::class], null, 'backend.marketplace'),
+                    'POST' => new Method(Backend\Action\Marketplace\Install::class, Model\Backend\Marketplace_Install::class, [201 => Model\Backend\Marketplace_Install::class], null, 'backend.marketplace'),
                 ],
                 '/marketplace/:app_name' => [
-                    'GET' => new Method(Backend\Action\Marketplace\Get::class, null, [200 => Backend\Model\Marketplace_Local_App::class], null, 'backend.marketplace'),
+                    'GET' => new Method(Backend\Action\Marketplace\Get::class, null, [200 => Model\Backend\Marketplace_Local_App::class], null, 'backend.marketplace'),
                     'PUT' => new Method(Backend\Action\Marketplace\Update::class, null, [200 => Message::class], null, 'backend.marketplace'),
                     'DELETE' => new Method(Backend\Action\Marketplace\Remove::class, null, [200 => Message::class], null, 'backend.marketplace'),
                 ],
                 '/plan/contract' => [
-                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Backend\Model\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
-                    'POST' => new Method(Backend\Action\Plan\Contract\Create::class, Backend\Model\Plan_Contract_Create::class, [201 => Message::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Model\Backend\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Contract\Create::class, Model\Backend\Plan_Contract_Create::class, [201 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/contract/$contract_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Plan\Contract\Get::class, null, [200 => Backend\Model\Plan_Contract::class], null, 'backend.plan'),
-                    'PUT' => new Method(Backend\Action\Plan\Contract\Update::class, Backend\Model\Plan_Contract_Update::class, [200 => Message::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Contract\Get::class, null, [200 => Model\Backend\Plan_Contract::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Contract\Update::class, Model\Backend\Plan_Contract_Update::class, [200 => Message::class], null, 'backend.plan'),
                     'DELETE' => new Method(Backend\Action\Plan\Contract\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/invoice' => [
-                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Backend\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'backend.plan'),
-                    'POST' => new Method(Backend\Action\Plan\Invoice\Create::class, Backend\Model\Plan_Invoice_Create::class, [201 => Message::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Model\Backend\Plan_Invoice_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Invoice\Create::class, Model\Backend\Plan_Invoice_Create::class, [201 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan/invoice/$invoice_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Plan\Invoice\Get::class, null, [200 => Backend\Model\Plan_Invoice::class], null, 'backend.plan'),
-                    'PUT' => new Method(Backend\Action\Plan\Invoice\Update::class, Backend\Model\Plan_Invoice_Update::class, [200 => Message::class], null, 'backend.plan'),
+                    'GET' => new Method(Backend\Action\Plan\Invoice\Get::class, null, [200 => Model\Backend\Plan_Invoice::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Invoice\Update::class, Model\Backend\Plan_Invoice_Update::class, [200 => Message::class], null, 'backend.plan'),
                     'DELETE' => new Method(Backend\Action\Plan\Invoice\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
                 ],
                 '/plan' => [
-                    'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Backend\Model\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
-                    'POST' => new Method(Backend\Action\Plan\Create::class, Backend\Model\Plan_Create::class, [201 => Message::class], null, 'backend.plan', 'fusio.plan.create'),
+                    'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Model\Backend\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
+                    'POST' => new Method(Backend\Action\Plan\Create::class, Model\Backend\Plan_Create::class, [201 => Message::class], null, 'backend.plan', 'fusio.plan.create'),
                 ],
                 '/plan/$plan_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Plan\Get::class, null, [200 => Backend\Model\Plan::class], null, 'backend.plan'),
-                    'PUT' => new Method(Backend\Action\Plan\Update::class, Backend\Model\Plan_Update::class, [200 => Message::class], null, 'backend.plan', 'fusio.plan.update'),
+                    'GET' => new Method(Backend\Action\Plan\Get::class, null, [200 => Model\Backend\Plan::class], null, 'backend.plan'),
+                    'PUT' => new Method(Backend\Action\Plan\Update::class, Model\Backend\Plan_Update::class, [200 => Message::class], null, 'backend.plan', 'fusio.plan.update'),
                     'DELETE' => new Method(Backend\Action\Plan\Delete::class, null, [200 => Message::class], null, 'backend.plan', 'fusio.plan.delete'),
                 ],
                 '/rate' => [
-                    'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Backend\Model\Rate_Collection::class], Collection_Query::class, 'backend.rate'),
-                    'POST' => new Method(Backend\Action\Rate\Create::class, Backend\Model\Rate_Create::class, [201 => Message::class], null, 'backend.rate', 'fusio.rate.create'),
+                    'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Model\Backend\Rate_Collection::class], Collection_Query::class, 'backend.rate'),
+                    'POST' => new Method(Backend\Action\Rate\Create::class, Model\Backend\Rate_Create::class, [201 => Message::class], null, 'backend.rate', 'fusio.rate.create'),
                 ],
                 '/rate/$rate_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Rate\Get::class, null, [200 => Backend\Model\Rate::class], null, 'backend.rate'),
-                    'PUT' => new Method(Backend\Action\Rate\Update::class, Backend\Model\Rate_Update::class, [200 => Message::class], null, 'backend.rate', 'fusio.rate.update'),
+                    'GET' => new Method(Backend\Action\Rate\Get::class, null, [200 => Model\Backend\Rate::class], null, 'backend.rate'),
+                    'PUT' => new Method(Backend\Action\Rate\Update::class, Model\Backend\Rate_Update::class, [200 => Message::class], null, 'backend.rate', 'fusio.rate.update'),
                     'DELETE' => new Method(Backend\Action\Rate\Delete::class, null, [200 => Message::class], null, 'backend.rate', 'fusio.rate.delete'),
                 ],
                 '/role' => [
-                    'GET' => new Method(Backend\Action\Role\GetAll::class, null, [200 => Backend\Model\Role_Collection::class], Collection_Query::class, 'backend.role'),
-                    'POST' => new Method(Backend\Action\Role\Create::class, Backend\Model\Role_Create::class, [201 => Message::class], null, 'backend.role', 'fusio.role.create'),
+                    'GET' => new Method(Backend\Action\Role\GetAll::class, null, [200 => Model\Backend\Role_Collection::class], Collection_Query::class, 'backend.role'),
+                    'POST' => new Method(Backend\Action\Role\Create::class, Model\Backend\Role_Create::class, [201 => Message::class], null, 'backend.role', 'fusio.role.create'),
                 ],
                 '/role/$role_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Role\Get::class, null, [200 => Backend\Model\Role::class], null, 'backend.role'),
-                    'PUT' => new Method(Backend\Action\Role\Update::class, Backend\Model\Role_Update::class, [200 => Message::class], null, 'backend.role', 'fusio.role.update'),
+                    'GET' => new Method(Backend\Action\Role\Get::class, null, [200 => Model\Backend\Role::class], null, 'backend.role'),
+                    'PUT' => new Method(Backend\Action\Role\Update::class, Model\Backend\Role_Update::class, [200 => Message::class], null, 'backend.role', 'fusio.role.update'),
                     'DELETE' => new Method(Backend\Action\Role\Delete::class, null, [200 => Message::class], null, 'backend.role', 'fusio.role.delete'),
                 ],
                 '/routes' => [
-                    'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Backend\Model\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),
-                    'POST' => new Method(Backend\Action\Route\Create::class, Backend\Model\Route_Create::class, [201 => Message::class], null, 'backend.route', 'fusio.route.create'),
+                    'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Model\Backend\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),
+                    'POST' => new Method(Backend\Action\Route\Create::class, Model\Backend\Route_Create::class, [201 => Message::class], null, 'backend.route', 'fusio.route.create'),
                 ],
                 '/routes/provider' => [
-                    'GET' => new Method(Backend\Action\Route\Provider\Index::class, null, [200 => Backend\Model\Route_Index_Providers::class], null, 'backend.route'),
+                    'GET' => new Method(Backend\Action\Route\Provider\Index::class, null, [200 => Model\Backend\Route_Index_Providers::class], null, 'backend.route'),
                 ],
                 '/routes/provider/:provider' => [
                     'GET' => new Method(Backend\Action\Route\Provider\Form::class, null, [200 => Form_Container::class], null, 'backend.route'),
-                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Backend\Model\Route_Provider::class, [201 => Message::class], null, 'backend.route'),
-                    'PUT' => new Method(Backend\Action\Route\Provider\Changelog::class, Backend\Model\Route_Provider_Config::class, [200 => Backend\Model\Route_Provider_Changelog::class], null, 'backend.route'),
+                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Model\Backend\Route_Provider::class, [201 => Message::class], null, 'backend.route'),
+                    'PUT' => new Method(Backend\Action\Route\Provider\Changelog::class, Model\Backend\Route_Provider_Config::class, [200 => Model\Backend\Route_Provider_Changelog::class], null, 'backend.route'),
                 ],
                 '/routes/$route_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Route\Get::class, null, [200 => Backend\Model\Route::class], null, 'backend.route'),
-                    'PUT' => new Method(Backend\Action\Route\Update::class, Backend\Model\Route_Update::class, [200 => Message::class], null, 'backend.route', 'fusio.route.update'),
+                    'GET' => new Method(Backend\Action\Route\Get::class, null, [200 => Model\Backend\Route::class], null, 'backend.route'),
+                    'PUT' => new Method(Backend\Action\Route\Update::class, Model\Backend\Route_Update::class, [200 => Message::class], null, 'backend.route', 'fusio.route.update'),
                     'DELETE' => new Method(Backend\Action\Route\Delete::class, null, [200 => Message::class], null, 'backend.route', 'fusio.route.delete'),
                 ],
                 '/schema' => [
-                    'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Backend\Model\Schema_Collection::class], Collection_Category_Query::class, 'backend.schema'),
-                    'POST' => new Method(Backend\Action\Schema\Create::class, Backend\Model\Schema_Create::class, [201 => Message::class], null, 'backend.schema', 'fusio.schema.create'),
+                    'GET' => new Method(Backend\Action\Schema\GetAll::class, null, [200 => Model\Backend\Schema_Collection::class], Collection_Category_Query::class, 'backend.schema'),
+                    'POST' => new Method(Backend\Action\Schema\Create::class, Model\Backend\Schema_Create::class, [201 => Message::class], null, 'backend.schema', 'fusio.schema.create'),
                 ],
                 '/schema/preview/:schema_id' => [
-                    'POST' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Backend\Model\Schema_Preview_Response::class], null, 'backend.schema'),
+                    'POST' => new Method(Backend\Action\Schema\GetPreview::class, null, [200 => Model\Backend\Schema_Preview_Response::class], null, 'backend.schema'),
                 ],
                 '/schema/form/$schema_id<[0-9]+>' => [
-                    'PUT' => new Method(Backend\Action\Schema\Form::class, Backend\Model\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
+                    'PUT' => new Method(Backend\Action\Schema\Form::class, Model\Backend\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
                 ],
                 '/schema/$schema_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Schema\Get::class, null, [200 => Backend\Model\Schema::class], null, 'backend.schema'),
-                    'PUT' => new Method(Backend\Action\Schema\Update::class, Backend\Model\Schema_Update::class, [200 => Message::class], null, 'backend.schema', 'fusio.schema.update'),
+                    'GET' => new Method(Backend\Action\Schema\Get::class, null, [200 => Model\Backend\Schema::class], null, 'backend.schema'),
+                    'PUT' => new Method(Backend\Action\Schema\Update::class, Model\Backend\Schema_Update::class, [200 => Message::class], null, 'backend.schema', 'fusio.schema.update'),
                     'DELETE' => new Method(Backend\Action\Schema\Delete::class, null, [200 => Message::class], null, 'backend.schema', 'fusio.schema.delete'),
                 ],
                 '/scope' => [
-                    'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Backend\Model\Scope_Collection::class], Collection_Category_Query::class, 'backend.scope'),
-                    'POST' => new Method(Backend\Action\Scope\Create::class, Backend\Model\Scope_Create::class, [201 => Message::class], null, 'backend.scope', 'fusio.scope.create'),
+                    'GET' => new Method(Backend\Action\Scope\GetAll::class, null, [200 => Model\Backend\Scope_Collection::class], Collection_Category_Query::class, 'backend.scope'),
+                    'POST' => new Method(Backend\Action\Scope\Create::class, Model\Backend\Scope_Create::class, [201 => Message::class], null, 'backend.scope', 'fusio.scope.create'),
                 ],
                 '/scope/categories' => [
-                    'GET' => new Method(Backend\Action\Scope\GetCategories::class, null, [200 => Backend\Model\Scope_Categories::class], null, 'backend.scope'),
+                    'GET' => new Method(Backend\Action\Scope\GetCategories::class, null, [200 => Model\Backend\Scope_Categories::class], null, 'backend.scope'),
                 ],
                 '/scope/$scope_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Scope\Get::class, null, [200 => Backend\Model\Scope::class], null, 'backend.scope'),
-                    'PUT' => new Method(Backend\Action\Scope\Update::class, Backend\Model\Scope_Update::class, [200 => Message::class], null, 'backend.scope', 'fusio.scope.update'),
+                    'GET' => new Method(Backend\Action\Scope\Get::class, null, [200 => Model\Backend\Scope::class], null, 'backend.scope'),
+                    'PUT' => new Method(Backend\Action\Scope\Update::class, Model\Backend\Scope_Update::class, [200 => Message::class], null, 'backend.scope', 'fusio.scope.update'),
                     'DELETE' => new Method(Backend\Action\Scope\Delete::class, null, [200 => Message::class], null, 'backend.scope', 'fusio.scope.delete'),
                 ],
                 '/sdk' => [
-                    'GET' => new Method(Backend\Action\Sdk\GetAll::class, null, [200 => Backend\Model\Sdk_Types::class], null, 'backend.sdk'),
-                    'POST' => new Method(Backend\Action\Sdk\Generate::class, Backend\Model\Sdk_Generate::class, [200 => Message::class], null, 'backend.sdk'),
+                    'GET' => new Method(Backend\Action\Sdk\GetAll::class, null, [200 => Model\Backend\Sdk_Types::class], null, 'backend.sdk'),
+                    'POST' => new Method(Backend\Action\Sdk\Generate::class, Model\Backend\Sdk_Generate::class, [200 => Message::class], null, 'backend.sdk'),
                 ],
                 '/statistic/count_requests' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/errors_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_requests' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_transactions' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Transaction_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Transaction_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/issued_tokens' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\App_Token_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\App_Token_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_apps' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_routes' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_average' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/used_points' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Backend\Model\Statistic_Count::class], Backend\Model\Plan_Usage_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Plan_Usage_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/transaction' => [
-                    'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Backend\Model\Transaction_Collection::class], Backend\Model\Transaction_Collection_Query::class, 'backend.transaction'),
+                    'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Model\Backend\Transaction_Collection::class], Model\Backend\Transaction_Collection_Query::class, 'backend.transaction'),
                 ],
                 '/transaction/$transaction_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Transaction\Get::class, null, [200 => Backend\Model\Transaction::class], null, 'backend.transaction'),
+                    'GET' => new Method(Backend\Action\Transaction\Get::class, null, [200 => Model\Backend\Transaction::class], null, 'backend.transaction'),
                 ],
                 '/user' => [
-                    'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Backend\Model\User_Collection::class], Collection_Query::class, 'backend.user'),
-                    'POST' => new Method(Backend\Action\User\Create::class, Backend\Model\User_Create::class, [201 => Message::class], null, 'backend.user', 'fusio.user.create'),
+                    'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Model\Backend\User_Collection::class], Collection_Query::class, 'backend.user'),
+                    'POST' => new Method(Backend\Action\User\Create::class, Model\Backend\User_Create::class, [201 => Message::class], null, 'backend.user', 'fusio.user.create'),
                 ],
                 '/user/$user_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\User\Get::class, null, [200 => Backend\Model\User::class], null, 'backend.user'),
-                    'PUT' => new Method(Backend\Action\User\Update::class, Backend\Model\User_Update::class, [200 => Message::class], null, 'backend.user', 'fusio.user.update'),
+                    'GET' => new Method(Backend\Action\User\Get::class, null, [200 => Model\Backend\User::class], null, 'backend.user'),
+                    'PUT' => new Method(Backend\Action\User\Update::class, Model\Backend\User_Update::class, [200 => Message::class], null, 'backend.user', 'fusio.user.update'),
                     'DELETE' => new Method(Backend\Action\User\Delete::class, null, [200 => Message::class], null, 'backend.user', 'fusio.user.delete'),
                 ],
             ],
             'consumer' => [
                 '/app' => [
-                    'GET' => new Method(Consumer\Action\App\GetAll::class, null, [200 => Consumer\Model\App_Collection::class], Collection_Query::class, 'consumer.app'),
-                    'POST' => new Method(Consumer\Action\App\Create::class, Consumer\Model\App_Create::class, [201 => Message::class], null, 'consumer.app'),
+                    'GET' => new Method(Consumer\Action\App\GetAll::class, null, [200 => Model\Consumer\App_Collection::class], Collection_Query::class, 'consumer.app'),
+                    'POST' => new Method(Consumer\Action\App\Create::class, Model\Consumer\App_Create::class, [201 => Message::class], null, 'consumer.app'),
                 ],
                 '/app/$app_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\App\Get::class, null, [200 => Consumer\Model\App::class], null, 'consumer.app'),
-                    'PUT' => new Method(Consumer\Action\App\Update::class, Consumer\Model\App_Update::class, [200 => Message::class], null, 'consumer.app'),
+                    'GET' => new Method(Consumer\Action\App\Get::class, null, [200 => Model\Consumer\App::class], null, 'consumer.app'),
+                    'PUT' => new Method(Consumer\Action\App\Update::class, Model\Consumer\App_Update::class, [200 => Message::class], null, 'consumer.app'),
                     'DELETE' => new Method(Consumer\Action\App\Delete::class, null, [200 => Message::class], null, 'consumer.app'),
                 ],
                 '/event' => [
-                    'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Consumer\Model\Event_Collection::class], Collection_Query::class, 'consumer.event'),
+                    'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Model\Consumer\Event_Collection::class], Collection_Query::class, 'consumer.event'),
                 ],
                 '/grant' => [
-                    'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Consumer\Model\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
+                    'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Model\Consumer\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
                 ],
                 '/grant/$grant_id<[0-9]+>' => [
                     'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [204 => Message::class], null, 'consumer.grant'),
                 ],
                 '/plan/contract' => [
-                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Consumer\Model\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
-                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, Consumer\Model\Plan_Order_Request::class, [201 => Consumer\Model\Plan_Order_Response::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Model\Consumer\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
+                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, Model\Consumer\Plan_Order_Request::class, [201 => Model\Consumer\Plan_Order_Response::class], null, 'consumer.plan'),
                 ],
                 '/plan/contract/$contract_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Consumer\Model\Plan_Contract::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Model\Consumer\Plan_Contract::class], null, 'consumer.plan'),
                 ],
                 '/plan/invoice' => [
-                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Consumer\Model\Plan_Invoice_Collection::class], Collection_Query::class, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Model\Consumer\Plan_Invoice_Collection::class], Collection_Query::class, 'consumer.plan'),
                 ],
                 '/plan/invoice/$invoice_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Plan\Invoice\Get::class, null, [200 => Consumer\Model\Plan_Invoice::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Invoice\Get::class, null, [200 => Model\Consumer\Plan_Invoice::class], null, 'consumer.plan'),
                 ],
                 '/plan' => [
-                    'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Consumer\Model\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Model\Consumer\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),
                 ],
                 '/plan/$plan_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Plan\Get::class, null, [200 => Consumer\Model\Plan::class], null, 'consumer.plan'),
+                    'GET' => new Method(Consumer\Action\Plan\Get::class, null, [200 => Model\Consumer\Plan::class], null, 'consumer.plan'),
                 ],
                 '/scope' => [
-                    'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Consumer\Model\Scope_Collection::class], Collection_Query::class, 'consumer.scope'),
+                    'GET' => new Method(Consumer\Action\Scope\GetAll::class, null, [200 => Model\Consumer\Scope_Collection::class], Collection_Query::class, 'consumer.scope'),
                 ],
                 '/subscription' => [
-                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Consumer\Model\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.subscription'),
-                    'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Consumer\Model\Event_Subscription_Create::class, [201 => Message::class], null, 'consumer.subscription'),
+                    'GET' => new Method(Consumer\Action\Event\Subscription\GetAll::class, null, [200 => Model\Consumer\Event_Subscription_Collection::class], Collection_Query::class, 'consumer.subscription'),
+                    'POST' => new Method(Consumer\Action\Event\Subscription\Create::class, Model\Consumer\Event_Subscription_Create::class, [201 => Message::class], null, 'consumer.subscription'),
                 ],
                 '/subscription/$subscription_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Event\Subscription\Get::class, null, [200 => Consumer\Model\Event_Subscription::class], null, 'consumer.subscription'),
-                    'PUT' => new Method(Consumer\Action\Event\Subscription\Update::class, Consumer\Model\Event_Subscription_Update::class, [200 => Message::class], null, 'consumer.subscription'),
+                    'GET' => new Method(Consumer\Action\Event\Subscription\Get::class, null, [200 => Model\Consumer\Event_Subscription::class], null, 'consumer.subscription'),
+                    'PUT' => new Method(Consumer\Action\Event\Subscription\Update::class, Model\Consumer\Event_Subscription_Update::class, [200 => Message::class], null, 'consumer.subscription'),
                     'DELETE' => new Method(Consumer\Action\Event\Subscription\Delete::class, null, [200 => Message::class], null, 'consumer.subscription'),
                 ],
                 '/transaction' => [
-                    'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Consumer\Model\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
+                    'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Model\Consumer\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
                 ],
                 '/transaction/execute/:transaction_id' => [
                     'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),
                 ],
                 '/transaction/prepare/:provider' => [
-                    'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Consumer\Model\Transaction_Prepare_Request::class, [200 => Consumer\Model\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
+                    'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Model\Consumer\Transaction_Prepare_Request::class, [200 => Model\Consumer\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
                 ],
                 '/transaction/$transaction_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Transaction\Get::class, null, [200 => Consumer\Model\Transaction::class], null, 'consumer.transaction'),
+                    'GET' => new Method(Consumer\Action\Transaction\Get::class, null, [200 => Model\Consumer\Transaction::class], null, 'consumer.transaction'),
                 ],
                 '/account' => [
-                    'GET' => new Method(Consumer\Action\User\Get::class, null, [200 => Consumer\Model\User_Account::class], null, 'consumer.user'),
-                    'PUT' => new Method(Consumer\Action\User\Update::class, Consumer\Model\User_Account::class, [200 => Message::class], null, 'consumer.user'),
+                    'GET' => new Method(Consumer\Action\User\Get::class, null, [200 => Model\Consumer\User_Account::class], null, 'consumer.user'),
+                    'PUT' => new Method(Consumer\Action\User\Update::class, Model\Consumer\User_Account::class, [200 => Message::class], null, 'consumer.user'),
                 ],
                 '/account/change_password' => [
-                    'PUT' => new Method(Consumer\Action\User\ChangePassword::class, Backend\Model\Account_ChangePassword::class, [200 => Message::class], null, 'consumer.user'),
+                    'PUT' => new Method(Consumer\Action\User\ChangePassword::class, Model\Backend\Account_ChangePassword::class, [200 => Message::class], null, 'consumer.user'),
                 ],
                 '/activate' => [
-                    'POST' => new Method(Consumer\Action\User\Activate::class, Consumer\Model\User_Activate::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Activate::class, Model\Consumer\User_Activate::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
                 '/authorize' => [
-                    'GET' => new Method(Consumer\Action\User\GetApp::class, null, [200 => Consumer\Model\Authorize_Meta::class], null, 'consumer.user', null, true),
-                    'POST' => new Method(Consumer\Action\User\Authorize::class, Consumer\Model\Authorize_Request::class, [200 => Consumer\Model\Authorize_Response::class], null, 'consumer.user', null, true),
+                    'GET' => new Method(Consumer\Action\User\GetApp::class, null, [200 => Model\Consumer\Authorize_Meta::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Authorize::class, Model\Consumer\Authorize_Request::class, [200 => Model\Consumer\Authorize_Response::class], null, 'consumer.user', null, true),
                 ],
                 '/login' => [
-                    'POST' => new Method(Consumer\Action\User\Login::class, Consumer\Model\User_Login::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
-                    'PUT' => new Method(Consumer\Action\User\Refresh::class, Consumer\Model\User_Refresh::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Login::class, Model\Consumer\User_Login::class, [200 => Model\Consumer\User_JWT::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\Refresh::class, Model\Consumer\User_Refresh::class, [200 => Model\Consumer\User_JWT::class], null, 'consumer.user', null, true),
                 ],
                 '/provider/:provider' => [
-                    'POST' => new Method(Consumer\Action\User\Provider::class, Consumer\Model\User_Provider::class, [200 => Consumer\Model\User_JWT::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Provider::class, Model\Consumer\User_Provider::class, [200 => Model\Consumer\User_JWT::class], null, 'consumer.user', null, true),
                 ],
                 '/register' => [
-                    'POST' => new Method(Consumer\Action\User\Register::class, Consumer\Model\User_Register::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\Register::class, Model\Consumer\User_Register::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
                 '/password_reset' => [
-                    'POST' => new Method(Consumer\Action\User\ResetPassword\Request::class, Consumer\Model\User_Email::class, [200 => Message::class], null, 'consumer.user', null, true),
-                    'PUT' => new Method(Consumer\Action\User\ResetPassword\Execute::class, Consumer\Model\User_PasswordReset::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'POST' => new Method(Consumer\Action\User\ResetPassword\Request::class, Model\Consumer\User_Email::class, [200 => Message::class], null, 'consumer.user', null, true),
+                    'PUT' => new Method(Consumer\Action\User\ResetPassword\Execute::class, Model\Consumer\User_PasswordReset::class, [200 => Message::class], null, 'consumer.user', null, true),
                 ],
             ],
             'system' => [
                 '/about' => [
-                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => System\Model\About::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetAbout::class, null, [200 => Model\System\About::class], null, null, null, true),
                 ],
                 '/route' => [
-                    'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => System\Model\Route::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetAllRoute::class, null, [200 => Model\System\Route::class], null, null, null, true),
                 ],
                 '/health' => [
-                    'GET' => new Method(System\Action\GetHealth::class, null, [200 => System\Model\Health_Check::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetHealth::class, null, [200 => Model\System\Health_Check::class], null, null, null, true),
                 ],
                 '/debug' => [
-                    'GET' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
-                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
-                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
-                    'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => System\Model\Debug::class], null, null, null, true),
-                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => System\Model\Debug::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetDebug::class, null, [200 => Model\System\Debug::class], null, null, null, true),
+                    'POST' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => Model\System\Debug::class], null, null, null, true),
+                    'PUT' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => Model\System\Debug::class], null, null, null, true),
+                    'DELETE' => new Method(System\Action\GetDebug::class, null, [200 => Model\System\Debug::class], null, null, null, true),
+                    'PATCH' => new Method(System\Action\GetDebug::class, 'Passthru', [200 => Model\System\Debug::class], null, null, null, true),
                 ],
                 '/schema/:name' => [
-                    'GET' => new Method(System\Action\GetSchema::class, null, [200 => System\Model\Schema::class], null, null, null, true),
+                    'GET' => new Method(System\Action\GetSchema::class, null, [200 => Model\System\Schema::class], null, null, null, true),
                 ],
             ],
             'authorization' => [
@@ -531,7 +538,7 @@ class NewInstallation
                     'POST' => new Method(Authorization\Action\Revoke::class, null, [200 => Message::class], null, 'authorization'),
                 ],
                 '/whoami' => [
-                    'GET' => new Method(Authorization\Action\GetWhoami::class, null, [200 => Backend\Model\User::class], null, 'authorization'),
+                    'GET' => new Method(Authorization\Action\GetWhoami::class, null, [200 => Model\Backend\User::class], null, 'authorization'),
                 ],
             ],
         ];

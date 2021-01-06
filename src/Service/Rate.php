@@ -23,9 +23,9 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\Model;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Rate_Allocation;
-use Fusio\Impl\Backend\Model\Rate_Create;
-use Fusio\Impl\Backend\Model\Rate_Update;
+use Fusio\Model\Backend\Rate_Allocation;
+use Fusio\Model\Backend\Rate_Create;
+use Fusio\Model\Backend\Rate_Update;
 use Fusio\Impl\Event\Rate\CreatedEvent;
 use Fusio\Impl\Event\Rate\DeletedEvent;
 use Fusio\Impl\Event\Rate\UpdatedEvent;

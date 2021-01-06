@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Engine\Model\Product;
-use PSX\Sql\TableAbstract;
 use PSX\Http\Exception as StatusCode;
+use PSX\Sql\TableAbstract;
 
 /**
  * Plan

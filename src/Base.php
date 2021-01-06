@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl;
 
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 
 /**
  * Base
@@ -37,7 +37,7 @@ class Base
      */
     public static function getVersion()
     {
-        return Versions::getVersion('fusio/impl');
+        return InstalledVersions::getVersion('fusio/impl');
     }
 
     /**

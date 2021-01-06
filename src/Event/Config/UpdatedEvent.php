@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Event\Config;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Config_Update;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Model\Backend\Config_Update;
 
 /**
  * UpdatedEvent

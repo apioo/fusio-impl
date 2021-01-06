@@ -29,7 +29,7 @@ use Fusio\Engine\Parameters;
 use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Consumer\Model\Transaction_Prepare_Request;
+use Fusio\Model\Consumer\Transaction_Prepare_Request;
 use Fusio\Impl\Event\Transaction\ExecutedEvent;
 use Fusio\Impl\Event\Transaction\PreparedEvent;
 use Fusio\Impl\Provider\ProviderFactory;

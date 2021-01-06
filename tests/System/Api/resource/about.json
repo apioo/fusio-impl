@@ -6,7 +6,7 @@
       "operationId": "System_Action_GetAbout",
       "tags": [],
       "responses": {
-        "200": "System_Model_About"
+        "200": "System_About"
       }
     }
   },
@@ -60,7 +60,7 @@
         }
       }
     },
-    "System_Model_About": {
+    "System_About": {
       "$ref": "About"
     }
   }

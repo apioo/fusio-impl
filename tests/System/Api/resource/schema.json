@@ -7,7 +7,7 @@
       "operationId": "System_Action_GetSchema",
       "tags": [],
       "responses": {
-        "200": "System_Model_Schema"
+        "200": "System_Schema"
       }
     }
   },
@@ -43,7 +43,7 @@
         }
       }
     },
-    "System_Model_Schema": {
+    "System_Schema": {
       "$ref": "Schema"
     }
   }

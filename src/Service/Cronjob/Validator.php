@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Service\Cronjob;
 
-use Fusio\Impl\Framework\Filter\Filter;
 use PSX\Http\Exception as StatusCode;
 
 /**

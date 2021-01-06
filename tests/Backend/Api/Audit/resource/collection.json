@@ -12,9 +12,9 @@
       "tags": [
         "backend.audit"
       ],
-      "queryParameters": "Backend_Model_Audit_Collection_Query",
+      "queryParameters": "Backend_Audit_Collection_Query",
       "responses": {
-        "200": "Backend_Model_Audit_Collection"
+        "200": "Backend_Audit_Collection"
       }
     }
   },
@@ -165,10 +165,10 @@
         "type": "any"
       }
     },
-    "Backend_Model_Audit_Collection": {
+    "Backend_Audit_Collection": {
       "$ref": "Audit_Collection"
     },
-    "Backend_Model_Audit_Collection_Query": {
+    "Backend_Audit_Collection_Query": {
       "$ref": "Audit_Collection_Query"
     },
     "Collection": {

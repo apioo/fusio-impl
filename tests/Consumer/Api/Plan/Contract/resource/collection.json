@@ -12,9 +12,9 @@
       "tags": [
         "consumer.plan"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_Plan_Contract_Collection"
+        "200": "Consumer_Plan_Contract_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "consumer.plan"
       ],
-      "request": "Consumer_Model_Plan_Order_Request",
+      "request": "Consumer_Plan_Order_Request",
       "responses": {
-        "201": "Consumer_Model_Plan_Order_Response"
+        "201": "Consumer_Plan_Order_Response"
       }
     }
   },
@@ -65,17 +65,14 @@
         }
       }
     },
-    "Consumer_Model_Plan_Contract_Collection": {
+    "Consumer_Plan_Contract_Collection": {
       "$ref": "Plan_Contract_Collection"
     },
-    "Consumer_Model_Plan_Order_Request": {
+    "Consumer_Plan_Order_Request": {
       "$ref": "Plan_Order_Request"
     },
-    "Consumer_Model_Plan_Order_Response": {
+    "Consumer_Plan_Order_Response": {
       "$ref": "Plan_Order_Response"
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     },
     "Plan": {
       "type": "object",

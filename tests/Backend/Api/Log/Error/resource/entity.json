@@ -14,7 +14,7 @@
         "backend.log"
       ],
       "responses": {
-        "200": "Backend_Model_Log_Error"
+        "200": "Backend_Log_Error"
       }
     }
   },
@@ -27,7 +27,7 @@
         }
       }
     },
-    "Backend_Model_Log_Error": {
+    "Backend_Log_Error": {
       "$ref": "Log_Error"
     },
     "Log_Error": {

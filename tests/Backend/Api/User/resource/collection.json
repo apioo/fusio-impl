@@ -12,9 +12,9 @@
       "tags": [
         "backend.user"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_User_Collection"
+        "200": "Backend_User_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.user"
       ],
-      "request": "Backend_Model_User_Create",
+      "request": "Backend_User_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
@@ -105,10 +105,10 @@
         }
       }
     },
-    "Backend_Model_User_Collection": {
+    "Backend_User_Collection": {
       "$ref": "User_Collection"
     },
-    "Backend_Model_User_Create": {
+    "Backend_User_Create": {
       "$ref": "User_Create"
     },
     "Collection": {
@@ -152,12 +152,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "User": {
       "type": "object",

@@ -12,9 +12,9 @@
       "tags": [
         "backend.app"
       ],
-      "queryParameters": "Backend_Model_App_Token_Collection_Query",
+      "queryParameters": "Backend_App_Token_Collection_Query",
       "responses": {
-        "200": "Backend_Model_App_Token_Collection"
+        "200": "Backend_App_Token_Collection"
       }
     }
   },
@@ -82,10 +82,10 @@
         }
       }
     },
-    "Backend_Model_App_Token_Collection": {
+    "Backend_App_Token_Collection": {
       "$ref": "App_Token_Collection"
     },
-    "Backend_Model_App_Token_Collection_Query": {
+    "Backend_App_Token_Collection_Query": {
       "$ref": "App_Token_Collection_Query"
     },
     "Collection": {

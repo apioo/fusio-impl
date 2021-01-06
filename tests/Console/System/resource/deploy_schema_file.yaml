@@ -1,2 +1,0 @@
-schema:
-  Ref-Schema: !include schema.json

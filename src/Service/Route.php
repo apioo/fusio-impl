@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service;
 
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model\Route_Create;
-use Fusio\Impl\Backend\Model\Route_Update;
+use Fusio\Model\Backend\Route_Create;
+use Fusio\Model\Backend\Route_Update;
 use Fusio\Impl\Controller\SchemaApiController;
 use Fusio\Impl\Event\Route\CreatedEvent;
 use Fusio\Impl\Event\Route\DeletedEvent;

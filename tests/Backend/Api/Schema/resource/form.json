@@ -13,9 +13,9 @@
       "tags": [
         "backend.schema"
       ],
-      "request": "Backend_Model_Schema_Form",
+      "request": "Backend_Schema_Form",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -28,7 +28,7 @@
         }
       }
     },
-    "Backend_Model_Schema_Form": {
+    "Backend_Schema_Form": {
       "$ref": "Schema_Form"
     },
     "Message": {
@@ -41,9 +41,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Schema_Form": {
       "description": "Contains a UI vocabulary to describe the UI of the schema",

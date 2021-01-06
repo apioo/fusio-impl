@@ -14,7 +14,7 @@
         "backend.schema"
       ],
       "responses": {
-        "200": "Backend_Model_Schema_Preview_Response"
+        "200": "Backend_Schema_Preview_Response"
       }
     }
   },
@@ -27,7 +27,7 @@
         }
       }
     },
-    "Backend_Model_Schema_Preview_Response": {
+    "Backend_Schema_Preview_Response": {
       "$ref": "Schema_Preview_Response"
     },
     "Schema_Preview_Response": {

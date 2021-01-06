@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Tests\Adapter\Test;
 
-use Fusio\Engine\Connection\DeploymentInterface;
-use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;

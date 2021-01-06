@@ -21,8 +21,7 @@
 
 namespace Fusio\Impl\System\Api;
 
-use Fusio\Impl\Authorization\Authorization;
-use Fusio\Impl\System\Model;
+use Fusio\Model\System;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
@@ -71,7 +70,7 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
         $post = $builder->addMethod('POST');
         $post->setDescription('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification');
         $post->setRequest(Passthru::class);
-        $post->addResponse(200, Model\Rpc_Response_Success::class);
+        $post->addResponse(200, System\Rpc_Response_Success::class);
 
         return $builder->getSpecification();
     }
