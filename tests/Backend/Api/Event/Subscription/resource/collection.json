@@ -12,9 +12,9 @@
       "tags": [
         "backend.event"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_Event_Subscription_Collection"
+        "200": "Backend_Event_Subscription_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Model_Event_Subscription_Create",
+      "request": "Backend_Event_Subscription_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Event_Subscription_Collection": {
+    "Backend_Event_Subscription_Collection": {
       "$ref": "Event_Subscription_Collection"
     },
-    "Backend_Model_Event_Subscription_Create": {
+    "Backend_Event_Subscription_Create": {
       "$ref": "Event_Subscription_Create"
     },
     "Collection": {
@@ -113,12 +113,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

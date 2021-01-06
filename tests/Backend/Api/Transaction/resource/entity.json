@@ -14,7 +14,7 @@
         "backend.transaction"
       ],
       "responses": {
-        "200": "Backend_Model_Transaction"
+        "200": "Backend_Transaction"
       }
     }
   },
@@ -27,7 +27,7 @@
         }
       }
     },
-    "Backend_Model_Transaction": {
+    "Backend_Transaction": {
       "$ref": "Transaction"
     },
     "Transaction": {

@@ -13,7 +13,7 @@
         "backend.sdk"
       ],
       "responses": {
-        "200": "Backend_Model_Sdk_Types"
+        "200": "Backend_Sdk_Types"
       }
     },
     "POST": {
@@ -26,17 +26,17 @@
       "tags": [
         "backend.sdk"
       ],
-      "request": "Backend_Model_Sdk_Generate",
+      "request": "Backend_Sdk_Generate",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Sdk_Generate": {
+    "Backend_Sdk_Generate": {
       "$ref": "Sdk_Generate"
     },
-    "Backend_Model_Sdk_Types": {
+    "Backend_Sdk_Types": {
       "$ref": "Sdk_Types"
     },
     "Message": {
@@ -49,9 +49,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Sdk_Generate": {
       "type": "object",

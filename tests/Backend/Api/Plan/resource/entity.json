@@ -14,7 +14,7 @@
         "backend.plan"
       ],
       "responses": {
-        "200": "Backend_Model_Plan"
+        "200": "Backend_Plan"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.plan"
       ],
-      "request": "Backend_Model_Plan_Update",
+      "request": "Backend_Plan_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.plan"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Plan": {
+    "Backend_Plan": {
       "$ref": "Plan"
     },
-    "Backend_Model_Plan_Update": {
+    "Backend_Plan_Update": {
       "$ref": "Plan_Update"
     },
     "Message": {
@@ -72,9 +72,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Plan": {
       "type": "object",

@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Tests\Consumer\Api\User;
 
 use Firebase\JWT\JWT;
-use Fusio\Impl\Consumer\Model\User_Register;
+use Fusio\Model\Consumer\User_Register;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;

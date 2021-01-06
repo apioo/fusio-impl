@@ -7,14 +7,14 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_Model_User_Activate",
+      "request": "Consumer_User_Activate",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
   "definitions": {
-    "Consumer_Model_User_Activate": {
+    "Consumer_User_Activate": {
       "$ref": "User_Activate"
     },
     "Message": {
@@ -27,9 +27,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "User_Activate": {
       "type": "object",

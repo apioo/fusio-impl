@@ -12,9 +12,9 @@
       "tags": [
         "backend.plan"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_Plan_Contract_Collection"
+        "200": "Backend_Plan_Contract_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.plan"
       ],
-      "request": "Backend_Model_Plan_Contract_Create",
+      "request": "Backend_Plan_Contract_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
@@ -105,10 +105,10 @@
         }
       }
     },
-    "Backend_Model_Plan_Contract_Collection": {
+    "Backend_Plan_Contract_Collection": {
       "$ref": "Plan_Contract_Collection"
     },
-    "Backend_Model_Plan_Contract_Create": {
+    "Backend_Plan_Contract_Create": {
       "$ref": "Plan_Contract_Create"
     },
     "Collection": {
@@ -152,12 +152,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Plan": {
       "type": "object",

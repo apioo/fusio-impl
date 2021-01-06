@@ -14,7 +14,7 @@
         "backend.schema"
       ],
       "responses": {
-        "200": "Backend_Model_Schema"
+        "200": "Backend_Schema"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.schema"
       ],
-      "request": "Backend_Model_Schema_Update",
+      "request": "Backend_Schema_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.schema"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Schema": {
+    "Backend_Schema": {
       "$ref": "Schema"
     },
-    "Backend_Model_Schema_Update": {
+    "Backend_Schema_Update": {
       "$ref": "Schema_Update"
     },
     "Message": {
@@ -72,9 +72,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Schema": {
       "type": "object",

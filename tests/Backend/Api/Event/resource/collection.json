@@ -12,9 +12,9 @@
       "tags": [
         "backend.event"
       ],
-      "queryParameters": "Model_Collection_Category_Query",
+      "queryParameters": "Collection_Category_Query",
       "responses": {
-        "200": "Backend_Model_Event_Collection"
+        "200": "Backend_Event_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Model_Event_Create",
+      "request": "Backend_Event_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Event_Collection": {
+    "Backend_Event_Collection": {
       "$ref": "Event_Collection"
     },
-    "Backend_Model_Event_Create": {
+    "Backend_Event_Create": {
       "$ref": "Event_Create"
     },
     "Collection": {
@@ -121,12 +121,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Category_Query": {
-      "$ref": "Collection_Category_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

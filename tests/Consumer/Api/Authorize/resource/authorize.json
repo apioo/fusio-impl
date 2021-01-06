@@ -8,7 +8,7 @@
         "consumer.user"
       ],
       "responses": {
-        "200": "Consumer_Model_Authorize_Meta"
+        "200": "Consumer_Authorize_Meta"
       }
     },
     "POST": {
@@ -16,9 +16,9 @@
       "tags": [
         "consumer.user"
       ],
-      "request": "Consumer_Model_Authorize_Request",
+      "request": "Consumer_Authorize_Request",
       "responses": {
-        "200": "Consumer_Model_Authorize_Response"
+        "200": "Consumer_Authorize_Response"
       }
     }
   },
@@ -103,13 +103,13 @@
         }
       }
     },
-    "Consumer_Model_Authorize_Meta": {
+    "Consumer_Authorize_Meta": {
       "$ref": "Authorize_Meta"
     },
-    "Consumer_Model_Authorize_Request": {
+    "Consumer_Authorize_Request": {
       "$ref": "Authorize_Request"
     },
-    "Consumer_Model_Authorize_Response": {
+    "Consumer_Authorize_Response": {
       "$ref": "Authorize_Response"
     },
     "Scope": {

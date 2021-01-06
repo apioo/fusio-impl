@@ -28,7 +28,7 @@ use Fusio\Engine\Exception\FactoryResolveException;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Backend\Model;
+use Fusio\Model\Backend;
 use Fusio\Model\Backend\Action_Create;
 use Fusio\Model\Backend\Action_Update;
 use Fusio\Impl\Event\Action\CreatedEvent;
@@ -259,7 +259,7 @@ class Action
         return $action;
     }
 
-    private function assertSandboxAccess(Model\Action $record)
+    private function assertSandboxAccess(Backend\Action $record)
     {
         $class = ltrim($record->getClass(), '\\');
 

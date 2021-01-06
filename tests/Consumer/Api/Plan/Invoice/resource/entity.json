@@ -14,7 +14,7 @@
         "consumer.plan"
       ],
       "responses": {
-        "200": "Consumer_Model_Plan_Invoice"
+        "200": "Consumer_Plan_Invoice"
       }
     }
   },
@@ -27,7 +27,7 @@
         }
       }
     },
-    "Consumer_Model_Plan_Invoice": {
+    "Consumer_Plan_Invoice": {
       "$ref": "Plan_Invoice"
     },
     "Plan_Invoice": {

@@ -14,7 +14,7 @@
         "backend.event"
       ],
       "responses": {
-        "200": "Backend_Model_Event_Subscription"
+        "200": "Backend_Event_Subscription"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "backend.event"
       ],
-      "request": "Backend_Model_Event_Subscription_Update",
+      "request": "Backend_Event_Subscription_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "backend.event"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -56,10 +56,10 @@
         }
       }
     },
-    "Backend_Model_Event_Subscription": {
+    "Backend_Event_Subscription": {
       "$ref": "Event_Subscription"
     },
-    "Backend_Model_Event_Subscription_Update": {
+    "Backend_Event_Subscription_Update": {
       "$ref": "Event_Subscription_Update"
     },
     "Event_Subscription": {
@@ -93,9 +93,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

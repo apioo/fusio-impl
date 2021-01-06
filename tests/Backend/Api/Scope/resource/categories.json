@@ -13,12 +13,12 @@
         "backend.scope"
       ],
       "responses": {
-        "200": "Backend_Model_Scope_Categories"
+        "200": "Backend_Scope_Categories"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Scope_Categories": {
+    "Backend_Scope_Categories": {
       "$ref": "Scope_Categories"
     },
     "Scope_Categories": {

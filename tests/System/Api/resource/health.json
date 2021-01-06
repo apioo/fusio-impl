@@ -6,7 +6,7 @@
       "operationId": "System_Action_GetHealth",
       "tags": [],
       "responses": {
-        "200": "System_Model_Health_Check"
+        "200": "System_Health_Check"
       }
     }
   },
@@ -22,7 +22,7 @@
         }
       }
     },
-    "System_Model_Health_Check": {
+    "System_Health_Check": {
       "$ref": "Health_Check"
     }
   }

@@ -12,14 +12,14 @@
       "tags": [
         "backend.log"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Model_Log_Error_Collection"
+        "200": "Backend_Log_Error_Collection"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Log_Error_Collection": {
+    "Backend_Log_Error_Collection": {
       "$ref": "Log_Error_Collection"
     },
     "Collection": {
@@ -75,9 +75,6 @@
       "$template": {
         "T": "Log_Error"
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     }
   }
 }

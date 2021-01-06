@@ -12,9 +12,9 @@
       "tags": [
         "backend.route"
       ],
-      "queryParameters": "Model_Collection_Category_Query",
+      "queryParameters": "Collection_Category_Query",
       "responses": {
-        "200": "Backend_Model_Route_Collection"
+        "200": "Backend_Route_Collection"
       }
     },
     "POST": {
@@ -27,17 +27,17 @@
       "tags": [
         "backend.route"
       ],
-      "request": "Backend_Model_Route_Create",
+      "request": "Backend_Route_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
   "definitions": {
-    "Backend_Model_Route_Collection": {
+    "Backend_Route_Collection": {
       "$ref": "Route_Collection"
     },
-    "Backend_Model_Route_Create": {
+    "Backend_Route_Create": {
       "$ref": "Route_Create"
     },
     "Collection": {
@@ -90,12 +90,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Category_Query": {
-      "$ref": "Collection_Category_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     },
     "Route": {
       "type": "object",

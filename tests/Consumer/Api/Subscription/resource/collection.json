@@ -12,9 +12,9 @@
       "tags": [
         "consumer.subscription"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_Event_Subscription_Collection"
+        "200": "Consumer_Event_Subscription_Collection"
       }
     },
     "POST": {
@@ -27,9 +27,9 @@
       "tags": [
         "consumer.subscription"
       ],
-      "request": "Consumer_Model_Event_Subscription_Create",
+      "request": "Consumer_Event_Subscription_Create",
       "responses": {
-        "201": "Model_Message"
+        "201": "Message"
       }
     }
   },
@@ -65,10 +65,10 @@
         }
       }
     },
-    "Consumer_Model_Event_Subscription_Collection": {
+    "Consumer_Event_Subscription_Collection": {
       "$ref": "Event_Subscription_Collection"
     },
-    "Consumer_Model_Event_Subscription_Create": {
+    "Consumer_Event_Subscription_Create": {
       "$ref": "Event_Subscription_Create"
     },
     "Event_Subscription": {
@@ -142,12 +142,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }

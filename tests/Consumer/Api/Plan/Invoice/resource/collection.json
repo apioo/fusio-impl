@@ -12,9 +12,9 @@
       "tags": [
         "consumer.plan"
       ],
-      "queryParameters": "Model_Collection_Query",
+      "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Consumer_Model_Plan_Invoice_Collection"
+        "200": "Consumer_Plan_Invoice_Collection"
       }
     }
   },
@@ -50,11 +50,8 @@
         }
       }
     },
-    "Consumer_Model_Plan_Invoice_Collection": {
+    "Consumer_Plan_Invoice_Collection": {
       "$ref": "Plan_Invoice_Collection"
-    },
-    "Model_Collection_Query": {
-      "$ref": "Collection_Query"
     },
     "Plan_Invoice": {
       "type": "object",

@@ -14,7 +14,7 @@
         "consumer.app"
       ],
       "responses": {
-        "200": "Consumer_Model_App"
+        "200": "Consumer_App"
       }
     },
     "PUT": {
@@ -27,9 +27,9 @@
       "tags": [
         "consumer.app"
       ],
-      "request": "Consumer_Model_App_Update",
+      "request": "Consumer_App_Update",
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     },
     "DELETE": {
@@ -43,7 +43,7 @@
         "consumer.app"
       ],
       "responses": {
-        "200": "Model_Message"
+        "200": "Message"
       }
     }
   },
@@ -117,10 +117,10 @@
         }
       }
     },
-    "Consumer_Model_App": {
+    "Consumer_App": {
       "$ref": "App"
     },
-    "Consumer_Model_App_Update": {
+    "Consumer_App_Update": {
       "$ref": "App_Update"
     },
     "Message": {
@@ -133,9 +133,6 @@
           "type": "string"
         }
       }
-    },
-    "Model_Message": {
-      "$ref": "Message"
     }
   }
 }
