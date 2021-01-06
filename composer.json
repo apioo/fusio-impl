@@ -12,7 +12,6 @@
   ],
   "scripts": {
     "tests": "@php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml tests",
-    "generate": "@php gen_model.php",
     "psalm": "@php vendor/vimeo/psalm/psalm"
   },
   "require": {
