@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Console;
 
+use Composer\InstalledVersions;
 use Fusio\Cli\Transport\TransportInterface;
 use PSX\Framework\Dispatch\Dispatch;
 use PSX\Http\Environment\HttpResponse;
@@ -52,10 +53,12 @@ class Transport implements TransportInterface
 
     public function request(string $baseUri, string $method, string $path, ?array $query = null, ?array $headers = null, $body = null): HttpResponseInterface
     {
-        $uri = new Uri($path);
+        $uri = new Uri('/' . $path);
         if ($query !== null) {
             $uri = $uri->withParameters($query);
         }
+
+        $headers['User-Agent'] = 'Fusio CLI v' . InstalledVersions::getPrettyVersion('fusio/cli');
 
         if ($body instanceof \JsonSerializable) {
             $headers['Content-Type'] = 'application/json';
