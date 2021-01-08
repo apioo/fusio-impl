@@ -77,7 +77,7 @@ class Config extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Config::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Config::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'type' => $this->fieldInteger('type'),
             'name' => 'name',
@@ -86,5 +86,15 @@ class Config extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Config::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

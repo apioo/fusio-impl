@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $role = $this->table->getEntity(
-            (int) $request->get('role_id')
+            $request->get('role_id')
         );
 
         if (empty($role)) {

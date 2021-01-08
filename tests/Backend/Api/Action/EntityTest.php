@@ -92,6 +92,34 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/action/~Sql-Insert', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": {$this->id},
+    "status": 1,
+    "name": "Sql-Insert",
+    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
+    "async": false,
+    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
+    "config": {
+        "connection": 2,
+        "table": "app_news"
+    },
+    "date": "2015-02-27T19:59:15Z"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetNotFound()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);

@@ -60,7 +60,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $schema = $this->table->getEntity(
-            (int) $request->get('schema_id')
+            $request->get('schema_id')
         );
 
         if (empty($schema)) {

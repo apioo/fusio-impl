@@ -51,7 +51,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $scope = $this->table->getEntity(
-            (int) $request->get('scope_id')
+            $request->get('scope_id')
         );
 
         if (empty($scope)) {

@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
+  "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+|^~>",
   "pathParameters": "BackendCronjobCronjob_idPath",
   "methods": {
     "GET": {

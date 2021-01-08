@@ -106,7 +106,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/scope\/$scope_id<[0-9]+>",
+      "path": "\/backend\/scope\/$scope_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -127,7 +127,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/schema\/$schema_id<[0-9]+>",
+      "path": "\/backend\/schema\/$schema_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -183,7 +183,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/role\/$role_id<[0-9]+>",
+      "path": "\/backend\/role\/$role_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -197,7 +197,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/rate\/$rate_id<[0-9]+>",
+      "path": "\/backend\/rate\/$rate_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -211,7 +211,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/$plan_id<[0-9]+>",
+      "path": "\/backend\/plan\/$plan_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -295,7 +295,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/event\/$event_id<[0-9]+>",
+      "path": "\/backend\/event\/$event_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -330,7 +330,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+>",
+      "path": "\/backend\/cronjob\/$cronjob_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -344,7 +344,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/connection\/$connection_id<[0-9]+>",
+      "path": "\/backend\/connection\/$connection_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -372,7 +372,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/config\/$config_id<[0-9]+>",
+      "path": "\/backend\/config\/$config_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -386,7 +386,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/category\/$category_id<[0-9]+>",
+      "path": "\/backend\/category\/$category_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],
@@ -449,7 +449,7 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/action\/$action_id<[0-9]+>",
+      "path": "\/backend\/action\/$action_id<[0-9]+|^~>",
       "methods": [
         "ANY"
       ],

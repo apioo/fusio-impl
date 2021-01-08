@@ -117,6 +117,58 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/routes/~' . urlencode('/foo'), 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": {$this->id},
+    "status": 1,
+    "path": "\/foo",
+    "controller": "Fusio\\\\Impl\\\\Controller\\\\SchemaApiController",
+    "scopes": [
+        "bar"
+    ],
+    "config": [
+        {
+            "version": 1,
+            "status": 4,
+            "methods": {
+                "GET": {
+                    "active": true,
+                    "public": true,
+                    "operationId": "listFoo",
+                    "responses": {
+                        "200": "Collection-Schema"
+                    },
+                    "action": "Sql-Select-All"
+                },
+                "POST": {
+                    "active": true,
+                    "public": false,
+                    "operationId": "createFoo",
+                    "request": "Entry-Schema",
+                    "responses": {
+                        "201": "Passthru"
+                    },
+                    "action": "Sql-Insert",
+                    "costs": 1
+                }
+            }
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetNotFound()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);

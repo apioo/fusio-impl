@@ -78,7 +78,7 @@ class Event extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Event::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Event::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -86,5 +86,15 @@ class Event extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Event::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

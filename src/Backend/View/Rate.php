@@ -80,7 +80,7 @@ class Rate extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Rate::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Rate::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'priority' => $this->fieldInteger('priority'),
@@ -98,5 +98,15 @@ class Rate extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Rate::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

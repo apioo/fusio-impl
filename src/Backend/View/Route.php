@@ -79,7 +79,7 @@ class Route extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Route::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Route::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'path' => 'path',
@@ -188,5 +188,15 @@ class Route extends ViewAbstract
         ];
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Route::class)->getOneByPath(urldecode(substr($id, 1)));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

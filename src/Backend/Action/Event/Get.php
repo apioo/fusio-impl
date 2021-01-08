@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $event = $this->table->getEntity(
-            (int) $request->get('event_id')
+            $request->get('event_id')
         );
 
         if (empty($event)) {

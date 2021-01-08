@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $route = $this->table->getEntity(
-            (int) $request->get('route_id')
+            $request->get('route_id')
         );
 
         if (empty($route)) {

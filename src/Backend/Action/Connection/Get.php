@@ -66,7 +66,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $connection = $this->table->getEntityWithConfig(
-            (int) $request->get('connection_id'),
+            $request->get('connection_id'),
             $this->config->get('fusio_project_key'),
             $this->connectionParser
         );

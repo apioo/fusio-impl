@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/scope\/$scope_id<[0-9]+>",
+  "path": "\/backend\/scope\/$scope_id<[0-9]+|^~>",
   "pathParameters": "BackendScopeScope_idPath",
   "methods": {
     "GET": {

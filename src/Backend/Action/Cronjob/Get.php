@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $cronjob = $this->table->getEntity(
-            (int) $request->get('cronjob_id')
+            $request->get('cronjob_id')
         );
 
         if (empty($cronjob)) {

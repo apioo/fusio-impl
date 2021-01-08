@@ -83,6 +83,27 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/event/~foo-event', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": {$this->id},
+    "status": 1,
+    "name": "foo-event",
+    "description": "Foo event description"
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetNotFound()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);

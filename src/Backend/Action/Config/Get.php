@@ -51,7 +51,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $config = $this->table->getEntity(
-            (int) $request->get('config_id')
+            $request->get('config_id')
         );
 
         if (empty($config)) {

@@ -75,6 +75,28 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/config/~authorization_url', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $actual = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "id": 3,
+    "type": 1,
+    "name": "authorization_url",
+    "description": "Url where the user can authorize for the OAuth2 flow",
+    "value": ""
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $actual);
+        $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/backend/config/3', 'POST', array(

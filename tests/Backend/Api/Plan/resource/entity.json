@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/plan\/$plan_id<[0-9]+>",
+  "path": "\/backend\/plan\/$plan_id<[0-9]+|^~>",
   "pathParameters": "BackendPlanPlan_idPath",
   "methods": {
     "GET": {

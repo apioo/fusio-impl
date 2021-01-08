@@ -80,7 +80,7 @@ class Connection extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -92,7 +92,7 @@ class Connection extends ViewAbstract
 
     public function getEntityWithConfig($id, $secretKey, ParserInterface $connectionParser)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -122,5 +122,15 @@ class Connection extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Connection::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

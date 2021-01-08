@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $rate = $this->table->getEntity(
-            (int) $request->get('rate_id')
+            $request->get('rate_id')
         );
 
         if (empty($rate)) {

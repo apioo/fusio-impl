@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/rate\/$rate_id<[0-9]+>",
+  "path": "\/backend\/rate\/$rate_id<[0-9]+|^~>",
   "pathParameters": "BackendRateRate_idPath",
   "methods": {
     "GET": {

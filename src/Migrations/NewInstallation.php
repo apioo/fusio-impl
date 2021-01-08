@@ -171,7 +171,7 @@ class NewInstallation
                 '/action/execute/:action_id' => [
                     'POST' => new Method(Backend\Action\Action\Execute::class, Model\Backend\Action_Execute_Request::class, [200 => Model\Backend\Action_Execute_Response::class], null, 'backend.action'),
                 ],
-                '/action/$action_id<[0-9]+>' => [
+                '/action/$action_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Action\Get::class, null, [200 => Model\Backend\Action::class], null, 'backend.action'),
                     'PUT' => new Method(Backend\Action\Action\Update::class, Model\Backend\Action_Update::class, [200 => Message::class], null, 'backend.action', 'fusio.action.update'),
                     'DELETE' => new Method(Backend\Action\Action\Delete::class, null, [200 => Message::class], null, 'backend.action', 'fusio.action.delete'),
@@ -204,7 +204,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Category\GetAll::class, null, [200 => Model\Backend\Category_Collection::class], Collection_Query::class, 'backend.category'),
                     'POST' => new Method(Backend\Action\Category\Create::class, Model\Backend\Category_Create::class, [201 => Message::class], null, 'backend.category', 'fusio.category.create'),
                 ],
-                '/category/$category_id<[0-9]+>' => [
+                '/category/$category_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Category\Get::class, null, [200 => Model\Backend\Category::class], null, 'backend.category'),
                     'PUT' => new Method(Backend\Action\Category\Update::class, Model\Backend\Category_Update::class, [200 => Message::class], null, 'backend.category', 'fusio.category.update'),
                     'DELETE' => new Method(Backend\Action\Category\Delete::class, null, [200 => Message::class], null, 'backend.category', 'fusio.category.delete'),
@@ -212,7 +212,7 @@ class NewInstallation
                 '/config' => [
                     'GET' => new Method(Backend\Action\Config\GetAll::class, null, [200 => Model\Backend\Config_Collection::class], Collection_Query::class, 'backend.config'),
                 ],
-                '/config/$config_id<[0-9]+>' => [
+                '/config/$config_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Config\Get::class, null, [200 => Model\Backend\Config::class], null, 'backend.config'),
                     'PUT' => new Method(Backend\Action\Config\Update::class, Model\Backend\Config_Update::class, [200 => Message::class], null, 'backend.config'),
                 ],
@@ -226,7 +226,7 @@ class NewInstallation
                 '/connection/form' => [
                     'GET' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], null, 'backend.connection'),
                 ],
-                '/connection/$connection_id<[0-9]+>' => [
+                '/connection/$connection_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Model\Backend\Connection::class], null, 'backend.connection'),
                     'PUT' => new Method(Backend\Action\Connection\Update::class, Model\Backend\Connection_Update::class, [200 => Message::class], null, 'backend.connection', 'fusio.connection.update'),
                     'DELETE' => new Method(Backend\Action\Connection\Delete::class, null, [200 => Message::class], null, 'backend.connection', 'fusio.connection.delete'),
@@ -235,7 +235,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Model\Backend\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
                     'POST' => new Method(Backend\Action\Cronjob\Create::class, Model\Backend\Cronjob_Create::class, [201 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.create'),
                 ],
-                '/cronjob/$cronjob_id<[0-9]+>' => [
+                '/cronjob/$cronjob_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Cronjob\Get::class, null, [200 => Model\Backend\Cronjob::class], null, 'backend.cronjob'),
                     'PUT' => new Method(Backend\Action\Cronjob\Update::class, Model\Backend\Cronjob_Update::class, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.update'),
                     'DELETE' => new Method(Backend\Action\Cronjob\Delete::class, null, [200 => Message::class], null, 'backend.cronjob', 'fusio.cronjob.delete'),
@@ -256,7 +256,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Event\GetAll::class, null, [200 => Model\Backend\Event_Collection::class], Collection_Category_Query::class, 'backend.event'),
                     'POST' => new Method(Backend\Action\Event\Create::class, Model\Backend\Event_Create::class, [201 => Message::class], null, 'backend.event', 'fusio.event.create'),
                 ],
-                '/event/$event_id<[0-9]+>' => [
+                '/event/$event_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Event\Get::class, null, [200 => Model\Backend\Event::class], null, 'backend.event'),
                     'PUT' => new Method(Backend\Action\Event\Update::class, Model\Backend\Event_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.update'),
                     'DELETE' => new Method(Backend\Action\Event\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.delete'),
@@ -304,7 +304,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Model\Backend\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
                     'POST' => new Method(Backend\Action\Plan\Create::class, Model\Backend\Plan_Create::class, [201 => Message::class], null, 'backend.plan', 'fusio.plan.create'),
                 ],
-                '/plan/$plan_id<[0-9]+>' => [
+                '/plan/$plan_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Plan\Get::class, null, [200 => Model\Backend\Plan::class], null, 'backend.plan'),
                     'PUT' => new Method(Backend\Action\Plan\Update::class, Model\Backend\Plan_Update::class, [200 => Message::class], null, 'backend.plan', 'fusio.plan.update'),
                     'DELETE' => new Method(Backend\Action\Plan\Delete::class, null, [200 => Message::class], null, 'backend.plan', 'fusio.plan.delete'),
@@ -313,7 +313,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Rate\GetAll::class, null, [200 => Model\Backend\Rate_Collection::class], Collection_Query::class, 'backend.rate'),
                     'POST' => new Method(Backend\Action\Rate\Create::class, Model\Backend\Rate_Create::class, [201 => Message::class], null, 'backend.rate', 'fusio.rate.create'),
                 ],
-                '/rate/$rate_id<[0-9]+>' => [
+                '/rate/$rate_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Rate\Get::class, null, [200 => Model\Backend\Rate::class], null, 'backend.rate'),
                     'PUT' => new Method(Backend\Action\Rate\Update::class, Model\Backend\Rate_Update::class, [200 => Message::class], null, 'backend.rate', 'fusio.rate.update'),
                     'DELETE' => new Method(Backend\Action\Rate\Delete::class, null, [200 => Message::class], null, 'backend.rate', 'fusio.rate.delete'),
@@ -322,7 +322,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Role\GetAll::class, null, [200 => Model\Backend\Role_Collection::class], Collection_Query::class, 'backend.role'),
                     'POST' => new Method(Backend\Action\Role\Create::class, Model\Backend\Role_Create::class, [201 => Message::class], null, 'backend.role', 'fusio.role.create'),
                 ],
-                '/role/$role_id<[0-9]+>' => [
+                '/role/$role_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Role\Get::class, null, [200 => Model\Backend\Role::class], null, 'backend.role'),
                     'PUT' => new Method(Backend\Action\Role\Update::class, Model\Backend\Role_Update::class, [200 => Message::class], null, 'backend.role', 'fusio.role.update'),
                     'DELETE' => new Method(Backend\Action\Role\Delete::class, null, [200 => Message::class], null, 'backend.role', 'fusio.role.delete'),
@@ -354,7 +354,7 @@ class NewInstallation
                 '/schema/form/$schema_id<[0-9]+>' => [
                     'PUT' => new Method(Backend\Action\Schema\Form::class, Model\Backend\Schema_Form::class, [200 => Message::class], null, 'backend.schema'),
                 ],
-                '/schema/$schema_id<[0-9]+>' => [
+                '/schema/$schema_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Schema\Get::class, null, [200 => Model\Backend\Schema::class], null, 'backend.schema'),
                     'PUT' => new Method(Backend\Action\Schema\Update::class, Model\Backend\Schema_Update::class, [200 => Message::class], null, 'backend.schema', 'fusio.schema.update'),
                     'DELETE' => new Method(Backend\Action\Schema\Delete::class, null, [200 => Message::class], null, 'backend.schema', 'fusio.schema.delete'),
@@ -366,7 +366,7 @@ class NewInstallation
                 '/scope/categories' => [
                     'GET' => new Method(Backend\Action\Scope\GetCategories::class, null, [200 => Model\Backend\Scope_Categories::class], null, 'backend.scope'),
                 ],
-                '/scope/$scope_id<[0-9]+>' => [
+                '/scope/$scope_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Scope\Get::class, null, [200 => Model\Backend\Scope::class], null, 'backend.scope'),
                     'PUT' => new Method(Backend\Action\Scope\Update::class, Model\Backend\Scope_Update::class, [200 => Message::class], null, 'backend.scope', 'fusio.scope.update'),
                     'DELETE' => new Method(Backend\Action\Scope\Delete::class, null, [200 => Message::class], null, 'backend.scope', 'fusio.scope.delete'),

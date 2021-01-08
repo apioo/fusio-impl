@@ -95,6 +95,37 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/rate/~gold', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": 4,
+    "status": 1,
+    "priority": 10,
+    "name": "gold",
+    "rateLimit": 16,
+    "timespan": "P1M",
+    "allocation": [
+        {
+            "id": 4,
+            "rateId": 4,
+            "routeId": {$this->routeId},
+            "authenticated": true
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetNotFound()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);

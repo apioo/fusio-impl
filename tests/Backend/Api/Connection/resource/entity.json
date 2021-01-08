@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/connection\/$connection_id<[0-9]+>",
+  "path": "\/backend\/connection\/$connection_id<[0-9]+|^~>",
   "pathParameters": "BackendConnectionConnection_idPath",
   "methods": {
     "GET": {

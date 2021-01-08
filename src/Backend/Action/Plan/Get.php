@@ -52,7 +52,7 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         $plan = $this->table->getEntity(
-            (int) $request->get('plan_id')
+            $request->get('plan_id')
         );
 
         if (empty($plan)) {

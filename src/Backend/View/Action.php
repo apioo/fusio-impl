@@ -80,7 +80,7 @@ class Action extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Action::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Action::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -94,5 +94,15 @@ class Action extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Action::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

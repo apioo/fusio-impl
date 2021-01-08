@@ -78,7 +78,7 @@ class Role extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Role::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Role::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'categoryId' => $this->fieldInteger('category_id'),
             'status' => $this->fieldInteger('status'),
@@ -87,5 +87,15 @@ class Role extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Role::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

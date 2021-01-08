@@ -77,7 +77,7 @@ class Scope extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'get'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
@@ -110,4 +110,13 @@ class Scope extends ViewAbstract
         return $this->build($definition);
     }
 
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Scope::class)->getOneByName(substr($id, 1));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
+    }
 }

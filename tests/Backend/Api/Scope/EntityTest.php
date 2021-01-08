@@ -98,6 +98,42 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetByName()
+    {
+        $response = $this->sendRequest('/backend/scope/~bar', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<JSON
+{
+    "id": 37,
+    "name": "bar",
+    "description": "Bar access",
+    "routes": [
+        {
+            "id": 102,
+            "scopeId": 37,
+            "routeId": 112,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        },
+        {
+            "id": 100,
+            "scopeId": 37,
+            "routeId": 111,
+            "allow": 1,
+            "methods": "GET|POST|PUT|PATCH|DELETE"
+        }
+    ]
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testGetNotFound()
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);

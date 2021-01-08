@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/category\/$category_id<[0-9]+>",
+  "path": "\/backend\/category\/$category_id<[0-9]+|^~>",
   "pathParameters": "BackendCategoryCategory_idPath",
   "methods": {
     "GET": {

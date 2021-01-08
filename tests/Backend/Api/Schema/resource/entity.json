@@ -1,6 +1,6 @@
 {
   "status": 1,
-  "path": "\/backend\/schema\/$schema_id<[0-9]+>",
+  "path": "\/backend\/schema\/$schema_id<[0-9]+|^~>",
   "pathParameters": "BackendSchemaSchema_idPath",
   "methods": {
     "GET": {
