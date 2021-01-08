@@ -96,7 +96,7 @@ class Plan extends ViewAbstract
     private function resolveId($id): int
     {
         if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Plan::class)->getOneByName(substr($id, 1));
+            $row = $this->getTable(Table\Plan::class)->getOneByName(urldecode(substr($id, 1)));
             return $row['id'] ?? 0;
         } else {
             return (int) $id;
