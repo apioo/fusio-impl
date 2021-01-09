@@ -58,7 +58,7 @@ class Transport implements TransportInterface
             $uri = $uri->withParameters($query);
         }
 
-        $headers['User-Agent'] = 'Fusio CLI v' . InstalledVersions::getPrettyVersion('fusio/cli');
+        $headers['User-Agent'] = 'Fusio CLI ' . InstalledVersions::getPrettyVersion('fusio/cli');
 
         if ($body instanceof \JsonSerializable) {
             $headers['Content-Type'] = 'application/json';
