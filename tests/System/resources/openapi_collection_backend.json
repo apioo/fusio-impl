@@ -5397,22 +5397,7 @@
           "description": {
             "type": "string"
           },
-          "value": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "number"
-              },
-              {
-                "type": "integer"
-              },
-              {
-                "type": "boolean"
-              }
-            ]
-          }
+          "value": []
         }
       },
       "Config_Collection": {
