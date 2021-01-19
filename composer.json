@@ -30,6 +30,8 @@
     "fusio/adapter-soap": "^4.0",
     "fusio/adapter-sql": "^4.0",
     "fusio/adapter-util": "^4.0",
+    "fusio/adapter-cli": "^0.1",
+    "fusio/adapter-fcgi": "^4.0",
     "firebase/php-jwt": "^5.0",
     "swiftmailer/swiftmailer": "^6.2",
     "doctrine/migrations": "^2.3",

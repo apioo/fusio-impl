@@ -72,6 +72,8 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
+            Adapter\Cli\Action\CliProcessor::class,
+            Adapter\Fcgi\Action\FcgiProcessor::class,
             Adapter\File\Action\FileProcessor::class,
             Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,
@@ -128,6 +130,8 @@ class RegisterCommandTest extends ControllerDbTestCase
 
         $actual = array_values($config->get(ProviderConfig::TYPE_ACTION));
         $expect = [
+            Adapter\Cli\Action\CliProcessor::class,
+            Adapter\Fcgi\Action\FcgiProcessor::class,
             Adapter\File\Action\FileProcessor::class,
             Adapter\GraphQL\Action\GraphQLProcessor::class,
             Adapter\Http\Action\HttpProcessor::class,

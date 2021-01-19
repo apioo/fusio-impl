@@ -64,6 +64,14 @@ class ListTest extends ControllerDbTestCase
 {
     "actions": [
         {
+            "name": "CLI-Processor",
+            "class": "Fusio\\Adapter\\Cli\\Action\\CliProcessor"
+        },
+        {
+            "name": "FastCGI-Processor",
+            "class": "Fusio\\Adapter\\Fcgi\\Action\\FcgiProcessor"
+        },
+        {
             "name": "File-Processor",
             "class": "Fusio\\Adapter\\File\\Action\\FileProcessor"
         },

@@ -41,6 +41,8 @@ class ProviderLoaderTest extends DbTestCase
         $actual = $config->getArrayCopy();
         $expect = [
             'action' => [
+                'cliprocessor' => \Fusio\Adapter\Cli\Action\CliProcessor::class,
+                'fcgiprocessor' => \Fusio\Adapter\Fcgi\Action\FcgiProcessor::class,
                 'fileprocessor' => \Fusio\Adapter\File\Action\FileProcessor::class,
                 'graphqlprocessor' => \Fusio\Adapter\GraphQL\Action\GraphQLProcessor::class,
                 'httpprocessor' => \Fusio\Adapter\Http\Action\HttpProcessor::class,

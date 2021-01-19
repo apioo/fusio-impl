@@ -111,6 +111,8 @@ class ProviderLoader
     {
         return [
             ProviderConfig::TYPE_ACTION => [
+                Adapter\Cli\Action\CliProcessor::class,
+                Adapter\Fcgi\Action\FcgiProcessor::class,
                 Adapter\File\Action\FileProcessor::class,
                 Adapter\GraphQL\Action\GraphQLProcessor::class,
                 Adapter\Http\Action\HttpProcessor::class,
