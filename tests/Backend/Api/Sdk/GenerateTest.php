@@ -66,6 +66,7 @@ class GenerateTest extends ControllerDbTestCase
 {
     "types": {
         "client-go": null,
+        "client-java": null,
         "client-php": null,
         "client-typescript": null,
         "markup-html": null,
