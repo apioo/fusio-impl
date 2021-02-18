@@ -27,7 +27,12 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service;
+use Fusio\Impl\Service\Marketplace;
+use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
+use PSX\Sql\Condition;
+use PSX\Sql\Sql;
+use PSX\Sql\TableManagerInterface;
 
 /**
  * GetAbout
@@ -48,10 +53,34 @@ class GetAbout extends ActionAbstract
      */
     private $config;
 
-    public function __construct(Service\Config $configService, Config $config)
+    /**
+     * @var Table\Route
+     */
+    private $routeTable;
+
+    /**
+     * @var Table\Category
+     */
+    private $categoryTable;
+
+    /**
+     * @var Table\Scope
+     */
+    private $scopeTable;
+
+    /**
+     * @var Marketplace\Repository\Local
+     */
+    private $localRepository;
+
+    public function __construct(Service\Config $configService, Config $config, TableManagerInterface $tableManager, Marketplace\Repository\Local $localRepository)
     {
         $this->configService = $configService;
         $this->config = $config;
+        $this->routeTable = $tableManager->getTable(Table\Route::class);
+        $this->categoryTable = $tableManager->getTable(Table\Category::class);
+        $this->scopeTable = $tableManager->getTable(Table\Scope::class);
+        $this->localRepository = $localRepository;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
@@ -66,8 +95,50 @@ class GetAbout extends ActionAbstract
             'contactEmail' => $this->configService->getValue('info_contact_email') ?: null,
             'licenseName' => $this->configService->getValue('info_license_name') ?: null,
             'licenseUrl' => $this->configService->getValue('info_license_url') ?: null,
+            'categories' => $this->getCategories(),
+            'scopes' => $this->getScopes(),
+            'apps' => $this->getApps(),
             'links' => $this->getLinks(),
         ]);
+    }
+
+    private function getApps(): array
+    {
+        $appsUrl = $this->config->get('fusio_apps_url');
+        $apps = $this->localRepository->fetchAll();
+
+        $result = [];
+        foreach ($apps as $app) {
+            $result[$app->getName()] = $appsUrl . '/' . $app->getName();
+        }
+
+        return $result;
+    }
+
+    private function getCategories(): array
+    {
+        $categories = $this->categoryTable->getAll(0, 1024);
+
+        $result = [];
+        foreach ($categories as $row) {
+            $result[] = $row['name'];
+        }
+
+        return $result;
+    }
+
+    private function getScopes(): array
+    {
+        $condition = new Condition();
+        $condition->equals('category_id', 1);
+        $categories = $this->scopeTable->getAll(0, 1024, 'name', Sql::SORT_ASC, $condition);
+
+        $result = [];
+        foreach ($categories as $row) {
+            $result[] = $row['name'];
+        }
+
+        return $result;
     }
 
     private function getLinks(): array
@@ -83,6 +154,21 @@ class GetAbout extends ActionAbstract
         $links[] = [
             'rel' => 'openapi',
             'href' => $baseUrl . 'system/export/openapi/*/*',
+        ];
+
+        $links[] = [
+            'rel' => 'documentation',
+            'href' => $baseUrl . 'system/doc',
+        ];
+
+        $links[] = [
+            'rel' => 'route',
+            'href' => $baseUrl . 'system/route',
+        ];
+
+        $links[] = [
+            'rel' => 'health',
+            'href' => $baseUrl . 'system/health',
         ];
 
         $links[] = [
