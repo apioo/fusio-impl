@@ -83,6 +83,30 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
+    public function testGetCategory()
+    {
+        $response = $this->sendRequest('/system/route?category=authorization', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "routes": {
+        "\/authorization\/revoke": {
+            "POST": "Authorization_Action_Revoke"
+        },
+        "\/authorization\/whoami": {
+            "GET": "Authorization_Action_GetWhoami"
+        }
+    }
+}
+JSON;
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
     public function testPost()
     {
         $response = $this->sendRequest('/system/route', 'POST', array(

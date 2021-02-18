@@ -158,14 +158,21 @@ class Route extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getPublic()
+    public function getPublic(?string $category)
     {
+        if (!empty($category)) {
+            $categoryId = (int) $this->connection->fetchOne('SELECT id FROM fusio_category WHERE name = :name', ['name' => $category]);
+        } else {
+            $categoryId = 1;
+        }
+
         $builder = $this->connection->createQueryBuilder()
             ->select(['route.path', 'method.method', 'method.action'])
             ->from('fusio_routes', 'route')
             ->innerJoin('route', 'fusio_routes_method', 'method', 'route.id = method.route_id')
-            ->where('(route.category_id = 1)')
-            ->orderBy('route.id', 'ASC');
+            ->where('(route.category_id = :category_id)')
+            ->orderBy('route.id', 'ASC')
+            ->setParameter('category_id', $categoryId);
 
         $definition = [
             'routes' => $this->doCollection($builder->getSQL(), $builder->getParameters(), [

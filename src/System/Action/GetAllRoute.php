@@ -49,6 +49,6 @@ class GetAllRoute extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return $this->table->getPublic();
+        return $this->table->getPublic($request->get('category'));
     }
 }
