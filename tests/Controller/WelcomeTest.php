@@ -51,6 +51,21 @@ class WelcomeTest extends ControllerDbTestCase
 {
     "apiVersion": "{$version}",
     "title": "Fusio",
+    "categories": [
+        "authorization",
+        "system",
+        "consumer",
+        "backend",
+        "default"
+    ],
+    "scopes": [
+        "bar",
+        "default",
+        "foo"
+    ],
+    "apps": {
+        "fusio": "http:\/\/127.0.0.1\/apps\/fusio"
+    },
     "links": [
         {
             "rel": "root",
@@ -59,6 +74,18 @@ class WelcomeTest extends ControllerDbTestCase
         {
             "rel": "openapi",
             "href": "http:\/\/127.0.0.1\/system\/export\/openapi\/*\/*"
+        },
+        {
+            "rel": "documentation",
+            "href": "http:\/\/127.0.0.1\/system\/doc"
+        },
+        {
+            "rel": "route",
+            "href": "http:\/\/127.0.0.1\/system\/route"
+        },
+        {
+            "rel": "health",
+            "href": "http:\/\/127.0.0.1\/system\/health"
         },
         {
             "rel": "jsonrpc",
