@@ -1,9 +1,39 @@
 {
+  "status": 4,
+  "path": "\/foo",
+  "methods": {
+    "GET": {
+      "operationId": "listFoo",
+      "tags": [
+        "bar"
+      ],
+      "responses": {
+        "200": "Collection-Schema"
+      }
+    },
+    "POST": {
+      "operationId": "createFoo",
+      "security": {
+        "app": [
+          "bar"
+        ]
+      },
+      "tags": [
+        "bar"
+      ],
+      "request": "Entry-Schema",
+      "responses": {
+        "201": "Passthru"
+      }
+    }
+  },
   "definitions": {
     "Collection": {
+      "title": "collection",
+      "type": "object",
       "properties": {
-        "entry": {
-          "$ref": "Entry"
+        "totalResults": {
+          "type": "integer"
         },
         "itemsPerPage": {
           "type": "integer"
@@ -11,33 +41,31 @@
         "startIndex": {
           "type": "integer"
         },
-        "totalResults": {
-          "type": "integer"
+        "entry": {
+          "$ref": "Entry"
         }
-      },
-      "title": "collection",
-      "type": "object"
+      }
     },
     "Collection-Schema": {
       "$ref": "Collection"
     },
     "Entry": {
+      "type": "object",
       "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
         "content": {
           "type": "string"
         },
         "date": {
           "format": "date-time",
           "type": "string"
-        },
-        "id": {
-          "type": "integer"
-        },
-        "title": {
-          "type": "string"
         }
-      },
-      "type": "object"
+      }
     },
     "Entry-Schema": {
       "$ref": "Entry"
@@ -47,32 +75,42 @@
       "type": "object"
     }
   },
-  "methods": {
-    "GET": {
-      "operationId": "listFoo",
-      "responses": {
-        "200": "Collection-Schema"
-      },
-      "tags": [
-        "bar"
-      ]
+  "links": [
+    {
+      "rel": "client-go",
+      "href": "http:\/\/127.0.0.1\/system\/export\/client-go\/*\/foo"
     },
-    "POST": {
-      "operationId": "createFoo",
-      "request": "Entry-Schema",
-      "responses": {
-        "201": "Passthru"
-      },
-      "security": {
-        "app": [
-          "bar"
-        ]
-      },
-      "tags": [
-        "bar"
-      ]
+    {
+      "rel": "client-java",
+      "href": "http:\/\/127.0.0.1\/system\/export\/client-java\/*\/foo"
+    },
+    {
+      "rel": "client-php",
+      "href": "http:\/\/127.0.0.1\/system\/export\/client-php\/*\/foo"
+    },
+    {
+      "rel": "client-typescript",
+      "href": "http:\/\/127.0.0.1\/system\/export\/client-typescript\/*\/foo"
+    },
+    {
+      "rel": "markup-html",
+      "href": "http:\/\/127.0.0.1\/system\/export\/markup-html\/*\/foo"
+    },
+    {
+      "rel": "markup-markdown",
+      "href": "http:\/\/127.0.0.1\/system\/export\/markup-markdown\/*\/foo"
+    },
+    {
+      "rel": "spec-typeschema",
+      "href": "http:\/\/127.0.0.1\/system\/export\/spec-typeschema\/*\/foo"
+    },
+    {
+      "rel": "spec-openapi",
+      "href": "http:\/\/127.0.0.1\/system\/export\/spec-openapi\/*\/foo"
+    },
+    {
+      "rel": "spec-raml",
+      "href": "http:\/\/127.0.0.1\/system\/export\/spec-raml\/*\/foo"
     }
-  },
-  "path": "/foo",
-  "status": 4
+  ]
 }
