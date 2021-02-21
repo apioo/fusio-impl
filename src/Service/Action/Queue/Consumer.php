@@ -52,30 +52,30 @@ class Consumer
 
     public function execute()
     {
-        $platform = $this->connection->getDatabasePlatform();
-
         $repository = new ActionDatabase($this->connection);
         $repository->setAsync(false);
         $this->processor->push($repository);
 
-        while (true) {
-            $sql = 'SELECT id, action, request, context FROM fusio_action_queue ORDER BY id ASC';
-            $sql = $platform->modifyLimitQuery($sql, 1);
+        $sql = 'SELECT id,
+                       action,
+                       request,
+                       context
+                  FROM fusio_action_queue
+              ORDER BY id ASC';
 
-            $row = $this->connection->fetchAssoc($sql);
+        $result = $this->connection->fetchAll($sql);
+        foreach ($result as $row) {
             $this->connection->delete('fusio_action_queue', ['id' => $row['id']]);
 
-            try {
-                $request = Serializer::unserializeRequest($row['request']);
-                $context = Serializer::unserializeContext($row['context']);
+            $request = Serializer::unserializeRequest($row['request']);
+            $context = Serializer::unserializeContext($row['context']);
 
+            try {
                 $this->processor->execute($row['action'], $request, $context);
             } catch (\Throwable $e) {
                 // ignore error and execute next request
                 // @TODO maybe log this in the future?
             }
-
-            usleep(500);
         }
     }
 }
