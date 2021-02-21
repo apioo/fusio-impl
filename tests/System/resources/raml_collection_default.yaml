@@ -77,7 +77,7 @@ title: Fusio
           application/json:
             type: System_About
 types:
-  About: { type: object, properties: { apiVersion: { type: string }, title: { type: string }, description: { type: string }, termsOfService: { type: string }, contactName: { type: string }, contactUrl: { type: string }, contactEmail: { type: string }, licenseName: { type: string }, licenseUrl: { type: string }, links: { type: array, items: { $ref: '#/types/About_Link' } } } }
+  About: { type: object, properties: { apiVersion: { type: string }, title: { type: string }, description: { type: string }, termsOfService: { type: string }, contactName: { type: string }, contactUrl: { type: string }, contactEmail: { type: string }, licenseName: { type: string }, licenseUrl: { type: string }, categories: { type: array, items: { type: string } }, scopes: { type: array, items: { type: string } }, apps: { type: object, additionalProperties: { type: string } }, links: { type: array, items: { $ref: '#/types/About_Link' } } } }
   About_Link: { type: object, properties: { rel: { type: string }, href: { type: string } } }
   Collection: { title: collection, type: object, properties: { totalResults: { type: integer }, itemsPerPage: { type: integer }, startIndex: { type: integer }, entry: { $ref: '#/types/Entry' } } }
   Collection-Schema: { $ref: '#/types/Collection' }
