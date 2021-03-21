@@ -109,10 +109,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
      */
     public function getPreFilter()
     {
-        $filter = [];
+        $filter = parent::getPreFilter();
 
-        // it is required for every request to have an user agent which
-        // identifies the client
         $filter[] = new UserAgentEnforcer();
 
         $filter[] = new Filter\AssertMethod(
