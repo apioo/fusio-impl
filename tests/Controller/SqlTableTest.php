@@ -546,7 +546,7 @@ JSON;
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-origin' => ['*'],
-            'access-control-allow-methods' => ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+            'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST, PUT, DELETE, PATCH'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
             'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
             'access-control-expose-headers' => ['*'],
