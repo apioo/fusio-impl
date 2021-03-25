@@ -104,10 +104,10 @@ class Postman implements ProviderInterface
         ];
 
         if (isset($item->body)) {
-            $config['request'] = null;
+            $config['request'] = -1;
         }
 
-        $config['responses'][200] = null;
+        $config['responses'][200] = -1;
         $config['action'] = $action;
 
         return $config;

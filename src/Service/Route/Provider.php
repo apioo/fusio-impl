@@ -296,7 +296,7 @@ class Provider
 
     private function resolveSchema($schema)
     {
-        if ($schema === null) {
+        if ($schema === -1) {
             return 'Passthru';
         }
 
