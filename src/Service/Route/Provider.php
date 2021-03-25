@@ -101,7 +101,7 @@ class Provider
     private $schemas;
 
     /**
-     * @var array 
+     * @var array
      */
     private $actions;
 
@@ -296,6 +296,10 @@ class Provider
 
     private function resolveSchema($schema)
     {
+        if ($schema === null) {
+            return 'Passthru';
+        }
+
         if (isset($this->schemas[$schema])) {
             return $this->schemas[$schema];
         } else {
