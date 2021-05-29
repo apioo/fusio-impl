@@ -73,9 +73,9 @@ class AppDatabase implements Repository\AppInterface
         return $apps;
     }
 
-    public function get($appId)
+    public function get($id)
     {
-        if (empty($appId)) {
+        if (empty($id)) {
             return null;
         }
 
@@ -87,9 +87,9 @@ class AppDatabase implements Repository\AppInterface
                        parameters,
                        app_key
                   FROM fusio_app
-                 WHERE id = :app_id';
+                 WHERE id = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('app_id' => $appId));
+        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
 
         if (!empty($row)) {
             $app = $this->newApp($row);

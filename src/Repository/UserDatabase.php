@@ -63,9 +63,9 @@ class UserDatabase implements Repository\UserInterface
         return $users;
     }
 
-    public function get($userId)
+    public function get($id)
     {
-        if (empty($userId)) {
+        if (empty($id)) {
             return null;
         }
 
@@ -76,9 +76,9 @@ class UserDatabase implements Repository\UserInterface
                        email,
                        points
                   FROM fusio_user
-                 WHERE id = :userId';
+                 WHERE id = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('userId' => $userId));
+        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
 
         if (!empty($row)) {
             return $this->newUser($row);

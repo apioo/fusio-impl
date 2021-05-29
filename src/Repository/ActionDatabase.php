@@ -79,13 +79,13 @@ class ActionDatabase implements Repository\ActionInterface
         return $actions;
     }
 
-    public function get($actionId)
+    public function get($id)
     {
-        if (empty($actionId)) {
+        if (empty($id)) {
             return null;
         }
 
-        if (is_numeric($actionId)) {
+        if (is_numeric($id)) {
             $column = 'id';
         } else {
             $column = 'name';
@@ -101,7 +101,7 @@ class ActionDatabase implements Repository\ActionInterface
                   FROM fusio_action
                  WHERE ' . $column . ' = :id';
 
-        $row = $this->connection->fetchAssoc($sql, ['id' => $actionId]);
+        $row = $this->connection->fetchAssoc($sql, ['id' => $id]);
 
         if (!empty($row)) {
             return $this->newAction($row);

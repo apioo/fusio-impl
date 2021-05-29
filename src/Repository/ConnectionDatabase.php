@@ -73,9 +73,9 @@ class ConnectionDatabase implements Repository\ConnectionInterface
         return $conns;
     }
 
-    public function get($connectionId)
+    public function get($id)
     {
-        if (is_numeric($connectionId)) {
+        if (is_numeric($id)) {
             $column = 'id';
         } else {
             $column = 'name';
@@ -88,7 +88,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                   FROM fusio_connection 
                  WHERE ' . $column . ' = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('id' => $connectionId));
+        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
 
         if (!empty($row)) {
             return $this->newConnection($row);
