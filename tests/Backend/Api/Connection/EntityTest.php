@@ -140,7 +140,7 @@ JSON;
             'type'     => 'pdo_mysql',
             'host'     => '127.0.0.1',
             'username' => 'root',
-            'password' => 'root',
+            'password' => 'test1234',
             'database' => 'fusio',
         ];
 
