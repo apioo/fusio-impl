@@ -67,13 +67,14 @@ class Sdk
             mkdir($sdkDir);
         }
 
-        $file = 'sdk-' . $format . '.zip';
+        $filter = 'external';
+        $file = 'sdk-' . $format . '-' . $filter . '.zip';
 
         $parameters = [
             'command'  => 'api:generate',
             'dir'      => $sdkDir,
             '--format' => $format,
-            '--filter' => 'external',
+            '--filter' => $filter,
         ];
 
         if (!empty($config)) {
