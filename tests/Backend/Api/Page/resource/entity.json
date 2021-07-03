@@ -1,0 +1,114 @@
+{
+  "status": 1,
+  "path": "\/backend\/action\/$action_id<[0-9]+|^~>",
+  "pathParameters": "BackendActionAction_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Action_Get",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "responses": {
+        "200": "Backend_Action"
+      }
+    },
+    "PUT": {
+      "operationId": "Backend_Action_Action_Update",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "request": "Backend_Action_Update",
+      "responses": {
+        "200": "Message"
+      }
+    },
+    "DELETE": {
+      "operationId": "Backend_Action_Action_Delete",
+      "security": {
+        "app": [
+          "backend.action"
+        ]
+      },
+      "tags": [
+        "backend.action"
+      ],
+      "responses": {
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Action": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
+        },
+        "class": {
+          "type": "string"
+        },
+        "async": {
+          "type": "boolean"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "Action_Config"
+        }
+      }
+    },
+    "Action_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      }
+    },
+    "Action_Update": {
+      "$extends": "Action",
+      "type": "object"
+    },
+    "BackendActionAction_idPath": {
+      "type": "object",
+      "properties": {
+        "action_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Action": {
+      "$ref": "Action"
+    },
+    "Backend_Action_Update": {
+      "$ref": "Action_Update"
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
