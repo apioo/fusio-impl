@@ -84,6 +84,7 @@ class AccountTest extends ControllerDbTestCase
         "backend.event",
         "backend.log",
         "backend.marketplace",
+        "backend.page",
         "backend.plan",
         "backend.rate",
         "backend.role",

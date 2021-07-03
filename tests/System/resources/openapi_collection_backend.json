@@ -2268,6 +2268,191 @@
         ]
       }
     },
+    "\/backend\/page\/{page_id}": {
+      "get": {
+        "tags": [
+          "backend.page"
+        ],
+        "operationId": "Backend_Action_Page_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Page"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.page"
+            ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "backend.page"
+        ],
+        "operationId": "Backend_Action_Page_Update",
+        "requestBody": {
+          "description": "PUT Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Page_Update"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PUT 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.page"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "backend.page"
+        ],
+        "operationId": "Backend_Action_Page_Delete",
+        "responses": {
+          "200": {
+            "description": "DELETE 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.page"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "page_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/page": {
+      "get": {
+        "tags": [
+          "backend.page"
+        ],
+        "operationId": "Backend_Action_Page_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Page_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.page"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.page"
+        ],
+        "operationId": "Backend_Action_Page_Create",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Page_Create"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "POST 201 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.page"
+            ]
+          }
+        ]
+      }
+    },
     "\/backend\/marketplace\/{app_name}": {
       "get": {
         "tags": [
@@ -4891,6 +5076,14 @@
           }
         }
       },
+      "BackendPagePage_idPath": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        }
+      },
       "BackendPlanContractContract_idPath": {
         "type": "object",
         "properties": {
@@ -5147,6 +5340,18 @@
       },
       "Backend_Marketplace_Local_App": {
         "$ref": "#\/components\/schemas\/Marketplace_Local_App"
+      },
+      "Backend_Page": {
+        "$ref": "#\/components\/schemas\/Page"
+      },
+      "Backend_Page_Collection": {
+        "$ref": "#\/components\/schemas\/Page_Collection"
+      },
+      "Backend_Page_Create": {
+        "$ref": "#\/components\/schemas\/Page_Create"
+      },
+      "Backend_Page_Update": {
+        "$ref": "#\/components\/schemas\/Page_Update"
       },
       "Backend_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
@@ -6060,6 +6265,50 @@
             "type": "string"
           }
         }
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Page_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Page_Create": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Page"
+          },
+          {
+            "type": "object",
+            "required": [
+              "title",
+              "content"
+            ]
+          }
+        ]
+      },
+      "Page_Update": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Page"
+          },
+          {
+            "type": "object"
+          }
+        ]
       },
       "Plan": {
         "type": "object",
@@ -6991,6 +7240,7 @@
               "backend.event": "",
               "backend.log": "",
               "backend.marketplace": "",
+              "backend.page": "",
               "backend.plan": "",
               "backend.rate": "",
               "backend.role": "",
@@ -7034,6 +7284,7 @@
               "backend.event": "",
               "backend.log": "",
               "backend.marketplace": "",
+              "backend.page": "",
               "backend.plan": "",
               "backend.rate": "",
               "backend.role": "",
@@ -7078,6 +7329,7 @@
               "backend.event": "",
               "backend.log": "",
               "backend.marketplace": "",
+              "backend.page": "",
               "backend.plan": "",
               "backend.rate": "",
               "backend.role": "",

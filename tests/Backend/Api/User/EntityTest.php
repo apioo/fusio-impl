@@ -213,10 +213,9 @@ JSON;
 
         $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
 
-        $this->assertEquals([[
-            'user_id'  => 2,
-            'scope_id' => 37,
-        ]], $scopes);
+        $this->assertEquals(1, count($scopes));
+        $this->assertEquals(2, $scopes[0]['user_id']);
+        $this->assertEquals(38, $scopes[0]['scope_id']);
     }
 
     public function testPutAttributes()
@@ -268,10 +267,9 @@ JSON;
 
         $scopes = Environment::getService('connection')->fetchAll($sql, ['user_id' => $this->id]);
 
-        $this->assertEquals([[
-            'user_id'  => 2,
-            'scope_id' => 37,
-        ]], $scopes);
+        $this->assertEquals(1, count($scopes));
+        $this->assertEquals(2, $scopes[0]['user_id']);
+        $this->assertEquals(38, $scopes[0]['scope_id']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('name', 'value')
