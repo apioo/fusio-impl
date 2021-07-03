@@ -56,6 +56,11 @@ class ClientCredentials extends ClientCredentialsAbstract
     private $userService;
 
     /**
+     * @var \Fusio\Impl\Table\App
+     */
+    private $appTable;
+
+    /**
      * @var string
      */
     private $expireToken;
@@ -64,13 +69,15 @@ class ClientCredentials extends ClientCredentialsAbstract
      * @param \Fusio\Impl\Service\App\Token $appTokenService
      * @param \Fusio\Impl\Service\Scope $scopeService
      * @param \Fusio\Impl\Service\User $userService
+     * @param \Fusio\Impl\Table\App $appTable
      * @param string $expireToken
      */
-    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, string $expireToken)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, string $expireToken)
     {
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->userService     = $userService;
+        $this->appTable        = $appTable;
         $this->expireToken     = $expireToken;
     }
 
@@ -81,7 +88,17 @@ class ClientCredentials extends ClientCredentialsAbstract
      */
     protected function generate(Credentials $credentials, $scope)
     {
-        $userId = $this->userService->authenticateUser($credentials->getClientId(), $credentials->getClientSecret());
+        // check whether the credentials contain an app key and secret
+        $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
+        if (!empty($app)) {
+            $appId  = $app['id'];
+            $userId = $app['user_id'];
+        } else {
+            // otherwise try to authenticate the user credentials
+            $appId  = null;
+            $userId = $this->userService->authenticateUser($credentials->getClientId(), $credentials->getClientSecret());
+        }
+
         if (empty($userId)) {
             throw new InvalidClientException('Unknown credentials');
         }
@@ -92,18 +109,33 @@ class ClientCredentials extends ClientCredentialsAbstract
         }
 
         // validate scopes
-        $scopes = $this->scopeService->getValidScopes($scope, null, $userId);
+        $scopes = $this->scopeService->getValidScopes($scope, $appId, $userId);
         if (empty($scopes)) {
             throw new InvalidScopeException('No valid scope given');
         }
 
         // generate access token
         return $this->appTokenService->generateAccessToken(
-            1,
+            $appId === null ? 1 : $appId,
             $userId,
             $scopes,
             isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
             new \DateInterval($this->expireToken)
         );
+    }
+
+    private function getApp(string $appKey, string $appSecret)
+    {
+        $condition = new Condition();
+        $condition->equals('app_key', $appKey);
+        $condition->equals('app_secret', $appSecret);
+        $condition->equals('status', Table\App::STATUS_ACTIVE);
+
+        $app = $this->appTable->getOneBy($condition);
+        if (empty($app)) {
+            return null;
+        }
+
+        return $app;
     }
 }

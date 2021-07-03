@@ -132,6 +132,7 @@ class Container extends DefaultContainer
             $this->get('app_token_service'),
             $this->get('scope_service'),
             $this->get('user_service'),
+            $this->get('table_manager')->getTable(Table\App::class),
             $this->get('config')->get('fusio_expire_token')
         ));
 
