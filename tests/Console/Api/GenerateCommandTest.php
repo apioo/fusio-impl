@@ -44,11 +44,12 @@ class GenerateCommandTest extends ControllerDbTestCase
     public function testCommand()
     {
         $command = Environment::getService('console')->find('api:generate');
+        $filter = 'internal';
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '-i'      => 'internal',
+            '-i'      => $filter,
             '-f'      => GeneratorFactoryInterface::CLIENT_PHP,
             'dir'     => __DIR__ . '/output',
         ]);
@@ -58,6 +59,6 @@ class GenerateCommandTest extends ControllerDbTestCase
         $this->assertRegExp('/Successful!/', trim($actual));
 
         // check file
-        $this->assertTrue(is_file(__DIR__ . '/output/sdk-client-php.zip'));
+        $this->assertTrue(is_file(__DIR__ . '/output/sdk-client-php-' . $filter . '.zip'));
     }
 }
