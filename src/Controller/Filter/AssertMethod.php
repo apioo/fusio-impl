@@ -39,10 +39,25 @@ use PSX\Http\ResponseInterface;
  */
 class AssertMethod implements FilterInterface
 {
-    private Service\Route\Method $routesMethodService;
-    private ?string $versionHeader;
-    private ?string $versionRegexp;
-    private Context $context;
+    /**
+     * @var Service\Route\Method
+     */
+    private $routesMethodService;
+
+    /**
+     * @var string|null
+     */
+    private $versionHeader;
+
+    /**
+     * @var string|null
+     */
+    private $versionRegexp;
+
+    /**
+     * @var Context
+     */
+    private $context;
 
     public function __construct(Service\Route\Method $routesMethodService, ?string $versionHeader, ?string $versionRegexp, Context $context)
     {
