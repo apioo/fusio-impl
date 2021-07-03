@@ -19,7 +19,7 @@ jobs:
       - name: Run Psalm
         run: vendor/bin/psalm --no-progress --shepherd --show-info=false --stats
   phpunit:
-    name: PHPUnit
+    name: "PHPUnit (PHP: ${{ matrix.php-versions }})"
     runs-on: ubuntu-latest
     strategy:
       matrix:
