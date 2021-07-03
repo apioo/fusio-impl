@@ -39,23 +39,16 @@ use PSX\Http\ResponseInterface;
  */
 class AssertMethod implements FilterInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Route\Method
-     */
-    private $routesMethodService;
+    private Service\Route\Method $routesMethodService;
+    private ?string $versionHeader;
+    private ?string $versionRegexp;
+    private Context $context;
 
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    private $context;
-
-    /**
-     * @param \Fusio\Impl\Service\Route\Method $routesMethodService
-     * @param \Fusio\Impl\Framework\Loader\Context $context
-     */
-    public function __construct(Service\Route\Method $routesMethodService, Context $context)
+    public function __construct(Service\Route\Method $routesMethodService, ?string $versionHeader, ?string $versionRegexp, Context $context)
     {
         $this->routesMethodService = $routesMethodService;
+        $this->versionHeader = $versionHeader;
+        $this->versionRegexp = $versionRegexp;
         $this->context = $context;
     }
 
@@ -107,11 +100,19 @@ class AssertMethod implements FilterInterface
      */
     private function getSubmittedVersionNumber(RequestInterface $request)
     {
-        $accept  = $request->getHeader('Accept');
-        $matches = array();
+        $accept  = $request->getHeader($this->versionHeader !== null ? $this->versionHeader : 'Accept');
+        $matches = [];
 
-        preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
+        if ($this->versionRegexp !== null) {
+            $regexp = $this->versionRegexp;
+            $index  = 1;
+        } else {
+            $regexp = '^application/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$';
+            $index  = 2;
+        }
 
-        return isset($matches[2]) ? $matches[2] : null;
+        preg_match('~' . $regexp . '~', $accept, $matches);
+
+        return $matches[$index] ?? null;
     }
 }
