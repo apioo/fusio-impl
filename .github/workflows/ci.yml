@@ -32,7 +32,7 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE fusio;' -uroot
+          mysql -e 'CREATE DATABASE fusio;' -uroot -proot
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Run PHPUnit
