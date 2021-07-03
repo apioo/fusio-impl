@@ -59,7 +59,7 @@ class Get extends ActionAbstract
             throw new StatusCode\NotFoundException('Could not find page');
         }
 
-        if ($page['status'] == Table\Action::STATUS_DELETED) {
+        if ($page['status'] == Table\Page::STATUS_DELETED) {
             throw new StatusCode\GoneException('Page was deleted');
         }
 

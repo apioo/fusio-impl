@@ -72,19 +72,14 @@ class EntityTest extends ControllerDbTestCase
         ));
 
         $body   = (string) $response->getBody();
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
-    "id": {$this->id},
+    "id": 1,
     "status": 1,
-    "name": "Sql-Insert",
-    "class": "Fusio\\\\Adapter\\\\Sql\\\\Action\\\\SqlInsert",
-    "async": false,
-    "engine": "Fusio\\\\Engine\\\\Factory\\\\Resolver\\\\PhpClass",
-    "config": {
-        "connection": 2,
-        "table": "app_news"
-    },
-    "date": "2015-02-27T19:59:15Z"
+    "title": "Getting started",
+    "slug": "getting-started",
+    "content": "\n<h2>Welcome<\/h2>\n\n<p>This is a quick introduction to help you get started using this API. On the left sidebar you see all available\ndocumentation resources. The <a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to discover\nthe endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a> page you can see all available support options if\nyou get stuck.<\/p>\n\n<p>You can also <a href=\"#!\/signup\">register<\/a> a new account to create a new app. Through this app you can access\nprotected parts of the API. The <a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains more\ninformation how you can authenticate.<\/p>\n",
+    "date": "2021-07-03T13:53:09Z"
 }
 JSON;
 
@@ -106,7 +101,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "Could not find action"
+    "message": "Could not find page"
 }
 JSON;
 
@@ -134,17 +129,14 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Bar',
-            'config' => [
-                'response' => '{"foo":"bar"}',
-            ],
+            'content' => 'Foobar',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Action successful updated"
+    "message": "Page successful updated"
 }
 JSON;
 
@@ -152,7 +144,15 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertAction('Bar', SqlInsert::class, '{"response":"{\"foo\":\"bar\"}"}');
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'content')
+            ->from('fusio_page')
+            ->where('id = ' . $this->id)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals('Foobar', $row['content']);
     }
 
     public function testDelete()
@@ -166,7 +166,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Action successful deleted"
+    "message": "Page successful deleted"
 }
 JSON;
 

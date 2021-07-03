@@ -134,10 +134,10 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
-        $bag->addPage('Getting started', 'getting-started', file_get_contents(__DIR__ . '/resources/getting_started.html'));
-        $bag->addPage('API', 'api', file_get_contents(__DIR__ . '/resources/api.html'));
-        $bag->addPage('Authorization', 'authorization', file_get_contents(__DIR__ . '/resources/authorization.html'));
-        $bag->addPage('Support', 'support', file_get_contents(__DIR__ . '/resources/support.html'));
+        $bag->addPage('Getting started', 'getting-started', self::readFile('getting_started.html'));
+        $bag->addPage('API', 'api', self::readFile('api.html'));
+        $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
+        $bag->addPage('Support', 'support', self::readFile('support.html'));
 
         foreach (self::getRoutes() as $category => $routes) {
             $bag->addRoutes($category, $routes);
@@ -555,5 +555,18 @@ class NewInstallation
                 ],
             ],
         ];
+    }
+
+    /**
+     * Reads files in new line neutral way that means we always use \n
+     *
+     * @param string $file
+     * @return string
+     */
+    private static function readFile(string $file)
+    {
+        $lines = file(__DIR__ . '/resources/' . $file);
+        $lines = array_map('trim', $lines);
+        return implode("\n", $lines);
     }
 }

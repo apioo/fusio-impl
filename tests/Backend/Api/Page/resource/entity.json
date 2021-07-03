@@ -1,46 +1,46 @@
 {
   "status": 1,
-  "path": "\/backend\/action\/$action_id<[0-9]+|^~>",
-  "pathParameters": "BackendActionAction_idPath",
+  "path": "\/backend\/page\/$page_id<[0-9]+|^~>",
+  "pathParameters": "BackendPagePage_idPath",
   "methods": {
     "GET": {
-      "operationId": "Backend_Action_Action_Get",
+      "operationId": "Backend_Action_Page_Get",
       "security": {
         "app": [
-          "backend.action"
+          "backend.page"
         ]
       },
       "tags": [
-        "backend.action"
+        "backend.page"
       ],
       "responses": {
-        "200": "Backend_Action"
+        "200": "Backend_Page"
       }
     },
     "PUT": {
-      "operationId": "Backend_Action_Action_Update",
+      "operationId": "Backend_Action_Page_Update",
       "security": {
         "app": [
-          "backend.action"
+          "backend.page"
         ]
       },
       "tags": [
-        "backend.action"
+        "backend.page"
       ],
-      "request": "Backend_Action_Update",
+      "request": "Backend_Page_Update",
       "responses": {
         "200": "Message"
       }
     },
     "DELETE": {
-      "operationId": "Backend_Action_Action_Delete",
+      "operationId": "Backend_Action_Page_Delete",
       "security": {
         "app": [
-          "backend.action"
+          "backend.page"
         ]
       },
       "tags": [
-        "backend.action"
+        "backend.page"
       ],
       "responses": {
         "200": "Message"
@@ -48,56 +48,19 @@
     }
   },
   "definitions": {
-    "Action": {
+    "BackendPagePage_idPath": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer"
-        },
-        "status": {
-          "type": "integer"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9\\-\\_]{3,255}$"
-        },
-        "class": {
-          "type": "string"
-        },
-        "async": {
-          "type": "boolean"
-        },
-        "engine": {
-          "type": "string"
-        },
-        "config": {
-          "$ref": "Action_Config"
-        }
-      }
-    },
-    "Action_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      }
-    },
-    "Action_Update": {
-      "$extends": "Action",
-      "type": "object"
-    },
-    "BackendActionAction_idPath": {
-      "type": "object",
-      "properties": {
-        "action_id": {
+        "page_id": {
           "type": "string"
         }
       }
     },
-    "Backend_Action": {
-      "$ref": "Action"
+    "Backend_Page": {
+      "$ref": "Page"
     },
-    "Backend_Action_Update": {
-      "$ref": "Action_Update"
+    "Backend_Page_Update": {
+      "$ref": "Page_Update"
     },
     "Message": {
       "type": "object",
@@ -109,6 +72,27 @@
           "type": "string"
         }
       }
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "Page_Update": {
+      "$extends": "Page",
+      "type": "object"
     }
   }
 }

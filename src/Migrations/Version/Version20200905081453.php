@@ -243,6 +243,18 @@ final class Version20200905081453 extends AbstractMigration
             $logErrorTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_page')) {
+            $pageTable = $schema->createTable('fusio_page');
+            $pageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $pageTable->addColumn('status', 'integer', ['default' => Table\Page::STATUS_ACTIVE]);
+            $pageTable->addColumn('title', 'string', ['length' => 255]);
+            $pageTable->addColumn('slug', 'string', ['length' => 255]);
+            $pageTable->addColumn('content', 'text');
+            $pageTable->addColumn('date', 'datetime');
+            $pageTable->setPrimaryKey(['id']);
+            $pageTable->addUniqueIndex(['slug']);
+        }
+
         if (!$schema->hasTable('fusio_plan')) {
             $planTable = $schema->createTable('fusio_plan');
             $planTable->addColumn('id', 'integer', ['autoincrement' => true]);

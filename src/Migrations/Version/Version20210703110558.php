@@ -20,15 +20,17 @@ final class Version20210703110558 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $pageTable = $schema->createTable('fusio_page');
-        $pageTable->addColumn('id', 'integer', ['autoincrement' => true]);
-        $pageTable->addColumn('status', 'integer', ['default' => Table\Page::STATUS_ACTIVE]);
-        $pageTable->addColumn('title', 'string', ['length' => 255]);
-        $pageTable->addColumn('slug', 'string', ['length' => 255]);
-        $pageTable->addColumn('content', 'text');
-        $pageTable->addColumn('date', 'datetime');
-        $pageTable->setPrimaryKey(['id']);
-        $pageTable->addUniqueIndex(['slug']);
+        if (!$schema->hasTable('fusio_page')) {
+            $pageTable = $schema->createTable('fusio_page');
+            $pageTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $pageTable->addColumn('status', 'integer', ['default' => Table\Page::STATUS_ACTIVE]);
+            $pageTable->addColumn('title', 'string', ['length' => 255]);
+            $pageTable->addColumn('slug', 'string', ['length' => 255]);
+            $pageTable->addColumn('content', 'text');
+            $pageTable->addColumn('date', 'datetime');
+            $pageTable->setPrimaryKey(['id']);
+            $pageTable->addUniqueIndex(['slug']);
+        }
     }
 
     public function down(Schema $schema) : void

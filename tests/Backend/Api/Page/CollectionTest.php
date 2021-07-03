@@ -65,8 +65,7 @@ class CollectionTest extends ControllerDbTestCase
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
-        
+
         $expect = <<<'JSON'
 {
     "totalResults": 4,
@@ -74,28 +73,32 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 178,
+            "id": 2,
             "status": 1,
-            "name": "Inspect-Action",
-            "date": "[datetime]"
+            "title": "API",
+            "slug": "api",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 177,
+            "id": 3,
             "status": 1,
-            "name": "Sql-Insert",
-            "date": "[datetime]"
+            "title": "Authorization",
+            "slug": "authorization",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 176,
+            "id": 1,
             "status": 1,
-            "name": "Sql-Select-All",
-            "date": "[datetime]"
+            "title": "Getting started",
+            "slug": "getting-started",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 175,
+            "id": 4,
             "status": 1,
-            "name": "Util-Static-Response",
-            "date": "[datetime]"
+            "title": "Support",
+            "slug": "support",
+            "date": "2021-07-03T13:53:09Z"
         }
     ]
 }
@@ -113,7 +116,6 @@ JSON;
         ));
 
         $body = (string) $response->getBody();
-        $body = preg_replace('/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/m', '[datetime]', $body);
 
         $expect = <<<'JSON'
 {
@@ -122,28 +124,32 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 178,
+            "id": 2,
             "status": 1,
-            "name": "Inspect-Action",
-            "date": "[datetime]"
+            "title": "API",
+            "slug": "api",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 177,
+            "id": 3,
             "status": 1,
-            "name": "Sql-Insert",
-            "date": "[datetime]"
+            "title": "Authorization",
+            "slug": "authorization",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 176,
+            "id": 1,
             "status": 1,
-            "name": "Sql-Select-All",
-            "date": "[datetime]"
+            "title": "Getting started",
+            "slug": "getting-started",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 175,
+            "id": 4,
             "status": 1,
-            "name": "Util-Static-Response",
-            "date": "[datetime]"
+            "title": "Support",
+            "slug": "support",
+            "date": "2021-07-03T13:53:09Z"
         }
     ]
 }
@@ -197,7 +203,14 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        $row = $this->connection->fetchAssociative('SELECT * FROM fusio_page WHERE slug = :slug', ['slug' => 'my-new-page']);
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'title', 'content')
+            ->from('fusio_page')
+            ->where('slug = :slug')
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['slug' => 'my-new-page']);
+
         $this->assertEquals('My new page', $row['title']);
         $this->assertEquals('<p>And here some content</p>', $row['content']);
     }

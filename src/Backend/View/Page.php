@@ -69,7 +69,7 @@ class Page extends ViewAbstract
             'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
-                'title' => 'name',
+                'title' => 'title',
                 'slug' => 'slug',
                 'date' => $this->fieldDateTime('date'),
             ]),
@@ -80,10 +80,10 @@ class Page extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
-            'title' => 'name',
+            'title' => 'title',
             'slug' => 'slug',
             'content' => 'content',
             'date' => $this->fieldDateTime('date'),
