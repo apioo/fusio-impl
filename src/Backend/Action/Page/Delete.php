@@ -37,7 +37,10 @@ use Fusio\Impl\Service\Page;
  */
 class Delete extends ActionAbstract
 {
-    private Page $pageService;
+    /**
+     * @var Page
+     */
+    private $pageService;
 
     public function __construct(Page $pageService)
     {

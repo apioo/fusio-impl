@@ -38,7 +38,10 @@ use Fusio\Model\Backend\Page_Update;
  */
 class Update extends ActionAbstract
 {
-    private Page $pageService;
+    /**
+     * @var Page
+     */
+    private $pageService;
 
     public function __construct(Page $pageService)
     {
