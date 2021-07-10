@@ -49,11 +49,11 @@ class DispatcherTest extends ControllerDbTestCase
 
         // payload from fixture
         $this->assertEquals(2, count($responses));
-        $this->assertEquals(43, $responses[0]['event_id']);
+        $this->assertEquals(46, $responses[0]['event_id']);
         $this->assertEquals(2, $responses[0]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[0]['payload']);
 
-        $this->assertEquals(43, $responses[1]['event_id']);
+        $this->assertEquals(46, $responses[1]['event_id']);
         $this->assertEquals(1, $responses[1]['status']);
         $this->assertEquals('{"foo":"bar"}', $responses[1]['payload']);
     }

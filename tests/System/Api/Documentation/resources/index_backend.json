@@ -253,6 +253,20 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/page\/$page_id<[0-9]+|^~>",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/page",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/marketplace\/:app_name",
       "methods": [
         "ANY"
