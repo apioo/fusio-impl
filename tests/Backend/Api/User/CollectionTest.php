@@ -257,7 +257,7 @@ JSON;
 
         $routes = Environment::getService('connection')->fetchAll($sql, ['user_id' => 6]);
 
-        $this->assertEquals(33, count($routes));
+        $this->assertEquals(34, count($routes));
     }
 
     public function testPostNameExists()

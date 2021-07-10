@@ -19,15 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Schema;
+namespace Fusio\Impl\Tests\Backend\Api\Page;
 
-use Fusio\Impl\Schema\Loader;
+use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Factory\Resolver\PhpClass;
+use Fusio\Impl\Backend;
 use Fusio\Impl\Tests\Assert;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
-use PSX\Schema\SchemaInterface;
 
 /**
  * CollectionTest
@@ -45,7 +46,7 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/schema', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/page', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -58,59 +59,46 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/schema', 'GET', array(
+        $response = $this->sendRequest('/backend/page', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 152,
+            "id": 2,
             "status": 1,
-            "name": "Entry-Schema"
+            "title": "API",
+            "slug": "api",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 151,
+            "id": 3,
             "status": 1,
-            "name": "Collection-Schema"
+            "title": "Authorization",
+            "slug": "authorization",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
             "id": 1,
             "status": 1,
-            "name": "Passthru"
-        }
-    ]
-}
-JSON;
-
-        $this->assertEquals(200, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testGetSearch()
-    {
-        $response = $this->sendRequest('/backend/schema?search=Entry', 'GET', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
-        ));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "totalResults": 1,
-    "startIndex": 0,
-    "itemsPerPage": 16,
-    "entry": [
+            "title": "Getting started",
+            "slug": "getting-started",
+            "date": "2021-07-03T13:53:09Z"
+        },
         {
-            "id": 152,
+            "id": 4,
             "status": 1,
-            "name": "Entry-Schema"
+            "title": "Support",
+            "slug": "support",
+            "date": "2021-07-03T13:53:09Z"
         }
     ]
 }
@@ -122,32 +110,46 @@ JSON;
 
     public function testGetCount()
     {
-        $response = $this->sendRequest('/backend/schema?count=80', 'GET', array(
+        $response = $this->sendRequest('/backend/page?count=80', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
-        $body   = (string) $response->getBody();
+        $body = (string) $response->getBody();
+
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 152,
+            "id": 2,
             "status": 1,
-            "name": "Entry-Schema"
+            "title": "API",
+            "slug": "api",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 151,
+            "id": 3,
             "status": 1,
-            "name": "Collection-Schema"
+            "title": "Authorization",
+            "slug": "authorization",
+            "date": "2021-07-03T13:53:09Z"
         },
         {
             "id": 1,
             "status": 1,
-            "name": "Passthru"
+            "title": "Getting started",
+            "slug": "getting-started",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
+            "id": 4,
+            "status": 1,
+            "title": "Support",
+            "slug": "support",
+            "date": "2021-07-03T13:53:09Z"
         }
     ]
 }
@@ -157,43 +159,43 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 
-    public function testPost()
+    public function testGetUnauthorized()
     {
-        $schema = <<<'JSON'
+        Environment::getService('config')->set('psx_debug', false);
+
+        $response = $this->sendRequest('/backend/page', 'GET', array(
+            'User-Agent' => 'Fusio TestCase',
+        ));
+
+        $body = (string) $response->getBody();
+
+        $expect = <<<'JSON'
 {
-    "$import": {
-        "entry": "schema:///Entry-Schema"
-    },
-    "definitions": {
-        "Bar": {
-            "type": "object",
-            "properties": {
-                "title": {
-                    "type": "string"
-                },
-                "foo": {
-                    "$ref": "entry:Entry-Schema"
-                }
-            }
-        }
-    },
-    "$ref": "Bar"
+    "success": false,
+    "title": "Internal Server Error",
+    "message": "Missing authorization header"
 }
 JSON;
 
-        $response = $this->sendRequest('/backend/schema', 'POST', array(
+        $this->assertEquals(401, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+    }
+
+    public function testPost()
+    {
+        $response = $this->sendRequest('/backend/page', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
-            'name'   => 'Bar-Schema',
-            'source' => \json_decode($schema),
+            'title'   => 'My new page',
+            'content' => '<p>And here some content</p>',
         ]));
 
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Schema successful created"
+    "message": "Page successful created"
 }
 JSON;
 
@@ -201,20 +203,21 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
 
         // check database
-        Assert::assertSchema('Bar-Schema', $schema);
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'title', 'content')
+            ->from('fusio_page')
+            ->where('slug = :slug')
+            ->getSQL();
 
-        // test schema
-        /** @var Loader $schemaLoader */
-        $schemaLoader = Environment::getService('schema_loader');
-        $schema = $schemaLoader->getSchema('Bar-Schema');
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['slug' => 'my-new-page']);
 
-        $this->assertInstanceOf(SchemaInterface::class, $schema);
-        $this->assertEquals(['entry:Entry', 'self:Bar'], array_keys($schema->getDefinitions()->getAllTypes()));
+        $this->assertEquals('My new page', $row['title']);
+        $this->assertEquals('<p>And here some content</p>', $row['content']);
     }
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/schema', 'PUT', array(
+        $response = $this->sendRequest('/backend/page', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -228,7 +231,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/schema', 'DELETE', array(
+        $response = $this->sendRequest('/backend/page', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

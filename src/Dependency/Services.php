@@ -383,6 +383,14 @@ trait Services
         );
     }
 
+    public function getPageService(): Service\Page
+    {
+        return new Service\Page(
+            $this->get('table_manager')->getTable(Table\Page::class),
+            $this->get('event_dispatcher')
+        );
+    }
+
     public function getPlanService(): Service\Plan
     {
         return new Service\Plan(

@@ -134,6 +134,10 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
+        $bag->addPage('Getting started', 'getting-started', self::readFile('getting_started.html'));
+        $bag->addPage('API', 'api', self::readFile('api.html'));
+        $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
+        $bag->addPage('Support', 'support', self::readFile('support.html'));
 
         foreach (self::getRoutes() as $category => $routes) {
             $bag->addRoutes($category, $routes);
@@ -281,6 +285,15 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Marketplace\Get::class, null, [200 => Model\Backend\Marketplace_Local_App::class], null, 'backend.marketplace'),
                     'PUT' => new Method(Backend\Action\Marketplace\Update::class, null, [200 => Message::class], null, 'backend.marketplace'),
                     'DELETE' => new Method(Backend\Action\Marketplace\Remove::class, null, [200 => Message::class], null, 'backend.marketplace'),
+                ],
+                '/page' => [
+                    'GET' => new Method(Backend\Action\Page\GetAll::class, null, [200 => Model\Backend\Page_Collection::class], Collection_Query::class, 'backend.page'),
+                    'POST' => new Method(Backend\Action\Page\Create::class, Model\Backend\Page_Create::class, [201 => Message::class], null, 'backend.page', 'fusio.page.create'),
+                ],
+                '/page/$page_id<[0-9]+|^~>' => [
+                    'GET' => new Method(Backend\Action\Page\Get::class, null, [200 => Model\Backend\Page::class], null, 'backend.page'),
+                    'PUT' => new Method(Backend\Action\Page\Update::class, Model\Backend\Page_Update::class, [200 => Message::class], null, 'backend.page', 'fusio.page.update'),
+                    'DELETE' => new Method(Backend\Action\Page\Delete::class, null, [200 => Message::class], null, 'backend.page', 'fusio.page.delete'),
                 ],
                 '/plan/contract' => [
                     'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Model\Backend\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
@@ -542,5 +555,18 @@ class NewInstallation
                 ],
             ],
         ];
+    }
+
+    /**
+     * Reads files in new line neutral way that means we always use \n
+     *
+     * @param string $file
+     * @return string
+     */
+    private static function readFile(string $file)
+    {
+        $lines = file(__DIR__ . '/resources/' . $file);
+        $lines = array_map('trim', $lines);
+        return implode("\n", $lines);
     }
 }

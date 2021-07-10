@@ -1,0 +1,59 @@
+
+<h2>Authorization</h2>
+
+<p>The API uses <a href="https://tools.ietf.org/html/rfc6749">OAuth2</a> for authorization. To access protected parts of
+the API you need to obtain an access token. Therefor you can use the following endpoints:</p>
+
+<dl>
+  <dt>Authorization-Endpoint</dt>
+  <dd><code>/developer/auth</code></dd>
+  <dt>Token-Endpoint</dt>
+  <dd><code>/authorization/token</code></dd>
+</dl>
+
+<b>App Registration</b>
+<p>Available for registered user at url <a href="#!/developer/account/app">/developer/account/app</a></p>
+
+<br>
+
+<b>Authorization Code Grant</b>
+<p>For obtaining the authorization code you have to redirect the resource owner's browser to the consumer endpoint:
+<code>/developer/auth?response_type=code&client_id=[app_key]&redirect_uri=[redirect_uri]&scope=[scopes]</code></p>
+
+<ul>
+  <li><code>app_key</code> - application key</li>
+  <li><code>redirect_uri</code> - should be on the same host as application url</li>
+  <li><code>scopes</code> - comma separated list of scopes which should be subset of application scopes</li>
+</ul>
+
+<p>If the authorization was successful the user gets redirected to the <code>redirect_uri</code> of your app.
+The redirect_uri contains a GET parameter code which can be exchanged for an access token at the Token-Endpoint.</p>
+
+<br>
+
+<b>Authorization Token Grant from Authorization Code</b>
+<pre>
+POST /authorization/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code=[code]&client_id=[app_key]&redirect_uri=[redirect_uri]&client_secret=[app_secret]
+</pre>
+
+<ul>
+  <li><code>code</code> - authorization code obtained at previous step</li>
+  <li><code>redirect_uri</code> - redirect uri used at previous step</li>
+</ul>
+
+<br>
+
+<b>Authorization Token Grant from Refresh Token</b>
+<pre>
+POST /authorization/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=[token]&client_id=[app_key]&client_secret=[app_secret]
+</pre>
+
+<ul>
+  <li><code>token</code> - refresh token obtained at previous step along with authorization token</li>
+</ul>

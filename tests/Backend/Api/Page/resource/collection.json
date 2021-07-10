@@ -1,0 +1,117 @@
+{
+  "status": 1,
+  "path": "\/backend\/page",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Page_GetAll",
+      "security": {
+        "app": [
+          "backend.page"
+        ]
+      },
+      "tags": [
+        "backend.page"
+      ],
+      "queryParameters": "Collection_Query",
+      "responses": {
+        "200": "Backend_Page_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Page_Create",
+      "security": {
+        "app": [
+          "backend.page"
+        ]
+      },
+      "tags": [
+        "backend.page"
+      ],
+      "request": "Backend_Page_Create",
+      "responses": {
+        "201": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Page_Collection": {
+      "$ref": "Page_Collection"
+    },
+    "Backend_Page_Create": {
+      "$ref": "Page_Create"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "Page_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Page"
+      }
+    },
+    "Page_Create": {
+      "$extends": "Page",
+      "type": "object",
+      "required": [
+        "title",
+        "content"
+      ]
+    }
+  }
+}

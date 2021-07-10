@@ -68,7 +68,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 43,
+            "id": 46,
             "status": 1,
             "name": "foo-event",
             "description": "Foo event description"
@@ -113,7 +113,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(44, $row['id']);
+        $this->assertEquals(47, $row['id']);
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);

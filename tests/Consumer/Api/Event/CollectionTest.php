@@ -68,7 +68,7 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 43,
+            "id": 46,
             "name": "foo-event",
             "description": "Foo event description"
         }

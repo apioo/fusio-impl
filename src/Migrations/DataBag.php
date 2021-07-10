@@ -58,6 +58,7 @@ class DataBag
             'fusio_plan_contract' => [],
             'fusio_plan_invoice' => [],
             'fusio_provider' => [],
+            'fusio_page' => [],
             'fusio_role' => [],
             'fusio_rate' => [],
             'fusio_routes' => [],
@@ -371,6 +372,17 @@ class DataBag
             'trace' => '[trace]',
             'file' => '[file]',
             'line' => 74
+        ];
+    }
+
+    public function addPage(string $title, string $slug, string $content)
+    {
+        $this->data['fusio_page'][$slug] = [
+            'status' => Table\Page::STATUS_ACTIVE,
+            'title' => $title,
+            'slug' => $slug,
+            'content' => $content,
+            'date' => '2021-07-03 13:53:09'
         ];
     }
 
