@@ -226,26 +226,31 @@ class CategoriesTest extends ControllerDbTestCase
                 },
                 {
                     "id": 31,
-                    "name": "consumer.plan",
+                    "name": "consumer.page",
                     "description": ""
                 },
                 {
                     "id": 32,
-                    "name": "consumer.scope",
+                    "name": "consumer.plan",
                     "description": ""
                 },
                 {
                     "id": 33,
-                    "name": "consumer.subscription",
+                    "name": "consumer.scope",
                     "description": ""
                 },
                 {
                     "id": 34,
-                    "name": "consumer.transaction",
+                    "name": "consumer.subscription",
                     "description": ""
                 },
                 {
                     "id": 35,
+                    "name": "consumer.transaction",
+                    "description": ""
+                },
+                {
+                    "id": 36,
                     "name": "consumer.user",
                     "description": ""
                 }
@@ -256,7 +261,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 38,
+                    "id": 39,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -266,7 +271,7 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 37,
+                    "id": 38,
                     "name": "foo",
                     "description": "Foo access"
                 }
@@ -277,7 +282,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 36,
+                    "id": 37,
                     "name": "system",
                     "description": ""
                 }

@@ -99,6 +99,7 @@ class AccountTest extends ControllerDbTestCase
         "consumer.app",
         "consumer.event",
         "consumer.grant",
+        "consumer.page",
         "consumer.plan",
         "consumer.scope",
         "consumer.subscription",

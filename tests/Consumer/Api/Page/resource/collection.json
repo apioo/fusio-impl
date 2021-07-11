@@ -4,11 +4,6 @@
   "methods": {
     "GET": {
       "operationId": "Consumer_Action_Page_GetAll",
-      "security": {
-        "app": [
-          "consumer.page"
-        ]
-      },
       "tags": [
         "consumer.page"
       ],

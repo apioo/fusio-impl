@@ -1079,6 +1079,82 @@
         ]
       }
     },
+    "\/consumer\/page\/{page_id}": {
+      "get": {
+        "tags": [
+          "consumer.page"
+        ],
+        "operationId": "Consumer_Action_Page_Get",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Page"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "page_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/page": {
+      "get": {
+        "tags": [
+          "consumer.page"
+        ],
+        "operationId": "Consumer_Action_Page_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Page_Collection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "\/consumer\/grant\/{grant_id}": {
       "delete": {
         "tags": [
@@ -1648,6 +1724,14 @@
           }
         }
       },
+      "ConsumerPagePage_idPath": {
+        "type": "object",
+        "properties": {
+          "page_id": {
+            "type": "string"
+          }
+        }
+      },
       "ConsumerPlanContractContract_idPath": {
         "type": "object",
         "properties": {
@@ -1750,6 +1834,12 @@
       },
       "Consumer_Grant_Collection": {
         "$ref": "#\/components\/schemas\/Grant_Collection"
+      },
+      "Consumer_Page": {
+        "$ref": "#\/components\/schemas\/Page"
+      },
+      "Consumer_Page_Collection": {
+        "$ref": "#\/components\/schemas\/Page_Collection"
       },
       "Consumer_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
@@ -1935,6 +2025,26 @@
             "type": "string"
           }
         }
+      },
+      "Page": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "Page_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
       },
       "Plan": {
         "type": "object",
@@ -2305,6 +2415,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -2349,6 +2460,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -2394,6 +2506,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",

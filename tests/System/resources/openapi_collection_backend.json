@@ -6272,6 +6272,9 @@
           "id": {
             "type": "integer"
           },
+          "status": {
+            "type": "integer"
+          },
           "title": {
             "type": "string"
           },
@@ -7256,6 +7259,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -7300,6 +7304,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -7345,6 +7350,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
