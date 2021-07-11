@@ -115,6 +115,8 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
 
         $filter[] = new Filter\AssertMethod(
             $this->routesMethodService,
+            $this->config->get('fusio_version_header'),
+            $this->config->get('fusio_version_regexp'),
             $this->context
         );
 

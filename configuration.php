@@ -24,6 +24,13 @@ return array(
     // off, then it is not possible to create or update such actions
     'fusio_php_sandbox'       => true,
 
+    // If a request arrives at Fusio we can extract the requested version number
+    // to load the fitting version of a route. Through the following keys you can
+    // configure where Fusio looks for the version. By default we try to extract the
+    // version from the Accept header
+    'fusio_version_header'    => null, // i.e. 'Accept'
+    'fusio_version_regexp'    => null, // i.e. '^application/vnd\.myapp\.v([\d]+)$'
+
     // The three-character ISO-4217 currency code which is used to process
     // payments
     'fusio_payment_currency'  => 'EUR',
