@@ -135,7 +135,7 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
         $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE);
-        $bag->addPage('Getting started', 'getting-started', self::readFile('bootstrap.html'));
+        $bag->addPage('Getting started', 'getting-started', self::readFile('getting-started.html'));
         $bag->addPage('API', 'api', self::readFile('api.html'));
         $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
         $bag->addPage('Support', 'support', self::readFile('support.html'));
