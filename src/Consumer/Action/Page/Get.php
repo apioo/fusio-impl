@@ -50,7 +50,6 @@ class Get extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getEntity(
-            $context->getUser()->getId(),
             $request->get('page_id')
         );
     }

@@ -35,7 +35,7 @@ use PSX\Sql\ViewAbstract;
  */
 class Page extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0)
+    public function getCollection(int $startIndex = 0)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -61,7 +61,7 @@ class Page extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $pageId)
+    public function getEntity($pageId)
     {
         $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$this->resolveId($pageId)], [
             'id' => $this->fieldInteger('id'),
