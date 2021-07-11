@@ -74,11 +74,11 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "id": 1,
+    "id": 2,
     "status": 1,
     "title": "Getting started",
     "slug": "getting-started",
-    "content": "\n<h2>Welcome<\/h2>\n\n<p>This is a quick introduction to help you get started using this API. On the left sidebar you see all available\ndocumentation resources. The <a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to discover\nthe endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a> page you can see all available support options if\nyou get stuck.<\/p>\n\n<p>You can also <a href=\"#!\/signup\">register<\/a> a new account to create a new app. Through this app you can access\nprotected parts of the API. The <a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains more\ninformation how you can authenticate.<\/p>\n",
+    "content": "\n<h2>Welcome<\/h2>\n\n<p>This is a quick introduction to help you get started using this API. On the\nleft sidebar you see all available documentation resources. The\n<a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to\ndiscover the endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a>\npage you can see all available support options if you get stuck.<\/p>\n\n<p>You can also <a href=\"#!\/signup\">register<\/a> a new account to create a new\napp. Through this app you can access protected parts of the API. The\n<a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains\nmore information how you can authenticate.<\/p>\n",
     "date": "2021-07-03T13:53:09Z"
 }
 JSON;
@@ -129,6 +129,8 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
+            'status'  => 1,
+            'title'   => 'Foobar',
             'content' => 'Foobar',
         ]));
 

@@ -68,33 +68,40 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 2,
+            "id": 3,
             "status": 1,
             "title": "API",
             "slug": "api",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 3,
+            "id": 4,
             "status": 1,
             "title": "Authorization",
             "slug": "authorization",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 1,
+            "id": 2,
             "status": 1,
             "title": "Getting started",
             "slug": "getting-started",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 4,
+            "id": 1,
+            "status": 2,
+            "title": "Overview",
+            "slug": "overview",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
+            "id": 5,
             "status": 1,
             "title": "Support",
             "slug": "support",
@@ -119,33 +126,40 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 2,
+            "id": 3,
             "status": 1,
             "title": "API",
             "slug": "api",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 3,
+            "id": 4,
             "status": 1,
             "title": "Authorization",
             "slug": "authorization",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 1,
+            "id": 2,
             "status": 1,
             "title": "Getting started",
             "slug": "getting-started",
             "date": "2021-07-03T13:53:09Z"
         },
         {
-            "id": 4,
+            "id": 1,
+            "status": 2,
+            "title": "Overview",
+            "slug": "overview",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
+            "id": 5,
             "status": 1,
             "title": "Support",
             "slug": "support",
@@ -187,6 +201,7 @@ JSON;
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
+            'status'  => 1,
             'title'   => 'My new page',
             'content' => '<p>And here some content</p>',
         ]));

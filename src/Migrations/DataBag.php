@@ -375,10 +375,10 @@ class DataBag
         ];
     }
 
-    public function addPage(string $title, string $slug, string $content)
+    public function addPage(string $title, string $slug, string $content, int $status = Table\Page::STATUS_VISIBLE)
     {
         $this->data['fusio_page'][$slug] = [
-            'status' => Table\Page::STATUS_ACTIVE,
+            'status' => $status,
             'title' => $title,
             'slug' => $slug,
             'content' => $content,

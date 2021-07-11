@@ -19,37 +19,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Table;
+namespace Fusio\Impl\Consumer\Action\Page;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Consumer\View;
+use PSX\Sql\TableManagerInterface;
 
 /**
- * Page
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Page extends TableAbstract
+class Get extends ActionAbstract
 {
-    const STATUS_VISIBLE   = 1;
-    const STATUS_INVISIBLE = 2;
-    const STATUS_DELETED   = 0;
+    /**
+     * @var View\Page
+     */
+    private $table;
 
-    public function getName()
+    public function __construct(TableManagerInterface $tableManager)
     {
-        return 'fusio_page';
+        $this->table = $tableManager->getTable(View\Page::class);
     }
 
-    public function getColumns()
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'title' => self::TYPE_VARCHAR | 255,
-            'slug' => self::TYPE_VARCHAR | 255,
-            'content' => self::TYPE_TEXT,
-            'date' => self::TYPE_DATETIME,
+        return $this->table->getEntity(
+            $context->getUser()->getId(),
+            $request->get('page_id')
         );
     }
 }

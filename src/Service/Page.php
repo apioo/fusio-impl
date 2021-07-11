@@ -70,9 +70,11 @@ class Page
             throw new StatusCode\BadRequestException('Page already exists');
         }
 
+        $this->assertStatus($page);
+
         // create page
         $record = [
-            'status'  => Table\Page::STATUS_ACTIVE,
+            'status'  => $page->getStatus(),
             'title'   => $page->getTitle(),
             'slug'    => $slug,
             'content' => $page->getContent(),
@@ -100,9 +102,16 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
+        $this->assertStatus($page);
+
+        $slug = $this->createSlug($page->getTitle());
+
         // update action
         $record = [
             'id'      => $existing['id'],
+            'status'  => $page->getStatus(),
+            'title'   => $page->getTitle(),
+            'slug'    => $slug,
             'content' => $page->getContent(),
         ];
 
@@ -133,7 +142,7 @@ class Page
     public function exists(string $slug)
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Action::STATUS_ACTIVE);
+        $condition->in('status', [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
         $condition->equals('slug', $slug);
 
         $page = $this->pageTable->getOneBy($condition);
@@ -159,5 +168,12 @@ class Page
         $slug = strtolower(trim($slug, '-'));
         $slug = preg_replace('/[\/_|+ -]+/', '-', $slug);
         return $slug;
+    }
+
+    private function assertStatus(\Fusio\Model\Backend\Page $page)
+    {
+        if (!in_array($page->getStatus(), [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE])) {
+            throw new StatusCode\GoneException('Page status must be either 1 or 2');
+        }
     }
 }

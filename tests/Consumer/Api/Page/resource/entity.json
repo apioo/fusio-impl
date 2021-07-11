@@ -1,0 +1,51 @@
+{
+  "status": 1,
+  "path": "\/consumer\/page\/:page_id",
+  "pathParameters": "ConsumerPagePage_idPath",
+  "methods": {
+    "GET": {
+      "operationId": "Consumer_Action_Page_Get",
+      "security": {
+        "app": [
+          "consumer.page"
+        ]
+      },
+      "tags": [
+        "consumer.page"
+      ],
+      "responses": {
+        "200": "Consumer_Page"
+      }
+    }
+  },
+  "definitions": {
+    "ConsumerPagePage_idPath": {
+      "type": "object",
+      "properties": {
+        "page_id": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Page": {
+      "$ref": "Page"
+    },
+    "Page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

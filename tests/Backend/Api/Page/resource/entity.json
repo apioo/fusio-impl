@@ -79,6 +79,9 @@
         "id": {
           "type": "integer"
         },
+        "status": {
+          "type": "integer"
+        },
         "title": {
           "type": "string"
         },

@@ -19,12 +19,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\View;
+namespace Fusio\Impl\Consumer\View;
 
-use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
-use PSX\Sql\Fields;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -37,38 +35,23 @@ use PSX\Sql\ViewAbstract;
  */
 class Page extends ViewAbstract
 {
-    public function getCollection(int $startIndex, int $count, ?string $search = null, ?string $sortBy = null, ?string $sortOrder = null)
+    public function getCollection(int $userId, int $startIndex = 0)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
         }
 
-        if (empty($count) || $count < 1 || $count > 1024) {
-            $count = 16;
-        }
-
-        if ($sortBy === null) {
-            $sortBy = 'slug';
-        }
-        
-        if ($sortOrder === null) {
-            $sortOrder = Sql::SORT_ASC;
-        }
+        $count = 32;
 
         $condition = new Condition();
-        $condition->in('status', [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
-
-        if (!empty($search)) {
-            $condition->like('title', '%' . $search . '%');
-        }
+        $condition->equals('status', Table\Page::STATUS_VISIBLE);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'getAll'], [$startIndex, $count, 'slug', 'ASC', $condition], [
                 'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
                 'title' => 'title',
                 'slug' => 'slug',
                 'date' => $this->fieldDateTime('date'),
@@ -78,11 +61,10 @@ class Page extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity($userId, $pageId)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$this->resolveId($pageId)], [
             'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
             'title' => 'title',
             'slug' => 'slug',
             'content' => 'content',
@@ -90,5 +72,15 @@ class Page extends ViewAbstract
         ]);
 
         return $this->build($definition);
+    }
+
+    private function resolveId($id): int
+    {
+        if (substr($id, 0, 1) === '~') {
+            $row = $this->getTable(Table\Page::class)->getOneBySlug(urldecode(substr($id, 1)));
+            return $row['id'] ?? 0;
+        } else {
+            return (int) $id;
+        }
     }
 }

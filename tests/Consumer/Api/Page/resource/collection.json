@@ -1,45 +1,24 @@
 {
   "status": 1,
-  "path": "\/backend\/page",
+  "path": "\/consumer\/page",
   "methods": {
     "GET": {
-      "operationId": "Backend_Action_Page_GetAll",
+      "operationId": "Consumer_Action_Page_GetAll",
       "security": {
         "app": [
-          "backend.page"
+          "consumer.page"
         ]
       },
       "tags": [
-        "backend.page"
+        "consumer.page"
       ],
       "queryParameters": "Collection_Query",
       "responses": {
-        "200": "Backend_Page_Collection"
-      }
-    },
-    "POST": {
-      "operationId": "Backend_Action_Page_Create",
-      "security": {
-        "app": [
-          "backend.page"
-        ]
-      },
-      "tags": [
-        "backend.page"
-      ],
-      "request": "Backend_Page_Create",
-      "responses": {
-        "201": "Message"
+        "200": "Consumer_Page_Collection"
       }
     }
   },
   "definitions": {
-    "Backend_Page_Collection": {
-      "$ref": "Page_Collection"
-    },
-    "Backend_Page_Create": {
-      "$ref": "Page_Create"
-    },
     "Collection": {
       "type": "object",
       "properties": {
@@ -71,24 +50,13 @@
         }
       }
     },
-    "Message": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
+    "Consumer_Page_Collection": {
+      "$ref": "Page_Collection"
     },
     "Page": {
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer"
-        },
-        "status": {
           "type": "integer"
         },
         "title": {
@@ -107,14 +75,6 @@
       "$template": {
         "T": "Page"
       }
-    },
-    "Page_Create": {
-      "$extends": "Page",
-      "type": "object",
-      "required": [
-        "title",
-        "content"
-      ]
     }
   }
 }

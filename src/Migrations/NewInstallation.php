@@ -134,7 +134,8 @@ class NewInstallation
         $bag->addUserScope('Administrator', 'backend');
         $bag->addUserScope('Administrator', 'consumer');
         $bag->addUserScope('Administrator', 'authorization');
-        $bag->addPage('Getting started', 'getting-started', self::readFile('getting_started.html'));
+        $bag->addPage('Overview', 'overview', self::readFile('overview.html'), Table\Page::STATUS_INVISIBLE);
+        $bag->addPage('Getting started', 'getting-started', self::readFile('bootstrap.html'));
         $bag->addPage('API', 'api', self::readFile('api.html'));
         $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
         $bag->addPage('Support', 'support', self::readFile('support.html'));
@@ -452,6 +453,12 @@ class NewInstallation
                 ],
                 '/grant/$grant_id<[0-9]+>' => [
                     'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [204 => Message::class], null, 'consumer.grant'),
+                ],
+                '/page' => [
+                    'GET' => new Method(Consumer\Action\Page\GetAll::class, null, [200 => Model\Consumer\Page_Collection::class], Collection_Query::class, 'consumer.page', null, true),
+                ],
+                '/page/:page_id' => [
+                    'GET' => new Method(Consumer\Action\Page\Get::class, null, [200 => Model\Consumer\Page::class], null, 'consumer.page', null, true),
                 ],
                 '/plan/contract' => [
                     'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Model\Consumer\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
