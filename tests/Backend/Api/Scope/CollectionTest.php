@@ -206,15 +206,15 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 38]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 40]);
 
         $this->assertEquals([[
-            'scope_id' => 38,
+            'scope_id' => 40,
             'route_id' => 116,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'scope_id' => 38,
+            'scope_id' => 40,
             'route_id' => 115,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
