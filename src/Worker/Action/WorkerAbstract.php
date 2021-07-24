@@ -64,7 +64,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $endpoint = $worker[$this->getLanguage()] ?? null;
 
         if (empty($endpoint)) {
-            throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. More information about the worker system at: https://www.fusio-project.org/documentation/worker');
+            throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. Please add a worker to the configuration file, more information at: https://www.fusio-project.org/documentation/worker');
         }
 
         $response = $this->httpClient->post($endpoint . '/execute', [
