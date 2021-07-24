@@ -32,6 +32,7 @@ use Fusio\Impl\Base;
 use Fusio\Impl\Console;
 use Fusio\Impl\EventListener\AuditListener;
 use Fusio\Impl\EventListener\WebhookListener;
+use Fusio\Impl\EventListener\WorkerListener;
 use Fusio\Impl\Framework\Api\GeneratorFactory;
 use Fusio\Impl\Framework\Api\ResourceListing;
 use Fusio\Impl\Framework\Filter;
@@ -329,6 +330,7 @@ class Container extends DefaultContainer
 
         $eventDispatcher->addSubscriber(new AuditListener($this->get('table_manager')->getTable(Table\Audit::class)));
         $eventDispatcher->addSubscriber(new WebhookListener($this->get('engine_dispatcher')));
+        $eventDispatcher->addSubscriber(new WorkerListener($this->get('config')));
     }
 
     protected function appendDefaultConfig()
