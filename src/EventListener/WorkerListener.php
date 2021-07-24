@@ -110,8 +110,12 @@ class WorkerListener implements EventSubscriberInterface
         );
     }
 
-    private function notifyWorkerConnection(string $name, string $class, ?Connection_Config $config)
+    private function notifyWorkerConnection(string $name, ?string $class, ?Connection_Config $config)
     {
+        if (empty($class)) {
+            return;
+        }
+
         $worker = $this->config->get('fusio_worker');
         if (empty($worker) || !is_array($worker)) {
             return;
@@ -131,8 +135,12 @@ class WorkerListener implements EventSubscriberInterface
         }
     }
 
-    private function notifyWorkerAction(string $name, string $class, ?Action_Config $config)
+    private function notifyWorkerAction(string $name, ?string $class, ?Action_Config $config)
     {
+        if (empty($class)) {
+            return;
+        }
+
         $worker = $this->config->get('fusio_worker');
         if (empty($worker) || !is_array($worker)) {
             return;
