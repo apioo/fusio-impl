@@ -2,6 +2,12 @@
 
 return array(
 
+    // This array contains a list of worker endpoints which can be used by
+    // Fusio to execute action code in different programming languages. For
+    // more information please take a look at our worker documentation:
+    // https://www.fusio-project.org/documentation/worker
+    'fusio_worker'            => [],
+
     // OAuth2 access token expiration settings. How long can you use an access
     // token and the refresh token. After the expiration a user either need to
     // use a refresh token to extend the token or request a new token
