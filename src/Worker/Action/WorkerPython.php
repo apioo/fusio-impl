@@ -28,11 +28,11 @@ namespace Fusio\Impl\Worker\Action;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class PythonWorker extends WorkerAbstract
+class WorkerPython extends WorkerAbstract
 {
     public function getName()
     {
-        return 'Python-Worker';
+        return 'Worker-Python';
     }
 
     protected function getLanguage(): string

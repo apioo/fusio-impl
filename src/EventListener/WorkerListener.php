@@ -23,10 +23,10 @@ namespace Fusio\Impl\EventListener;
 
 use Fusio\Impl\Base;
 use Fusio\Impl\Event;
-use Fusio\Impl\Worker\Action\JavascriptWorker;
-use Fusio\Impl\Worker\Action\JavaWorker;
-use Fusio\Impl\Worker\Action\PHPWorker;
-use Fusio\Impl\Worker\Action\PythonWorker;
+use Fusio\Impl\Worker\Action\WorkerJavascript;
+use Fusio\Impl\Worker\Action\WorkerJava;
+use Fusio\Impl\Worker\Action\WorkerPHP;
+use Fusio\Impl\Worker\Action\WorkerPython;
 use Fusio\Model\Backend\Action_Config;
 use Fusio\Model\Backend\Connection_Config;
 use GuzzleHttp\Client;
@@ -43,10 +43,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class WorkerListener implements EventSubscriberInterface
 {
     private const MAPPING = [
-        JavascriptWorker::class => 'javascript',
-        JavaWorker::class => 'java',
-        PHPWorker::class => 'php',
-        PythonWorker::class => 'python',
+        WorkerJavascript::class => 'javascript',
+        WorkerJava::class => 'java',
+        WorkerPHP::class => 'php',
+        WorkerPython::class => 'python',
     ];
 
     /**

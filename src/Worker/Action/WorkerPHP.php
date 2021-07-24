@@ -22,21 +22,21 @@
 namespace Fusio\Impl\Worker\Action;
 
 /**
- * JavaWorker
+ * PHPWorker
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class JavaWorker extends WorkerAbstract
+class WorkerPHP extends WorkerAbstract
 {
     public function getName()
     {
-        return 'Java-Worker';
+        return 'Worker-PHP';
     }
 
     protected function getLanguage(): string
     {
-        return 'java';
+        return 'php';
     }
 }

@@ -31,6 +31,7 @@ use Fusio\Engine\Request\RpcInterface;
 use Fusio\Engine\RequestInterface;
 use GuzzleHttp\Client;
 use PSX\Framework\Config\Config;
+use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * WorkerAbstract
@@ -63,7 +64,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $endpoint = $worker[$this->getLanguage()] ?? null;
 
         if (empty($endpoint)) {
-            throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage());
+            throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. More information about the worker system at: https://www.fusio-project.org/documentation/worker');
         }
 
         $response = $this->httpClient->post($endpoint . '/execute', [
@@ -72,9 +73,13 @@ abstract class WorkerAbstract extends ActionAbstract
 
         $data = \json_decode((string) $response->getBody());
 
+        if (isset($data->success) && $data->success === false) {
+            throw new InternalServerErrorException($data->message ?? 'An unknown error occurred at the worker');
+        }
+
         if (isset($data->response)) {
-            $statusCode = $data->response->statusCode ?? 200;
-            $headers = $data->response->headers ?? [];
+            $statusCode = (int) ($data->response->statusCode ?? 200);
+            $headers = (array) ($data->response->headers ?? []);
             $body = $data->response->body ?? new \stdClass();
         } else {
             throw new \RuntimeException('The worker does not return a response');
@@ -117,8 +122,8 @@ abstract class WorkerAbstract extends ActionAbstract
             return [
                 'method' => $request->getMethod(),
                 'headers' => $request->getHeaders(),
-                'uriFragments' => (object) $request->getUriFragments()->toArray(),
-                'parameters' => (object) $request->getParameters()->toArray(),
+                'uriFragments' => (object) $request->getUriFragments(),
+                'parameters' => (object) $request->getParameters(),
                 'body' => $request->getBody(),
             ];
         } elseif ($request instanceof RpcInterface) {

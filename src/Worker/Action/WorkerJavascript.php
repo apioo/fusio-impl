@@ -28,11 +28,11 @@ namespace Fusio\Impl\Worker\Action;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class JavascriptWorker extends WorkerAbstract
+class WorkerJavascript extends WorkerAbstract
 {
     public function getName()
     {
-        return 'Javascript-Worker';
+        return 'Worker-Javascript';
     }
 
     protected function getLanguage(): string
