@@ -10,6 +10,7 @@
         <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
+            <directory name="src/Worker/Generated" />
         </ignoreFiles>
     </projectFiles>
     <stubs>
