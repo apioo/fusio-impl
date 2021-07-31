@@ -26,6 +26,7 @@ use Grpc\ChannelCredentials;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TBufferedTransport;
 use Thrift\Transport\THttpClient;
+use Thrift\Transport\TSocket;
 
 /**
  * ClientFactory
@@ -44,8 +45,8 @@ class ClientFactory
             return self::$instances[$endpoint];
         }
 
-        $parts = parse_url($endpoint);
-        $socket = new THttpClient($parts['host'] ?? 'localhost', (int) ($parts['port'] ?? 8080), $parts['path'] ?? '', $parts['scheme'] ?? 'http');
+        [$host, $port] = explode(':', $endpoint);
+        $socket = new TSocket($host, (int) $port);
         $transport = new TBufferedTransport($socket, 1024, 1024);
         $protocol = new TBinaryProtocol($transport);
         $transport->open();
