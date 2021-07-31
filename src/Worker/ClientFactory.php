@@ -22,10 +22,8 @@
 namespace Fusio\Impl\Worker;
 
 use Fusio\Impl\Worker\Generated\WorkerClient;
-use Grpc\ChannelCredentials;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TBufferedTransport;
-use Thrift\Transport\THttpClient;
 use Thrift\Transport\TSocket;
 
 /**
