@@ -45,9 +45,10 @@ class ClientFactory
         }
 
         $parts = parse_url($endpoint);
-        $socket = new THttpClient($parts['host'], (int) $parts['port'], $parts['path'], $parts['scheme'] ?? 'http');
+        $socket = new THttpClient($parts['host'] ?? 'localhost', (int) ($parts['port'] ?? 8080), $parts['path'] ?? '', $parts['scheme'] ?? 'http');
         $transport = new TBufferedTransport($socket, 1024, 1024);
         $protocol = new TBinaryProtocol($transport);
+        $transport->open();
 
         return self::$instances[$endpoint] = new WorkerClient($protocol);
     }

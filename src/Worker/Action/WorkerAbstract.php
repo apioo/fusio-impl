@@ -93,7 +93,7 @@ abstract class WorkerAbstract extends ActionAbstract
 
         return $this->response->build(
             $result->response->statusCode,
-            \iterator_to_array($result->response->headers),
+            $result->response->headers,
             \json_decode($result->response->body)
         );
     }
@@ -111,7 +111,7 @@ abstract class WorkerAbstract extends ActionAbstract
         if ($request instanceof HttpInterface) {
             $httpRequest = new HttpRequest();
             $httpRequest->method = $request->getMethod();
-            $httpRequest->headers = $request->getHeaders();
+            $httpRequest->headers = $this->getHttpHeaders($request);
             $httpRequest->uriFragments = $request->getUriFragments();
             $httpRequest->parameters = $request->getParameters();
             $httpRequest->body = \json_encode($request->getBody());
@@ -125,6 +125,17 @@ abstract class WorkerAbstract extends ActionAbstract
         }
 
         return $return;
+    }
+
+    private function getHttpHeaders(HttpInterface $request): array
+    {
+        $result = [];
+        $headers = $request->getHeaders();
+        foreach ($headers as $name => $values) {
+            $result[$name] = implode(', ', $values);
+        }
+
+        return $result;
     }
 
     private function buildContext(ContextInterface $context): Context
