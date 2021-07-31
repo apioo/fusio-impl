@@ -92,8 +92,8 @@ abstract class WorkerAbstract extends ActionAbstract
         }
 
         return $this->response->build(
-            $result->response->statusCode,
-            $result->response->headers,
+            $result->response->statusCode ?? 200,
+            $result->response->headers ?? [],
             \json_decode($result->response->body)
         );
     }
