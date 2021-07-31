@@ -29,9 +29,16 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Request\HttpInterface;
 use Fusio\Engine\Request\RpcInterface;
 use Fusio\Engine\RequestInterface;
-use GuzzleHttp\Client;
+use Fusio\Impl\Worker\ClientFactory;
+use Fusio\Impl\Worker\Generated\App;
+use Fusio\Impl\Worker\Generated\Context;
+use Fusio\Impl\Worker\Generated\Execute;
+use Fusio\Impl\Worker\Generated\HttpRequest;
+use Fusio\Impl\Worker\Generated\Request;
+use Fusio\Impl\Worker\Generated\Result;
+use Fusio\Impl\Worker\Generated\RpcRequest;
+use Fusio\Impl\Worker\Generated\User;
 use PSX\Framework\Config\Config;
-use PSX\Http\Exception\InternalServerErrorException;
 
 /**
  * WorkerAbstract
@@ -47,15 +54,9 @@ abstract class WorkerAbstract extends ActionAbstract
      */
     private $config;
 
-    /**
-     * @var Client
-     */
-    private $httpClient;
-
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->httpClient = new Client();
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
@@ -67,37 +68,34 @@ abstract class WorkerAbstract extends ActionAbstract
             throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. Please add a worker to the configuration file, more information at: https://www.fusio-project.org/documentation/worker');
         }
 
-        $response = $this->httpClient->post($endpoint . '/execute', [
-            'json' => $this->build($request, $context)
-        ]);
+        $execute = new Execute();
+        $execute->action = $context->getAction()->getName();
+        $execute->request = $this->buildRequest($request);
+        $execute->context = $this->buildContext($context);
 
-        $data = \json_decode((string) $response->getBody());
+        $result = ClientFactory::getClient($endpoint)->executeAction($execute);
 
-        if (isset($data->success) && $data->success === false) {
-            throw new InternalServerErrorException($data->message ?? 'An unknown error occurred at the worker');
+        if (!$result instanceof Result) {
+            throw new \RuntimeException('Worker returned no result');
         }
 
-        if (isset($data->response)) {
-            $statusCode = (int) ($data->response->statusCode ?? 200);
-            $headers = (array) ($data->response->headers ?? []);
-            $body = $data->response->body ?? new \stdClass();
-        } else {
-            throw new \RuntimeException('The worker does not return a response');
-        }
-
-        if (isset($data->events) && is_array($data->events)) {
-            foreach ($data->events as $event) {
-                $this->dispatcher->dispatch($event->eventName, $event->data ?? null);
+        if (!empty($result->events)) {
+            foreach ($result->events as $event) {
+                $this->dispatcher->dispatch($event->eventName, \json_decode($event->data));
             }
         }
 
-        if (isset($data->logs) && is_array($data->logs)) {
-            foreach ($data->logs as $log) {
-                $this->logger->log($log->level, $log->message, $log->context ?? null);
+        if (!empty($result->logs)) {
+            foreach ($result->logs as $log) {
+                $this->logger->log($log->level, $log->message);
             }
         }
 
-        return $this->response->build($statusCode, $headers, $body);
+        return $this->response->build(
+            $result->response->statusCode,
+            \iterator_to_array($result->response->headers),
+            \json_decode($result->response->body)
+        );
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
@@ -107,61 +105,54 @@ abstract class WorkerAbstract extends ActionAbstract
 
     abstract protected function getLanguage(): string;
 
-    private function build(RequestInterface $request, ContextInterface $context): array
+    private function buildRequest(RequestInterface $request)
     {
-        return [
-            'action' => $context->getAction()->getName(),
-            'request' => $this->buildRequest($request),
-            'context' => $this->buildContext($context)
-        ];
-    }
-
-    private function buildRequest(RequestInterface $request): array
-    {
+        $return = new Request();
         if ($request instanceof HttpInterface) {
-            return [
-                'method' => $request->getMethod(),
-                'headers' => $request->getHeaders(),
-                'uriFragments' => (object) $request->getUriFragments(),
-                'parameters' => (object) $request->getParameters(),
-                'body' => $request->getBody(),
-            ];
+            $httpRequest = new HttpRequest();
+            $httpRequest->method = $request->getMethod();
+            $httpRequest->headers = $request->getHeaders();
+            $httpRequest->uriFragments = $request->getUriFragments();
+            $httpRequest->parameters = $request->getParameters();
+            $httpRequest->body = \json_encode($request->getBody());
+            $return->http = $httpRequest;
         } elseif ($request instanceof RpcInterface) {
-            return [
-                'arguments' => $request->getArguments()
-            ];
+            $rpcRequest = new RpcRequest();
+            $rpcRequest->arguments = \json_encode($request->getArguments());
+            $return->rpc = $rpcRequest;
         } else {
-            return [];
+            throw new \RuntimeException('Received an not supported request');
         }
+
+        return $return;
     }
 
-    private function buildContext(ContextInterface $context): array
+    private function buildContext(ContextInterface $context): Context
     {
-        $app = $context->getApp();
-        $user = $context->getUser();
+        $app = new App();
+        $app->id = $context->getApp()->getId();
+        $app->userId = $context->getApp()->getUserId();
+        $app->status = $context->getApp()->getStatus();
+        $app->name = $context->getApp()->getName();
+        $app->url = $context->getApp()->getUrl();
+        $app->appKey = $context->getApp()->getAppKey();
+        $app->scopes = $context->getApp()->getScopes();
+        $app->parameters = $context->getApp()->getParameters();
 
-        return [
-            'routeId' => $context->getRouteId(),
-            'baseUrl' => $context->getBaseUrl(),
-            'app' => [
-                'id' => $app->getId(),
-                'userId' => $app->getUserId(),
-                'status' => $app->getStatus(),
-                'name' => $app->getName(),
-                'url' => $app->getUrl(),
-                'appKey' => $app->getAppKey(),
-                'scopes' => $app->getScopes(),
-                'parameters' => $app->getParameters(),
-            ],
-            'user' => [
-                'id' => $user->getId(),
-                'roleId' => $user->getRoleId(),
-                'categoryId' => $user->getCategoryId(),
-                'status' => $user->getStatus(),
-                'name' => $user->getName(),
-                'email' => $user->getEmail(),
-                'points' => $user->getPoints(),
-            ],
-        ];
+        $user = new User();
+        $user->id = $context->getUser()->getId();
+        $user->roleId = $context->getUser()->getRoleId();
+        $user->categoryId = $context->getUser()->getCategoryId();
+        $user->status = $context->getUser()->getStatus();
+        $user->name = $context->getUser()->getName();
+        $user->email = $context->getUser()->getEmail();
+        $user->points = $context->getUser()->getPoints();
+
+        $return = new Context();
+        $return->routeId = $context->getRouteId();
+        $return->baseUrl = $context->getBaseUrl();
+        $return->app = $app;
+        $return->user = $user;
+        return $return;
     }
 }

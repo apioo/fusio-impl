@@ -21,16 +21,19 @@
 
 namespace Fusio\Impl\EventListener;
 
-use Fusio\Impl\Base;
 use Fusio\Impl\Event;
-use Fusio\Impl\Worker\Action\WorkerJavascript;
 use Fusio\Impl\Worker\Action\WorkerJava;
+use Fusio\Impl\Worker\Action\WorkerJavascript;
 use Fusio\Impl\Worker\Action\WorkerPHP;
 use Fusio\Impl\Worker\Action\WorkerPython;
+use Fusio\Impl\Worker\ClientFactory;
+use Fusio\Impl\Worker\Generated\Action;
+use Fusio\Impl\Worker\Generated\Connection;
+use Fusio\Impl\Worker\Generated\Message;
 use Fusio\Model\Backend\Action_Config;
 use Fusio\Model\Backend\Connection_Config;
-use GuzzleHttp\Client;
 use PSX\Framework\Config\Config;
+use PSX\Http\Exception\InternalServerErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -54,15 +57,9 @@ class WorkerListener implements EventSubscriberInterface
      */
     private $config;
 
-    /**
-     * @var Client
-     */
-    private $httpClient;
-
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $this->httpClient = new Client();
     }
 
     public function onActionCreate(Event\Action\CreatedEvent $event)
@@ -122,16 +119,14 @@ class WorkerListener implements EventSubscriberInterface
         }
 
         foreach ($worker as $endpoint) {
-            $this->httpClient->post($endpoint . '/connection', [
-                'headers' => [
-                    'User-Agent' => Base::getUserAgent(),
-                ],
-                'json' => [
-                    'name' => $name,
-                    'type' => $this->convertClassToType($class),
-                    'config' => $config,
-                ]
-            ]);
+            $connection = new Connection();
+            $connection->name = $name;
+            $connection->type = $this->convertClassToType($class);
+            if ($config !== null) {
+                $connection->config = $config->getProperties();
+            }
+
+            ClientFactory::getClient($endpoint)->setConnection($connection);
         }
     }
 
@@ -160,15 +155,15 @@ class WorkerListener implements EventSubscriberInterface
             return;
         }
 
-        $this->httpClient->post($endpoint . '/action', [
-            'headers' => [
-                'User-Agent' => Base::getUserAgent(),
-            ],
-            'json' => [
-                'name' => $name,
-                'code' => $config->getProperty('code'),
-            ]
-        ]);
+        $action = new Action();
+        $action->name = $name;
+        $action->code = $config->getProperty('code');
+
+        $message = ClientFactory::getClient($endpoint)->setAction($action);
+
+        if ($message instanceof Message && $message->success === false) {
+            throw new InternalServerErrorException('Worker returned an error: ' . $message->message);
+        }
     }
 
     private function convertClassToType(?string $class): string
