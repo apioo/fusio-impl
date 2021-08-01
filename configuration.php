@@ -6,7 +6,14 @@ return array(
     // Fusio to execute action code in different programming languages. For
     // more information please take a look at our worker documentation:
     // https://www.fusio-project.org/documentation/worker
-    'fusio_worker'            => [],
+    /*
+    'fusio_worker'            => [
+        'java'                => 'localhost:9090',
+        'javascript'          => 'localhost:9091',
+        'php'                 => 'localhost:9092',
+        'python'              => 'localhost:9093',
+    ],
+    */
 
     // OAuth2 access token expiration settings. How long can you use an access
     // token and the refresh token. After the expiration a user either need to
@@ -22,12 +29,11 @@ return array(
     'fusio_project_key'       => '42eec18ffdbffc9fda6110dcc705d6ce',
 
     // Indicates whether the PHP sandbox feature is enabled. If yes it is
-    // possible to create an action at the backend which contains PHP code. This
-    // helps to quickly develop new actions but you should also be aware of the
-    // security implications. The code gets checked by a parser which prevents
+    // possible to use the PHP-Sandbox action which executes PHP code directly
+    // on the server. The code gets checked by a parser which prevents
     // the use of unsafe functions but there is no guarantee that this is
-    // complete safe. If you dont need this feature it is recommended to turn it
-    // off, then it is not possible to create or update such actions
+    // complete safe. Otherwise you can also use the PHP worker which executes
+    // the code at the worker.
     'fusio_php_sandbox'       => true,
 
     // The three-character ISO-4217 currency code which is used to process
@@ -80,15 +86,6 @@ return array(
     // file
     'fusio_cron_exec'         => '/usr/bin/php ' . __DIR__ . '/bin/fusio',
 
-    // The web server type, based on this type Fusio generates the fitting
-    // configuration format
-    'fusio_server_type'       => null,
-
-    // Location of the automatically generated web server config file. Note
-    // Fusio writes only to this file if it exists. Also you may need to restart
-    // the web server so that the config changes take affect
-    'fusio_server_conf'       => null,
-
     // The url to the psx public folder (i.e. http://127.0.0.1/psx/public or 
     // http://localhost.com)
     'psx_url'                 => 'http://127.0.0.1',
@@ -120,7 +117,7 @@ return array(
     ],
 
     // Global middleware which are applied before and after every request. Must
-    // bei either a classname, closure or PSX\Dispatch\FilterInterface instance
+    // bei either a classname, closure or PSX\Http\FilterInterface instance
     //'psx_filter_pre'          => [],
     //'psx_filter_post'         => [],
 
@@ -128,16 +125,12 @@ return array(
     // filesystem cache is used
     //'psx_cache_factory'       => null,
 
+    // Specify a specific log level
+    //'psx_log_level' => \Monolog\Logger::ERROR,
+
     // A closure which returns a monolog handler implementation. If null the
     // system handler is used
     //'psx_logger_factory'      => null,
-
-    // Class name of the error controller
-    //'psx_error_controller'    => null,
-
-    // If you only want to change the appearance of the error page you can 
-    // specify a custom template
-    //'psx_error_template'      => null,
 
 );
 
