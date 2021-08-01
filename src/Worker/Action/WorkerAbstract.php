@@ -39,6 +39,8 @@ use Fusio\Impl\Worker\Generated\Result;
 use Fusio\Impl\Worker\Generated\RpcRequest;
 use Fusio\Impl\Worker\Generated\User;
 use PSX\Framework\Config\Config;
+use PSX\Http\Exception as StatusCode;
+use Thrift\Exception\TException;
 
 /**
  * WorkerAbstract
@@ -65,7 +67,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $endpoint = $worker[$this->getLanguage()] ?? null;
 
         if (empty($endpoint)) {
-            throw new \RuntimeException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. Please add a worker to the configuration file, more information at: https://www.fusio-project.org/documentation/worker');
+            throw new StatusCode\InternalServerErrorException('It looks like there is no worker configured for the language: ' . $this->getLanguage() . '. Please add a worker to the configuration file, more information at: https://www.fusio-project.org/documentation/worker');
         }
 
         $execute = new Execute();
@@ -73,10 +75,14 @@ abstract class WorkerAbstract extends ActionAbstract
         $execute->request = $this->buildRequest($request);
         $execute->context = $this->buildContext($context);
 
-        $result = ClientFactory::getClient($endpoint)->executeAction($execute);
+        try {
+            $result = ClientFactory::getClient($endpoint)->executeAction($execute);
+        } catch (TException $e) {
+            throw new StatusCode\ServiceUnavailableException('Could not execute action', $e);
+        }
 
         if (!$result instanceof Result) {
-            throw new \RuntimeException('Worker returned no result');
+            throw new StatusCode\ServiceUnavailableException('Worker returned no result');
         }
 
         if (!empty($result->events)) {
@@ -121,7 +127,7 @@ abstract class WorkerAbstract extends ActionAbstract
             $rpcRequest->arguments = \json_encode($request->getArguments());
             $return->rpc = $rpcRequest;
         } else {
-            throw new \RuntimeException('Received an not supported request');
+            throw new StatusCode\BadRequestException('Received an not supported request');
         }
 
         return $return;
@@ -164,6 +170,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $return->baseUrl = $context->getBaseUrl();
         $return->app = $app;
         $return->user = $user;
+
         return $return;
     }
 }

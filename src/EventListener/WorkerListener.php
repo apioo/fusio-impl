@@ -35,6 +35,7 @@ use Fusio\Model\Backend\Connection_Config;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception\InternalServerErrorException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Thrift\Exception\TException;
 
 /**
  * WorkerListener
@@ -126,7 +127,13 @@ class WorkerListener implements EventSubscriberInterface
                 $connection->config = $config->getProperties();
             }
 
-            ClientFactory::getClient($endpoint)->setConnection($connection);
+            try {
+                ClientFactory::getClient($endpoint)->setConnection($connection);
+            } catch (TException $e) {
+                // in this case the worker is not reachable so we simply ignore this so that we can still save and use
+                // the backend
+                return;
+            }
         }
     }
 
@@ -159,7 +166,13 @@ class WorkerListener implements EventSubscriberInterface
         $action->name = $name;
         $action->code = $config->getProperty('code');
 
-        $message = ClientFactory::getClient($endpoint)->setAction($action);
+        try {
+            $message = ClientFactory::getClient($endpoint)->setAction($action);
+        } catch (TException $e) {
+            // in this case the worker is not reachable so we simply ignore this so that we can still save and use
+            // the backend
+            return;
+        }
 
         if ($message instanceof Message && $message->success === false) {
             throw new InternalServerErrorException('Worker returned an error: ' . $message->message);
