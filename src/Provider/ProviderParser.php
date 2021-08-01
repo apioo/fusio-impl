@@ -71,19 +71,23 @@ class ProviderParser extends ParserAbstract
     public function getClasses()
     {
         $classes = $this->providerLoader->getConfig()->getClasses($this->type);
-        $result  = array();
+        $result  = [];
 
-        foreach ($classes as $name => $class) {
+        foreach ($classes as $class) {
             $object     = $this->getObject($class);
             $instanceOf = $this->instanceOf;
 
             if ($object instanceof $instanceOf) {
-                $result[] = array(
+                $result[] = [
                     'name'  => $object->getName(),
                     'class' => $class,
-                );
+                ];
             }
         }
+
+        usort($result, function($a, $b) {
+            return strcmp($a['name'], $b['name']);
+        });
 
         return $result;
     }

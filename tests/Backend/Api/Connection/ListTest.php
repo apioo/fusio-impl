@@ -64,18 +64,6 @@ class ListTest extends ControllerDbTestCase
 {
     "connections": [
         {
-            "name": "HTTP",
-            "class": "Fusio\\Adapter\\Http\\Connection\\Http"
-        },
-        {
-            "name": "SQL",
-            "class": "Fusio\\Adapter\\Sql\\Connection\\Sql"
-        },
-        {
-            "name": "SQL (advanced)",
-            "class": "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
-        },
-        {
             "name": "FTP",
             "class": "Fusio\\Adapter\\File\\Connection\\Ftp"
         },
@@ -84,12 +72,24 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\GraphQL\\Connection\\GraphQL"
         },
         {
+            "name": "HTTP",
+            "class": "Fusio\\Adapter\\Http\\Connection\\Http"
+        },
+        {
             "name": "SMTP",
             "class": "Fusio\\Adapter\\Smtp\\Connection\\Smtp"
         },
         {
             "name": "SOAP",
             "class": "Fusio\\Adapter\\Soap\\Connection\\Soap"
+        },
+        {
+            "name": "SQL",
+            "class": "Fusio\\Adapter\\Sql\\Connection\\Sql"
+        },
+        {
+            "name": "SQL (advanced)",
+            "class": "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
         },
         {
             "name": "Void-Connection",
