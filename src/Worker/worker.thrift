@@ -1,13 +1,29 @@
 
 namespace java org.fusioproject.worker.generated
-namespace php Fusio.Impl.Worker.Generated
+namespace php Fusio.Worker.Generated
 
+/**
+ * The Fusio Worker provides a simple interface so that the Fusio instance can interact with the worker.
+ */
 service Worker {
 
+  /**
+   * Sets a specific connection to the worker. This method is invoked everytime a connection is created or updated at
+   * the Fusio instance. The worker must persist the connection so at it can be reused on execution
+   */
   Message setConnection(1: Connection connection),
 
+  /**
+   * Sets a specific action to the worker. This method is invoked everytime an action is created or updated at the Fusio
+   * instance. The worker must persist the action code at a file which then can be executed. If your language needs a
+   * compile step it should be invoked at this call
+   */
   Message setAction(1: Action action),
 
+  /**
+   * Is called if an user invokes a route at Fusio and this routes has a worker action assigned. The worker must then
+   * execute the provided action name and return the response
+   */
   Result executeAction(1: Execute execute)
 
 }
