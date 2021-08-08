@@ -132,7 +132,7 @@ class WorkerListener implements EventSubscriberInterface
             } catch (TException $e) {
                 // in this case the worker is not reachable so we simply ignore this so that we can still save and use
                 // the backend
-                return;
+                continue;
             }
         }
     }
