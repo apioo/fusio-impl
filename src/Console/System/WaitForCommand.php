@@ -38,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class WaitForCommand extends Command
 {
-    private const MAX_TRY = 16;
+    private const MAX_TRY = 40;
 
     /**
      * @var Config
