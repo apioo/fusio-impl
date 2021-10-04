@@ -457,17 +457,6 @@
           "$ref": "#\/components\/schemas\/Documentation_Method"
         }
       },
-      "Documentation_Path": {
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          }
-        }
-      },
       "Documentation_Route": {
         "type": "object",
         "properties": {
@@ -560,14 +549,6 @@
       "Schema_TypeSchema": {
         "type": "object",
         "additionalProperties": []
-      },
-      "SystemSchemaNamePath": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          }
-        }
       },
       "System_About": {
         "$ref": "#\/components\/schemas\/About"

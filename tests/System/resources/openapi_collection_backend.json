@@ -723,6 +723,30 @@
         "operationId": "Backend_Action_Scope_GetAll",
         "parameters": [
           {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "categoryId",
             "in": "query",
             "required": false,
@@ -975,6 +999,30 @@
         ],
         "operationId": "Backend_Action_Schema_GetAll",
         "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "categoryId",
             "in": "query",
@@ -1278,6 +1326,30 @@
         ],
         "operationId": "Backend_Action_Route_GetAll",
         "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "categoryId",
             "in": "query",
@@ -2861,6 +2933,30 @@
         "operationId": "Backend_Action_Event_GetAll",
         "parameters": [
           {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "categoryId",
             "in": "query",
             "required": false,
@@ -3241,6 +3337,30 @@
         ],
         "operationId": "Backend_Action_Cronjob_GetAll",
         "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "categoryId",
             "in": "query",
@@ -4419,6 +4539,30 @@
         "operationId": "Backend_Action_Action_GetAll",
         "parameters": [
           {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "categoryId",
             "in": "query",
             "required": false,
@@ -4953,241 +5097,6 @@
         "type": "object",
         "additionalProperties": []
       },
-      "BackendActionAction_idPath": {
-        "type": "object",
-        "properties": {
-          "action_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendActionExecuteAction_idPath": {
-        "type": "object",
-        "properties": {
-          "action_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendAppApp_idPath": {
-        "type": "object",
-        "properties": {
-          "app_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendAppApp_idTokenToken_idPath": {
-        "type": "object",
-        "properties": {
-          "app_id": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendAppTokenToken_idPath": {
-        "type": "object",
-        "properties": {
-          "token_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendAuditAudit_idPath": {
-        "type": "object",
-        "properties": {
-          "audit_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendCategoryCategory_idPath": {
-        "type": "object",
-        "properties": {
-          "category_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendConfigConfig_idPath": {
-        "type": "object",
-        "properties": {
-          "config_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendConnectionConnection_idPath": {
-        "type": "object",
-        "properties": {
-          "connection_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendCronjobCronjob_idPath": {
-        "type": "object",
-        "properties": {
-          "cronjob_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendEventEvent_idPath": {
-        "type": "object",
-        "properties": {
-          "event_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendEventSubscriptionSubscription_idPath": {
-        "type": "object",
-        "properties": {
-          "subscription_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendLogErrorError_idPath": {
-        "type": "object",
-        "properties": {
-          "error_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendLogLog_idPath": {
-        "type": "object",
-        "properties": {
-          "log_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendMarketplaceApp_namePath": {
-        "type": "object",
-        "properties": {
-          "app_name": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendPagePage_idPath": {
-        "type": "object",
-        "properties": {
-          "page_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendPlanContractContract_idPath": {
-        "type": "object",
-        "properties": {
-          "contract_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendPlanInvoiceInvoice_idPath": {
-        "type": "object",
-        "properties": {
-          "invoice_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendPlanPlan_idPath": {
-        "type": "object",
-        "properties": {
-          "plan_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendRateRate_idPath": {
-        "type": "object",
-        "properties": {
-          "rate_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendRoleRole_idPath": {
-        "type": "object",
-        "properties": {
-          "role_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendRoutesProviderProviderPath": {
-        "type": "object",
-        "properties": {
-          "provider": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendRoutesRoute_idPath": {
-        "type": "object",
-        "properties": {
-          "route_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendSchemaFormSchema_idPath": {
-        "type": "object",
-        "properties": {
-          "schema_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendSchemaPreviewSchema_idPath": {
-        "type": "object",
-        "properties": {
-          "schema_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendSchemaSchema_idPath": {
-        "type": "object",
-        "properties": {
-          "schema_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendScopeScope_idPath": {
-        "type": "object",
-        "properties": {
-          "scope_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendTransactionTransaction_idPath": {
-        "type": "object",
-        "properties": {
-          "transaction_id": {
-            "type": "string"
-          }
-        }
-      },
-      "BackendUserUser_idPath": {
-        "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string"
-          }
-        }
-      },
       "Backend_Account_ChangePassword": {
         "$ref": "#\/components\/schemas\/Account_ChangePassword"
       },
@@ -5555,35 +5464,6 @@
             "items": {
               "$generic": "T"
             }
-          }
-        }
-      },
-      "Collection_Category_Query": {
-        "allOf": [
-          {
-            "$ref": "#\/components\/schemas\/Collection_Query"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "categoryId": {
-                "type": "integer"
-              }
-            }
-          }
-        ]
-      },
-      "Collection_Query": {
-        "type": "object",
-        "properties": {
-          "startIndex": {
-            "type": "integer"
-          },
-          "count": {
-            "type": "integer"
-          },
-          "search": {
-            "type": "string"
           }
         }
       },

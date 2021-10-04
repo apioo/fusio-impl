@@ -391,14 +391,6 @@
       "Entry-Schema": {
         "$ref": "#\/components\/schemas\/Entry"
       },
-      "InspectFooPath": {
-        "type": "object",
-        "properties": {
-          "foo": {
-            "type": "string"
-          }
-        }
-      },
       "Passthru": {
         "description": "No schema information available",
         "type": "object"
