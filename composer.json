@@ -19,7 +19,7 @@
     "psx/framework": "^5.0",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^0.1",
-    "fusio/cli": "^0.1",
+    "fusio/cli": "^0.2",
     "fusio/model": "^0.1",
     "fusio/engine": "^4.0",
     "fusio/adapter-file": "^4.0",
