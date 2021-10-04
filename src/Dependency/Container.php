@@ -307,6 +307,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_token_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
         $application->add(new Console\System\UserAddCommand($this->get('user_service'), $this->get('config_service')));
+        $application->add(new Console\System\WaitForCommand($this->get('config')));
 
         // symfony commands
         $application->add(new SymfonyCommand\HelpCommand());
