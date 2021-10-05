@@ -301,6 +301,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\CleanCommand($this->get('connection')));
         $application->add(new Console\System\ClearCacheCommand($this->get('cache'), $this->get('engine_cache')));
         $application->add(new Console\System\CronjobExecuteCommand($this->get('cronjob_service')));
+        $application->add(new Console\System\CronjobFlushCommand($this->get('cronjob_service')));
         $application->add(new Console\System\LogRotateCommand($this->get('connection')));
         $application->add(new Console\System\PushCommand($this->get('provider_loader'), $this->get('container_autowire_resolver')));
         $application->add(new Console\System\RegisterCommand($this->get('provider_writer')));

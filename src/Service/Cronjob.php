@@ -115,7 +115,7 @@ class Cronjob
 
         $this->eventDispatcher->dispatch(new CreatedEvent($cronjob, $context));
 
-        $this->writeCronFile();
+        $this->flush();
 
         return $cronjobId;
     }
@@ -144,7 +144,7 @@ class Cronjob
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
 
-        $this->writeCronFile();
+        $this->flush();
     }
 
     public function delete(int $cronjobId, UserContext $context)
@@ -167,7 +167,7 @@ class Cronjob
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
-        $this->writeCronFile();
+        $this->flush();
     }
 
     /**
@@ -243,7 +243,7 @@ class Cronjob
      * 
      * @return bool|int
      */
-    private function writeCronFile()
+    public function flush()
     {
         if (empty($this->cronFile)) {
             return false;
