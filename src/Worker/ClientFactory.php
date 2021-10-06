@@ -24,6 +24,7 @@ namespace Fusio\Impl\Worker;
 use Fusio\Impl\Worker\Generated\WorkerClient;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TBufferedTransport;
+use Thrift\Transport\THttpClient;
 use Thrift\Transport\TSocket;
 
 /**
@@ -37,14 +38,20 @@ class ClientFactory
 {
     private static $instances = [];
 
-    public static function getClient(string $endpoint): WorkerClient
+    public static function getClient(string $endpoint, ?string $type = null): WorkerClient
     {
         if (isset(self::$instances[$endpoint])) {
             return self::$instances[$endpoint];
         }
 
         [$host, $port] = explode(':', $endpoint);
-        $socket = new TSocket($host, (int) $port);
+
+        if ($type === 'php') {
+            $socket = new THttpClient($host, (int) $port);
+        } else {
+            $socket = new TSocket($host, (int) $port);
+        }
+
         $transport = new TBufferedTransport($socket, 1024, 1024);
         $protocol = new TBinaryProtocol($transport);
         $transport->open();

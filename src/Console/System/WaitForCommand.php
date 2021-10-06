@@ -72,8 +72,8 @@ class WaitForCommand extends Command
         $worker = $this->config->get('fusio_worker');
         if (!empty($worker) && is_array($worker)) {
             foreach ($worker as $type => $endpoint) {
-                $this->waitFor($type, $output, function() use ($endpoint) {
-                    ClientFactory::getClient($endpoint);
+                $this->waitFor($type, $output, function() use ($endpoint, $type) {
+                    ClientFactory::getClient($endpoint, $type);
                 });
             }
         }

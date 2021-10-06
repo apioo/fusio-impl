@@ -119,7 +119,7 @@ class WorkerListener implements EventSubscriberInterface
             return;
         }
 
-        foreach ($worker as $endpoint) {
+        foreach ($worker as $type => $endpoint) {
             $connection = new Connection();
             $connection->name = $name;
             $connection->type = $this->convertClassToType($class);
@@ -128,7 +128,7 @@ class WorkerListener implements EventSubscriberInterface
             }
 
             try {
-                ClientFactory::getClient($endpoint)->setConnection($connection);
+                ClientFactory::getClient($endpoint, $type)->setConnection($connection);
             } catch (TException $e) {
                 // in this case the worker is not reachable so we simply ignore this so that we can still save and use
                 // the backend
@@ -167,7 +167,7 @@ class WorkerListener implements EventSubscriberInterface
         $action->code = $config->getProperty('code');
 
         try {
-            $message = ClientFactory::getClient($endpoint)->setAction($action);
+            $message = ClientFactory::getClient($endpoint, $language)->setAction($action);
         } catch (TException $e) {
             // in this case the worker is not reachable so we simply ignore this so that we can still save and use
             // the backend

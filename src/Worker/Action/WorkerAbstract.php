@@ -76,7 +76,7 @@ abstract class WorkerAbstract extends ActionAbstract
         $execute->context = $this->buildContext($context);
 
         try {
-            $result = ClientFactory::getClient($endpoint)->executeAction($execute);
+            $result = ClientFactory::getClient($endpoint, $this->getLanguage())->executeAction($execute);
         } catch (TException $e) {
             throw new StatusCode\ServiceUnavailableException('Could not execute action: ' . $e->getMessage(), $e);
         }
