@@ -42,8 +42,25 @@ class OpenAPITest extends DbTestCase
 
         (new OpenAPI())->setup($setup, '/', new Parameters(['spec' => $spec]));
 
-        $this->assertEquals(3, count($setup->getActions()));
-        $this->assertEquals(5, count($setup->getSchemas()));
-        $this->assertEquals(2, count($setup->getRoutes()));
+        $schemas = $setup->getSchemas();
+        $actions = $setup->getActions();
+        $routes = $setup->getRoutes();
+
+        $this->assertEquals(5, count($schemas));
+        $this->assertEquals(3, count($actions));
+        $this->assertEquals(2, count($routes));
+
+        $this->assertEquals('Pet', $schemas[0]->name);
+        $this->assertEquals('Pets', $schemas[1]->name);
+        $this->assertEquals('Error', $schemas[2]->name);
+        $this->assertEquals('PetsGetQuery', $schemas[3]->name);
+        $this->assertEquals('PetsPetIdGetQuery', $schemas[4]->name);
+
+        $this->assertEquals('pets-listPets-GET', $actions[0]->name);
+        $this->assertEquals('pets-createPets-POST', $actions[1]->name);
+        $this->assertEquals('pets-_petId-showPetById-GET', $actions[2]->name);
+
+        $this->assertEquals('/pets', $routes[0]->path);
+        $this->assertEquals('/pets/:petId', $routes[1]->path);
     }
 }
