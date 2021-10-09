@@ -31,7 +31,7 @@ use Fusio\Impl\Tests\DbTestCase;
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @link    http://phpsx.org
+ * @link    https://www.fusio-project.org/
  */
 class OpenAPITest extends DbTestCase
 {
