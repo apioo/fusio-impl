@@ -30,7 +30,7 @@ use Fusio\Engine\Routes\ProviderInterface;
 use Fusio\Engine\Routes\SetupInterface;
 
 /**
- * OpenAPI
+ * Postman
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -89,7 +89,7 @@ class Postman implements ProviderInterface
 
         $url = $item->request->url->raw ?? null;
         if (empty($url)) {
-            throw new \RuntimeException('no url provided');
+            throw new \RuntimeException('No url provided');
         }
 
         $name = $this->buildName([$name]);

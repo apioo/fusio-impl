@@ -22,6 +22,8 @@
 namespace Fusio\Impl\Provider\Routes;
 
 use Doctrine\Common\Annotations\SimpleAnnotationReader;
+use Fusio\Adapter\Http\Action\HttpEngine;
+use Fusio\Adapter\Http\Action\HttpProcessor;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
@@ -127,9 +129,9 @@ class OpenAPI implements ProviderInterface
         $statusCode = $this->getSuccessStatusCode($method);
         $name = $this->buildName([$prefix, $method->getOperationId(), $method->getName()]);
 
-        $action = $setup->addAction($name, UtilStaticResponse::class, PhpClass::class, [
-            'statusCode' => strval($statusCode ?? 200),
-            'response' => json_encode(['message' => 'Test implementation']),
+        $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
+            'url' => strval($statusCode ?? 200),
+            'type' => HttpEngine::TYPE_JSON,
         ]);
 
         $config = [
