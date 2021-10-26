@@ -1,0 +1,648 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-10-25T19:28:31.974Z",
+  "__export_source": "insomnia.desktop.app:v2021.5.3",
+  "resources": [
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d79ef8a92",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882258,
+      "created": 1633545882258,
+      "url": "{{ base_url }}/",
+      "name": "/",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882258,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_fc351312df6444e29089be9761a0f66d",
+      "parentId": null,
+      "modified": 1633545886273,
+      "created": 1633545886273,
+      "name": "Fusio 1",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66de5f355cd",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882257,
+      "created": 1633545882257,
+      "url": "{{ base_url }}/contract",
+      "name": "/contract",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882257,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d86a2bbe1",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882256,
+      "created": 1633545882256,
+      "url": "{{ base_url }}/contract",
+      "name": "/contract",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"customer\": 0,\n  \"product\": 0\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882256,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d831173f0",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882255,
+      "created": 1633545882255,
+      "url": "{{ base_url }}/contract/{{ contract }}",
+      "name": "/contract/{contract}",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882255,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d9c6da7b2",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882254,
+      "created": 1633545882254,
+      "url": "{{ base_url }}/contract/{{ contract }}",
+      "name": "/contract/{contract}",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"customer\": 0,\n  \"product\": 0\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882254,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66da89824b8",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882253,
+      "created": 1633545882253,
+      "url": "{{ base_url }}/contract/{{ contract }}",
+      "name": "/contract/{contract}",
+      "description": "",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882253,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d6070cd65",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882252,
+      "created": 1633545882252,
+      "url": "{{ base_url }}/customer",
+      "name": "/customer",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882252,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d11c294a6",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882251,
+      "created": 1633545882251,
+      "url": "{{ base_url }}/customer",
+      "name": "/customer",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\",\n  \"age\": 0\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882251,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d5777ff74",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882250,
+      "created": 1633545882250,
+      "url": "{{ base_url }}/customer/{{ customer }}",
+      "name": "/customer/{customer}",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882250,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66dfcae3ddc",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882249,
+      "created": 1633545882249,
+      "url": "{{ base_url }}/customer/{{ customer }}",
+      "name": "/customer/{customer}",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\",\n  \"age\": 0\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882249,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66db66ffd43",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882247,
+      "created": 1633545882247,
+      "url": "{{ base_url }}/customer/{{ customer }}",
+      "name": "/customer/{customer}",
+      "description": "",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882247,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d4dcb55ba",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882246,
+      "created": 1633545882246,
+      "url": "{{ base_url }}/group",
+      "name": "/group",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882246,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d6be59be5",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882245,
+      "created": 1633545882245,
+      "url": "{{ base_url }}/group",
+      "name": "/group",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882245,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66de8a31deb",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882243,
+      "created": 1633545882243,
+      "url": "{{ base_url }}/group/{{ group }}",
+      "name": "/group/{group}",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882243,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d46c6af64",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882242,
+      "created": 1633545882242,
+      "url": "{{ base_url }}/group/{{ group }}",
+      "name": "/group/{group}",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882242,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66da17d3498",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882241,
+      "created": 1633545882241,
+      "url": "{{ base_url }}/group/{{ group }}",
+      "name": "/group/{group}",
+      "description": "",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882241,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d94c4ee1e",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882240,
+      "created": 1633545882240,
+      "url": "{{ base_url }}/product",
+      "name": "/product",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882240,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d64bbbe77",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882239,
+      "created": 1633545882239,
+      "url": "{{ base_url }}/product",
+      "name": "/product",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\",\n  \"price\": 0,\n  \"groups\": [\n    0\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882239,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d3bb9082b",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882237,
+      "created": 1633545882237,
+      "url": "{{ base_url }}/product/{{ product }}",
+      "name": "/product/{product}",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1633545882237,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d66b1e7dd",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882235,
+      "created": 1633545882235,
+      "url": "{{ base_url }}/product/{{ product }}",
+      "name": "/product/{product}",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"string\",\n  \"price\": 0,\n  \"groups\": [\n    0\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882235,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_wrk_fc351312df6444e29089be9761a0f66d5175ed07",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882231,
+      "created": 1633545882231,
+      "url": "{{ base_url }}/product/{{ product }}",
+      "name": "/product/{product}",
+      "description": "",
+      "method": "DELETE",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1633545882231,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_c6209282b3364c66d18110a692941f07d77b542d",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545882262,
+      "created": 1633545882260,
+      "name": "Base environment",
+      "data": {
+        "base_url": "{{ scheme }}://{{ host }}{{ base_path }}"
+      },
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1633545882260,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_c6209282b3364c66d18110a692941f07d77b542d",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545890505,
+      "created": 1633545890505,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_3aaf78ccbd7c43e4950b7a04b7f42dad",
+      "parentId": "wrk_fc351312df6444e29089be9761a0f66d",
+      "modified": 1633545886306,
+      "created": 1633545886275,
+      "fileName": "Fusio 1",
+      "contents": "{\n    \"openapi\": \"3.0.0\",\n    \"info\": {\n        \"title\": \"Fusio\",\n        \"version\": \"1\"\n    },\n    \"servers\": [\n        {\n            \"url\": \"https:\\/\\/3ca114.fusio.cloud\\/\"\n        }\n    ],\n    \"paths\": {\n        \"\\/\": {\n            \"get\": {\n                \"operationId\": \"System_Action_GetAbout\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/System_About\"\n                                }\n                            }\n                        }\n                    }\n                }\n            }\n        },\n        \"\\/contract\": {\n            \"get\": {\n                \"tags\": [\n                    \"contract\"\n                ],\n                \"description\": \"Returns all Contract entries\",\n                \"operationId\": \"get.contract\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Contract_Collection\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"contract\"\n                ],\n                \"description\": \"Creates a new Contract entry\",\n                \"operationId\": \"post.contract\",\n                \"requestBody\": {\n                    \"description\": \"POST Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Contract_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"POST 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"POST 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"contract\"\n                        ]\n                    }\n                ]\n            }\n        },\n        \"\\/contract\\/{contract}\": {\n            \"get\": {\n                \"tags\": [\n                    \"contract\"\n                ],\n                \"description\": \"Returns a single Contract entry\",\n                \"operationId\": \"get.contract.contract\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Contract_Entity\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"put\": {\n                \"tags\": [\n                    \"contract\"\n                ],\n                \"description\": \"Updates a Contract entry\",\n                \"operationId\": \"put.contract.contract\",\n                \"requestBody\": {\n                    \"description\": \"PUT Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Contract_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"PUT 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"PUT 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"contract\"\n                        ]\n                    }\n                ]\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"contract\"\n                ],\n                \"description\": \"Removes a Contract entry\",\n                \"operationId\": \"delete.contract.contract\",\n                \"requestBody\": {\n                    \"description\": \"DELETE Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Passthru\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"DELETE 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"DELETE 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"contract\"\n                        ]\n                    }\n                ]\n            },\n            \"parameters\": [\n                {\n                    \"name\": \"contract\",\n                    \"in\": \"path\",\n                    \"required\": false,\n                    \"schema\": {\n                        \"type\": \"string\"\n                    }\n                }\n            ]\n        },\n        \"\\/customer\": {\n            \"get\": {\n                \"tags\": [\n                    \"customer\"\n                ],\n                \"description\": \"Returns all Customer entries\",\n                \"operationId\": \"get.customer\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Customer_Collection\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"customer\"\n                ],\n                \"description\": \"Creates a new Customer entry\",\n                \"operationId\": \"post.customer\",\n                \"requestBody\": {\n                    \"description\": \"POST Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Customer_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"POST 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"POST 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"customer\"\n                        ]\n                    }\n                ]\n            }\n        },\n        \"\\/customer\\/{customer}\": {\n            \"get\": {\n                \"tags\": [\n                    \"customer\"\n                ],\n                \"description\": \"Returns a single Customer entry\",\n                \"operationId\": \"get.customer.customer\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Customer_Entity\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"put\": {\n                \"tags\": [\n                    \"customer\"\n                ],\n                \"description\": \"Updates a Customer entry\",\n                \"operationId\": \"put.customer.customer\",\n                \"requestBody\": {\n                    \"description\": \"PUT Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Customer_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"PUT 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"PUT 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"customer\"\n                        ]\n                    }\n                ]\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"customer\"\n                ],\n                \"description\": \"Removes a Customer entry\",\n                \"operationId\": \"delete.customer.customer\",\n                \"requestBody\": {\n                    \"description\": \"DELETE Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Passthru\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"DELETE 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"DELETE 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"customer\"\n                        ]\n                    }\n                ]\n            },\n            \"parameters\": [\n                {\n                    \"name\": \"customer\",\n                    \"in\": \"path\",\n                    \"required\": false,\n                    \"schema\": {\n                        \"type\": \"string\"\n                    }\n                }\n            ]\n        },\n        \"\\/group\": {\n            \"get\": {\n                \"tags\": [\n                    \"group\"\n                ],\n                \"description\": \"Returns all Group entries\",\n                \"operationId\": \"get.group\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Group_Collection\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"group\"\n                ],\n                \"description\": \"Creates a new Group entry\",\n                \"operationId\": \"post.group\",\n                \"requestBody\": {\n                    \"description\": \"POST Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Group_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"POST 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"POST 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"group\"\n                        ]\n                    }\n                ]\n            }\n        },\n        \"\\/group\\/{group}\": {\n            \"get\": {\n                \"tags\": [\n                    \"group\"\n                ],\n                \"description\": \"Returns a single Group entry\",\n                \"operationId\": \"get.group.group\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Group_Entity\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"put\": {\n                \"tags\": [\n                    \"group\"\n                ],\n                \"description\": \"Updates a Group entry\",\n                \"operationId\": \"put.group.group\",\n                \"requestBody\": {\n                    \"description\": \"PUT Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Group_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"PUT 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"PUT 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"group\"\n                        ]\n                    }\n                ]\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"group\"\n                ],\n                \"description\": \"Removes a Group entry\",\n                \"operationId\": \"delete.group.group\",\n                \"requestBody\": {\n                    \"description\": \"DELETE Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Passthru\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"DELETE 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"DELETE 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"group\"\n                        ]\n                    }\n                ]\n            },\n            \"parameters\": [\n                {\n                    \"name\": \"group\",\n                    \"in\": \"path\",\n                    \"required\": false,\n                    \"schema\": {\n                        \"type\": \"string\"\n                    }\n                }\n            ]\n        },\n        \"\\/product\": {\n            \"get\": {\n                \"tags\": [\n                    \"product\"\n                ],\n                \"description\": \"Returns all Product entries\",\n                \"operationId\": \"get.product\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Product_Collection\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"post\": {\n                \"tags\": [\n                    \"product\"\n                ],\n                \"description\": \"Creates a new Product entry\",\n                \"operationId\": \"post.product\",\n                \"requestBody\": {\n                    \"description\": \"POST Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Product_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"POST 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"POST 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"product\"\n                        ]\n                    }\n                ]\n            }\n        },\n        \"\\/product\\/{product}\": {\n            \"get\": {\n                \"tags\": [\n                    \"product\"\n                ],\n                \"description\": \"Returns a single Product entry\",\n                \"operationId\": \"get.product.product\",\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"GET 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Product_Entity\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"GET 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                }\n            },\n            \"put\": {\n                \"tags\": [\n                    \"product\"\n                ],\n                \"description\": \"Updates a Product entry\",\n                \"operationId\": \"put.product.product\",\n                \"requestBody\": {\n                    \"description\": \"PUT Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Product_Entity\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"PUT 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"PUT 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"product\"\n                        ]\n                    }\n                ]\n            },\n            \"delete\": {\n                \"tags\": [\n                    \"product\"\n                ],\n                \"description\": \"Removes a Product entry\",\n                \"operationId\": \"delete.product.product\",\n                \"requestBody\": {\n                    \"description\": \"DELETE Request\",\n                    \"content\": {\n                        \"application\\/json\": {\n                            \"schema\": {\n                                \"$ref\": \"#\\/components\\/schemas\\/Passthru\"\n                            }\n                        }\n                    }\n                },\n                \"responses\": {\n                    \"200\": {\n                        \"description\": \"DELETE 200 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    },\n                    \"500\": {\n                        \"description\": \"DELETE 500 Response\",\n                        \"content\": {\n                            \"application\\/json\": {\n                                \"schema\": {\n                                    \"$ref\": \"#\\/components\\/schemas\\/Message\"\n                                }\n                            }\n                        }\n                    }\n                },\n                \"security\": [\n                    {\n                        \"app\": [\n                            \"product\"\n                        ]\n                    }\n                ]\n            },\n            \"parameters\": [\n                {\n                    \"name\": \"product\",\n                    \"in\": \"path\",\n                    \"required\": false,\n                    \"schema\": {\n                        \"type\": \"string\"\n                    }\n                }\n            ]\n        }\n    },\n    \"components\": {\n        \"schemas\": {\n            \"Contract_Entity\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"customer\": {\n                        \"type\": \"integer\"\n                    },\n                    \"product\": {\n                        \"type\": \"integer\"\n                    }\n                }\n            },\n            \"Customer_Entity\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"name\": {\n                        \"type\": \"string\"\n                    },\n                    \"age\": {\n                        \"type\": \"integer\"\n                    }\n                }\n            },\n            \"Group_Entity\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"name\": {\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"Product_Entity\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"name\": {\n                        \"type\": \"string\",\n                        \"maxLength\": 120\n                    },\n                    \"price\": {\n                        \"type\": \"number\"\n                    },\n                    \"groups\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"type\": \"integer\"\n                        }\n                    }\n                }\n            },\n            \"About\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"apiVersion\": {\n                        \"type\": \"string\"\n                    },\n                    \"title\": {\n                        \"type\": \"string\"\n                    },\n                    \"description\": {\n                        \"type\": \"string\"\n                    },\n                    \"termsOfService\": {\n                        \"type\": \"string\"\n                    },\n                    \"contactName\": {\n                        \"type\": \"string\"\n                    },\n                    \"contactUrl\": {\n                        \"type\": \"string\"\n                    },\n                    \"contactEmail\": {\n                        \"type\": \"string\"\n                    },\n                    \"licenseName\": {\n                        \"type\": \"string\"\n                    },\n                    \"licenseUrl\": {\n                        \"type\": \"string\"\n                    },\n                    \"categories\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"type\": \"string\"\n                        }\n                    },\n                    \"scopes\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"type\": \"string\"\n                        }\n                    },\n                    \"apps\": {\n                        \"type\": \"object\",\n                        \"additionalProperties\": {\n                            \"type\": \"string\"\n                        }\n                    },\n                    \"links\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#\\/components\\/schemas\\/About_Link\"\n                        }\n                    }\n                }\n            },\n            \"About_Link\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"rel\": {\n                        \"type\": \"string\"\n                    },\n                    \"href\": {\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"Contract_Collection\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"totalCount\": {\n                        \"type\": \"integer\"\n                    },\n                    \"entry\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#\\/components\\/schemas\\/Contract_Entity\"\n                        }\n                    }\n                }\n            },\n            \"Customer_Collection\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"totalCount\": {\n                        \"type\": \"integer\"\n                    },\n                    \"entry\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#\\/components\\/schemas\\/Customer_Entity\"\n                        }\n                    }\n                }\n            },\n            \"Group_Collection\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"totalCount\": {\n                        \"type\": \"integer\"\n                    },\n                    \"entry\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#\\/components\\/schemas\\/Group_Entity\"\n                        }\n                    }\n                }\n            },\n            \"Message\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"success\": {\n                        \"type\": \"boolean\"\n                    },\n                    \"message\": {\n                        \"type\": \"string\"\n                    }\n                }\n            },\n            \"Passthru\": {\n                \"description\": \"No schema information available\",\n                \"type\": \"object\"\n            },\n            \"Product_Collection\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"totalCount\": {\n                        \"type\": \"integer\"\n                    },\n                    \"entry\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                            \"$ref\": \"#\\/components\\/schemas\\/Product_Entity\"\n                        }\n                    }\n                }\n            },\n            \"System_About\": {\n                \"$ref\": \"#\\/components\\/schemas\\/About\"\n            }\n        },\n        \"securitySchemes\": {\n            \"app\": {\n                \"type\": \"oauth2\",\n                \"flows\": {\n                    \"password\": {\n                        \"tokenUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"refreshUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"scopes\": {\n                            \"authorization\": \"\",\n                            \"backend\": \"\",\n                            \"backend.account\": \"\",\n                            \"backend.action\": \"\",\n                            \"backend.app\": \"\",\n                            \"backend.audit\": \"\",\n                            \"backend.category\": \"\",\n                            \"backend.config\": \"\",\n                            \"backend.connection\": \"\",\n                            \"backend.cronjob\": \"\",\n                            \"backend.dashboard\": \"\",\n                            \"backend.event\": \"\",\n                            \"backend.log\": \"\",\n                            \"backend.marketplace\": \"\",\n                            \"backend.page\": \"\",\n                            \"backend.plan\": \"\",\n                            \"backend.rate\": \"\",\n                            \"backend.role\": \"\",\n                            \"backend.route\": \"\",\n                            \"backend.schema\": \"\",\n                            \"backend.scope\": \"\",\n                            \"backend.sdk\": \"\",\n                            \"backend.statistic\": \"\",\n                            \"backend.transaction\": \"\",\n                            \"backend.user\": \"\",\n                            \"consumer\": \"\",\n                            \"consumer.app\": \"\",\n                            \"consumer.event\": \"\",\n                            \"consumer.grant\": \"\",\n                            \"consumer.page\": \"\",\n                            \"consumer.plan\": \"\",\n                            \"consumer.scope\": \"\",\n                            \"consumer.subscription\": \"\",\n                            \"consumer.transaction\": \"\",\n                            \"consumer.user\": \"\",\n                            \"contract\": \"\",\n                            \"customer\": \"\",\n                            \"default\": \"\",\n                            \"group\": \"\",\n                            \"product\": \"\",\n                            \"system\": \"\"\n                        }\n                    },\n                    \"clientCredentials\": {\n                        \"tokenUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"refreshUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"scopes\": {\n                            \"authorization\": \"\",\n                            \"backend\": \"\",\n                            \"backend.account\": \"\",\n                            \"backend.action\": \"\",\n                            \"backend.app\": \"\",\n                            \"backend.audit\": \"\",\n                            \"backend.category\": \"\",\n                            \"backend.config\": \"\",\n                            \"backend.connection\": \"\",\n                            \"backend.cronjob\": \"\",\n                            \"backend.dashboard\": \"\",\n                            \"backend.event\": \"\",\n                            \"backend.log\": \"\",\n                            \"backend.marketplace\": \"\",\n                            \"backend.page\": \"\",\n                            \"backend.plan\": \"\",\n                            \"backend.rate\": \"\",\n                            \"backend.role\": \"\",\n                            \"backend.route\": \"\",\n                            \"backend.schema\": \"\",\n                            \"backend.scope\": \"\",\n                            \"backend.sdk\": \"\",\n                            \"backend.statistic\": \"\",\n                            \"backend.transaction\": \"\",\n                            \"backend.user\": \"\",\n                            \"consumer\": \"\",\n                            \"consumer.app\": \"\",\n                            \"consumer.event\": \"\",\n                            \"consumer.grant\": \"\",\n                            \"consumer.page\": \"\",\n                            \"consumer.plan\": \"\",\n                            \"consumer.scope\": \"\",\n                            \"consumer.subscription\": \"\",\n                            \"consumer.transaction\": \"\",\n                            \"consumer.user\": \"\",\n                            \"contract\": \"\",\n                            \"customer\": \"\",\n                            \"default\": \"\",\n                            \"group\": \"\",\n                            \"product\": \"\",\n                            \"system\": \"\"\n                        }\n                    },\n                    \"authorizationCode\": {\n                        \"authorizationUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/developer\\/auth\",\n                        \"tokenUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"refreshUrl\": \"https:\\/\\/3ca114.fusio.cloud\\/authorization\\/token\",\n                        \"scopes\": {\n                            \"authorization\": \"\",\n                            \"backend\": \"\",\n                            \"backend.account\": \"\",\n                            \"backend.action\": \"\",\n                            \"backend.app\": \"\",\n                            \"backend.audit\": \"\",\n                            \"backend.category\": \"\",\n                            \"backend.config\": \"\",\n                            \"backend.connection\": \"\",\n                            \"backend.cronjob\": \"\",\n                            \"backend.dashboard\": \"\",\n                            \"backend.event\": \"\",\n                            \"backend.log\": \"\",\n                            \"backend.marketplace\": \"\",\n                            \"backend.page\": \"\",\n                            \"backend.plan\": \"\",\n                            \"backend.rate\": \"\",\n                            \"backend.role\": \"\",\n                            \"backend.route\": \"\",\n                            \"backend.schema\": \"\",\n                            \"backend.scope\": \"\",\n                            \"backend.sdk\": \"\",\n                            \"backend.statistic\": \"\",\n                            \"backend.transaction\": \"\",\n                            \"backend.user\": \"\",\n                            \"consumer\": \"\",\n                            \"consumer.app\": \"\",\n                            \"consumer.event\": \"\",\n                            \"consumer.grant\": \"\",\n                            \"consumer.page\": \"\",\n                            \"consumer.plan\": \"\",\n                            \"consumer.scope\": \"\",\n                            \"consumer.subscription\": \"\",\n                            \"consumer.transaction\": \"\",\n                            \"consumer.user\": \"\",\n                            \"contract\": \"\",\n                            \"customer\": \"\",\n                            \"default\": \"\",\n                            \"group\": \"\",\n                            \"product\": \"\",\n                            \"system\": \"\"\n                        }\n                    }\n                }\n            }\n        }\n    }\n}",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    },
+    {
+      "_id": "env_env_c6209282b3364c66d18110a692941f07d77b542d_sub",
+      "parentId": "env_c6209282b3364c66d18110a692941f07d77b542d",
+      "modified": 1633545882261,
+      "created": 1633545882261,
+      "name": "OpenAPI env",
+      "data": {
+        "scheme": "https",
+        "base_path": "",
+        "host": "3ca114.fusio.cloud"
+      },
+      "dataPropertyOrder": null,
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1633545882261,
+      "_type": "environment"
+    }
+  ]
+}

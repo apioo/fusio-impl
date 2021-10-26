@@ -28,6 +28,8 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Routes\ProviderInterface;
 use Fusio\Engine\Routes\SetupInterface;
+use Fusio\Impl\Controller\SchemaApiController;
+use PSX\Api\Util\Inflection;
 
 /**
  * Postman
@@ -46,16 +48,41 @@ class Postman implements ProviderInterface
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
     {
         $import = $this->parse($configuration->get('import'));
-        if (isset($import->item) && is_array($import->item)) {
-            foreach ($import->item as $item) {
-                $setup->addRoute(1, $this->normalizePath($item), 'Fusio\Impl\Controller\SchemaApiController', [], [$this->buildConfig($item, $setup)]);
-            }
+        if (!$import instanceof \stdClass) {
+            return;
+        }
+
+        $resources = [];
+        $this->walk($import, $setup, $resources);
+
+        foreach ($resources as $path => $methods) {
+            $setup->addRoute(1, $path, SchemaApiController::class, [], [$this->buildConfig($methods, $setup)]);
         }
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
     {
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Postman JSON export'));
+    }
+
+    private function walk(\stdClass $item, SetupInterface $setup, array &$resources)
+    {
+        if (isset($item->item) && is_array($item->item)) {
+            foreach ($item->item as $child) {
+                $this->walk($child, $setup, $resources);
+            }
+        }
+
+        if (isset($item->request) && $item->request instanceof \stdClass) {
+            $path = $this->normalizePath($item);
+            if (!isset($resources[$path])) {
+                $resources[$path] = [];
+            }
+
+            $method = $item->request->method ?? null;
+
+            $resources[$path][$method] = $item;
+        }
     }
 
     private function parse(string $import): \stdClass
@@ -68,15 +95,16 @@ class Postman implements ProviderInterface
         return $data;
     }
 
-    private function buildConfig(\stdClass $item, SetupInterface $setup): array
+    private function buildConfig(array $methods, SetupInterface $setup): array
     {
-        $methodName = $item->method ?? 'GET';
+        $result = [];
+        foreach ($methods as $methodName => $item) {
+            $result[$methodName] = $this->buildMethod($item, $setup);
+        }
 
         return [
             'version' => 1,
-            'methods' => [
-                $methodName => $this->buildMethod($item, $setup)
-            ],
+            'methods' => $result,
         ];
     }
 
@@ -125,10 +153,10 @@ class Postman implements ProviderInterface
     private function normalizePath(\stdClass $item)
     {
         $path = $item->request->url->path ?? null;
-        if (is_array($path)) {
-            return '/' . implode('/', $path);
-        } else {
+        if (empty($path)) {
             throw new \RuntimeException('Could not find path');
         }
+
+        return '/' . Inflection::convertPlaceholderToColon(implode('/', $path));
     }
 }
