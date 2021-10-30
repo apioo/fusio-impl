@@ -358,6 +358,13 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/connection\/$connection_id<[0-9]+|^~>\/redirect",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/connection\/$connection_id<[0-9]+|^~>",
       "methods": [
         "ANY"

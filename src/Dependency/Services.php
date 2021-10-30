@@ -224,6 +224,17 @@ trait Services
         );
     }
 
+    public function getConnectionTokenFetcherService(): Service\Connection\Token
+    {
+        return new Service\Connection\Token(
+            $this->get('connection_factory'),
+            $this->get('connection_repository'),
+            $this->get('http_client'),
+            $this->get('connection_service'),
+            $this->get('config')
+        );
+    }
+
     public function getCronjobService(): Service\Cronjob
     {
         return new Service\Cronjob(

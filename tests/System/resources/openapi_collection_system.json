@@ -10,6 +10,33 @@
     }
   ],
   "paths": {
+    "\/system\/connection\/{name}\/callback": {
+      "get": {
+        "operationId": "System_Action_ConnectionCallback",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "\/system\/schema\/{name}": {
       "get": {
         "operationId": "System_Action_GetSchema",
@@ -485,6 +512,17 @@
             "type": "boolean"
           },
           "error": {
+            "type": "string"
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
             "type": "string"
           }
         }

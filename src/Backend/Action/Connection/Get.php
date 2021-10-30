@@ -27,6 +27,7 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View;
 use Fusio\Impl\Provider\ConnectionProviderParser;
+use Fusio\Impl\Service\Connection\Token;
 use Fusio\Impl\Table;
 use PSX\Framework\Config\Config;
 use PSX\Http\Exception as StatusCode;
@@ -56,11 +57,17 @@ class Get extends ActionAbstract
      */
     private $connectionParser;
 
-    public function __construct(TableManagerInterface $tableManager, Config $config, ConnectionProviderParser $connectionParser)
+    /**
+     * @var Token
+     */
+    private $tokenService;
+
+    public function __construct(TableManagerInterface $tableManager, Config $config, ConnectionProviderParser $connectionParser, Token $tokenService)
     {
         $this->table = $tableManager->getTable(View\Connection::class);
         $this->config = $config;
         $this->connectionParser = $connectionParser;
+        $this->tokenService = $tokenService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
@@ -77,6 +84,11 @@ class Get extends ActionAbstract
 
         if ($connection['status'] == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
+        }
+
+        if ($this->tokenService->isValid($request->get('connection_id'))) {
+            // in case the connection supports the oauth2 flow we add a button to start the authorization code flow
+            $connection['oauth2'] = true;
         }
 
         return $connection;

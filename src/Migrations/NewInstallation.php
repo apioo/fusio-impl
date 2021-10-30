@@ -115,9 +115,11 @@ class NewInstallation
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
         $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
         $bag->addAction('backend', 'Backend_Action_Plan_Billing', Backend\Action\Plan\Billing::class);
+        $bag->addAction('backend', 'Backend_Action_Connection_RenewToken', Backend\Action\Connection\RenewToken::class);
         $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
         $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
         $bag->addCronjob('backend', 'Billing_Run', '0 0 * * *', 'Backend_Action_Plan_Billing');
+        $bag->addCronjob('backend', 'Renew_Token', '0 * * * *', 'Backend_Action_Connection_RenewToken');
         $bag->addRoleScope('Administrator', 'authorization');
         $bag->addRoleScope('Administrator', 'backend');
         $bag->addRoleScope('Administrator', 'consumer');
@@ -235,6 +237,9 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Model\Backend\Connection::class], null, 'backend.connection'),
                     'PUT' => new Method(Backend\Action\Connection\Update::class, Model\Backend\Connection_Update::class, [200 => Message::class], null, 'backend.connection', 'fusio.connection.update'),
                     'DELETE' => new Method(Backend\Action\Connection\Delete::class, null, [200 => Message::class], null, 'backend.connection', 'fusio.connection.delete'),
+                ],
+                '/connection/$connection_id<[0-9]+|^~>/redirect' => [
+                    'GET' => new Method(Backend\Action\Connection\GetRedirect::class, null, [200 => Message::class], null, 'backend.connection'),
                 ],
                 '/cronjob' => [
                     'GET' => new Method(Backend\Action\Cronjob\GetAll::class, null, [200 => Model\Backend\Cronjob_Collection::class], Collection_Category_Query::class, 'backend.cronjob'),
@@ -551,6 +556,9 @@ class NewInstallation
                 ],
                 '/schema/:name' => [
                     'GET' => new Method(System\Action\GetSchema::class, null, [200 => Model\System\Schema::class], null, null, null, true),
+                ],
+                '/connection/:name/callback' => [
+                    'GET' => new Method(System\Action\ConnectionCallback::class, null, [200 => Message::class], null, null, null, true),
                 ],
             ],
             'authorization' => [
