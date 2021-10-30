@@ -83,7 +83,13 @@ class Token
         $this->config = $config;
     }
 
-    public function isValid(string $connectionId)
+    /**
+     * Returns whether the provided connection id supports an OAuth2 flow
+     *
+     * @param string $connectionId
+     * @return bool
+     */
+    public function isValid(string $connectionId): bool
     {
         try {
             $this->getImplementation($this->getConnection($connectionId));
