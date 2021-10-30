@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Schema;
 
 use Doctrine\DBAL\Connection;
-use PSX\Schema\InvalidSchemaException;
+use PSX\Schema\Exception\InvalidSchemaException;
 use PSX\Schema\SchemaInterface;
 use PSX\Schema\SchemaManagerInterface;
 
