@@ -29,7 +29,7 @@ use PSX\Http\Exception\StatusCodeException;
 use PSX\Json\Rpc\Exception\MethodNotFoundException;
 use PSX\Json\Rpc\Exception\ServerErrorException;
 use PSX\Record\Record;
-use PSX\Schema\ValidationException;
+use PSX\Schema\Exception\ValidationException;
 
 /**
  * Invoker
