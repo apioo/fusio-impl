@@ -49,6 +49,7 @@ class GetRedirect extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return [
+            'success' => true,
             'redirectUri' => $this->tokenService->buildRedirectUri($request->get('connection_id'))
         ];
     }
