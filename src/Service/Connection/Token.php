@@ -295,7 +295,7 @@ class Token
     private function assertState(string $state)
     {
         try {
-            JWT::decode($state, $this->config->get('fusio_project_key'), []);
+            JWT::decode($state, $this->config->get('fusio_project_key'), ['HS256']);
         } catch (\UnexpectedValueException $e) {
             throw new StatusCode\BadRequestException('The provided state is not valid', $e);
         }
@@ -303,7 +303,7 @@ class Token
 
     private function newState(): string
     {
-        return JWT::encode(['exp' => time() + (60 * 10)], $this->config->get('fusio_project_key'), ['HS256']);
+        return JWT::encode(['exp' => time() + (60 * 10)], $this->config->get('fusio_project_key'));
     }
 
     private function newRedirectUri($connectionId): string
