@@ -133,10 +133,10 @@ class Insomnia implements ProviderInterface
 
         $config = [
             'active' => true,
-            'public' => !isset($item->auth)
+            'public' => !isset($resource->auth)
         ];
 
-        if (isset($item->body)) {
+        if (isset($resource->body)) {
             $config['request'] = -1;
         }
 
