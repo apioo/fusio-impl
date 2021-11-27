@@ -108,7 +108,7 @@ class Insomnia implements ProviderInterface
         ];
     }
 
-    private function buildMethod(string $methodName, \stdClass $resource, SetupInterface $setup, array $env)
+    private function buildMethod(string $methodName, \stdClass $resource, SetupInterface $setup, array $env): array
     {
         $name = $resource->name ?? null;
         if (empty($name)) {
@@ -146,7 +146,7 @@ class Insomnia implements ProviderInterface
         return $config;
     }
 
-    private function buildName(array $parts)
+    private function buildName(array $parts): string
     {
         $parts = array_map(function($value){
             return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
@@ -155,7 +155,7 @@ class Insomnia implements ProviderInterface
         return implode('-', array_filter($parts));
     }
 
-    private function normalizePath(\stdClass $resource)
+    private function normalizePath(\stdClass $resource): string
     {
         $path = $resource->name ?? null;
         if (empty($path)) {
@@ -165,7 +165,7 @@ class Insomnia implements ProviderInterface
         return Inflection::convertPlaceholderToColon($path);
     }
 
-    private function getEnvironmentVariables(array $resources)
+    private function getEnvironmentVariables(array $resources): array
     {
         $env = [];
         $sort = [];
