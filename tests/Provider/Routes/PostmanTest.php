@@ -47,7 +47,7 @@ class PostmanTest extends DbTestCase
         $actions = $setup->getActions();
         $routes = $setup->getRoutes();
 
-        $this->assertEquals(0, count($schemas));
+        $this->assertEquals(19, count($schemas));
         $this->assertEquals(132, count($actions));
         $this->assertEquals(73, count($routes));
     }
