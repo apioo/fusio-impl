@@ -124,7 +124,7 @@ class OpenAPI implements ProviderInterface
         return $config;
     }
 
-    private function buildMethod(Resource\MethodAbstract $method, $prefix, SetupInterface $setup)
+    private function buildMethod(Resource\MethodAbstract $method, $prefix, SetupInterface $setup): array
     {
         $statusCode = $this->getSuccessStatusCode($method);
         $name = $this->buildName([$prefix, $method->getOperationId(), $method->getName()]);
@@ -157,7 +157,7 @@ class OpenAPI implements ProviderInterface
         return $config;
     }
 
-    private function buildName(array $parts)
+    private function buildName(array $parts): string
     {
         $parts = array_map(function($value){
             return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
@@ -166,12 +166,12 @@ class OpenAPI implements ProviderInterface
         return implode('-', array_filter($parts));
     }
 
-    private function buildPrefixFromPath($path)
+    private function buildPrefixFromPath($path): string
     {
         return implode('-', array_filter(explode('/', $path)));
     }
 
-    private function normalizePath($path)
+    private function normalizePath($path): string
     {
         $path = '/' . implode('/', array_filter(explode('/', $path)));
         $path = preg_replace('/(\{(\w+)\})/i', ':$2', $path);
