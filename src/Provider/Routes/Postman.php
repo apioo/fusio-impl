@@ -52,11 +52,16 @@ class Postman implements ProviderInterface
             return;
         }
 
+        $env = [];
+        if (isset($import->variable) && is_array($import->variable)) {
+            $env = $this->getEnv($import->variable);
+        }
+
         $resources = [];
         $this->walk($import, $setup, $resources);
 
         foreach ($resources as $path => $methods) {
-            $setup->addRoute(1, $path, SchemaApiController::class, [], [$this->buildConfig($methods, $setup)]);
+            $setup->addRoute(1, $path, SchemaApiController::class, [], [$this->buildConfig($methods, $setup, $env)]);
         }
     }
 
@@ -81,8 +86,21 @@ class Postman implements ProviderInterface
 
             $method = $item->request->method ?? null;
 
-            $resources[$path][$method] = $item;
+            if (!empty($method)) {
+                $resources[$path][$method] = $item;
+            }
         }
+    }
+
+    private function getEnv(array $variables): array
+    {
+        $result = [];
+        foreach ($variables as $variable) {
+            if (isset($variable->key) && isset($variable->value)) {
+                $result[$variable->key] = $variable->value;
+            }
+        }
+        return $result;
     }
 
     private function parse(string $import): \stdClass
@@ -95,11 +113,16 @@ class Postman implements ProviderInterface
         return $data;
     }
 
-    private function buildConfig(array $methods, SetupInterface $setup): array
+    private function buildConfig(array $methods, SetupInterface $setup, array $env): array
     {
         $result = [];
         foreach ($methods as $methodName => $item) {
-            $result[$methodName] = $this->buildMethod($item, $setup);
+            $methodName = strtoupper($methodName);
+            if (!in_array($methodName, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])) {
+                continue;
+            }
+
+            $result[$methodName] = $this->buildMethod($item, $setup, $env, $methodName);
         }
 
         return [
@@ -108,19 +131,42 @@ class Postman implements ProviderInterface
         ];
     }
 
-    private function buildMethod(\stdClass $item, SetupInterface $setup)
+    private function buildMethod(\stdClass $item, SetupInterface $setup, array $env, string $methodName): array
     {
         $name = $item->name ?? null;
         if (empty($name)) {
             throw new \RuntimeException('No name provided');
         }
 
-        $url = $item->request->url->raw ?? null;
-        if (empty($url)) {
-            throw new \RuntimeException('No url provided');
+        if (strlen($name) > 58) {
+            $name = substr($name, 0, 58);
         }
 
-        $name = $this->buildName([$name]);
+        $host = $item->request->url->host ?? null;
+        $path = $item->request->url->path ?? null;
+
+        if (is_array($host)) {
+            $host = implode('.', $host);
+        }
+
+        if (!empty($host) && is_array($path)) {
+            $url = $host . '/' . implode('/', $path);
+        } else {
+            throw new \RuntimeException('No url provided for ' . $item->name);
+        }
+
+        foreach ($env as $key => $value) {
+            $url = str_replace('{{' . $key. '}}', $value, $url);
+        }
+
+        $query = $item->request->url->query ?? null;
+        $parameters = null;
+        if (!empty($query) && is_array($query)) {
+            $schemaName = $this->buildName([$name, 'Query']);
+            $parameters = $setup->addSchema($schemaName, $this->getQuerySchema($query, $schemaName));
+        }
+
+        $name = $this->buildName([$name, $methodName]);
 
         $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
             'url' => $url,
@@ -130,6 +176,10 @@ class Postman implements ProviderInterface
             'active' => true,
             'public' => !isset($item->auth)
         ];
+
+        if (!empty($parameters)) {
+            $config['parameters'] = $parameters;
+        }
 
         if (isset($item->body)) {
             $config['request'] = -1;
@@ -144,16 +194,16 @@ class Postman implements ProviderInterface
         return $config;
     }
 
-    private function buildName(array $parts)
+    private function buildName(array $parts): string
     {
         $parts = array_map(function($value){
             return preg_replace('/[^0-9A-Za-z_-]/', '_', $value);
         }, $parts);
 
-        return implode('-', array_filter($parts));
+        return implode('_', array_filter($parts));
     }
 
-    private function normalizePath(\stdClass $item)
+    private function normalizePath(\stdClass $item): string
     {
         $path = $item->request->url->path ?? null;
         if (empty($path)) {
@@ -161,5 +211,35 @@ class Postman implements ProviderInterface
         }
 
         return '/' . Inflection::convertPlaceholderToColon(implode('/', $path));
+    }
+
+    private function getQuerySchema(array $query, string $schemaName): array
+    {
+        $properties = [];
+        foreach ($query as $parameter) {
+            if (!isset($parameter->key)) {
+                continue;
+            }
+
+            $type = [
+                'type' => 'string'
+            ];
+
+            if (isset($parameter->description)) {
+                $type['description'] = $parameter->description;
+            }
+
+            $properties[$parameter->key] = $type;
+        }
+
+        return [
+            'definitions' => [
+                $schemaName => [
+                    'type' => 'object',
+                    'properties' => $properties
+                ]
+            ],
+            '$ref' => $schemaName,
+        ];
     }
 }
