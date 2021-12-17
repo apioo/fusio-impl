@@ -500,7 +500,7 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Model\Consumer\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
                 ],
                 '/transaction/execute/:transaction_id' => [
-                    'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction'),
+                    'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction', null, true),
                 ],
                 '/transaction/prepare/:provider' => [
                     'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Model\Consumer\Transaction_Prepare_Request::class, [200 => Model\Consumer\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
