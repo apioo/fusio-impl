@@ -24,6 +24,7 @@ namespace Fusio\Impl\Consumer\Action\Transaction;
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\Transaction;
 use PSX\Http\Exception as StatusCode;
@@ -49,9 +50,14 @@ class Execute extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
+        $parameters = [];
+        if ($request instanceof HttpRequest) {
+            $parameters = $request->getParameters();
+        }
+
         $returnUrl = $this->transactionService->execute(
             $request->get('transaction_id'),
-            (array) $request->getPayload()
+            $parameters
         );
 
         throw new StatusCode\TemporaryRedirectException($returnUrl);
