@@ -220,37 +220,42 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 30,
+                    "id": 31,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 31,
-                    "name": "consumer.page",
+                    "id": 30,
+                    "name": "consumer.log",
                     "description": ""
                 },
                 {
                     "id": 32,
-                    "name": "consumer.plan",
+                    "name": "consumer.page",
                     "description": ""
                 },
                 {
                     "id": 33,
-                    "name": "consumer.scope",
+                    "name": "consumer.plan",
                     "description": ""
                 },
                 {
                     "id": 34,
-                    "name": "consumer.subscription",
+                    "name": "consumer.scope",
                     "description": ""
                 },
                 {
                     "id": 35,
-                    "name": "consumer.transaction",
+                    "name": "consumer.subscription",
                     "description": ""
                 },
                 {
                     "id": 36,
+                    "name": "consumer.transaction",
+                    "description": ""
+                },
+                {
+                    "id": 37,
                     "name": "consumer.user",
                     "description": ""
                 }
@@ -261,7 +266,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "default",
             "scopes": [
                 {
-                    "id": 39,
+                    "id": 40,
                     "name": "bar",
                     "description": "Bar access"
                 },
@@ -271,7 +276,7 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 38,
+                    "id": 39,
                     "name": "foo",
                     "description": "Foo access"
                 }
@@ -282,7 +287,7 @@ class CategoriesTest extends ControllerDbTestCase
             "name": "system",
             "scopes": [
                 {
-                    "id": 37,
+                    "id": 38,
                     "name": "system",
                     "description": ""
                 }

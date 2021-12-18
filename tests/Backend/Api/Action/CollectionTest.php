@@ -74,25 +74,25 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 188,
+            "id": 190,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 187,
+            "id": 189,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 186,
+            "id": 188,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 185,
+            "id": 187,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"
@@ -122,13 +122,13 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 187,
+            "id": 189,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 186,
+            "id": 188,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
@@ -158,25 +158,25 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 188,
+            "id": 190,
             "status": 1,
             "name": "Inspect-Action",
             "date": "[datetime]"
         },
         {
-            "id": 187,
+            "id": 189,
             "status": 1,
             "name": "Sql-Insert",
             "date": "[datetime]"
         },
         {
-            "id": 186,
+            "id": 188,
             "status": 1,
             "name": "Sql-Select-All",
             "date": "[datetime]"
         },
         {
-            "id": 185,
+            "id": 187,
             "status": 1,
             "name": "Util-Static-Response",
             "date": "[datetime]"

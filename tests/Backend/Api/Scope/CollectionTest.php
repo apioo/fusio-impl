@@ -68,12 +68,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 39,
+            "id": 40,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 38,
+            "id": 39,
             "name": "foo",
             "description": "Foo access"
         },
@@ -105,7 +105,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 38,
+            "id": 39,
             "name": "foo",
             "description": "Foo access"
         }
@@ -132,12 +132,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 39,
+            "id": 40,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 38,
+            "id": 39,
             "name": "foo",
             "description": "Foo access"
         },
@@ -195,7 +195,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(40, $row['id']);
+        $this->assertEquals(41, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 
@@ -206,16 +206,16 @@ JSON;
             ->orderBy('id', 'DESC')
             ->getSQL();
 
-        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 40]);
+        $routes = Environment::getService('connection')->fetchAll($sql, ['scope_id' => 41]);
 
         $this->assertEquals([[
-            'scope_id' => 40,
-            'route_id' => 118,
+            'scope_id' => 41,
+            'route_id' => 120,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ], [
-            'scope_id' => 40,
-            'route_id' => 117,
+            'scope_id' => 41,
+            'route_id' => 119,
             'allow'    => 1,
             'methods'  => 'GET|POST|PUT|PATCH|DELETE',
         ]], $routes);

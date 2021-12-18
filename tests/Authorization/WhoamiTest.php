@@ -83,6 +83,7 @@ class WhoamiTest extends ControllerDbTestCase
         "consumer",
         "consumer.app",
         "consumer.event",
+        "consumer.log",
         "consumer.grant",
         "consumer.page",
         "consumer.plan",

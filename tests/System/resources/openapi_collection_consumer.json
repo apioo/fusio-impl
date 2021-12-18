@@ -1238,6 +1238,122 @@
         ]
       }
     },
+    "\/consumer\/log\/{log_id}": {
+      "get": {
+        "tags": [
+          "consumer.log"
+        ],
+        "operationId": "Consumer_Action_Log_Get",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Log"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.log"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "log_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/log": {
+      "get": {
+        "tags": [
+          "consumer.log"
+        ],
+        "operationId": "Consumer_Action_Log_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Log_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.log"
+            ]
+          }
+        ]
+      }
+    },
     "\/consumer\/event": {
       "get": {
         "tags": [
@@ -1726,6 +1842,12 @@
       "Consumer_Grant_Collection": {
         "$ref": "#\/components\/schemas\/Grant_Collection"
       },
+      "Consumer_Log": {
+        "$ref": "#\/components\/schemas\/Log"
+      },
+      "Consumer_Log_Collection": {
+        "$ref": "#\/components\/schemas\/Log_Collection"
+      },
       "Consumer_Page": {
         "$ref": "#\/components\/schemas\/Page"
       },
@@ -1904,6 +2026,42 @@
         }
       },
       "Grant_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Log": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "appId": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "string"
+          },
+          "userAgent": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "header": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "Log_Collection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
       "Message": {
@@ -2306,6 +2464,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.log": "",
               "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
@@ -2351,6 +2510,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.log": "",
               "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
@@ -2397,6 +2557,7 @@
               "consumer.app": "",
               "consumer.event": "",
               "consumer.grant": "",
+              "consumer.log": "",
               "consumer.page": "",
               "consumer.plan": "",
               "consumer.scope": "",
