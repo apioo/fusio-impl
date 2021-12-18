@@ -72,7 +72,8 @@ class CollectionTest extends ControllerDbTestCase
             "name": "Plan A",
             "description": "",
             "price": 39.99,
-            "points": 500
+            "points": 500,
+            "period": 1
         },
         {
             "id": 2,

@@ -463,14 +463,7 @@
           "consumer.transaction"
         ],
         "operationId": "Consumer_Action_Transaction_Execute",
-        "responses": {},
-        "security": [
-          {
-            "app": [
-              "consumer.transaction"
-            ]
-          }
-        ]
+        "responses": {}
       },
       "parameters": [
         {

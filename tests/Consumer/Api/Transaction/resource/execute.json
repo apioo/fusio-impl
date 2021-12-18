@@ -5,11 +5,6 @@
   "methods": {
     "GET": {
       "operationId": "Consumer_Action_Transaction_Execute",
-      "security": {
-        "app": [
-          "consumer.transaction"
-        ]
-      },
       "tags": [
         "consumer.transaction"
       ],
