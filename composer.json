@@ -15,7 +15,7 @@
     "psalm": "@php vendor/vimeo/psalm/psalm"
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "psx/framework": "^5.0",
     "psx/openssl": "^2.0",
     "psx/cloudevents": "^0.1",
