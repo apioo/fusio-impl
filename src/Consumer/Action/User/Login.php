@@ -67,6 +67,7 @@ class Login extends ActionAbstract
                 'token' => $token->getAccessToken(),
                 'expires_in' => $token->getExpiresIn(),
                 'refresh_token' => $token->getRefreshToken(),
+                'scope' => $token->getScope(),
             ];
         } else {
             throw new StatusCode\BadRequestException('Invalid name or password');
