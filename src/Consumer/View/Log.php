@@ -48,10 +48,6 @@ class Log extends ViewAbstract
         $condition = $filter->getCondition();
         $condition->equals('user_id', $userId);
 
-        if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
-        }
-
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
