@@ -19,40 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\Scope;
+namespace Fusio\Impl\Consumer\Action\Log;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
+use Fusio\Impl\Table;
+use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableManagerInterface;
 
 /**
- * GetAll
+ * Get
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class GetAll extends ActionAbstract
+class Get extends ActionAbstract
 {
     /**
-     * @var View\Scope
+     * @var View\Log
      */
     private $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->table = $tableManager->getTable(View\Scope::class);
+        $this->table = $tableManager->getTable(View\Log::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
-        return $this->table->getCollection(
-            $context->getUser()->getCategoryId(),
+        $log = $this->table->getEntity(
             $context->getUser()->getId(),
-            (int) $request->get('startIndex')
+            (int) $request->get('log_id')
         );
+
+        if (empty($log)) {
+            throw new StatusCode\NotFoundException('Could not find log');
+        }
+
+        return $log;
     }
 }

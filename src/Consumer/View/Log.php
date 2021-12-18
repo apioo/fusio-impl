@@ -21,21 +21,23 @@
 
 namespace Fusio\Impl\Consumer\View;
 
+use Fusio\Impl\Backend\View\Log\QueryFilter;
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Fields;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
 /**
- * Plan
+ * Log
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Plan extends ViewAbstract
+class Log extends ViewAbstract
 {
-    public function getCollection(int $userId, int $startIndex = 0)
+    public function getCollection(int $userId, int $startIndex, QueryFilter $filter)
     {
         if (empty($startIndex) || $startIndex < 0) {
             $startIndex = 0;
@@ -43,39 +45,47 @@ class Plan extends ViewAbstract
 
         $count = 16;
 
-        $condition = new Condition();
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition = $filter->getCondition();
+        $condition->equals('user_id', $userId);
+
+        if (!empty($search)) {
+            $condition->like('name', '%' . $search . '%');
+        }
 
         $definition = [
-            'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
+            'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'getAll'], [$startIndex, $count, 'price', Sql::SORT_ASC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['header', 'body'])], [
                 'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
-                'price' => $this->fieldNumber('price'),
-                'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period_type'),
+                'appId' => $this->fieldInteger('app_id'),
+                'ip' => 'ip',
+                'userAgent' => 'user_agent',
+                'method' => 'method',
+                'path' => 'path',
+                'date' => $this->fieldDateTime('date'),
             ]),
         ];
 
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $planId)
+    public function getEntity($userId, $logId)
     {
         $condition = new Condition();
-        $condition->equals('id', $planId);
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->equals('id', $logId);
+        $condition->equals('user_id', $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'getOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
-            'name' => 'name',
-            'description' => 'description',
-            'price' => $this->fieldNumber('price'),
-            'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period_type'),
+            'appId' => $this->fieldInteger('app_id'),
+            'ip' => 'ip',
+            'userAgent' => 'user_agent',
+            'method' => 'method',
+            'path' => 'path',
+            'header' => 'header',
+            'body' => 'body',
+            'date' => $this->fieldDateTime('date'),
         ]);
 
         return $this->build($definition);

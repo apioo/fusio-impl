@@ -19,12 +19,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\Scope;
+namespace Fusio\Impl\Consumer\Action\Log;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Backend\View\Log\QueryFilter;
 use Fusio\Impl\Consumer\View;
 use PSX\Sql\TableManagerInterface;
 
@@ -38,21 +39,21 @@ use PSX\Sql\TableManagerInterface;
 class GetAll extends ActionAbstract
 {
     /**
-     * @var View\Scope
+     * @var View\Log
      */
     private $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
-        $this->table = $tableManager->getTable(View\Scope::class);
+        $this->table = $tableManager->getTable(View\Log::class);
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
     {
         return $this->table->getCollection(
-            $context->getUser()->getCategoryId(),
             $context->getUser()->getId(),
-            (int) $request->get('startIndex')
+            (int) $request->get('startIndex'),
+            QueryFilter::create($request)
         );
     }
 }

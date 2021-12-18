@@ -1,0 +1,96 @@
+{
+  "status": 1,
+  "path": "\/consumer\/log",
+  "methods": {
+    "GET": {
+      "operationId": "Consumer_Action_Log_GetAll",
+      "security": {
+        "app": [
+          "consumer.log"
+        ]
+      },
+      "tags": [
+        "consumer.log"
+      ],
+      "queryParameters": "Collection_Query",
+      "responses": {
+        "200": "Consumer_Log_Collection"
+      }
+    }
+  },
+  "definitions": {
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Log_Collection": {
+      "$ref": "Log_Collection"
+    },
+    "Log": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "appId": {
+          "type": "integer"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "userAgent": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "header": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "Log_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Log"
+      }
+    }
+  }
+}
