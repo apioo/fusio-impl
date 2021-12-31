@@ -124,6 +124,8 @@ class Insomnia implements ProviderInterface
             $url = str_replace('{{ ' . $key . ' }}', $value, $url);
         }
 
+        $url = $this->convertPlaceholderToColon($url);
+
         $name = $this->buildName([$methodName, $name]);
 
         $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
@@ -163,6 +165,13 @@ class Insomnia implements ProviderInterface
         }
 
         return Inflection::convertPlaceholderToColon($path);
+    }
+
+    private function convertPlaceholderToColon(string $path)
+    {
+        $path = preg_replace('/(\{\{ (\w+) \}\})/i', ':$2', $path);
+
+        return $path;
     }
 
     private function getEnvironmentVariables(array $resources): array

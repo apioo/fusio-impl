@@ -51,5 +51,19 @@ class InsomniaTest extends DbTestCase
         $this->assertEquals(0, count($schemas));
         $this->assertEquals(21, count($actions));
         $this->assertEquals(9, count($routes));
+
+        $this->assertEquals('GET-_', $actions[0]->name);
+        $this->assertEquals('https://3ca114.fusio.cloud/', $actions[0]->config->url);
+        $this->assertEquals('GET-_contract', $actions[1]->name);
+        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[1]->config->url);
+        $this->assertEquals('POST-_contract', $actions[2]->name);
+        $this->assertEquals('https://3ca114.fusio.cloud/contract', $actions[2]->config->url);
+        $this->assertEquals('GET-_contract__contract_', $actions[3]->name);
+        $this->assertEquals('https://3ca114.fusio.cloud/contract/:contract', $actions[3]->config->url);
+
+        $this->assertEquals('/', $routes[0]->path);
+        $this->assertEquals('/contract', $routes[1]->path);
+        $this->assertEquals('/contract/:contract', $routes[2]->path);
+        $this->assertEquals('/customer', $routes[3]->path);
     }
 }

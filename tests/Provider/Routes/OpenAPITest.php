@@ -57,8 +57,11 @@ class OpenAPITest extends DbTestCase
         $this->assertEquals('PetsPetIdGetQuery', $schemas[4]->name);
 
         $this->assertEquals('pets-listPets-GET', $actions[0]->name);
+        $this->assertEquals('http://petstore.swagger.io/v1/pets', $actions[0]->config->url);
         $this->assertEquals('pets-createPets-POST', $actions[1]->name);
+        $this->assertEquals('http://petstore.swagger.io/v1/pets', $actions[1]->config->url);
         $this->assertEquals('pets-_petId-showPetById-GET', $actions[2]->name);
+        $this->assertEquals('http://petstore.swagger.io/v1/pets/:petId', $actions[2]->config->url);
 
         $this->assertEquals('/pets', $routes[0]->path);
         $this->assertEquals('/pets/:petId', $routes[1]->path);

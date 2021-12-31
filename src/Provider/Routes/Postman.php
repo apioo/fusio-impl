@@ -150,13 +150,17 @@ class Postman implements ProviderInterface
         }
 
         if (!empty($host) && is_array($path)) {
-            $url = $host . '/' . implode('/', $path);
+            $url = rtrim($host, '/') . '/' . implode('/', $path);
         } else {
             throw new \RuntimeException('No url provided for ' . $item->name);
         }
 
         foreach ($env as $key => $value) {
-            $url = str_replace('{{' . $key. '}}', $value, $url);
+            if ($key === 'baseUrl') {
+                $url = str_replace('{{' . $key . '}}', rtrim($value, '/'), $url);
+            } else {
+                $url = str_replace('{{' . $key . '}}', $value, $url);
+            }
         }
 
         $query = $item->request->url->query ?? null;

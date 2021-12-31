@@ -59,7 +59,8 @@ class OpenAPI implements ProviderInterface
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
     {
-        $specification = $this->parse($configuration->get('spec'));
+        $baseUrl = '';
+        $specification = $this->parse($configuration->get('spec'), $baseUrl);
 
         // add schemas
         $generator   = new Generator\TypeSchema();
@@ -78,8 +79,8 @@ class OpenAPI implements ProviderInterface
 
         // add routes and actions
         $resources = $specification->getResourceCollection();
-        foreach ($resources as $path => $resource) {
-            $setup->addRoute(1, $this->normalizePath($resource->getPath()), 'Fusio\Impl\Controller\SchemaApiController', [], [$this->buildConfig($resource, $setup)]);
+        foreach ($resources as $resource) {
+            $setup->addRoute(1, $this->normalizePath($resource->getPath()), 'Fusio\Impl\Controller\SchemaApiController', [], [$this->buildConfig($resource, $setup, $baseUrl)]);
         }
     }
 
@@ -88,7 +89,7 @@ class OpenAPI implements ProviderInterface
         $builder->add($elementFactory->newTextArea('spec', 'Specification', 'The OpenAPI specification in the YAML format'));
     }
 
-    private function parse(string $schema): SpecificationInterface
+    private function parse(string $schema, string &$baseUrl): SpecificationInterface
     {
         // check whether we need to transform YAML into JSON
         if (!json_decode($schema)) {
@@ -100,6 +101,10 @@ class OpenAPI implements ProviderInterface
             }
         }
 
+        // get base url
+        $data = \json_decode($schema);
+        $baseUrl = $data->servers[0]->url ?? '';
+
         $reader = new SimpleAnnotationReader();
         $reader->addNamespace('PSX\\Schema\\Annotation');
         $parser = new \PSX\Api\Parser\OpenAPI($reader);
@@ -107,8 +112,9 @@ class OpenAPI implements ProviderInterface
         return $parser->parse($schema);
     }
 
-    private function buildConfig(Resource $resource, SetupInterface $setup): array
+    private function buildConfig(Resource $resource, SetupInterface $setup, string $baseUrl): array
     {
+        $url = rtrim($baseUrl, '/') . '/' . ltrim($resource->getPath(), '/');
         $methods = $resource->getMethods();
         $prefix  = $this->buildPrefixFromPath($resource->getPath());
 
@@ -118,19 +124,18 @@ class OpenAPI implements ProviderInterface
         ];
         
         foreach ($methods as $methodName => $method) {
-            $config['methods'][$methodName] = $this->buildMethod($method, $prefix, $setup);
+            $config['methods'][$methodName] = $this->buildMethod($method, $prefix, $setup, $url);
         }
 
         return $config;
     }
 
-    private function buildMethod(Resource\MethodAbstract $method, $prefix, SetupInterface $setup): array
+    private function buildMethod(Resource\MethodAbstract $method, $prefix, SetupInterface $setup, string $url): array
     {
-        $statusCode = $this->getSuccessStatusCode($method);
         $name = $this->buildName([$prefix, $method->getOperationId(), $method->getName()]);
 
         $action = $setup->addAction($name, HttpProcessor::class, PhpClass::class, [
-            'url' => strval($statusCode ?? 200),
+            'url' => $url,
             'type' => HttpEngine::TYPE_JSON,
         ]);
 
@@ -176,17 +181,5 @@ class OpenAPI implements ProviderInterface
         $path = '/' . implode('/', array_filter(explode('/', $path)));
         $path = preg_replace('/(\{(\w+)\})/i', ':$2', $path);
         return $path;
-    }
-
-    private function getSuccessStatusCode(Resource\MethodAbstract $method)
-    {
-        $statusCode = null;
-        foreach ($method->getResponses() as $code => $schema) {
-            if ($code >= 200 && $code < 300) {
-                $statusCode = $code;
-            }
-        }
-
-        return $statusCode;
     }
 }
