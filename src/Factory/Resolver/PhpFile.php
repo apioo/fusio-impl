@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Factory\Resolver;
 
 use Fusio\Adapter\Php\Action\PhpEngine;
+use Fusio\Engine\ActionInterface;
 use Fusio\Engine\Factory\ResolverInterface;
 
 /**
@@ -33,7 +34,7 @@ use Fusio\Engine\Factory\ResolverInterface;
  */
 class PhpFile implements ResolverInterface
 {
-    public function resolve($className)
+    public function resolve(string $className): ActionInterface
     {
         return new PhpEngine($className);
     }
