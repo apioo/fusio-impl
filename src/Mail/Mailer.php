@@ -25,6 +25,10 @@ use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Connection\Resolver;
 use Psr\Log\LoggerInterface;
 use PSX\Framework\Config\Config as FrameworkConfig;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\NullTransport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 
 /**
  * Mailer
@@ -83,7 +87,7 @@ class Mailer implements MailerInterface
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
         if (!$dispatcher) {
-            $dispatcher = new \Swift_Mailer($this->createTransport());
+            $dispatcher = new SymfonyMailer($this->createTransport());
         }
 
         $from = $this->configService->getValue('mail_sender');
@@ -125,30 +129,13 @@ class Mailer implements MailerInterface
         return $host;
     }
 
-    /**
-     * @return \Swift_Transport
-     */
-    private function createTransport()
+    private function createTransport(): TransportInterface
     {
-        if ($this->config['psx_debug'] === false) {
-            $mailer = $this->config['fusio_mailer'];
-            if (!empty($mailer)) {
-                if ($mailer['transport'] == 'smtp') {
-                    $transport = new \Swift_SmtpTransport($mailer['host'], $mailer['port']);
-                    if (isset($mailer['encryption'])) {
-                        $transport->setEncryption($mailer['encryption']);
-                    }
-                    if (isset($mailer['username'])) {
-                        $transport->setUsername($mailer['username']);
-                        $transport->setPassword($mailer['password']);
-                    }
-                    return $transport;
-                }
-            }
-
-            return new \Swift_SendmailTransport();
+        $mailer = $this->config['fusio_mailer'];
+        if ($this->config['psx_debug'] === false && !empty($mailer)) {
+            return Transport::fromDsn($mailer);
         } else {
-            return new \Swift_NullTransport();
+            return new NullTransport();
         }
     }
 }

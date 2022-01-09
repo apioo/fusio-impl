@@ -51,17 +51,10 @@ return array(
         'last_name',
     ],
 
-    // Settings of the internal mailer. By default we use the internal PHP mail
-    // function
+    // Settings of the internal mailer. More information s.
+    // https://symfony.com/doc/current/mailer.html#using-built-in-transports
     /*
-    'fusio_mailer'            => [
-        'transport'           => 'smtp',
-        'host'                => 'email-smtp.us-east-1.amazonaws.com',
-        'port'                => 587,
-        'username'            => 'my-username',
-        'password'            => 'my-password',
-        'encryption'          => 'tls',
-    ],
+    'fusio_mailer'            => 'native://default',
     */
 
     // Endpoint of the apps repository. All listed apps can be installed by the
