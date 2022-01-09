@@ -30,29 +30,11 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Cronjob extends TableAbstract
+class Cronjob extends Generated\CronjobTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
-    const CODE_SUCCESS = 0;
-    const CODE_ERROR = 1;
-
-    public function getName()
-    {
-        return 'fusio_cronjob';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'cron' => self::TYPE_VARCHAR,
-            'action' => self::TYPE_VARCHAR,
-            'execute_date' => self::TYPE_DATETIME,
-            'exit_code' => self::TYPE_INT,
-        );
-    }
+    public const CODE_SUCCESS = 0;
+    public const CODE_ERROR = 1;
 }

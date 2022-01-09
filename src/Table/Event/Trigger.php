@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\Event;
 
 use Fusio\Impl\Table;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Trigger
@@ -31,17 +31,17 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Trigger extends TableAbstract
+class Trigger extends Generated\EventTriggerTable
 {
     const STATUS_PENDING = 1;
     const STATUS_DONE = 2;
 
-    public function getName()
+    public function getName(): string
     {
         return 'fusio_event_trigger';
     }
 
-    public function getColumns()
+    public function getColumns(): array
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,

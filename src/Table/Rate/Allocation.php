@@ -23,7 +23,7 @@ namespace Fusio\Impl\Table\Rate;
 
 use Fusio\Engine\Model;
 use Fusio\Impl\Table\Rate;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Allocation
@@ -32,25 +32,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Allocation extends TableAbstract
+class Allocation extends Generated\RateAllocationTable
 {
-    public function getName()
-    {
-        return 'fusio_rate_allocation';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'rate_id' => self::TYPE_INT,
-            'route_id' => self::TYPE_INT,
-            'app_id' => self::TYPE_INT,
-            'authenticated' => self::TYPE_BOOLEAN,
-            'parameters' => self::TYPE_VARCHAR,
-        );
-    }
-
     public function deleteAllFromRate($rateId)
     {
         $sql = 'DELETE FROM fusio_rate_allocation 

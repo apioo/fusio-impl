@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\Cronjob;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Error
@@ -30,22 +30,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Error extends TableAbstract
+class Error extends Generated\CronjobErrorTable
 {
-    public function getName()
-    {
-        return 'fusio_cronjob_error';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'cronjob_id' => self::TYPE_INT,
-            'message' => self::TYPE_VARCHAR,
-            'trace' => self::TYPE_TEXT,
-            'file' => self::TYPE_VARCHAR,
-            'line' => self::TYPE_INT,
-        );
-    }
 }

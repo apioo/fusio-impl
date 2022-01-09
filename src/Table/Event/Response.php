@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\Event;
 
 use Fusio\Impl\Table;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Response
@@ -31,7 +31,7 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Response extends TableAbstract
+class Response extends Generated\EventResponseTable
 {
     const STATUS_PENDING = 1;
     const STATUS_DONE = 2;

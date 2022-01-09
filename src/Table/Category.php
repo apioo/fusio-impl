@@ -30,24 +30,10 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Category extends TableAbstract
+class Category extends Generated\CategoryTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
-    {
-        return 'fusio_category';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-        );
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
     public function getCategoryIdForPath(string $path): int
     {

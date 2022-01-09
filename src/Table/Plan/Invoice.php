@@ -23,7 +23,7 @@ namespace Fusio\Impl\Table\Plan;
 
 use PSX\Sql\Condition;
 use PSX\Sql\Sql;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Invoice
@@ -32,34 +32,11 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Invoice extends TableAbstract
+class Invoice extends Generated\PlanInvoiceTable
 {
     const STATUS_OPEN = 0;
     const STATUS_PAYED = 1;
     const STATUS_DELETED = 2;
-
-    public function getName()
-    {
-        return 'fusio_plan_invoice';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'contract_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'prev_id' => self::TYPE_INT, // id of the previous invoice
-            'display_id' => self::TYPE_VARCHAR,
-            'status' => self::TYPE_INT,
-            'amount' => self::TYPE_FLOAT,
-            'points' => self::TYPE_INT,
-            'from_date' => self::TYPE_DATE,
-            'to_date' => self::TYPE_DATE,
-            'pay_date' => self::TYPE_DATETIME,
-            'insert_date' => self::TYPE_DATETIME,
-        );
-    }
 
     public function getLastInvoiceByContract($contractId)
     {

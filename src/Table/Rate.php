@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Rate
  *
@@ -30,25 +28,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Rate extends TableAbstract
+class Rate extends Generated\RateTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
-    {
-        return 'fusio_rate';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'priority' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'rate_limit' => self::TYPE_INT,
-            'timespan' => self::TYPE_VARCHAR,
-        );
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 }

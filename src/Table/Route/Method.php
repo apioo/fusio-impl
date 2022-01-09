@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\Route;
 
 use PSX\Api\Resource;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Method
@@ -31,32 +31,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Method extends TableAbstract
+class Method extends Generated\RoutesMethodTable
 {
-    public function getName()
-    {
-        return 'fusio_routes_method';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'route_id' => self::TYPE_INT,
-            'method' => self::TYPE_VARCHAR,
-            'version' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'active' => self::TYPE_INT,
-            'public' => self::TYPE_INT,
-            'description' => self::TYPE_VARCHAR,
-            'operation_id' => self::TYPE_VARCHAR,
-            'parameters' => self::TYPE_VARCHAR,
-            'request' => self::TYPE_VARCHAR,
-            'action' => self::TYPE_VARCHAR,
-            'costs' => self::TYPE_INT,
-        );
-    }
-
     public function deleteAllFromRoute($routeId, $version = null, $status = null)
     {
         $sql = 'DELETE FROM fusio_routes_method

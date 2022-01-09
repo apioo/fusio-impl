@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * User
  *
@@ -30,33 +28,11 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class User extends TableAbstract
+class User extends Generated\UserTable
 {
-    const STATUS_DISABLED = 2;
-    const STATUS_ACTIVE   = 1;
-    const STATUS_DELETED  = 0;
-
-    public function getName()
-    {
-        return 'fusio_user';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'role_id' => self::TYPE_INT,
-            'provider' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'remote_id' => self::TYPE_VARCHAR,
-            'name' => self::TYPE_VARCHAR,
-            'email' => self::TYPE_VARCHAR,
-            'password' => self::TYPE_VARCHAR,
-            'points' => self::TYPE_INT,
-            'token' => self::TYPE_VARCHAR,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
+    public const STATUS_DISABLED = 2;
+    public const STATUS_ACTIVE   = 1;
+    public const STATUS_DELETED  = 0;
 
     public function changePassword($userId, $oldPassword, $newPassword, $verifyOld = true)
     {

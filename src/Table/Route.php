@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Route
  *
@@ -30,30 +28,12 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Route extends TableAbstract
+class Route extends Generated\RoutesTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
-    public function getName()
-    {
-        return 'fusio_routes';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'category_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'priority' => self::TYPE_INT,
-            'methods' => self::TYPE_VARCHAR,
-            'path' => self::TYPE_VARCHAR,
-            'controller' => self::TYPE_VARCHAR,
-        );
-    }
-
-    public function getMaxPriority()
+    public function getMaxPriority(): int
     {
         $sql = 'SELECT MAX(priority)
                   FROM fusio_routes 
@@ -64,6 +44,6 @@ class Route extends TableAbstract
             'status' => self::STATUS_ACTIVE,
         ];
 
-        return $this->connection->fetchColumn($sql, $params);
+        return (int) $this->connection->fetchColumn($sql, $params);
     }
 }
