@@ -36,25 +36,15 @@ use Fusio\Impl\Table;
  */
 class ActionDatabase implements Repository\ActionInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private DBALConnection $connection;
+    private bool $async = true;
 
-    /**
-     * @var bool
-     */
-    private $async = true;
-
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function __construct(DBALConnection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $sql = 'SELECT id,
                        name,
@@ -79,7 +69,7 @@ class ActionDatabase implements Repository\ActionInterface
         return $actions;
     }
 
-    public function get($id)
+    public function get(string|int $id): ?Action
     {
         if (empty($id)) {
             return null;
@@ -115,19 +105,17 @@ class ActionDatabase implements Repository\ActionInterface
         $this->async = $async;
     }
 
-    protected function newAction(array $row)
+    protected function newAction(array $row): Action
     {
         $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
 
-        $action = new Action();
-        $action->setId((int) $row['id']);
-        $action->setName($row['name']);
-        $action->setAsync($this->async ? (bool) $row['async'] : false);
-        $action->setClass($row['class']);
-        $action->setEngine($row['engine']);
-        $action->setConfig($config);
-        $action->setDate($row['date']);
-
-        return $action;
+        return new Action(
+            $row['id'],
+            $row['name'],
+            $row['class'],
+            $row['engine'],
+            $this->async ? (bool) $row['async'] : false,
+            $config
+        );
     }
 }
