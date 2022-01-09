@@ -22,15 +22,11 @@
 namespace Fusio\Impl\Dependency;
 
 use Fusio\Engine\Action;
-use Fusio\Engine\Cache;
-use Fusio\Engine\CacheInterface;
 use Fusio\Engine\Connector;
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\DispatcherInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Form;
-use Fusio\Engine\Logger;
-use Fusio\Engine\LoggerInterface;
 use Fusio\Engine\Processor;
 use Fusio\Engine\ProcessorInterface;
 use Fusio\Engine\Repository;
@@ -45,6 +41,10 @@ use Fusio\Impl\Repository as ImplRepository;
 use Fusio\Impl\Service\Action\Queue;
 use Fusio\Impl\Service\Event\Dispatcher;
 use Fusio\Impl\Table;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Psr16Cache;
 
 /**
  * Engine
@@ -66,7 +66,7 @@ trait Engine
 
     public function getActionFactory(): Factory\ActionInterface
     {
-        $factory = new Factory\Action($this, $this->get('container_type_resolver'));
+        $factory = new Factory\Action($this->get('container_type_resolver'));
         $factory->addResolver(new Factory\Resolver\PhpClass($this->get('container_autowire_resolver')));
         $factory->addResolver(new Resolver\HttpUrl());
         $factory->addResolver(new Resolver\PhpFile());
@@ -92,7 +92,7 @@ trait Engine
 
     public function getEngineCache(): CacheInterface
     {
-        return new Cache($this->newDoctrineCacheImpl('action'));
+        return new Psr16Cache($this->get('cache'));
     }
 
     public function getActionRepository(): Repository\ActionInterface
@@ -128,7 +128,7 @@ trait Engine
 
     public function getConnectionFactory(): Factory\ConnectionInterface
     {
-        return new Factory\Connection($this, $this->get('container_autowire_resolver'));
+        return new Factory\Connection($this->get('container_autowire_resolver'));
     }
 
     public function getConnectionRepository(): Repository\ConnectionInterface
