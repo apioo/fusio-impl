@@ -37,19 +37,9 @@ use PSX\Framework\Loader\RoutingParserInterface;
  */
 class DatabaseParser implements RoutingParserInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private Connection $connection;
+    private ?RoutingCollection $collection = null;
 
-    /**
-     * @var \PSX\Framework\Loader\RoutingCollection
-     */
-    private $collection;
-
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -58,7 +48,7 @@ class DatabaseParser implements RoutingParserInterface
     /**
      * @inheritDoc
      */
-    public function getCollection(?FilterInterface $filter = null)
+    public function getCollection(?FilterInterface $filter = null): \PSX\Framework\Loader\RoutingCollection
     {
         $key = $filter !== null ? $filter->getId() : '0';
 
