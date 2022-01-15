@@ -130,7 +130,7 @@ class Transaction
         }
     }
 
-    public function execute(int $transactionId, array $parameters): string
+    public function execute(string $transactionId, array $parameters): string
     {
         $transaction = $this->createTransaction($transactionId);
         $provider    = $this->providerFactory->factory($transaction->getProvider());
@@ -182,7 +182,7 @@ class Transaction
         );
     }
 
-    private function createTransaction(int $transactionId): TransactionModel
+    private function createTransaction(string $transactionId): TransactionModel
     {
         $result = $this->transactionTable->findOneByTransactionId($transactionId);
         if (empty($result)) {
@@ -244,7 +244,7 @@ class Transaction
             $row->getStatus(),
             $row->getProvider(),
             $row->getTransactionId(),
-            $row->getRemoteId(),
+            $row->getRemoteId() ?? '',
             $row->getAmount(),
             $row->getReturnUrl(),
             $row->getUpdateDate(),

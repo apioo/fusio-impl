@@ -26,6 +26,7 @@ use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service;
 use Fusio\Impl\Service\Action\Invoker as ActionInvoker;
 use Fusio\Impl\Table;
+use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\RequestInterface;
 use PSX\Schema\SchemaTraverser;
 
@@ -38,58 +39,26 @@ use PSX\Schema\SchemaTraverser;
  */
 class InvokerFactory
 {
-    /**
-     * @var \Fusio\Impl\Service\Action\Invoker
-     */
-    private $actionInvoker;
+    private ActionInvoker $actionInvoker;
+    private Table\Route\Method $methodTable;
+    private Loader $schemaLoader;
+    private Service\Security\TokenValidator $tokenValidator;
+    private Service\Rate $rateService;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
-
-    /**
-     * @var \Fusio\Impl\Schema\Loader
-     */
-    private $schemaLoader;
-
-    /**
-     * @var \Fusio\Impl\Service\Security\TokenValidator
-     */
-    private $tokenValidator;
-
-    /**
-     * @var \Fusio\Impl\Service\Rate
-     */
-    private $rateService;
-
-    /**
-     * @var \PSX\Schema\SchemaTraverser
-     */
-    private $schemaTraverser;
-
-    /**
-     * @param ActionInvoker $actionInvoker
-     * @param Table\Route\Method $methodTable
-     * @param Loader $schemaLoader
-     * @param Service\Security\TokenValidator $tokenValidator
-     * @param Service\Rate $rateService
-     */
     public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable, Loader $schemaLoader, Service\Security\TokenValidator $tokenValidator, Service\Rate $rateService)
     {
-        $this->actionInvoker    = $actionInvoker;
-        $this->methodTable      = $methodTable;
-        $this->schemaLoader     = $schemaLoader;
-        $this->tokenValidator   = $tokenValidator;
-        $this->rateService      = $rateService;
-        $this->schemaTraverser  = new SchemaTraverser();
+        $this->actionInvoker  = $actionInvoker;
+        $this->methodTable    = $methodTable;
+        $this->schemaLoader   = $schemaLoader;
+        $this->tokenValidator = $tokenValidator;
+        $this->rateService    = $rateService;
     }
 
-    public function createByFramework(RequestInterface $request): Invoker
+    public function createByFramework(HttpContextInterface $context): Invoker
     {
         $invoker = new Invoker($this->actionInvoker, $this->methodTable);
-        $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $request->getHeader('Authorization')));
-        $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1'));
+        $invoker->addMiddleware(new Middleware\Authentication($this->tokenValidator, $context->getHeader('Authorization')));
+        $invoker->addMiddleware(new Middleware\RequestLimit($this->rateService, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1'));
         $invoker->addMiddleware(new Middleware\ValidateSchema($this->schemaLoader));
 
         return $invoker;

@@ -37,20 +37,12 @@ use PSX\Uri\Url;
  */
 class HTTP implements SenderInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public function accept($dispatcher)
+    public function accept(object $dispatcher): bool
     {
         return $dispatcher instanceof ClientInterface;
     }
 
-    /**
-     * @param \PSX\Http\Client\ClientInterface $dispatcher
-     * @param \Fusio\Impl\Service\Event\Message $message
-     * @return integer
-     */
-    public function send($dispatcher, Message $message)
+    public function send(object $dispatcher, Message $message): int
     {
         $headers = [
             'Content-Type' => 'application/json',

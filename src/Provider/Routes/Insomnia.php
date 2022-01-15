@@ -41,12 +41,12 @@ use PSX\Api\Util\Inflection;
  */
 class Insomnia implements ProviderInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Insomnia';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
         if (!$import instanceof \stdClass) {
@@ -80,7 +80,7 @@ class Insomnia implements ProviderInterface
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Insomnia JSON export'));
     }

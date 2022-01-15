@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Provider\Routes;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Fusio\Adapter\Http\Action\HttpEngine;
 use Fusio\Adapter\Http\Action\HttpProcessor;
-use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -105,9 +103,7 @@ class OpenAPI implements ProviderInterface
         $data = \json_decode($schema);
         $baseUrl = $data->servers[0]->url ?? '';
 
-        $reader = new SimpleAnnotationReader();
-        $reader->addNamespace('PSX\\Schema\\Annotation');
-        $parser = new \PSX\Api\Parser\OpenAPI($reader);
+        $parser = new \PSX\Api\Parser\OpenAPI();
 
         return $parser->parse($schema);
     }

@@ -130,7 +130,6 @@ class Container extends DefaultContainer
         ));
 
         $factory->add(new Authorization\AuthorizationCode(
-            $this->get('app_code_service'),
             $this->get('app_token_service'),
             $this->get('scope_service'),
             $this->get('table_manager')->getTable(Table\App\Code::class),

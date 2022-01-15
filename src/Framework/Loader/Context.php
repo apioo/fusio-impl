@@ -36,16 +36,16 @@ use PSX\Framework\Loader\Context as FrameworkContext;
  */
 class Context extends FrameworkContext
 {
-    private int $routeId;
-    private int $categoryId;
-    private AppInterface $app;
-    private UserInterface $user;
-    private TokenInterface $token;
-    private int $logId;
-    private array $method;
+    private ?int $routeId = null;
+    private ?int $categoryId = null;
+    private ?AppInterface $app = null;
+    private ?UserInterface $user = null;
+    private ?TokenInterface $token = null;
+    private ?int $logId = null;
+    private ?array $method = null;
     private ?UserContext $userContext = null;
 
-    public function getRouteId(): int
+    public function getRouteId(): ?int
     {
         return $this->routeId;
     }
@@ -55,7 +55,7 @@ class Context extends FrameworkContext
         $this->routeId = $routeId;
     }
 
-    public function getCategoryId(): int
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
@@ -65,12 +65,12 @@ class Context extends FrameworkContext
         $this->categoryId = $categoryId;
     }
 
-    public function getApp(): AppInterface
+    public function getApp(): ?AppInterface
     {
         return $this->app;
     }
 
-    public function getAppId(): int
+    public function getAppId(): ?int
     {
         return $this->app->getId();
     }
@@ -80,12 +80,12 @@ class Context extends FrameworkContext
         $this->app = $app;
     }
 
-    public function getUser(): UserInterface
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->user->getId();
     }
@@ -95,7 +95,7 @@ class Context extends FrameworkContext
         $this->user = $user;
     }
 
-    public function getToken(): TokenInterface
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }
@@ -105,7 +105,7 @@ class Context extends FrameworkContext
         $this->token = $token;
     }
 
-    public function getLogId(): int
+    public function getLogId(): ?int
     {
         return $this->logId;
     }
@@ -115,7 +115,7 @@ class Context extends FrameworkContext
         $this->logId = $logId;
     }
 
-    public function getMethod(): array
+    public function getMethod(): ?array
     {
         return $this->method;
     }

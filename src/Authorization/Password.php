@@ -63,7 +63,7 @@ class Password extends PasswordAbstract
         $condition->equals('app_secret', $credentials->getClientSecret());
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
-        $app = $this->appTable->getOneBy($condition);
+        $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {
             throw new InvalidClientException('Unknown credentials');
         }

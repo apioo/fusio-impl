@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Connection;
  */
 class ConnectionCallback extends ActionAbstract
 {
-    /**
-     * @var Connection\Token
-     */
-    private $tokenService;
+    private Connection\Token $tokenService;
 
     public function __construct(Connection\Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->fetchByCode(
             $request->get('name'),

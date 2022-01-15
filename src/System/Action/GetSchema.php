@@ -41,15 +41,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetSchema extends ActionAbstract
 {
-    /**
-     * @var View\Schema
-     */
-    private $table;
-
-    /**
-     * @var Loader
-     */
-    private $loader;
+    private View\Schema $table;
+    private Loader $loader;
 
     public function __construct(TableManagerInterface $tableManager, Loader $loader)
     {
@@ -57,7 +50,7 @@ class GetSchema extends ActionAbstract
         $this->loader = $loader;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $schema = $this->table->getEntityWithForm(
             $request->get('name')

@@ -100,9 +100,9 @@ class Schema extends ViewAbstract
     public function getEntityWithForm($name)
     {
         if (is_numeric($name)) {
-            $method = 'get';
+            $method = 'find';
         } else {
-            $method = 'getOneByName';
+            $method = 'findOneByName';
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [

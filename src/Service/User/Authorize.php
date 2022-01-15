@@ -195,7 +195,7 @@ class Authorize
         $condition->equals('user_id', $userId);
         $condition->equals('app_id', $appId);
 
-        $userApp = $this->userGrantTable->getOneBy($condition);
+        $userApp = $this->userGrantTable->findOneBy($condition);
 
         if (empty($userApp)) {
             $record = new Table\Generated\UserGrantRow([
