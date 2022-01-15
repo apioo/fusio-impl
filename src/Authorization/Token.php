@@ -21,6 +21,8 @@
 
 namespace Fusio\Impl\Authorization;
 
+use PSX\Dependency\Attribute\Inject;
+use PSX\Framework\Oauth2\GrantTypeFactory;
 use PSX\Framework\Oauth2\TokenAbstract;
 
 /**
@@ -32,9 +34,6 @@ use PSX\Framework\Oauth2\TokenAbstract;
  */
 class Token extends TokenAbstract
 {
-    /**
-     * @Inject("grant_type_factory")
-     * @var \PSX\Framework\Oauth2\GrantTypeFactory
-     */
-    protected $grantTypeFactory;
+    #[Inject('grant_type_factory')]
+    protected GrantTypeFactory $grantTypeFactory;
 }

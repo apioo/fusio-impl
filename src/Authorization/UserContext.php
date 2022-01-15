@@ -32,48 +32,48 @@ use Fusio\Engine\ContextInterface;
  */
 class UserContext
 {
-    protected $userId;
-    protected $appId;
-    protected $ip;
+    private int $userId;
+    private int $appId;
+    private string $ip;
 
-    public function __construct($userId, $appId, $ip)
+    public function __construct(int $userId, int $appId, string $ip)
     {
         $this->userId = $userId;
         $this->appId  = $appId;
         $this->ip     = $ip;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    public function getAppId()
+    public function getAppId(): int
     {
         return $this->appId;
     }
 
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
 
-    public static function newContext($userId, $appId = null)
+    public static function newContext(int $userId, ?int $appId = null): self
     {
-        return new UserContext($userId, $appId, isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1');
+        return new UserContext($userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
     }
 
-    public static function newAnonymousContext()
-    {
-        return self::newContext(1, 1);
-    }
-
-    public static function newCommandContext()
+    public static function newAnonymousContext(): self
     {
         return self::newContext(1, 1);
     }
 
-    public static function newActionContext(ContextInterface $context)
+    public static function newCommandContext(): self
+    {
+        return self::newContext(1, 1);
+    }
+
+    public static function newActionContext(ContextInterface $context): self
     {
         return self::newContext($context->getUser()->getId(), $context->getApp()->getId());
     }

@@ -25,9 +25,11 @@ use Fusio\Impl\Service;
 use Fusio\Impl\Table;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\PasswordAbstract;
+use PSX\Oauth2\AccessToken;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
 use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\Oauth2\Grant;
 use PSX\Sql\Condition;
 
 /**
@@ -39,38 +41,12 @@ use PSX\Sql\Condition;
  */
 class Password extends PasswordAbstract
 {
-    /**
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    private $appTokenService;
+    private Service\App\Token $appTokenService;
+    private Service\Scope $scopeService;
+    private Service\User $userService;
+    private Table\App $appTable;
+    private string $expireToken;
 
-    /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    private $scopeService;
-
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
-
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
-
-    /**
-     * @var string
-     */
-    private $expireToken;
-
-    /**
-     * @param \Fusio\Impl\Service\App\Token $appTokenService
-     * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param string $expireToken
-     */
     public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, string $expireToken)
     {
         $this->appTokenService = $appTokenService;
@@ -80,14 +56,7 @@ class Password extends PasswordAbstract
         $this->expireToken     = $expireToken;
     }
 
-    /**
-     * @param \PSX\Framework\Oauth2\Credentials $credentials
-     * @param string $username
-     * @param string $password
-     * @param string $scope
-     * @return \PSX\Oauth2\AccessToken
-     */
-    protected function generate(Credentials $credentials, $username, $password, $scope)
+    protected function generate(Credentials $credentials, Grant\Password $grant): AccessToken
     {
         $condition = new Condition();
         $condition->equals('app_key', $credentials->getClientId());
@@ -100,11 +69,12 @@ class Password extends PasswordAbstract
         }
 
         // check user
-        $userId = $this->userService->authenticateUser($username, $password);
+        $userId = $this->userService->authenticateUser($grant->getUsername(), $grant->getPassword());
         if (empty($userId)) {
             throw new InvalidGrantException('Unknown user');
         }
 
+        $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
             $scope = implode(',', $this->userService->getAvailableScopes($userId));

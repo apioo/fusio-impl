@@ -23,12 +23,11 @@ namespace Fusio\Impl\Authorization;
 
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Fusio\Impl\Table\App;
 use PSX\Framework\Oauth2\Credentials;
 use PSX\Framework\Oauth2\GrantType\ClientCredentialsAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
-use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\Oauth2\Grant;
 use PSX\Sql\Condition;
 
 /**
@@ -40,38 +39,12 @@ use PSX\Sql\Condition;
  */
 class ClientCredentials extends ClientCredentialsAbstract
 {
-    /**
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    private $appTokenService;
+    private Service\App\Token $appTokenService;
+    private Service\Scope $scopeService;
+    private Service\User $userService;
+    private Table\App $appTable;
+    private string $expireToken;
 
-    /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    private $scopeService;
-
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
-
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
-
-    /**
-     * @var string
-     */
-    private $expireToken;
-
-    /**
-     * @param \Fusio\Impl\Service\App\Token $appTokenService
-     * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param string $expireToken
-     */
     public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\User $userService, Table\App $appTable, string $expireToken)
     {
         $this->appTokenService = $appTokenService;
@@ -81,12 +54,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         $this->expireToken     = $expireToken;
     }
 
-    /**
-     * @param \PSX\Framework\Oauth2\Credentials $credentials
-     * @param string $scope
-     * @return \PSX\Oauth2\AccessToken
-     */
-    protected function generate(Credentials $credentials, $scope)
+    protected function generate(Credentials $credentials, Grant\ClientCredentials $grant)
     {
         // check whether the credentials contain an app key and secret
         $app = $this->getApp($credentials->getClientId(), $credentials->getClientSecret());
@@ -103,6 +71,7 @@ class ClientCredentials extends ClientCredentialsAbstract
             throw new InvalidClientException('Unknown credentials');
         }
 
+        $scope = $grant->getScope();
         if (empty($scope)) {
             // as fallback simply use all scopes assigned to the user
             $scope = implode(',', $this->userService->getAvailableScopes($userId));
@@ -119,7 +88,7 @@ class ClientCredentials extends ClientCredentialsAbstract
             $appId === null ? 1 : $appId,
             $userId,
             $scopes,
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->expireToken)
         );
     }
@@ -131,7 +100,7 @@ class ClientCredentials extends ClientCredentialsAbstract
         $condition->equals('app_secret', $appSecret);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
-        $app = $this->appTable->getOneBy($condition);
+        $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {
             return null;
         }

@@ -21,7 +21,11 @@
 
 namespace Fusio\Impl\Authorization;
 
+use Doctrine\DBAL\Connection;
 use Fusio\Impl\Controller\Filter\Authentication;
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Service\Security\TokenValidator;
+use PSX\Dependency\Attribute\Inject;
 use PSX\Http\Filter\UserAgentEnforcer;
 
 /**
@@ -33,27 +37,17 @@ use PSX\Http\Filter\UserAgentEnforcer;
  */
 trait ProtectionTrait
 {
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    protected $context;
+    protected Context $context;
 
-    /**
-     * @Inject
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    #[Inject]
+    protected Connection $connection;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Security\TokenValidator
-     */
-    protected $securityTokenValidator;
+    #[Inject]
+    protected TokenValidator $securityTokenValidator;
 
     public function getPreFilter()
     {
-        // it is required for every request to have an user agent which
-        // identifies the client
+        // it is required for every request to have an user agent which identifies the client
         $filter[] = new UserAgentEnforcer();
 
         $filter[] = new Authentication(
