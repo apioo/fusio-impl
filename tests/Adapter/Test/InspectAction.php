@@ -36,12 +36,12 @@ use PSX\Http\Exception as StatusCode;
  */
 class InspectAction extends ActionAbstract
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Inspect-Action';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $throw = $request->getParameter('throw');
         if ($throw) {

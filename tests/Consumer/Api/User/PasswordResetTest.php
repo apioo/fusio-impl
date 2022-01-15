@@ -115,7 +115,7 @@ JSON;
         $body = (string) $response->getBody();
         $data = json_decode($body, true);
 
-        $this->assertEquals(500, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertEquals('/ the following properties are required: email', substr($data['message'], 0, 46), $body);
     }
 

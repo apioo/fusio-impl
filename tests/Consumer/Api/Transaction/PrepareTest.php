@@ -106,7 +106,7 @@ JSON;
 }
 JSON;
 
-        $this->assertEquals(500, $response->getStatusCode(), $body);
+        $this->assertEquals(400, $response->getStatusCode(), $body);
         $this->assertJsonStringEqualsJsonString($expect, $body, $body);
     }
 

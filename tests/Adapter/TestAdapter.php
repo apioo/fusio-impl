@@ -32,7 +32,7 @@ use Fusio\Engine\AdapterInterface;
  */
 class TestAdapter implements AdapterInterface
 {
-    public function getDefinition()
+    public function getDefinition(): string
     {
         return __DIR__ . '/definition.json';
     }
