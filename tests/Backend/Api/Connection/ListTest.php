@@ -64,10 +64,6 @@ class ListTest extends ControllerDbTestCase
 {
     "connections": [
         {
-            "name": "FTP",
-            "class": "Fusio\\Adapter\\File\\Connection\\Ftp"
-        },
-        {
             "name": "GraphQL",
             "class": "Fusio\\Adapter\\GraphQL\\Connection\\GraphQL"
         },

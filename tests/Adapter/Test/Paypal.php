@@ -36,7 +36,7 @@ use Fusio\Engine\Payment\ProviderInterface;
  */
 class Paypal implements ProviderInterface
 {
-    public function prepare($connection, ProductInterface $product, TransactionInterface $transaction, PrepareContext $context)
+    public function prepare(mixed $connection, ProductInterface $product, TransactionInterface $transaction, PrepareContext $context): string
     {
         // here the payment provider needs to create the transaction using the
         // remote connection and return an approval url
@@ -46,7 +46,7 @@ class Paypal implements ProviderInterface
         return $approvalUrl;
     }
 
-    public function execute($connection, ProductInterface $product, TransactionInterface $transaction, ParametersInterface $parameters)
+    public function execute(mixed $connection, ProductInterface $product, TransactionInterface $transaction, ParametersInterface $parameters): void
     {
         // here the payment provider needs to execute the transaction and set
         // the transaction to approved
