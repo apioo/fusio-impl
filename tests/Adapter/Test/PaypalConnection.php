@@ -35,17 +35,17 @@ use Fusio\Engine\ParametersInterface;
  */
 class PaypalConnection implements ConnectionInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Paypal-Connection';
     }
 
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): mixed
     {
         return new \stdClass();
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
     }
 }

@@ -41,15 +41,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class Revoke extends ActionAbstract
 {
-    /**
-     * @var Service\App\Token
-     */
-    private $appTokenService;
-
-    /**
-     * @var Table\App\Token
-     */
-    private $table;
+    private Service\App\Token $appTokenService;
+    private Table\App\Token $table;
 
     public function __construct(Service\App\Token $appTokenService, TableManagerInterface $tableManager)
     {
@@ -57,7 +50,7 @@ class Revoke extends ActionAbstract
         $this->table = $tableManager->getTable(Table\App\Token::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         if ($request instanceof HttpRequest) {
             $token = $this->getTokenByHttp($request);
@@ -83,8 +76,8 @@ class Revoke extends ActionAbstract
     {
         $header = $request->getHeader('Authorization');
         $parts  = explode(' ', $header, 2);
-        $type   = isset($parts[0]) ? $parts[0] : null;
-        $token  = isset($parts[1]) ? $parts[1] : null;
+        $type   = $parts[0] ?? null;
+        $token  = $parts[1] ?? null;
 
         if ($type !== 'Bearer') {
             throw new StatusCode\BadRequestException('Invalid token type');

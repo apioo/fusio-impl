@@ -60,7 +60,7 @@ class UserContext
 
     public static function newContext(int $userId, ?int $appId = null): self
     {
-        return new UserContext($userId, $appId, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
+        return new UserContext($userId, $appId ?? 1, $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1');
     }
 
     public static function newAnonymousContext(): self
