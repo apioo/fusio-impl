@@ -38,15 +38,8 @@ use PSX\Http\ResponseInterface;
  */
 class Authentication implements FilterInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Security\TokenValidator
-     */
-    private $tokenValidator;
-
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    private $context;
+    private TokenValidator $tokenValidator;
+    private Context $context;
 
     public function __construct(TokenValidator $tokenValidator, Context $context)
     {
@@ -54,7 +47,7 @@ class Authentication implements FilterInterface
         $this->context        = $context;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $success = $this->tokenValidator->assertAuthorization(
             $request->getMethod(),

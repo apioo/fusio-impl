@@ -39,30 +39,16 @@ use PSX\Http\ResponseInterface;
  */
 class AssertMethod implements FilterInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Route\Method
-     */
-    private $routesMethodService;
+    private Service\Route\Method $routesMethodService;
+    private Context $context;
 
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    private $context;
-
-    /**
-     * @param \Fusio\Impl\Service\Route\Method $routesMethodService
-     * @param \Fusio\Impl\Framework\Loader\Context $context
-     */
     public function __construct(Service\Route\Method $routesMethodService, Context $context)
     {
         $this->routesMethodService = $routesMethodService;
         $this->context = $context;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $routeId    = $this->context->getRouteId();
         $methodName = $request->getMethod();
@@ -100,18 +86,15 @@ class AssertMethod implements FilterInterface
     }
 
     /**
-     * Returns the version number which was submitted by the client in the
-     * accept header field
-     *
-     * @return integer
+     * Returns the version number which was submitted by the client in the accept header field
      */
-    private function getSubmittedVersionNumber(RequestInterface $request)
+    private function getSubmittedVersionNumber(RequestInterface $request): ?string
     {
         $accept  = $request->getHeader('Accept');
         $matches = array();
 
         preg_match('/^application\/vnd\.([a-z.-_]+)\.v([\d]+)\+([a-z]+)$/', $accept, $matches);
 
-        return isset($matches[2]) ? $matches[2] : null;
+        return $matches[2] ?? null;
     }
 }
