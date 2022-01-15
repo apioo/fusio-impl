@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Scope;
 use Fusio\Model\Backend\Scope_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -57,9 +58,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Scope successful created',
-        ];
+        ]);
     }
 }

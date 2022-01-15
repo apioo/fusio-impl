@@ -30,6 +30,7 @@ use Fusio\Model\Backend\Action_Create;
 use Fusio\Model\Backend\Connection_Create;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -58,9 +59,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Connection successful created',
-        ];
+        ]);
     }
 }

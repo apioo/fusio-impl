@@ -29,6 +29,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Plan;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Plan_Contract_Create;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -63,9 +64,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Contract successful created',
-        ];
+        ]);
     }
 }

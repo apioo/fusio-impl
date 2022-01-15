@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
 use Fusio\Model\Backend\Cronjob_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -57,9 +58,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'Cronjob successful created',
-        ];
+        ]);
     }
 }
