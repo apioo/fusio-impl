@@ -57,7 +57,7 @@ class Contract extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan\Contract::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                     'id' => $this->fieldInteger('id'),

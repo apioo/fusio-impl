@@ -65,7 +65,7 @@ class User extends ViewAbstract
             'totalResults' => $this->getTable(Table\User::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'roleId' => $this->fieldInteger('role_id'),
                 'provider' => 'provider',

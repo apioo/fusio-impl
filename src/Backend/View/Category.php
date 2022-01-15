@@ -64,7 +64,7 @@ class Category extends ViewAbstract
             'totalResults' => $this->getTable(Table\Category::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',

@@ -53,7 +53,7 @@ class Token extends ViewAbstract
             'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['token'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, Sql::SORT_DESC, Fields::blacklist(['token'])], [
                 'id' => $this->fieldInteger('id'),
                 'appId' => $this->fieldInteger('app_id'),
                 'userId' => $this->fieldInteger('user_id'),

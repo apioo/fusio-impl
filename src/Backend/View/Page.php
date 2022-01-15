@@ -66,7 +66,7 @@ class Page extends ViewAbstract
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'title' => 'title',

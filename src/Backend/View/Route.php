@@ -66,7 +66,7 @@ class Route extends ViewAbstract
             'totalResults' => $this->getTable(Table\Route::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Route::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Route::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'path' => 'path',
@@ -77,9 +77,17 @@ class Route extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Route::class), 'find'], [$this->resolveId($id)], [
+        if (str_starts_with($id, '~')) {
+            $method = 'findOneByName';
+            $id = urldecode(substr($id, 1));
+        } else {
+            $method = 'find';
+            $id = (int) $id;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Route::class), $method], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'path' => 'path',
@@ -195,15 +203,5 @@ class Route extends ViewAbstract
         ];
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Route::class)->getOneByPath(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

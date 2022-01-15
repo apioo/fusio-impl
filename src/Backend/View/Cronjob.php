@@ -66,7 +66,7 @@ class Cronjob extends ViewAbstract
             'totalResults' => $this->getTable(Table\Cronjob::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -79,9 +79,17 @@ class Cronjob extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Cronjob::class), 'find'], [$this->resolveId($id)], [
+        if (str_starts_with($id, '~')) {
+            $method = 'findOneByName';
+            $id = urldecode(substr($id, 1));
+        } else {
+            $method = 'find';
+            $id = (int) $id;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Cronjob::class), $method], [$id], [
             'id' => 'id',
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -89,7 +97,7 @@ class Cronjob extends ViewAbstract
             'action' => 'action',
             'executeDate' => $this->fieldDateTime('execute_date'),
             'exitCode' => $this->fieldInteger('exit_code'),
-            'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'getByCronjob_id'], [new Reference('id')], [
+            'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'findByCronjobId'], [new Reference('id')], [
                 'message' => 'message',
                 'trace' => 'trace',
                 'file' => 'file',
@@ -98,15 +106,5 @@ class Cronjob extends ViewAbstract
         ]);
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Cronjob::class)->getOneByName(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

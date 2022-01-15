@@ -66,7 +66,7 @@ class App extends ViewAbstract
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
                 'id' => $this->fieldInteger('id'),
                 'userId' => $this->fieldInteger('user_id'),
                 'status' => $this->fieldInteger('status'),

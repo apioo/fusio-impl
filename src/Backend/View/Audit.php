@@ -52,7 +52,7 @@ class Audit extends ViewAbstract
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'event' => 'event',
                 'ip' => 'ip',
