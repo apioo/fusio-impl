@@ -39,17 +39,14 @@ use PSX\Oauth2\AccessToken;
  */
 class Refresh extends ActionAbstract
 {
-    /**
-     * @var UserLogin
-     */
-    private $loginService;
+    private UserLogin $loginService;
 
     public function __construct(UserLogin $loginService)
     {
         $this->loginService = $loginService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

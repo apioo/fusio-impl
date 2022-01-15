@@ -38,17 +38,14 @@ use Fusio\Model\Consumer\Event_Subscription_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Subscription
-     */
-    private $subscriptionService;
+    private Subscription $subscriptionService;
 
     public function __construct(Subscription $subscriptionService)
     {
         $this->subscriptionService = $subscriptionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

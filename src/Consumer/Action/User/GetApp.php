@@ -40,15 +40,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetApp extends ActionAbstract
 {
-    /**
-     * @var View\App
-     */
-    private $table;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private View\App $table;
+    private Config $config;
 
     public function __construct(TableManagerInterface $tableManager, Config $config)
     {
@@ -56,7 +49,7 @@ class GetApp extends ActionAbstract
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->table->getEntityByAppKey(
             $request->get('client_id'),

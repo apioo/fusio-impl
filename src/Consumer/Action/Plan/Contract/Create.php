@@ -38,17 +38,14 @@ use Fusio\Model\Consumer\Plan_Order_Request;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Order
-     */
-    private $orderService;
+    private Order $orderService;
 
     public function __construct(Order $orderService)
     {
         $this->orderService = $orderService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

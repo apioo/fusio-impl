@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Consumer\Subscription;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Subscription
-     */
-    private $subscriptionService;
+    private Subscription $subscriptionService;
 
     public function __construct(Subscription $subscriptionService)
     {
         $this->subscriptionService = $subscriptionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->subscriptionService->delete(
             (int) $request->get('subscription_id'),

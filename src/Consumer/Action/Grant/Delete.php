@@ -37,17 +37,14 @@ use Fusio\Impl\Service\App\Grant;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Grant
-     */
-    private $grantService;
+    private Grant $grantService;
 
     public function __construct(Grant $grantService)
     {
         $this->grantService = $grantService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->grantService->delete(
             (int) $request->get('grant_id'),

@@ -37,17 +37,14 @@ use Fusio\Model\Consumer\User_Register;
  */
 class Register extends ActionAbstract
 {
-    /**
-     * @var UserRegister
-     */
-    private $registerService;
+    private UserRegister $registerService;
 
     public function __construct(UserRegister $registerService)
     {
         $this->registerService = $registerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
