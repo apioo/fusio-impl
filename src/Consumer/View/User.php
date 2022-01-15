@@ -36,7 +36,7 @@ class User extends ViewAbstract
 {
     public function getEntity(int $id, array $userAttributes = null)
     {
-        $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'roleId' => $this->fieldInteger('role_id'),
             'status' => $this->fieldInteger('status'),
@@ -44,7 +44,7 @@ class User extends ViewAbstract
             'email' => 'email',
             'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'getByUser_id'], [new Reference('id')], [
+            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
                 'name' => 'name',
                 'value' => 'value',
             ], null, function(array $result) use ($userAttributes){

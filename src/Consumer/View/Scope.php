@@ -63,16 +63,10 @@ class Scope extends ViewAbstract
         return $this->build($definition);
     }
 
-    /**
-     * @param array $fields
-     * @param \PSX\Sql\Condition $condition
-     * @param string $orderBy
-     * @return string
-     */
-    private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
+    private function getBaseQuery(array $fields, Condition $condition, ?string $orderBy = null): string
     {
         $fields  = implode(',', $fields);
-        $where   = $condition->getStatment($this->connection->getDatabasePlatform());
+        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
         $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
 
         return <<<SQL

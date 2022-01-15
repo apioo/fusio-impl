@@ -51,7 +51,7 @@ class App extends ViewAbstract
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => 16,
-            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'getAll'], [$startIndex, 16, null, Sql::SORT_DESC, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, 16, null, Sql::SORT_DESC, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
                 'id' => $this->fieldInteger('id'),
                 'userId' => $this->fieldInteger('user_id'),
                 'status' => $this->fieldInteger('status'),
@@ -64,14 +64,14 @@ class App extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $appId)
+    public function getEntity(int $userId, int $appId)
     {
         $condition = new Condition();
         $condition->equals('id', $appId);
         $condition->equals('user_id', $userId);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
             'userId' => $this->fieldInteger('user_id'),
             'status' => $this->fieldInteger('status'),
@@ -102,7 +102,7 @@ class App extends ViewAbstract
         $condition->equals('status', Table\App::STATUS_ACTIVE);
         $condition->equals('app_key', $appKey);
 
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'getOneBy'], [$condition, Fields::blacklist(['user_id', 'status', 'parameters', 'app_key', 'app_secret', 'date'])], [
+        $definition = $this->doEntity([$this->getTable(Table\App::class), 'findOneBy'], [$condition, Fields::blacklist(['user_id', 'status', 'parameters', 'app_key', 'app_secret', 'date'])], [
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'url' => 'url',

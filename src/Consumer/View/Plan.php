@@ -50,7 +50,7 @@ class Plan extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'getAll'], [$startIndex, $count, 'price', Sql::SORT_ASC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, 'price', Sql::SORT_ASC], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
@@ -63,13 +63,13 @@ class Plan extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $planId)
+    public function getEntity(int $userId, int $planId)
     {
         $condition = new Condition();
         $condition->equals('id', $planId);
         $condition->equals('status', Table\Plan::STATUS_ACTIVE);
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'findOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
