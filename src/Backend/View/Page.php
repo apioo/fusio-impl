@@ -66,7 +66,7 @@ class Page extends ViewAbstract
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'title' => 'title',
@@ -80,7 +80,7 @@ class Page extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'title' => 'title',

@@ -68,7 +68,7 @@ class Connection extends ViewAbstract
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['class', 'config'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['class', 'config'])], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -80,7 +80,7 @@ class Connection extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'find'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -92,7 +92,7 @@ class Connection extends ViewAbstract
 
     public function getEntityWithConfig($id, $secretKey, ParserInterface $connectionParser)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Connection::class), 'find'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',

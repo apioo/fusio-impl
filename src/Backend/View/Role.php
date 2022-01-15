@@ -65,7 +65,7 @@ class Role extends ViewAbstract
             'totalResults' => $this->getTable(Table\Role::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Role::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Role::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'categoryId' => $this->fieldInteger('category_id'),
                 'status' => $this->fieldInteger('status'),
@@ -78,7 +78,7 @@ class Role extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Role::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Role::class), 'find'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'categoryId' => $this->fieldInteger('category_id'),
             'status' => $this->fieldInteger('status'),

@@ -65,7 +65,7 @@ class User extends ViewAbstract
             'totalResults' => $this->getTable(Table\User::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'roleId' => $this->fieldInteger('role_id'),
                 'provider' => 'provider',
@@ -81,7 +81,7 @@ class User extends ViewAbstract
 
     public function getEntity($id, array $userAttributes = null)
     {
-        $definition = $this->doEntity([$this->getTable(Table\User::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'roleId' => $this->fieldInteger('role_id'),
             'provider' => $this->fieldInteger('provider'),
@@ -90,7 +90,7 @@ class User extends ViewAbstract
             'email' => 'email',
             'points' => $this->fieldInteger('points'),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
-            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'getByUser_id'], [new Reference('id')], [
+            'apps' => $this->doCollection([$this->getTable(Table\App::class), 'findByUserId'], [new Reference('id')], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -98,10 +98,10 @@ class User extends ViewAbstract
                 'appKey' => 'app_key',
                 'date' => 'date',
             ]),
-            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'getByUser_id'], [new Reference('id')], [
+            'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
                 'name' => 'name',
                 'value' => 'value',
-            ], null, function(array $result) use ($userAttributes){
+            ], null, function (array $result) use ($userAttributes) {
                 $values = [];
                 foreach ($result as $row) {
                     $values[$row['name']] = $row['value'];

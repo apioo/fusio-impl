@@ -57,13 +57,13 @@ class Contract extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan\Contract::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
                 'id' => $this->fieldInteger('id'),
-                'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                 ]),
-                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
+                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('plan_id')], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                 ]),
@@ -80,13 +80,13 @@ class Contract extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
             ]),
-            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
+            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('plan_id')], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
             ]),

@@ -65,7 +65,7 @@ class Scope extends ViewAbstract
             'totalResults' => $this->getTable(Table\Scope::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
@@ -77,7 +77,7 @@ class Scope extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'find'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
@@ -96,7 +96,7 @@ class Scope extends ViewAbstract
     public function getCategories()
     {
         $definition = [
-            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'getAll'], [0, 1024, 'name', Sql::SORT_ASC], [
+            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [0, 1024, 'name', Sql::SORT_ASC], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'getByCategory_id'], [new Reference('id'), null, 0, 1024, 'name', Sql::SORT_ASC], [

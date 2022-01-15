@@ -66,7 +66,7 @@ class Schema extends ViewAbstract
             'totalResults' => $this->getTable(Table\Schema::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['propertyName', 'source', 'cache'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'findAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['propertyName', 'source', 'cache'])], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -78,7 +78,7 @@ class Schema extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Schema::class), 'get'], [$this->resolveId($id)], [
+        $definition = $this->doEntity([$this->getTable(Table\Schema::class), 'find'], [$this->resolveId($id)], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',

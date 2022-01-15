@@ -91,7 +91,7 @@ class Error extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Log\Error::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Log\Error::class), 'find'], [$id], [
             'id' => 'id',
             'logId' => 'log_id',
             'message' => 'message',
