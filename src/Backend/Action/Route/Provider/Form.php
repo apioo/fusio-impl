@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Route\Provider;
  */
 class Form extends ActionAbstract
 {
-    /**
-     * @var Provider
-     */
-    private $providerService;
+    private Provider $providerService;
 
     public function __construct(Provider $providerService)
     {
         $this->providerService = $providerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->providerService->getForm($request->get('provider'));
     }

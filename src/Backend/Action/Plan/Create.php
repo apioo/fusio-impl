@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Plan_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Plan
-     */
-    private $planService;
+    private Plan $planService;
 
     public function __construct(Plan $planService)
     {
         $this->planService = $planService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

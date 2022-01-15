@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Sdk;
  */
 class GetAll extends ActionAbstract
 {
-    /**
-     * @var Sdk
-     */
-    private $sdkService;
+    private Sdk $sdkService;
 
     public function __construct(Sdk $sdkService)
     {
         $this->sdkService = $sdkService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
             'types' => $this->sdkService->getTypes(),

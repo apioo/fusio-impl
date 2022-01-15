@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Action;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Action
-     */
-    private $actionService;
+    private Action $actionService;
 
     public function __construct(Action $actionService)
     {
         $this->actionService = $actionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->actionService->delete(
             (int) $request->get('action_id'),

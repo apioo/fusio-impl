@@ -37,17 +37,14 @@ use Fusio\Model\Backend\Sdk_Generate;
  */
 class Generate extends ActionAbstract
 {
-    /**
-     * @var Sdk
-     */
-    private $sdkService;
+    private Sdk $sdkService;
 
     public function __construct(Sdk $sdkService)
     {
         $this->sdkService = $sdkService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Cronjob_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Cronjob
-     */
-    private $cronjobService;
+    private Cronjob $cronjobService;
 
     public function __construct(Cronjob $cronjobService)
     {
         $this->cronjobService = $cronjobService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

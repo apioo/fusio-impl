@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Cronjob;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Cronjob
-     */
-    private $cronjobService;
+    private Cronjob $cronjobService;
 
     public function __construct(Cronjob $cronjobService)
     {
         $this->cronjobService = $cronjobService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->cronjobService->delete(
             (int) $request->get('cronjob_id'),

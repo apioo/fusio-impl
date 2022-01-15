@@ -40,17 +40,14 @@ use Fusio\Impl\Service\Connection;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Connection
-     */
-    private $connectionService;
+    private Connection $connectionService;
 
     public function __construct(Connection $connectionService)
     {
         $this->connectionService = $connectionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

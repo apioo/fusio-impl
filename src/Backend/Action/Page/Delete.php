@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Page;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Page
-     */
-    private $pageService;
+    private Page $pageService;
 
     public function __construct(Page $pageService)
     {
         $this->pageService = $pageService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->pageService->delete(
             (int) $request->get('page_id'),

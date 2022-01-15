@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Scope_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Scope
-     */
-    private $scopeService;
+    private Scope $scopeService;
 
     public function __construct(Scope $scopeService)
     {
         $this->scopeService = $scopeService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

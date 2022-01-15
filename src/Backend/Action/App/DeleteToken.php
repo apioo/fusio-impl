@@ -37,17 +37,14 @@ use Fusio\Impl\Service\App;
  */
 class DeleteToken extends ActionAbstract
 {
-    /**
-     * @var App\Token
-     */
-    private $tokenService;
+    private App\Token $tokenService;
 
     public function __construct(App\Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->removeToken(
             $request->get('app_id'),

@@ -38,17 +38,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetMostUsedRoutes extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\MostUsedRoutes
-     */
-    private $table;
+    private View\Statistic\MostUsedRoutes $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\MostUsedRoutes::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             $context->getUser()->getCategoryId(),

@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Role_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Role
-     */
-    private $roleService;
+    private Role $roleService;
 
     public function __construct(Role $roleService)
     {
         $this->roleService = $roleService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

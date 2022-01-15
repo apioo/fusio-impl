@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Action\Queue\Consumer;
  */
 class Async extends ActionAbstract
 {
-    /**
-     * @var Consumer
-     */
-    private $consumer;
+    private Consumer $consumer;
 
     public function __construct(Consumer $consumer)
     {
         $this->consumer = $consumer;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->consumer->execute();
 

@@ -36,17 +36,14 @@ use Fusio\Impl\Provider\ActionProviderParser;
  */
 class GetIndex extends ActionAbstract
 {
-    /**
-     * @var ActionProviderParser
-     */
-    private $actionParser;
+    private ActionProviderParser $actionParser;
 
     public function __construct(ActionProviderParser $actionParser)
     {
         $this->actionParser = $actionParser;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
             'actions' => $this->actionParser->getClasses()

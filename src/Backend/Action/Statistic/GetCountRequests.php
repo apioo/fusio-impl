@@ -38,17 +38,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetCountRequests extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\CountRequests
-     */
-    private $table;
+    private View\Statistic\CountRequests $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\CountRequests::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             $context->getUser()->getCategoryId(),

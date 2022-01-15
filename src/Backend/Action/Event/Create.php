@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Event_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Event
-     */
-    private $eventService;
+    private Event $eventService;
 
     public function __construct(Event $eventService)
     {
         $this->eventService = $eventService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

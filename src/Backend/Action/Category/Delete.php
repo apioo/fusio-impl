@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Category;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Category
-     */
-    private $categoryService;
+    private Category $categoryService;
 
     public function __construct(Category $categoryService)
     {
         $this->categoryService = $categoryService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->categoryService->delete(
             (int) $request->get('category_id'),

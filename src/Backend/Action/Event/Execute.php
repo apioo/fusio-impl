@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Event;
  */
 class Execute extends ActionAbstract
 {
-    /**
-     * @var Event\Executor
-     */
-    private $executor;
+    private Event\Executor $executor;
 
     public function __construct(Event\Executor $executor)
     {
         $this->executor = $executor;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->executor->execute();
 

@@ -38,17 +38,14 @@ use Fusio\Impl\Service\Marketplace\Installer;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Installer
-     */
-    private $installerService;
+    private Installer $installerService;
 
     public function __construct(Installer $installerService)
     {
         $this->installerService = $installerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->installerService->update(
             $request->get('app_name'),

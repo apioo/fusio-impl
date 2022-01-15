@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Scope;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Scope
-     */
-    private $scopeService;
+    private Scope $scopeService;
 
     public function __construct(Scope $scopeService)
     {
         $this->scopeService = $scopeService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->scopeService->delete(
             (int) $request->get('scope_id'),

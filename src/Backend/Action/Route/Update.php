@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Route_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Route
-     */
-    private $routeService;
+    private Route $routeService;
 
     public function __construct(Route $routeService)
     {
         $this->routeService = $routeService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

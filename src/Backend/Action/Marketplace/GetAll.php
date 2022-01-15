@@ -38,20 +38,9 @@ use PSX\Framework\Config\Config;
  */
 class GetAll extends ActionAbstract
 {
-    /**
-     * @var Marketplace\Repository\Remote
-     */
-    private $remoteRepository;
-
-    /**
-     * @var Marketplace\Repository\Local
-     */
-    private $localRepository;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Marketplace\Repository\Remote $remoteRepository;
+    private Marketplace\Repository\Local $localRepository;
+    private Config $config;
 
     public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, Config $config)
     {
@@ -60,7 +49,7 @@ class GetAll extends ActionAbstract
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $apps = $this->remoteRepository->fetchAll();
         $result = [];

@@ -37,17 +37,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetMostUsedApps extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\MostUsedApps
-     */
-    private $table;
+    private View\Statistic\MostUsedApps $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\MostUsedApps::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             View\Log\QueryFilter::create($request)

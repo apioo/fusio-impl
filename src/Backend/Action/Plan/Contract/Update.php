@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Plan_Contract_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Plan\Contract
-     */
-    private $contractService;
+    private Plan\Contract $contractService;
 
     public function __construct(Plan\Contract $contractService)
     {
         $this->contractService = $contractService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

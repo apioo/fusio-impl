@@ -37,17 +37,14 @@ use Fusio\Impl\Service\User;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var User
-     */
-    private $userService;
+    private User $userService;
 
     public function __construct(User $userService)
     {
         $this->userService = $userService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->userService->delete(
             (int) $request->get('user_id'),

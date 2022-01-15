@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Plan;
  */
 class Billing extends ActionAbstract
 {
-    /**
-     * @var Plan\BillingRun
-     */
-    private $billingRun;
+    private Plan\BillingRun $billingRun;
 
     public function __construct(Plan\BillingRun $billingRun)
     {
         $this->billingRun = $billingRun;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $generator = $this->billingRun->run();
         $count = 0;

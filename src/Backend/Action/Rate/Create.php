@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Rate_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Rate
-     */
-    private $rateService;
+    private Rate $rateService;
 
     public function __construct(Rate $rateService)
     {
         $this->rateService = $rateService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

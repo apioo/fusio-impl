@@ -38,17 +38,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetErrorsPerRoute extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\ErrorsPerRoute
-     */
-    private $table;
+    private View\Statistic\ErrorsPerRoute $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\ErrorsPerRoute::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             $context->getUser()->getCategoryId(),
