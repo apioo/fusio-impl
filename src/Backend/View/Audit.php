@@ -82,7 +82,7 @@ class Audit extends ViewAbstract
             'event' => 'event',
             'ip' => 'ip',
             'message' => 'message',
-            'content' => 'content',
+            'content' => $this->fieldJson('content'),
             'date' => $this->fieldDateTime('date'),
         ]);
 

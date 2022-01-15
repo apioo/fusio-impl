@@ -52,7 +52,7 @@ class Executor
         $this->userRepository = $userRepository;
     }
 
-    public function execute(int $actionId, Action_Execute_Request $request): mixed
+    public function execute(string|int $actionId, Action_Execute_Request $request): mixed
     {
         $body = $request->getBody();
         if ($body === null) {

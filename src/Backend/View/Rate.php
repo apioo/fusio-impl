@@ -100,7 +100,7 @@ class Rate extends ViewAbstract
                 'rateId' => $this->fieldInteger('rate_id'),
                 'routeId' => $this->fieldInteger('route_id'),
                 'appId' => $this->fieldInteger('app_id'),
-                'authenticated' => 'authenticated',
+                'authenticated' => $this->fieldBoolean('authenticated'),
                 'parameters' => 'parameters',
             ]),
         ]);

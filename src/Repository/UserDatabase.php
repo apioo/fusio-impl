@@ -97,7 +97,7 @@ class UserDatabase implements Repository\UserInterface
             $row['status'],
             $row['name'],
             $row['email'],
-            $row['points'],
+            $row['points'] ?? 0,
         );
     }
 

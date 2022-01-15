@@ -41,7 +41,7 @@ class Invoice extends Generated\PlanInvoiceTable
     public function getLastInvoiceByContract($contractId)
     {
         $condition = new Condition(['contract_id', '=', $contractId]);
-        $result    = $this->getBy($condition, null, 0, 1, 'id', Sql::SORT_DESC);
+        $result    = $this->findBy($condition, 0, 1, 'id', Sql::SORT_DESC);
 
         return $result[0] ?? null;
     }

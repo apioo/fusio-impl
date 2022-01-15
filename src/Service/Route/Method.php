@@ -60,9 +60,9 @@ class Method
     /**
      * Returns the method configuration for the provide route, version and request method
      */
-    public function getMethod(int $routeId, string $version, string $method): array
+    public function getMethod(int $routeId, ?string $version, string $method): array|false
     {
-        if ($version == '*' || empty($version)) {
+        if ($version === '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         } else {
             $version = $this->methodTable->getVersion($routeId, $version);
@@ -75,7 +75,7 @@ class Method
         return $this->methodTable->getMethod($routeId, $version, $method);
     }
 
-    public function getAllowedMethods(int $routeId, string $version): array
+    public function getAllowedMethods(int $routeId, ?string $version): array
     {
         return $this->methodTable->getAllowedMethods($routeId, $version);
     }

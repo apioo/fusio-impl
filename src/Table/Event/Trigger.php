@@ -33,24 +33,8 @@ use Fusio\Impl\Table\Generated;
  */
 class Trigger extends Generated\EventTriggerTable
 {
-    const STATUS_PENDING = 1;
-    const STATUS_DONE = 2;
-
-    public function getName(): string
-    {
-        return 'fusio_event_trigger';
-    }
-
-    public function getColumns(): array
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'event_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'payload' => self::TYPE_TEXT,
-            'insert_date' => self::TYPE_DATETIME,
-        );
-    }
+    public const STATUS_PENDING = 1;
+    public const STATUS_DONE = 2;
 
     public function getAllPending()
     {

@@ -46,7 +46,7 @@ class Token extends Generated\AppTokenTable
         $con->add('status', '=', self::STATUS_ACTIVE);
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
 
-        return $this->getBy($con);
+        return $this->findBy($con);
     }
 
     public function getTokenByRefreshToken($appId, $refreshToken)
@@ -55,7 +55,7 @@ class Token extends Generated\AppTokenTable
         $con->add('app_id', '=', $appId);
         $con->add('refresh', '=', $refreshToken);
 
-        return $this->getOneBy($con);
+        return $this->findOneBy($con);
     }
 
     public function getTokenByToken($appId, $token)
@@ -67,7 +67,7 @@ class Token extends Generated\AppTokenTable
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
         $con->add('token', '=', $token);
 
-        return $this->getOneBy($con);
+        return $this->findOneBy($con);
     }
 
     public function removeTokenFromApp($appId, $tokenId)

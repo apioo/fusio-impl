@@ -33,32 +33,12 @@ use Fusio\Impl\Table\Generated;
  */
 class Response extends Generated\EventResponseTable
 {
-    const STATUS_PENDING = 1;
-    const STATUS_DONE = 2;
-    const STATUS_EXCEEDED = 3;
+    public const STATUS_PENDING = 1;
+    public const STATUS_DONE = 2;
+    public const STATUS_EXCEEDED = 3;
 
-    const RESPONSE_LIMIT = 60;
+    public const RESPONSE_LIMIT = 60;
 
-    public function getName()
-    {
-        return 'fusio_event_response';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'trigger_id' => self::TYPE_INT,
-            'subscription_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'code' => self::TYPE_INT,
-            'attempts' => self::TYPE_INT,
-            'error' => self::TYPE_VARCHAR,
-            'execute_date' => self::TYPE_DATETIME,
-            'insert_date' => self::TYPE_DATETIME,
-        );
-    }
-    
     public function getAllPending()
     {
         $sql = 'SELECT response.id,

@@ -80,7 +80,7 @@ class Route extends ViewAbstract
     public function getEntity(string $id)
     {
         if (str_starts_with($id, '~')) {
-            $method = 'findOneByName';
+            $method = 'findOneByPath';
             $id = urldecode(substr($id, 1));
         } else {
             $method = 'find';

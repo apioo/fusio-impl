@@ -24,6 +24,7 @@ namespace Fusio\Impl\Event\Plan\Invoice;
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PlanInvoiceRow;
 
 /**
  * PayedEvent
@@ -34,28 +35,11 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class PayedEvent extends EventAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $invoiceId;
+    private int $invoiceId;
+    private PlanInvoiceRow $invoice;
+    private TransactionInterface $transaction;
 
-    /**
-     * @var array
-     */
-    protected $invoice;
-
-    /**
-     * @var \Fusio\Engine\Model\TransactionInterface
-     */
-    protected $transaction;
-
-    /**
-     * @param integer $invoiceId
-     * @param array $invoice
-     * @param \Fusio\Engine\Model\TransactionInterface $transaction
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($invoiceId, $invoice, TransactionInterface $transaction, UserContext $context)
+    public function __construct(int $invoiceId, PlanInvoiceRow $invoice, TransactionInterface $transaction, UserContext $context)
     {
         parent::__construct($context);
 
@@ -64,17 +48,17 @@ class PayedEvent extends EventAbstract
         $this->transaction = $transaction;
     }
 
-    public function getInvoiceId()
+    public function getInvoiceId(): int
     {
         return $this->invoiceId;
     }
 
-    public function getInvoice()
+    public function getInvoice(): PlanInvoiceRow
     {
         return $this->invoice;
     }
 
-    public function getTransaction()
+    public function getTransaction(): TransactionInterface
     {
         return $this->transaction;
     }

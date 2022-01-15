@@ -154,7 +154,7 @@ class Log
         return rtrim($result);
     }
 
-    protected function getBodyAsString(RequestInterface $request): string
+    protected function getBodyAsString(RequestInterface $request): ?string
     {
         $body = Util::toString($request->getBody());
         if (empty($body)) {

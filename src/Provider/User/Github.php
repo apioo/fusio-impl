@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\Model\User;
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service\Config;
 use PSX\Http\Client\ClientInterface;
@@ -30,7 +30,6 @@ use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Json\Parser;
 use PSX\Uri\Url;
-use RuntimeException;
 
 /**
  * Github

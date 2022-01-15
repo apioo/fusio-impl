@@ -59,6 +59,6 @@ class Contract extends Generated\PlanContractTable
     
     public function getActiveContracts()
     {
-        return $this->getBy(new Condition(['status', '=', self::STATUS_ACTIVE]));
+        return $this->findBy(new Condition(['status', '=', self::STATUS_ACTIVE]));
     }
 }

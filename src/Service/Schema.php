@@ -117,12 +117,12 @@ class Schema
         try {
             $this->schemaTable->beginTransaction();
 
-            $record = [
+            $record = new Table\Generated\SchemaRow([
                 'id'     => $existing['id'],
                 'name'   => $schema->getName(),
                 'source' => $this->parseSource($schema->getSource()),
                 'form'   => $this->parseForm($schema->getForm()),
-            ];
+            ]);
 
             $this->schemaTable->update($record);
 

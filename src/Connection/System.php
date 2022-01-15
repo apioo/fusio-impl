@@ -39,26 +39,19 @@ use PSX\Framework\Config\Config;
  */
 class System implements ConnectionInterface, PingableInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'System';
     }
 
-    /**
-     * @param \Fusio\Engine\ParametersInterface $config
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): DBAL\Connection
     {
         $params = $this->config->get('psx_connection');
         $config = new DBAL\Configuration();
@@ -72,11 +65,11 @@ class System implements ConnectionInterface, PingableInterface
         return DBAL\DriverManager::getConnection($params, $config);
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
     }
 
-    public function ping($connection)
+    public function ping(mixed $connection): bool
     {
         if ($connection instanceof DBAL\Connection) {
             return $connection->ping();
