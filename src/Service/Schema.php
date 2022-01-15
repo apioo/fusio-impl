@@ -47,32 +47,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Schema
 {
-    /**
-     * @var \Fusio\Impl\Table\Schema
-     */
-    private $schemaTable;
+    private Table\Schema $schemaTable;
+    private Table\Route\Method $routesMethodTable;
+    private Loader $schemaLoader;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $routesMethodTable;
-
-    /**
-     * @var \Fusio\Impl\Schema\Loader
-     */
-    private $schemaLoader;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Schema $schemaTable
-     * @param \Fusio\Impl\Table\Route\Method $routesMethodTable
-     * @param \Fusio\Impl\Schema\Loader $schemaLoader
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Schema $schemaTable, Table\Route\Method $routesMethodTable, Loader $schemaLoader, EventDispatcherInterface $eventDispatcher)
     {
         $this->schemaTable       = $schemaTable;
@@ -81,7 +60,7 @@ class Schema
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Schema_Create $schema, UserContext $context)
+    public function create(int $categoryId, Schema_Create $schema, UserContext $context): int
     {
         if (!preg_match('/^[A-z0-9\-\_]{3,64}$/', $schema->getName())) {
             throw new StatusCode\BadRequestException('Invalid schema name');
@@ -96,13 +75,13 @@ class Schema
             $this->schemaTable->beginTransaction();
 
             // create schema
-            $record = [
+            $record = new Table\Generated\SchemaRow([
                 'category_id' => $categoryId,
                 'status'      => Table\Schema::STATUS_ACTIVE,
                 'name'        => $schema->getName(),
                 'source'      => $this->parseSource($schema->getSource()),
                 'form'        => $this->parseForm($schema->getForm()),
-            ];
+            ]);
 
             $this->schemaTable->create($record);
 
@@ -124,9 +103,9 @@ class Schema
         return $schemaId;
     }
 
-    public function update(int $schemaId, Schema_Update $schema, UserContext $context)
+    public function update(int $schemaId, Schema_Update $schema, UserContext $context): int
     {
-        $existing = $this->schemaTable->get($schemaId);
+        $existing = $this->schemaTable->find($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -158,11 +137,13 @@ class Schema
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($schema, $existing, $context));
+
+        return $schemaId;
     }
 
-    public function delete(int $schemaId, UserContext $context)
+    public function delete(int $schemaId, UserContext $context): int
     {
-        $existing = $this->schemaTable->get($schemaId);
+        $existing = $this->schemaTable->find($schemaId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -171,20 +152,21 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = [
+        $record = new Table\Generated\SchemaRow([
             'id'     => $existing['id'],
             'status' => Table\Schema::STATUS_DELETED,
-        ];
+        ]);
 
         $this->schemaTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $schemaId;
     }
 
-    public function updateForm($schemaId, Schema_Form $form, UserContext $context)
+    public function updateForm(int $schemaId, Schema_Form $form, UserContext $context): void
     {
-        $schema = $this->schemaTable->get($schemaId);
-
+        $schema = $this->schemaTable->find($schemaId);
         if (empty($schema)) {
             throw new StatusCode\NotFoundException('Could not find schema');
         }
@@ -193,37 +175,30 @@ class Schema
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
-        $record = [
+        $record = new Table\Generated\SchemaRow([
             'id'   => $schema['id'],
             'form' => $this->parseForm($form),
-        ];
+        ]);
 
         $this->schemaTable->update($record);
     }
 
-    public function generatePreview($schemaId)
+    public function generatePreview(int $schemaId): Generator\Code\Chunks|string
     {
         $schema = $this->schemaLoader->getSchema($schemaId);
-        if ($schema instanceof SchemaInterface) {
-            return (new Generator\Html())->generate($schema);
-        } else {
-            throw new StatusCode\BadRequestException('Invalid schema');
-        }
+        return (new Generator\Html())->generate($schema);
     }
 
     /**
      * Returns either false ot the id of the existing schema
-     * 
-     * @param string $name
-     * @return integer|false
      */
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->equals('status', Table\Schema::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $connection = $this->schemaTable->getOneBy($condition);
+        $connection = $this->schemaTable->findOneBy($condition);
 
         if (!empty($connection)) {
             return $connection['id'];

@@ -43,45 +43,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Cronjob
 {
-    /**
-     * @var \Fusio\Impl\Table\Cronjob
-     */
-    private $cronjobTable;
+    private Table\Cronjob $cronjobTable;
+    private Table\Cronjob\Error $errorTable;
+    private Executor $executorService;
+    private ?string $cronFile;
+    private ?string $cronExec;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Cronjob\Error
-     */
-    private $errorTable;
-
-    /**
-     * @var \Fusio\Impl\Service\Action\Executor
-     */
-    private $executorService;
-
-    /**
-     * @var string
-     */
-    private $cronFile;
-
-    /**
-     * @var string
-     */
-    private $cronExec;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Cronjob $cronjobTable
-     * @param \Fusio\Impl\Table\Cronjob\Error $errorTable
-     * @param \Fusio\Impl\Service\Action\Executor $executorService
-     * @param string $cronFile
-     * @param string $cronExec
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
-    public function __construct(Table\Cronjob $cronjobTable, Table\Cronjob\Error $errorTable, Executor $executorService, $cronFile, $cronExec, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Cronjob $cronjobTable, Table\Cronjob\Error $errorTable, Executor $executorService, ?string $cronFile, ?string $cronExec, EventDispatcherInterface $eventDispatcher)
     {
         $this->cronjobTable    = $cronjobTable;
         $this->errorTable      = $errorTable;
@@ -91,7 +60,7 @@ class Cronjob
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Cronjob_Create $cronjob, UserContext $context)
+    public function create(int $categoryId, Cronjob_Create $cronjob, UserContext $context): int
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
@@ -101,13 +70,13 @@ class Cronjob
         }
 
         // create cronjob
-        $record = [
+        $record = new Table\Generated\CronjobRow([
             'category_id' => $categoryId,
             'status'      => Table\Cronjob::STATUS_ACTIVE,
             'name'        => $cronjob->getName(),
             'cron'        => $cronjob->getCron(),
             'action'      => $cronjob->getAction(),
-        ];
+        ]);
 
         $this->cronjobTable->create($record);
 
@@ -120,11 +89,11 @@ class Cronjob
         return $cronjobId;
     }
 
-    public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context)
+    public function update(int $cronjobId, Cronjob_Update $cronjob, UserContext $context): int
     {
         Cronjob\Validator::assertCron($cronjob->getCron());
 
-        $existing = $this->cronjobTable->get($cronjobId);
+        $existing = $this->cronjobTable->find($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
@@ -133,23 +102,25 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $record = [
+        $record = new Table\Generated\CronjobRow([
             'id'     => $existing['id'],
             'name'   => $cronjob->getName(),
             'cron'   => $cronjob->getCron(),
             'action' => $cronjob->getAction(),
-        ];
+        ]);
 
         $this->cronjobTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($cronjob, $existing, $context));
 
         $this->flush();
+
+        return $cronjobId;
     }
 
-    public function delete(int $cronjobId, UserContext $context)
+    public function delete(int $cronjobId, UserContext $context): int
     {
-        $existing = $this->cronjobTable->get($cronjobId);
+        $existing = $this->cronjobTable->find($cronjobId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
@@ -158,31 +129,29 @@ class Cronjob
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $record = [
+        $record = new Table\Generated\CronjobRow([
             'id'     => $existing['id'],
             'status' => Table\Cronjob::STATUS_DELETED,
-        ];
+        ]);
 
         $this->cronjobTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
 
         $this->flush();
+
+        return $cronjobId;
     }
 
     /**
      * Executes a specific cronjob
-     * 
-     * @param string|integer $cronjobId
      */
-    public function execute($cronjobId)
+    public function execute(string|int $cronjobId)
     {
         if (is_numeric($cronjobId)) {
-            $existing = $this->cronjobTable->get($cronjobId);
+            $existing = $this->cronjobTable->find($cronjobId);
         } else {
-            $condition = new Condition();
-            $condition->equals('name', $cronjobId);
-            $existing = $this->cronjobTable->getOneBy($condition);
+            $existing = $this->cronjobTable->findOneByName($cronjobId);
         }
 
         if (empty($existing)) {
@@ -202,34 +171,34 @@ class Cronjob
 
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
-            $this->errorTable->create([
+            $this->errorTable->create(new Table\Generated\CronjobErrorRow([
                 'cronjob_id' => $existing['id'],
                 'message'    => $e->getMessage(),
                 'trace'      => $e->getTraceAsString(),
                 'file'       => $e->getFile(),
                 'line'       => $e->getLine(),
-            ]);
+            ]));
 
             $exitCode = Table\Cronjob::CODE_ERROR;
         }
 
         // set execute date
-        $record = [
+        $record = new Table\Generated\CronjobRow([
             'id' => $existing['id'],
             'execute_date' => new \DateTime(),
             'exit_code' => $exitCode,
-        ];
+        ]);
 
         $this->cronjobTable->update($record);
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $cronjob = $this->cronjobTable->getOneBy($condition);
+        $cronjob = $this->cronjobTable->findOneBy($condition);
 
         if (!empty($cronjob)) {
             return $cronjob['id'];
@@ -240,10 +209,8 @@ class Cronjob
 
     /**
      * Writes the cron file
-     * 
-     * @return bool|int
      */
-    public function flush()
+    public function flush(): int|false
     {
         if (empty($this->cronFile)) {
             return false;
@@ -260,15 +227,12 @@ class Cronjob
         return file_put_contents($this->cronFile, $this->generateCron());
     }
 
-    /**
-     * @return string
-     */
-    private function generateCron()
+    private function generateCron(): string
     {
         $condition = new Condition();
         $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
 
-        $result = $this->cronjobTable->getAll(0, 1024, null, null, $condition);
+        $result = $this->cronjobTable->findAll($condition, 0, 1024);
         $lines  = [];
 
         foreach ($result as $row) {

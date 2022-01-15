@@ -49,30 +49,11 @@ use PSX\Uri\Url;
  */
 class Token
 {
-    /**
-     * @var Factory\ConnectionInterface
-     */
-    private $factory;
-
-    /**
-     * @var Repository\ConnectionInterface
-     */
-    private $repository;
-
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
-
-    /**
-     * @var Service\Connection
-     */
-    private $connectionService;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Factory\ConnectionInterface $factory;
+    private Repository\ConnectionInterface $repository;
+    private ClientInterface $httpClient;
+    private Service\Connection $connectionService;
+    private Config $config;
 
     public function __construct(Factory\ConnectionInterface $factory, Repository\ConnectionInterface $repository, ClientInterface $httpClient, Service\Connection $connectionService, Config $config)
     {
@@ -85,9 +66,6 @@ class Token
 
     /**
      * Returns whether the provided connection id supports an OAuth2 flow
-     *
-     * @param string $connectionId
-     * @return bool
      */
     public function isValid(string $connectionId): bool
     {
@@ -102,9 +80,6 @@ class Token
     /**
      * Returns the redirect uri for a provided connection. This works only in case the connection implements the
      * OAuth2Interface
-     *
-     * @param string $connectionId
-     * @return string
      */
     public function buildRedirectUri(string $connectionId): string
     {
@@ -128,10 +103,6 @@ class Token
 
     /**
      * Obtains an access token by the provided code and persists the access token at the connection config
-     *
-     * @param string $connectionId
-     * @param string $code
-     * @param string $state
      */
     public function fetchByCode(string $connectionId, string $code, string $state): void
     {
@@ -155,8 +126,6 @@ class Token
 
     /**
      * Obtains an access token by a refresh token and persists the access token at the connection config
-     *
-     * @param string $connectionId
      */
     public function fetchByRefreshToken(string $connectionId): void
     {
@@ -281,12 +250,13 @@ class Token
         $refreshToken = $data->refresh_token ?? null;
         $scope = $data->scope ?? null;
 
-        $token = new AccessToken();
-        $token->setAccessToken($accessToken);
-        $token->setExpiresIn($expiresIn);
-        $token->setRefreshToken($refreshToken);
-        $token->setScope($scope);
-        return $token;
+        return new AccessToken(
+            $accessToken,
+            'bearer',
+            $expiresIn,
+            $refreshToken,
+            $scope
+        );
     }
 
     /**
@@ -306,7 +276,7 @@ class Token
         return JWT::encode(['exp' => time() + (60 * 10)], $this->config->get('fusio_project_key'));
     }
 
-    private function newRedirectUri($connectionId): string
+    private function newRedirectUri(string $connectionId): string
     {
         return $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch') . 'system/connection/' . $connectionId . '/callback';
     }

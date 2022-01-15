@@ -41,27 +41,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Category
 {
-    /**
-     * @var \Fusio\Impl\Table\Category
-     */
-    private $categoryTable;
+    private Table\Category $categoryTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Category $categoryTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Category $categoryTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->categoryTable   = $categoryTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Category_Create $category, UserContext $context)
+    public function create(Category_Create $category, UserContext $context): int
     {
         // check whether rate exists
         if ($this->exists($category->getName())) {
@@ -72,10 +61,10 @@ class Category
             $this->categoryTable->beginTransaction();
 
             // create category
-            $record = [
+            $record = new Table\Generated\CategoryRow([
                 'status' => Table\Rate::STATUS_ACTIVE,
                 'name'   => $category->getName(),
-            ];
+            ]);
 
             $this->categoryTable->create($record);
 
@@ -95,9 +84,9 @@ class Category
         return $categoryId;
     }
 
-    public function update(int $categoryId, Category_Update $category, UserContext $context)
+    public function update(int $categoryId, Category_Update $category, UserContext $context): int
     {
-        $existing = $this->categoryTable->get($categoryId);
+        $existing = $this->categoryTable->find($categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }
@@ -110,10 +99,10 @@ class Category
             $this->categoryTable->beginTransaction();
 
             // update category
-            $record = [
+            $record = new Table\Generated\CategoryRow([
                 'id'   => $existing['id'],
                 'name' => $category->getName(),
-            ];
+            ]);
 
             $this->categoryTable->update($record);
 
@@ -125,32 +114,36 @@ class Category
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($category, $existing, $context));
+
+        return $categoryId;
     }
 
-    public function delete($categoryId, UserContext $context)
+    public function delete(int $categoryId, UserContext $context): int
     {
-        $existing = $this->categoryTable->get($categoryId);
+        $existing = $this->categoryTable->find($categoryId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find category');
         }
 
-        $record = [
+        $record = new Table\Generated\CategoryRow([
             'id'     => $existing['id'],
             'status' => Table\Category::STATUS_DELETED,
-        ];
+        ]);
 
         $this->categoryTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $categoryId;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->notEquals('status', Table\Category::STATUS_DELETED);
         $condition->equals('name', $name);
 
-        $category = $this->categoryTable->getOneBy($condition);
+        $category = $this->categoryTable->findOneBy($condition);
 
         if (!empty($category)) {
             return $category['id'];

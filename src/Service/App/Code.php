@@ -33,31 +33,25 @@ use Fusio\Impl\Table;
  */
 class Code
 {
-    /**
-     * @var \Fusio\Impl\Table\App\Code
-     */
-    private $appCodeTable;
+    private Table\App\Code $appCodeTable;
 
-    /**
-     * @param \Fusio\Impl\Table\App\Code $appCodeTable
-     */
     public function __construct(Table\App\Code $appCodeTable)
     {
         $this->appCodeTable = $appCodeTable;
     }
 
-    public function generateCode($appId, $userId, $redirectUri, array $scopes)
+    public function generateCode($appId, $userId, $redirectUri, array $scopes): string
     {
         $code = TokenGenerator::generateCode();
 
-        $this->appCodeTable->create([
+        $this->appCodeTable->create(new Table\Generated\AppCodeRow([
             'app_id'       => $appId,
             'user_id'      => $userId,
             'code'         => $code,
             'redirect_uri' => $redirectUri,
             'scope'        => implode(',', $scopes),
             'date'         => new \DateTime(),
-        ]);
+        ]));
 
         return $code;
     }

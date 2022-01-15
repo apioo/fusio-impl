@@ -32,17 +32,13 @@ use PSX\Http\Exception as StatusCode;
  */
 class Validator
 {
-    /**
-     * @param string $path
-     * @return void
-     */
     public static function assertPath(string $path): void
     {
         if (empty($path)) {
             throw new StatusCode\BadRequestException('Path must not be empty');
         }
 
-        if (substr($path, 0, 1) != '/') {
+        if (!str_starts_with($path, '/')) {
             throw new StatusCode\BadRequestException('Path must start with a /');
         }
 

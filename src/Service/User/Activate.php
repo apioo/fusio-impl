@@ -36,27 +36,16 @@ use PSX\Http\Exception as StatusCode;
  */
 class Activate
 {
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
+    private Service\User $userService;
+    private Service\User\Token $tokenService;
 
-    /**
-     * @var Token
-     */
-    private $tokenService;
-
-    /**
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\User\Token $tokenService
-     */
     public function __construct(Service\User $userService, Service\User\Token $tokenService)
     {
         $this->userService  = $userService;
         $this->tokenService = $tokenService;
     }
 
-    public function activate(User_Activate $activate)
+    public function activate(User_Activate $activate): void
     {
         $userId = $this->tokenService->getUser($activate->getToken());
         if (!empty($userId)) {

@@ -42,32 +42,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Invoice
 {
-    /**
-     * @var \Fusio\Impl\Table\Plan\Contract
-     */
-    private $contractTable;
+    private Table\Plan\Contract $contractTable;
+    private Table\Plan\Invoice $invoiceTable;
+    private Table\User $userTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Plan\Invoice
-     */
-    private $invoiceTable;
-
-    /**
-     * @var \Fusio\Impl\Table\User
-     */
-    private $userTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Plan\Contract $contractTable
-     * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
-     * @param \Fusio\Impl\Table\User $userTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, Table\User $userTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->contractTable = $contractTable;
@@ -78,14 +57,10 @@ class Invoice
 
     /**
      * Creates an invoice for the provided contract id
-     * 
-     * @param Plan_Invoice_Create $invoice
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     * @param integer $prevId
      */
-    public function create(Plan_Invoice_Create $invoice, UserContext $context, $prevId = null)
+    public function create(Plan_Invoice_Create $invoice, UserContext $context, ?int $prevId = null): int
     {
-        $contract = $this->contractTable->get($invoice->getContractId());
+        $contract = $this->contractTable->find($invoice->getContractId());
         if (empty($contract)) {
             throw new \InvalidArgumentException('Invalid contract id');
         }
@@ -95,7 +70,7 @@ class Invoice
 
         $displayId = $this->generateInvoiceId($contract['user_id']);
 
-        $record = [
+        $record = new Table\Generated\PlanInvoiceRow([
             'contract_id' => $contract['id'],
             'user_id' => $contract['user_id'],
             'transaction_id' => null,
@@ -108,7 +83,7 @@ class Invoice
             'to_date' => $to,
             'pay_date' => null,
             'insert_date' => new \DateTime(),
-        ];
+        ]);
 
         $this->invoiceTable->create($record);
 
@@ -117,12 +92,12 @@ class Invoice
 
         $this->eventDispatcher->dispatch(new CreatedEvent($invoice, $context));
 
-        return (int) $invoiceId;
+        return $invoiceId;
     }
 
-    public function update(int $invoiceId, Plan_Invoice_Update $invoice, UserContext $context)
+    public function update(int $invoiceId, Plan_Invoice_Update $invoice, UserContext $context): int
     {
-        $existing = $this->invoiceTable->get($invoiceId);
+        $existing = $this->invoiceTable->find($invoiceId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find invoice');
         }
@@ -132,42 +107,44 @@ class Invoice
         }
 
         // update invoice
-        $record = [
+        $record = new Table\Generated\PlanInvoiceRow([
             'id'     => $existing['id'],
             'status' => $invoice->getStatus(),
-        ];
+        ]);
 
         $this->invoiceTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($invoice, $existing, $context));
+
+        return $invoiceId;
     }
 
-    public function delete($invoiceId, UserContext $context)
+    public function delete(int $invoiceId, UserContext $context): int
     {
-        $existing = $this->invoiceTable->get($invoiceId);
+        $existing = $this->invoiceTable->find($invoiceId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find invoice');
         }
 
-        $record = [
+        $record = new Table\Generated\PlanInvoiceRow([
             'id'     => $existing['id'],
             'status' => Table\Plan\Invoice::STATUS_DELETED,
-        ];
+        ]);
 
         $this->invoiceTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $invoiceId;
     }
 
     /**
-     * Marks the invoice which is referenced by the transaction as payed. This
-     * also credits the points from the invoice to the account of the user
-     * 
-     * @param \Fusio\Engine\Model\TransactionInterface $transaction
+     * Marks the invoice which is referenced by the transaction as payed. This also credits the points from the invoice
+     * to the account of the user
      */
     public function pay(TransactionInterface $transaction)
     {
-        $invoice = $this->invoiceTable->get($transaction->getInvoiceId());
+        $invoice = $this->invoiceTable->find($transaction->getInvoiceId());
         if (empty($invoice)) {
             throw new \RuntimeException('Invalid invoice id');
         }
@@ -180,7 +157,7 @@ class Invoice
             throw new \InvalidArgumentException('Cant mark invoice as payed since the transaction is not approved');
         }
 
-        $contract = $this->contractTable->get($invoice['contract_id']);
+        $contract = $this->contractTable->find($invoice['contract_id']);
         if (empty($contract)) {
             throw new \RuntimeException('Invalid contract id');
         }
@@ -194,11 +171,13 @@ class Invoice
         }
 
         // mark invoice as payed
-        $this->invoiceTable->update([
+        $record = new Table\Generated\PlanInvoiceRow([
             'id' => $invoice['id'],
             'status' => Table\Plan\Invoice::STATUS_PAYED,
             'pay_date' => new \DateTime(),
         ]);
+
+        $this->invoiceTable->update($record);
 
         // credit points
         $this->userTable->creditPoints($contract['user_id'], $invoice['points']);
@@ -212,7 +191,7 @@ class Invoice
      * @param integer $userId
      * @return string
      */
-    private function generateInvoiceId($userId)
+    private function generateInvoiceId(int $userId): string
     {
         $parts = [
             str_pad($userId, 4, '0', STR_PAD_LEFT),

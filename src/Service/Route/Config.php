@@ -41,32 +41,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Config
 {
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
+    private Table\Route\Method $methodTable;
+    private Table\Route\Response $responseTable;
+    private ListingInterface $listing;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Response
-     */
-    private $responseTable;
-
-    /**
-     * @var \PSX\Api\ListingInterface
-     */
-    private $listing;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Route\Method $methodTable
-     * @param \Fusio\Impl\Table\Route\Response $responseTable
-     * @param \PSX\Api\ListingInterface $listing
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, ListingInterface $listing, EventDispatcherInterface $eventDispatcher)
     {
         $this->methodTable     = $methodTable;
@@ -76,13 +55,9 @@ class Config
     }
 
     /**
-     * Method which handles data change of each API method. Basically an API
-     * method can only change if it is in development mode. In every other
-     * case we can only change the status
+     * Method which handles data change of each API method. Basically an API method can only change if it is in
+     * development mode. In every other case we can only change the status
      *
-     * @param integer $categoryId
-     * @param integer $routeId
-     * @param string $path
      * @param Route_Version[] $versions
      */
     public function handleConfig(int $categoryId, int $routeId, string $path, array $versions, UserContext $context)
@@ -135,10 +110,12 @@ class Config
             } else {
                 // update only existing methods
                 foreach ($existingMethods as $existingMethod) {
-                    $this->methodTable->update([
+                    $record = new Table\Generated\RoutesMethodRow([
                         'id'     => $existingMethod['id'],
                         'status' => $status,
                     ]);
+
+                    $this->methodTable->update($record);
                 }
             }
         }
@@ -151,16 +128,7 @@ class Config
         }
     }
 
-    /**
-     * @param integer $routeId
-     * @param string $method
-     * @param integer $ver
-     * @param integer $status
-     * @param Route_Method $config
-     * @param string $path
-     * @return int
-     */
-    private function createMethod(int $routeId, string $method, int $ver, int $status, Route_Method $config, string $path)
+    private function createMethod(int $routeId, string $method, int $ver, int $status, Route_Method $config, string $path): int
     {
         $active      = $config->getActive() ?? false;
         $public      = $config->getPublic() ?? false;
@@ -176,7 +144,7 @@ class Config
         }
 
         // create method
-        $data = [
+        $data = new Table\Generated\RoutesMethodRow([
             'route_id'     => $routeId,
             'method'       => $method,
             'version'      => $ver,
@@ -189,7 +157,7 @@ class Config
             'request'      => $request,
             'action'       => $action,
             'costs'        => $costs,
-        ];
+        ]);
 
         $this->methodTable->create($data);
 
@@ -200,29 +168,33 @@ class Config
      * @param integer $methodId
      * @param Route_Method $config
      */
-    private function createResponses(int $methodId, Route_Method $config)
+    private function createResponses(int $methodId, Route_Method $config): void
     {
         $response  = $config->getResponse(); // deprecated
         $responses = $config->getResponses();
 
         if (!empty($responses)) {
             foreach ($responses as $statusCode => $response) {
-                $this->responseTable->create([
+                $record = new Table\Generated\RoutesResponseRow([
                     'method_id' => $methodId,
                     'code'      => $statusCode,
                     'response'  => $response,
                 ]);
+
+                $this->responseTable->create($record);
             }
         } elseif (!empty($response)) {
-            $this->responseTable->create([
+            $record = new Table\Generated\RoutesResponseRow([
                 'method_id' => $methodId,
                 'code'      => 200,
                 'response'  => $response,
             ]);
+
+            $this->responseTable->create($record);
         }
     }
 
-    public static function buildOperationId(string $path, string $method)
+    public static function buildOperationId(string $path, string $method): string
     {
         $parts = array_filter(explode('/', $path));
 

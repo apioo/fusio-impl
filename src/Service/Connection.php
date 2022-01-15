@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Engine\Connection\DeploymentInterface;
 use Fusio\Engine\Connection\LifecycleInterface;
 use Fusio\Engine\Connection\PingableInterface;
+use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Factory;
 use Fusio\Engine\Parameters;
 use Fusio\Impl\Authorization\UserContext;
@@ -46,32 +47,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Connection
 {
-    /**
-     * @var \Fusio\Impl\Table\Connection
-     */
-    private $connectionTable;
+    private Table\Connection $connectionTable;
+    private Factory\Connection $connectionFactory;
+    private string $secretKey;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Engine\Factory\Connection
-     */
-    private $connectionFactory;
-
-    /**
-     * @var string
-     */
-    private $secretKey;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Connection $connectionTable
-     * @param \Fusio\Engine\Factory\Connection $connectionFactory
-     * @param string $secretKey
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, $secretKey, EventDispatcherInterface $eventDispatcher)
     {
         $this->connectionTable   = $connectionTable;
@@ -80,7 +60,7 @@ class Connection
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(Connection_Create $connection, UserContext $context)
+    public function create(Connection_Create $connection, UserContext $context): int
     {
         // check whether connection exists
         if ($this->exists($connection->getName())) {
@@ -107,12 +87,12 @@ class Connection
         }
 
         // create connection
-        $record = [
+        $record = new Table\Generated\ConnectionRow([
             'status' => Table\Connection::STATUS_ACTIVE,
             'name'   => $connection->getName(),
             'class'  => $connection->getClass(),
             'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-        ];
+        ]);
 
         $this->connectionTable->create($record);
 
@@ -123,10 +103,9 @@ class Connection
         return $connectionId;
     }
 
-    public function update(int $connectionId, Connection_Update $connection, UserContext $context)
+    public function update(int $connectionId, Connection_Update $connection, UserContext $context): int
     {
-        $existing = $this->connectionTable->get($connectionId);
-
+        $existing = $this->connectionTable->find($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -150,20 +129,21 @@ class Connection
         }
 
         // update connection
-        $record = [
+        $record = new Table\Generated\ConnectionRow([
             'id'     => $existing['id'],
             'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-        ];
+        ]);
 
         $this->connectionTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($connection, $existing, $context));
+
+        return $connectionId;
     }
 
-    public function delete(int $connectionId, UserContext $context)
+    public function delete(int $connectionId, UserContext $context): int
     {
-        $existing = $this->connectionTable->get($connectionId);
-
+        $existing = $this->connectionTable->find($connectionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find connection');
         }
@@ -189,23 +169,25 @@ class Connection
             $factory->onDelete($existing['name'], $parameters, $conn);
         }
 
-        $record = [
+        $record = new Table\Generated\ConnectionRow([
             'id'     => $existing['id'],
             'status' => Table\Connection::STATUS_DELETED,
-        ];
+        ]);
 
         $this->connectionTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $connectionId;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->equals('status', Table\Connection::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $connection = $this->connectionTable->getOneBy($condition);
+        $connection = $this->connectionTable->findOneBy($condition);
 
         if (!empty($connection)) {
             return $connection['id'];
@@ -214,12 +196,8 @@ class Connection
         }
     }
 
-    protected function testConnection($factory, $connection)
+    protected function testConnection(ConnectionInterface $factory, object $connection)
     {
-        if (!is_object($connection)) {
-            throw new StatusCode\BadRequestException('Invalid connection');
-        }
-
         if ($factory instanceof PingableInterface) {
             try {
                 $ping = $factory->ping($connection);

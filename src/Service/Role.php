@@ -41,32 +41,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Role
 {
-    /**
-     * @var \Fusio\Impl\Table\Role
-     */
-    private $roleTable;
+    private Table\Role $roleTable;
+    private Table\Role\Scope $roleScopeTable;
+    private Table\Scope $scopeTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Role\Scope
-     */
-    private $roleScopeTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    private $scopeTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Role $roleTable
-     * @param \Fusio\Impl\Table\Role\Scope $roleScopeTable
-     * @param \Fusio\Impl\Table\Scope $scopeTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Role $roleTable, Table\Role\Scope $roleScopeTable, Table\Scope $scopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->roleTable       = $roleTable;
@@ -75,7 +54,7 @@ class Role
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Role_Create $role, UserContext $context)
+    public function create(Role_Create $role, UserContext $context): int
     {
         // check whether role exists
         if ($this->exists($role->getName())) {
@@ -86,11 +65,11 @@ class Role
             $this->roleTable->beginTransaction();
 
             // create role
-            $record = [
+            $record = new Table\Generated\RoleRow([
                 'category_id' => $role->getCategoryId(),
                 'status'      => Table\Role::STATUS_ACTIVE,
                 'name'        => $role->getName(),
-            ];
+            ]);
 
             $this->roleTable->create($record);
 
@@ -113,9 +92,9 @@ class Role
         return $roleId;
     }
 
-    public function update(int $roleId, Role_Update $role, UserContext $context)
+    public function update(int $roleId, Role_Update $role, UserContext $context): int
     {
-        $existing = $this->roleTable->get($roleId);
+        $existing = $this->roleTable->find($roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
@@ -128,11 +107,11 @@ class Role
             $this->roleTable->beginTransaction();
 
             // update role
-            $record = [
+            $record = new Table\Generated\RoleRow([
                 'id'          => $existing['id'],
                 'category_id' => $role->getCategoryId(),
                 'name'        => $role->getName(),
-            ];
+            ]);
 
             $this->roleTable->update($record);
 
@@ -152,32 +131,36 @@ class Role
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($role, $existing, $context));
+
+        return $roleId;
     }
 
-    public function delete($roleId, UserContext $context)
+    public function delete(int $roleId, UserContext $context): int
     {
-        $existing = $this->roleTable->get($roleId);
+        $existing = $this->roleTable->find($roleId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find role');
         }
 
-        $record = [
+        $record = new Table\Generated\RoleRow([
             'id'     => $existing['id'],
             'status' => Table\Role::STATUS_DELETED,
-        ];
+        ]);
 
         $this->roleTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $roleId;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->notEquals('status', Table\Role::STATUS_DELETED);
         $condition->equals('name', $name);
 
-        $role = $this->roleTable->getOneBy($condition);
+        $role = $this->roleTable->findOneBy($condition);
 
         if (!empty($role)) {
             return $role['id'];
@@ -186,16 +169,16 @@ class Role
         }
     }
 
-    protected function insertScopes(int $roleId, array $scopes)
+    protected function insertScopes(int $roleId, array $scopes): void
     {
         if (!empty($scopes) && is_array($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
-                $this->roleScopeTable->create(array(
+                $this->roleScopeTable->create(new Table\Generated\RoleScopeRow([
                     'role_id'  => $roleId,
                     'scope_id' => $scope['id'],
-                ));
+                ]));
             }
         }
     }

@@ -34,46 +34,15 @@ use PSX\Http\Client\ClientInterface;
  */
 class Executor
 {
-    const MAX_ATTEMPTS = 3;
+    public const MAX_ATTEMPTS = 3;
 
-    /**
-     * @var \Fusio\Impl\Table\Event\Trigger
-     */
-    private $triggerTable;
+    private Table\Event\Trigger $triggerTable;
+    private Table\Event\Subscription $subscriptionTable;
+    private Table\Event\Response $responseTable;
+    private ClientInterface $httpClient;
+    private Resolver $resolver;
+    private SenderFactory $senderFactory;
 
-    /**
-     * @var \Fusio\Impl\Table\Event\Subscription
-     */
-    private $subscriptionTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Event\Response
-     */
-    private $responseTable;
-
-    /**
-     * @var \PSX\Http\Client\ClientInterface
-     */
-    private $httpClient;
-
-    /**
-     * @var \Fusio\Impl\Service\Connection\Resolver
-     */
-    private $resolver;
-
-    /**
-     * @var \Fusio\Impl\Service\Event\SenderFactory
-     */
-    private $senderFactory;
-
-    /**
-     * @param \Fusio\Impl\Table\Event\Trigger $triggerTable
-     * @param \Fusio\Impl\Table\Event\Subscription $subscriptionTable
-     * @param \Fusio\Impl\Table\Event\Response $responseTable
-     * @param \PSX\Http\Client\ClientInterface $httpClient
-     * @param \Fusio\Impl\Service\Connection\Resolver $resolver
-     * @param \Fusio\Impl\Service\Event\SenderFactory $senderFactory
-     */
     public function __construct(Table\Event\Trigger $triggerTable, Table\Event\Subscription $subscriptionTable, Table\Event\Response $responseTable, ClientInterface $httpClient, Resolver $resolver, SenderFactory $senderFactory)
     {
         $this->triggerTable       = $triggerTable;
@@ -84,13 +53,13 @@ class Executor
         $this->senderFactory      = $senderFactory;
     }
 
-    public function execute()
+    public function execute(): void
     {
         $this->insertTriggerEntries();
         $this->executePendingResponses();
     }
 
-    private function insertTriggerEntries()
+    private function insertTriggerEntries(): void
     {
         $triggers = $this->triggerTable->getAllPending();
 
@@ -98,22 +67,22 @@ class Executor
             $subscriptions = $this->subscriptionTable->getSubscriptionsForEvent($trigger['event_id']);
 
             foreach ($subscriptions as $subscription) {
-                $now = new \DateTime();
-
-                $this->responseTable->create([
+                $record = new Table\Generated\EventResponseRow([
                     'trigger_id' => $trigger['id'],
                     'subscription_id' => $subscription['id'],
                     'status' => Table\Event\Response::STATUS_PENDING,
                     'attempts' => 0,
-                    'insert_date' => $now,
+                    'insert_date' => new \DateTime(),
                 ]);
+
+                $this->responseTable->create($record);
             }
 
             $this->triggerTable->markDone($trigger['id']);
         }
     }
 
-    private function executePendingResponses()
+    private function executePendingResponses(): void
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_DISPATCHER);
         if (!$dispatcher) {

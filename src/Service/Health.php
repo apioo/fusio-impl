@@ -37,32 +37,11 @@ use PSX\Sql\Condition;
  */
 class Health
 {
-    /**
-     * @var \Fusio\Impl\Service\Connection 
-     */
-    private $connectionService;
+    private Service\Connection $connectionService;
+    private Table\Connection $connectionTable;
+    private Factory\Connection $connectionFactory;
+    private string $secretKey;
 
-    /**
-     * @var \Fusio\Impl\Table\Connection 
-     */
-    private $connectionTable;
-
-    /**
-     * @var \Fusio\Engine\Factory\Connection
-     */
-    private $connectionFactory;
-
-    /**
-     * @var string
-     */
-    private $secretKey;
-
-    /**
-     * @param \Fusio\Impl\Service\Connection $connectionService
-     * @param \Fusio\Impl\Table\Connection $connectionTable
-     * @param \Fusio\Engine\Factory\Connection $connectionFactory
-     * @param string $secretKey
-     */
     public function __construct(Service\Connection $connectionService, Table\Connection $connectionTable, Factory\Connection $connectionFactory, string $secretKey)
     {
         $this->connectionService = $connectionService;
@@ -71,17 +50,14 @@ class Health
         $this->secretKey         = $secretKey;
     }
 
-    /**
-     * @return \Fusio\Impl\Service\Health\CheckResult
-     */
-    public function check()
+    public function check(): Service\Health\CheckResult
     {
         $checks = new Service\Health\CheckResult();
 
         $condition  = new Condition();
         $condition->equals('status', Table\Connection::STATUS_ACTIVE);
 
-        $result = $this->connectionTable->getAll(0, 1024, null, null, $condition);
+        $result = $this->connectionTable->findAll($condition, 0, 1024);
         foreach ($result as $row) {
             $factory    = $this->connectionFactory->factory($row['class']);
             $parameters = Service\Connection\Encrypter::decrypt($row['config'], $this->secretKey);

@@ -27,6 +27,7 @@ use Fusio\Engine\Repository;
 use Fusio\Engine\Request;
 use Fusio\Model\Backend\Action_Execute_Request;
 use PSX\Http\Environment\HttpContext;
+use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Request as HttpRequest;
 use PSX\Record\Record;
 use PSX\Uri\Uri;
@@ -40,26 +41,10 @@ use PSX\Uri\Uri;
  */
 class Executor
 {
-    /**
-     * @var \Fusio\Engine\ProcessorInterface
-     */
-    private $processor;
+    private ProcessorInterface $processor;
+    private Repository\AppInterface $appRepository;
+    private Repository\UserInterface $userRepository;
 
-    /**
-     * @var \Fusio\Engine\Repository\AppInterface
-     */
-    private $appRepository;
-
-    /**
-     * @var \Fusio\Engine\Repository\UserInterface
-     */
-    private $userRepository;
-
-    /**
-     * @param \Fusio\Engine\ProcessorInterface $processor
-     * @param \Fusio\Engine\Repository\AppInterface $appRepository
-     * @param \Fusio\Engine\Repository\UserInterface $userRepository
-     */
     public function __construct(ProcessorInterface $processor, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->processor      = $processor;
@@ -67,7 +52,7 @@ class Executor
         $this->userRepository = $userRepository;
     }
 
-    public function execute($actionId, Action_Execute_Request $request)
+    public function execute(int $actionId, Action_Execute_Request $request): mixed
     {
         $body = $request->getBody();
         if ($body === null) {
@@ -93,7 +78,7 @@ class Executor
         return $this->processor->execute($actionId, $request, $context);
     }
 
-    private function parseQueryString($data)
+    private function parseQueryString(?string $data): array
     {
         $result = array();
         if (!empty($data)) {

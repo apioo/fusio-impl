@@ -50,16 +50,17 @@ class Dispatcher implements DispatcherInterface
         $condition->equals('name', $eventName);
 
         $event = $this->eventTable->findOneBy($condition);
-
         if (empty($event)) {
             throw new \RuntimeException('Invalid event name');
         }
 
-        $this->triggerTable->create([
+        $record = new Table\Generated\EventTriggerRow([
             'event_id' => $event['id'],
             'status' => Table\Event\Trigger::STATUS_PENDING,
             'payload' => json_encode($payload),
             'insert_date' => new \DateTime(),
         ]);
+
+        $this->triggerTable->create($record);
     }
 }

@@ -33,7 +33,7 @@ use PSX\OpenSsl\OpenSsl;
  */
 class Encrypter
 {
-    public static function encrypt($config, string $secretKey)
+    public static function encrypt(mixed $config, string $secretKey)
     {
         if (empty($config)) {
             return null;
@@ -48,7 +48,7 @@ class Encrypter
         return base64_encode($iv) . '.' . base64_encode($data);
     }
 
-    public static function decrypt($data, string $secretKey)
+    public static function decrypt(mixed $data, string $secretKey)
     {
         if (empty($data)) {
             return [];

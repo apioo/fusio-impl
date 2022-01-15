@@ -55,60 +55,17 @@ use PSX\Schema\Visitor\TypeVisitor;
  */
 class Provider
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    /**
-     * @var \Fusio\Impl\Provider\ProviderFactory
-     */
-    private $providerFactory;
-
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var \Fusio\Impl\Service\Route
-     */
-    private $routeService;
-
-    /**
-     * @var \Fusio\Impl\Service\Schema
-     */
-    private $schemaService;
-
-    /**
-     * @var \Fusio\Impl\Service\Action
-     */
-    private $actionService;
-
-    /**
-     * @var \Fusio\Engine\Form\ElementFactoryInterface
-     */
-    private $elementFactory;
-
-    /**
-     * @var \PSX\Schema\SchemaManagerInterface
-     */
-    private $schemaManager;
-
-    /**
-     * @var array
-     */
-    private $schemas;
-
-    /**
-     * @var array
-     */
-    private $actions;
-
-    /**
-     * @var array
-     */
-    private $routes;
+    private Connection $connection;
+    private ProviderFactory $providerFactory;
+    private ContainerInterface $container;
+    private Route $routeService;
+    private Schema $schemaService;
+    private Action $actionService;
+    private ElementFactoryInterface $elementFactory;
+    private SchemaManagerInterface $schemaManager;
+    private array $schemas;
+    private array $actions;
+    private array $routes;
 
     public function __construct(Connection $connection, ProviderFactory $providerFactory, ContainerInterface $container, Route $routeService, Schema $schemaService, Action $actionService, ElementFactoryInterface $elementFactory, SchemaManagerInterface $schemaManager)
     {
@@ -126,15 +83,11 @@ class Provider
         $this->routes = [];
     }
 
-    public function create(string $provider, int $categoryId, Route_Provider $config, UserContext $context)
+    public function create(string $provider, int $categoryId, Route_Provider $config, UserContext $context): void
     {
         $provider = $this->providerFactory->factory($provider);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
-        }
-
-        if ($provider instanceof ContainerAwareInterface) {
-            $provider->setContainer($this->container);
         }
 
         $setup = new Setup();
@@ -159,7 +112,7 @@ class Provider
         }
     }
 
-    public function getForm(string $providerName)
+    public function getForm(string $providerName): Form\Container
     {
         $provider = $this->providerFactory->factory($providerName);
 
@@ -174,10 +127,9 @@ class Provider
         return $builder->getForm();
     }
 
-    public function getChangelog(string $providerName, Route_Provider_Config $config)
+    public function getChangelog(string $providerName, Route_Provider_Config $config): array
     {
         $provider = $this->providerFactory->factory($providerName);
-
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
@@ -193,7 +145,7 @@ class Provider
         ];
     }
 
-    private function createSchemas(int $categoryId, array $schemas, UserContext $context)
+    private function createSchemas(int $categoryId, array $schemas, UserContext $context): void
     {
         $schema = $this->schemaManager->getSchema(Schema_Create::class);
 
@@ -211,7 +163,7 @@ class Provider
         }
     }
 
-    private function createActions(int $categoryId, array $actions, UserContext $context)
+    private function createActions(int $categoryId, array $actions, UserContext $context): void
     {
         $schema = $this->schemaManager->getSchema(Action_Create::class);
 
@@ -229,7 +181,7 @@ class Provider
         }
     }
 
-    private function createRoutes(int $categoryId, array $routes, $basePath, $scopes, UserContext $context)
+    private function createRoutes(int $categoryId, array $routes, $basePath, $scopes, UserContext $context): void
     {
         $scopes = $scopes ?: [];
         $schema = $this->schemaManager->getSchema(Route_Create::class);
@@ -258,12 +210,12 @@ class Provider
         }
     }
 
-    private function buildPath(string $basePath, string $path)
+    private function buildPath(string $basePath, string $path): string
     {
         return '/' . implode('/', array_filter(array_merge(explode('/', $basePath), explode('/', $path))));
     }
 
-    private function resolveConfig(\stdClass $data)
+    private function resolveConfig(\stdClass $data): void
     {
         $versions = $data->config ?? [];
 
@@ -294,7 +246,7 @@ class Provider
         }
     }
 
-    private function resolveSchema($schema)
+    private function resolveSchema(int $schema): string
     {
         if ($schema === -1) {
             return 'Passthru';
@@ -307,7 +259,7 @@ class Provider
         }
     }
 
-    private function resolveAction($action)
+    private function resolveAction(int $action): string
     {
         if (isset($this->actions[$action])) {
             return $this->actions[$action];

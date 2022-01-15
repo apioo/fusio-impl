@@ -38,38 +38,12 @@ use PSX\Sql\Condition;
  */
 class App
 {
-    /**
-     * @var \Fusio\Impl\Service\App
-     */
-    private $appService;
+    private Service\App $appService;
+    private Service\Config $configService;
+    private Table\App $appTable;
+    private Table\Scope $scopeTable;
+    private Table\User\Scope $userScopeTable;
 
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    private $configService;
-
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    private $scopeTable;
-
-    /**
-     * @var \Fusio\Impl\Table\User\Scope
-     */
-    private $userScopeTable;
-
-    /**
-     * @param \Fusio\Impl\Service\App $appService
-     * @param \Fusio\Impl\Service\Config $configService
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param \Fusio\Impl\Table\Scope $scopeTable
-     * @param \Fusio\Impl\Table\User\Scope $userScopeTable
-     */
     public function __construct(Service\App $appService, Service\Config $configService, Table\App $appTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable)
     {
         $this->appService     = $appService;
@@ -79,7 +53,7 @@ class App
         $this->userScopeTable = $userScopeTable;
     }
 
-    public function create(App_Create $app, UserContext $context)
+    public function create(App_Create $app, UserContext $context): int
     {
         $this->assertName($app->getName());
         $this->assertUrl($app->getUrl());
@@ -99,12 +73,12 @@ class App
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);
 
-        $this->appService->create($backendApp, $context);
+        return $this->appService->create($backendApp, $context);
     }
 
-    public function update(int $appId, App_Update $app, UserContext $context)
+    public function update(int $appId, App_Update $app, UserContext $context): int
     {
-        $existing = $this->appTable->get($appId);
+        $existing = $this->appTable->find($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -127,13 +101,13 @@ class App
         $backendApp->setUrl($app->getUrl());
         $backendApp->setScopes($scopes);
 
-        $this->appService->update($appId, $backendApp, $context);
+        return $this->appService->update($appId, $backendApp, $context);
     }
 
-    public function delete($appId, UserContext $context)
+    public function delete(int $appId, UserContext $context): int
     {
         $userId = $context->getUserId();
-        $app    = $this->appTable->get($appId);
+        $app    = $this->appTable->find($appId);
 
         if (empty($app)) {
             throw new StatusCode\NotFoundException('Could not find app');
@@ -143,10 +117,10 @@ class App
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
-        $this->appService->delete($appId, $context);
+        return $this->appService->delete($appId, $context);
     }
 
-    protected function getValidUserScopes($userId, $scopes)
+    protected function getValidUserScopes(int $userId, array $scopes): array
     {
         if (empty($scopes)) {
             return [];
@@ -171,14 +145,14 @@ class App
         }, $scopes);
     }
 
-    private function assertName($name)
+    private function assertName(?string $name): void
     {
         if (empty($name)) {
             throw new StatusCode\BadRequestException('Invalid name');
         }
     }
 
-    private function assertUrl($url)
+    private function assertUrl(?string $url): void
     {
         if (!empty($url)) {
             if (!filter_var($url, FILTER_VALIDATE_URL)) {
@@ -187,7 +161,7 @@ class App
         }
     }
 
-    private function assertMaxAppCount($userId)
+    private function assertMaxAppCount(int $userId): void
     {
         $appCount = $this->configService->getValue('app_consumer');
 

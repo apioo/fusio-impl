@@ -44,32 +44,11 @@ use PSX\Schema\TypeInterface;
  */
 class Method
 {
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
+    private Table\Route\Method $methodTable;
+    private Table\Route\Response $responseTable;
+    private Table\Scope\Route $scopeTable;
+    private Loader $schemaLoader;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Response
-     */
-    private $responseTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Scope\Route
-     */
-    private $scopeTable;
-
-    /**
-     * @var Loader
-     */
-    private $schemaLoader;
-
-    /**
-     * @param \Fusio\Impl\Table\Route\Method $methodTable
-     * @param \Fusio\Impl\Table\Route\Response $responseTable
-     * @param \Fusio\Impl\Table\Scope\Route $scopeTable
-     * @param Loader $schemaLoader
-     */
     public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Loader $schemaLoader)
     {
         $this->methodTable   = $methodTable;
@@ -80,13 +59,8 @@ class Method
 
     /**
      * Returns the method configuration for the provide route, version and request method
-     * 
-     * @param integer $routeId
-     * @param string $version
-     * @param string $method
-     * @return array
      */
-    public function getMethod($routeId, $version, $method)
+    public function getMethod(int $routeId, string $version, string $method): array
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
@@ -101,22 +75,12 @@ class Method
         return $this->methodTable->getMethod($routeId, $version, $method);
     }
 
-    /**
-     * @param integer $routeId
-     * @param string $version
-     * @return array
-     */
-    public function getAllowedMethods($routeId, $version)
+    public function getAllowedMethods(int $routeId, string $version): array
     {
         return $this->methodTable->getAllowedMethods($routeId, $version);
     }
 
-    /**
-     * @param integer $routeId
-     * @param string $version
-     * @return array
-     */
-    public function getRequestSchemas($routeId, $version)
+    public function getRequestSchemas(int $routeId, string $version): array
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);

@@ -34,26 +34,10 @@ use PSX\Http\Exception as StatusCode;
  */
 class Grant
 {
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
+    private Table\App $appTable;
+    private Table\User\Grant $userGrantTable;
+    private Table\App\Token $appTokenTable;
 
-    /**
-     * @var \Fusio\Impl\Table\User\Grant
-     */
-    private $userGrantTable;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Token
-     */
-    private $appTokenTable;
-
-    /**
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param \Fusio\Impl\Table\User\Grant $userGrantTable
-     * @param \Fusio\Impl\Table\App\Token $appTokenTable
-     */
     public function __construct(Table\App $appTable, Table\User\Grant $userGrantTable, Table\App\Token $appTokenTable)
     {
         $this->appTable       = $appTable;
@@ -61,10 +45,10 @@ class Grant
         $this->appTokenTable  = $appTokenTable;
     }
 
-    public function delete($grantId, UserContext $context)
+    public function delete(int $grantId, UserContext $context): int
     {
         $userId = $context->getUserId();
-        $grant  = $this->userGrantTable->get($grantId);
+        $grant  = $this->userGrantTable->find($grantId);
 
         if (empty($grant)) {
             throw new StatusCode\NotFoundException('Could not find grant');
@@ -88,5 +72,7 @@ class Grant
 
             throw $e;
         }
+
+        return $grantId;
     }
 }

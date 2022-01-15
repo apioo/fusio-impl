@@ -38,43 +38,13 @@ use PSX\Sql\Condition;
  */
 class Register
 {
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
+    private Service\User $userService;
+    private Service\User\Captcha $captchaService;
+    private Service\User\Token $tokenService;
+    private Service\User\Mailer $mailerService;
+    private Service\Config $configService;
+    private Table\Role $roleTable;
 
-    /**
-     * @var \Fusio\Impl\Service\User\Captcha
-     */
-    private $captchaService;
-
-    /**
-     * @var \Fusio\Impl\Service\User\Token
-     */
-    private $tokenService;
-
-    /**
-     * @var \Fusio\Impl\Service\User\Mailer
-     */
-    private $mailerService;
-
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    private $configService;
-    /**
-     * @var Table\Role
-     */
-    private $roleTable;
-
-    /**
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\Config $configService
-     * @param \Fusio\Impl\Service\User\Captcha $captchaService
-     * @param \Fusio\Impl\Service\User\Token $tokenService
-     * @param \Fusio\Impl\Service\User\Mailer $mailerService
-     * @param \Fusio\Impl\Table\Role $roleTable
-     */
     public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Service\Config $configService, Table\Role $roleTable)
     {
         $this->userService    = $userService;
@@ -85,7 +55,7 @@ class Register
         $this->roleTable      = $roleTable;
     }
 
-    public function register(User_Register $register)
+    public function register(User_Register $register): int
     {
         $this->captchaService->assertCaptcha($register->getCaptcha());
 
@@ -96,9 +66,7 @@ class Register
             $status = Table\User::STATUS_ACTIVE;
         }
 
-        $condition = new Condition();
-        $condition->equals('name', $this->configService->getValue('role_default'));
-        $role = $this->roleTable->getOneBy($condition);
+        $role = $this->roleTable->findOneByName($this->configService->getValue('role_default'));
         if (empty($role)) {
             throw new StatusCode\InternalServerErrorException('Invalid default role configured');
         }
@@ -118,5 +86,7 @@ class Register
 
             $this->mailerService->sendActivationMail($token, $register->getName(), $register->getEmail());
         }
+
+        return $userId;
     }
 }

@@ -36,23 +36,12 @@ use Fusio\Impl\Service\Config;
  */
 class Resolver
 {
-    const TYPE_MAILER = 'mailer';
-    const TYPE_DISPATCHER = 'dispatcher';
+    public const TYPE_MAILER = 'mailer';
+    public const TYPE_DISPATCHER = 'dispatcher';
 
-    /**
-     * @var \Fusio\Engine\Connector
-     */
-    private $connector;
+    private Connector $connector;
+    private Config $configService;
 
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    private $configService;
-
-    /**
-     * @param \Fusio\Engine\Connector $connector
-     * @param \Fusio\Impl\Service\Config $configService
-     */
     public function __construct(Connector $connector, Config $configService)
     {
         $this->connector     = $connector;
@@ -61,11 +50,8 @@ class Resolver
 
     /**
      * Returns a configured connection from the provided type
-     *
-     * @param string $type
-     * @return mixed|null
      */
-    public function get($type)
+    public function get(string $type): mixed
     {
         if ($type === self::TYPE_MAILER) {
             $name = $this->configService->getValue('system_mailer');

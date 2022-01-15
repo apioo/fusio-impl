@@ -36,18 +36,12 @@ interface SenderInterface
      * @param object $dispatcher
      * @return boolean
      */
-    public function accept($dispatcher);
+    public function accept(object $dispatcher): bool;
 
     /**
-     * Sends an event using the dispatcher. The dispatcher is by default an http
-     * client but it also possible to configure another dispatcher by using the
-     * name of an connection. Through this it would be possible to dispatch
-     * events using different message queue systems. By default the sender can
-     * handle 
-     * 
-     * @param object $dispatcher
-     * @param Message $message
-     * @return integer
+     * Sends an event using the dispatcher. The dispatcher is by default an http client but it also possible to
+     * configure another dispatcher by using the name of an connection. Through this it would be possible to dispatch
+     * events using different message queue systems. By default the sender can handle
      */
-    public function send($dispatcher, Message $message);
+    public function send(object $dispatcher, Message $message): int;
 }

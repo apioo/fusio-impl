@@ -41,27 +41,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Plan
 {
-    /**
-     * @var \Fusio\Impl\Table\Plan
-     */
-    private $planTable;
+    private Table\Plan $planTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Plan $planTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->planTable       = $planTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Plan_Create $plan, UserContext $context)
+    public function create(Plan_Create $plan, UserContext $context): int
     {
         // check whether plan exists
         if ($this->exists($plan->getName())) {
@@ -69,14 +58,14 @@ class Plan
         }
 
         // create event
-        $record = [
+        $record = new Table\Generated\PlanRow([
             'status'      => Table\Plan::STATUS_ACTIVE,
             'name'        => $plan->getName(),
             'description' => $plan->getDescription(),
             'price'       => $plan->getPrice(),
             'points'      => $plan->getPoints(),
             'period_type' => $plan->getPeriod(),
-        ];
+        ]);
 
         $this->planTable->create($record);
 
@@ -89,9 +78,9 @@ class Plan
         return $planId;
     }
 
-    public function update(int $planId, Plan_Update $plan, UserContext $context)
+    public function update(int $planId, Plan_Update $plan, UserContext $context): int
     {
-        $existing = $this->planTable->get($planId);
+        $existing = $this->planTable->find($planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
@@ -101,45 +90,48 @@ class Plan
         }
 
         // update event
-        $record = [
+        $record = new Table\Generated\PlanRow([
             'id'          => $existing['id'],
             'name'        => $plan->getName(),
             'description' => $plan->getDescription(),
             'price'       => $plan->getPrice(),
             'points'      => $plan->getPoints(),
             'period_type' => $plan->getPeriod(),
-        ];
+        ]);
 
         $this->planTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
+
+        return $planId;
     }
 
-    public function delete(int $planId, UserContext $context)
+    public function delete(int $planId, UserContext $context): int
     {
-        $existing = $this->planTable->get($planId);
-
+        $existing = $this->planTable->find($planId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
-        $record = [
+        $record = new Table\Generated\PlanRow([
             'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
-        ];
+        ]);
 
         $this->planTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $planId;
     }
     
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = new Condition();
         $condition->equals('status', Table\Event::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $plan = $this->planTable->getOneBy($condition);
+        $plan = $this->planTable->findOneBy($condition);
 
         if (!empty($plan)) {
             return $plan['id'];

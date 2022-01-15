@@ -36,6 +36,8 @@ use Fusio\Impl\Event\Action\DeletedEvent;
 use Fusio\Impl\Event\Action\UpdatedEvent;
 use Fusio\Impl\Factory\EngineDetector;
 use Fusio\Impl\Table;
+use PSX\Dependency\Exception\AutowiredException;
+use PSX\Dependency\Exception\NotFoundException;
 use PSX\Framework\Config\Config as FrameworkConfig;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
@@ -50,38 +52,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Action
 {
-    /**
-     * @var \Fusio\Impl\Table\Action
-     */
-    private $actionTable;
+    private Table\Action $actionTable;
+    private Table\Route\Method $routeMethodTable;
+    private Factory\ActionInterface $actionFactory;
+    private FrameworkConfig $config;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $routeMethodTable;
-
-    /**
-     * @var \Fusio\Engine\Factory\ActionInterface
-     */
-    private $actionFactory;
-
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    private $config;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Action $actionTable
-     * @param \Fusio\Impl\Table\Route\Method $routeMethodTable
-     * @param \Fusio\Engine\Factory\ActionInterface $actionFactory
-     * @param \PSX\Framework\Config\Config $config
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Action $actionTable, Table\Route\Method $routeMethodTable, Factory\ActionInterface $actionFactory, FrameworkConfig $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->actionTable      = $actionTable;
@@ -91,7 +67,7 @@ class Action
         $this->eventDispatcher  = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Action_Create $action, UserContext $context)
+    public function create(int $categoryId, Action_Create $action, UserContext $context): int
     {
         $this->assertSandboxAccess($action);
 
@@ -117,7 +93,7 @@ class Action
         }
 
         // create action
-        $record = [
+        $record = new Table\Generated\ActionRow([
             'category_id' => $categoryId,
             'status'      => Table\Action::STATUS_ACTIVE,
             'name'        => $action->getName(),
@@ -126,7 +102,7 @@ class Action
             'engine'      => $engine,
             'config'      => self::serializeConfig($config),
             'date'        => new \DateTime(),
-        ];
+        ]);
 
         $this->actionTable->create($record);
 
@@ -138,11 +114,11 @@ class Action
         return $actionId;
     }
 
-    public function update(int $actionId, Action_Update $action, UserContext $context)
+    public function update(int $actionId, Action_Update $action, UserContext $context): int
     {
         $this->assertSandboxAccess($action);
 
-        $existing = $this->actionTable->get($actionId);
+        $existing = $this->actionTable->find($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -173,7 +149,7 @@ class Action
         }
 
         // update action
-        $record = [
+        $record = new Table\Generated\ActionRow([
             'id'     => $existing['id'],
             'name'   => $action->getName(),
             'class'  => $class,
@@ -181,17 +157,18 @@ class Action
             'engine' => $engine,
             'config' => self::serializeConfig($config),
             'date'   => new \DateTime(),
-        ];
+        ]);
 
         $this->actionTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($action, $existing, $context));
+
+        return $actionId;
     }
 
-    public function delete(int $actionId, UserContext $context)
+    public function delete(int $actionId, UserContext $context): int
     {
-        $existing = $this->actionTable->get($actionId);
-
+        $existing = $this->actionTable->find($actionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find action');
         }
@@ -209,21 +186,25 @@ class Action
             $handler->onDelete($existing['name'], $parameters);
         }
 
-        $this->actionTable->update([
+        $record = new Table\Generated\ActionRow([
             'id'     => $existing['id'],
             'status' => Table\Action::STATUS_DELETED,
         ]);
 
+        $this->actionTable->update($record);
+
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $actionId;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
-        $condition  = new Condition();
+        $condition = new Condition();
         $condition->equals('status', Table\Action::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $action = $this->actionTable->getOneBy($condition);
+        $action = $this->actionTable->findOneBy($condition);
 
         if (!empty($action)) {
             return $action['id'];
@@ -233,14 +214,9 @@ class Action
     }
 
     /**
-     * Checks whether the provided class is resolvable and returns an action
-     * instance
-     * 
-     * @param string $class
-     * @param string $engine
-     * @return \Fusio\Engine\ActionInterface
+     * Checks whether the provided class is resolvable and returns an action instance
      */
-    private function newAction($class, $engine)
+    private function newAction(string $class, string $engine): ActionInterface
     {
         if (!class_exists($engine)) {
             throw new StatusCode\BadRequestException('Could not resolve engine');
@@ -248,18 +224,14 @@ class Action
 
         try {
             $action = $this->actionFactory->factory($class, $engine);
-        } catch (FactoryResolveException $e) {
+        } catch (FactoryResolveException|NotFoundException|AutowiredException $e) {
             throw new StatusCode\BadRequestException($e->getMessage());
-        }
-
-        if (!$action instanceof ActionInterface) {
-            throw new StatusCode\BadRequestException('Could not resolve action');
         }
 
         return $action;
     }
 
-    private function assertSandboxAccess(Backend\Action $record)
+    private function assertSandboxAccess(Backend\Action $record): void
     {
         $class = ltrim($record->getClass(), '\\');
 
@@ -268,11 +240,7 @@ class Action
         }
     }
 
-    /**
-     * @param array|null $config
-     * @return string|null
-     */
-    public static function serializeConfig(array $config = null)
+    public static function serializeConfig(?array $config = null): ?string
     {
         if (empty($config)) {
             return null;
@@ -281,11 +249,7 @@ class Action
         return \json_encode($config);
     }
 
-    /**
-     * @param string $data
-     * @return array|null
-     */
-    public static function unserializeConfig($data)
+    public static function unserializeConfig(?string $data): ?array
     {
         if (empty($data)) {
             return null;

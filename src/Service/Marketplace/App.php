@@ -30,153 +30,84 @@ namespace Fusio\Impl\Service\Marketplace;
  */
 class App
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @var string
-     */
-    private $screenshot;
-
-    /**
-     * @var string
-     */
-    private $website;
-
-    /**
-     * @var string
-     */
-    private $downloadUrl;
-
-    /**
-     * @var string
-     */
-    private $sha1Hash;
+    private string $name;
+    private ?string $version = null;
+    private ?string $description = null;
+    private ?string $screenshot = null;
+    private ?string $website = null;
+    private ?string $downloadUrl = null;
+    private ?string $sha1Hash = null;
 
     public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }
 
-    /**
-     * @param string $version
-     */
     public function setVersion(string $version): void
     {
         $this->version = $version;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return string
-     */
-    public function getScreenshot(): string
+    public function getScreenshot(): ?string
     {
         return $this->screenshot;
     }
 
-    /**
-     * @param string $screenshot
-     */
     public function setScreenshot(string $screenshot): void
     {
         $this->screenshot = $screenshot;
     }
 
-    /**
-     * @return string
-     */
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
 
-    /**
-     * @param string $website
-     */
     public function setWebsite(string $website): void
     {
         $this->website = $website;
     }
 
-    /**
-     * @return string
-     */
-    public function getDownloadUrl(): string
+    public function getDownloadUrl(): ?string
     {
         return $this->downloadUrl;
     }
 
-    /**
-     * @param string $downloadUrl
-     */
     public function setDownloadUrl(string $downloadUrl): void
     {
         $this->downloadUrl = $downloadUrl;
     }
 
-    /**
-     * @return string
-     */
-    public function getSha1Hash(): string
+    public function getSha1Hash(): ?string
     {
         return $this->sha1Hash;
     }
 
-    /**
-     * @param string $sha1Hash
-     */
     public function setSha1Hash(string $sha1Hash): void
     {
         $this->sha1Hash = $sha1Hash;
