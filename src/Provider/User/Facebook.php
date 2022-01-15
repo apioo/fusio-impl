@@ -40,15 +40,8 @@ use RuntimeException;
  */
 class Facebook implements ProviderInterface
 {
-    /**
-     * @var \PSX\Http\Client\ClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @var string
-     */
-    protected $secret;
+    private ClientInterface $httpClient;
+    private string $secret;
 
     public function __construct(ClientInterface $httpClient, Config $config)
     {
@@ -56,62 +49,49 @@ class Facebook implements ProviderInterface
         $this->secret     = $config->getValue('provider_facebook_secret');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
+    public function getId(): int
     {
         return self::PROVIDER_FACEBOOK;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function requestUser($code, $clientId, $redirectUri)
+    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
         $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
-
-        if (!empty($accessToken)) {
-            $url      = new Url('https://graph.facebook.com/v2.5/me');
-            $headers  = [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'User-Agent'    => Base::getUserAgent()
-            ];
-
-            $url = $url->withParameters([
-                'access_token' => $accessToken,
-                'fields'       => 'id,email,first_name,last_name,link,name',
-            ]);
-
-            $response = $this->httpClient->request(new GetRequest($url, $headers));
-
-            if ($response->getStatusCode() == 200) {
-                $data  = Parser::decode($response->getBody());
-                $id    = isset($data->id) ? $data->id : null;
-                $name  = isset($data->name) ? $data->name : null;
-                $email = isset($data->email) ? $data->email : null;
-
-                if (!empty($id) && !empty($name) && !empty($email)) {
-                    $user = new User();
-                    $user->setId($id);
-                    $user->setName($name);
-                    $user->setEmail($email);
-
-                    return $user;
-                }
-            }
+        if (empty($accessToken)) {
+            return null;
         }
 
-        return null;
+        $url = new Url('https://graph.facebook.com/v2.5/me');
+        $url = $url->withParameters([
+            'access_token' => $accessToken,
+            'fields'       => 'id,name,email',
+        ]);
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'User-Agent'    => Base::getUserAgent()
+        ];
+
+        $response = $this->httpClient->request(new GetRequest($url, $headers));
+        if ($response->getStatusCode() !== 200) {
+            return null;
+        }
+
+        $data  = Parser::decode($response->getBody());
+        $id    = $data->id ?? null;
+        $name  = $data->name ?? null;
+        $email = $data->email ?? null;
+
+        if (!empty($id) && !empty($name)) {
+            return new UserDetails($id, $name, $email);
+        } else {
+            return null;
+        }
     }
-    
-    protected function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
-    {
-        if (empty($clientSecret)) {
-            throw new RuntimeException('No secret provided');
-        }
 
-        $url = new Url('https://graph.facebook.com/v2.5/oauth/access_token');
+    protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
+    {
+        $url = new Url('https://graph.facebook.com/v12.0/oauth/access_token');
         $url = $url->withParameters([
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
@@ -120,14 +100,15 @@ class Facebook implements ProviderInterface
         ]);
 
         $response = $this->httpClient->request(new GetRequest($url));
-
-        if ($response->getStatusCode() == 200) {
-            $data = Parser::decode($response->getBody());
-            if (isset($data->access_token)) {
-                return $data->access_token;
-            }
+        if ($response->getStatusCode() !== 200) {
+            return null;
         }
 
-        return null;
+        $data = Parser::decode($response->getBody());
+        if (isset($data->access_token)) {
+            return $data->access_token;
+        } else {
+            return null;
+        }
     }
 }

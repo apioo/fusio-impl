@@ -41,15 +41,8 @@ use RuntimeException;
  */
 class Github implements ProviderInterface
 {
-    /**
-     * @var \PSX\Http\Client\ClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @var string
-     */
-    protected $secret;
+    private ClientInterface $httpClient;
+    private string $secret;
 
     public function __construct(ClientInterface $httpClient, Config $config)
     {
@@ -57,57 +50,45 @@ class Github implements ProviderInterface
         $this->secret     = $config->getValue('provider_github_secret');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
+    public function getId(): int
     {
         return self::PROVIDER_GITHUB;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function requestUser($code, $clientId, $redirectUri)
+    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
         $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
-
-        if (!empty($accessToken)) {
-            $url      = new Url('https://api.github.com/user');
-            $headers  = [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'User-Agent'    => Base::getUserAgent()
-            ];
-
-            $response = $this->httpClient->request(new GetRequest($url, $headers));
-
-            if ($response->getStatusCode() == 200) {
-                $data  = Parser::decode($response->getBody());
-                $id    = isset($data->id) ? $data->id: null;
-                $name  = isset($data->login) ? $data->login : null;
-                $email = isset($data->email) ? $data->email : null;
-
-                if (!empty($id) && !empty($name)) {
-                    $user = new User();
-                    $user->setId($id);
-                    $user->setName($name);
-                    $user->setEmail($email);
-
-                    return $user;
-                }
-            }
+        if (empty($accessToken)) {
+            return null;
         }
 
-        return null;
+        $url = new Url('https://api.github.com/user');
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'User-Agent'    => Base::getUserAgent()
+        ];
+
+        $response = $this->httpClient->request(new GetRequest($url, $headers));
+        if ($response->getStatusCode() !== 200) {
+            return null;
+        }
+
+        $data  = Parser::decode($response->getBody());
+        $id    = $data->id ?? null;
+        $name  = $data->login ?? null;
+        $email = $data->email ?? null;
+
+        if (!empty($id) && !empty($name)) {
+            return new UserDetails($id, $name, $email);
+        } else {
+            return null;
+        }
     }
 
     protected function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
     {
-        if (empty($clientSecret)) {
-            throw new RuntimeException('No secret provided');
-        }
-
-        $url    = new Url('https://github.com/login/oauth/access_token');
+        $url = new Url('https://github.com/login/oauth/access_token');
         $params = [
             'code'          => $code,
             'client_id'     => $clientId,
@@ -121,14 +102,15 @@ class Github implements ProviderInterface
         ];
 
         $response = $this->httpClient->request(new PostRequest($url, $headers, $params));
-
-        if ($response->getStatusCode() == 200) {
-            $data = Parser::decode($response->getBody());
-            if (isset($data->access_token)) {
-                return $data->access_token;
-            }
+        if ($response->getStatusCode() !== 200) {
+            return null;
         }
 
-        return null;
+        $data = Parser::decode($response->getBody());
+        if (isset($data->access_token)) {
+            return $data->access_token;
+        } else {
+            return null;
+        }
     }
 }

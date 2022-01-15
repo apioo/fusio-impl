@@ -32,23 +32,14 @@ use Doctrine\DBAL\Connection;
  */
 class ProviderWriter
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private Connection $connection;
 
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * @return array
-     */
-    public function getAvailableTypes()
+    public function getAvailableTypes(): array
     {
         return [
             ProviderConfig::TYPE_ACTION,
@@ -60,10 +51,7 @@ class ProviderWriter
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function write(array $newConfig)
+    public function write(array $newConfig): int
     {
         $types    = $this->getAvailableTypes();
         $existing = $this->getExistingClasses();
@@ -93,7 +81,7 @@ class ProviderWriter
         return $count;
     }
 
-    private function getExistingClasses()
+    private function getExistingClasses(): array
     {
         $classes = [];
         $result  = $this->connection->fetchAll('SELECT class FROM fusio_provider ORDER BY class ASC');

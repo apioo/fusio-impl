@@ -52,12 +52,12 @@ class OpenAPI implements ProviderInterface
 {
     private $schemas;
 
-    public function getName()
+    public function getName(): string
     {
         return 'OpenAPI';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $baseUrl = '';
         $specification = $this->parse($configuration->get('spec'), $baseUrl);
@@ -84,7 +84,7 @@ class OpenAPI implements ProviderInterface
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newTextArea('spec', 'Specification', 'The OpenAPI specification in the YAML format'));
     }

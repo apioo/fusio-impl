@@ -34,28 +34,10 @@ use Fusio\Engine\Parser\ParserAbstract;
  */
 class ProviderParser extends ParserAbstract
 {
-    /**
-     * @var \Fusio\Impl\Provider\ProviderLoader
-     */
-    protected $providerLoader;
+    private ProviderLoader $providerLoader;
+    private string $type;
+    private string $instanceOf;
 
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $instanceOf;
-
-    /**
-     * @param \Fusio\Engine\Factory\FactoryInterface $factory
-     * @param \Fusio\Engine\Form\ElementFactoryInterface $elementFactory
-     * @param \Fusio\Impl\Provider\ProviderLoader $providerLoader
-     * @param string $type
-     * @param string $instanceOf
-     */
     public function __construct(FactoryInterface $factory, Form\ElementFactoryInterface $elementFactory, ProviderLoader $providerLoader, string $type, string $instanceOf)
     {
         parent::__construct($factory, $elementFactory);
@@ -65,10 +47,7 @@ class ProviderParser extends ParserAbstract
         $this->instanceOf     = $instanceOf;
     }
 
-    /**
-     * @return array
-     */
-    public function getClasses()
+    public function getClasses(): array
     {
         $classes = $this->providerLoader->getConfig()->getClasses($this->type);
         $result  = [];

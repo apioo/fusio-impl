@@ -32,32 +32,11 @@ use PSX\Dependency\AutowireResolverInterface;
  */
 class ProviderFactory
 {
-    /**
-     * @var \Fusio\Impl\Provider\ProviderLoader
-     */
-    protected $loader;
+    private ProviderLoader $loader;
+    private AutowireResolverInterface $resolver;
+    private string $type;
+    private string $instanceOf;
 
-    /**
-     * @var \PSX\Dependency\AutowireResolverInterface
-     */
-    protected $resolver;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var string
-     */
-    protected $instanceOf;
-
-    /**
-     * @param \Fusio\Impl\Provider\ProviderLoader $loader
-     * @param \PSX\Dependency\AutowireResolverInterface $resolver
-     * @param string $type
-     * @param string $instanceOf
-     */
     public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver, string $type, string $instanceOf)
     {
         $this->loader     = $loader;
@@ -66,11 +45,7 @@ class ProviderFactory
         $this->instanceOf = $instanceOf;
     }
 
-    /**
-     * @param string $provider
-     * @return object|null
-     */
-    public function factory(string $provider)
+    public function factory(string $provider): ?object
     {
         $provider = strtolower($provider);
         $class    = $this->loader->getConfig()->getClass($this->type, $provider);
@@ -82,11 +57,7 @@ class ProviderFactory
         return null;
     }
 
-    /**
-     * @param string $class
-     * @return object
-     */
-    protected function newInstance(string $class)
+    protected function newInstance(string $class): object
     {
         $instance = $this->resolver->getObject($class);
 
