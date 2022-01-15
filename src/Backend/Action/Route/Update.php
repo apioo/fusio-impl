@@ -59,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Route successful updated',
+            'message' => 'Route successfully updated',
         ];
     }
 }

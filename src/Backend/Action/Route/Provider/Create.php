@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Route\Provider;
 use Fusio\Model\Backend\Route_Provider;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -58,9 +59,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Provider successful created',
-        ];
+            'message' => 'Provider successfully created',
+        ]);
     }
 }

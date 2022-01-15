@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Plan\Order;
 use Fusio\Model\Consumer\Plan_Order_Request;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -51,9 +52,9 @@ class Create extends ActionAbstract
 
         assert($body instanceof Plan_Order_Request);
 
-        return $this->orderService->order(
+        return new HttpResponse(201, [], $this->orderService->order(
             $body,
             UserContext::newActionContext($context)
-        );
+        ));
     }
 }

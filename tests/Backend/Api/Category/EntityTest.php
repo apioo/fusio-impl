@@ -131,7 +131,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successful updated"
+    "message": "Category successfully updated"
 }
 JSON;
 
@@ -162,7 +162,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Category successful deleted"
+    "message": "Category successfully deleted"
 }
 JSON;
 

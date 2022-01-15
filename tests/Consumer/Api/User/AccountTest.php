@@ -150,7 +150,7 @@ JSON;
         $expect = <<<JSON
 {
     "success": true,
-    "message": "Account successful updated"
+    "message": "Account successfully updated"
 }
 JSON;
 

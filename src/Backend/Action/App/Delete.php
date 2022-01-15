@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'App successful deleted',
+            'message' => 'App successfully deleted',
         ];
     }
 }

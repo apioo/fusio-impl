@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Cronjob successful deleted',
+            'message' => 'Cronjob successfully deleted',
         ];
     }
 }

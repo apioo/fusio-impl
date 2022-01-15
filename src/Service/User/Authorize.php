@@ -120,20 +120,20 @@ class Authorize
                     $state
                 );
 
-                $parameters = [
+                $parameters = array_filter([
                     'access_token' => $accessToken->getAccessToken(),
                     'token_type' => $accessToken->getTokenType(),
                     'expires_in' => $accessToken->getExpiresIn(),
                     'refresh_token' => $accessToken->getRefreshToken(),
                     'scope' => $accessToken->getScope(),
                     'state' => $accessToken->getState(),
-                ];
+                ]);
 
                 $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
 
                 return [
                     'type' => 'token',
-                    'token' => $accessToken,
+                    'token' => $parameters,
                     'redirectUri' => $redirectUri,
                 ];
             } else {

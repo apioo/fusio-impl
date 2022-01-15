@@ -152,7 +152,7 @@ JSON;
             $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successful updated"
+    "message": "Route successfully updated"
 }
 JSON;
 
@@ -265,7 +265,7 @@ JSON;
             $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successful updated"
+    "message": "Route successfully updated"
 }
 JSON;
 

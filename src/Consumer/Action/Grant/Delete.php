@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Grant successful deleted',
+            'message' => 'Grant successfully deleted',
         ];
     }
 }

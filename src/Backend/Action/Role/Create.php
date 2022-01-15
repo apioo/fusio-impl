@@ -59,7 +59,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Role successful created',
+            'message' => 'Role successfully created',
         ]);
     }
 }

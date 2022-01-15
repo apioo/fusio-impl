@@ -72,7 +72,7 @@ class OpenAPI implements ProviderInterface
 
             $result = $generator->generate($schema);
 
-            $this->schemas[$name] = $setup->addSchema($name, \json_decode($result));
+            $this->schemas[$name] = $setup->addSchema($name, (array) \json_decode($result));
         }
 
         // add routes and actions

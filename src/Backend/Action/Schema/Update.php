@@ -59,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Schema successful updated',
+            'message' => 'Schema successfully updated',
         ];
     }
 }

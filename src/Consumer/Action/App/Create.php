@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\App;
 use Fusio\Model\Consumer\App_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -56,9 +57,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'App successful created',
-        ];
+            'message' => 'App successfully created',
+        ]);
     }
 }

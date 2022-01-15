@@ -54,7 +54,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'App ' . $app->getName() . ' successful updated',
+            'message' => 'App ' . $app->getName() . ' successfully updated',
         ];
     }
 }

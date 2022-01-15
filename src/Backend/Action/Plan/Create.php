@@ -59,7 +59,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Plan successful created',
+            'message' => 'Plan successfully created',
         ]);
     }
 }

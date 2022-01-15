@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Route successful deleted',
+            'message' => 'Route successfully deleted',
         ];
     }
 }

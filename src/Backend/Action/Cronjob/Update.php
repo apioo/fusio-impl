@@ -59,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Cronjob successful updated',
+            'message' => 'Cronjob successfully updated',
         ];
     }
 }

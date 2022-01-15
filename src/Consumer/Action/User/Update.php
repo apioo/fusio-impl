@@ -58,7 +58,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Account successful updated',
+            'message' => 'Account successfully updated',
         ];
     }
 }

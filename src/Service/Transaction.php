@@ -244,7 +244,7 @@ class Transaction
             $row->getStatus(),
             $row->getProvider(),
             $row->getTransactionId(),
-            $row->getRemoteId() ?? '',
+            $row->getRemoteId(),
             $row->getAmount(),
             $row->getReturnUrl(),
             $row->getUpdateDate(),

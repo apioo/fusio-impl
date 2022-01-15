@@ -137,7 +137,7 @@ JSON;
             $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successful updated"
+    "message": "Route successfully updated"
 }
 JSON;
 
@@ -234,7 +234,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Entry successful created",
+    "message": "Entry successfully created",
     "id": "3"
 }
 JSON;
@@ -490,7 +490,6 @@ JSON;
             'x-ratelimit-limit' => ['8'],
             'x-ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
-            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -548,7 +547,6 @@ JSON;
             'access-control-allow-origin' => ['*'],
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST, PUT, DELETE, PATCH'],
             'access-control-allow-headers' => ['Accept, Accept-Language, Authorization, Content-Language, Content-Type'],
-            'link' => ['<http://127.0.0.1/system/schema/Entry-Schema>; rel="post-schema"'],
             'access-control-expose-headers' => ['*'],
         ];
 

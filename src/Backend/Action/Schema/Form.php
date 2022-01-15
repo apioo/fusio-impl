@@ -59,7 +59,7 @@ class Form extends ActionAbstract
 
         return array(
             'success' => true,
-            'message' => 'Schema form successful updated',
+            'message' => 'Schema form successfully updated',
         );
     }
 }

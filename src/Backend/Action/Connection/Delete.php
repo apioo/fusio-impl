@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Connection successful deleted',
+            'message' => 'Connection successfully deleted',
         ];
     }
 }

@@ -99,7 +99,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Provider successful created"
+    "message": "Provider successfully created"
 }
 JSON;
 

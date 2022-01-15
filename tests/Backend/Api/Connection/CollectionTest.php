@@ -175,7 +175,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Connection successful created"
+    "message": "Connection successfully created"
 }
 JSON;
 

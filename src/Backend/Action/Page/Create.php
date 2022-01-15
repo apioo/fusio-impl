@@ -59,7 +59,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Page successful created',
+            'message' => 'Page successfully created',
         ]);
     }
 }

@@ -124,7 +124,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Config successful updated"
+    "message": "Config successfully updated"
 }
 JSON;
 

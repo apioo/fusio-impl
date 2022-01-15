@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Action successful deleted',
+            'message' => 'Action successfully deleted',
         ];
     }
 }

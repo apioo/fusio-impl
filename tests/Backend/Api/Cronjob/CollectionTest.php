@@ -161,7 +161,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Cronjob successful created"
+    "message": "Cronjob successfully created"
 }
 JSON;
 

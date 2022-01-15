@@ -59,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Subscription successful updated',
+            'message' => 'Subscription successfully updated',
         ];
     }
 }

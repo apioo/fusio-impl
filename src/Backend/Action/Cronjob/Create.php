@@ -60,7 +60,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Cronjob successful created',
+            'message' => 'Cronjob successfully created',
         ]);
     }
 }

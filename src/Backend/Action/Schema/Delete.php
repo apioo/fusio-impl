@@ -53,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Schema successful deleted',
+            'message' => 'Schema successfully deleted',
         ];
     }
 }

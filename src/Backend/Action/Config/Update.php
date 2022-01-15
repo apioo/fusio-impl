@@ -59,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Config successful updated',
+            'message' => 'Config successfully updated',
         ];
     }
 }

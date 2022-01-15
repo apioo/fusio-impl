@@ -183,7 +183,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Scope successful updated"
+    "message": "Scope successfully updated"
 }
 JSON;
 
@@ -219,7 +219,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Scope successful deleted"
+    "message": "Scope successfully deleted"
 }
 JSON;
 

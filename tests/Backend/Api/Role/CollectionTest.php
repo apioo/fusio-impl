@@ -176,7 +176,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Role successful created"
+    "message": "Role successfully created"
 }
 JSON;
 

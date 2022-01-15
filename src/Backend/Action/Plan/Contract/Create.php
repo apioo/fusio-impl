@@ -66,7 +66,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Contract successful created',
+            'message' => 'Contract successfully created',
         ]);
     }
 }

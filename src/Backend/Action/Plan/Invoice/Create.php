@@ -59,7 +59,7 @@ class Create extends ActionAbstract
 
         return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Invoice successful created',
+            'message' => 'Invoice successfully created',
         ]);
     }
 }

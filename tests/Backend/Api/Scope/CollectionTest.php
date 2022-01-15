@@ -177,7 +177,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Scope successful created"
+    "message": "Scope successfully created"
 }
 JSON;
 
