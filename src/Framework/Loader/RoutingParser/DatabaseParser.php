@@ -23,9 +23,9 @@ namespace Fusio\Impl\Framework\Loader\RoutingParser;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Impl\Framework\Filter\Filter;
-use Fusio\Impl\Framework\Loader\RoutingCollection;
 use Fusio\Impl\Table\Route as TableRoutes;
 use PSX\Api\Listing\FilterInterface;
+use PSX\Framework\Loader\RoutingCollection;
 use PSX\Framework\Loader\RoutingParserInterface;
 
 /**
@@ -38,17 +38,14 @@ use PSX\Framework\Loader\RoutingParserInterface;
 class DatabaseParser implements RoutingParserInterface
 {
     private Connection $connection;
-    private ?RoutingCollection $collection = null;
+    private array $collection = [];
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getCollection(?FilterInterface $filter = null): \PSX\Framework\Loader\RoutingCollection
+    public function getCollection(?FilterInterface $filter = null): RoutingCollection
     {
         $key = $filter !== null ? $filter->getId() : '0';
 
@@ -85,6 +82,6 @@ class DatabaseParser implements RoutingParserInterface
 
     public function clear()
     {
-        $this->collection = null;
+        $this->collection = [];
     }
 }

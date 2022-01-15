@@ -64,6 +64,8 @@ class ResourceListing extends ControllerDocumentation
 
     public function __construct(RoutingParserInterface $routingParser, Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Loader $schemaLoader, SchemaManagerInterface $schemaManager)
     {
+        parent::__construct($routingParser, $schemaManager);
+
         $this->routingParser = $routingParser;
         $this->methodTable = $methodTable;
         $this->responseTable = $responseTable;
