@@ -61,7 +61,7 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
             $scopes     = $this->scopeTable->getAvailableScopes();
-            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
+            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/apps/developer/#!/auth';
             $tokenUrl   = $this->url . '/' . $this->dispatch . 'authorization/token';
             $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
 
