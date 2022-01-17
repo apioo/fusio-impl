@@ -62,7 +62,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 27,
+    "totalResults": 31,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -98,14 +98,14 @@ class CollectionTest extends ControllerDbTestCase
             "id": 10,
             "type": 1,
             "name": "info_contact_email",
-            "description": "The email address of the contact person/organization. MUST be in the format of an email address",
+            "description": "The email address of the contact person\/organization. MUST be in the format of an email address",
             "value": ""
         },
         {
             "id": 8,
             "type": 1,
             "name": "info_contact_name",
-            "description": "The identifying name of the contact person/organization",
+            "description": "The identifying name of the contact person\/organization",
             "value": ""
         },
         {
@@ -155,7 +155,7 @@ class CollectionTest extends ControllerDbTestCase
             "type": 6,
             "name": "mail_pw_reset_body",
             "description": "Body of the password reset mail",
-            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\nhttp://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}\n\nPlease ignore this email if you have not requested a password reset."
+            "value": "Hello {name},\n\nyou have requested to reset your password.\nTo set a new password please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#password_reset?token={token}\n\nPlease ignore this email if you have not requested a password reset."
         },
         {
             "id": 15,
@@ -169,7 +169,7 @@ class CollectionTest extends ControllerDbTestCase
             "type": 6,
             "name": "mail_register_body",
             "description": "Body of the activation mail",
-            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}"
+            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\nhttp:\/\/127.0.0.1\/projects\/fusio\/public\/consumer\/#activate?token={token}"
         },
         {
             "id": 13,
@@ -225,7 +225,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 27,
+    "totalResults": 31,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -349,7 +349,7 @@ JSON;
             "value": ""
         },
         {
-            "id": 23,
+            "id": 27,
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
@@ -358,61 +358,89 @@ JSON;
         {
             "id": 18,
             "type": 1,
+            "name": "provider_facebook_key",
+            "description": "Facebook app key",
+            "value": ""
+        },
+        {
+            "id": 19,
+            "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
             "value": ""
         },
         {
-            "id": 20,
+            "id": 22,
+            "type": 1,
+            "name": "provider_github_key",
+            "description": "GitHub app key",
+            "value": ""
+        },
+        {
+            "id": 23,
             "type": 1,
             "name": "provider_github_secret",
             "description": "GitHub app secret",
             "value": ""
         },
         {
-            "id": 19,
+            "id": 20,
+            "type": 1,
+            "name": "provider_google_key",
+            "description": "Google app key",
+            "value": ""
+        },
+        {
+            "id": 21,
             "type": 1,
             "name": "provider_google_secret",
             "description": "Google app secret",
             "value": ""
         },
         {
-            "id": 21,
+            "id": 24,
+            "type": 1,
+            "name": "recaptcha_key",
+            "description": "ReCaptcha key",
+            "value": ""
+        },
+        {
+            "id": 25,
             "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
             "value": ""
         },
         {
-            "id": 22,
+            "id": 26,
             "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
         },
         {
-            "id": 25,
+            "id": 29,
             "type": 1,
             "name": "system_dispatcher",
             "description": "Optional a HTTP or message queue connection which is used to dispatch events",
             "value": ""
         },
         {
-            "id": 24,
+            "id": 28,
             "type": 1,
             "name": "system_mailer",
             "description": "Optional a SMTP connection which is used as mailer",
             "value": ""
         },
         {
-            "id": 27,
+            "id": 31,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 26,
+            "id": 30,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
