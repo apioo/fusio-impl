@@ -32,45 +32,29 @@ use PSX\Framework\Config\Config;
  */
 class ProviderConfig extends Config
 {
-    const TYPE_ACTION = 'action';
-    const TYPE_CONNECTION = 'connection';
-    const TYPE_PAYMENT = 'payment';
-    const TYPE_USER = 'user';
-    const TYPE_ROUTES = 'routes';
-    const TYPE_PUSH = 'push';
+    public const TYPE_ACTION = 'action';
+    public const TYPE_CONNECTION = 'connection';
+    public const TYPE_PAYMENT = 'payment';
+    public const TYPE_USER = 'user';
+    public const TYPE_ROUTES = 'routes';
+    public const TYPE_PUSH = 'push';
 
-    /**
-     * @param array $config
-     */
     public function __construct(array $config)
     {
         parent::__construct($this->parse($config));
     }
 
-    /**
-     * @param string $type
-     * @return array
-     */
-    public function getClasses(string $type)
+    public function getClasses(string $type): array
     {
         return $this->get($type);
     }
 
-    /**
-     * @param string $type
-     * @param string $name
-     * @return string|null
-     */
-    public function getClass(string $type, string $name)
+    public function getClass(string $type, string $name): ?string
     {
         return $this->get($type)[$name] ?? null;
     }
 
-    /**
-     * @param array $config
-     * @return array
-     */
-    private function parse(array $config)
+    private function parse(array $config): array
     {
         $result = [];
         foreach ($config as $name => $classes) {
@@ -90,10 +74,7 @@ class ProviderConfig extends Config
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public static function getTypes()
+    public static function getTypes(): array
     {
         return [
             self::TYPE_ACTION,

@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Role
  *
@@ -30,23 +28,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Role extends TableAbstract
+class Role extends Generated\RoleTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
-    {
-        return 'fusio_role';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'category_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-        );
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 }

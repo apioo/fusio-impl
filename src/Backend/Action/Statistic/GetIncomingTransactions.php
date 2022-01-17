@@ -37,17 +37,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetIncomingTransactions extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\IncomingTransactions
-     */
-    private $table;
+    private View\Statistic\IncomingTransactions $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\IncomingTransactions::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             View\Transaction\QueryFilter::create($request)

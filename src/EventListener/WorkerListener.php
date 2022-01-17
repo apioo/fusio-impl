@@ -53,10 +53,7 @@ class WorkerListener implements EventSubscriberInterface
         WorkerPython::class => 'python',
     ];
 
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {

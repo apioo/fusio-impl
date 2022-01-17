@@ -39,17 +39,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    /**
-     * @var View\App
-     */
-    private $table;
+    private View\App $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\App::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->table->getEntity(
             (int) $request->get('app_id')

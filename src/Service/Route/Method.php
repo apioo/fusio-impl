@@ -44,32 +44,11 @@ use PSX\Schema\TypeInterface;
  */
 class Method
 {
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
+    private Table\Route\Method $methodTable;
+    private Table\Route\Response $responseTable;
+    private Table\Scope\Route $scopeTable;
+    private Loader $schemaLoader;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Response
-     */
-    private $responseTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Scope\Route
-     */
-    private $scopeTable;
-
-    /**
-     * @var Loader
-     */
-    private $schemaLoader;
-
-    /**
-     * @param \Fusio\Impl\Table\Route\Method $methodTable
-     * @param \Fusio\Impl\Table\Route\Response $responseTable
-     * @param \Fusio\Impl\Table\Scope\Route $scopeTable
-     * @param Loader $schemaLoader
-     */
     public function __construct(Table\Route\Method $methodTable, Table\Route\Response $responseTable, Table\Scope\Route $scopeTable, Loader $schemaLoader)
     {
         $this->methodTable   = $methodTable;
@@ -79,97 +58,11 @@ class Method
     }
 
     /**
-     * Returns an api resource documentation for the provided route and version
-     * 
-     * @param integer $routeId
-     * @param string $path
-     * @param string|null $version
-     * @return \PSX\Api\SpecificationInterface
+     * Returns the method configuration for the provide route, version and request method
      */
-    public function getDocumentation(int $routeId, string $path, ?string $version): SpecificationInterface
+    public function getMethod(int $routeId, ?string $version, string $method): array|false
     {
-        if ($version == '*' || empty($version)) {
-            $version = $this->methodTable->getLatestVersion($routeId);
-        } else {
-            $version = $this->methodTable->getVersion($routeId, $version);
-        }
-
-        if (empty($version)) {
-            throw new StatusCode\UnsupportedMediaTypeException('Version does not exist');
-        }
-
-        $definitions = new Definitions();
-
-        $methods  = $this->methodTable->getMethods($routeId, $version, true);
-        $resource = new Resource($this->getStatusFromMethods($methods), $path);
-        $scopes   = $this->scopeTable->getScopesForRoute($routeId);
-
-        $this->buildPathParameters($path, $resource, $definitions);
-
-        foreach ($methods as $method) {
-            $resourceMethod = Resource\Factory::getMethod($method['method']);
-
-            if (!empty($method['operation_id'])) {
-                $resourceMethod->setOperationId($method['operation_id']);
-            } else {
-                $resourceMethod->setOperationId($method['action']);
-            }
-
-            if (!empty($method['description'])) {
-                $resourceMethod->setDescription($method['description']);
-            }
-
-            if (!$method['public']) {
-                if (isset($scopes[$method['method']])) {
-                    $resourceMethod->setSecurity(Authorization::APP, array_unique($scopes[$method['method']]));
-                } else {
-                    $resourceMethod->setSecurity(Authorization::APP, []);
-                }
-            }
-
-            if (isset($scopes[$method['method']])) {
-                $resourceMethod->setTags($scopes[$method['method']]);
-            }
-
-            if (!empty($method['parameters'])) {
-                $resourceMethod->setQueryParameters($method['parameters']);
-
-                $definitions->addSchema($method['parameters'], $this->schemaLoader->getSchema($method['parameters']));
-            }
-
-            if (!empty($method['request'])) {
-                $resourceMethod->setRequest($method['request']);
-
-                $definitions->addSchema($method['request'], $this->schemaLoader->getSchema($method['request']));
-            }
-
-            $responses = $this->responseTable->getResponses($method['id']);
-            if (!empty($responses)) {
-                foreach ($responses as $response) {
-                    $resourceMethod->addResponse($response['code'], $response['response']);
-
-                    $definitions->addSchema($response['response'], $this->schemaLoader->getSchema($response['response']));
-                }
-            }
-
-            $resource->addMethod($resourceMethod);
-        }
-
-        return Specification::fromResource($resource, $definitions);
-    }
-
-    /**
-     * Returns the method configuration for the provide route, version and 
-     * request method
-     * 
-     * @param integer $routeId
-     * @param string $version
-     * @param string $method
-     * @return array
-     */
-    public function getMethod($routeId, $version, $method)
-    {
-        if ($version == '*' || empty($version)) {
+        if ($version === '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         } else {
             $version = $this->methodTable->getVersion($routeId, $version);
@@ -182,22 +75,12 @@ class Method
         return $this->methodTable->getMethod($routeId, $version, $method);
     }
 
-    /**
-     * @param integer $routeId
-     * @param string $version
-     * @return array
-     */
-    public function getAllowedMethods($routeId, $version)
+    public function getAllowedMethods(int $routeId, ?string $version): array
     {
         return $this->methodTable->getAllowedMethods($routeId, $version);
     }
 
-    /**
-     * @param integer $routeId
-     * @param string $version
-     * @return array
-     */
-    public function getRequestSchemas($routeId, $version)
+    public function getRequestSchemas(int $routeId, string $version): array
     {
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
@@ -220,50 +103,5 @@ class Method
         }
 
         return $schemas;
-    }
-    
-    private function getStatusFromMethods(array $methods)
-    {
-        $method = reset($methods);
-
-        return isset($method['status']) ? $method['status'] : Resource::STATUS_DEVELOPMENT;
-    }
-
-    private function buildPathParameters(string $path, Resource $resource, DefinitionsInterface $definitions)
-    {
-        $type = $this->getPathType($path);
-        if (!$type instanceof StructType) {
-            return;
-        }
-
-        $pathName = Inflection::generateTitleFromRoute($path) . 'Path';
-        $definitions->addType($pathName, $type);
-        $resource->setPathParameters($pathName);
-    }
-
-    private function getPathType(string $path): ?TypeInterface
-    {
-        $type = TypeFactory::getStruct();
-
-        $parts = explode('/', $path);
-        $count = 0;
-        foreach ($parts as $part) {
-            if (isset($part[0])) {
-                $name = null;
-                if ($part[0] == ':') {
-                    $name = substr($part, 1);
-                } elseif ($part[0] == '$') {
-                    $pos  = strpos($part, '<');
-                    $name = substr($part, 1, $pos - 1);
-                }
-
-                if ($name !== null) {
-                    $type->addProperty($name, TypeFactory::getString());
-                    $count++;
-                }
-            }
-        }
-
-        return $count > 0 ? $type : null;
     }
 }

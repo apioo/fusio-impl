@@ -24,6 +24,7 @@ namespace Fusio\Impl\Service;
 use Fusio\Model\Backend\Sdk_Generate;
 use PSX\Api\GeneratorFactory;
 use PSX\Http\Exception as StatusCode;
+use PSX\Framework\Config\Config as FrameworkConfig;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -37,23 +38,16 @@ use Symfony\Component\Console\Output\NullOutput;
  */
 class Sdk
 {
-    /**
-     * @var Application
-     */
-    private $console;
+    private Application $console;
+    private FrameworkConfig $config;
 
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    private $config;
-
-    public function __construct(Application $console, \PSX\Framework\Config\Config $config)
+    public function __construct(Application $console, FrameworkConfig $config)
     {
         $this->console = $console;
         $this->config = $config;
     }
 
-    public function generate(Sdk_Generate $record)
+    public function generate(Sdk_Generate $record): string
     {
         $format = $record->getFormat();
         $config = $record->getConfig();
@@ -108,7 +102,7 @@ class Sdk
         return $result;
     }
 
-    private function getSdkDir()
+    private function getSdkDir(): string
     {
         return $this->config->get('psx_path_public') . '/sdk';
     }

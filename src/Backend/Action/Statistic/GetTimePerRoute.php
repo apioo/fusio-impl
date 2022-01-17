@@ -38,17 +38,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetTimePerRoute extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\TimePerRoute
-     */
-    private $table;
+    private View\Statistic\TimePerRoute $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\TimePerRoute::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             $context->getUser()->getCategoryId(),

@@ -37,38 +37,38 @@ use Fusio\Engine\ParametersInterface;
  */
 class VoidConnection implements ConnectionInterface, DeploymentInterface, LifecycleInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Void-Connection';
     }
 
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): mixed
     {
         return new \stdClass();
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newInput('foo', 'Foo', 'text', 'Description'));
     }
 
-    public function onUp($name, ParametersInterface $config)
+    public function onUp(string $name, ParametersInterface $config): void
     {
     }
 
-    public function onDown($name, ParametersInterface $config)
+    public function onDown(string $name, ParametersInterface $config): void
     {
     }
 
-    public function onCreate($name, ParametersInterface $config, $connection)
+    public function onCreate(string $name, ParametersInterface $config, mixed $connection): void
     {
     }
 
-    public function onUpdate($name, ParametersInterface $config, $connection)
+    public function onUpdate(string $name, ParametersInterface $config, mixed $connection): void
     {
     }
 
-    public function onDelete($name, ParametersInterface $config, $connection)
+    public function onDelete(string $name, ParametersInterface $config, mixed $connection): void
     {
     }
 }

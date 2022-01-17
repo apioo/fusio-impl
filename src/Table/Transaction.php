@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Transaction
  *
@@ -30,26 +28,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Transaction extends TableAbstract
+class Transaction extends Generated\TransactionTable
 {
-    public function getName()
-    {
-        return 'fusio_transaction';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'invoice_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'provider' => self::TYPE_VARCHAR,
-            'transaction_id' => self::TYPE_VARCHAR,
-            'remote_id' => self::TYPE_VARCHAR,
-            'amount' => self::TYPE_FLOAT,
-            'return_url' => self::TYPE_VARCHAR,
-            'update_date' => self::TYPE_DATETIME,
-            'insert_date' => self::TYPE_DATETIME,
-        );
-    }
 }

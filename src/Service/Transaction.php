@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Model\Product;
+use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Model\Transaction as TransactionModel;
 use Fusio\Engine\Model\TransactionInterface;
 use Fusio\Engine\Parameters;
@@ -49,50 +50,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Transaction
 {
-    /**
-     * @var \Fusio\Engine\ConnectorInterface
-     */
-    private $connector;
+    private ConnectorInterface $connector;
+    private Plan\Invoice $invoiceService;
+    private ProviderFactory $providerFactory;
+    private Config $config;
+    private Table\Plan\Invoice $invoiceTable;
+    private Table\Transaction $transactionTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Service\Plan\Invoice
-     */
-    private $invoiceService;
-
-    /**
-     * @var \Fusio\Impl\Provider\ProviderFactory
-     */
-    private $providerFactory;
-
-    /**
-     * @var \PSX\Framework\Config\Config $config
-     */
-    private $config;
-
-    /**
-     * @var \Fusio\Impl\Table\Plan\Invoice
-     */
-    private $invoiceTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Transaction
-     */
-    private $transactionTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Engine\ConnectorInterface $connector
-     * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
-     * @param \Fusio\Impl\Provider\ProviderFactory $providerFactory
-     * @param \PSX\Framework\Config\Config $config
-     * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
-     * @param \Fusio\Impl\Table\Transaction $transactionTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(ConnectorInterface $connector, Plan\Invoice $invoiceService, ProviderFactory $providerFactory, Config $config, Table\Plan\Invoice $invoiceTable, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
@@ -104,13 +69,7 @@ class Transaction
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param string $name
-     * @param Transaction_Prepare_Request $prepare
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     * @return string
-     */
-    public function prepare(string $name, Transaction_Prepare_Request $prepare, UserContext $context)
+    public function prepare(string $name, Transaction_Prepare_Request $prepare, UserContext $context): string
     {
         $provider = $this->providerFactory->factory($name);
         if (!$provider instanceof ProviderInterface) {
@@ -127,28 +86,25 @@ class Transaction
         }
 
         // create transaction
-        $transaction = new TransactionModel();
-        $transaction->setInvoiceId($prepare->getInvoiceId());
-        $transaction->setProvider($name);
-        $transaction->setTransactionId(Uuid::pseudoRandom());
-        $transaction->setReturnUrl($returnUrl);
-
         $this->transactionTable->beginTransaction();
 
         try {
             // create transaction
-            $this->transactionTable->create([
-                'invoice_id' => $transaction->getInvoiceId(),
+            $record = new Table\Generated\TransactionRow([
+                'invoice_id' => $prepare->getInvoiceId(),
                 'status' => TransactionModel::STATUS_CREATED,
-                'provider' => $transaction->getProvider(),
-                'transaction_id' => $transaction->getTransactionId(),
+                'provider' => $name,
+                'transaction_id' => Uuid::pseudoRandom(),
                 'amount' => $product->getPrice(),
-                'return_url' => $transaction->getReturnUrl(),
+                'return_url' => $returnUrl,
                 'insert_date' => new \DateTime(),
             ]);
 
+            $this->transactionTable->create($record);
+
             // set transaction id
-            $transaction->setId($this->transactionTable->getLastInsertId());
+            $record->setId($this->transactionTable->getLastInsertId());
+            $transaction = $this->newTransactionModel($record);
 
             // prepare payment
             $approvalUrl = $provider->prepare(
@@ -174,12 +130,7 @@ class Transaction
         }
     }
 
-    /**
-     * @param integer $transactionId
-     * @param array $parameters
-     * @return string
-     */
-    public function execute($transactionId, array $parameters)
+    public function execute(string $transactionId, array $parameters): string
     {
         $transaction = $this->createTransaction($transactionId);
         $provider    = $this->providerFactory->factory($transaction->getProvider());
@@ -215,38 +166,25 @@ class Transaction
         }
     }
 
-    /**
-     * @param integer $invoiceId
-     * @return \Fusio\Engine\Model\ProductInterface
-     */
-    private function getProduct($invoiceId)
+    private function getProduct(int $invoiceId): ProductInterface
     {
         $plan = $this->invoiceTable->getPlanByInvoiceId($invoiceId);
         if (empty($plan)) {
             throw new StatusCode\BadRequestException('Invalid invoice id');
         }
 
-        $product = new Product();
-        $product->setId($plan['id']);
-        $product->setName($plan['name']);
-        $product->setPrice($plan['amount']);
-        $product->setPoints($plan['points']);
-        $product->setInterval($plan['period_type']);
-
-        return $product;
+        return new Product(
+            $plan['id'],
+            $plan['name'],
+            $plan['amount'],
+            $plan['points'],
+            $plan['period_type']
+        );
     }
 
-    /**
-     * @param integer $transactionId
-     * @return \Fusio\Engine\Model\Transaction
-     */
-    private function createTransaction($transactionId)
+    private function createTransaction(string $transactionId): TransactionModel
     {
-        $condition = new Condition();
-        $condition->equals('transaction_id', $transactionId);
-
-        $result = $this->transactionTable->getOneBy($condition);
-
+        $result = $this->transactionTable->findOneByTransactionId($transactionId);
         if (empty($result)) {
             throw new StatusCode\BadRequestException('Invalid transaction id');
         }
@@ -255,40 +193,23 @@ class Transaction
             throw new StatusCode\BadRequestException('Transaction is already approved');
         }
 
-        $transaction = new TransactionModel();
-        $transaction->setId($result['id']);
-        $transaction->setInvoiceId($result['invoice_id']);
-        $transaction->setStatus($result['status']);
-        $transaction->setProvider($result['provider']);
-        $transaction->setTransactionId($result['transaction_id']);
-        $transaction->setRemoteId($result['remote_id']);
-        $transaction->setAmount($result['amount']);
-        $transaction->setReturnUrl($result['return_url']);
-
-        $updateDate = $result['update_date'];
-        if (!empty($updateDate)) {
-            $transaction->setUpdateDate($updateDate);
-        }
-
-        $transaction->setCreateDate($result['insert_date']);
-
-        return $transaction;
+        return $this->newTransactionModel($result);
     }
 
     /**
      * Updates the status of the transaction
-     * 
-     * @param \Fusio\Engine\Model\TransactionInterface $transaction
      */
     private function updateTransaction(TransactionInterface $transaction)
     {
         // update transaction
-        $this->transactionTable->update([
+        $record = new Table\Generated\TransactionRow([
             'id' => $transaction->getId(),
             'status' => $transaction->getStatus(),
             'remote_id' => $transaction->getRemoteId(),
             'update_date' => new \DateTime(),
         ]);
+
+        $this->transactionTable->update($record);
 
         // if approved add points to user
         if ($transaction->getStatus() == TransactionInterface::STATUS_APPROVED) {
@@ -296,31 +217,38 @@ class Transaction
         }
     }
 
-    /**
-     * @param \Fusio\Engine\Model\TransactionInterface $transaction
-     * @return \Fusio\Engine\Payment\PrepareContext
-     */
-    private function buildPrepareContext(TransactionInterface $transaction)
+    private function buildPrepareContext(TransactionInterface $transaction): PrepareContext
     {
         $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
 
-        $context = new PrepareContext();
-        $context->setReturnUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
-        $context->setCancelUrl($baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId());
-        $context->setCurrency($this->config->get('fusio_payment_currency'));
-
-        return $context;
+        return new PrepareContext(
+            $baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId(),
+            $baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId(),
+            $this->config->get('fusio_payment_currency')
+        );
     }
 
-    /**
-     * @param \Fusio\Engine\Model\TransactionInterface $transaction
-     * @return string
-     */
-    private function buildReturnUrl(TransactionInterface $transaction)
+    private function buildReturnUrl(TransactionInterface $transaction): string
     {
         $returnUrl = $transaction->getReturnUrl();
         $returnUrl = str_replace('{transaction_id}', $transaction->getId(), $returnUrl);
 
         return $returnUrl;
+    }
+
+    private function newTransactionModel(Table\Generated\TransactionRow $row): TransactionModel
+    {
+        return new TransactionModel(
+            $row->getId(),
+            $row->getInvoiceId(),
+            $row->getStatus(),
+            $row->getProvider(),
+            $row->getTransactionId(),
+            $row->getRemoteId(),
+            $row->getAmount(),
+            $row->getReturnUrl(),
+            $row->getUpdateDate(),
+            $row->getInsertDate()
+        );
     }
 }

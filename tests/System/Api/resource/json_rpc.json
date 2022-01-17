@@ -3,15 +3,22 @@
   "path": "\/system\/jsonrpc",
   "methods": {
     "POST": {
+      "operationId": "Fusio_Impl_System_Api_JsonRpc_doPost",
       "description": "JSON-RPC Endpoint please take a look at https:\/\/www.jsonrpc.org\/specification",
       "tags": [],
-      "request": "Passthru",
+      "request": "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request",
       "responses": {
-        "200": "Rpc_Response_Success"
+        "200": "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response"
       }
     }
   },
   "definitions": {
+    "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response": {
+      "$ref": "Rpc_Response_Success"
+    },
+    "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request": {
+      "$ref": "Passthru"
+    },
     "Passthru": {
       "description": "No schema information available",
       "type": "object"

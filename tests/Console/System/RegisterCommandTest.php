@@ -96,7 +96,6 @@ class RegisterCommandTest extends ControllerDbTestCase
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
-            Adapter\File\Connection\Ftp::class,
             Adapter\GraphQL\Connection\GraphQL::class,
             Adapter\Http\Connection\Http::class,
             Adapter\Smtp\Connection\Smtp::class,
@@ -154,7 +153,6 @@ class RegisterCommandTest extends ControllerDbTestCase
         // check connection class
         $actual = array_values($config->get(ProviderConfig::TYPE_CONNECTION));
         $expect = [
-            Adapter\File\Connection\Ftp::class,
             Adapter\GraphQL\Connection\GraphQL::class,
             Adapter\Http\Connection\Http::class,
             Adapter\Smtp\Connection\Smtp::class,

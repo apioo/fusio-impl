@@ -38,50 +38,15 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAll extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\ErrorsPerRoute
-     */
-    private $errorsPerRoute;
-
-    /**
-     * @var View\Statistic\IncomingRequests
-     */
-    private $incomingRequests;
-
-    /**
-     * @var View\Statistic\IncomingTransactions
-     */
-    private $incomingTransactions;
-
-    /**
-     * @var View\Statistic\MostUsedRoutes
-     */
-    private $mostUsedRoutes;
-
-    /**
-     * @var View\Statistic\TimePerRoute
-     */
-    private $timePerRoute;
-
-    /**
-     * @var View\Dashboard\LatestApps
-     */
-    private $latestApps;
-
-    /**
-     * @var View\Dashboard\LatestRequests
-     */
-    private $latestRequests;
-
-    /**
-     * @var View\Dashboard\LatestUsers
-     */
-    private $latestUsers;
-
-    /**
-     * @var View\Dashboard\LatestTransactions
-     */
-    private $latestTransactions;
+    private View\Statistic\ErrorsPerRoute $errorsPerRoute;
+    private View\Statistic\IncomingRequests $incomingRequests;
+    private View\Statistic\IncomingTransactions $incomingTransactions;
+    private View\Statistic\MostUsedRoutes $mostUsedRoutes;
+    private View\Statistic\TimePerRoute $timePerRoute;
+    private View\Dashboard\LatestApps $latestApps;
+    private View\Dashboard\LatestRequests $latestRequests;
+    private View\Dashboard\LatestUsers $latestUsers;
+    private View\Dashboard\LatestTransactions $latestTransactions;
 
     public function __construct(TableManagerInterface $tableManager)
     {
@@ -96,7 +61,7 @@ class GetAll extends ActionAbstract
         $this->latestTransactions = $tableManager->getTable(View\Dashboard\LatestTransactions::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $logFilter = View\Log\QueryFilter::create($request);
         $transactionFilter = View\Transaction\QueryFilter::create($request);

@@ -66,7 +66,7 @@ class Schema extends ViewAbstract
             'totalResults' => $this->getTable(Table\Schema::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['propertyName', 'source', 'cache'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\Schema::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['propertyName', 'source', 'cache'])], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -76,9 +76,17 @@ class Schema extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Schema::class), 'get'], [$this->resolveId($id)], [
+        if (str_starts_with($id, '~')) {
+            $method = 'findOneByName';
+            $id = urldecode(substr($id, 1));
+        } else {
+            $method = 'find';
+            $id = (int) $id;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'name' => 'name',
@@ -92,9 +100,9 @@ class Schema extends ViewAbstract
     public function getEntityWithForm($name)
     {
         if (is_numeric($name)) {
-            $method = 'get';
+            $method = 'find';
         } else {
-            $method = 'getOneByName';
+            $method = 'findOneByName';
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Schema::class), $method], [$name], [
@@ -105,15 +113,5 @@ class Schema extends ViewAbstract
         ]);
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Schema::class)->getOneByName(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

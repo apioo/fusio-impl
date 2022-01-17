@@ -38,29 +38,11 @@ use PSX\Sql\Condition;
  */
 class Subscription
 {
-    /**
-     * @var \Fusio\Impl\Service\Event\Subscription
-     */
-    private $subscriptionService;
+    private Service\Event\Subscription $subscriptionService;
+    private Service\Config $configService;
+    private Table\Event\Subscription $subscriptionTable;
+    private Table\Event $eventTable;
 
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    private $configService;
-
-    /**
-     * @var \Fusio\Impl\Table\Event\Subscription
-     */
-    private $subscriptionTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Event
-     */
-    private $eventTable;
-
-    /**
-     * @param \Fusio\Impl\Service\Event\Subscription $subscriptionService
-     */
     public function __construct(Service\Event\Subscription $subscriptionService, Service\Config $configService, Table\Event\Subscription $subscriptionTable, Table\Event $eventTable)
     {
         $this->subscriptionService = $subscriptionService;
@@ -69,7 +51,7 @@ class Subscription
         $this->eventTable          = $eventTable;
     }
 
-    public function create(Event_Subscription_Create $subscription, UserContext $context)
+    public function create(Event_Subscription_Create $subscription, UserContext $context): int
     {
         // check max subscription count
         $count = $this->subscriptionTable->getSubscriptionCount($context->getUserId());
@@ -81,7 +63,7 @@ class Subscription
         $condition  = new Condition();
         $condition->equals('name', $subscription->getEvent());
 
-        $event = $this->eventTable->getOneBy($condition);
+        $event = $this->eventTable->findOneBy($condition);
         if (empty($event)) {
             throw new StatusCode\BadRequestException('Event does not exist');
         }
@@ -91,12 +73,12 @@ class Subscription
         $backendSubscription->setEventId($event['id']);
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
-        $this->subscriptionService->create($backendSubscription, $context);
+        return $this->subscriptionService->create($backendSubscription, $context);
     }
 
-    public function update($subscriptionId, Event_Subscription_Update $subscription, UserContext $context)
+    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context): int
     {
-        $existing = $this->subscriptionTable->get($subscriptionId);
+        $existing = $this->subscriptionTable->find($subscriptionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
@@ -108,13 +90,12 @@ class Subscription
         $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Update();
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
-        $this->subscriptionService->update($subscriptionId, $backendSubscription, $context);
+        return $this->subscriptionService->update($subscriptionId, $backendSubscription, $context);
     }
 
-    public function delete($subscriptionId, UserContext $context)
+    public function delete(int $subscriptionId, UserContext $context): int
     {
-        $subscription = $this->subscriptionTable->get($subscriptionId);
-
+        $subscription = $this->subscriptionTable->find($subscriptionId);
         if (empty($subscription)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
@@ -123,6 +104,6 @@ class Subscription
             throw new StatusCode\BadRequestException('Subscription does not belong to the user');
         }
 
-        $this->subscriptionService->delete($subscriptionId, $context);
+        return $this->subscriptionService->delete($subscriptionId, $context);
     }
 }

@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Config_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Config
-     */
-    private $configService;
+    private Config $configService;
 
     public function __construct(Config $configService)
     {
         $this->configService = $configService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Config successful updated',
+            'message' => 'Config successfully updated',
         ];
     }
 }

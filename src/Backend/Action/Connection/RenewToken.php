@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Connection\Token;
  */
 class RenewToken extends ActionAbstract
 {
-    /**
-     * @var Token
-     */
-    private $tokenService;
+    private Token $tokenService;
 
     public function __construct(Token $tokenService)
     {
         $this->tokenService = $tokenService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->tokenService->refreshAll();
 

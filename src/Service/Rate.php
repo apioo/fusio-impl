@@ -44,32 +44,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Rate
 {
-    /**
-     * @var \Fusio\Impl\Table\Rate
-     */
-    private $rateTable;
+    private Table\Rate $rateTable;
+    private Table\Rate\Allocation $rateAllocationTable;
+    private Table\Log $logTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Rate\Allocation
-     */
-    private $rateAllocationTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Log
-     */
-    private $logTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Rate $rateTable
-     * @param \Fusio\Impl\Table\Rate\Allocation $rateAllocationTable
-     * @param \Fusio\Impl\Table\Log $logTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Rate $rateTable, Table\Rate\Allocation $rateAllocationTable, Table\Log $logTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->rateTable           = $rateTable;
@@ -78,7 +57,7 @@ class Rate
         $this->eventDispatcher     = $eventDispatcher;
     }
 
-    public function create(Rate_Create $rate, UserContext $context)
+    public function create(Rate_Create $rate, UserContext $context): int
     {
         // check whether rate exists
         if ($this->exists($rate->getName())) {
@@ -89,13 +68,13 @@ class Rate
             $this->rateTable->beginTransaction();
 
             // create rate
-            $record = [
+            $record = new Table\Generated\RateRow([
                 'status'     => Table\Rate::STATUS_ACTIVE,
                 'priority'   => $rate->getPriority(),
                 'name'       => $rate->getName(),
                 'rate_limit' => $rate->getRateLimit(),
                 'timespan'   => $rate->getTimespan(),
-            ];
+            ]);
 
             $this->rateTable->create($record);
 
@@ -116,9 +95,9 @@ class Rate
         return $rateId;
     }
 
-    public function update(int $rateId, Rate_Update $rate, UserContext $context)
+    public function update(int $rateId, Rate_Update $rate, UserContext $context): int
     {
-        $existing = $this->rateTable->get($rateId);
+        $existing = $this->rateTable->find($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
@@ -131,13 +110,13 @@ class Rate
             $this->rateTable->beginTransaction();
 
             // update rate
-            $record = [
+            $record = new Table\Generated\RateRow([
                 'id'         => $existing['id'],
                 'priority'   => $rate->getPriority(),
                 'name'       => $rate->getName(),
                 'rate_limit' => $rate->getRateLimit(),
                 'timespan'   => $rate->getTimespan(),
-            ];
+            ]);
 
             $this->rateTable->update($record);
 
@@ -151,36 +130,32 @@ class Rate
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($rate, $existing, $context));
+
+        return $rateId;
     }
 
-    public function delete($rateId, UserContext $context)
+    public function delete(int $rateId, UserContext $context): int
     {
-        $existing = $this->rateTable->get($rateId);
+        $existing = $this->rateTable->find($rateId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
-        $record = [
+        $record = new Table\Generated\RateRow([
             'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
-        ];
+        ]);
 
         $this->rateTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $rateId;
     }
-    
-    /**
-     * @param string $ip
-     * @param integer $routeId
-     * @param \Fusio\Engine\Model\AppInterface $app
-     * @param \PSX\Http\ResponseInterface|null $response
-     * @return boolean
-     */
-    public function assertLimit($ip, $routeId, Model\AppInterface $app, ResponseInterface $response = null)
+
+    public function assertLimit(string $ip, int $routeId, Model\AppInterface $app, ?ResponseInterface $response = null): bool
     {
         $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
-
         if (empty($rate)) {
             return false;
         }
@@ -200,13 +175,13 @@ class Rate
         return true;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->notEquals('status', Table\Rate::STATUS_DELETED);
         $condition->equals('name', $name);
 
-        $app = $this->rateTable->getOneBy($condition);
+        $app = $this->rateTable->findOneBy($condition);
 
         if (!empty($app)) {
             return $app['id'];
@@ -215,13 +190,7 @@ class Rate
         }
     }
 
-    /**
-     * @param string $ip
-     * @param string $timespan
-     * @param \Fusio\Engine\Model\AppInterface $app
-     * @return integer
-     */
-    protected function getRequestCount($ip, $timespan, Model\AppInterface $app)
+    protected function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int
     {
         if (empty($timespan)) {
             return 0;
@@ -247,22 +216,21 @@ class Rate
     }
 
     /**
-     * @param int $rateId
      * @param Rate_Allocation[] $allocations
      */
-    protected function handleAllocations(int $rateId, array $allocations = null)
+    protected function handleAllocations(int $rateId, ?array $allocations = null): void
     {
         $this->rateAllocationTable->deleteAllFromRate($rateId);
 
         if (!empty($allocations)) {
             foreach ($allocations as $allocation) {
-                $this->rateAllocationTable->create(array(
+                $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
                     'rate_id'       => $rateId,
                     'route_id'      => $allocation->getRouteId(),
                     'app_id'        => $allocation->getAppId(),
                     'authenticated' => $allocation->getAuthenticated(),
                     'parameters'    => $allocation->getParameters(),
-                ));
+                ]));
             }
         }
     }

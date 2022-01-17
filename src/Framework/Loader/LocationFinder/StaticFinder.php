@@ -34,7 +34,7 @@ use PSX\Http\RequestInterface;
  */
 class StaticFinder implements LocationFinderInterface
 {
-    public function resolve(RequestInterface $request, Context $context)
+    public function resolve(RequestInterface $request, Context $context): ?RequestInterface
     {
         return $request;
     }

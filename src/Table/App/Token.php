@@ -22,9 +22,9 @@
 namespace Fusio\Impl\Table\App;
 
 use DateTime;
+use Fusio\Impl\Table\Generated;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\Condition;
-use PSX\Sql\TableAbstract;
 
 /**
  * Token
@@ -33,31 +33,10 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Token extends TableAbstract
+class Token extends Generated\AppTokenTable
 {
     const STATUS_ACTIVE  = 0x1;
     const STATUS_DELETED = 0x2;
-
-    public function getName()
-    {
-        return 'fusio_app_token';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'app_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'token' => self::TYPE_VARCHAR,
-            'refresh' => self::TYPE_VARCHAR,
-            'scope' => self::TYPE_VARCHAR,
-            'ip' => self::TYPE_VARCHAR,
-            'expire' => self::TYPE_DATETIME,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
 
     public function getTokensByApp($appId)
     {
@@ -67,7 +46,7 @@ class Token extends TableAbstract
         $con->add('status', '=', self::STATUS_ACTIVE);
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
 
-        return $this->getBy($con);
+        return $this->findBy($con);
     }
 
     public function getTokenByRefreshToken($appId, $refreshToken)
@@ -76,7 +55,7 @@ class Token extends TableAbstract
         $con->add('app_id', '=', $appId);
         $con->add('refresh', '=', $refreshToken);
 
-        return $this->getOneBy($con);
+        return $this->findOneBy($con);
     }
 
     public function getTokenByToken($appId, $token)
@@ -88,7 +67,7 @@ class Token extends TableAbstract
         $con->add('expire', '>', $now->format('Y-m-d H:i:s'));
         $con->add('token', '=', $token);
 
-        return $this->getOneBy($con);
+        return $this->findOneBy($con);
     }
 
     public function removeTokenFromApp($appId, $tokenId)

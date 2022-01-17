@@ -37,38 +37,12 @@ use PSX\Http\Exception as StatusCode;
  */
 class ResetPassword
 {
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
+    private Service\User $userService;
+    private Service\User\Captcha $captchaService;
+    private Service\User\Token $tokenService;
+    private Service\User\Mailer $mailerService;
+    private Table\User $userTable;
 
-    /**
-     * @var \Fusio\Impl\Service\User\Captcha
-     */
-    private $captchaService;
-
-    /**
-     * @var \Fusio\Impl\Service\User\Token
-     */
-    private $tokenService;
-
-    /**
-     * @var \Fusio\Impl\Service\User\Mailer
-     */
-    private $mailerService;
-
-    /**
-     * @var \Fusio\Impl\Table\User
-     */
-    private $userTable;
-
-    /**
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\User\Captcha $captchaService
-     * @param \Fusio\Impl\Service\User\Token $tokenService
-     * @param \Fusio\Impl\Service\User\Mailer $mailerService
-     * @param \Fusio\Impl\Table\User $userTable
-     */
     public function __construct(Service\User $userService, Captcha $captchaService, Token $tokenService, Mailer $mailerService, Table\User $userTable)
     {
         $this->userService    = $userService;
@@ -78,11 +52,11 @@ class ResetPassword
         $this->userTable      = $userTable;
     }
 
-    public function resetPassword(User_Email $reset)
+    public function resetPassword(User_Email $reset): void
     {
         $this->captchaService->assertCaptcha($reset->getCaptcha());
 
-        $user = $this->userTable->getOneByEmail($reset->getEmail());
+        $user = $this->userTable->findOneByEmail($reset->getEmail());
         if (empty($user)) {
             throw new StatusCode\NotFoundException('Could not find user');
         }
@@ -98,7 +72,7 @@ class ResetPassword
         $this->mailerService->sendResetPasswordMail($token, $user['name'], $user['email']);
     }
 
-    public function changePassword(User_PasswordReset $reset)
+    public function changePassword(User_PasswordReset $reset): void
     {
         $userId = $this->tokenService->getUser($reset->getToken());
         if (empty($userId)) {

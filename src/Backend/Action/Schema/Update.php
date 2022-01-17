@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Schema_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Schema
-     */
-    private $schemaService;
+    private Schema $schemaService;
 
     public function __construct(Schema $schemaService)
     {
         $this->schemaService = $schemaService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Schema successful updated',
+            'message' => 'Schema successfully updated',
         ];
     }
 }

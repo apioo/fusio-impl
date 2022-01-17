@@ -39,17 +39,14 @@ use PSX\Http\Environment\HttpResponseInterface;
  */
 class Execute extends ActionAbstract
 {
-    /**
-     * @var Action
-     */
-    private $actionExecutorService;
+    private Action\Executor $actionExecutorService;
 
     public function __construct(Action\Executor $actionExecutorService)
     {
         $this->actionExecutorService = $actionExecutorService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

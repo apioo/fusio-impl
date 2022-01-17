@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Rate;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Rate
-     */
-    private $rateService;
+    private Rate $rateService;
 
     public function __construct(Rate $rateService)
     {
         $this->rateService = $rateService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->rateService->delete(
             (int) $request->get('rate_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Rate successful deleted',
+            'message' => 'Rate successfully deleted',
         ];
     }
 }

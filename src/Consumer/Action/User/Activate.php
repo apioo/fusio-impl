@@ -37,17 +37,14 @@ use Fusio\Model\Consumer\User_Activate;
  */
 class Activate extends ActionAbstract
 {
-    /**
-     * @var UserActivate
-     */
-    private $activateService;
+    private UserActivate $activateService;
 
     public function __construct(UserActivate $activateService)
     {
         $this->activateService = $activateService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

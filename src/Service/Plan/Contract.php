@@ -41,26 +41,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Contract
 {
-    /**
-     * @var \Fusio\Impl\Table\Plan\Contract
-     */
-    private $contractTable;
+    private Table\Plan\Contract $contractTable;
+    private Table\Plan\Invoice $invoiceTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Plan\Invoice
-     */
-    private $invoiceTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Plan\Contract $contractTable
-     * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->contractTable   = $contractTable;
@@ -68,15 +52,9 @@ class Contract
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param integer $userId
-     * @param \Fusio\Engine\Model\ProductInterface $product
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     * @return integer
-     */
-    public function create($userId, ProductInterface $product, UserContext $context)
+    public function create(int $userId, ProductInterface $product, UserContext $context): int
     {
-        $record = [
+        $record = new Table\Generated\PlanContractRow([
             'user_id' => $userId,
             'plan_id' => $product->getId(),
             'status' => Table\Plan\Contract::STATUS_ACTIVE,
@@ -84,7 +62,7 @@ class Contract
             'points' => $product->getPoints(),
             'period_type' => $product->getInterval(),
             'insert_date' => new \DateTime(),
-        ];
+        ]);
 
         $this->contractTable->create($record);
 
@@ -97,20 +75,12 @@ class Contract
 
         $this->eventDispatcher->dispatch(new CreatedEvent($contract, $context));
 
-        return (int) $contractId;
+        return $contractId;
     }
 
-    /**
-     * @param integer $contractId
-     * @param integer $planId
-     * @param integer $status
-     * @param float $amount
-     * @param integer $points
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function update(int $contractId, Plan_Contract_Update $contract, UserContext $context)
+    public function update(int $contractId, Plan_Contract_Update $contract, UserContext $context): int
     {
-        $existing = $this->contractTable->get($contractId);
+        $existing = $this->contractTable->find($contractId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
@@ -120,33 +90,37 @@ class Contract
         }
 
         // update contract
-        $record = [
+        $record = new Table\Generated\PlanContractRow([
             'id'      => $existing['id'],
             'plan_id' => $contract->getPlan(),
             'status'  => $contract->getStatus(),
             'amount'  => $contract->getAmount(),
             'points'  => $contract->getPoints(),
-        ];
+        ]);
 
         $this->contractTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($contract, $existing, $context));
+
+        return $contractId;
     }
 
-    public function delete(int $contractId, UserContext $context)
+    public function delete(int $contractId, UserContext $context): int
     {
-        $existing = $this->contractTable->get($contractId);
+        $existing = $this->contractTable->find($contractId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find contract');
         }
 
-        $record = [
+        $record = new Table\Generated\PlanContractRow([
             'id'     => $existing['id'],
             'status' => Table\Plan\Contract::STATUS_DELETED,
-        ];
+        ]);
 
         $this->contractTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $contractId;
     }
 }

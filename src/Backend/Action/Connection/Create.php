@@ -30,6 +30,7 @@ use Fusio\Model\Backend\Action_Create;
 use Fusio\Model\Backend\Connection_Create;
 use Fusio\Impl\Service\Action;
 use Fusio\Impl\Service\Connection;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -40,17 +41,14 @@ use Fusio\Impl\Service\Connection;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Connection
-     */
-    private $connectionService;
+    private Connection $connectionService;
 
     public function __construct(Connection $connectionService)
     {
         $this->connectionService = $connectionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -61,9 +59,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Connection successful created',
-        ];
+            'message' => 'Connection successfully created',
+        ]);
     }
 }

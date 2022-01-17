@@ -40,12 +40,12 @@ use PSX\Api\Util\Inflection;
  */
 class Postman implements ProviderInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Postman';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $import = $this->parse($configuration->get('import'));
         if (!$import instanceof \stdClass) {
@@ -65,7 +65,7 @@ class Postman implements ProviderInterface
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newTextArea('import', 'Import', 'The Postman JSON export'));
     }

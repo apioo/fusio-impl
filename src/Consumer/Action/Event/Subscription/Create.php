@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Consumer\Subscription;
 use Fusio\Model\Consumer\Event_Subscription_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Model\Consumer\Event_Subscription_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Subscription
-     */
-    private $subscriptionService;
+    private Subscription $subscriptionService;
 
     public function __construct(Subscription $subscriptionService)
     {
         $this->subscriptionService = $subscriptionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -59,9 +57,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Subscription successful created',
-        ];
+            'message' => 'Subscription successfully created',
+        ]);
     }
 }

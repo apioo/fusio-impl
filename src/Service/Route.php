@@ -43,38 +43,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Route
 {
-    /**
-     * @var \Fusio\Impl\Table\Route
-     */
-    private $routesTable;
+    private Table\Route $routesTable;
+    private Table\Route\Method $methodTable;
+    private Service\Scope $scopeService;
+    private Route\Config $configService;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Method
-     */
-    private $methodTable;
-
-    /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    private $scopeService;
-
-    /**
-     * @var \Fusio\Impl\Service\Route\Config
-     */
-    private $configService;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Route $routesTable
-     * @param \Fusio\Impl\Table\Route\Method $methodTable
-     * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Service\Route\Config $configService
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Route $routesTable, Table\Route\Method $methodTable, Service\Scope $scopeService, Route\Config $configService, EventDispatcherInterface $eventDispatcher)
     {
         $this->routesTable     = $routesTable;
@@ -84,7 +58,7 @@ class Route
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Route_Create $route, UserContext $context)
+    public function create(int $categoryId, Route_Create $route, UserContext $context): int
     {
         Route\Validator::assertPath($route->getPath());
 
@@ -111,14 +85,14 @@ class Route
             $this->routesTable->beginTransaction();
 
             // create route
-            $record = [
+            $record = new Table\Generated\RoutesRow([
                 'category_id' => $categoryId,
                 'status'      => Table\Route::STATUS_ACTIVE,
                 'priority'    => $route->getPriority(),
                 'methods'     => 'ANY',
                 'path'        => $route->getPath(),
                 'controller'  => $route->getController(),
-            ];
+            ]);
 
             $this->routesTable->create($record);
 
@@ -147,9 +121,9 @@ class Route
         return $routeId;
     }
 
-    public function update(int $routeId, Route_Update $route, UserContext $context)
+    public function update(int $routeId, Route_Update $route, UserContext $context): int
     {
-        $existing = $this->routesTable->get($routeId);
+        $existing = $this->routesTable->find($routeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
@@ -169,10 +143,10 @@ class Route
             $this->routesTable->beginTransaction();
 
             // update route
-            $record = [
+            $record = new Table\Generated\RoutesRow([
                 'id'       => $existing['id'],
                 'priority' => $priority,
-            ];
+            ]);
 
             $this->routesTable->update($record);
 
@@ -193,12 +167,13 @@ class Route
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($route, $existing, $context));
+
+        return $routeId;
     }
 
-    public function delete(int $routeId, UserContext $context)
+    public function delete(int $routeId, UserContext $context): int
     {
-        $existing = $this->routesTable->get($routeId);
-
+        $existing = $this->routesTable->find($routeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find route');
         }
@@ -213,29 +188,28 @@ class Route
         }
 
         // delete route
-        $record = [
+        $record = new Table\Generated\RoutesRow([
             'id'     => $existing['id'],
             'status' => Table\Route::STATUS_DELETED
-        ];
+        ]);
 
         $this->routesTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $routeId;
     }
 
     /**
      * Checks whether the provided path already exists
-     * 
-     * @param string $path
-     * @return bool|mixed
      */
-    public function exists(string $path)
+    public function exists(string $path): int|false
     {
         $condition  = new Condition();
         $condition->equals('status', Table\Route::STATUS_ACTIVE);
         $condition->equals('path', $path);
 
-        $route = $this->routesTable->getOneBy($condition);
+        $route = $this->routesTable->findOneBy($condition);
 
         if (!empty($route)) {
             return $route['id'];

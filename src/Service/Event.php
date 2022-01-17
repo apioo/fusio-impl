@@ -41,27 +41,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Event
 {
-    /**
-     * @var \Fusio\Impl\Table\Event
-     */
-    private $eventTable;
+    private Table\Event $eventTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Event $eventTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Event $eventTable, EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventTable          = $eventTable;
-        $this->eventDispatcher     = $eventDispatcher;
+        $this->eventTable      = $eventTable;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Event_Create $event, UserContext $context)
+    public function create(int $categoryId, Event_Create $event, UserContext $context): int
     {
         // check whether event exists
         if ($this->exists($event->getName())) {
@@ -69,13 +58,13 @@ class Event
         }
 
         // create event
-        $record = [
+        $record = new Table\Generated\EventRow([
             'category_id' => $categoryId,
             'status'      => Table\Event::STATUS_ACTIVE,
             'name'        => $event->getName(),
             'description' => $event->getDescription(),
             'schema'      => $event->getSchema(),
-        ];
+        ]);
 
         $this->eventTable->create($record);
 
@@ -88,9 +77,9 @@ class Event
         return $eventId;
     }
 
-    public function update(int $eventId, Event_Update $event, UserContext $context)
+    public function update(int $eventId, Event_Update $event, UserContext $context): int
     {
-        $existing = $this->eventTable->get($eventId);
+        $existing = $this->eventTable->find($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
@@ -100,42 +89,46 @@ class Event
         }
 
         // update event
-        $record = [
+        $record = new Table\Generated\EventRow([
             'id'          => $existing['id'],
             'name'        => $event->getName(),
             'description' => $event->getDescription(),
             'schema'      => $event->getSchema(),
-        ];
+        ]);
 
         $this->eventTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($event, $existing, $context));
+
+        return $eventId;
     }
 
-    public function delete(int $eventId, UserContext $context)
+    public function delete(int $eventId, UserContext $context): int
     {
-        $existing = $this->eventTable->get($eventId);
+        $existing = $this->eventTable->find($eventId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
-        $record = [
+        $record = new Table\Generated\EventRow([
             'id'     => $existing['id'],
             'status' => Table\Rate::STATUS_DELETED,
-        ];
+        ]);
 
         $this->eventTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $eventId;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->equals('status', Table\Event::STATUS_ACTIVE);
         $condition->equals('name', $name);
 
-        $event = $this->eventTable->getOneBy($condition);
+        $event = $this->eventTable->findOneBy($condition);
 
         if (!empty($event)) {
             return $event['id'];

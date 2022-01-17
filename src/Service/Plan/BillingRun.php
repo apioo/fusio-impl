@@ -36,38 +36,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class BillingRun
 {
-    /**
-     * @var \Fusio\Impl\Service\Plan\Invoice
-     */
-    private $invoiceService;
+    private Service\Plan\Invoice $invoiceService;
+    private Table\Plan\Contract $contractTable;
+    private Table\Plan\Invoice $invoiceTable;
+    private Table\User $userTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Plan\Contract
-     */
-    private $contractTable;
-
-    /**
-     * @var \Fusio\Impl\Table\Plan\Invoice
-     */
-    private $invoiceTable;
-
-    /**
-     * @var \Fusio\Impl\Table\User
-     */
-    private $userTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
-     * @param \Fusio\Impl\Table\Plan\Contract $contractTable
-     * @param \Fusio\Impl\Table\Plan\Invoice $invoiceTable
-     * @param \Fusio\Impl\Table\User $userTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Service\Plan\Invoice $invoiceService, Table\Plan\Contract $contractTable, Table\Plan\Invoice $invoiceTable, Table\User $userTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->invoiceService = $invoiceService;
@@ -78,8 +52,7 @@ class BillingRun
     }
 
     /**
-     * Executes the billing run which creates new invoices if a date border is
-     * reached
+     * Executes the billing run which creates new invoices if a date border is reached
      */
     public function run(): \Generator
     {

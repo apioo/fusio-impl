@@ -71,7 +71,7 @@ class Transaction extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $transactionId)
+    public function getEntity(int $userId, int $transactionId)
     {
         $condition = new Condition();
         $condition->equals('transact.id', $transactionId);
@@ -108,7 +108,7 @@ class Transaction extends ViewAbstract
     private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
     {
         $fields  = implode(',', $fields);
-        $where   = $condition->getStatment($this->connection->getDatabasePlatform());
+        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
         $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
 
         return <<<SQL

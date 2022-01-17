@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Schema;
  */
 class GetPreview extends ActionAbstract
 {
-    /**
-     * @var Schema
-     */
-    private $schemaService;
+    private Schema $schemaService;
 
     public function __construct(Schema $schemaService)
     {
         $this->schemaService = $schemaService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $this->schemaService->generatePreview(
             $request->get('schema_id')

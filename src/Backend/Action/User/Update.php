@@ -38,17 +38,14 @@ use Fusio\Model\Backend\User_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var User
-     */
-    private $userService;
+    private User $userService;
 
     public function __construct(User $userService)
     {
         $this->userService = $userService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'User successful updated',
+            'message' => 'User successfully updated',
         ];
     }
 }

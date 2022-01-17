@@ -30,33 +30,12 @@ namespace Fusio\Impl\Mail;
  */
 class Message
 {
-    /**
-     * @var string
-     */
-    private $from;
+    private string $from;
+    private array $to;
+    private string $subject;
+    private string $body;
 
-    /**
-     * @var array
-     */
-    private $to;
-
-    /**
-     * @var string
-     */
-    private $subject;
-
-    /**
-     * @var string
-     */
-    private $body;
-
-    /**
-     * @param string $from
-     * @param array $to
-     * @param string $subject
-     * @param string $body
-     */
-    public function __construct($from, array $to, $subject, $body)
+    public function __construct(string $from, array $to, string $subject, string $body)
     {
         $this->from    = $from;
         $this->to      = $to;
@@ -64,34 +43,22 @@ class Message
         $this->body    = $body;
     }
 
-    /**
-     * @return string
-     */
-    public function getFrom()
+    public function getFrom(): string
     {
         return $this->from;
     }
 
-    /**
-     * @return array
-     */
-    public function getTo()
+    public function getTo(): array
     {
         return $this->to;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @return string
-     */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }

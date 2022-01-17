@@ -39,20 +39,9 @@ use PSX\Http\Exception as StatusCode;
  */
 class Get extends ActionAbstract
 {
-    /**
-     * @var Marketplace\Repository\Remote
-     */
-    private $remoteRepository;
-
-    /**
-     * @var Marketplace\Repository\Local
-     */
-    private $localRepository;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Marketplace\Repository\Remote $remoteRepository;
+    private Marketplace\Repository\Local $localRepository;
+    private Config $config;
 
     public function __construct(Marketplace\Repository\Remote $remoteRepository, Marketplace\Repository\Local $localRepository, Config $config)
     {
@@ -61,7 +50,7 @@ class Get extends ActionAbstract
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $localApp = $this->localRepository->fetchByName(
             $request->get('app_name')

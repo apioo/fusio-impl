@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\Plan;
 
 use PSX\Sql\Condition;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Contract
@@ -31,19 +31,19 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Contract extends TableAbstract
+class Contract extends Generated\PlanContractTable
 {
     const STATUS_ACTIVE = 1;
     const STATUS_CANCELLED = 2;
     const STATUS_CLOSED = 3;
     const STATUS_DELETED = 4;
 
-    public function getName()
+    public function getName(): string
     {
         return 'fusio_plan_contract';
     }
 
-    public function getColumns()
+    public function getColumns(): array
     {
         return array(
             'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
@@ -59,6 +59,6 @@ class Contract extends TableAbstract
     
     public function getActiveContracts()
     {
-        return $this->getBy(new Condition(['status', '=', self::STATUS_ACTIVE]));
+        return $this->findBy(new Condition(['status', '=', self::STATUS_ACTIVE]));
     }
 }

@@ -65,7 +65,7 @@ class Scope extends ViewAbstract
             'totalResults' => $this->getTable(Table\Scope::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',
@@ -75,13 +75,21 @@ class Scope extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Scope::class), 'get'], [$this->resolveId($id)], [
+        if (str_starts_with($id, '~')) {
+            $method = 'findOneByName';
+            $id = urldecode(substr($id, 1));
+        } else {
+            $method = 'find';
+            $id = (int) $id;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Scope::class), $method], [$id], [
             'id' => $this->fieldInteger('id'),
             'name' => 'name',
             'description' => 'description',
-            'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'getByScope_id'], [new Reference('id'), null, 0, 1024], [
+            'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'findByScopeId'], [new Reference('id'), null, 0, 1024], [
                 'id' => $this->fieldInteger('id'),
                 'scopeId' => $this->fieldInteger('scope_id'),
                 'routeId' => $this->fieldInteger('route_id'),
@@ -96,10 +104,10 @@ class Scope extends ViewAbstract
     public function getCategories()
     {
         $definition = [
-            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'getAll'], [0, 1024, 'name', Sql::SORT_ASC], [
+            'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [null, 0, 1024, 'name', Sql::SORT_ASC], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
-                'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'getByCategory_id'], [new Reference('id'), null, 0, 1024, 'name', Sql::SORT_ASC], [
+                'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', Sql::SORT_ASC], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                     'description' => 'description',
@@ -108,15 +116,5 @@ class Scope extends ViewAbstract
         ];
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Scope::class)->getOneByName(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

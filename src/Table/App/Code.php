@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\App;
 
 use Fusio\Impl\Table\App;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Code
@@ -31,27 +31,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Code extends TableAbstract
+class Code extends Generated\AppCodeTable
 {
-    public function getName()
-    {
-        return 'fusio_app_code';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'app_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'code' => self::TYPE_VARCHAR,
-            'redirect_uri' => self::TYPE_VARCHAR,
-            'scope' => self::TYPE_VARCHAR,
-            'state' => self::TYPE_VARCHAR,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
-
     public function getCodeByRequest($appKey, $appSecret, $code, $redirectUri)
     {
         $sql = '    SELECT code.id,

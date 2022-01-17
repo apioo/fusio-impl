@@ -34,26 +34,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Payer
 {
-    /**
-     * @var \Fusio\Impl\Table\User
-     */
-    private $userTable;
+    private Table\User $userTable;
+    private Table\Plan\Usage $usageTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Plan\Usage
-     */
-    private $usageTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\User $userTable
-     * @param \Fusio\Impl\Table\Plan\Usage $usageTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\User $userTable, Table\Plan\Usage $usageTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->userTable       = $userTable;
@@ -62,25 +46,23 @@ class Payer
     }
 
     /**
-     * Method which is called in case a user visits a route which cost a
-     * specific amount of points. This method decreases the points from the
-     * user account
-     *
-     * @param integer $points
-     * @param \Fusio\Engine\ContextInterface $context
+     * Method which is called in case a user visits a route which cost a specific amount of points. This method
+     * decreases the points from the user account
      */
-    public function pay($points, ContextInterface $context)
+    public function pay(int $points, ContextInterface $context): void
     {
         // decrease user points
         $this->userTable->payPoints($context->getUser()->getId(), $points);
 
         // add usage entry
-        $this->usageTable->create([
+        $record = new Table\Generated\PlanUsageRow([
             'route_id' => $context->getRouteId(),
             'user_id' => $context->getUser()->getId(),
             'app_id' => $context->getApp()->getId(),
             'points' => $points,
             'insert_date' => new \DateTime(),
         ]);
+
+        $this->usageTable->create($record);
     }
 }

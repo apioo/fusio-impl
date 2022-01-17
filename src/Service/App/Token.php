@@ -44,38 +44,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Token
 {
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
+    private Table\App $appTable;
+    private Table\User $userTable;
+    private Table\App\Token $appTokenTable;
+    private Config $config;
+    private EventDispatcherInterface  $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\User 
-     */
-    private $userTable;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Token 
-     */
-    private $appTokenTable;
-
-    /**
-     * @var \PSX\Framework\Config\Config 
-     */
-    private $config;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface 
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param \Fusio\Impl\Table\User $userTable
-     * @param \Fusio\Impl\Table\App\Token $appTokenTable
-     * @param \PSX\Framework\Config\Config $config
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\App $appTable, Table\User $userTable, Table\App\Token $appTokenTable, Config $config, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
@@ -85,15 +59,7 @@ class Token
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param integer $appId
-     * @param integer $userId
-     * @param array $scopes
-     * @param string $ip
-     * @param \DateInterval $expire
-     * @return \PSX\Oauth2\AccessToken
-     */
-    public function generateAccessToken($appId, $userId, array $scopes, $ip, DateInterval $expire)
+    public function generateAccessToken(int $appId, int $userId, array $scopes, string $ip, DateInterval $expire, ?string $state = null): AccessToken
     {
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No scopes provided');
@@ -110,7 +76,7 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $this->appTokenTable->create([
+        $record = new Table\Generated\AppTokenRow([
             'app_id'  => $app['id'],
             'user_id' => $user['id'],
             'status'  => Table\App\Token::STATUS_ACTIVE,
@@ -121,6 +87,8 @@ class Token
             'expire'  => $expires,
             'date'    => $now,
         ]);
+
+        $this->appTokenTable->create($record);
 
         $tokenId = $this->appTokenTable->getLastInsertId();
 
@@ -135,34 +103,25 @@ class Token
             new UserContext($appId, $userId, $ip)
         ));
 
-        $token = new AccessToken();
-        $token->setAccessToken($accessToken);
-        $token->setTokenType('bearer');
-        $token->setExpiresIn($expires->getTimestamp());
-        $token->setRefreshToken($refreshToken);
-        $token->setScope(implode(',', $scopes));
-
-        return $token;
+        return new AccessToken(
+            $accessToken,
+            'bearer',
+            $expires->getTimestamp(),
+            $refreshToken,
+            implode(',', $scopes),
+            $state
+        );
     }
 
-    /**
-     * @param integer $appId
-     * @param string $refreshToken
-     * @param string $ip
-     * @param \DateInterval $expireApp
-     * @param \DateInterval $expireRefresh
-     * @return \PSX\Oauth2\AccessToken
-     */
-    public function refreshAccessToken($appId, $refreshToken, $ip, DateInterval $expireApp, DateInterval $expireRefresh)
+    public function refreshAccessToken(int $appId, string $refreshToken, string $ip, DateInterval $expireApp, DateInterval $expireRefresh): AccessToken
     {
         $token = $this->appTokenTable->getTokenByRefreshToken($appId, $refreshToken);
-        $now   = new \DateTime();
-
         if (empty($token)) {
             throw new StatusCode\BadRequestException('Invalid refresh token');
         }
 
         // check expire date
+        $now = new \DateTime();
         $date = $token['date'];
         if ($date instanceof \DateTime) {
             $expires = clone $date;
@@ -189,7 +148,7 @@ class Token
         $accessToken  = $this->generateJWT($user, $now, $expires);
         $refreshToken = TokenGenerator::generateToken();
 
-        $this->appTokenTable->update([
+        $record = new Table\Generated\AppTokenRow([
             'id'      => $token['id'],
             'status'  => Table\App\Token::STATUS_ACTIVE,
             'token'   => $accessToken,
@@ -198,6 +157,8 @@ class Token
             'expire'  => $expires,
             'date'    => $now,
         ]);
+
+        $this->appTokenTable->update($record);
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
@@ -210,22 +171,16 @@ class Token
             new UserContext($app['id'], $token['user_id'], $ip)
         ));
 
-        $token = new AccessToken();
-        $token->setAccessToken($accessToken);
-        $token->setTokenType('bearer');
-        $token->setExpiresIn($expires->getTimestamp());
-        $token->setRefreshToken($refreshToken);
-        $token->setScope(implode(',', $scopes));
-
-        return $token;
+        return new AccessToken(
+            $accessToken,
+            'bearer',
+            $expires->getTimestamp(),
+            $refreshToken,
+            implode(',', $scopes)
+        );
     }
 
-    /**
-     * @param integer $appId
-     * @param integer $tokenId
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function removeToken($appId, $tokenId, UserContext $context)
+    public function removeToken(int $appId, int $tokenId, UserContext $context): void
     {
         $app = $this->getApp($appId);
 
@@ -234,13 +189,7 @@ class Token
         $this->eventDispatcher->dispatch(new RemovedTokenEvent($appId, $tokenId, $context));
     }
 
-    /**
-     * @param \PSX\Record\Record $user
-     * @param \DateTime $now
-     * @param \DateTime $expires
-     * @return string
-     */
-    private function generateJWT($user, DateTime $now, DateTime $expires)
+    private function generateJWT(Table\Generated\UserRow $user, DateTime $now, DateTime $expires): string
     {
         $baseUrl = $this->config->get('psx_url');
 
@@ -255,14 +204,9 @@ class Token
         return JWT::encode($payload, $this->config->get('fusio_project_key'));
     }
 
-    /**
-     * @param integer $appId
-     * @return \PSX\Record\Record
-     */
-    private function getApp($appId)
+    private function getApp(int $appId): ?Table\Generated\AppRow
     {
-        $app = $this->appTable->get($appId);
-
+        $app = $this->appTable->find($appId);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Invalid app');
         }
@@ -274,14 +218,9 @@ class Token
         return $app;
     }
 
-    /**
-     * @param integer $userId
-     * @return \PSX\Record\Record
-     */
-    private function getUser($userId)
+    private function getUser(int $userId): ?Table\Generated\UserRow
     {
-        $user = $this->userTable->get($userId);
-
+        $user = $this->userTable->find($userId);
         if (empty($user)) {
             throw new StatusCode\BadRequestException('Invalid user');
         }

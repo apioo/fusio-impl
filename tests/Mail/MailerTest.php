@@ -28,6 +28,7 @@ use Fusio\Impl\Mail\SenderInterface;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
+use Symfony\Component\Mailer\Mailer;
 
 /**
  * MailerTest
@@ -52,7 +53,7 @@ class MailerTest extends ControllerDbTestCase
         $sender->expects($this->once())
             ->method('accept')
             ->with($this->callback(function($dispatcher){
-                $this->assertInstanceOf(\Swift_Mailer::class, $dispatcher);
+                $this->assertInstanceOf(Mailer::class, $dispatcher);
 
                 return true;
             }))
@@ -61,7 +62,7 @@ class MailerTest extends ControllerDbTestCase
         $sender->expects($this->once())
             ->method('send')
             ->with($this->callback(function($dispatcher){
-                $this->assertInstanceOf(\Swift_Mailer::class, $dispatcher);
+                $this->assertInstanceOf(Mailer::class, $dispatcher);
 
                 return true;
             }), $this->callback(function($message){

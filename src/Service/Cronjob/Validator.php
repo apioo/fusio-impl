@@ -32,10 +32,7 @@ use PSX\Http\Exception as StatusCode;
  */
 class Validator
 {
-    /**
-     * @var array
-     */
-    private static $special = [
+    private const SPECIAL = [
         '@reboot',
         '@yearly',
         '@annually',
@@ -46,10 +43,7 @@ class Validator
         '@hourly',
     ];
 
-    /**
-     * @var array
-     */
-    private static $rules = [
+    private const RULES = [
         [0, 59],
         [0, 23],
         [1, 31],
@@ -57,10 +51,7 @@ class Validator
         [0, 7],
     ];
 
-    /**
-     * @var array
-     */
-    private static $convert = [
+    private const CONVERT = [
         null,
         null,
         null,
@@ -68,10 +59,7 @@ class Validator
         [1 => 'mon', 2 => 'tue', 3 => 'wed', 4 => 'thu', 5 => 'fri', 6 => 'sat', 7 => 'sun'],
     ];
 
-    /**
-     * @var array
-     */
-    private static $fields = [
+    private const FIELDS = [
         'minute',
         'hour',
         'day',
@@ -79,34 +67,30 @@ class Validator
         'weekday',
     ];
 
-    /**
-     * @param string $cron
-     * @return void
-     */
     public static function assertCron(string $cron): void
     {
         if (empty($cron)) {
             throw new StatusCode\BadRequestException('Cron must not be empty');
         }
 
-        if (in_array($cron, self::$special)) {
+        if (in_array($cron, self::SPECIAL)) {
             return;
         }
 
         $cron = preg_replace('/\s+/', ' ', $cron);
         $parts = explode(' ', $cron);
 
-        if (count($parts) != count(self::$rules)) {
-            throw new StatusCode\BadRequestException('Cron must have exactly ' . count(self::$rules) . ' space separated fields');
+        if (count($parts) != count(self::RULES)) {
+            throw new StatusCode\BadRequestException('Cron must have exactly ' . count(self::RULES) . ' space separated fields');
         }
 
         foreach ($parts as $index => $part) {
-            [$min, $max] = self::$rules[$index];
+            [$min, $max] = self::RULES[$index];
 
             try {
-                self::validateField($part, $min, $max, self::$convert[$index]);
+                self::validateField($part, $min, $max, self::CONVERT[$index]);
             } catch (\InvalidArgumentException $e) {
-                throw new StatusCode\BadRequestException('Cron ' . self::$fields[$index] . ' ' . $e->getMessage());
+                throw new StatusCode\BadRequestException('Cron ' . self::FIELDS[$index] . ' ' . $e->getMessage());
             }
         }
     }

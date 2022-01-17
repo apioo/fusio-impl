@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\App;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Scope
@@ -30,22 +30,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Scope extends TableAbstract
+class Scope extends Generated\AppScopeTable
 {
-    public function getName()
-    {
-        return 'fusio_app_scope';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'app_id' => self::TYPE_INT,
-            'scope_id' => self::TYPE_INT,
-        );
-    }
-
     public function deleteAllFromApp($appId)
     {
         $sql = 'DELETE FROM fusio_app_scope

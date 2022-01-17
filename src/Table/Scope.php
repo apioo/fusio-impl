@@ -23,7 +23,6 @@ namespace Fusio\Impl\Table;
 
 use PSX\Sql\Condition;
 use PSX\Sql\Sql;
-use PSX\Sql\TableAbstract;
 
 /**
  * Scope
@@ -32,33 +31,17 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Scope extends TableAbstract
+class Scope extends Generated\ScopeTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
-    {
-        return 'fusio_scope';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'category_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'description' => self::TYPE_VARCHAR,
-        );
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
     public function getValidScopes(array $names)
     {
         $names = array_filter($names);
 
         if (!empty($names)) {
-            return $this->getAll(0, 1024, null, null, new Condition(['name', 'IN', $names]));
+            return $this->findAll(new Condition(['name', 'IN', $names]), 0, 1024);
         } else {
             return [];
         }
@@ -66,7 +49,7 @@ class Scope extends TableAbstract
 
     public function getAvailableScopes()
     {
-        $result = $this->getAll(0, 1024, 'name', Sql::SORT_ASC);
+        $result = $this->findAll(null, 0, 1024, 'name', Sql::SORT_ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row['name']] = $row['description'];

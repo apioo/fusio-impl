@@ -40,15 +40,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetDebug extends ActionAbstract
 {
-    /**
-     * @var View\User
-     */
-    private $table;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private View\User $table;
+    private Config $config;
 
     public function __construct(TableManagerInterface $tableManager, Config $config)
     {
@@ -56,7 +49,7 @@ class GetDebug extends ActionAbstract
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $data = [
             'class' => get_class($request)
@@ -71,7 +64,7 @@ class GetDebug extends ActionAbstract
         return $data;
     }
 
-    private function buildHttp(HttpRequest $request)
+    private function buildHttp(HttpRequest $request): array
     {
         return [
             'method' => $request->getMethod(),
@@ -82,7 +75,7 @@ class GetDebug extends ActionAbstract
         ];
     }
 
-    private function buildRpc(RpcRequest $request)
+    private function buildRpc(RpcRequest $request): array
     {
         return [
             'arguments' => $request->getArguments(),

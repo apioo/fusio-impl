@@ -103,7 +103,7 @@ class FormTest extends ControllerDbTestCase
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Schema form successful updated"
+    "message": "Schema form successfully updated"
 }
 JSON;
 

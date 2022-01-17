@@ -36,20 +36,14 @@ use Fusio\Model\Consumer\User_Account;
  */
 class User
 {
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
+    private Service\User $userService;
 
-    /**
-     * @param \Fusio\Impl\Service\User $userService
-     */
     public function __construct(Service\User $userService)
     {
         $this->userService = $userService;
     }
 
-    public function update(User_Account $account, UserContext $context)
+    public function update(User_Account $account, UserContext $context): int
     {
         $attributes = new User_Attributes();
         foreach ($account->getAttributes() ?? [] as $key => $value) {
@@ -60,6 +54,6 @@ class User
         $backendUser->setEmail($account->getEmail());
         $backendUser->setAttributes($attributes);
 
-        $this->userService->update($context->getUserId(), $backendUser, $context);
+        return $this->userService->update($context->getUserId(), $backendUser, $context);
     }
 }

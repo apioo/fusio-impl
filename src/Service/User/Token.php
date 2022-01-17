@@ -36,15 +36,8 @@ use PSX\Http\Exception as StatusCode;
  */
 class Token
 {
-    /**
-     * @var Table\User
-     */
-    private $userTable;
-
-    /**
-     * @var Config
-     */
-    private $psxConfig;
+    private Table\User $userTable;
+    private Config $psxConfig;
 
     public function __construct(Table\User $userTable, Config $psxConfig)
     {
@@ -53,13 +46,9 @@ class Token
     }
 
     /**
-     * Returns a user for the provided one time token. Note we delete the token
-     * in case we can return a valid user
-     * 
-     * @param string $token
-     * @return int
+     * Returns a user for the provided one time token. Note we delete the token in case we can return a valid user
      */
-    public function getUser(string $token)
+    public function getUser(string $token): int
     {
         try {
             JWT::decode($token, $this->psxConfig->get('fusio_project_key'), ['HS256']);
@@ -67,7 +56,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid token provided');
         }
 
-        $user = $this->userTable->getOneByToken($token);
+        $user = $this->userTable->findOneByToken($token);
         if (empty($user)) {
             throw new StatusCode\BadRequestException('Could not find user for token');
         }
@@ -79,11 +68,8 @@ class Token
 
     /**
      * Generates a one time token for the user and assigns the token to the user
-     *
-     * @param int $userId
-     * @return string
      */
-    public function generateToken($userId): string
+    public function generateToken(int $userId): string
     {
         $payload = [
             'exp' => time() + (60 * 60),
@@ -92,10 +78,12 @@ class Token
 
         $token = JWT::encode($payload, $this->psxConfig->get('fusio_project_key'), 'HS256');
 
-        $this->userTable->update([
+        $record = new Table\Generated\UserRow([
             'id'    => $userId,
             'token' => $token
         ]);
+
+        $this->userTable->update($record);
 
         return $token;
     }
@@ -105,11 +93,13 @@ class Token
      * 
      * @param int $userId
      */
-    public function resetToken($userId)
+    public function resetToken(int $userId)
     {
-        $this->userTable->update([
+        $record = new Table\Generated\UserRow([
             'id'    => $userId,
             'token' => ''
         ]);
+
+        $this->userTable->update($record);
     }
 }

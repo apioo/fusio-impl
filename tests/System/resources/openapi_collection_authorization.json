@@ -66,12 +66,13 @@
     },
     "\/authorization\/token": {
       "post": {
+        "operationId": "Fusio_Impl_Authorization_Token_doPost",
         "requestBody": {
           "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/OAuth2_Request"
+                "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_Request"
               }
             }
           }
@@ -82,7 +83,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Access_Token"
+                  "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_200_Response"
                 }
               }
             }
@@ -92,7 +93,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/OAuth2_Error"
+                  "$ref": "#\/components\/schemas\/Fusio_Impl_Authorization_Token_doPost_POST_400_Response"
                 }
               }
             }
@@ -103,6 +104,29 @@
   },
   "components": {
     "schemas": {
+      "AccessToken": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
       "App": {
         "type": "object",
         "properties": {
@@ -177,6 +201,29 @@
       "Backend_User": {
         "$ref": "#\/components\/schemas\/User"
       },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "error_description": {
+            "type": "string"
+          },
+          "error_uri": {
+            "type": "string"
+          }
+        }
+      },
+      "Fusio_Impl_Authorization_Token_doPost_POST_200_Response": {
+        "$ref": "#\/components\/schemas\/AccessToken"
+      },
+      "Fusio_Impl_Authorization_Token_doPost_POST_400_Response": {
+        "$ref": "#\/components\/schemas\/Error"
+      },
+      "Fusio_Impl_Authorization_Token_doPost_POST_Request": {
+        "$ref": "#\/components\/schemas\/Passthru"
+      },
       "Message": {
         "type": "object",
         "properties": {
@@ -188,134 +235,9 @@
           }
         }
       },
-      "OAuth2_Access_Token": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Authorization_Code": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "authorization_code",
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "redirect_uri": {
-            "type": "string"
-          },
-          "client_id": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "code"
-        ]
-      },
-      "OAuth2_Client_Credentials": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "client_credentials",
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type"
-        ]
-      },
-      "OAuth2_Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "error_description": {
-            "type": "string"
-          },
-          "error_uri": {
-            "type": "string"
-          },
-          "state": {
-            "type": "string"
-          }
-        }
-      },
-      "OAuth2_Password": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "password",
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "username",
-          "password"
-        ]
-      },
-      "OAuth2_Refresh_Token": {
-        "type": "object",
-        "properties": {
-          "grant_type": {
-            "const": "refresh_token",
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "grant_type",
-          "refresh_token"
-        ]
-      },
-      "OAuth2_Request": {
-        "oneOf": [
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Authorization_Code"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Password"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Client_Credentials"
-          },
-          {
-            "$ref": "#\/components\/schemas\/OAuth2_Refresh_Token"
-          }
-        ]
+      "Passthru": {
+        "description": "No schema information available",
+        "type": "object"
       },
       "User": {
         "type": "object",
@@ -464,7 +386,7 @@
             }
           },
           "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "authorizationUrl": "http:\/\/127.0.0.1\/apps\/developer\/#!\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {

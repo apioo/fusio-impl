@@ -53,7 +53,7 @@ class Token extends ViewAbstract
             'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getAll'], [$startIndex, $count, null, Sql::SORT_DESC, $condition, Fields::blacklist(['token'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, Sql::SORT_DESC, Fields::blacklist(['token'])], [
                 'id' => $this->fieldInteger('id'),
                 'appId' => $this->fieldInteger('app_id'),
                 'userId' => $this->fieldInteger('user_id'),
@@ -69,15 +69,15 @@ class Token extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\App\Token::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\App\Token::class), 'find'], [$id], [
             'id' => 'id',
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('app_id')], [
+            'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => 'id',
                 'userId' => 'user_id',
                 'status' => 'status',
                 'name' => 'name',
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                 'id' => 'id',
                 'status' => 'status',
                 'name' => 'name',

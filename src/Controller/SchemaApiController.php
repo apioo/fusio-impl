@@ -21,13 +21,26 @@
 
 namespace Fusio\Impl\Controller;
 
+use Doctrine\DBAL\Connection;
+use Fusio\Engine\Processor;
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
+use Fusio\Impl\Schema\Loader;
+use Fusio\Impl\Service\Action\Invoker;
+use Fusio\Impl\Service\Config;
+use Fusio\Impl\Service\Log;
+use Fusio\Impl\Service\Rate;
+use Fusio\Impl\Service\Route\Method;
+use Fusio\Impl\Service\Security\TokenValidator;
 use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource\MethodAbstract;
 use PSX\Api\SpecificationInterface;
+use PSX\Dependency\Attribute\Inject;
+use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
+use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
@@ -41,73 +54,29 @@ use PSX\Record\RecordInterface;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class SchemaApiController extends SchemaApiAbstract implements DocumentedInterface
+class SchemaApiController extends ControllerAbstract
 {
     private const SCHEMA_PASSTHRU = 'Passthru';
 
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    protected $context;
+    #[Inject]
+    private Loader $schemaLoader;
 
-    /**
-     * @Inject
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    #[Inject]
+    private Method $routesMethodService;
 
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Processor
-     */
-    protected $processor;
+    #[Inject]
+    private Rate $rateService;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Schema\Loader
-     */
-    protected $schemaLoader;
+    #[Inject]
+    private Log $logService;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Route\Method
-     */
-    protected $routesMethodService;
+    #[Inject]
+    private TokenValidator $securityTokenValidator;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
+    #[Inject]
+    private Invoker $actionInvokerService;
 
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Rate
-     */
-    protected $rateService;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Log
-     */
-    protected $logService;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Security\TokenValidator
-     */
-    protected $securityTokenValidator;
-
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Service\Action\Invoker
-     */
-    protected $actionInvokerService;
-
-    /**
-     * @return array
-     */
-    public function getPreFilter()
+    public function getPreFilter(): array
     {
         $filter = parent::getPreFilter();
 
@@ -136,100 +105,46 @@ class SchemaApiController extends SchemaApiAbstract implements DocumentedInterfa
         return $filter;
     }
 
-    /**
-     * Select all methods from the routes method table and build a resource
-     * based on the data. If the route is in production mode read the schema
-     * from the cache else resolve it
-     *
-     * @param string|null $version
-     * @return SpecificationInterface
-     */
-    public function getDocumentation(string $version = null): ?SpecificationInterface
-    {
-        return $this->routesMethodService->getDocumentation(
-            $this->context->getRouteId(),
-            $this->context->getPath(),
-            $version
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function onOptions(RequestInterface $request, ResponseInterface $response)
-    {
-        parent::onOptions($request, $response);
-
-        $methods = $this->routesMethodService->getRequestSchemas($this->context->getRouteId(), '*');
-        foreach ($methods as $methodName => $schemaId) {
-            $url = $this->config->get('psx_url') . $this->config->get('psx_dispatch') . '/system/schema/' . $schemaId;
-            $response->addHeader('Link', '<' . $url . '>; rel="' . strtolower($methodName) . '-schema"');
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function doGet(HttpContextInterface $context)
+    protected function doGet(HttpContextInterface $context): mixed
     {
         return $this->executeAction(new Record(), $context);
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doPost($record, HttpContextInterface $context)
+    protected function doPost(mixed $record, HttpContextInterface $context): mixed
     {
         return $this->executeAction($record, $context);
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doPut($record, HttpContextInterface $context)
+    protected function doPut(mixed $record, HttpContextInterface $context): mixed
     {
         return $this->executeAction($record, $context);
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doPatch($record, HttpContextInterface $context)
+    protected function doPatch(mixed $record, HttpContextInterface $context): mixed
     {
         return $this->executeAction($record, $context);
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function doDelete($record, HttpContextInterface $context)
+    protected function doDelete(HttpContextInterface $context): mixed
     {
-        return $this->executeAction($record, $context);
+        return $this->executeAction(new Record(), $context);
     }
 
-    /**
-     * @inheritdoc
-     */
-    protected function parseRequest(RequestInterface $request, MethodAbstract $method)
+    protected function parseRequest(RequestInterface $request, MethodAbstract $method): mixed
     {
         if ($method->hasRequest()) {
             if ($method->getRequest() == self::SCHEMA_PASSTHRU) {
                 return new PassthruRecord($this->requestReader->getBody($request));
             } else {
                 $schema = $this->schemaLoader->getSchema($method->getRequest());
-                return $this->requestReader->getBodyAs($request, $schema, $this->getValidator($method));
+                return $this->requestReader->getBodyAs($request, $schema);
             }
         } else {
             return new Record();
         }
     }
 
-    /**
-     * @param mixed $record
-     * @param \PSX\Http\Environment\HttpContextInterface $httpContext
-     * @return \PSX\Http\Environment\HttpResponseInterface|null
-     */
-    private function executeAction($record, HttpContextInterface $httpContext)
+    private function executeAction(mixed $record, HttpContextInterface $httpContext): mixed
     {
         if (!$record instanceof RecordInterface) {
             // in case the record is not an RecordInterface, this means the

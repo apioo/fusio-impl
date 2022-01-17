@@ -201,7 +201,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Route successful created"
+    "message": "Route successfully created"
 }
 JSON;
 

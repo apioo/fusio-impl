@@ -33,29 +33,21 @@ use PSX\Data\Util\PriorityQueue;
 class SenderFactory
 {
     /**
-     * @var \Fusio\Impl\Service\Event\SenderInterface[] 
+     * @var SenderInterface[]
      */
-    private $senders;
+    private PriorityQueue $senders;
 
     public function __construct()
     {
         $this->senders = new PriorityQueue();
     }
 
-    /**
-     * @param \Fusio\Impl\Service\Event\SenderInterface $sender
-     * @param integer $priority
-     */
-    public function add(SenderInterface $sender, $priority)
+    public function add(SenderInterface $sender, int $priority)
     {
         $this->senders->insert($sender, $priority);
     }
 
-    /**
-     * @param mixed $dispatcher
-     * @return \Fusio\Impl\Service\Event\SenderInterface|null
-     */
-    public function factory($dispatcher)
+    public function factory(mixed $dispatcher): ?SenderInterface
     {
         foreach ($this->senders as $sender) {
             if ($sender->accept($dispatcher)) {

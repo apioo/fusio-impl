@@ -30,26 +30,9 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Page extends TableAbstract
+class Page extends Generated\PageTable
 {
-    const STATUS_VISIBLE   = 1;
-    const STATUS_INVISIBLE = 2;
-    const STATUS_DELETED   = 0;
-
-    public function getName()
-    {
-        return 'fusio_page';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'title' => self::TYPE_VARCHAR | 255,
-            'slug' => self::TYPE_VARCHAR | 255,
-            'content' => self::TYPE_TEXT,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
+    public const STATUS_VISIBLE   = 1;
+    public const STATUS_INVISIBLE = 2;
+    public const STATUS_DELETED   = 0;
 }

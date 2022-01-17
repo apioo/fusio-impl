@@ -52,10 +52,10 @@ class Contract extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan\Contract::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
-                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('plan_id')], [
+                'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('plan_id')], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                     'description' => 'description',
@@ -70,16 +70,16 @@ class Contract extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $contractId)
+    public function getEntity(int $userId, int $contractId)
     {
         $condition = new Condition();
         $condition->equals('id', $contractId);
         $condition->equals('user_id', $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'findOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
-            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'get'], [new Reference('id')], [
+            'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('id')], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
                 'description' => 'description',

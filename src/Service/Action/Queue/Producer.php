@@ -35,17 +35,14 @@ use Fusio\Engine\RequestInterface;
  */
 class Producer implements QueueInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function push($actionId, RequestInterface $request, ContextInterface $context)
+    public function push(string|int $actionId, RequestInterface $request, ContextInterface $context): void
     {
         $this->connection->insert('fusio_action_queue', [
             'action'  => $actionId,

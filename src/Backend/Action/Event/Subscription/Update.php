@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Event_Subscription_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Event\Subscription
-     */
-    private $subscriptionService;
+    private Event\Subscription $subscriptionService;
 
     public function __construct(Event\Subscription $subscriptionService)
     {
         $this->subscriptionService = $subscriptionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Subscription successful updated',
+            'message' => 'Subscription successfully updated',
         ];
     }
 }

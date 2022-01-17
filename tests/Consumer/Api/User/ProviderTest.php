@@ -109,12 +109,12 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://graph.facebook.com/v2.5/oauth/access_token?client_id=bar&redirect_uri=' . urlencode('http://google.com') . '&client_secret=facebook&code=foo', $transaction['request']->getUri());
+        $this->assertEquals('https://graph.facebook.com/v12.0/oauth/access_token?client_id=bar&redirect_uri=' . urlencode('http://google.com') . '&client_secret=facebook&code=foo', $transaction['request']->getUri());
 
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://graph.facebook.com/v2.5/me?access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&fields=id%2Cemail%2Cfirst_name%2Clast_name%2Clink%2Cname', $transaction['request']->getUri());
+        $this->assertEquals('https://graph.facebook.com/v2.5/me?access_token=e72e16c7e42f292c6912e7710c838347ae178b4a&fields=id%2Cname%2Cemail', $transaction['request']->getUri());
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 
@@ -169,7 +169,7 @@ class ProviderTest extends ControllerDbTestCase
     {
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'e72e16c7e42f292c6912e7710c838347ae178b4a'])),
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['sub' => 1, 'name' => 'octocat', 'email' => 'octocat@github.com'])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['id' => 1, 'name' => 'octocat', 'email' => 'octocat@github.com'])),
         ]);
 
         $container = [];
@@ -202,13 +202,13 @@ class ProviderTest extends ControllerDbTestCase
         $transaction = array_shift($container);
 
         $this->assertEquals('POST', $transaction['request']->getMethod());
-        $this->assertEquals('https://accounts.google.com/o/oauth2/token', $transaction['request']->getUri());
+        $this->assertEquals('https://oauth2.googleapis.com/token', $transaction['request']->getUri());
         $this->assertEquals('code=foo&client_id=bar&client_secret=google&redirect_uri=http%3A%2F%2Fgoogle.com&grant_type=authorization_code', (string) $transaction['request']->getBody());
 
         $transaction = array_shift($container);
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
-        $this->assertEquals('https://www.googleapis.com/plus/v1/people/me/openIdConnect', $transaction['request']->getUri());
+        $this->assertEquals('https://www.googleapis.com/userinfo/v2/me', $transaction['request']->getUri());
         $this->assertEquals(['Bearer e72e16c7e42f292c6912e7710c838347ae178b4a'], $transaction['request']->getHeader('Authorization'));
     }
 

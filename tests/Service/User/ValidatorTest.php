@@ -39,9 +39,9 @@ class ValidatorTest extends TestCase
      */
     public function testAssertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial)
     {
-        $result = Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
+        Validator::assertPassword($password, $minLength, $minAlpha, $minNumeric, $minSpecial);
 
-        $this->assertEquals(true, $result);
+        $this->assertTrue(true);
     }
 
     /**

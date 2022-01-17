@@ -21,8 +21,8 @@
 
 namespace Fusio\Impl\Provider\User;
 
-use Fusio\Engine\Model\User;
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Engine\User\UserDetails;
 use Fusio\Impl\Base;
 use Fusio\Impl\Service\Config;
 use PSX\Http\Client\ClientInterface;
@@ -30,7 +30,6 @@ use PSX\Http\Client\GetRequest;
 use PSX\Http\Client\PostRequest;
 use PSX\Json\Parser;
 use PSX\Uri\Url;
-use RuntimeException;
 
 /**
  * Google
@@ -41,15 +40,8 @@ use RuntimeException;
  */
 class Google implements ProviderInterface
 {
-    /**
-     * @var \PSX\Http\Client\ClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @var string
-     */
-    protected $secret;
+    private ClientInterface $httpClient;
+    private string $secret;
 
     public function __construct(ClientInterface $httpClient, Config $config)
     {
@@ -57,57 +49,45 @@ class Google implements ProviderInterface
         $this->secret     = $config->getValue('provider_google_secret');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
+    public function getId(): int
     {
         return self::PROVIDER_GOOGLE;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function requestUser($code, $clientId, $redirectUri)
+    public function requestUser(string $code, string $clientId, string $redirectUri): ?UserDetails
     {
         $accessToken = $this->getAccessToken($code, $clientId, $this->secret, $redirectUri);
-
-        if (!empty($accessToken)) {
-            $url      = new Url('https://www.googleapis.com/plus/v1/people/me/openIdConnect');
-            $headers  = [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'User-Agent'    => Base::getUserAgent()
-            ];
-
-            $response = $this->httpClient->request(new GetRequest($url, $headers));
-
-            if ($response->getStatusCode() == 200) {
-                $data  = Parser::decode($response->getBody());
-                $id    = isset($data->sub) ? $data->sub : null;
-                $name  = isset($data->name) ? $data->name : null;
-                $email = isset($data->email) ? $data->email : null;
-
-                if (!empty($id) && !empty($name)) {
-                    $user = new User();
-                    $user->setId($id);
-                    $user->setName($name);
-                    $user->setEmail($email);
-
-                    return $user;
-                }
-            }
+        if (empty($accessToken)) {
+            return null;
         }
 
-        return null;
+        $url = new Url('https://www.googleapis.com/userinfo/v2/me');
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'User-Agent'    => Base::getUserAgent()
+        ];
+
+        $response = $this->httpClient->request(new GetRequest($url, $headers));
+        if ($response->getStatusCode() !== 200) {
+            return null;
+        }
+
+        $data  = Parser::decode($response->getBody());
+        $id    = $data->id ?? null;
+        $name  = $data->name ?? null;
+        $email = $data->email ?? null;
+
+        if (!empty($id) && !empty($name)) {
+            return new UserDetails($id, $name, $email);
+        } else {
+            return null;
+        }
     }
 
-    protected function getAccessToken($code, $clientId, $clientSecret, $redirectUri)
+    protected function getAccessToken(string $code, string $clientId, string $clientSecret, string $redirectUri): ?string
     {
-        if (empty($clientSecret)) {
-            throw new RuntimeException('No secret provided');
-        }
-
-        $url = new Url('https://accounts.google.com/o/oauth2/token');
+        $url = new Url('https://oauth2.googleapis.com/token');
 
         $params = [
             'code'          => $code,
@@ -124,13 +104,15 @@ class Google implements ProviderInterface
 
         $response = $this->httpClient->request(new PostRequest($url, $headers, $params));
 
-        if ($response->getStatusCode() == 200) {
-            $data = Parser::decode($response->getBody());
-            if (isset($data->access_token)) {
-                return $data->access_token;
-            }
+        if ($response->getStatusCode() !== 200) {
+            return null;
         }
 
-        return null;
+        $data = Parser::decode($response->getBody());
+        if (isset($data->access_token)) {
+            return $data->access_token;
+        } else {
+            return null;
+        }
     }
 }

@@ -34,48 +34,34 @@ class DateCalculator
 {
     /**
      * Returns the end date of a contract
-     * 
-     * @param \DateTime $startDate
-     * @param integer $interval
-     * @return \DateTime
      */
-    public function calculate(\DateTime $startDate, $interval)
+    public function calculate(\DateTimeInterface $startDate, int $interval): \DateTimeInterface
     {
         switch ($interval) {
             case Table\Plan::INTERVAL_1MONTH:
                 return $this->addMonth($startDate, 1);
-                break;
 
             case Table\Plan::INTERVAL_3MONTH:
                 return $this->addMonth($startDate, 3);
-                break;
 
             case Table\Plan::INTERVAL_6MONTH:
                 return $this->addMonth($startDate, 6);
-                break;
 
             case Table\Plan::INTERVAL_12MONTH:
                 return $this->addMonth($startDate, 12);
-                break;
 
             case Table\Plan::INTERVAL_NONE:
                 return $startDate;
-                break;
         }
 
         throw new \InvalidArgumentException('Provided interval does not exist');
     }
 
     /**
-     * Adds the amount of month to the provided date without crossing a date
-     * border. I.e. if the date is 31.01 and we add 1 month the end date is
-     * 28.02
-     * 
-     * @param \DateTime $date
-     * @param integer $count
-     * @return \DateTime
+     * Adds the amount of month to the provided date without crossing a date border. I.e. if the date is 31.01 and we
+     * add 1 month the end date is 28.02
      */
-    private function addMonth(\DateTime $date, int $count)
+    private function addMonth(\DateTimeInterface $date, int $count): \DateTimeInterface
     {
         $year  = (int) $date->format('Y');
         $month = (int) $date->format('n');

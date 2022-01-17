@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Role_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Role
-     */
-    private $roleService;
+    private Role $roleService;
 
     public function __construct(Role $roleService)
     {
         $this->roleService = $roleService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Role successful updated',
+            'message' => 'Role successfully updated',
         ];
     }
 }

@@ -66,7 +66,7 @@ class App extends ViewAbstract
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
                 'id' => $this->fieldInteger('id'),
                 'userId' => $this->fieldInteger('user_id'),
                 'status' => $this->fieldInteger('status'),
@@ -79,9 +79,9 @@ class App extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\App::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\App::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'userId' => $this->fieldInteger('user_id'),
             'status' => $this->fieldInteger('status'),

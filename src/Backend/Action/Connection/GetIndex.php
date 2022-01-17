@@ -42,17 +42,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetIndex extends ActionAbstract
 {
-    /**
-     * @var ConnectionProviderParser
-     */
-    private $connectionParser;
+    private ConnectionProviderParser $connectionParser;
 
     public function __construct(ConnectionProviderParser $connectionParser)
     {
         $this->connectionParser = $connectionParser;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return [
             'connections' => $this->connectionParser->getClasses()

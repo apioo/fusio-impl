@@ -56,6 +56,7 @@ use PSX\Framework\Loader\LocationFinderInterface;
 use PSX\Framework\Loader\RoutingParserInterface;
 use PSX\Framework\Oauth2\GrantTypeFactory;
 use PSX\Schema\Console as SchemaConsole;
+use PSX\Sql\Console as SqlConsole;
 use PSX\Schema\Parser\TypeSchema\ImportResolver;
 use PSX\Schema\SchemaManager;
 use PSX\Schema\SchemaManagerInterface;
@@ -92,7 +93,14 @@ class Container extends DefaultContainer
 
     public function getResourceListing(): ListingInterface
     {
-        $resourceListing = new ResourceListing($this->get('routing_parser'), $this->get('controller_factory'));
+        $resourceListing = new ResourceListing(
+            $this->get('routing_parser'),
+            $this->get('table_manager')->getTable(Table\Route\Method::class),
+            $this->get('table_manager')->getTable(Table\Route\Response::class),
+            $this->get('table_manager')->getTable(Table\Scope\Route::class),
+            $this->get('schema_loader'),
+            $this->get('schema_manager'),
+        );
 
         if ($this->get('config')->get('psx_debug')) {
             return $resourceListing;
@@ -122,7 +130,6 @@ class Container extends DefaultContainer
         ));
 
         $factory->add(new Authorization\AuthorizationCode(
-            $this->get('app_code_service'),
             $this->get('app_token_service'),
             $this->get('scope_service'),
             $this->get('table_manager')->getTable(Table\App\Code::class),
@@ -152,7 +159,6 @@ class Container extends DefaultContainer
         return new GeneratorFactory(
             $this->get('table_manager')->getTable(Table\Scope::class),
             $this->get('config_service'),
-            $this->get('annotation_reader_factory')->factory('PSX\Schema\Parser\Popo\Annotation'),
             $this->get('config')->get('psx_json_namespace'),
             $this->get('config')->get('psx_url'),
             $this->get('config')->get('psx_dispatch')
@@ -235,7 +241,6 @@ class Container extends DefaultContainer
     public function getSchemaManager(): SchemaManagerInterface
     {
         return new SchemaManager(
-            $this->get('annotation_reader_factory')->factory('PSX\Schema\Annotation'),
             $this->get('cache'),
             $this->get('config')->get('psx_debug'),
             $this->get('schema_parser_import_resolver')
@@ -253,19 +258,20 @@ class Container extends DefaultContainer
         );
     }
 
-    protected function appendConsoleCommands(Application $application)
+    protected function appendConsoleCommands(Application $application): void
     {
         // psx commands
         $application->add(new FrameworkConsole\RouteCommand($this->get('routing_parser')));
         $application->add(new FrameworkConsole\ServeCommand($this));
         $application->add(new FrameworkConsole\Container\ListCommand($this->get('container_inspector')));
-        $application->add(new FrameworkConsole\Container\BuildCommand($this, $this->get('annotation_reader_factory')->factory('PSX\Dependency\Annotation'), $this->get('config')));
+        $application->add(new FrameworkConsole\Container\BuildCommand($this, $this->get('config')));
 
         $application->add(new ApiConsole\ParseCommand($this->get('api_manager'), $this->get('generator_factory')));
-        $application->add(new ApiConsole\ResourceCommand($this->get('resource_listing'), $this->get('generator_factory')));
         $application->add(new ApiConsole\GenerateCommand($this->get('resource_listing'), $this->get('generator_factory'), $this->get('listing_filter_factory')));
 
         $application->add(new SchemaConsole\ParseCommand($this->get('schema_manager')));
+
+        $application->add(new SqlConsole\GenerateCommand($this->get('connection')));
 
         // fusio cli
         $transport = new Console\Transport($this->get('dispatch'));
@@ -315,10 +321,7 @@ class Container extends DefaultContainer
         $application->add(new SymfonyCommand\ListCommand());
     }
 
-    /**
-     * @return array
-     */
-    protected function appendConsoleHelpers()
+    protected function appendConsoleHelpers(): array
     {
         return array(
             'db' => new ConnectionHelper($this->get('connection')),

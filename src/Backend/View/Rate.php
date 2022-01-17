@@ -65,7 +65,7 @@ class Rate extends ViewAbstract
             'totalResults' => $this->getTable(Table\Rate::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Rate::class), 'getAll'], [$startIndex, $count, $sortBy, $sortOrder, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Rate::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'priority' => $this->fieldInteger('priority'),
@@ -78,35 +78,33 @@ class Rate extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($id)
+    public function getEntity(string $id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Rate::class), 'get'], [$this->resolveId($id)], [
+        if (str_starts_with($id, '~')) {
+            $method = 'findOneByName';
+            $id = urldecode(substr($id, 1));
+        } else {
+            $method = 'find';
+            $id = (int) $id;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Rate::class), $method], [$id], [
             'id' => $this->fieldInteger('id'),
             'status' => $this->fieldInteger('status'),
             'priority' => $this->fieldInteger('priority'),
             'name' => 'name',
             'rateLimit' => 'rate_limit',
             'timespan' => 'timespan',
-            'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'getByRate_id'], [new Reference('id')], [
+            'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'findByRateId'], [new Reference('id')], [
                 'id' => $this->fieldInteger('id'),
                 'rateId' => $this->fieldInteger('rate_id'),
                 'routeId' => $this->fieldInteger('route_id'),
                 'appId' => $this->fieldInteger('app_id'),
-                'authenticated' => 'authenticated',
+                'authenticated' => $this->fieldBoolean('authenticated'),
                 'parameters' => 'parameters',
             ]),
         ]);
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Rate::class)->getOneByName(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

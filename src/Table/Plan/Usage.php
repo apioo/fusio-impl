@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\Plan;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Usage
@@ -30,22 +30,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Usage extends TableAbstract
+class Usage extends Generated\PlanUsageTable
 {
-    public function getName()
-    {
-        return 'fusio_plan_usage';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'route_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'app_id' => self::TYPE_INT,
-            'points' => self::TYPE_INT,
-            'insert_date' => self::TYPE_DATETIME,
-        );
-    }
 }

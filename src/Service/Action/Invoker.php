@@ -27,6 +27,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Service;
 use PSX\Framework\Config\Config;
+use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Exception as StatusCode;
 
 /**
@@ -38,20 +39,9 @@ use PSX\Http\Exception as StatusCode;
  */
 class Invoker
 {
-    /**
-     * @var Processor
-     */
-    private $processor;
-
-    /**
-     * @var Service\Plan\Payer
-     */
-    private $planPayerService;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Processor $processor;
+    private Service\Plan\Payer $planPayerService;
+    private Config $config;
 
     public function __construct(Processor $processor, Service\Plan\Payer $planPayerService, Config $config)
     {
@@ -60,7 +50,7 @@ class Invoker
         $this->config = $config;
     }
 
-    public function invoke(RequestInterface $request, Context $context)
+    public function invoke(RequestInterface $request, Context $context): mixed
     {
         $method = $context->getMethod();
         $action = $method['action'];

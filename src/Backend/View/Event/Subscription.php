@@ -57,7 +57,7 @@ class Subscription extends ViewAbstract
             'totalResults' => $this->getTable(Table\Event\Subscription::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Event\Subscription::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Event\Subscription::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'eventId' => $this->fieldInteger('event_id'),
                 'userId' => $this->fieldInteger('user_id'),
@@ -70,7 +70,7 @@ class Subscription extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Event\Subscription::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Event\Subscription::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'eventId' => $this->fieldInteger('event_id'),
             'userId' => $this->fieldInteger('user_id'),

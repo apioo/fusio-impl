@@ -39,9 +39,6 @@ interface RepositoryInterface
 
     /**
      * Returns a single app from the repository
-     *
-     * @param string $name
-     * @return App|null
      */
     public function fetchByName(string $name): ?App;
 }

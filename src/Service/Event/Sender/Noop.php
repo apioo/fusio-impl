@@ -34,20 +34,12 @@ use Fusio\Impl\Service\Event\SenderInterface;
  */
 class Noop implements SenderInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public function accept($dispatcher)
+    public function accept(object $dispatcher): bool
     {
         return true;
     }
 
-    /**
-     * @param object $dispatcher
-     * @param \Fusio\Impl\Service\Event\Message $message
-     * @return integer
-     */
-    public function send($dispatcher, Message $message)
+    public function send(object $dispatcher, Message $message): int
     {
         return 200;
     }

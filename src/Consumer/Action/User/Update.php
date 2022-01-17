@@ -38,17 +38,14 @@ use Fusio\Model\Consumer\User_Account;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var User
-     */
-    private $userService;
+    private User $userService;
 
     public function __construct(User $userService)
     {
         $this->userService = $userService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -61,7 +58,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Account successful updated',
+            'message' => 'Account successfully updated',
         ];
     }
 }

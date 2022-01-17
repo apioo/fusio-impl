@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Plan_Invoice_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Plan\Invoice
-     */
-    private $invoiceService;
+    private Plan\Invoice $invoiceService;
 
     public function __construct(Plan\Invoice $invoiceService)
     {
         $this->invoiceService = $invoiceService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Invoice successful updated',
+            'message' => 'Invoice successfully updated',
         ];
     }
 }

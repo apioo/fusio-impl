@@ -36,15 +36,8 @@ use PSX\Json\Parser;
  */
 class Captcha
 {
-    /**
-     * @var Service\Config
-     */
-    private $configService;
-
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private Service\Config $configService;
+    private ClientInterface $httpClient;
 
     public function __construct(Service\Config $configService, ClientInterface $httpClient)
     {
@@ -60,7 +53,7 @@ class Captcha
         }
     }
 
-    protected function verifyCaptcha($captcha, $secret)
+    protected function verifyCaptcha(?string $captcha, string $secret)
     {
         if (empty($captcha)) {
             throw new StatusCode\BadRequestException('Invalid captcha');
@@ -69,7 +62,7 @@ class Captcha
         $request = new PostRequest('https://www.google.com/recaptcha/api/siteverify', [], [
             'secret'   => $secret,
             'response' => $captcha,
-            'remoteip' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
         ]);
 
         $response = $this->httpClient->request($request);

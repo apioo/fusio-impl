@@ -36,7 +36,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class WebhookListener implements EventSubscriberInterface
 {
-    protected $dispatcher;
+    private Dispatcher $dispatcher;
 
     public function __construct(Dispatcher $dispatcher)
     {

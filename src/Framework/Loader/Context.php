@@ -36,178 +36,96 @@ use PSX\Framework\Loader\Context as FrameworkContext;
  */
 class Context extends FrameworkContext
 {
-    /**
-     * @var integer
-     */
-    private $routeId;
+    private ?int $routeId = null;
+    private ?int $categoryId = null;
+    private ?AppInterface $app = null;
+    private ?UserInterface $user = null;
+    private ?TokenInterface $token = null;
+    private ?int $logId = null;
+    private ?array $method = null;
+    private ?UserContext $userContext = null;
 
-    /**
-     * @var integer
-     */
-    private $categoryId;
-
-    /**
-     * @var \Fusio\Engine\Model\AppInterface
-     */
-    private $app;
-
-    /**
-     * @var \Fusio\Engine\Model\UserInterface
-     */
-    private $user;
-
-    /**
-     * @var \Fusio\Engine\Model\TokenInterface
-     */
-    private $token;
-
-    /**
-     * @var integer
-     */
-    private $logId;
-
-    /**
-     * @var array
-     */
-    private $method;
-
-    /**
-     * @var \Fusio\Impl\Authorization\UserContext
-     */
-    private $userContext;
-
-    /**
-     * @return integer
-     */
-    public function getRouteId()
+    public function getRouteId(): ?int
     {
         return $this->routeId;
     }
 
-    /**
-     * @param integer $routeId
-     */
-    public function setRouteId($routeId)
+    public function setRouteId(int $routeId): void
     {
         $this->routeId = $routeId;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryId()
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
-    /**
-     * @param int $categoryId
-     */
-    public function setCategoryId($categoryId)
+    public function setCategoryId(int $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
 
-    /**
-     * @return \Fusio\Engine\Model\AppInterface
-     */
-    public function getApp()
+    public function getApp(): ?AppInterface
     {
         return $this->app;
     }
 
-    /**
-     * @return integer
-     */
-    public function getAppId()
+    public function getAppId(): ?int
     {
         return $this->app->getId();
     }
 
-    /**
-     * @param \Fusio\Engine\Model\AppInterface $app
-     */
-    public function setApp(AppInterface $app)
+    public function setApp(AppInterface $app): void
     {
         $this->app = $app;
     }
 
-    /**
-     * @return \Fusio\Engine\Model\UserInterface
-     */
-    public function getUser()
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
-    /**
-     * @return integer
-     */
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->user->getId();
     }
 
-    /**
-     * @param \Fusio\Engine\Model\UserInterface $user
-     */
-    public function setUser(UserInterface $user)
+    public function setUser(UserInterface $user): void
     {
         $this->user = $user;
     }
 
-    /**
-     * @return \Fusio\Engine\Model\TokenInterface
-     */
-    public function getToken()
+    public function getToken(): ?TokenInterface
     {
         return $this->token;
     }
 
-    /**
-     * @param \Fusio\Engine\Model\TokenInterface $token
-     */
-    public function setToken(TokenInterface $token)
+    public function setToken(TokenInterface $token): void
     {
         $this->token = $token;
     }
 
-    /**
-     * @return integer
-     */
-    public function getLogId()
+    public function getLogId(): ?int
     {
         return $this->logId;
     }
 
-    /**
-     * @param integer $logId
-     */
-    public function setLogId($logId)
+    public function setLogId(int $logId): void
     {
         $this->logId = $logId;
     }
 
-    /**
-     * @return array
-     */
-    public function getMethod()
+    public function getMethod(): ?array
     {
         return $this->method;
     }
 
-    /**
-     * @param array $method
-     */
-    public function setMethod(array $method)
+    public function setMethod(array $method): void
     {
         $this->method = $method;
     }
 
-    /**
-     * @return \Fusio\Impl\Authorization\UserContext
-     */
-    public function getUserContext()
+    public function getUserContext(): UserContext
     {
         if ($this->userContext) {
             return $this->userContext;

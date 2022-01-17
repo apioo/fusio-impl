@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Schema;
 use Fusio\Model\Backend\Schema_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Model\Backend\Schema_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Schema
-     */
-    private $schemaService;
+    private Schema $schemaService;
 
     public function __construct(Schema $schemaService)
     {
         $this->schemaService = $schemaService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -60,9 +58,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Schema successful created',
-        ];
+            'message' => 'Schema successfully created',
+        ]);
     }
 }

@@ -52,7 +52,7 @@ class Audit extends ViewAbstract
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'event' => 'event',
                 'ip' => 'ip',
@@ -66,14 +66,14 @@ class Audit extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
-            'app' => $this->doEntity([$this->getTable(Table\App::class), 'get'], [new Reference('app_id')], [
+            'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
             ]),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                 'id' => $this->fieldInteger('id'),
                 'status' => $this->fieldInteger('status'),
                 'name' => 'name',
@@ -82,7 +82,7 @@ class Audit extends ViewAbstract
             'event' => 'event',
             'ip' => 'ip',
             'message' => 'message',
-            'content' => 'content',
+            'content' => $this->fieldJson('content'),
             'date' => $this->fieldDateTime('date'),
         ]);
 

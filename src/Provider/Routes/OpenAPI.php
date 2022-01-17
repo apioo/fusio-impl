@@ -21,10 +21,8 @@
 
 namespace Fusio\Impl\Provider\Routes;
 
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Fusio\Adapter\Http\Action\HttpEngine;
 use Fusio\Adapter\Http\Action\HttpProcessor;
-use Fusio\Adapter\Util\Action\UtilStaticResponse;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -52,12 +50,12 @@ class OpenAPI implements ProviderInterface
 {
     private $schemas;
 
-    public function getName()
+    public function getName(): string
     {
         return 'OpenAPI';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $baseUrl = '';
         $specification = $this->parse($configuration->get('spec'), $baseUrl);
@@ -74,7 +72,7 @@ class OpenAPI implements ProviderInterface
 
             $result = $generator->generate($schema);
 
-            $this->schemas[$name] = $setup->addSchema($name, \json_decode($result));
+            $this->schemas[$name] = $setup->addSchema($name, (array) \json_decode($result));
         }
 
         // add routes and actions
@@ -84,7 +82,7 @@ class OpenAPI implements ProviderInterface
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newTextArea('spec', 'Specification', 'The OpenAPI specification in the YAML format'));
     }
@@ -105,9 +103,7 @@ class OpenAPI implements ProviderInterface
         $data = \json_decode($schema);
         $baseUrl = $data->servers[0]->url ?? '';
 
-        $reader = new SimpleAnnotationReader();
-        $reader->addNamespace('PSX\\Schema\\Annotation');
-        $parser = new \PSX\Api\Parser\OpenAPI($reader);
+        $parser = new \PSX\Api\Parser\OpenAPI();
 
         return $parser->parse($schema);
     }

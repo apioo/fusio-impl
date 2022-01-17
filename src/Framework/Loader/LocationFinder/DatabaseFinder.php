@@ -38,32 +38,16 @@ use PSX\Http\RequestInterface;
  */
 class DatabaseFinder implements LocationFinderInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private Connection $connection;
+    private TableCategory $categoryTable;
 
-    /**
-     * @var TableCategory
-     */
-    private $categoryTable;
-
-    /**
-     * @param Connection $connection
-     * @param TableCategory $categoryTable
-     */
     public function __construct(Connection $connection, TableCategory $categoryTable)
     {
         $this->connection = $connection;
         $this->categoryTable = $categoryTable;
     }
 
-    /**
-     * @param \PSX\Http\RequestInterface $request
-     * @param \Fusio\Impl\Framework\Loader\Context $context
-     * @return \PSX\Http\RequestInterface|null
-     */
-    public function resolve(RequestInterface $request, Context $context)
+    public function resolve(RequestInterface $request, Context $context): ?RequestInterface
     {
         $sql = 'SELECT id,
                        category_id,

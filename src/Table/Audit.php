@@ -21,8 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use PSX\Sql\TableAbstract;
-
 /**
  * Audit
  *
@@ -30,25 +28,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Audit extends TableAbstract
+class Audit extends Generated\AuditTable
 {
-    public function getName()
-    {
-        return 'fusio_audit';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'app_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'ref_id' => self::TYPE_INT,
-            'event' => self::TYPE_VARCHAR,
-            'ip' => self::TYPE_VARCHAR,
-            'message' => self::TYPE_VARCHAR,
-            'content' => self::TYPE_JSON,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
 }

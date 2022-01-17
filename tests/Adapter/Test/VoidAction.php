@@ -37,16 +37,17 @@ use Fusio\Engine\RequestInterface;
  */
 class VoidAction implements ActionInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Void-Action';
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        return null;
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newInput('foo', 'Foo', 'text', 'Foo description'));
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'Connection description'));

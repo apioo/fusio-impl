@@ -30,11 +30,5 @@ namespace Fusio\Impl\Mail;
  */
 interface MailerInterface
 {
-    /**
-     * @param string $subject
-     * @param array $to
-     * @param string $body
-     * @return void
-     */
-    public function send($subject, array $to, $body);
+    public function send(string $subject, array $to, string $body): void;
 }

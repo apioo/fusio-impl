@@ -35,20 +35,12 @@ use GuzzleHttp\Client;
  */
 class Guzzle implements SenderInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public function accept($dispatcher)
+    public function accept(object $dispatcher): bool
     {
         return $dispatcher instanceof Client;
     }
 
-    /**
-     * @param \GuzzleHttp\Client $dispatcher
-     * @param \Fusio\Impl\Service\Event\Message $message
-     * @return integer
-     */
-    public function send($dispatcher, Message $message)
+    public function send(object $dispatcher, Message $message): int
     {
         $response = $dispatcher->post($message->getEndpoint(), [
             'headers' => [

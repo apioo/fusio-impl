@@ -37,17 +37,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetIssuedTokens extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\IssuedTokens
-     */
-    private $table;
+    private View\Statistic\IssuedTokens $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\IssuedTokens::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             View\App\Token\QueryFilter::create($request)

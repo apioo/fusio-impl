@@ -38,17 +38,14 @@ use Fusio\Model\Consumer\Transaction_Prepare_Request;
  */
 class Prepare extends ActionAbstract
 {
-    /**
-     * @var Transaction
-     */
-    private $transactionService;
+    private Transaction $transactionService;
 
     public function __construct(Transaction $transactionService)
     {
         $this->transactionService = $transactionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

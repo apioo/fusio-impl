@@ -24,6 +24,8 @@ namespace Fusio\Impl\Tests\Mail\Sender;
 use Fusio\Impl\Mail\Message;
 use Fusio\Impl\Mail\Sender\SMTP;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\NullTransport;
 
 /**
  * SMTPTest
@@ -38,34 +40,20 @@ class SMTPTest extends TestCase
     {
         $sender = new SMTP();
 
-        $this->assertTrue($sender->accept(new \Swift_Mailer(new \Swift_NullTransport())));
+        $this->assertTrue($sender->accept(new Mailer(new NullTransport())));
         $this->assertFalse($sender->accept(new \stdClass()));
     }
 
     public function testSend()
     {
-        $dispatcher = $this->getMockBuilder(\Swift_Mailer::class)
-            ->setConstructorArgs([new \Swift_NullTransport()])
-            ->setMethods(['send'])
-            ->getMock();
-
-        $dispatcher->expects($this->once())
-            ->method('send')
-            ->with($this->callback(function($message){
-                /** @var \Swift_Mime_SimpleMessage $message */
-                $this->assertInstanceOf(\Swift_Mime_SimpleMessage::class, $message);
-
-                $this->assertEquals(['foo@bar.com' => null], $message->getFrom());
-                $this->assertEquals(['bar@foo.com' => null], $message->getTo());
-                $this->assertEquals('foo', $message->getSubject());
-                $this->assertEquals('bar', $message->getBody());
-
-                return true;
-            }));
+        $transport = new MemoryTransport();
+        $dispatcher = new Mailer($transport);
 
         $message = new Message('foo@bar.com', ['bar@foo.com'], 'foo', 'bar');
 
         $sender = new SMTP();
         $sender->send($dispatcher, $message);
+
+        $this->assertEquals(1, count($transport->getMessages()));
     }
 }

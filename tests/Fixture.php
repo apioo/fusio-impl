@@ -44,7 +44,7 @@ use PSX\Api\Resource;
  */
 class Fixture
 {
-    private static $data;
+    private static ?DataBag $data = null;
 
     public static function getDataSet(): array
     {

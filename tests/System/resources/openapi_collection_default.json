@@ -325,10 +325,7 @@
             }
           },
           "apps": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#\/components\/schemas\/About_Apps"
           },
           "links": {
             "type": "array",
@@ -336,6 +333,12 @@
               "$ref": "#\/components\/schemas\/About_Link"
             }
           }
+        }
+      },
+      "About_Apps": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
         }
       },
       "About_Link": {
@@ -496,7 +499,7 @@
             }
           },
           "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "authorizationUrl": "http:\/\/127.0.0.1\/apps\/developer\/#!\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {

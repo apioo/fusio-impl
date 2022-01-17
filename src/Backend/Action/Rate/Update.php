@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Rate_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Rate
-     */
-    private $rateService;
+    private Rate $rateService;
 
     public function __construct(Rate $rateService)
     {
         $this->rateService = $rateService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Rate successful updated',
+            'message' => 'Rate successfully updated',
         ];
     }
 }

@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Cronjob;
 use Fusio\Model\Backend\Cronjob_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Model\Backend\Cronjob_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Cronjob
-     */
-    private $cronjobService;
+    private Cronjob $cronjobService;
 
     public function __construct(Cronjob $cronjobService)
     {
         $this->cronjobService = $cronjobService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -60,9 +58,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Cronjob successful created',
-        ];
+            'message' => 'Cronjob successfully created',
+        ]);
     }
 }

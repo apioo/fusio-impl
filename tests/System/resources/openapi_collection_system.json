@@ -222,15 +222,22 @@
         }
       }
     },
+    "\/system\/export\/{type}\/{version}\/{path}": {
+      "get": {
+        "operationId": "PSX_Framework_Controller_Generator_GeneratorController_doGet",
+        "responses": {}
+      }
+    },
     "\/system\/doc": {
       "get": {
+        "operationId": "PSX_Framework_Controller_Tool_Documentation_IndexController_doGet",
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Documentation_Index"
+                  "$ref": "#\/components\/schemas\/PSX_Framework_Controller_Tool_Documentation_IndexController_doGet_GET_200_Response"
                 }
               }
             }
@@ -240,13 +247,14 @@
     },
     "\/system\/doc\/{version}\/{path}": {
       "get": {
+        "operationId": "PSX_Framework_Controller_Tool_Documentation_DetailController_doGet",
         "responses": {
           "200": {
             "description": "GET 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Documentation_Detail"
+                  "$ref": "#\/components\/schemas\/PSX_Framework_Controller_Tool_Documentation_DetailController_doGet_GET_200_Response"
                 }
               }
             }
@@ -275,12 +283,13 @@
     "\/system\/jsonrpc": {
       "post": {
         "description": "JSON-RPC Endpoint please take a look at https:\/\/www.jsonrpc.org\/specification",
+        "operationId": "Fusio_Impl_System_Api_JsonRpc_doPost",
         "requestBody": {
           "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Passthru"
+                "$ref": "#\/components\/schemas\/Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request"
               }
             }
           }
@@ -291,7 +300,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Rpc_Response_Success"
+                  "$ref": "#\/components\/schemas\/Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response"
                 }
               }
             }
@@ -345,10 +354,7 @@
             }
           },
           "apps": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#\/components\/schemas\/About_Apps"
           },
           "links": {
             "type": "array",
@@ -356,6 +362,12 @@
               "$ref": "#\/components\/schemas\/About_Link"
             }
           }
+        }
+      },
+      "About_Apps": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
         }
       },
       "About_Link": {
@@ -505,6 +517,12 @@
         "type": "object",
         "additionalProperties": true
       },
+      "Fusio_Impl_System_Api_JsonRpc_doPost_POST_200_Response": {
+        "$ref": "#\/components\/schemas\/Rpc_Response_Success"
+      },
+      "Fusio_Impl_System_Api_JsonRpc_doPost_POST_Request": {
+        "$ref": "#\/components\/schemas\/Passthru"
+      },
       "Health_Check": {
         "type": "object",
         "properties": {
@@ -526,6 +544,12 @@
             "type": "string"
           }
         }
+      },
+      "PSX_Framework_Controller_Tool_Documentation_DetailController_doGet_GET_200_Response": {
+        "$ref": "#\/components\/schemas\/Documentation_Detail"
+      },
+      "PSX_Framework_Controller_Tool_Documentation_IndexController_doGet_GET_200_Response": {
+        "$ref": "#\/components\/schemas\/Documentation_Index"
       },
       "Passthru": {
         "description": "No schema information available",
@@ -701,7 +725,7 @@
             }
           },
           "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "authorizationUrl": "http:\/\/127.0.0.1\/apps\/developer\/#!\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {

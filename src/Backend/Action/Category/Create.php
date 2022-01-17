@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Model\Backend\Category_Create;
 use Fusio\Impl\Service\Category;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Impl\Service\Category;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Category
-     */
-    private $categoryService;
+    private Category $categoryService;
 
     public function __construct(Category $categoryService)
     {
         $this->categoryService = $categoryService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -59,9 +57,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Category successful created',
-        ];
+            'message' => 'Category successfully created',
+        ]);
     }
 }

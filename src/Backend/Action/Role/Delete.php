@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Role;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Role
-     */
-    private $roleService;
+    private Role $roleService;
 
     public function __construct(Role $roleService)
     {
         $this->roleService = $roleService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->roleService->delete(
             (int) $request->get('role_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Role successful deleted',
+            'message' => 'Role successfully deleted',
         ];
     }
 }

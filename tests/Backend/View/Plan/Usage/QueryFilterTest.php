@@ -51,7 +51,7 @@ class QueryFilterTest extends FilterTestCase
 
         $condition = $filter->getCondition();
 
-        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND route_id = ? AND user_id = ? AND app_id = ?)', $condition->getStatment());
+        $this->assertEquals('WHERE (insert_date >= ? AND insert_date <= ? AND route_id = ? AND user_id = ? AND app_id = ?)', $condition->getStatement());
         $this->assertEquals([
             '2015-08-20 00:00:00',
             '2015-08-30 23:59:59',

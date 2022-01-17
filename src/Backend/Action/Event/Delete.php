@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Event;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Event
-     */
-    private $eventService;
+    private Event $eventService;
 
     public function __construct(Event $eventService)
     {
         $this->eventService = $eventService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->eventService->delete(
             (int) $request->get('event_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Event successful deleted',
+            'message' => 'Event successfully deleted',
         ];
     }
 }

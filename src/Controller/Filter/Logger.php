@@ -37,15 +37,8 @@ use PSX\Http\ResponseInterface;
  */
 class Logger implements FilterInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Log
-     */
-    private $logService;
-
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    private $context;
+    private Service\Log $logService;
+    private Context $context;
 
     public function __construct(Service\Log $logService, Context $context)
     {
@@ -53,7 +46,7 @@ class Logger implements FilterInterface
         $this->context    = $context;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $this->logService->log(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',

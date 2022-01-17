@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\User;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Attribute
@@ -30,20 +30,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Attribute extends TableAbstract
+class Attribute extends Generated\UserAttributeTable
 {
-    public function getName()
-    {
-        return 'fusio_user_attribute';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'user_id' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'value' => self::TYPE_VARCHAR,
-        );
-    }
 }

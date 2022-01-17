@@ -30,38 +30,21 @@ namespace Fusio\Impl\Service\Event;
  */
 class Message
 {
-    /**
-     * @var string
-     */
-    private $endpoint;
+    private string $endpoint;
+    private string $payload;
 
-    /**
-     * @var string
-     */
-    private $payload;
-
-    /**
-     * @param string $endpoint
-     * @param string $payload
-     */
-    public function __construct($endpoint, $payload)
+    public function __construct(string $endpoint, string $payload)
     {
         $this->endpoint = $endpoint;
         $this->payload  = $payload;
     }
 
-    /**
-     * @return string
-     */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
         return $this->endpoint;
     }
 
-    /**
-     * @return string
-     */
-    public function getPayload()
+    public function getPayload(): string
     {
         return $this->payload;
     }

@@ -37,47 +37,37 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Config
 {
-    /**
-     * @var \Fusio\Impl\Table\Config
-     */
-    private $configTable;
+    private Table\Config $configTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Config $configTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Config $configTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->configTable     = $configTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function update(int $configId, Config_Update $config, UserContext $context)
+    public function update(int $configId, Config_Update $config, UserContext $context): int
     {
-        $existing = $this->configTable->get($configId);
+        $existing = $this->configTable->find($configId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find config');
         }
 
-        $record = [
+        $record = new Table\Generated\ConfigRow([
             'id'    => $existing['id'],
             'value' => $config->getValue(),
-        ];
+        ]);
 
         $this->configTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($config, $context));
+
+        return $configId;
     }
 
-    public function getValue($name)
+    public function getValue(string $name)
     {
         $config = $this->configTable->getValue($name);
-
         if (!empty($config)) {
             return $this->convertValueToType($config['value'], $config['type']);
         } else {
@@ -85,7 +75,7 @@ class Config
         }
     }
 
-    protected function convertValueToType($value, $type)
+    protected function convertValueToType(mixed $value, int $type)
     {
         switch ($type) {
             case Table\Config::FORM_NUMBER:

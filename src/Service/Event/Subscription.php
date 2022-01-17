@@ -40,26 +40,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Subscription
 {
-    /**
-     * @var \Fusio\Impl\Table\Event
-     */
-    protected $eventTable;
+    private Table\Event $eventTable;
+    private Table\Event\Subscription $subscriptionTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Event\Subscription
-     */
-    protected $subscriptionTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Event $eventTable
-     * @param \Fusio\Impl\Table\Event\Subscription $subscriptionTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Event $eventTable, Table\Event\Subscription $subscriptionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->eventTable        = $eventTable;
@@ -67,15 +51,15 @@ class Subscription
         $this->eventDispatcher   = $eventDispatcher;
     }
 
-    public function create(Event_Subscription_Create $subscription, UserContext $context)
+    public function create(Event_Subscription_Create $subscription, UserContext $context): int
     {
         // create event
-        $record = [
+        $record = new Table\Generated\EventSubscriptionRow([
             'event_id' => $subscription->getEventId(),
             'user_id'  => $subscription->getUserId(),
             'status'   => Table\Event\Subscription::STATUS_ACTIVE,
             'endpoint' => $subscription->getEndpoint(),
-        ];
+        ]);
 
         $this->subscriptionTable->create($record);
 
@@ -84,29 +68,33 @@ class Subscription
         $subscription->setId($subscriptionId);
 
         $this->eventDispatcher->dispatch(new CreatedEvent($subscription, $context));
+
+        return $subscriptionId;
     }
 
-    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context)
+    public function update(int $subscriptionId, Event_Subscription_Update $subscription, UserContext $context): int
     {
-        $existing = $this->subscriptionTable->get($subscriptionId);
+        $existing = $this->subscriptionTable->find($subscriptionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
         // update subscription
-        $record = [
+        $record = new Table\Generated\EventSubscriptionRow([
             'id'       => $existing['id'],
             'endpoint' => $subscription->getEndpoint(),
-        ];
+        ]);
 
         $this->subscriptionTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($subscription, $existing, $context));
+
+        return $subscriptionId;
     }
 
-    public function delete(int $subscriptionId, UserContext $context)
+    public function delete(int $subscriptionId, UserContext $context): int
     {
-        $existing = $this->subscriptionTable->get($subscriptionId);
+        $existing = $this->subscriptionTable->find($subscriptionId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
@@ -115,12 +103,14 @@ class Subscription
         $this->subscriptionTable->deleteAllResponses($subscriptionId);
 
         // remove subscription
-        $record = [
+        $record = new Table\Generated\EventSubscriptionRow([
             'id' => $existing['id'],
-        ];
+        ]);
 
         $this->subscriptionTable->delete($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $subscriptionId;
     }
 }

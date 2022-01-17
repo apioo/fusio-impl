@@ -212,7 +212,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Rate successful created"
+    "message": "Rate successfully created"
 }
 JSON;
 

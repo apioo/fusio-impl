@@ -43,35 +43,12 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetAbout extends ActionAbstract
 {
-    /**
-     * @var Service\Config
-     */
-    private $configService;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var Table\Route
-     */
-    private $routeTable;
-
-    /**
-     * @var Table\Category
-     */
-    private $categoryTable;
-
-    /**
-     * @var Table\Scope
-     */
-    private $scopeTable;
-
-    /**
-     * @var Marketplace\Repository\Local
-     */
-    private $localRepository;
+    private Service\Config $configService;
+    private Config $config;
+    private Table\Route $routeTable;
+    private Table\Category $categoryTable;
+    private Table\Scope $scopeTable;
+    private Marketplace\Repository\Local $localRepository;
 
     public function __construct(Service\Config $configService, Config $config, TableManagerInterface $tableManager, Marketplace\Repository\Local $localRepository)
     {
@@ -83,7 +60,7 @@ class GetAbout extends ActionAbstract
         $this->localRepository = $localRepository;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return array_filter([
             'apiVersion' => Base::getVersion(),
@@ -117,7 +94,7 @@ class GetAbout extends ActionAbstract
 
     private function getCategories(): array
     {
-        $categories = $this->categoryTable->getAll(0, 1024);
+        $categories = $this->categoryTable->findAll(null, 0, 1024);
 
         $result = [];
         foreach ($categories as $row) {
@@ -131,7 +108,7 @@ class GetAbout extends ActionAbstract
     {
         $condition = new Condition();
         $condition->equals('category_id', 1);
-        $categories = $this->scopeTable->getAll(0, 1024, 'name', Sql::SORT_ASC, $condition);
+        $categories = $this->scopeTable->findAll($condition, 0, 1024, 'name', Sql::SORT_ASC);
 
         $result = [];
         foreach ($categories as $row) {

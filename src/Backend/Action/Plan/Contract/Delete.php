@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Plan;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Plan\Contract
-     */
-    private $contractService;
+    private Plan\Contract $contractService;
 
     public function __construct(Plan\Contract $contractService)
     {
         $this->contractService = $contractService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->contractService->delete(
             (int) $request->get('contract_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Contract successful deleted',
+            'message' => 'Contract successfully deleted',
         ];
     }
 }

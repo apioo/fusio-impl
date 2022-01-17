@@ -38,15 +38,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetWhoami extends ActionAbstract
 {
-    /**
-     * @var View\User
-     */
-    private $table;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private View\User $table;
+    private Config $config;
 
     public function __construct(TableManagerInterface $tableManager, Config $config)
     {
@@ -54,7 +47,7 @@ class GetWhoami extends ActionAbstract
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getEntity(
             $context->getUser()->getId(),

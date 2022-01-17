@@ -24,8 +24,7 @@ namespace Fusio\Impl\Service\Security;
 use Doctrine\DBAL\Connection;
 use Firebase\JWT\JWT;
 use Fusio\Engine\Model;
-use Fusio\Engine\Repository\AppInterface;
-use Fusio\Engine\Repository\UserInterface;
+use Fusio\Engine\Repository;
 use Fusio\Impl\Framework\Loader\Context;
 use Fusio\Impl\Table\App\Token as AppToken;
 use PSX\Http\Exception\UnauthorizedException;
@@ -40,33 +39,12 @@ use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
  */
 class TokenValidator
 {
-    /**
-     * @var \Doctrine\DBAL\Connection 
-     */
-    private $connection;
+    private Connection $connection;
+    private string $projectKey;
+    private Repository\AppInterface $appRepository;
+    private Repository\UserInterface $userRepository;
 
-    /**
-     * @var string 
-     */
-    private $projectKey;
-
-    /**
-     * @var \Fusio\Engine\Repository\AppInterface
-     */
-    private $appRepository;
-
-    /**
-     * @var \Fusio\Engine\Repository\UserInterface
-     */
-    private $userRepository;
-
-    /**
-     * @param Connection $connection
-     * @param string $projectKey
-     * @param AppInterface $appRepository
-     * @param UserInterface $userRepository
-     */
-    public function __construct(Connection $connection, string $projectKey, AppInterface $appRepository, UserInterface $userRepository)
+    public function __construct(Connection $connection, string $projectKey, Repository\AppInterface $appRepository, Repository\UserInterface $userRepository)
     {
         $this->connection = $connection;
         $this->projectKey = $projectKey;
@@ -74,7 +52,7 @@ class TokenValidator
         $this->userRepository = $userRepository;
     }
 
-    public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context)
+    public function assertAuthorization(string $requestMethod, ?string $authorization, Context $context): bool
     {
         if ($requestMethod === 'OPTIONS') {
             $needsAuth = false;
@@ -94,8 +72,8 @@ class TokenValidator
         // gets maybe another rate limit
         if ($needsAuth || !empty($authorization)) {
             $parts       = explode(' ', $authorization, 2);
-            $type        = isset($parts[0]) ? $parts[0] : null;
-            $accessToken = isset($parts[1]) ? $parts[1] : null;
+            $type        = $parts[0] ?? null;
+            $accessToken = $parts[1] ?? null;
 
             $params = array(
                 'realm' => 'Fusio',
@@ -124,15 +102,9 @@ class TokenValidator
                 throw new UnauthorizedException('Missing authorization header', 'Bearer', $params);
             }
         } else {
-            $app = new Model\App();
-            $app->setAnonymous(true);
-            $app->setScopes([]);
-
-            $user = new Model\User();
-            $user->setAnonymous(true);
-
-            $token = new Model\Token();
-            $token->setScopes([]);
+            $app = new Model\App(true, 0, 0, 0, '', '', '', [], []);
+            $user = new Model\User(true, 0, 0, 0, 0, '', '', 0);
+            $token = new Model\Token(0, 0, 0, [], '', '');
 
             $context->setApp($app);
             $context->setUser($user);
@@ -141,18 +113,10 @@ class TokenValidator
 
         return true;
     }
-    
-    /**
-     * @param string $token
-     * @param string $routeId
-     * @param string $requestMethod
-     * @return \Fusio\Engine\Model\Token|null
-     * @throws \Exception
-     */
-    private function getToken($token, $routeId, string $requestMethod)
+
+    private function getToken(string $token, int $routeId, string $requestMethod): ?Model\Token
     {
-        // @TODO in the latest version we only issue JWTs so in the next major
-        // release we can always decode the token
+        // @TODO in the latest version we only issue JWTs so in the next major release we can always decode the token
         if (strpos($token, '.') !== false) {
             JWT::decode($token, $this->projectKey, ['HS256']);
         }
@@ -176,16 +140,18 @@ class TokenValidator
             'now'    => $now->format($this->connection->getDatabasePlatform()->getDateTimeFormatString()),
         ));
 
-        if (!empty($accessToken)) {
-            // these are the scopes which are assigned to the token
-            $entitledScopes = explode(',', $accessToken['scope']);
+        if (empty($accessToken)) {
+            return null;
+        }
 
-            // if the user has a global scope like backend or consumer replace
-            // them with all sub scopes
-            $entitledScopes = $this->substituteGlobalScopes($entitledScopes);
+        // these are the scopes which are assigned to the token
+        $entitledScopes = explode(',', $accessToken['scope']);
 
-            // get all scopes which are assigned to this route
-            $sql = '    SELECT scope.name,
+        // if the user has a global scope like backend or consumer replace them with all sub scopes
+        $entitledScopes = $this->substituteGlobalScopes($entitledScopes);
+
+        // get all scopes which are assigned to this route
+        $sql = '    SELECT scope.name,
                                scope_routes.allow,
                                scope_routes.methods
                           FROM fusio_scope_routes scope_routes
@@ -193,44 +159,38 @@ class TokenValidator
                             ON scope.id = scope_routes.scope_id
                          WHERE scope_routes.route_id = :route';
 
-            $availableScopes = $this->connection->fetchAll($sql, array('route' => $routeId));
+        $availableScopes = $this->connection->fetchAll($sql, array('route' => $routeId));
 
-            // now we check whether the assigned scopes are allowed to
-            // access this route. We must have at least one scope which
-            // explicit allows the request
-            $isAllowed = false;
+        // now we check whether the assigned scopes are allowed to access this route. We must have at least one scope
+        // which explicit allows the request
+        $isAllowed = false;
 
-            foreach ($entitledScopes as $entitledScope) {
-                foreach ($availableScopes as $scope) {
-                    if ($scope['name'] == $entitledScope && $scope['allow'] == 1 && in_array($requestMethod, explode('|', $scope['methods']))) {
-                        $isAllowed = true;
-                        break 2;
-                    }
+        foreach ($entitledScopes as $entitledScope) {
+            foreach ($availableScopes as $scope) {
+                if ($scope['name'] == $entitledScope && $scope['allow'] == 1 && in_array($requestMethod, explode('|', $scope['methods']))) {
+                    $isAllowed = true;
+                    break 2;
                 }
-            }
-
-            if ($isAllowed) {
-                $return = new Model\Token();
-                $return->setId($accessToken['id']);
-                $return->setAppId($accessToken['app_id']);
-                $return->setUserId($accessToken['user_id']);
-                $return->setScopes($entitledScopes);
-                $return->setExpire($accessToken['expire']);
-                $return->setDate($accessToken['date']);
-
-                return $return;
-            } else {
-                throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
             }
         }
 
-        return null;
+        if ($isAllowed) {
+            return new Model\Token(
+                $accessToken['id'],
+                $accessToken['app_id'],
+                $accessToken['user_id'],
+                $entitledScopes,
+                $accessToken['expire'],
+                $accessToken['date']
+            );
+        } else {
+            throw new InvalidScopeException('Access to this resource is not in the scope of the provided token');
+        }
     }
 
     /**
-     * If the user has as entitled scope a global scope like backend or consumer
-     * he has the right to access every sub scope, so we add them to the
-     * entitled scopes
+     * If the user has as entitled scope a global scope like backend or consumer he has the right to access every sub
+     * scope, so we add them to the entitled scopes
      * 
      * @param array $entitledScopes
      * @return array

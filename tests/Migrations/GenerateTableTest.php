@@ -19,27 +19,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Framework\Loader;
+namespace Fusio\Impl\Tests\Migrations;
 
-use PSX\Framework\Loader\RoutingCollection as PSXRoutingCollection;
+use Fusio\Impl\Backend;
+use Fusio\Impl\Migrations\MigrationUtil;
+use Fusio\Impl\Migrations\NewInstallation;
+use Fusio\Impl\Table\Config;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\DbTestCase;
+use PSX\Sql\Generator\Generator;
 
 /**
- * RoutingCollection
+ * GenerateTableTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class RoutingCollection extends PSXRoutingCollection
+class GenerateTableTest extends DbTestCase
 {
-    public function add(array $methods, $path, $source, $routeId = null, $categoryId = null)
+    public function getDataSet()
     {
-        $this->routings[] = [
-            $methods,
-            $path,
-            $source,
-            $routeId,
-            $categoryId
-        ];
+        return Fixture::getDataSet();
+    }
+
+    public function testGenerate()
+    {
+        $this->markTestSkipped();
+
+        $target = __DIR__ . '/../../src/Table/Generated';
+        $namespace = 'Fusio\Impl\Table\Generated';
+
+        $generator = new Generator($this->connection, $namespace, 'fusio_');
+        $count = 0;
+        foreach ($generator->generate() as $className => $source) {
+            file_put_contents($target . '/' . $className . '.php', '<?php' . "\n\n" . $source);
+            $count++;
+        }
+
+        $this->assertNotEmpty($count);
     }
 }

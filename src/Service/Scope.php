@@ -42,38 +42,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Scope
 {
-    /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    private $scopeTable;
+    private Table\Scope $scopeTable;
+    private Table\Scope\Route $scopeRouteTable;
+    private Table\App\Scope $appScopeTable;
+    private Table\User\Scope $userScopeTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Scope\Route
-     */
-    private $scopeRouteTable;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Scope
-     */
-    private $appScopeTable;
-
-    /**
-     * @var \Fusio\Impl\Table\User\Scope
-     */
-    private $userScopeTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Scope $scopeTable
-     * @param \Fusio\Impl\Table\Scope\Route $scopeRouteTable
-     * @param \Fusio\Impl\Table\App\Scope $appScopeTable
-     * @param \Fusio\Impl\Table\User\Scope $userScopeTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Scope $scopeTable, Table\Scope\Route $scopeRouteTable, Table\App\Scope $appScopeTable, Table\User\Scope $userScopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->scopeTable      = $scopeTable;
@@ -83,7 +57,7 @@ class Scope
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(int $categoryId, Scope_Create $scope, UserContext $context)
+    public function create(int $categoryId, Scope_Create $scope, UserContext $context): int
     {
         // check whether scope exists
         if ($this->exists($scope->getName())) {
@@ -94,11 +68,11 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             // create scope
-            $record = [
+            $record = new Table\Generated\ScopeRow([
                 'category_id' => $categoryId,
                 'name'        => $scope->getName(),
                 'description' => $scope->getDescription() ?? '',
-            ];
+            ]);
 
             $this->scopeTable->create($record);
 
@@ -120,23 +94,22 @@ class Scope
         return $scopeId;
     }
 
-    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context)
+    public function createFromRoute(int $categoryId, int $routeId, array $scopeNames, UserContext $context): void
     {
         // remove all scopes from this route
         $this->scopeRouteTable->deleteAllFromRoute($routeId);
 
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
-            $scope = $this->scopeTable->getOneBy(new Condition(['name', '=', $scopeName]));
-
+            $scope = $this->scopeTable->findOneByName($scopeName);
             if (!empty($scope)) {
                 // assign route to scope
-                $this->scopeRouteTable->create([
+                $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
                     'scope_id' => $scope['id'],
                     'route_id' => $routeId,
                     'allow'    => 1,
                     'methods'  => 'GET|POST|PUT|PATCH|DELETE',
-                ]);
+                ]));
             } else {
                 // create new scope
                 $route = new Scope_Route();
@@ -153,9 +126,9 @@ class Scope
         }
     }
 
-    public function update(int $scopeId, Scope_Update $scope, UserContext $context)
+    public function update(int $scopeId, Scope_Update $scope, UserContext $context): int
     {
-        $existing = $this->scopeTable->get($scopeId);
+        $existing = $this->scopeTable->find($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -168,11 +141,11 @@ class Scope
         try {
             $this->scopeTable->beginTransaction();
 
-            $record = [
+            $record = new Table\Generated\ScopeRow([
                 'id'          => $existing['id'],
                 'name'        => $scope->getName(),
                 'description' => $scope->getDescription(),
-            ];
+            ]);
 
             $this->scopeTable->update($record);
 
@@ -188,11 +161,13 @@ class Scope
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($scope, $existing, $context));
+
+        return $scopeId;
     }
 
-    public function delete(int $scopeId, UserContext $context)
+    public function delete(int $scopeId, UserContext $context): int
     {
-        $existing = $this->scopeTable->get($scopeId);
+        $existing = $this->scopeTable->find($scopeId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find scope');
         }
@@ -219,9 +194,9 @@ class Scope
             // delete all routes assigned to the scope
             $this->scopeRouteTable->deleteAllFromScope($existing['id']);
 
-            $record = [
+            $record = new Table\Generated\ScopeRow([
                 'id' => $existing['id']
-            ];
+            ]);
 
             $this->scopeTable->delete($record);
 
@@ -233,18 +208,14 @@ class Scope
         }
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $scopeId;
     }
 
     /**
-     * Returns all scope names which are valid for the app and the user. The
-     * scopes are a comma separated list
-     *
-     * @param integer|null $appId
-     * @param integer|null $userId
-     * @param string $scopes
-     * @return array
+     * Returns all scope names which are valid for the app and the user. The scopes are a comma separated list
      */
-    public function getValidScopes(string $scopes, ?int $appId, ?int $userId)
+    public function getValidScopes(string $scopes, ?int $appId, ?int $userId): array
     {
         $scopes = self::split($scopes);
 
@@ -258,12 +229,12 @@ class Scope
         return $scopes;
     }
 
-    public function exists(string $name)
+    public function exists(string $name): int|false
     {
         $condition  = new Condition();
         $condition->equals('name', $name);
 
-        $scope = $this->scopeTable->getOneBy($condition);
+        $scope = $this->scopeTable->findOneBy($condition);
 
         if (!empty($scope)) {
             return $scope['id'];
@@ -273,28 +244,27 @@ class Scope
     }
 
     /**
-     * @param int $scopeId
      * @param Scope_Route[] $routes
      */
-    protected function insertRoutes(int $scopeId, array $routes)
+    protected function insertRoutes(int $scopeId, ?array $routes): void
     {
         if (!empty($routes) && is_array($routes)) {
             foreach ($routes as $route) {
                 if ($route->getAllow()) {
-                    $this->scopeRouteTable->create(array(
+                    $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
                         'scope_id' => $scopeId,
                         'route_id' => $route->getRouteId(),
                         'allow'    => $route->getAllow() ? 1 : 0,
                         'methods'  => $route->getMethods(),
-                    ));
+                    ]));
                 }
             }
         }
     }
 
-    public static function split($scopes)
+    public static function split(string $scopes): array
     {
-        if (strpos($scopes, ',') !== false) {
+        if (str_contains($scopes, ',')) {
             return explode(',', $scopes);
         } else {
             return explode(' ', $scopes);

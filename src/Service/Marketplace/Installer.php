@@ -38,37 +38,12 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Installer
 {
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Repository\Local
-     */
-    private $localRepository;
+    private Repository\Local $localRepository;
+    private Repository\Remote $remoteRepository;
+    private Config $config;
+    private Service\Config $configService;
+    private Filesystem $filesystem;
 
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Repository\Remote
-     */
-    private $remoteRepository;
-
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    private $configService;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @param \Fusio\Impl\Service\Marketplace\Repository\Local $localRepository
-     * @param \Fusio\Impl\Service\Marketplace\Repository\Remote $remoteRepository
-     * @param \Fusio\Impl\Service\Config $configService
-     * @param \PSX\Framework\Config\Config $config
-     */
     public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Config $config)
     {
         $this->localRepository = $localRepository;
@@ -199,7 +174,7 @@ class Installer
         $this->filesystem->rename($appDir, $this->config->get('psx_path_cache') . '/' . $app->getName() . '_' . $app->getVersion() . '_' . uniqid());
     }
 
-    private function replaceVariables(string $appDir)
+    private function replaceVariables(string $appDir): void
     {
         $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
         $url = $this->config->get('fusio_apps_url');

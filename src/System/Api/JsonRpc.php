@@ -21,11 +21,15 @@
 
 namespace Fusio\Impl\System\Api;
 
+use Fusio\Impl\Rpc\InvokerFactory;
 use Fusio\Model\System;
-use PSX\Api\DocumentedInterface;
+use PSX\Api\Attribute\Description;
+use PSX\Api\Attribute\Incoming;
+use PSX\Api\Attribute\Outgoing;
 use PSX\Api\Resource;
 use PSX\Api\SpecificationInterface;
-use PSX\Framework\Controller\SchemaApiAbstract;
+use PSX\Dependency\Attribute\Inject;
+use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Framework\Schema\Passthru;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
@@ -38,18 +42,12 @@ use PSX\Json\Rpc\Server;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
+class JsonRpc extends ControllerAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Impl\Rpc\InvokerFactory
-     */
-    protected $rpcInvokerFactory;
+    #[Inject]
+    private InvokerFactory $rpcInvokerFactory;
 
-    /**
-     * @return array
-     */
-    public function getPreFilter()
+    public function getPreFilter(): array
     {
         $filter = [];
 
@@ -60,28 +58,16 @@ class JsonRpc extends SchemaApiAbstract implements DocumentedInterface
         return $filter;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getDocumentation(?string $version = null): ?SpecificationInterface
+    #[Description('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification')]
+    #[Incoming(schema: Passthru::class)]
+    #[Outgoing(code: 200, schema: System\Rpc_Response_Success::class)]
+    protected function doPost($record, HttpContextInterface $context): mixed
     {
-        $builder = $this->apiManager->getBuilder(Resource::STATUS_ACTIVE, $this->context->getPath());
+        $invoker = $this->rpcInvokerFactory->createByFramework($context);
 
-        $post = $builder->addMethod('POST');
-        $post->setDescription('JSON-RPC Endpoint please take a look at https://www.jsonrpc.org/specification');
-        $post->setRequest(Passthru::class);
-        $post->addResponse(200, System\Rpc_Response_Success::class);
-
-        return $builder->getSpecification();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function doPost($record, HttpContextInterface $context)
-    {
-        $invoker = $this->rpcInvokerFactory->createByFramework($this->request);
-        $server  = new Server($invoker);
+        $server = new Server(function($method, $params) use ($invoker) {
+            return $invoker->invoke($method, $params);
+        });
 
         return $server->invoke($record);
     }

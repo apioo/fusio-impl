@@ -35,27 +35,16 @@ use Fusio\Impl\Service\Connection as ConnectionService;
  */
 class ConnectionDatabase implements Repository\ConnectionInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private DBALConnection $connection;
+    private string $secretKey;
 
-    /**
-     * @var string
-     */
-    protected $secretKey;
-
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param string $secretKey
-     */
-    public function __construct(DBALConnection $connection, $secretKey)
+    public function __construct(DBALConnection $connection, string $secretKey)
     {
         $this->connection = $connection;
         $this->secretKey  = $secretKey;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $sql = 'SELECT id,
                        name, 
@@ -73,7 +62,7 @@ class ConnectionDatabase implements Repository\ConnectionInterface
         return $conns;
     }
 
-    public function get($id)
+    public function get(string|int $id): ?Connection
     {
         if (is_numeric($id)) {
             $column = 'id';
@@ -101,12 +90,11 @@ class ConnectionDatabase implements Repository\ConnectionInterface
     {
         $config = !empty($row['config']) ? ConnectionService\Encrypter::decrypt($row['config'], $this->secretKey) : [];
 
-        $connection = new Connection();
-        $connection->setId($row['id']);
-        $connection->setName($row['name']);
-        $connection->setClass($row['class']);
-        $connection->setConfig($config);
-
-        return $connection;
+        return new Connection(
+            $row['id'],
+            $row['name'],
+            $row['class'],
+            $config
+        );
     }
 }

@@ -54,7 +54,7 @@ class Log extends ViewAbstract
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['header', 'body'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC, Fields::blacklist(['header', 'body'])], [
                 'id' => $this->fieldInteger('id'),
                 'appId' => $this->fieldInteger('app_id'),
                 'routeId' => $this->fieldInteger('route_id'),
@@ -71,7 +71,7 @@ class Log extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'appId' => $this->fieldInteger('app_id'),
             'routeId' => $this->fieldInteger('route_id'),
@@ -81,7 +81,7 @@ class Log extends ViewAbstract
             'path' => 'path',
             'header' => 'header',
             'body' => 'body',
-            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'getByLog_id'], [new Reference('id')], [
+            'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
                 'message' => 'message',
                 'trace' => 'trace',
                 'file' => 'file',

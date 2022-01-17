@@ -172,7 +172,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Cronjob successful updated"
+    "message": "Cronjob successfully updated"
 }
 JSON;
 
@@ -229,7 +229,7 @@ CRON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Cronjob successful deleted"
+    "message": "Cronjob successfully deleted"
 }
 JSON;
 

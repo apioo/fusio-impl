@@ -42,25 +42,10 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    /**
-     * @var View\Connection
-     */
-    private $table;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var ConnectionProviderParser
-     */
-    private $connectionParser;
-
-    /**
-     * @var Token
-     */
-    private $tokenService;
+    private View\Connection $table;
+    private Config $config;
+    private ConnectionProviderParser $connectionParser;
+    private Token $tokenService;
 
     public function __construct(TableManagerInterface $tableManager, Config $config, ConnectionProviderParser $connectionParser, Token $tokenService)
     {
@@ -70,7 +55,7 @@ class Get extends ActionAbstract
         $this->tokenService = $tokenService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $connection = $this->table->getEntityWithConfig(
             $request->get('connection_id'),

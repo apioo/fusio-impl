@@ -34,10 +34,8 @@ class TokenGenerator
 {
     /**
      * Generates the bearer authorization token
-     *
-     * @return string
      */
-    public static function generateToken()
+    public static function generateToken(): string
     {
         return implode('-', [
             self::generateString(20),
@@ -48,45 +46,37 @@ class TokenGenerator
 
     /**
      * Generates the authorization code
-     *
-     * @return string
      */
-    public static function generateCode()
+    public static function generateCode(): string
     {
         return self::generateString(16);
     }
 
     /**
      * Generates the app key
-     *
-     * @return string
      */
-    public static function generateAppKey()
+    public static function generateAppKey(): string
     {
         return Uuid::pseudoRandom();
     }
 
     /**
      * Generates the app secret
-     *
-     * @return string
      */
-    public static function generateAppSecret()
+    public static function generateAppSecret(): string
     {
         return self::generateString(64);
     }
 
     /**
      * Generates the user password
-     *
-     * @return string
      */
-    public static function generateUserPassword()
+    public static function generateUserPassword(): string
     {
         return self::generateString(20);
     }
 
-    private static function generateString($length)
+    private static function generateString(int $length): string
     {
         return substr(bin2hex(random_bytes($length)), 0, $length);
     }

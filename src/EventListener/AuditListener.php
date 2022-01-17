@@ -37,7 +37,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class AuditListener implements EventSubscriberInterface
 {
-    protected $auditTable;
+    private Table\Audit $auditTable;
 
     public function __construct(Table\Audit $auditTable)
     {
@@ -609,7 +609,7 @@ class AuditListener implements EventSubscriberInterface
 
     private function log(UserContext $context, $refId, $event, $message, ?object $content = null)
     {
-        $this->auditTable->create([
+        $record = new Table\Generated\AuditRow([
             'app_id'   => $context->getAppId(),
             'user_id'  => $context->getUserId(),
             'ref_id'   => $refId,
@@ -619,18 +619,20 @@ class AuditListener implements EventSubscriberInterface
             'content'  => $this->normalize($content),
             'date'     => new \DateTime(),
         ]);
+
+        $this->auditTable->create($record);
     }
 
-    private function normalize(?object $content = null)
+    private function normalize(?object $content = null): string
     {
         if ($content instanceof User_Create) {
             $content->setPassword('******');
         }
 
-        return $content;
+        return json_encode($content);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Event\Action\CreatedEvent::class        => 'onActionCreate',

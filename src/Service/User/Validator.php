@@ -32,20 +32,18 @@ use PSX\Http\Exception as StatusCode;
  */
 class Validator
 {
-    public static function assertName($name)
+    public static function assertName(?string $name): void
     {
         if (empty($name)) {
             throw new StatusCode\BadRequestException('Name must not be empty');
         }
 
-        if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $name)) {
-            return $name;
-        } else {
+        if (!preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $name)) {
             throw new StatusCode\BadRequestException('Name must be between 3 and 32 signs and use only the characters (a-zA-Z0-9-_.)');
         }
     }
 
-    public static function assertEmail($email)
+    public static function assertEmail(?string $email): void
     {
         if (empty($email)) {
             throw new StatusCode\BadRequestException('Email must not be empty');
@@ -56,7 +54,7 @@ class Validator
         }
     }
 
-    public static function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null)
+    public static function assertPassword($password, $minLength = null, $minAlpha = null, $minNumeric = null, $minSpecial = null): void
     {
         if (empty($password)) {
             throw new StatusCode\BadRequestException('Password must not be empty');
@@ -109,7 +107,5 @@ class Validator
         if ($special < $minSpecial) {
             throw new StatusCode\BadRequestException('Password must have at least ' . $minSpecial . ' special character i.e. (!#$%&*@_~)');
         }
-
-        return true;
     }
 }

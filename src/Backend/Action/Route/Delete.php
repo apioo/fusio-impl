@@ -37,17 +37,14 @@ use Fusio\Impl\Service\Route;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var Route
-     */
-    private $routeService;
+    private Route $routeService;
 
     public function __construct(Route $routeService)
     {
         $this->routeService = $routeService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->routeService->delete(
             (int) $request->get('route_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Route successful deleted',
+            'message' => 'Route successfully deleted',
         ];
     }
 }

@@ -36,21 +36,14 @@ use Fusio\Engine\ParametersInterface;
  */
 class Memory implements ConnectionInterface
 {
-    /**
-     * @var array
-     */
-    private static $connections = [];
+    private static array $connections = [];
 
-    public function getName()
+    public function getName(): string
     {
         return 'Memory';
     }
 
-    /**
-     * @param \Fusio\Engine\ParametersInterface $config
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): mixed
     {
         $key = $config->get('key') ?: 'default';
 
@@ -64,7 +57,7 @@ class Memory implements ConnectionInterface
         return self::$connections[$key];
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newInput('key', 'Key', 'text', 'Optional a unique key of this connection'));
     }

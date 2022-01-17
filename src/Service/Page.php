@@ -41,27 +41,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Page
 {
-    /**
-     * @var \Fusio\Impl\Table\Page
-     */
-    private $pageTable;
+    private Table\Page $pageTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\Page $pageTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Table\Page $pageTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->pageTable       = $pageTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(Page_Create $page, UserContext $context)
+    public function create(Page_Create $page, UserContext $context): int
     {
         $slug = $this->createSlug($page->getTitle());
 
@@ -73,13 +62,13 @@ class Page
         $this->assertStatus($page);
 
         // create page
-        $record = [
+        $record = new Table\Generated\PageRow([
             'status'  => $page->getStatus(),
             'title'   => $page->getTitle(),
             'slug'    => $slug,
             'content' => $page->getContent(),
             'date'    => new \DateTime(),
-        ];
+        ]);
 
         $this->pageTable->create($record);
 
@@ -91,9 +80,9 @@ class Page
         return $pageId;
     }
 
-    public function update(int $pageId, Page_Update $page, UserContext $context)
+    public function update(int $pageId, Page_Update $page, UserContext $context): int
     {
-        $existing = $this->pageTable->get($pageId);
+        $existing = $this->pageTable->find($pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }
@@ -107,22 +96,24 @@ class Page
         $slug = $this->createSlug($page->getTitle());
 
         // update action
-        $record = [
+        $record = new Table\Generated\PageRow([
             'id'      => $existing['id'],
             'status'  => $page->getStatus(),
             'title'   => $page->getTitle(),
             'slug'    => $slug,
             'content' => $page->getContent(),
-        ];
+        ]);
 
         $this->pageTable->update($record);
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($page, $existing, $context));
+
+        return $pageId;
     }
 
-    public function delete(int $pageId, UserContext $context)
+    public function delete(int $pageId, UserContext $context): int
     {
-        $existing = $this->pageTable->get($pageId);
+        $existing = $this->pageTable->find($pageId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find page');
         }
@@ -131,21 +122,25 @@ class Page
             throw new StatusCode\GoneException('Page was deleted');
         }
 
-        $this->pageTable->update([
+        $record = new Table\Generated\PageRow([
             'id'     => $existing['id'],
             'status' => Table\Page::STATUS_DELETED,
         ]);
 
+        $this->pageTable->update($record);
+
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $pageId;
     }
 
-    public function exists(string $slug)
+    public function exists(string $slug): int|false
     {
         $condition  = new Condition();
         $condition->in('status', [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
         $condition->equals('slug', $slug);
 
-        $page = $this->pageTable->getOneBy($condition);
+        $page = $this->pageTable->findOneBy($condition);
 
         if (!empty($page)) {
             return $page['id'];
@@ -170,7 +165,7 @@ class Page
         return $slug;
     }
 
-    private function assertStatus(\Fusio\Model\Backend\Page $page)
+    private function assertStatus(\Fusio\Model\Backend\Page $page): void
     {
         if (!in_array($page->getStatus(), [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE])) {
             throw new StatusCode\GoneException('Page status must be either 1 or 2');

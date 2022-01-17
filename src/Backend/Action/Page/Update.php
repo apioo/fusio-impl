@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Page_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Page
-     */
-    private $pageService;
+    private Page $pageService;
 
     public function __construct(Page $pageService)
     {
         $this->pageService = $pageService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Page successful updated',
+            'message' => 'Page successfully updated',
         ];
     }
 }

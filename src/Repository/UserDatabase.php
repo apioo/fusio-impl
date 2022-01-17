@@ -35,14 +35,14 @@ use Fusio\Impl\Table;
  */
 class UserDatabase implements Repository\UserInterface
 {
-    protected $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $sql = 'SELECT id,
                        status,
@@ -63,7 +63,7 @@ class UserDatabase implements Repository\UserInterface
         return $users;
     }
 
-    public function get($id)
+    public function get(string|int $id): ?User
     {
         if (empty($id)) {
             return null;
@@ -89,16 +89,16 @@ class UserDatabase implements Repository\UserInterface
 
     private function newUser(array $row)
     {
-        $user = new User();
-        $user->setId($row['id']);
-        $user->setRoleId($row['role_id']);
-        $user->setCategoryId($this->getCategoryForRole($row['role_id']));
-        $user->setStatus($row['status']);
-        $user->setName($row['name']);
-        $user->setEmail($row['email']);
-        $user->setPoints($row['points']);
-
-        return $user;
+        return new User(
+            false,
+            $row['id'],
+            $row['role_id'],
+            $this->getCategoryForRole($row['role_id']),
+            $row['status'],
+            $row['name'],
+            $row['email'],
+            $row['points'] ?? 0,
+        );
     }
 
     private function getCategoryForRole($roleId): int

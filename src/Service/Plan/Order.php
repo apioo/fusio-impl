@@ -36,32 +36,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Order
 {
-    /**
-     * @var \Fusio\Impl\Service\Plan\Contract
-     */
-    private $contractService;
+    private Contract $contractService;
+    private Invoice $invoiceService;
+    private Table\Plan $planTable;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Service\Plan\Invoice
-     */
-    private $invoiceService;
-
-    /**
-     * @var \Fusio\Impl\Table\Plan
-     */
-    private $planTable;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Service\Plan\Contract $contractService
-     * @param \Fusio\Impl\Service\Plan\Invoice $invoiceService
-     * @param \Fusio\Impl\Table\Plan $planTable
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Contract $contractService, Invoice $invoiceService, Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->contractService = $contractService;
@@ -70,12 +49,7 @@ class Order
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param Plan_Order_Request $order
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     * @return array
-     */
-    public function order(Plan_Order_Request $order, UserContext $context)
+    public function order(Plan_Order_Request $order, UserContext $context): array
     {
         $product    = $this->planTable->getProduct($order->getPlanId());
         $contractId = $this->contractService->create($context->getUserId(), $product, $context);

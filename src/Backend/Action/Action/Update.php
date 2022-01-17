@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Action_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Action
-     */
-    private $actionService;
+    private Action $actionService;
 
     public function __construct(Action $actionService)
     {
         $this->actionService = $actionService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Action successful updated',
+            'message' => 'Action successfully updated',
         ];
     }
 }

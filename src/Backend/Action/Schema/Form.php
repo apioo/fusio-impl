@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Schema_Form;
  */
 class Form extends ActionAbstract
 {
-    /**
-     * @var Schema
-     */
-    private $schemaService;
+    private Schema $schemaService;
 
     public function __construct(Schema $schemaService)
     {
         $this->schemaService = $schemaService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Form extends ActionAbstract
 
         return array(
             'success' => true,
-            'message' => 'Schema form successful updated',
+            'message' => 'Schema form successfully updated',
         );
     }
 }

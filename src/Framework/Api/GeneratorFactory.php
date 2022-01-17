@@ -21,7 +21,6 @@
 
 namespace Fusio\Impl\Framework\Api;
 
-use Doctrine\Common\Annotations\Reader;
 use Fusio\Impl\Authorization\Authorization;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -38,25 +37,18 @@ use PSX\Api\GeneratorInterface;
  */
 class GeneratorFactory extends ApiGeneratorFactory
 {
-    /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    protected $scopeTable;
+    private Table\Scope $scopeTable;
+    private Service\Config $configService;
 
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
-
-    public function __construct(Table\Scope $scopeTable, Service\Config $configService, Reader $reader, $namespace, $url, $dispatch)
+    public function __construct(Table\Scope $scopeTable, Service\Config $configService, string $namespace, string $url, string $dispatch)
     {
-        parent::__construct($reader, $namespace, $url, $dispatch);
+        parent::__construct($namespace, $url, $dispatch);
 
         $this->scopeTable    = $scopeTable;
         $this->configService = $configService;
     }
 
-    protected function configure(GeneratorInterface $generator)
+    protected function configure(GeneratorInterface $generator): void
     {
         if ($generator instanceof Generator\Spec\OpenAPIAbstract) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
@@ -69,7 +61,7 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
             $scopes     = $this->scopeTable->getAvailableScopes();
-            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/developer/auth';
+            $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/apps/developer/#!/auth';
             $tokenUrl   = $this->url . '/' . $this->dispatch . 'authorization/token';
             $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';
 

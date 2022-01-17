@@ -34,46 +34,33 @@ use PSX\Sql\Condition;
  */
 class Dispatcher implements DispatcherInterface
 {
-    /**
-     * @var \Fusio\Impl\Table\Event
-     */
-    private $eventTable;
+    private Table\Event $eventTable;
+    private Table\Event\Trigger $triggerTable;
 
-    /**
-     * @var \Fusio\Impl\Table\Event\Trigger
-     */
-    private $triggerTable;
-
-    /**
-     * @param \Fusio\Impl\Table\Event $eventTable
-     * @param \Fusio\Impl\Table\Event\Trigger $triggerTable
-     */
     public function __construct(Table\Event $eventTable, Table\Event\Trigger $triggerTable)
     {
         $this->eventTable   = $eventTable;
         $this->triggerTable = $triggerTable;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function dispatch($eventName, $payload)
+    public function dispatch(string $eventName, mixed $payload): void
     {
         // check whether event exists
         $condition  = new Condition();
         $condition->equals('name', $eventName);
 
-        $event = $this->eventTable->getOneBy($condition);
-
+        $event = $this->eventTable->findOneBy($condition);
         if (empty($event)) {
             throw new \RuntimeException('Invalid event name');
         }
 
-        $this->triggerTable->create([
+        $record = new Table\Generated\EventTriggerRow([
             'event_id' => $event['id'],
             'status' => Table\Event\Trigger::STATUS_PENDING,
             'payload' => json_encode($payload),
             'insert_date' => new \DateTime(),
         ]);
+
+        $this->triggerTable->create($record);
     }
 }

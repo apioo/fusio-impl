@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\Event;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Subscription
@@ -30,26 +30,10 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Subscription extends TableAbstract
+class Subscription extends Generated\EventSubscriptionTable
 {
     const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 2;
-
-    public function getName()
-    {
-        return 'fusio_event_subscription';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'event_id' => self::TYPE_INT,
-            'user_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'endpoint' => self::TYPE_VARCHAR,
-        );
-    }
 
     public function getSubscriptionsForEvent($eventId)
     {

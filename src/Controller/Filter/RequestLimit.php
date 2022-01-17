@@ -38,30 +38,16 @@ use PSX\Http\ResponseInterface;
  */
 class RequestLimit implements FilterInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Rate
-     */
-    private $rateService;
+    private Service\Rate $rateService;
+    private Context $context;
 
-    /**
-     * @var \Fusio\Impl\Framework\Loader\Context
-     */
-    private $context;
-
-    /**
-     * @param \Fusio\Impl\Service\Rate $rateService
-     * @param \Fusio\Impl\Framework\Loader\Context $context
-     */
     public function __construct(Service\Rate $rateService, Context $context)
     {
         $this->rateService   = $rateService;
         $this->context       = $context;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $success = $this->rateService->assertLimit(
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',

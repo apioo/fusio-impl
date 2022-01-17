@@ -193,7 +193,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Schema successful created"
+    "message": "Schema successfully created"
 }
 JSON;
 

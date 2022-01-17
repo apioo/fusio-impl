@@ -29,6 +29,7 @@ use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Plan;
 use Fusio\Impl\Table;
 use Fusio\Model\Backend\Plan_Contract_Create;
+use PSX\Http\Environment\HttpResponse;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -40,15 +41,8 @@ use PSX\Sql\TableManagerInterface;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Plan\Contract
-     */
-    private $contractService;
-
-    /**
-     * @var Table\Plan
-     */
-    private $table;
+    private Plan\Contract $contractService;
+    private Table\Plan $table;
 
     public function __construct(Plan\Contract $contractService, TableManagerInterface $tableManager)
     {
@@ -56,7 +50,7 @@ class Create extends ActionAbstract
         $this->table = $tableManager->getTable(Table\Plan::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -70,9 +64,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Contract successful created',
-        ];
+            'message' => 'Contract successfully created',
+        ]);
     }
 }

@@ -95,9 +95,9 @@ class TokenCommand extends Command
         $expire = $input->getArgument('expire');
 
         if (!is_numeric($appId)) {
-            $app = $this->appTable->getOneByName($appId);
+            $app = $this->appTable->findOneByName($appId);
         } else {
-            $app = $this->appTable->get($appId);
+            $app = $this->appTable->find($appId);
         }
 
         if (empty($app)) {
@@ -105,9 +105,9 @@ class TokenCommand extends Command
         }
 
         if (!is_numeric($userId)) {
-            $user = $this->userTable->getOneByName($userId);
+            $user = $this->userTable->findOneByName($userId);
         } else {
-            $user = $this->userTable->get($userId);
+            $user = $this->userTable->find($userId);
         }
 
         if (empty($user)) {

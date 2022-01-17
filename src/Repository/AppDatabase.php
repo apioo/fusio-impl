@@ -35,20 +35,14 @@ use Fusio\Impl\Table;
  */
 class AppDatabase implements Repository\AppInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private DBALConnection $connection;
 
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     */
     public function __construct(DBALConnection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         $sql = 'SELECT id,
                        user_id,
@@ -67,13 +61,13 @@ class AppDatabase implements Repository\AppInterface
         ]);
 
         foreach ($result as $row) {
-            $apps[] = $this->newApp($row);
+            $apps[] = $this->newApp($row, []);
         }
 
         return $apps;
     }
 
-    public function get($id)
+    public function get(string|int $id): ?App
     {
         if (empty($id)) {
             return null;
@@ -92,16 +86,13 @@ class AppDatabase implements Repository\AppInterface
         $row = $this->connection->fetchAssoc($sql, array('id' => $id));
 
         if (!empty($row)) {
-            $app = $this->newApp($row);
-            $app->setScopes($this->getScopes($row['id']));
-
-            return $app;
+            return $this->newApp($row, $this->getScopes($row['id']));
         } else {
             return null;
         }
     }
 
-    protected function getScopes($appId)
+    protected function getScopes(string|int $appId): array
     {
         $sql = '    SELECT scope.name
                       FROM fusio_app_scope app_scope
@@ -119,22 +110,23 @@ class AppDatabase implements Repository\AppInterface
         return $names;
     }
 
-    protected function newApp(array $row)
+    protected function newApp(array $row, array $scopes)
     {
         $parameters = [];
         if (!empty($row['parameters'])) {
             parse_str($row['parameters'], $parameters);
         }
 
-        $app = new App();
-        $app->setId($row['id']);
-        $app->setUserId($row['user_id']);
-        $app->setStatus($row['status']);
-        $app->setName($row['name']);
-        $app->setUrl($row['url']);
-        $app->setParameters($parameters);
-        $app->setAppKey($row['app_key']);
-
-        return $app;
+        return new App(
+            false,
+            $row['id'],
+            $row['user_id'],
+            $row['status'],
+            $row['name'],
+            $row['url'],
+            $row['app_key'],
+            $parameters,
+            $scopes
+        );
     }
 }

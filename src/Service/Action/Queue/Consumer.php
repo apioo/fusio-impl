@@ -34,15 +34,8 @@ use Fusio\Impl\Repository\ActionDatabase;
  */
 class Consumer
 {
-    /**
-     * @var Processor
-     */
-    private $processor;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Processor $processor;
+    private Connection $connection;
 
     public function __construct(Processor $processor, Connection $connection)
     {

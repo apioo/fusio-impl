@@ -71,7 +71,8 @@ class ProviderTest extends ControllerDbTestCase
             "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
             "type": "text",
             "name": "table",
-            "title": "Table"
+            "title": "Table",
+            "help": null
         }
     ]
 }
@@ -98,7 +99,7 @@ JSON;
         $expect = <<<'JSON'
 {
     "success": true,
-    "message": "Provider successful created"
+    "message": "Provider successfully created"
 }
 JSON;
 

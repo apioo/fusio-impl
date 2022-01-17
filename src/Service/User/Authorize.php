@@ -39,44 +39,13 @@ use PSX\Uri\Url;
  */
 class Authorize
 {
-    /**
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    private $appTokenService;
+    private Service\App\Token $appTokenService;
+    private Service\Scope $scopeService;
+    private Service\App\Code $appCodeService;
+    private Table\App $appTable;
+    private Table\User\Grant $userGrantTable;
+    private Config $config;
 
-    /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    private $scopeService;
-
-    /**
-     * @var \Fusio\Impl\Service\App\Code
-     */
-    private $appCodeService;
-
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
-
-    /**
-     * @var \Fusio\Impl\Table\User\Grant
-     */
-    private $userGrantTable;
-
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    private $config;
-
-    /**
-     * @param \Fusio\Impl\Service\App\Token $appTokenService
-     * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Service\App\Code $appCodeService
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param \Fusio\Impl\Table\User\Grant $userGrantTable
-     * @param \PSX\Framework\Config\Config $config
-     */
     public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Service\App\Code $appCodeService, Table\App $appTable, Table\User\Grant $userGrantTable, Config $config)
     {
         $this->appTokenService = $appTokenService;
@@ -87,7 +56,7 @@ class Authorize
         $this->config          = $config;
     }
 
-    public function authorize($userId, Authorize_Request $request)
+    public function authorize(int $userId, Authorize_Request $request): array
     {
         // response type
         if (!in_array($request->getResponseType(), ['code', 'token'])) {
@@ -146,21 +115,25 @@ class Authorize
                     $app['id'],
                     $userId,
                     $scopes,
-                    isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                    new \DateInterval($this->config->get('fusio_expire_token'))
+                    $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+                    new \DateInterval($this->config->get('fusio_expire_token')),
+                    $state
                 );
 
-                $parameters = $accessToken->getProperties();
-
-                if (!empty($state)) {
-                    $parameters['state'] = $state;
-                }
+                $parameters = array_filter([
+                    'access_token' => $accessToken->getAccessToken(),
+                    'token_type' => $accessToken->getTokenType(),
+                    'expires_in' => $accessToken->getExpiresIn(),
+                    'refresh_token' => $accessToken->getRefreshToken(),
+                    'scope' => $accessToken->getScope(),
+                    'state' => $accessToken->getState(),
+                ]);
 
                 $redirectUri = $redirectUri->withFragment(http_build_query($parameters, '', '&'))->toString();
 
                 return [
                     'type' => 'token',
-                    'token' => $accessToken,
+                    'token' => $parameters,
                     'redirectUri' => $redirectUri,
                 ];
             } else {
@@ -222,33 +195,37 @@ class Authorize
         $condition->equals('user_id', $userId);
         $condition->equals('app_id', $appId);
 
-        $userApp = $this->userGrantTable->getOneBy($condition);
+        $userApp = $this->userGrantTable->findOneBy($condition);
 
         if (empty($userApp)) {
-            $this->userGrantTable->create([
+            $record = new Table\Generated\UserGrantRow([
                 'user_id' => $userId,
                 'app_id'  => $appId,
                 'allow'   => $allow ? 1 : 0,
                 'date'    => new \DateTime(),
             ]);
+
+            $this->userGrantTable->create($record);
         } else {
-            $this->userGrantTable->update([
+            $record = new Table\Generated\UserGrantRow([
                 'id'      => $userApp['id'],
                 'user_id' => $userId,
                 'app_id'  => $appId,
                 'allow'   => $allow ? 1 : 0,
                 'date'    => new \DateTime(),
             ]);
+
+            $this->userGrantTable->update($record);
         }
     }
     
-    private function getApp($clientId)
+    private function getApp(string $clientId): Table\Generated\AppRow
     {
         $condition = new Condition();
         $condition->equals('app_key', $clientId);
         $condition->equals('status', Table\App::STATUS_ACTIVE);
 
-        $app = $this->appTable->getOneBy($condition);
+        $app = $this->appTable->findOneBy($condition);
         if (empty($app)) {
             throw new StatusCode\BadRequestException('Unknown client id');
         }

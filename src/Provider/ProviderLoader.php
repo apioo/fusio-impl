@@ -33,37 +33,17 @@ use Fusio\Adapter;
  */
 class ProviderLoader
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private Connection $connection;
+    private string $file;
+    private ?ProviderConfig $config = null;
 
-    /**
-     * @var string
-     */
-    private $file;
-
-    /**
-     * @var \Fusio\Impl\Provider\ProviderConfig
-     */
-    private $config;
-
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param string $file
-     */
-    public function __construct(Connection $connection, $file)
+    public function __construct(Connection $connection, string $file)
     {
         $this->connection = $connection;
         $this->file       = $file;
     }
 
-    /**
-     * Returns the provider config of the system
-     * 
-     * @return \Fusio\Impl\Provider\ProviderConfig
-     */
-    public function getConfig()
+    public function getConfig(): ProviderConfig
     {
         if ($this->config) {
             return $this->config;
@@ -93,12 +73,12 @@ class ProviderLoader
         return $this->config = new ProviderConfig($config);
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->config = null;
     }
 
-    private function mergeClass(array &$config, $type, $class)
+    private function mergeClass(array &$config, $type, $class): void
     {
         if (isset($config[$type])) {
             if (class_exists($class) && !in_array($class, $config[$type])) {
@@ -107,7 +87,7 @@ class ProviderLoader
         }
     }
 
-    private function getDefaultConfig()
+    private function getDefaultConfig(): array
     {
         return [
             ProviderConfig::TYPE_ACTION => [

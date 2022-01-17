@@ -30,12 +30,9 @@ namespace Fusio\Impl\Service\Health;
  */
 class CheckResult
 {
-    private $checks = [];
+    private array $checks = [];
 
-    /**
-     * @return boolean
-     */
-    public function isHealthy()
+    public function isHealthy(): bool
     {
         $count = 0;
         foreach ($this->checks as $check) {
@@ -47,20 +44,12 @@ class CheckResult
         return count($this->checks) === $count;
     }
 
-    /**
-     * @return array
-     */
-    public function getChecks()
+    public function getChecks(): array
     {
         return $this->checks;
     }
 
-    /**
-     * @param string $name
-     * @param boolean $healthy
-     * @param string|null $error
-     */
-    public function add($name, $healthy, $error = null)
+    public function add(string $name, bool $healthy, ?string $error = null)
     {
         $check = [
             'healthy' => $healthy,

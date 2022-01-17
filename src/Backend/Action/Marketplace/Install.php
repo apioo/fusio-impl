@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Model\Backend\Marketplace_Install;
 use Fusio\Impl\Service\Marketplace\Installer;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Install
@@ -38,17 +39,14 @@ use Fusio\Impl\Service\Marketplace\Installer;
  */
 class Install extends ActionAbstract
 {
-    /**
-     * @var Installer
-     */
-    private $installerService;
+    private Installer $installerService;
 
     public function __construct(Installer $installerService)
     {
         $this->installerService = $installerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -59,9 +57,9 @@ class Install extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'App ' . $app->getName() . ' successful installed',
-        ];
+        ]);
     }
 }

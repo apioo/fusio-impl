@@ -37,17 +37,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class GetUsedPoints extends ActionAbstract
 {
-    /**
-     * @var View\Statistic\UsedPoints
-     */
-    private $table;
+    private View\Statistic\UsedPoints $table;
 
     public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Statistic\UsedPoints::class);
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         return $this->table->getView(
             View\Plan\Usage\QueryFilter::create($request)

@@ -38,17 +38,14 @@ use Fusio\Model\Backend\Cronjob_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var Cronjob
-     */
-    private $cronjobService;
+    private Cronjob $cronjobService;
 
     public function __construct(Cronjob $cronjobService)
     {
         $this->cronjobService = $cronjobService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'Cronjob successful updated',
+            'message' => 'Cronjob successfully updated',
         ];
     }
 }

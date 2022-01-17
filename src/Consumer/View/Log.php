@@ -52,7 +52,7 @@ class Log extends ViewAbstract
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition, Fields::blacklist(['header', 'body'])], [
+            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC, Fields::blacklist(['header', 'body'])], [
                 'id' => $this->fieldInteger('id'),
                 'appId' => $this->fieldInteger('app_id'),
                 'ip' => 'ip',
@@ -66,13 +66,13 @@ class Log extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $logId)
+    public function getEntity(int $userId, int $logId)
     {
         $condition = new Condition();
         $condition->equals('id', $logId);
         $condition->equals('user_id', $userId);
 
-        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'getOneBy'], [$condition], [
+        $definition = $this->doEntity([$this->getTable(Table\Log::class), 'findOneBy'], [$condition], [
             'id' => $this->fieldInteger('id'),
             'appId' => $this->fieldInteger('app_id'),
             'ip' => 'ip',

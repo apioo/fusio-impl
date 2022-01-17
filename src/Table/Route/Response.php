@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\Route;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Response
@@ -30,23 +30,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Response extends TableAbstract
+class Response extends Generated\RoutesResponseTable
 {
-    public function getName()
-    {
-        return 'fusio_routes_response';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'method_id' => self::TYPE_INT,
-            'code' => self::TYPE_INT,
-            'response' => self::TYPE_VARCHAR,
-        );
-    }
-
     public function getResponses($methodId)
     {
         $sql = 'SELECT response.id, 

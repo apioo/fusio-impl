@@ -39,15 +39,8 @@ use PSX\Dependency\AutowireResolverInterface;
  */
 class Index extends ActionAbstract
 {
-    /**
-     * @var ProviderLoader
-     */
-    private $loader;
-
-    /**
-     * @var AutowireResolverInterface
-     */
-    private $resolver;
+    private ProviderLoader $loader;
+    private AutowireResolverInterface $resolver;
 
     public function __construct(ProviderLoader $loader, AutowireResolverInterface $resolver)
     {
@@ -55,7 +48,7 @@ class Index extends ActionAbstract
         $this->resolver = $resolver;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $classes = $this->loader->getConfig()->getClasses(ProviderConfig::TYPE_ROUTES);
         $result  = [];

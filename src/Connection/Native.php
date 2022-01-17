@@ -37,35 +37,28 @@ use Fusio\Engine\ParametersInterface;
  */
 class Native implements ConnectionInterface, PingableInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'Native';
     }
 
-    /**
-     * @param \Fusio\Engine\ParametersInterface $config
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): mixed
     {
         return $this->connection;
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
     }
 
-    public function ping($connection)
+    public function ping(mixed $connection): bool
     {
         if ($connection instanceof Connection) {
             return $connection->ping();

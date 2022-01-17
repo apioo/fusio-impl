@@ -65,7 +65,7 @@ class Subscription extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($userId, $subscriptionId)
+    public function getEntity(int $userId, int $subscriptionId)
     {
         $condition = new Condition();
         $condition->equals('event_subscription.id', $subscriptionId);
@@ -98,7 +98,7 @@ class Subscription extends ViewAbstract
     private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
     {
         $fields  = implode(',', $fields);
-        $where   = $condition->getStatment($this->connection->getDatabasePlatform());
+        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
         $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
 
         return <<<SQL

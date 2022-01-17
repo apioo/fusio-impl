@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\Table\Scope;
 
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Route
@@ -30,24 +30,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Route extends TableAbstract
+class Route extends Generated\ScopeRoutesTable
 {
-    public function getName()
-    {
-        return 'fusio_scope_routes';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'scope_id' => self::TYPE_INT,
-            'route_id' => self::TYPE_INT,
-            'allow' => self::TYPE_INT,
-            'methods' => self::TYPE_VARCHAR,
-        );
-    }
-
     public function deleteAllFromScope($scopeId)
     {
         $sql = 'DELETE FROM fusio_scope_routes

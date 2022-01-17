@@ -40,25 +40,10 @@ use PSX\Schema\Exception\ValidationException;
  */
 class Invoker
 {
-    /**
-     * @var ActionInvoker
-     */
-    private $actionInvoker;
+    private ActionInvoker $actionInvoker;
+    private Table\Route\Method $methodTable;
+    private array $middlewares;
 
-    /**
-     * @var \Fusio\Impl\Table\Route\Method 
-     */
-    private $methodTable;
-
-    /**
-     * @var array
-     */
-    private $middlewares;
-
-    /**
-     * @param ActionInvoker $actionInvoker
-     * @param Table\Route\Method $methodTable
-     */
     public function __construct(ActionInvoker $actionInvoker, Table\Route\Method $methodTable)
     {
         $this->actionInvoker = $actionInvoker;
@@ -89,7 +74,7 @@ class Invoker
         }
     }
 
-    private function execute($operationId, $arguments)
+    private function execute(string $operationId, mixed $arguments)
     {
         $method = $this->methodTable->getMethodByOperationId($operationId);
         if (empty($method)) {

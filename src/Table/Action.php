@@ -30,28 +30,8 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Action extends TableAbstract
+class Action extends Generated\ActionTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
-
-    public function getName()
-    {
-        return 'fusio_action';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'category_id' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'class' => self::TYPE_VARCHAR,
-            'async' => self::TYPE_BOOLEAN,
-            'engine' => self::TYPE_VARCHAR,
-            'config' => self::TYPE_TEXT,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 }

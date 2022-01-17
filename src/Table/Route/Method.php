@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Table\Route;
 
 use PSX\Api\Resource;
-use PSX\Sql\TableAbstract;
+use Fusio\Impl\Table\Generated;
 
 /**
  * Method
@@ -31,33 +31,9 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Method extends TableAbstract
+class Method extends Generated\RoutesMethodTable
 {
-    public function getName()
-    {
-        return 'fusio_routes_method';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'route_id' => self::TYPE_INT,
-            'method' => self::TYPE_VARCHAR,
-            'version' => self::TYPE_INT,
-            'status' => self::TYPE_INT,
-            'active' => self::TYPE_INT,
-            'public' => self::TYPE_INT,
-            'description' => self::TYPE_VARCHAR,
-            'operation_id' => self::TYPE_VARCHAR,
-            'parameters' => self::TYPE_VARCHAR,
-            'request' => self::TYPE_VARCHAR,
-            'action' => self::TYPE_VARCHAR,
-            'costs' => self::TYPE_INT,
-        );
-    }
-
-    public function deleteAllFromRoute($routeId, $version = null, $status = null)
+    public function deleteAllFromRoute(int $routeId, ?int $version = null, ?int $status = null): void
     {
         $sql = 'DELETE FROM fusio_routes_method
                       WHERE route_id = :id';
@@ -79,13 +55,8 @@ class Method extends TableAbstract
 
     /**
      * Returns only active methods for the route
-     *
-     * @param integer $routeId
-     * @param integer|null $version
-     * @param boolean|null $active
-     * @return array
      */
-    public function getMethods(int $routeId, ?int $version = null, ?bool $active = true)
+    public function getMethods(int $routeId, ?int $version = null, ?bool $active = true): array
     {
         $sql = '  SELECT method.id,
                          method.route_id,
@@ -119,7 +90,7 @@ class Method extends TableAbstract
         return $this->project($sql, $params);
     }
 
-    public function getAllowedMethods($routeId, $version)
+    public function getAllowedMethods(int $routeId, ?string $version): array
     {
         $methods = $this->getMethods($routeId, $version);
         $names   = [];
@@ -131,7 +102,7 @@ class Method extends TableAbstract
         return $names;
     }
 
-    public function getMethod($routeId, $version, $method)
+    public function getMethod(int $routeId, int $version, string $method): array|false
     {
         $sql = 'SELECT method.route_id,
                        method.public,
@@ -145,7 +116,7 @@ class Method extends TableAbstract
                    AND method = :method
                    AND active = :active';
 
-        return $this->connection->fetchAssoc($sql, [
+        return $this->connection->fetchAssociative($sql, [
             'route_id' => $routeId,
             'version' => $version,
             'method' => $method,
@@ -153,7 +124,7 @@ class Method extends TableAbstract
         ]);
     }
 
-    public function getMethodByOperationId($operationId)
+    public function getMethodByOperationId(string $operationId): array|false
     {
         $sql = 'SELECT method.route_id,
                        method.method,
@@ -168,33 +139,33 @@ class Method extends TableAbstract
                  WHERE method.operation_id = :operation_id
                    AND method.active = :active';
 
-        return $this->connection->fetchAssoc($sql, [
+        return $this->connection->fetchAssociative($sql, [
             'operation_id' => $operationId,
             'active' => Resource::STATUS_ACTIVE,
         ]);
     }
 
-    public function getVersion($routeId, $version)
+    public function getVersion(int $routeId, ?string $version): string|false
     {
         $sql = 'SELECT version
                   FROM fusio_routes_method
                  WHERE route_id = :route_id
                    AND version = :version';
 
-        return $this->connection->fetchColumn($sql, [
+        return $this->connection->fetchOne($sql, [
             'route_id' => $routeId,
             'version' => $version,
         ]);
     }
 
-    public function getLatestVersion($routeId)
+    public function getLatestVersion(int $routeId)
     {
         $sql = 'SELECT MAX(version)
                   FROM fusio_routes_method
                  WHERE route_id = :route_id
                    AND status = :status';
 
-        $version = $this->connection->fetchColumn($sql, [
+        $version = $this->connection->fetchOne($sql, [
             'route_id' => $routeId,
             'status' => Resource::STATUS_ACTIVE,
         ]);
@@ -206,7 +177,7 @@ class Method extends TableAbstract
                       FROM fusio_routes_method
                      WHERE route_id = :route_id';
 
-            return $this->connection->fetchColumn($sql, [
+            return $this->connection->fetchOne($sql, [
                 'route_id' => $routeId,
             ]);
         } else {
@@ -214,7 +185,7 @@ class Method extends TableAbstract
         }
     }
 
-    public function hasProductionVersion($routeId)
+    public function hasProductionVersion(int $routeId): bool
     {
         $sql = 'SELECT COUNT(id) AS cnt
                   FROM fusio_routes_method
@@ -222,7 +193,7 @@ class Method extends TableAbstract
                    AND status IN (:production, :deprecated)
                    AND active = :active';
 
-        $count = (int) $this->connection->fetchColumn($sql, [
+        $count = (int) $this->connection->fetchOne($sql, [
             'route_id'   => $routeId,
             'production' => Resource::STATUS_ACTIVE,
             'deprecated' => Resource::STATUS_DEPRECATED,

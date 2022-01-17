@@ -38,17 +38,14 @@ use Fusio\Impl\Service\Marketplace\Installer;
  */
 class Remove extends ActionAbstract
 {
-    /**
-     * @var Installer
-     */
-    private $installerService;
+    private Installer $installerService;
 
     public function __construct(Installer $installerService)
     {
         $this->installerService = $installerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $app = $this->installerService->remove(
             $request->get('app_name'),

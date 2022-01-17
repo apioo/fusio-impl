@@ -51,17 +51,14 @@ use Thrift\Exception\TException;
  */
 abstract class WorkerAbstract extends ActionAbstract
 {
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $worker = $this->config->get('fusio_worker');
         $endpoint = $worker[$this->getLanguage()] ?? null;
@@ -104,14 +101,14 @@ abstract class WorkerAbstract extends ActionAbstract
         );
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newTextArea('code', 'Code', $this->getLanguage(), 'Click <a ng-click="help.showDialog(\'help/action/worker-' . $this->getLanguage() . '.md\')">here</a> for more information.'));
     }
 
     abstract protected function getLanguage(): string;
 
-    private function buildRequest(RequestInterface $request)
+    private function buildRequest(RequestInterface $request): Request
     {
         $return = new Request();
         if ($request instanceof HttpInterface) {

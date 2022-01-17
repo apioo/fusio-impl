@@ -30,27 +30,6 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Log extends TableAbstract
+class Log extends Generated\LogTable
 {
-    public function getName()
-    {
-        return 'fusio_log';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'app_id' => self::TYPE_INT,
-            'route_id' => self::TYPE_INT,
-            'ip' => self::TYPE_VARCHAR,
-            'user_agent' => self::TYPE_VARCHAR,
-            'method' => self::TYPE_VARCHAR,
-            'path' => self::TYPE_VARCHAR,
-            'header' => self::TYPE_TEXT,
-            'body' => self::TYPE_TEXT,
-            'execution_time' => self::TYPE_INT,
-            'date' => self::TYPE_DATETIME,
-        );
-    }
 }

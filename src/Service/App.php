@@ -43,45 +43,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class App
 {
-    /**
-     * @var \Fusio\Impl\Table\App
-     */
-    private $appTable;
+    private Table\App $appTable;
+    private Table\Scope $scopeTable;
+    private Table\App\Scope $appScopeTable;
+    private Table\App\Token $appTokenTable;
+    private string $tokenSecret;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Fusio\Impl\Table\Scope
-     */
-    private $scopeTable;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Scope
-     */
-    private $appScopeTable;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Token
-     */
-    private $appTokenTable;
-
-    /**
-     * @var string
-     */
-    private $tokenSecret;
-
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @param \Fusio\Impl\Table\App $appTable
-     * @param \Fusio\Impl\Table\Scope $scopeTable
-     * @param \Fusio\Impl\Table\App\Scope $appScopeTable
-     * @param \Fusio\Impl\Table\App\Token $appTokenTable
-     * @param string $tokenSecret
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
-    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, $tokenSecret, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\App $appTable, Table\Scope $scopeTable, Table\App\Scope $appScopeTable, Table\App\Token $appTokenTable, string $tokenSecret, EventDispatcherInterface $eventDispatcher)
     {
         $this->appTable        = $appTable;
         $this->scopeTable      = $scopeTable;
@@ -91,7 +60,7 @@ class App
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function create(App_Create $app, UserContext $context)
+    public function create(App_Create $app, UserContext $context): int
     {
         // check whether app exists
         $condition  = new Condition();
@@ -99,7 +68,7 @@ class App
         $condition->notEquals('status', Table\App::STATUS_DELETED);
         $condition->equals('name', $app->getName());
 
-        $existing = $this->appTable->getOneBy($condition);
+        $existing = $this->appTable->findOneBy($condition);
         if (!empty($existing)) {
             throw new StatusCode\BadRequestException('App already exists');
         }
@@ -117,7 +86,7 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $record = [
+            $record = new Table\Generated\AppRow([
                 'user_id'    => $app->getUserId(),
                 'status'     => $app->getStatus(),
                 'name'       => $app->getName(),
@@ -126,7 +95,7 @@ class App
                 'app_key'    => $appKey,
                 'app_secret' => $appSecret,
                 'date'       => new DateTime(),
-            ];
+            ]);
 
             $this->appTable->create($record);
 
@@ -151,9 +120,9 @@ class App
         return $appId;
     }
 
-    public function update(int $appId, App_Update $app, UserContext $context)
+    public function update(int $appId, App_Update $app, UserContext $context): int
     {
-        $existing = $this->appTable->get($appId);
+        $existing = $this->appTable->find($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -173,13 +142,13 @@ class App
         try {
             $this->appTable->beginTransaction();
 
-            $record = [
+            $record = new Table\Generated\AppRow([
                 'id'         => $existing['id'],
                 'status'     => $app->getStatus(),
                 'name'       => $app->getName(),
                 'url'        => $app->getUrl(),
                 'parameters' => $parameters,
-            ];
+            ]);
 
             $this->appTable->update($record);
 
@@ -200,12 +169,13 @@ class App
         }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($app, $existing, $context));
+
+        return $appId;
     }
 
-    public function delete(int $appId, UserContext $context)
+    public function delete(int $appId, UserContext $context): int
     {
-        $existing = $this->appTable->get($appId);
-
+        $existing = $this->appTable->find($appId);
         if (empty($existing)) {
             throw new StatusCode\NotFoundException('Could not find app');
         }
@@ -214,31 +184,33 @@ class App
             throw new StatusCode\GoneException('App was deleted');
         }
 
-        $record = [
+        $record = new Table\Generated\AppRow([
             'id'     => $existing['id'],
             'status' => Table\App::STATUS_DELETED,
-        ];
+        ]);
 
         $this->appTable->update($record);
 
         $this->eventDispatcher->dispatch(new DeletedEvent($existing, $context));
+
+        return $appId;
     }
 
-    protected function insertScopes(int $appId, array $scopes)
+    protected function insertScopes(int $appId, ?array $scopes): void
     {
         if (!empty($scopes) && is_array($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {
-                $this->appScopeTable->create(array(
+                $this->appScopeTable->create(new Table\Generated\AppScopeRow([
                     'app_id'   => $appId,
                     'scope_id' => $scope['id'],
-                ));
+                ]));
             }
         }
     }
 
-    protected function parseParameters($parameters)
+    protected function parseParameters(string $parameters): string
     {
         parse_str($parameters, $data);
 

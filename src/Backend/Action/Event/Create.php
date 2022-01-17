@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Event;
 use Fusio\Model\Backend\Event_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Model\Backend\Event_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Event
-     */
-    private $eventService;
+    private Event $eventService;
 
     public function __construct(Event $eventService)
     {
         $this->eventService = $eventService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -60,9 +58,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Event successful created',
-        ];
+            'message' => 'Event successfully created',
+        ]);
     }
 }

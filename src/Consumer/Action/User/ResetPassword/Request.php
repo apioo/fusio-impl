@@ -37,17 +37,14 @@ use Fusio\Model\Consumer\User_Email;
  */
 class Request extends ActionAbstract
 {
-    /**
-     * @var UserResetPassword
-     */
-    private $resetService;
+    private UserResetPassword $resetService;
 
     public function __construct(UserResetPassword $resetService)
     {
         $this->resetService = $resetService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

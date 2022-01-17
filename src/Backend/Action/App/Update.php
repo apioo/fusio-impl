@@ -38,17 +38,14 @@ use Fusio\Model\Backend\App_Update;
  */
 class Update extends ActionAbstract
 {
-    /**
-     * @var App
-     */
-    private $appService;
+    private App $appService;
 
     public function __construct(App $appService)
     {
         $this->appService = $appService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -62,7 +59,7 @@ class Update extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'App successful updated',
+            'message' => 'App successfully updated',
         ];
     }
 }

@@ -38,17 +38,14 @@ use PSX\Http\Exception as StatusCode;
  */
 class Provider extends ActionAbstract
 {
-    /**
-     * @var UserProvider
-     */
-    private $providerService;
+    private UserProvider $providerService;
 
     public function __construct(UserProvider $providerService)
     {
         $this->providerService = $providerService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Service\Page;
 use Fusio\Model\Backend\Page_Create;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Create
@@ -38,17 +39,14 @@ use Fusio\Model\Backend\Page_Create;
  */
 class Create extends ActionAbstract
 {
-    /**
-     * @var Page
-     */
-    private $pageService;
+    private Page $pageService;
 
     public function __construct(Page $pageService)
     {
         $this->pageService = $pageService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 
@@ -59,9 +57,9 @@ class Create extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
-            'message' => 'Page successful created',
-        ];
+            'message' => 'Page successfully created',
+        ]);
     }
 }

@@ -36,17 +36,14 @@ use Fusio\Impl\Service\Health;
  */
 class GetHealth extends ActionAbstract
 {
-    /**
-     * @var Health
-     */
-    private $healthService;
+    private Health $healthService;
 
     public function __construct(Health $healthService)
     {
         $this->healthService = $healthService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $result  = $this->healthService->check();
         $healthy = $result->isHealthy();

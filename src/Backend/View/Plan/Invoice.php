@@ -57,10 +57,10 @@ class Invoice extends ViewAbstract
             'totalResults' => $this->getTable(Table\Plan\Invoice::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'getAll'], [$startIndex, $count, 'id', Sql::SORT_DESC, $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
                 'id' => $this->fieldInteger('id'),
                 'contractId' => $this->fieldInteger('contract_id'),
-                'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+                'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                     'id' => $this->fieldInteger('id'),
                     'name' => 'name',
                 ]),
@@ -81,10 +81,10 @@ class Invoice extends ViewAbstract
 
     public function getEntity($id)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'get'], [$id], [
+        $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),
             'contractId' => $this->fieldInteger('contract_id'),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'get'], [new Reference('user_id')], [
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
             ]),

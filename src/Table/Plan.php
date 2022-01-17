@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Table;
 
 use Fusio\Engine\Model\Product;
+use Fusio\Engine\Model\ProductInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Sql\TableAbstract;
 
@@ -32,42 +33,20 @@ use PSX\Sql\TableAbstract;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Plan extends TableAbstract
+class Plan extends Generated\PlanTable
 {
-    const STATUS_ACTIVE  = 1;
-    const STATUS_DELETED = 0;
+    public const STATUS_ACTIVE  = 1;
+    public const STATUS_DELETED = 0;
 
-    const INTERVAL_NONE = 0;
-    const INTERVAL_1MONTH = 1;
-    const INTERVAL_3MONTH = 2;
-    const INTERVAL_6MONTH = 3;
-    const INTERVAL_12MONTH = 4;
+    public const INTERVAL_NONE = 0;
+    public const INTERVAL_1MONTH = 1;
+    public const INTERVAL_3MONTH = 2;
+    public const INTERVAL_6MONTH = 3;
+    public const INTERVAL_12MONTH = 4;
 
-    public function getName()
+    public function getProduct(int $planId): ProductInterface
     {
-        return 'fusio_plan';
-    }
-
-    public function getColumns()
-    {
-        return array(
-            'id' => self::TYPE_INT | self::AUTO_INCREMENT | self::PRIMARY_KEY,
-            'status' => self::TYPE_INT,
-            'name' => self::TYPE_VARCHAR,
-            'description' => self::TYPE_VARCHAR,
-            'price' => self::TYPE_FLOAT,
-            'points' => self::TYPE_INT,
-            'period_type' => self::TYPE_INT,
-        );
-    }
-
-    /**
-     * @param integer $planId
-     * @return \Fusio\Engine\Model\ProductInterface
-     */
-    public function getProduct($planId)
-    {
-        $plan = $this->get($planId);
+        $plan = $this->find($planId);
 
         if (empty($plan)) {
             throw new StatusCode\BadRequestException('Invalid plan id');
@@ -77,13 +56,12 @@ class Plan extends TableAbstract
             throw new StatusCode\BadRequestException('Invalid plan status');
         }
 
-        $product = new Product();
-        $product->setId($plan['id']);
-        $product->setName($plan['name']);
-        $product->setPrice($plan['price']);
-        $product->setPoints($plan['points']);
-        $product->setInterval($plan['period_type']);
-
-        return $product;
+        return new Product(
+            $plan['id'],
+            $plan['name'],
+            $plan['price'],
+            $plan['points'],
+            $plan['period_type']
+        );
     }
 }

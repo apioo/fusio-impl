@@ -37,17 +37,14 @@ use Fusio\Impl\Service\App;
  */
 class Delete extends ActionAbstract
 {
-    /**
-     * @var App
-     */
-    private $appService;
+    private App $appService;
 
     public function __construct(App $appService)
     {
         $this->appService = $appService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $this->appService->delete(
             (int) $request->get('app_id'),
@@ -56,7 +53,7 @@ class Delete extends ActionAbstract
 
         return [
             'success' => true,
-            'message' => 'App successful deleted',
+            'message' => 'App successfully deleted',
         ];
     }
 }

@@ -36,36 +36,26 @@ use PSX\Http\Stream\Util;
  */
 class Log
 {
-    const START_TIME = 0;
-    const LOG_ID = 1;
+    public const START_TIME = 0;
+    public const LOG_ID = 1;
 
-    private static $level = -1;
+    private static int $level = -1;
 
-    /**
-     * @var \Doctrine\DBAL\Connection 
-     */
-    private $connection;
+    private DBALConnection $connection;
+    private array $stack;
 
-    /**
-     * @var array
-     */
-    private $stack;
-
-    /**
-     * @param DBALConnection $connection
-     */
     public function __construct(DBALConnection $connection)
     {
         $this->connection = $connection;
         $this->stack = [];
     }
 
-    public function log($remoteIp, $method, $path, $userAgent, Context $context, RequestInterface $request = null)
+    public function log(string $remoteIp, string $method, string $path, string $userAgent, Context $context, ?RequestInterface $request = null): void
     {
         self::$level++;
 
         $this->stack[self::$level] = [
-            self::START_TIME => microtime(),
+            self::START_TIME => hrtime(),
             self::LOG_ID => null
         ];
 
@@ -92,7 +82,7 @@ class Log
         $this->stack[self::$level][self::LOG_ID] = $this->connection->lastInsertId();
     }
 
-    public function finish()
+    public function finish(): void
     {
         $startTime = $this->stack[self::$level][self::START_TIME] ?? null;
         $logId = $this->stack[self::$level][self::LOG_ID] ?? null;
@@ -103,11 +93,10 @@ class Log
 
         self::$level--;
 
-        // @TODO use hrtime if we require PHP >= 7.3
-        $endTime = microtime();
+        $endTime = hrtime();
 
-        [$startUsec, $startSec] = explode(' ', $startTime);
-        [$endUsec, $endSec] = explode(' ', $endTime);
+        [$startSec, $startUsec] = $startTime;
+        [$endSec, $endUsec] = $endTime;
 
         $diffSec  = $startSec != $endSec ? $endSec - $startSec : 0;
         $diffUsec = $endUsec - $startUsec;
@@ -119,10 +108,7 @@ class Log
         ]);
     }
 
-    /**
-     * @param \Throwable $exception
-     */
-    public function error(\Throwable $exception)
+    public function error(\Throwable $exception): void
     {
         if ($exception instanceof DisplayException) {
             return;
@@ -153,7 +139,7 @@ class Log
         ));
     }
 
-    protected function getHeadersAsString(RequestInterface $request)
+    protected function getHeadersAsString(RequestInterface $request): string
     {
         $headers = $request->getHeaders();
         $result  = '';
@@ -168,7 +154,7 @@ class Log
         return rtrim($result);
     }
 
-    protected function getBodyAsString(RequestInterface $request)
+    protected function getBodyAsString(RequestInterface $request): ?string
     {
         $body = Util::toString($request->getBody());
         if (empty($body)) {

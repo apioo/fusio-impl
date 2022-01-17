@@ -41,23 +41,14 @@ use PSX\Sql\TableManagerInterface;
  */
 class Get extends ActionAbstract
 {
-    /**
-     * @var View\Schema
-     */
-    private $table;
+    private View\Schema $table;
 
-    /**
-     * @var Loader
-     */
-    private $schemaManager;
-
-    public function __construct(TableManagerInterface $tableManager, SchemaManagerInterface $schemaManager)
+    public function __construct(TableManagerInterface $tableManager)
     {
         $this->table = $tableManager->getTable(View\Schema::class);
-        $this->schemaManager = $schemaManager;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $schema = $this->table->getEntity(
             $request->get('schema_id')

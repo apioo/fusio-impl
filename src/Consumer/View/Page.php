@@ -50,7 +50,7 @@ class Page extends ViewAbstract
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'getAll'], [$startIndex, $count, 'slug', 'ASC', $condition], [
+            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, 'slug', Sql::SORT_ASC], [
                 'id' => $this->fieldInteger('id'),
                 'title' => 'title',
                 'slug' => 'slug',
@@ -61,9 +61,17 @@ class Page extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity($pageId)
+    public function getEntity(string $pageId)
     {
-        $definition = $this->doEntity([$this->getTable(Table\Page::class), 'get'], [$this->resolveId($pageId)], [
+        if (str_starts_with($pageId, '~')) {
+            $method = 'findOneByTitle';
+            $pageId = urldecode(substr($pageId, 1));
+        } else {
+            $method = 'find';
+            $pageId = (int) $pageId;
+        }
+
+        $definition = $this->doEntity([$this->getTable(Table\Page::class), $method], [$pageId], [
             'id' => $this->fieldInteger('id'),
             'title' => 'title',
             'slug' => 'slug',
@@ -72,15 +80,5 @@ class Page extends ViewAbstract
         ]);
 
         return $this->build($definition);
-    }
-
-    private function resolveId($id): int
-    {
-        if (substr($id, 0, 1) === '~') {
-            $row = $this->getTable(Table\Page::class)->getOneBySlug(urldecode(substr($id, 1)));
-            return $row['id'] ?? 0;
-        } else {
-            return (int) $id;
-        }
     }
 }

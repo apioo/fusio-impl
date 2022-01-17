@@ -25,6 +25,7 @@ use Fusio\Impl\Service;
 use Fusio\Model\Consumer\User_Login;
 use Fusio\Model\Consumer\User_Refresh;
 use PSX\Framework\Config\Config;
+use PSX\Oauth2\AccessToken;
 
 /**
  * Login
@@ -35,26 +36,10 @@ use PSX\Framework\Config\Config;
  */
 class Login
 {
-    /**
-     * @var \Fusio\Impl\Service\User
-     */
-    private $userService;
+    private Service\User $userService;
+    private Service\App\Token $appTokenService;
+    private Config $config;
 
-    /**
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    private $appTokenService;
-
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    private $config;
-
-    /**
-     * @param \Fusio\Impl\Service\User $userService
-     * @param \Fusio\Impl\Service\App\Token $appTokenService
-     * @param \PSX\Framework\Config\Config $config
-     */
     public function __construct(Service\User $userService, Service\App\Token $appTokenService, Config $config)
     {
         $this->userService     = $userService;
@@ -62,39 +47,37 @@ class Login
         $this->config          = $config;
     }
 
-    public function login(User_Login $login)
+    public function login(User_Login $login): ?AccessToken
     {
         $userId = $this->userService->authenticateUser($login->getUsername(), $login->getPassword());
-        if ($userId > 0) {
-            $scopes = $login->getScopes();
-            if (empty($scopes)) {
-                $scopes = $this->userService->getAvailableScopes($userId);
-            } else {
-                $scopes = $this->userService->getValidScopes($userId, $scopes);
-            }
-
-            $appId = $this->getAppId();
-
-            return $this->appTokenService->generateAccessToken(
-                $appId,
-                $userId,
-                $scopes,
-                isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
-                new \DateInterval($this->config->get('fusio_expire_token'))
-            );
+        if (empty($userId)) {
+            return null;
         }
 
-        return null;
-    }
+        $scopes = $login->getScopes();
+        if (empty($scopes)) {
+            $scopes = $this->userService->getAvailableScopes($userId);
+        } else {
+            $scopes = $this->userService->getValidScopes($userId, $scopes);
+        }
 
-    public function refresh(User_Refresh $refresh)
-    {
         $appId = $this->getAppId();
 
-        return $this->appTokenService->refreshAccessToken(
+        return $this->appTokenService->generateAccessToken(
             $appId,
+            $userId,
+            $scopes,
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
+            new \DateInterval($this->config->get('fusio_expire_token'))
+        );
+    }
+
+    public function refresh(User_Refresh $refresh): AccessToken
+    {
+        return $this->appTokenService->refreshAccessToken(
+            $this->getAppId(),
             $refresh->getRefresh_token(),
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->config->get('fusio_expire_token')),
             new \DateInterval($this->config->get('fusio_expire_refresh'))
         );

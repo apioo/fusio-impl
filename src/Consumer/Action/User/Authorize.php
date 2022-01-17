@@ -37,17 +37,14 @@ use Fusio\Model\Consumer\Authorize_Request;
  */
 class Authorize extends ActionAbstract
 {
-    /**
-     * @var UserAuthorize
-     */
-    private $authorizeService;
+    private UserAuthorize $authorizeService;
 
     public function __construct(UserAuthorize $authorizeService)
     {
         $this->authorizeService = $authorizeService;
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context)
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
 

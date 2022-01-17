@@ -28,6 +28,7 @@ use PSX\Framework\Oauth2\GrantType\AuthorizationCodeAbstract;
 use PSX\Oauth2\Authorization\Exception\InvalidClientException;
 use PSX\Oauth2\Authorization\Exception\InvalidGrantException;
 use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
+use PSX\Oauth2\Grant;
 
 /**
  * AuthorizationCode
@@ -38,61 +39,26 @@ use PSX\Oauth2\Authorization\Exception\InvalidScopeException;
  */
 class AuthorizationCode extends AuthorizationCodeAbstract
 {
-    /**
-     * @var \Fusio\Impl\Service\App\Code
-     */
-    private $appCodeService;
+    private Service\App\Token $appTokenService;
+    private Service\Scope $scopeService;
+    private Table\App\Code $appCodeTable;
+    private string $expireToken;
 
-    /**
-     * @var \Fusio\Impl\Service\Scope
-     */
-    private $scopeService;
-
-    /**
-     * @var \Fusio\Impl\Service\App\Token
-     */
-    private $appTokenService;
-
-    /**
-     * @var \Fusio\Impl\Table\App\Code
-     */
-    private $appCodeTable;
-
-    /**
-     * @var string
-     */
-    private $expireToken;
-
-    /**
-     * @param \Fusio\Impl\Service\App\Code $appCodeService
-     * @param \Fusio\Impl\Service\App\Token $appTokenService
-     * @param \Fusio\Impl\Service\Scope $scopeService
-     * @param \Fusio\Impl\Table\App\Code $appCodeTable
-     * @param string $expireToken
-     */
-    public function __construct(Service\App\Code $appCodeService, Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, string $expireToken)
+    public function __construct(Service\App\Token $appTokenService, Service\Scope $scopeService, Table\App\Code $appCodeTable, string $expireToken)
     {
-        $this->appCodeService  = $appCodeService;
         $this->appTokenService = $appTokenService;
         $this->scopeService    = $scopeService;
         $this->appCodeTable    = $appCodeTable;
         $this->expireToken     = $expireToken;
     }
 
-    /**
-     * @param \PSX\Framework\Oauth2\Credentials $credentials
-     * @param string $code
-     * @param string $redirectUri
-     * @param string $clientId
-     * @return \PSX\Oauth2\AccessToken
-     */
-    protected function generate(Credentials $credentials, $code, $redirectUri, $clientId)
+    protected function generate(Credentials $credentials, Grant\AuthorizationCode $grant)
     {
         $code = $this->appCodeTable->getCodeByRequest(
             $credentials->getClientId(),
             $credentials->getClientSecret(),
-            $code,
-            $redirectUri ?: ''
+            $grant->getCode(),
+            $grant->getRedirectUri()
         );
 
         if (empty($code)) {
@@ -116,7 +82,7 @@ class AuthorizationCode extends AuthorizationCodeAbstract
             $code['app_id'],
             $code['user_id'],
             $scopes,
-            isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1',
+            $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
             new \DateInterval($this->expireToken)
         );
     }
