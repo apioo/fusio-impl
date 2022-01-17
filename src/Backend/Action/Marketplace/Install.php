@@ -28,6 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Model\Backend\Marketplace_Install;
 use Fusio\Impl\Service\Marketplace\Installer;
+use PSX\Http\Environment\HttpResponse;
 
 /**
  * Install
@@ -56,9 +57,9 @@ class Install extends ActionAbstract
             UserContext::newActionContext($context)
         );
 
-        return [
+        return new HttpResponse(201, [], [
             'success' => true,
             'message' => 'App ' . $app->getName() . ' successful installed',
-        ];
+        ]);
     }
 }
