@@ -57,6 +57,7 @@ class MarketplaceTestCase extends ControllerDbTestCase
         return $this->installer = new Installer(
             Environment::getService('marketplace_repository_local'),
             $this->getRemoteRepository(),
+            Environment::getService('config_service'),
             Environment::getService('config')
         );
     }
