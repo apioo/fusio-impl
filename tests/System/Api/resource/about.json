@@ -54,10 +54,7 @@
           }
         },
         "apps": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
+          "$ref": "About_Apps"
         },
         "links": {
           "type": "array",
@@ -65,6 +62,12 @@
             "$ref": "About_Link"
           }
         }
+      }
+    },
+    "About_Apps": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
       }
     },
     "About_Link": {
