@@ -32,18 +32,11 @@ interface SenderInterface
 {
     /**
      * Returns whether the sender supports this dispatcher instance
-     *
-     * @param object $dispatcher
-     * @return boolean
      */
-    public function accept($dispatcher);
+    public function accept(object $dispatcher): bool;
 
     /**
      * Sends a message using the dispatcher
-     *
-     * @param object $dispatcher
-     * @param Message $message
-     * @return void
      */
-    public function send($dispatcher, Message $message);
+    public function send(object $dispatcher, Message $message): void;
 }

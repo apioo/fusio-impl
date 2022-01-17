@@ -21,10 +21,14 @@
 
 namespace Fusio\Impl\Mail;
 
-use Fusio\Impl\Service\Config;
+use Fusio\Impl\Service;
 use Fusio\Impl\Service\Connection\Resolver;
 use Psr\Log\LoggerInterface;
-use PSX\Framework\Config\Config as FrameworkConfig;
+use PSX\Framework\Config\Config;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\NullTransport;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 
 /**
  * Mailer
@@ -35,39 +39,13 @@ use PSX\Framework\Config\Config as FrameworkConfig;
  */
 class Mailer implements MailerInterface
 {
-    /**
-     * @var \Fusio\Impl\Service\Config
-     */
-    protected $configService;
+    private Service\Config $configService;
+    private Resolver $resolver;
+    private SenderFactory $senderFactory;
+    private Config $config;
+    private LoggerInterface $logger;
 
-    /**
-     * @var \Fusio\Impl\Service\Connection\Resolver
-     */
-    protected $resolver;
-
-    /**
-     * @var \Fusio\Impl\Mail\SenderFactory
-     */
-    protected $senderFactory;
-
-    /**
-     * @var \PSX\Framework\Config\Config
-     */
-    protected $config;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @param \Fusio\Impl\Service\Config $configService
-     * @param \Fusio\Impl\Service\Connection\Resolver $resolver
-     * @param \Fusio\Impl\Mail\SenderFactory $senderFactory
-     * @param \PSX\Framework\Config\Config $config
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(Config $configService, Resolver $resolver, SenderFactory $senderFactory, FrameworkConfig $config, LoggerInterface $logger)
+    public function __construct(Service\Config $configService, Resolver $resolver, SenderFactory $senderFactory, Config $config, LoggerInterface $logger)
     {
         $this->configService = $configService;
         $this->resolver      = $resolver;
@@ -76,14 +54,11 @@ class Mailer implements MailerInterface
         $this->logger        = $logger;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function send($subject, array $to, $body)
+    public function send(string $subject, array $to, string $body): void
     {
         $dispatcher = $this->resolver->get(Resolver::TYPE_MAILER);
         if (!$dispatcher) {
-            $dispatcher = new \Swift_Mailer($this->createTransport());
+            $dispatcher = new SymfonyMailer($this->createTransport());
         }
 
         $from = $this->configService->getValue('mail_sender');
@@ -112,10 +87,8 @@ class Mailer implements MailerInterface
 
     /**
      * Tries to determine the current hostname
-     *
-     * @return string
      */
-    private function getHostname()
+    private function getHostname(): string
     {
         $host = parse_url($this->config->get('psx_url'), PHP_URL_HOST);
         if (empty($host)) {
@@ -125,30 +98,13 @@ class Mailer implements MailerInterface
         return $host;
     }
 
-    /**
-     * @return \Swift_Transport
-     */
-    private function createTransport()
+    private function createTransport(): TransportInterface
     {
-        if ($this->config['psx_debug'] === false) {
-            $mailer = $this->config['fusio_mailer'];
-            if (!empty($mailer)) {
-                if ($mailer['transport'] == 'smtp') {
-                    $transport = new \Swift_SmtpTransport($mailer['host'], $mailer['port']);
-                    if (isset($mailer['encryption'])) {
-                        $transport->setEncryption($mailer['encryption']);
-                    }
-                    if (isset($mailer['username'])) {
-                        $transport->setUsername($mailer['username']);
-                        $transport->setPassword($mailer['password']);
-                    }
-                    return $transport;
-                }
-            }
-
-            return new \Swift_SendmailTransport();
+        $mailer = $this->config['fusio_mailer'];
+        if ($this->config['psx_debug'] === false && !empty($mailer)) {
+            return Transport::fromDsn($mailer);
         } else {
-            return new \Swift_NullTransport();
+            return new NullTransport();
         }
     }
 }
