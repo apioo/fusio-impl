@@ -22,10 +22,9 @@
 namespace Fusio\Impl\Service\Marketplace;
 
 use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service;
 use Fusio\Model\Backend\Marketplace_Install;
 use PSX\Framework\Config\Config;
-use PSX\Http\Client\ClientInterface;
-use PSX\Http\Client\GetRequest;
 use PSX\Http\Exception as StatusCode;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -42,12 +41,14 @@ class Installer
     private Repository\Local $localRepository;
     private Repository\Remote $remoteRepository;
     private Config $config;
+    private Service\Config $configService;
     private Filesystem $filesystem;
 
-    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Config $config)
+    public function __construct(Repository\Local $localRepository, Repository\Remote $remoteRepository, Service\Config $configService, Config $config)
     {
         $this->localRepository = $localRepository;
         $this->remoteRepository = $remoteRepository;
+        $this->configService = $configService;
         $this->config = $config;
         $this->filesystem = new Filesystem();
     }
@@ -184,6 +185,21 @@ class Installer
             'URL' => $url,
             'BASE_PATH' => $basePath,
         ]);
+
+        // set values from config
+        $configValues = [
+            'PROVIDER_FACEBOOK_KEY' => 'provider_facebook_key',
+            'PROVIDER_GOOGLE_KEY' => 'provider_google_key',
+            'PROVIDER_GITHUB_KEY' => 'provider_github_key',
+            'RECAPTCHA_KEY' => 'recaptcha_key',
+        ];
+
+        foreach ($configValues as $key => $name) {
+            $value = $this->configService->getValue($name);
+            if (!empty($value)) {
+                $env[$key] = $value;
+            }
+        }
 
         $file = $appDir . '/index.html';
         if (is_file($file)) {

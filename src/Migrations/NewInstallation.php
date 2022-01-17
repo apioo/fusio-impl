@@ -97,9 +97,13 @@ class NewInstallation
         $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail');
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
         $bag->addConfig('mail_sender', Table\Config::FORM_STRING, '', 'Email address which is used in the "From" header');
+        $bag->addConfig('provider_facebook_key', Table\Config::FORM_STRING, '', 'Facebook app key');
         $bag->addConfig('provider_facebook_secret', Table\Config::FORM_STRING, '', 'Facebook app secret');
+        $bag->addConfig('provider_google_key', Table\Config::FORM_STRING, '', 'Google app key');
         $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
+        $bag->addConfig('provider_github_key', Table\Config::FORM_STRING, '', 'GitHub app key');
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
+        $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
         $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
         $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
