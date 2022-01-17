@@ -21,39 +21,35 @@
 
 namespace Fusio\Impl\Tests\Mail\Sender;
 
-use Fusio\Impl\Mail\Message;
-use Fusio\Impl\Mail\Sender\SMTP;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\NullTransport;
+use Symfony\Component\Mailer\SentMessage;
+use Symfony\Component\Mailer\Transport\AbstractTransport;
 
 /**
- * SMTPTest
+ * MemoryTransport
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class SMTPTest extends TestCase
+final class MemoryTransport extends AbstractTransport
 {
-    public function testAccept()
-    {
-        $sender = new SMTP();
+    private array $messages = [];
 
-        $this->assertTrue($sender->accept(new Mailer(new NullTransport())));
-        $this->assertFalse($sender->accept(new \stdClass()));
+    protected function doSend(SentMessage $message): void
+    {
+        $this->messages[] = $message;
     }
 
-    public function testSend()
+    /**
+     * @return SentMessage[]
+     */
+    public function getMessages(): array
     {
-        $transport = new MemoryTransport();
-        $dispatcher = new Mailer($transport);
+        return $this->messages;
+    }
 
-        $message = new Message('foo@bar.com', ['bar@foo.com'], 'foo', 'bar');
-
-        $sender = new SMTP();
-        $sender->send($dispatcher, $message);
-
-        $this->assertEquals(1, count($transport->getMessages()));
+    public function __toString(): string
+    {
+        return 'memory://';
     }
 }
