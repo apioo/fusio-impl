@@ -30,7 +30,7 @@ namespace Fusio\Impl\Worker\Action;
  */
 class WorkerPHP extends WorkerAbstract
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Worker-PHP';
     }
