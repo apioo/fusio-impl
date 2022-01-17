@@ -87,8 +87,9 @@ class ProviderTest extends ControllerDbTestCase
 
         $client = new Client(['handler' => $handler]);
 
+        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_facebook_secret']);
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => 18]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'facebook'], ['id' => $id]);
 
         $response = $this->sendRequest('/consumer/provider/facebook', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -132,8 +133,9 @@ class ProviderTest extends ControllerDbTestCase
 
         $client = new Client(['handler' => $handler]);
 
+        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_github_secret']);
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => 20]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'github'], ['id' => $id]);
 
         $response = $this->sendRequest('/consumer/provider/github', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
@@ -178,8 +180,9 @@ class ProviderTest extends ControllerDbTestCase
 
         $client = new Client(['handler' => $handler]);
 
+        $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = :name', ['name' => 'provider_google_secret']);
         Environment::getContainer()->set('http_client', $client);
-        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => 19]);
+        Environment::getService('connection')->update('fusio_config', ['value' => 'google'], ['id' => $id]);
 
         $response = $this->sendRequest('/consumer/provider/google', 'POST', array(
             'User-Agent' => 'Fusio TestCase',
