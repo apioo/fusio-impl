@@ -28,7 +28,10 @@ final class Version20220117184948 extends AbstractMigration
         ];
 
         foreach ($configs as $row) {
-            $this->addSql('INSERT INTO fusio_config (type, name, description, value) VALUES (?, ?, ?, ?)', $row);
+            $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = ?', [$row[1]]);
+            if (empty($id)) {
+                $this->addSql('INSERT INTO fusio_config (type, name, description, value) VALUES (?, ?, ?, ?)', $row);
+            }
         }
     }
 
