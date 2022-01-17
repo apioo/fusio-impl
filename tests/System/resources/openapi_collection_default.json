@@ -325,10 +325,7 @@
             }
           },
           "apps": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#\/components\/schemas\/Record"
           },
           "links": {
             "type": "array",
@@ -394,6 +391,12 @@
       "Passthru": {
         "description": "No schema information available",
         "type": "object"
+      },
+      "Record": {
+        "type": "object",
+        "additionalProperties": {
+          "$generic": "T"
+        }
       },
       "System_About": {
         "$ref": "#\/components\/schemas\/About"
@@ -496,7 +499,7 @@
             }
           },
           "authorizationCode": {
-            "authorizationUrl": "http:\/\/127.0.0.1\/developer\/auth",
+            "authorizationUrl": "http:\/\/127.0.0.1\/apps\/developer\/#!\/auth",
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
