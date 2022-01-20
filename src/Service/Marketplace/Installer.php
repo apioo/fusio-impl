@@ -223,6 +223,8 @@ class Installer
             $value = $this->configService->getValue($name);
             if (!empty($value)) {
                 $env[$key] = $value;
+            } elseif (!isset($env[$key])) {
+                $env[$key] = '';
             }
         }
 
