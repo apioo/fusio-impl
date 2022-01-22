@@ -35,15 +35,8 @@ use PSX\Schema\SchemaManagerInterface;
  */
 class Loader
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var SchemaManagerInterface
-     */
-    private $schemaManager;
+    private Connection $connection;
+    private SchemaManagerInterface $schemaManager;
 
     public function __construct(Connection $connection, SchemaManagerInterface $schemaManager)
     {
@@ -51,19 +44,13 @@ class Loader
         $this->schemaManager = $schemaManager;
     }
 
-    public function getSchema($schemaId): SchemaInterface
+    public function getSchema(string|int $schemaId): SchemaInterface
     {
         $source = $this->getSource($schemaId);
         return $this->schemaManager->getSchema($source);
     }
 
-    /**
-     * @param string|integer $schemaId
-     * @return string
-     * @throws InvalidSchemaException
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function getSource($schemaId): string
+    private function getSource(string|int $schemaId): string
     {
         if (is_numeric($schemaId)) {
             $column = 'id';

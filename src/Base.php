@@ -32,18 +32,12 @@ use Composer\InstalledVersions;
  */
 class Base
 {
-    /**
-     * @return string
-     */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return InstalledVersions::getVersion('fusio/impl');
     }
 
-    /**
-     * @return string
-     */
-    public static function getUserAgent()
+    public static function getUserAgent(): string
     {
         return 'Fusio v' . self::getVersion() . ' (https://www.fusio-project.org/)';
     }

@@ -36,7 +36,7 @@ use Thrift\Transport\TSocket;
  */
 class ClientFactory
 {
-    private static $instances = [];
+    private static array $instances = [];
 
     public static function getClient(string $endpoint, ?string $type = null): WorkerClient
     {

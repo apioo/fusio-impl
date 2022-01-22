@@ -35,19 +35,13 @@ use PSX\Uri\Uri;
  */
 class Database implements ResolverInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function resolve(Uri $uri, ?string $basePath = null): \stdClass
     {
         $result = $this->connection->fetchAll('SELECT source FROM fusio_schema WHERE name LIKE :name', ['name' => ltrim($uri->getPath(), '/')]);
