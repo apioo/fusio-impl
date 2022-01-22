@@ -48,7 +48,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class OpenAPI implements ProviderInterface
 {
-    private $schemas;
+    private array $schemas = [];
 
     public function getName(): string
     {
