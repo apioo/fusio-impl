@@ -32,34 +32,25 @@ use Fusio\Impl\Adapter\InstructionAbstract;
  */
 class ProviderClass extends InstructionAbstract
 {
-    protected $type;
+    protected string $type;
 
-    public function __construct($payload, $type)
+    public function __construct(mixed $payload, string $type)
     {
         parent::__construct($payload);
 
         $this->type = $type;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getName(): string
     {
         return ucfirst($this->type) . ' Class';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getKey(): string
     {
         return $this->type . 'Class';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getDescription(): ?string
     {
         return $this->payload;

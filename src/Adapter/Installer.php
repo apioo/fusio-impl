@@ -25,8 +25,8 @@ use Fusio\Impl\Provider\ProviderWriter;
 use stdClass;
 
 /**
- * The installer inserts only the action and connection classes through the
- * database connection. All other entries are inserted through the API endpoint
+ * The installer inserts only the action and connection classes through the database connection. All other entries are
+ * inserted through the API endpoint
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
@@ -34,20 +34,14 @@ use stdClass;
  */
 class Installer
 {
-    /**
-     * @var ProviderWriter
-     */
-    private $providerWriter;
+    private ProviderWriter $providerWriter;
 
     public function __construct(ProviderWriter $providerWriter)
     {
         $this->providerWriter = $providerWriter;
     }
 
-    /**
-     * @param array $instructions
-     */
-    public function install(array $instructions)
+    public function install(array $instructions): void
     {
         $data = new stdClass();
 
@@ -59,16 +53,13 @@ class Installer
                 $data->$key = [];
             }
 
-            array_push($data->$key, $value);
+            $data->$key[] = $value;
         }
 
         $this->importProvider($data);
     }
 
-    /**
-     * @param \stdClass $data
-     */
-    private function importProvider(stdClass $data)
+    private function importProvider(stdClass $data): void
     {
         $providerTypes  = $this->providerWriter->getAvailableTypes();
         $providerConfig = [];

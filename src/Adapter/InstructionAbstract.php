@@ -30,14 +30,14 @@ namespace Fusio\Impl\Adapter;
  */
 abstract class InstructionAbstract
 {
-    protected $payload;
+    protected mixed $payload;
 
-    public function __construct($payload)
+    public function __construct(mixed $payload)
     {
         $this->payload = $payload;
     }
 
-    public function getPayload()
+    public function getPayload(): mixed
     {
         return $this->payload;
     }

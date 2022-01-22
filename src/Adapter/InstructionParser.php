@@ -33,7 +33,7 @@ use stdClass;
  */
 class InstructionParser
 {
-    public function parse(stdClass $definition)
+    public function parse(stdClass $definition): array
     {
         $instructions = array();
 
