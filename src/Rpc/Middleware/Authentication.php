@@ -35,15 +35,8 @@ use PSX\Http\Exception as StatusCode;
  */
 class Authentication
 {
-    /**
-     * @var Service\Security\TokenValidator
-     */
-    private $tokenValidator;
-
-    /**
-     * @var string
-     */
-    private $authorization;
+    private Service\Security\TokenValidator $tokenValidator;
+    private ?string $authorization;
 
     public function __construct(Service\Security\TokenValidator $tokenValidator, ?string $authorization)
     {

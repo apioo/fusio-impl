@@ -42,15 +42,8 @@ use PSX\Uri\Uri;
  */
 class Executor implements ExecutorInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var Dispatch
-     */
-    private $dispatcher;
+    private ContainerInterface $container;
+    private Dispatch $dispatcher;
 
     public function __construct(ContainerInterface $container, DispatchInterface $dispatcher)
     {
@@ -58,9 +51,6 @@ class Executor implements ExecutorInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function execute(array $method, string $httpMethod, string $path, array $uriFragments, array $headers, ?string $body = null): ResponseInterface
     {
         // we dont need to use the routing of the framework

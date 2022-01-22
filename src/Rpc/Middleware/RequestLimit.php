@@ -35,15 +35,8 @@ use PSX\Http\Exception as StatusCode;
  */
 class RequestLimit
 {
-    /**
-     * @var Service\Rate
-     */
-    private $rateService;
-
-    /**
-     * @var string
-     */
-    private $remoteIp;
+    private Service\Rate $rateService;
+    private string $remoteIp;
 
     public function __construct(Service\Rate $rateService, string $remoteIp)
     {

@@ -40,15 +40,8 @@ class ValidateSchema
 {
     private const SCHEMA_PASSTHRU = 'Passthru';
 
-    /**
-     * @var Loader
-     */
-    private $schemaLoader;
-
-    /**
-     * @var SchemaTraverser
-     */
-    private $schemaTraverser;
+    private Loader $schemaLoader;
+    private SchemaTraverser $schemaTraverser;
 
     public function __construct(Loader $schemaLoader)
     {

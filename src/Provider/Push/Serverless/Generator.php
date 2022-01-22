@@ -36,14 +36,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Generator implements GeneratorInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @param Connection $connection
-     */
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
