@@ -32,9 +32,6 @@ use PSX\Data\Util\PriorityQueue;
  */
 class SenderFactory
 {
-    /**
-     * @var SenderInterface[]
-     */
     private PriorityQueue $senders;
 
     public function __construct()

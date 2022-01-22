@@ -177,7 +177,7 @@ class Token
         $config[OAuth2Interface::CONFIG_REFRESH_TOKEN] = $token->getRefreshToken();
 
         $update = new Connection_Update();
-        $update->setConfig(new Connection_Config('config', $config));
+        $update->setConfig(new Connection_Config($config));
         $this->connectionService->update($connection->getId(), $update, UserContext::newAnonymousContext());
     }
 

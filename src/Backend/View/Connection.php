@@ -122,9 +122,9 @@ class Connection extends ViewAbstract
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();
                         foreach ($elements as $element) {
-                            if ($element instanceof Form\Element\Input && $element['type'] == 'password') {
-                                if (isset($config[$element['name']])) {
-                                    unset($config[$element['name']]);
+                            if ($element instanceof Form\Element\Input && $element->getType() == 'password') {
+                                if (isset($config[$element->getName()])) {
+                                    unset($config[$element->getName()]);
                                 }
                             }
                         }

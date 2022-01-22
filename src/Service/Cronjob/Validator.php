@@ -85,10 +85,18 @@ class Validator
         }
 
         foreach ($parts as $index => $part) {
+            if (!isset(self::RULES[$index])) {
+                throw new StatusCode\BadRequestException('Cron rule index ' . $index . ' is not available');
+            }
+
+            if (!isset(self::FIELDS[$index])) {
+                throw new StatusCode\BadRequestException('Cron field index ' . $index . ' is not available');
+            }
+
             [$min, $max] = self::RULES[$index];
 
             try {
-                self::validateField($part, $min, $max, self::CONVERT[$index]);
+                self::validateField($part, $min, $max, self::CONVERT[$index] ?? null);
             } catch (\InvalidArgumentException $e) {
                 throw new StatusCode\BadRequestException('Cron ' . self::FIELDS[$index] . ' ' . $e->getMessage());
             }

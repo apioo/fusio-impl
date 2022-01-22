@@ -84,7 +84,7 @@ class ConfigurationBuilder
 
         if (isset($composer['autoload'])) {
             $paths = $composer['autoload']['psr-4'] ?? [];
-            $base  = trim(key($paths), '\\');
+            $base  = trim((string) key($paths), '\\');
 
             if (!empty($base)) {
                 return $base;

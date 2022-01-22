@@ -36,8 +36,8 @@ class MigrationUtil
     {
         $data = NewInstallation::getData();
 
-        self::syncConfig($connection, $data['fusio_config'], $callback);
-        self::syncRoutes($connection, $data['fusio_routes'], $callback);
+        self::syncConfig($connection, $data->toArray()['fusio_config'], $callback);
+        self::syncRoutes($connection, $data->toArray()['fusio_routes'], $callback);
     }
 
     /**

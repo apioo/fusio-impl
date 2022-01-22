@@ -42,6 +42,10 @@ class Log
     private static int $level = -1;
 
     private DBALConnection $connection;
+
+    /**
+     * @var array<array{0: array{0: int, 1: int}, 1: int|null}>
+     */
     private array $stack;
 
     public function __construct(DBALConnection $connection)
@@ -87,7 +91,7 @@ class Log
         $startTime = $this->stack[self::$level][self::START_TIME] ?? null;
         $logId = $this->stack[self::$level][self::LOG_ID] ?? null;
 
-        if ($logId === null) {
+        if ($startTime === null || $logId === null) {
             return;
         }
 
