@@ -37,14 +37,12 @@ use PSX\Sql\Condition;
  */
 class Health
 {
-    private Service\Connection $connectionService;
     private Table\Connection $connectionTable;
     private Factory\Connection $connectionFactory;
     private string $secretKey;
 
-    public function __construct(Service\Connection $connectionService, Table\Connection $connectionTable, Factory\Connection $connectionFactory, string $secretKey)
+    public function __construct(Table\Connection $connectionTable, Factory\Connection $connectionFactory, string $secretKey)
     {
-        $this->connectionService = $connectionService;
         $this->connectionTable   = $connectionTable;
         $this->connectionFactory = $connectionFactory;
         $this->secretKey         = $secretKey;
