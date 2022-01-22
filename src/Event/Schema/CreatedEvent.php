@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Schema_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Schema_Create
-     */
-    private $schema;
+    private Schema_Create $schema;
 
-    /**
-     * @param Schema_Create $schema
-     * @param UserContext $context
-     */
     public function __construct(Schema_Create $schema, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->schema = $schema;
     }
 
-    /**
-     * @return Schema_Create
-     */
     public function getSchema(): Schema_Create
     {
         return $this->schema;

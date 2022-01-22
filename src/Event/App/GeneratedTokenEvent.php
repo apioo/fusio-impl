@@ -33,46 +33,14 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class GeneratedTokenEvent extends EventAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $appId;
+    private int $appId;
+    private int $tokenId;
+    private string $accessToken;
+    private array $scopes;
+    private \DateTimeInterface $expires;
+    private \DateTimeInterface $now;
 
-    /**
-     * @var integer
-     */
-    protected $tokenId;
-
-    /**
-     * @var string
-     */
-    protected $accessToken;
-
-    /**
-     * @var array
-     */
-    protected $scopes;
-
-    /**
-     * @var \DateTime
-     */
-    protected $expires;
-
-    /**
-     * @var \DateTime
-     */
-    protected $now;
-
-    /**
-     * @param integer $appId
-     * @param integer $tokenId
-     * @param string $accessToken
-     * @param array $scopes
-     * @param \DateTime $expires
-     * @param \DateTime $now
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($appId, $tokenId, $accessToken, array $scopes, \DateTime $expires, \DateTime $now, UserContext $context)
+    public function __construct(int $appId, int $tokenId, string $accessToken, array $scopes, \DateTimeInterface $expires, \DateTimeInterface $now, UserContext $context)
     {
         parent::__construct($context);
 
@@ -84,32 +52,32 @@ class GeneratedTokenEvent extends EventAbstract
         $this->now         = $now;
     }
 
-    public function getAppId()
+    public function getAppId(): int
     {
         return $this->appId;
     }
 
-    public function getTokenId()
+    public function getTokenId(): int
     {
         return $this->tokenId;
     }
 
-    public function getAccessToken()
+    public function getAccessToken(): string
     {
         return $this->accessToken;
     }
 
-    public function getExpires()
+    public function getExpires(): \DateTimeInterface
     {
         return $this->expires;
     }
 
-    public function getNow()
+    public function getNow(): \DateTimeInterface
     {
         return $this->now;
     }
 
-    public function getScopes()
+    public function getScopes(): array
     {
         return $this->scopes;
     }

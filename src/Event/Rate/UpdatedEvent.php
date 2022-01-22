@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Rate;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\RateRow;
 use Fusio\Model\Backend\Rate_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Rate_Update
-     */
-    private $rate;
+    private Rate_Update $rate;
+    private RateRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Rate_Update $rate
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Rate_Update $rate, RecordInterface $existing, UserContext $context)
+    public function __construct(Rate_Update $rate, RateRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Rate_Update
-     */
     public function getRate(): Rate_Update
     {
         return $this->rate;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): RateRow
     {
         return $this->existing;
     }

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Scope;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\ScopeRow;
 use Fusio\Model\Backend\Scope_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Scope_Update
-     */
-    private $scope;
-    
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
+    private Scope_Update $scope;
+    private ScopeRow $existing;
 
-    /**
-     * @param Scope_Update $scope
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Scope_Update $scope, RecordInterface $existing, UserContext $context)
+    public function __construct(Scope_Update $scope, ScopeRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Scope_Update
-     */
     public function getScope(): Scope_Update
     {
         return $this->scope;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): ScopeRow
     {
         return $this->existing;
     }

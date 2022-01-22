@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Cronjob;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\CronjobRow;
 use Fusio\Model\Backend\Cronjob_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Cronjob_Update
-     */
-    private $cronjob;
+    private Cronjob_Update $cronjob;
+    private CronjobRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Cronjob_Update $cronjob
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Cronjob_Update $cronjob, RecordInterface $existing, UserContext $context)
+    public function __construct(Cronjob_Update $cronjob, CronjobRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Cronjob_Update
-     */
     public function getCronjob(): Cronjob_Update
     {
         return $this->cronjob;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): CronjobRow
     {
         return $this->existing;
     }

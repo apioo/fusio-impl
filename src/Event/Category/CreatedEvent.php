@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Category_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Category_Create
-     */
-    private $category;
+    private Category_Create $category;
 
-    /**
-     * @param Category_Create $category
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
     public function __construct(Category_Create $category, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->category = $category;
     }
 
-    /**
-     * @return Category_Create
-     */
     public function getCategory(): Category_Create
     {
         return $this->category;

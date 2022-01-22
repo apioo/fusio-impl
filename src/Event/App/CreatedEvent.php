@@ -34,15 +34,8 @@ use Fusio\Model\Backend\App_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var App_Create
-     */
-    private $app;
+    private App_Create $app;
 
-    /**
-     * @param App_Create $app
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
     public function __construct(App_Create $app, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->app = $app;
     }
 
-    /**
-     * @return App_Create
-     */
     public function getApp(): App_Create
     {
         return $this->app;

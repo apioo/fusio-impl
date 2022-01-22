@@ -33,14 +33,14 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 abstract class EventAbstract extends Event
 {
-    protected $context;
+    private UserContext $context;
 
     public function __construct(UserContext $context)
     {
         $this->context = $context;
     }
 
-    public function getContext()
+    public function getContext(): UserContext
     {
         return $this->context;
     }

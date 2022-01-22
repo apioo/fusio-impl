@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Plan;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PlanRow;
 use PSX\Record\RecordInterface;
 
 /**
@@ -34,26 +35,16 @@ use PSX\Record\RecordInterface;
  */
 class DeletedEvent extends EventAbstract
 {
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
+    private PlanRow $existing;
 
-    /**
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(RecordInterface $existing, UserContext $context)
+    public function __construct(PlanRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
         $this->existing = $existing;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): PlanRow
     {
         return $this->existing;
     }

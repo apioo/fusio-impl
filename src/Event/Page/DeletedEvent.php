@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Page;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PageRow;
 use PSX\Record\RecordInterface;
 
 /**
@@ -34,26 +35,16 @@ use PSX\Record\RecordInterface;
  */
 class DeletedEvent extends EventAbstract
 {
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
+    private PageRow $existing;
 
-    /**
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(RecordInterface $existing, UserContext $context)
+    public function __construct(PageRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
         $this->existing = $existing;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): PageRow
     {
         return $this->existing;
     }

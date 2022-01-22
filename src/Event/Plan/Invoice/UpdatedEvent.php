@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Plan\Invoice;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PlanInvoiceRow;
 use Fusio\Model\Backend\Plan_Invoice_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Plan_Invoice_Update
-     */
-    private $invoice;
+    private Plan_Invoice_Update $invoice;
+    private PlanInvoiceRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Plan_Invoice_Update $invoice
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Plan_Invoice_Update $invoice, RecordInterface $existing, UserContext $context)
+    public function __construct(Plan_Invoice_Update $invoice, PlanInvoiceRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Plan_Invoice_Update
-     */
     public function getInvoice(): Plan_Invoice_Update
     {
         return $this->invoice;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): PlanInvoiceRow
     {
         return $this->existing;
     }

@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Plan\Contract;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PlanContractRow;
 use Fusio\Model\Backend\Plan_Contract_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Plan_Contract_Update
-     */
-    private $contract;
+    private Plan_Contract_Update $contract;
+    private PlanContractRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Plan_Contract_Update $contract
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Plan_Contract_Update $contract, RecordInterface $existing, UserContext $context)
+    public function __construct(Plan_Contract_Update $contract, PlanContractRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Plan_Contract_Update
-     */
     public function getContract(): Plan_Contract_Update
     {
         return $this->contract;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): PlanContractRow
     {
         return $this->existing;
     }

@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Plan_Invoice_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Plan_Invoice_Create
-     */
-    private $invoice;
+    private Plan_Invoice_Create $invoice;
 
-    /**
-     * @param Plan_Invoice_Create $invoice
-     * @param UserContext $context
-     */
     public function __construct(Plan_Invoice_Create $invoice, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->invoice = $invoice;
     }
 
-    /**
-     * @return Plan_Invoice_Create
-     */
     public function getInvoice(): Plan_Invoice_Create
     {
         return $this->invoice;

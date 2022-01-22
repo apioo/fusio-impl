@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Page;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\PageRow;
 use Fusio\Model\Backend\Page_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Page_Update
-     */
-    private $page;
+    private Page_Update $page;
+    private PageRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Page_Update $page
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Page_Update $page, RecordInterface $existing, UserContext $context)
+    public function __construct(Page_Update $page, PageRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Page_Update
-     */
     public function getPage(): Page_Update
     {
         return $this->page;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): PageRow
     {
         return $this->existing;
     }

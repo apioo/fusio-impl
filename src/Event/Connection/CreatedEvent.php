@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Connection_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Connection_Create
-     */
-    private $connection;
+    private Connection_Create $connection;
 
-    /**
-     * @param Connection_Create $connection
-     * @param UserContext $context
-     */
     public function __construct(Connection_Create $connection, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->connection = $connection;
     }
 
-    /**
-     * @return Connection_Create
-     */
     public function getConnection(): Connection_Create
     {
         return $this->connection;

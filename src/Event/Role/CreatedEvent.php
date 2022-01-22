@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Role_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Role_Create
-     */
-    private $role;
+    private Role_Create $role;
 
-    /**
-     * @param Role_Create $role
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
     public function __construct(Role_Create $role, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->role = $role;
     }
 
-    /**
-     * @return Role_Create
-     */
     public function getRole(): Role_Create
     {
         return $this->role;

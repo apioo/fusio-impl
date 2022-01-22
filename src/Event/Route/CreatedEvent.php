@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Route_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Route_Create
-     */
-    private $route;
+    private Route_Create $route;
 
-    /**
-     * @param Route_Create $route
-     * @param UserContext $context
-     */
     public function __construct(Route_Create $route, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->route = $route;
     }
 
-    /**
-     * @return Route_Create
-     */
     public function getRoute(): Route_Create
     {
         return $this->route;

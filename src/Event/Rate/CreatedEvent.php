@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Rate_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Rate_Create
-     */
-    private $rate;
+    private Rate_Create $rate;
 
-    /**
-     * @param Rate_Create $rate
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
     public function __construct(Rate_Create $rate, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->rate = $rate;
     }
 
-    /**
-     * @return Rate_Create
-     */
     public function getRate(): Rate_Create
     {
         return $this->rate;

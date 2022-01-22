@@ -23,6 +23,7 @@ namespace Fusio\Impl\Event\Role;
 
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Event\EventAbstract;
+use Fusio\Impl\Table\Generated\RoleRow;
 use Fusio\Model\Backend\Role_Update;
 use PSX\Record\RecordInterface;
 
@@ -35,22 +36,10 @@ use PSX\Record\RecordInterface;
  */
 class UpdatedEvent extends EventAbstract
 {
-    /**
-     * @var Role_Update
-     */
-    private $role;
+    private Role_Update $role;
+    private RoleRow $existing;
 
-    /**
-     * @var RecordInterface
-     */
-    private $existing;
-
-    /**
-     * @param Role_Update $role
-     * @param RecordInterface $existing
-     * @param UserContext $context
-     */
-    public function __construct(Role_Update $role, RecordInterface $existing, UserContext $context)
+    public function __construct(Role_Update $role, RoleRow $existing, UserContext $context)
     {
         parent::__construct($context);
 
@@ -58,18 +47,12 @@ class UpdatedEvent extends EventAbstract
         $this->existing = $existing;
     }
 
-    /**
-     * @return Role_Update
-     */
     public function getRole(): Role_Update
     {
         return $this->role;
     }
 
-    /**
-     * @return RecordInterface
-     */
-    public function getExisting(): RecordInterface
+    public function getExisting(): RoleRow
     {
         return $this->existing;
     }

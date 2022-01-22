@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Event_Subscription_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Event_Subscription_Create
-     */
-    private $subscription;
+    private Event_Subscription_Create $subscription;
 
-    /**
-     * @param Event_Subscription_Create $subscription
-     * @param UserContext $context
-     */
     public function __construct(Event_Subscription_Create $subscription, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->subscription = $subscription;
     }
 
-    /**
-     * @return Event_Subscription_Create
-     */
     public function getSubscription(): Event_Subscription_Create
     {
         return $this->subscription;

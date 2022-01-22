@@ -34,14 +34,8 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class ExecutedEvent extends EventAbstract
 {
-    /**
-     * @var \Fusio\Engine\Model\Transaction
-     */
-    protected $transaction;
+    private Transaction $transaction;
 
-    /**
-     * @param \Fusio\Engine\Model\Transaction $transaction
-     */
     public function __construct(Transaction $transaction)
     {
         parent::__construct(UserContext::newAnonymousContext());
@@ -49,7 +43,7 @@ class ExecutedEvent extends EventAbstract
         $this->transaction = $transaction;
     }
 
-    public function getTransaction()
+    public function getTransaction(): Transaction
     {
         return $this->transaction;
     }

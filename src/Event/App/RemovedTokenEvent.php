@@ -33,22 +33,10 @@ use Fusio\Impl\Event\EventAbstract;
  */
 class RemovedTokenEvent extends EventAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $appId;
+    private int $appId;
+    private int $tokenId;
 
-    /**
-     * @var integer
-     */
-    protected $tokenId;
-
-    /**
-     * @param integer $appId
-     * @param integer $tokenId
-     * @param \Fusio\Impl\Authorization\UserContext $context
-     */
-    public function __construct($appId, $tokenId, UserContext $context)
+    public function __construct(int $appId, int $tokenId, UserContext $context)
     {
         parent::__construct($context);
 
@@ -56,12 +44,12 @@ class RemovedTokenEvent extends EventAbstract
         $this->tokenId = $tokenId;
     }
 
-    public function getAppId()
+    public function getAppId(): int
     {
         return $this->appId;
     }
 
-    public function getTokenId()
+    public function getTokenId(): int
     {
         return $this->tokenId;
     }

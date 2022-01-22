@@ -34,15 +34,8 @@ use Fusio\Model\Backend\Plan_Contract_Create;
  */
 class CreatedEvent extends EventAbstract
 {
-    /**
-     * @var Plan_Contract_Create
-     */
-    private $contract;
+    private Plan_Contract_Create $contract;
 
-    /**
-     * @param Plan_Contract_Create $contract
-     * @param UserContext $context
-     */
     public function __construct(Plan_Contract_Create $contract, UserContext $context)
     {
         parent::__construct($context);
@@ -50,9 +43,6 @@ class CreatedEvent extends EventAbstract
         $this->contract = $contract;
     }
 
-    /**
-     * @return Plan_Contract_Create
-     */
     public function getContract(): Plan_Contract_Create
     {
         return $this->contract;
