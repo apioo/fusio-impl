@@ -37,9 +37,9 @@ use Fusio\Impl\Table;
  */
 class DataBag
 {
-    private $data;
+    private array $data;
 
-    private static $priorities = [];
+    private static array $priorities = [];
     
     public function __construct()
     {

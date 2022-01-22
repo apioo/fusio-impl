@@ -35,55 +35,16 @@ use PSX\Api\Resource;
  */
 class Method
 {
-    /**
-     * @var string
-     */
-    private $action;
-    
-    /**
-     * @var string|null
-     */
-    private $request;
-    
-    /**
-     * @var array
-     */
-    private $responses;
-
-    /**
-     * @var string|null
-     */
-    private $parameters;
-
-    /**
-     * @var string|null
-     */
-    private $scope;
-
-    /**
-     * @var string|null
-     */
-    private $eventName;
-
-    /**
-     * @var bool
-     */
-    private $public;
-
-    /**
-     * @var int|null
-     */
-    private $costs;
-
-    /**
-     * @var string|null
-     */
-    private $operationId;
-
-    /**
-     * @var int
-     */
-    private $status;
+    private string $action;
+    private ?string $request;
+    private array $responses;
+    private ?string $parameters;
+    private ?string $scope;
+    private ?string $eventName;
+    private bool $public;
+    private ?int $costs;
+    private ?string $operationId;
+    private int $status;
 
     public function __construct(string $action, ?string $request, array $responses, ?string $parameters = null, ?string $scope = null, ?string $eventName = null, bool $public = false, ?int $costs = null, ?string $operationId = null, int $status = Resource::STATUS_ACTIVE)
     {
@@ -99,81 +60,51 @@ class Method
         $this->status = $status;
     }
 
-    /**
-     * @return string
-     */
     public function getAction(): string
     {
         return $this->action;
     }
 
-    /**
-     * @return string|null
-     */
     public function getRequest(): ?string
     {
         return $this->request;
     }
 
-    /**
-     * @return array
-     */
     public function getResponses(): array
     {
         return $this->responses;
     }
 
-    /**
-     * @return string|null
-     */
     public function getParameters(): ?string
     {
         return $this->parameters;
     }
 
-    /**
-     * @return string|null
-     */
     public function getScope(): ?string
     {
         return $this->scope;
     }
 
-    /**
-     * @return string|null
-     */
     public function getEventName(): ?string
     {
         return $this->eventName;
     }
 
-    /**
-     * @return bool
-     */
     public function isPublic(): bool
     {
         return $this->public;
     }
 
-    /**
-     * @return int|null
-     */
     public function getCosts(): ?int
     {
         return $this->costs;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOperationId(): ?string
     {
         return $this->operationId;
     }
 
-    /**
-     * @return int
-     */
     public function getStatus(): int
     {
         return $this->status;

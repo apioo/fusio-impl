@@ -32,28 +32,19 @@ use PSX\Api\Listing\FilterInterface;
  */
 class Filter implements FilterInterface
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
 
     public function __construct(int $id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function match(string $path): bool
     {
         // we dont need to filter any values since we already filter at the query
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getId(): string
     {
         return '' . $this->id;

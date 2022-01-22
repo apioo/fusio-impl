@@ -32,11 +32,7 @@ use Doctrine\DBAL\Connection;
  */
 class MigrationUtil
 {
-    /**
-     * @param Connection $connection
-     * @param \Closure $callback
-     */
-    public static function sync(Connection $connection, \Closure $callback)
+    public static function sync(Connection $connection, \Closure $callback): void
     {
         $data = NewInstallation::getData();
 
@@ -46,12 +42,8 @@ class MigrationUtil
 
     /**
      * Helper method to sync all config values of an existing system
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param array $configs
-     * @param \Closure $callback
      */
-    public static function syncConfig(Connection $connection, array $configs, \Closure $callback)
+    public static function syncConfig(Connection $connection, array $configs, \Closure $callback): void
     {
         foreach ($configs as $row) {
             $config = $connection->fetchAssoc('SELECT id, name FROM fusio_config WHERE name = :name', [
@@ -66,12 +58,8 @@ class MigrationUtil
 
     /**
      * Helper method to sync all routes of an existing system
-     * 
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param array $routes
-     * @param \Closure $callback
      */
-    public static function syncRoutes(Connection $connection, array $routes, \Closure $callback)
+    public static function syncRoutes(Connection $connection, array $routes, \Closure $callback): void
     {
         foreach ($routes as $row) {
             $route = $connection->fetchAssoc('SELECT id, category_id, status, priority, methods, controller FROM fusio_routes WHERE path = :path', [
@@ -90,12 +78,7 @@ class MigrationUtil
         }
     }
 
-    /**
-     * @param string $tableName
-     * @param array $row
-     * @param \Closure $callback
-     */
-    public static function insertRow(string $tableName, array $row, \Closure $callback)
+    public static function insertRow(string $tableName, array $row, \Closure $callback): void
     {
         $columnList = [];
         $paramPlaceholders = [];
@@ -114,14 +97,7 @@ class MigrationUtil
         }
     }
 
-    /**
-     * @param string $tableName
-     * @param array $row
-     * @param array $existing
-     * @param array $columns
-     * @param \Closure $callback
-     */
-    public static function updateRow(string $tableName, array $row, array $existing, array $columns, \Closure $callback)
+    public static function updateRow(string $tableName, array $row, array $existing, array $columns, \Closure $callback): void
     {
         $parts  = [];
         $params = [];

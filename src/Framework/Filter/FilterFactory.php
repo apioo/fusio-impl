@@ -34,15 +34,8 @@ use PSX\Api\Listing\FilterInterface;
  */
 class FilterFactory extends PSXFilterFactory
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var bool
-     */
-    private $loaded = false;
+    private Connection $connection;
+    private bool $loaded = false;
 
     public function __construct(Connection $connection)
     {
@@ -51,9 +44,6 @@ class FilterFactory extends PSXFilterFactory
         $this->connection = $connection;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getFilter(string $name): ?FilterInterface
     {
         $this->load();

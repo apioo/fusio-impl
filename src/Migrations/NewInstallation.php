@@ -47,7 +47,7 @@ use PSX\Framework\Schema\Passthru;
  */
 class NewInstallation
 {
-    private static $data;
+    private static ?DataBag $data = null;
 
     public static function getData(): DataBag
     {
@@ -584,11 +584,8 @@ class NewInstallation
 
     /**
      * Reads files in new line neutral way that means we always use \n
-     *
-     * @param string $file
-     * @return string
      */
-    private static function readFile(string $file)
+    private static function readFile(string $file): string
     {
         $lines = file(__DIR__ . '/resources/' . $file);
         $lines = array_map('trim', $lines);

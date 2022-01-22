@@ -34,12 +34,7 @@ use Fusio\Engine\ConnectorInterface;
  */
 class ConfigurationBuilder
 {
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \Doctrine\Migrations\OutputWriter|null $outputWriter
-     * @return \Doctrine\Migrations\Configuration\Configuration
-     */
-    public static function fromSystem(Connection $connection, Migrations\OutputWriter $outputWriter = null)
+    public static function fromSystem(Connection $connection, ?Migrations\OutputWriter $outputWriter = null): Migrations\Configuration\Configuration
     {
         $configuration = new Migrations\Configuration\Configuration($connection, $outputWriter);
         $configuration->setName('Fusio migrations');
@@ -52,13 +47,7 @@ class ConfigurationBuilder
         return $configuration;
     }
 
-    /**
-     * @param string $connectionId
-     * @param \Fusio\Engine\ConnectorInterface $connector
-     * @param \Doctrine\Migrations\OutputWriter|null $outputWriter
-     * @return \Doctrine\Migrations\Configuration\Configuration
-     */
-    public static function fromConnector($connectionId, ConnectorInterface $connector, Migrations\OutputWriter $outputWriter = null)
+    public static function fromConnector(string|int $connectionId, ConnectorInterface $connector, ?Migrations\OutputWriter $outputWriter = null): Migrations\Configuration\Configuration
     {
         if (is_numeric($connectionId)) {
             throw new \InvalidArgumentException('Connection id must be a name');
@@ -84,12 +73,10 @@ class ConfigurationBuilder
     }
 
     /**
-     * This method tries to find the base namespace of the current app. We try
-     * to look at the composer.json file and use the first psr-4 autoload key
-     * 
-     * @return string
+     * This method tries to find the base namespace of the current app. We try to look at the composer.json file and use
+     * the first psr-4 autoload key
      */
-    private static function getBaseNamespace()
+    private static function getBaseNamespace(): string
     {
         // try to determine the namespace of the
         $composerFile = PSX_PATH_SRC . '/../composer.json';
