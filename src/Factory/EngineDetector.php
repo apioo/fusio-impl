@@ -34,13 +34,10 @@ use Fusio\Impl\Factory\Resolver;
 class EngineDetector
 {
     /**
-     * This method determines the fitting engine for the provided string. The
-     * provided string gets modified in case it has the uri format 
-     * 
-     * @param string $class
-     * @return string
+     * This method determines the fitting engine for the provided string. The provided string gets modified in case it
+     * has the uri format
      */
-    public static function getEngine(&$class)
+    public static function getEngine(string &$class): string
     {
         $engine = null;
 
@@ -75,43 +72,24 @@ class EngineDetector
         return $engine;
     }
 
-    /**
-     * @param string $file
-     * @return string|null
-     */
-    private static function getEngineByFile($file)
+    private static function getEngineByFile(string $file): ?string
     {
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
 
-        switch ($fileExtension) {
-            case 'php':
-                return Resolver\PhpFile::class;
-
-            default:
-                return Resolver\StaticFile::class;
-        }
+        return match ($fileExtension) {
+            'php'   => Resolver\PhpFile::class,
+            default => Resolver\StaticFile::class,
+        };
     }
 
-    /**
-     * @param string $proto
-     * @return string|null
-     */
-    private static function getEngineByProto($proto)
+    private static function getEngineByProto(string $proto): ?string
     {
-        switch ($proto) {
-            case 'PhpClass':
-                return PhpClass::class;
-
-            case 'PhpFile':
-                return Resolver\PhpFile::class;
-
-            case 'HttpUrl':
-                return Resolver\HttpUrl::class;
-
-            case 'StaticFile':
-                return Resolver\StaticFile::class;
-        }
-
-        return null;
+        return match ($proto) {
+            'PhpClass'   => PhpClass::class,
+            'PhpFile'    => Resolver\PhpFile::class,
+            'HttpUrl'    => Resolver\HttpUrl::class,
+            'StaticFile' => Resolver\StaticFile::class,
+            default      => null,
+        };
     }
 }
