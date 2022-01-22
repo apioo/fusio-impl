@@ -36,10 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronjobExecuteCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Service\Cronjob
-     */
-    protected $cronjobService;
+    private Service\Cronjob $cronjobService;
 
     public function __construct(Service\Cronjob $cronjobService)
     {

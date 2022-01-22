@@ -36,10 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CheckCommand extends Command
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {

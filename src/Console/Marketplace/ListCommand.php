@@ -37,14 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Repository\Remote
-     */
-    protected $remoteRepository;
+    private Service\Marketplace\Repository\Remote $remoteRepository;
 
-    /**
-     * @param \Fusio\Impl\Service\Marketplace\Repository\Remote $remoteRepository
-     */
     public function __construct(Service\Marketplace\Repository\Remote $remoteRepository)
     {
         parent::__construct();

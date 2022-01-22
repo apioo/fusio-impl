@@ -39,20 +39,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class PushCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Provider\ProviderLoader
-     */
-    private $providerLoader;
+    private ProviderLoader $providerLoader;
+    private AutowireResolverInterface $autowireResolver;
 
-    /**
-     * @var \PSX\Dependency\AutowireResolverInterface
-     */
-    private $autowireResolver;
-
-    /**
-     * @param \Fusio\Impl\Provider\ProviderLoader $providerLoader
-     * @param \PSX\Dependency\AutowireResolverInterface $autowireResolver
-     */
     public function __construct(ProviderLoader $providerLoader, AutowireResolverInterface $autowireResolver)
     {
         parent::__construct();

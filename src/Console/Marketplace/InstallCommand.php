@@ -40,20 +40,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InstallCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Installer
-     */
-    protected $installer;
+    private Service\Marketplace\Installer $installer;
+    private Service\Marketplace\Repository\Remote $remoteRepository;
 
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Repository\Remote
-     */
-    private $remoteRepository;
-
-    /**
-     * @param Service\Marketplace\Installer $installer
-     * @param Service\Marketplace\Repository\Remote $remoteRepository
-     */
     public function __construct(Service\Marketplace\Installer $installer, Service\Marketplace\Repository\Remote $remoteRepository)
     {
         parent::__construct();

@@ -38,14 +38,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RemoveCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Service\Marketplace\Installer
-     */
-    protected $installer;
+    private Service\Marketplace\Installer $installer;
 
-    /**
-     * @param \Fusio\Impl\Service\Marketplace\Installer $installer
-     */
     public function __construct(Service\Marketplace\Installer $installer)
     {
         parent::__construct();

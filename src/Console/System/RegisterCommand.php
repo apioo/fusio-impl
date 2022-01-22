@@ -43,15 +43,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class RegisterCommand extends Command
 {
-    /**
-     * @var \Fusio\Impl\Adapter\Installer
-     */
-    protected $installer;
-
-    /**
-     * @var \Fusio\Impl\Adapter\InstructionParser
-     */
-    protected $parser;
+    private Installer $installer;
+    private InstructionParser $parser;
 
     public function __construct(ProviderWriter $providerWriter)
     {

@@ -41,15 +41,8 @@ use Symfony\Component\Console\Question\Question;
  */
 class UserAddCommand extends Command
 {
-    /**
-     * @var Service\User 
-     */
-    private $userService;
-
-    /**
-     * @var Service\Config 
-     */
-    private $configService;
+    private Service\User $userService;
+    private Service\Config $configService;
 
     public function __construct(Service\User $userService, Service\Config $configService)
     {

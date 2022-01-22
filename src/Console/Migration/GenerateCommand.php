@@ -39,26 +39,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class GenerateCommand extends DoctrineGenerateCommand
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    private ConnectorInterface $connector;
 
-    /**
-     * @var \Fusio\Engine\ConnectorInterface
-     */
-    protected $connector;
-
-    /**
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \Fusio\Engine\ConnectorInterface $connector
-     */
     public function __construct(Connection $connection, ConnectorInterface $connector)
     {
         parent::__construct();
 
-        $this->connection = $connection;
-        $this->connector  = $connector;
+        $this->connector = $connector;
+        $this->setConnection($connection);
     }
 
     protected function configure(): void
