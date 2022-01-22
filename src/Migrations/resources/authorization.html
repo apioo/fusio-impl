@@ -1,59 +1,81 @@
 
-<p>The API uses <a href="https://tools.ietf.org/html/rfc6749">OAuth2</a> for
-authorization. To access protected parts of the API you need to obtain an access
-token. Therefore you can use the following endpoints:</p>
+<p>To access protected parts of the API you need to obtain an access token. The following lists shows some examples how
+to obtain an access token.</p>
 
-<dl>
-    <dt>Authorization-Endpoint</dt>
-    <dd><code>/developer/auth</code></dd>
-    <dt>Token-Endpoint</dt>
-    <dd><code>/authorization/token</code></dd>
-</dl>
+<h3>Basic</h3>
 
-<b>App Registration</b>
-<p>Available for registered user at url <a href="#!/developer/account/app">/developer/account/app</a></p>
+<p>The most basic way to obtain an access token is to use your personal credentials i.e.</p>
 
-<br>
+<p><b>Request</b></p>
+<pre>POST /consumer/login
+Content-Type: application/json
 
-<b>Authorization Code Grant</b>
-<p>For obtaining the authorization code you have to redirect the resource owner's browser to the consumer endpoint:
-<code>/developer/auth?response_type=code&client_id=[app_key]&redirect_uri=[redirect_uri]&scope=[scopes]</code></p>
-
-<ul>
-  <li><code>app_key</code> - application key</li>
-  <li><code>redirect_uri</code> - should be on the same host as application url</li>
-  <li><code>scopes</code> - comma separated list of scopes which should be subset of application scopes</li>
-</ul>
-
-<p>If the authorization was successful the user gets redirected to the <code>redirect_uri</code>
-of your app. The redirect_uri contains a GET parameter code which can be exchanged for
-an access token at the Token-Endpoint.</p>
-
-<br>
-
-<b>Authorization Token Grant from Authorization Code</b>
-<pre>
-POST /authorization/token
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=authorization_code&code=[code]&client_id=[app_key]&redirect_uri=[redirect_uri]&client_secret=[app_secret]
+{
+  "username": "[username]",
+  "password": "[password]",
+}
 </pre>
 
-<ul>
-  <li><code>code</code> - authorization code obtained at previous step</li>
-  <li><code>redirect_uri</code> - redirect uri used at previous step</li>
-</ul>
-
-<br>
-
-<b>Authorization Token Grant from Refresh Token</b>
+<p><b>Response</b></p>
 <pre>
-POST /authorization/token
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=refresh_token&refresh_token=[token]&client_id=[app_key]&client_secret=[app_secret]
+{
+  "token": "",
+  "expires_in": "",
+  "refresh_token": ""
+}
 </pre>
 
-<ul>
-  <li><code>token</code> - refresh token obtained at previous step along with authorization token</li>
-</ul>
+<h3>OAuth2</h3>
+
+<p>It is also possible to use our <a href="https://tools.ietf.org/html/rfc6749">OAuth2</a> authorization endpoint.</p>
+
+<h4>Client credentials</h4>
+
+<p><b>Request</b></p>
+<pre>POST /authorization/token
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+</pre>
+
+<p>As Basic authorization header you need to provide the <code>[app key] + ":" + [app secret]</code> as <code>base64</code>
+encoded string. It is also possible to provide your username and password but in general it is recommended to use the
+app key and secret since the app access can always be revoked later on.</p>
+
+<p><b>Response</b></p>
+<pre>
+{
+  "access_token": "",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "refresh_token": ""
+}
+</pre>
+
+<h4>Refresh token</h4>
+
+<p>Most token responses always include a refresh token. You can use this refresh token to extend an access token before
+it expires.</p>
+
+<p><b>Request</b></p>
+<pre>POST /authorization/token
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token=[refresh_token]
+</pre>
+
+<p>Like at the client credentials call the Basic header must contain the base64 encode app key and secret.</p>
+
+<p><b>Response</b></p>
+<pre>
+{
+  "access_token": "",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "refresh_token": ""
+}
+</pre>
+
+<p>As response you will get the refreshed access token.</p>
