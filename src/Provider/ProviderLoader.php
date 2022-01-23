@@ -123,8 +123,6 @@ class ProviderLoader
             ProviderConfig::TYPE_ROUTES => [
                 Adapter\Sql\Routes\SqlTable::class,
             ],
-            ProviderConfig::TYPE_PUSH => [
-            ],
         ];
     }
 }

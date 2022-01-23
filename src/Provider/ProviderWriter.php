@@ -47,7 +47,6 @@ class ProviderWriter
             ProviderConfig::TYPE_PAYMENT,
             ProviderConfig::TYPE_USER,
             ProviderConfig::TYPE_ROUTES,
-            ProviderConfig::TYPE_PUSH,
         ];
     }
 

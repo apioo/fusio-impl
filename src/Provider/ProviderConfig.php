@@ -37,7 +37,6 @@ class ProviderConfig extends Config
     public const TYPE_PAYMENT = 'payment';
     public const TYPE_USER = 'user';
     public const TYPE_ROUTES = 'routes';
-    public const TYPE_PUSH = 'push';
 
     public function __construct(array $config)
     {
@@ -82,7 +81,6 @@ class ProviderConfig extends Config
             self::TYPE_PAYMENT,
             self::TYPE_USER,
             self::TYPE_ROUTES,
-            self::TYPE_PUSH,
         ];
     }
 }
