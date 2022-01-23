@@ -53,9 +53,7 @@ return array(
 
     // Settings of the internal mailer. More information s.
     // https://symfony.com/doc/current/mailer.html#using-built-in-transports
-    /*
     'fusio_mailer'            => 'native://default',
-    */
 
     // Endpoint of the apps repository. All listed apps can be installed by the
     // user at the backend app

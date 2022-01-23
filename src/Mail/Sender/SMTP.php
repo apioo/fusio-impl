@@ -23,6 +23,8 @@ namespace Fusio\Impl\Mail\Sender;
 
 use Fusio\Impl\Mail\Message;
 use Fusio\Impl\Mail\SenderInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
 
 /**
  * SMTP
@@ -33,26 +35,23 @@ use Fusio\Impl\Mail\SenderInterface;
  */
 class SMTP implements SenderInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function accept($dispatcher)
     {
-        return $dispatcher instanceof \Swift_Mailer;
+        return $dispatcher instanceof Mailer;
     }
 
     /**
-     * @param \Swift_Mailer $dispatcher
+     * @param Mailer $dispatcher
      * @param \Fusio\Impl\Mail\Message $message
      * @return void
      */
     public function send($dispatcher, Message $message)
     {
-        $msg = new \Swift_Message();
-        $msg->setFrom([$message->getFrom()]);
-        $msg->setTo($message->getTo());
-        $msg->setSubject($message->getSubject());
-        $msg->setBody($message->getBody());
+        $msg = new Email();
+        $msg->from($message->getFrom());
+        $msg->to(...$message->getTo());
+        $msg->subject($message->getSubject());
+        $msg->html($message->getBody());
 
         $dispatcher->send($msg);
     }
