@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\AppTokenRow>
+ */
 class AppTokenTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_app_token';
@@ -24,18 +27,18 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_TOKEN => 0xa00200, self::COLUMN_REFRESH => 0x40a000ff, self::COLUMN_SCOPE => 0xa003ff, self::COLUMN_IP => 0xa00028, self::COLUMN_EXPIRE => 0x40800000, self::COLUMN_DATE => 0x800000);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -56,10 +59,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
@@ -75,10 +78,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('app_id', $value);
@@ -94,10 +97,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('user_id', $value);
@@ -113,10 +116,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('status', $value);
@@ -132,10 +135,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByToken(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByToken(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('token', $value);
@@ -151,10 +154,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRefresh(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByRefresh(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('refresh', $value);
@@ -170,10 +173,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByScope(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByScope(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('scope', $value);
@@ -189,10 +192,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByIp(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByIp(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('ip', $value);
@@ -208,10 +211,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExpire(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByExpire(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('expire', $value);
@@ -227,10 +230,10 @@ class AppTokenTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppTokenRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppTokenRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('date', $value);

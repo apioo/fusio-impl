@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\RoutesRow>
+ */
 class RoutesTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_routes';
@@ -21,18 +24,18 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PRIORITY => 0x4020000a, self::COLUMN_METHODS => 0xa00040, self::COLUMN_PATH => 0xa000ff, self::COLUMN_CONTROLLER => 0xa000ff);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -53,10 +56,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
@@ -72,10 +75,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('category_id', $value);
@@ -91,10 +94,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('status', $value);
@@ -110,10 +113,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPriority(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByPriority(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('priority', $value);
@@ -129,10 +132,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByMethods(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByMethods(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('methods', $value);
@@ -148,10 +151,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPath(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByPath(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('path', $value);
@@ -167,10 +170,10 @@ class RoutesTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\RoutesRow[]
+     * @return array<\Fusio\Impl\Table\Generated\RoutesRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByController(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByController(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('controller', $value);

@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\AppCodeRow>
+ */
 class AppCodeTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_app_code';
@@ -21,18 +24,18 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_APP_ID => 0x20000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_CODE => 0xa000ff, self::COLUMN_REDIRECT_URI => 0x40a000ff, self::COLUMN_SCOPE => 0xa000ff, self::COLUMN_DATE => 0x800000);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -53,10 +56,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
@@ -72,10 +75,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('app_id', $value);
@@ -91,10 +94,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('user_id', $value);
@@ -110,10 +113,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByCode(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByCode(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('code', $value);
@@ -129,10 +132,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRedirectUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByRedirectUri(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('redirect_uri', $value);
@@ -148,10 +151,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByScope(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByScope(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('scope', $value);
@@ -167,10 +170,10 @@ class AppCodeTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\AppCodeRow[]
+     * @return array<\Fusio\Impl\Table\Generated\AppCodeRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('date', $value);

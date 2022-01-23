@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\LogRow>
+ */
 class LogTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_log';
@@ -27,18 +30,18 @@ class LogTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_ROUTE_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_IP => 0xa00028, self::COLUMN_USER_AGENT => 0xa000ff, self::COLUMN_METHOD => 0xa00010, self::COLUMN_PATH => 0xa003ff, self::COLUMN_HEADER => 0xb00000, self::COLUMN_BODY => 0x40b00000, self::COLUMN_EXECUTION_TIME => 0x4020000a, self::COLUMN_DATE => 0x800000);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -59,10 +62,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
@@ -78,10 +81,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByCategoryId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('category_id', $value);
@@ -97,10 +100,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRouteId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByRouteId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('route_id', $value);
@@ -116,10 +119,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByAppId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('app_id', $value);
@@ -135,10 +138,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('user_id', $value);
@@ -154,10 +157,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByIp(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByIp(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('ip', $value);
@@ -173,10 +176,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByUserAgent(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByUserAgent(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('user_agent', $value);
@@ -192,10 +195,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByMethod(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByMethod(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('method', $value);
@@ -211,10 +214,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByPath(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByPath(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('path', $value);
@@ -230,10 +233,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByHeader(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByHeader(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('header', $value);
@@ -249,10 +252,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByBody(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByBody(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('body', $value);
@@ -268,10 +271,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExecutionTime(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByExecutionTime(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('execution_time', $value);
@@ -287,10 +290,10 @@ class LogTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\LogRow[]
+     * @return array<\Fusio\Impl\Table\Generated\LogRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('date', $value);

@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\MigrationVersionsRow>
+ */
 class MigrationVersionsTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_migration_versions';
@@ -16,18 +19,18 @@ class MigrationVersionsTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_VERSION => 0x10a0000e, self::COLUMN_EXECUTED_AT => 0xa00000);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\MigrationVersionsRow[]
+     * @return array<\Fusio\Impl\Table\Generated\MigrationVersionsRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\MigrationVersionsRow[]
+     * @return array<\Fusio\Impl\Table\Generated\MigrationVersionsRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -48,10 +51,10 @@ class MigrationVersionsTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\MigrationVersionsRow[]
+     * @return array<\Fusio\Impl\Table\Generated\MigrationVersionsRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByVersion(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByVersion(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('version', $value);
@@ -67,10 +70,10 @@ class MigrationVersionsTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\MigrationVersionsRow[]
+     * @return array<\Fusio\Impl\Table\Generated\MigrationVersionsRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByExecutedAt(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByExecutedAt(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('executed_at', $value);

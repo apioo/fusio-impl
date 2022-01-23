@@ -2,6 +2,9 @@
 
 namespace Fusio\Impl\Table\Generated;
 
+/**
+ * @extends \PSX\Sql\TableAbstract<\Fusio\Impl\Table\Generated\TransactionRow>
+ */
 class TransactionTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_transaction';
@@ -24,18 +27,18 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_INVOICE_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PROVIDER => 0xa000ff, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_AMOUNT => 0x500000, self::COLUMN_RETURN_URL => 0xa000ff, self::COLUMN_UPDATE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findAll(?\PSX\Sql\Condition $condition = null, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindAll($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : iterable
+    public function findBy(\PSX\Sql\Condition $condition, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null, ?\PSX\Sql\Fields $fields = null) : array
     {
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder, $fields);
     }
@@ -56,10 +59,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findById(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
@@ -75,10 +78,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByInvoiceId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByInvoiceId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('invoice_id', $value);
@@ -94,10 +97,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('status', $value);
@@ -113,10 +116,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByProvider(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByProvider(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('provider', $value);
@@ -132,10 +135,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByTransactionId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByTransactionId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('transaction_id', $value);
@@ -151,10 +154,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRemoteId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByRemoteId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('remote_id', $value);
@@ -170,10 +173,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByAmount(float $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByAmount(float $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('amount', $value);
@@ -189,10 +192,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByReturnUrl(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByReturnUrl(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('return_url', $value);
@@ -208,10 +211,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByUpdateDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByUpdateDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('update_date', $value);
@@ -227,10 +230,10 @@ class TransactionTable extends \PSX\Sql\TableAbstract
         return $this->doFindOneBy($condition);
     }
     /**
-     * @return \Fusio\Impl\Table\Generated\TransactionRow[]
+     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByInsertDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : iterable
+    public function findByInsertDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('insert_date', $value);
