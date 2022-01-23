@@ -78,9 +78,6 @@ class ProviderLoaderTest extends DbTestCase
                 'sqltable' => \Fusio\Adapter\Sql\Routes\SqlTable::class,
                 'stdclass' => \stdClass::class,
             ],
-            'push' => [
-                'stdclass' => \stdClass::class,
-            ],
         ];
 
         $this->assertEquals($expect, $actual);
