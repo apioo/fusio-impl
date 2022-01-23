@@ -89,7 +89,6 @@ class Transaction
         $this->transactionTable->beginTransaction();
 
         try {
-            // create transaction
             $record = new Table\Generated\TransactionRow([
                 'invoice_id' => $prepare->getInvoiceId(),
                 'status' => TransactionModel::STATUS_CREATED,

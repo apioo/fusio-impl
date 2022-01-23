@@ -70,17 +70,28 @@ class Cronjob
         }
 
         // create cronjob
-        $record = new Table\Generated\CronjobRow([
-            'category_id' => $categoryId,
-            'status'      => Table\Cronjob::STATUS_ACTIVE,
-            'name'        => $cronjob->getName(),
-            'cron'        => $cronjob->getCron(),
-            'action'      => $cronjob->getAction(),
-        ]);
+        try {
+            $this->cronjobTable->beginTransaction();
 
-        $this->cronjobTable->create($record);
+            $record = new Table\Generated\CronjobRow([
+                'category_id' => $categoryId,
+                'status'      => Table\Cronjob::STATUS_ACTIVE,
+                'name'        => $cronjob->getName(),
+                'cron'        => $cronjob->getCron(),
+                'action'      => $cronjob->getAction(),
+            ]);
 
-        $cronjobId = $this->cronjobTable->getLastInsertId();
+            $this->cronjobTable->create($record);
+
+            $cronjobId = $this->cronjobTable->getLastInsertId();
+            $cronjob->setId($cronjobId);
+
+            $this->cronjobTable->commit();
+        } catch (\Throwable $e) {
+            $this->cronjobTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($cronjob, $context));
 

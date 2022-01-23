@@ -71,10 +71,10 @@ class Schema
             throw new StatusCode\BadRequestException('Schema already exists');
         }
 
+        // create schema
         try {
             $this->schemaTable->beginTransaction();
 
-            // create schema
             $record = new Table\Generated\SchemaRow([
                 'category_id' => $categoryId,
                 'status'      => Table\Schema::STATUS_ACTIVE,

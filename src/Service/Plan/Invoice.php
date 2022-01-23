@@ -70,25 +70,36 @@ class Invoice
 
         $displayId = $this->generateInvoiceId($contract['user_id']);
 
-        $record = new Table\Generated\PlanInvoiceRow([
-            'contract_id' => $contract['id'],
-            'user_id' => $contract['user_id'],
-            'transaction_id' => null,
-            'display_id' => $displayId,
-            'prev_id' => $prevId,
-            'status' => Table\Plan\Invoice::STATUS_OPEN,
-            'amount' => $contract['amount'],
-            'points' => $contract['points'],
-            'from_date' => $from,
-            'to_date' => $to,
-            'pay_date' => null,
-            'insert_date' => new \DateTime(),
-        ]);
+        // create invoice
+        try {
+            $this->invoiceTable->beginTransaction();
 
-        $this->invoiceTable->create($record);
+            $record = new Table\Generated\PlanInvoiceRow([
+                'contract_id' => $contract['id'],
+                'user_id' => $contract['user_id'],
+                'transaction_id' => null,
+                'display_id' => $displayId,
+                'prev_id' => $prevId,
+                'status' => Table\Plan\Invoice::STATUS_OPEN,
+                'amount' => $contract['amount'],
+                'points' => $contract['points'],
+                'from_date' => $from,
+                'to_date' => $to,
+                'pay_date' => null,
+                'insert_date' => new \DateTime(),
+            ]);
 
-        $invoiceId = $this->invoiceTable->getLastInsertId();
-        $invoice->setId($invoiceId);
+            $this->invoiceTable->create($record);
+
+            $invoiceId = $this->invoiceTable->getLastInsertId();
+            $invoice->setId($invoiceId);
+
+            $this->invoiceTable->commit();
+        } catch (\Throwable $e) {
+            $this->invoiceTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($invoice, $context));
 

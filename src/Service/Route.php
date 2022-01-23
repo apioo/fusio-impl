@@ -81,10 +81,10 @@ class Route
             $route->setController(SchemaApiController::class);
         }
 
+        // create route
         try {
             $this->routesTable->beginTransaction();
 
-            // create route
             $record = new Table\Generated\RoutesRow([
                 'category_id' => $categoryId,
                 'status'      => Table\Route::STATUS_ACTIVE,
@@ -96,7 +96,6 @@ class Route
 
             $this->routesTable->create($record);
 
-            // get last insert id
             $routeId = $this->routesTable->getLastInsertId();
             $route->setId($routeId);
 

@@ -80,11 +80,11 @@ class App
         }
 
         // create app
-        $appKey    = TokenGenerator::generateAppKey();
-        $appSecret = TokenGenerator::generateAppSecret();
-
         try {
             $this->appTable->beginTransaction();
+
+            $appKey    = TokenGenerator::generateAppKey();
+            $appSecret = TokenGenerator::generateAppSecret();
 
             $record = new Table\Generated\AppRow([
                 'user_id'    => $app->getUserId(),
@@ -104,7 +104,6 @@ class App
 
             $scopes = $app->getScopes();
             if ($scopes !== null) {
-                // insert scopes
                 $this->insertScopes($appId, $scopes);
             }
 

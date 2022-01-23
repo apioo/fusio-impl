@@ -69,7 +69,7 @@ class DateCalculator
 
         $month = $month + $count;
 
-        $target = clone $date;
+        $target = \DateTime::createFromInterface($date);
         $target->setDate($year, $month, 1);
 
         $maxDays = (int) $target->format('t');

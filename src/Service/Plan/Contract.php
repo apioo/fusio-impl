@@ -54,24 +54,34 @@ class Contract
 
     public function create(int $userId, ProductInterface $product, UserContext $context): int
     {
-        $record = new Table\Generated\PlanContractRow([
-            'user_id' => $userId,
-            'plan_id' => $product->getId(),
-            'status' => Table\Plan\Contract::STATUS_ACTIVE,
-            'amount' => $product->getPrice(),
-            'points' => $product->getPoints(),
-            'period_type' => $product->getInterval(),
-            'insert_date' => new \DateTime(),
-        ]);
+        try {
+            $this->contractTable->beginTransaction();
 
-        $this->contractTable->create($record);
+            $record = new Table\Generated\PlanContractRow([
+                'user_id' => $userId,
+                'plan_id' => $product->getId(),
+                'status' => Table\Plan\Contract::STATUS_ACTIVE,
+                'amount' => $product->getPrice(),
+                'points' => $product->getPoints(),
+                'period_type' => $product->getInterval(),
+                'insert_date' => new \DateTime(),
+            ]);
 
-        $contractId = $this->contractTable->getLastInsertId();
+            $this->contractTable->create($record);
 
-        $contract = new Plan_Contract_Create();
-        $contract->setId($contractId);
-        $contract->setPlanId($product->getId());
-        $contract->setUserId($userId);
+            $contractId = $this->contractTable->getLastInsertId();
+
+            $contract = new Plan_Contract_Create();
+            $contract->setId($contractId);
+            $contract->setPlanId($product->getId());
+            $contract->setUserId($userId);
+
+            $this->contractTable->commit();
+        } catch (\Throwable $e) {
+            $this->contractTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($contract, $context));
 

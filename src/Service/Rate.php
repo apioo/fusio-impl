@@ -64,10 +64,10 @@ class Rate
             throw new StatusCode\BadRequestException('Rate already exists');
         }
 
+        // create rate
         try {
             $this->rateTable->beginTransaction();
 
-            // create rate
             $record = new Table\Generated\RateRow([
                 'status'     => Table\Rate::STATUS_ACTIVE,
                 'priority'   => $rate->getPriority(),
@@ -78,8 +78,8 @@ class Rate
 
             $this->rateTable->create($record);
 
-            // get last insert id
             $rateId = $this->rateTable->getLastInsertId();
+            $rate->setId($rateId);
 
             $this->handleAllocations($rateId, $rate->getAllocation());
 

@@ -87,16 +87,27 @@ class Connection
         }
 
         // create connection
-        $record = new Table\Generated\ConnectionRow([
-            'status' => Table\Connection::STATUS_ACTIVE,
-            'name'   => $connection->getName(),
-            'class'  => $connection->getClass(),
-            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
-        ]);
+        try {
+            $this->connectionTable->beginTransaction();
 
-        $this->connectionTable->create($record);
+            $record = new Table\Generated\ConnectionRow([
+                'status' => Table\Connection::STATUS_ACTIVE,
+                'name'   => $connection->getName(),
+                'class'  => $connection->getClass(),
+                'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
+            ]);
 
-        $connectionId = $this->connectionTable->getLastInsertId();
+            $this->connectionTable->create($record);
+
+            $connectionId = $this->connectionTable->getLastInsertId();
+            $connection->setId($connectionId);
+
+            $this->connectionTable->commit();
+        } catch (\Throwable $e) {
+            $this->connectionTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($connection, $context));
 

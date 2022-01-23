@@ -68,7 +68,6 @@ class Category
 
             $this->categoryTable->create($record);
 
-            // get last insert id
             $categoryId = $this->categoryTable->getLastInsertId();
             $category->setId($categoryId);
 

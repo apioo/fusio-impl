@@ -58,19 +58,28 @@ class Event
         }
 
         // create event
-        $record = new Table\Generated\EventRow([
-            'category_id' => $categoryId,
-            'status'      => Table\Event::STATUS_ACTIVE,
-            'name'        => $event->getName(),
-            'description' => $event->getDescription(),
-            'schema'      => $event->getSchema(),
-        ]);
+        try {
+            $this->eventTable->beginTransaction();
 
-        $this->eventTable->create($record);
+            $record = new Table\Generated\EventRow([
+                'category_id' => $categoryId,
+                'status'      => Table\Event::STATUS_ACTIVE,
+                'name'        => $event->getName(),
+                'description' => $event->getDescription(),
+                'schema'      => $event->getSchema(),
+            ]);
 
-        // get last insert id
-        $eventId = $this->eventTable->getLastInsertId();
-        $event->setId($eventId);
+            $this->eventTable->create($record);
+
+            $eventId = $this->eventTable->getLastInsertId();
+            $event->setId($eventId);
+
+            $this->eventTable->commit();
+        } catch (\Throwable $e) {
+            $this->eventTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($event, $context));
 

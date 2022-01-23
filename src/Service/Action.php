@@ -93,21 +93,31 @@ class Action
         }
 
         // create action
-        $record = new Table\Generated\ActionRow([
-            'category_id' => $categoryId,
-            'status'      => Table\Action::STATUS_ACTIVE,
-            'name'        => $action->getName(),
-            'class'       => $class,
-            'async'       => $action->getAsync(),
-            'engine'      => $engine,
-            'config'      => self::serializeConfig($config),
-            'date'        => new \DateTime(),
-        ]);
+        try {
+            $this->actionTable->beginTransaction();
 
-        $this->actionTable->create($record);
+            $record = new Table\Generated\ActionRow([
+                'category_id' => $categoryId,
+                'status'      => Table\Action::STATUS_ACTIVE,
+                'name'        => $action->getName(),
+                'class'       => $class,
+                'async'       => $action->getAsync(),
+                'engine'      => $engine,
+                'config'      => self::serializeConfig($config),
+                'date'        => new \DateTime(),
+            ]);
 
-        $actionId = $this->actionTable->getLastInsertId();
-        $action->setId($actionId);
+            $this->actionTable->create($record);
+
+            $actionId = $this->actionTable->getLastInsertId();
+            $action->setId($actionId);
+
+            $this->actionTable->commit();
+        } catch (\Throwable $e) {
+            $this->actionTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($action, $context));
 

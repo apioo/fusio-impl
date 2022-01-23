@@ -62,18 +62,28 @@ class Page
         $this->assertStatus($page);
 
         // create page
-        $record = new Table\Generated\PageRow([
-            'status'  => $page->getStatus(),
-            'title'   => $page->getTitle(),
-            'slug'    => $slug,
-            'content' => $page->getContent(),
-            'date'    => new \DateTime(),
-        ]);
+        try {
+            $this->pageTable->beginTransaction();
 
-        $this->pageTable->create($record);
+            $record = new Table\Generated\PageRow([
+                'status'  => $page->getStatus(),
+                'title'   => $page->getTitle(),
+                'slug'    => $slug,
+                'content' => $page->getContent(),
+                'date'    => new \DateTime(),
+            ]);
 
-        $pageId = $this->pageTable->getLastInsertId();
-        $page->setId($pageId);
+            $this->pageTable->create($record);
+
+            $pageId = $this->pageTable->getLastInsertId();
+            $page->setId($pageId);
+
+            $this->pageTable->commit();
+        } catch (\Throwable $e) {
+            $this->pageTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($page, $context));
 

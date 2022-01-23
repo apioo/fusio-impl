@@ -64,10 +64,10 @@ class Scope
             throw new StatusCode\BadRequestException('Scope already exists');
         }
 
+        // create scope
         try {
             $this->scopeTable->beginTransaction();
 
-            // create scope
             $record = new Table\Generated\ScopeRow([
                 'category_id' => $categoryId,
                 'name'        => $scope->getName(),
@@ -76,7 +76,6 @@ class Scope
 
             $this->scopeTable->create($record);
 
-            // insert routes
             $scopeId = $this->scopeTable->getLastInsertId();
             $scope->setId($scopeId);
 

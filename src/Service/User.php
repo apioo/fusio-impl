@@ -133,10 +133,10 @@ class User
             throw new StatusCode\BadRequestException('No role provided');
         }
 
+        // create user
         try {
             $this->userTable->beginTransaction();
 
-            // create user
             $record = new Table\Generated\UserRow([
                 'role_id'  => $user->getRoleId(),
                 'provider' => ProviderInterface::PROVIDER_SYSTEM,

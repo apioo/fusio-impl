@@ -57,21 +57,30 @@ class Plan
             throw new StatusCode\BadRequestException('Plan already exists');
         }
 
-        // create event
-        $record = new Table\Generated\PlanRow([
-            'status'      => Table\Plan::STATUS_ACTIVE,
-            'name'        => $plan->getName(),
-            'description' => $plan->getDescription(),
-            'price'       => $plan->getPrice(),
-            'points'      => $plan->getPoints(),
-            'period_type' => $plan->getPeriod(),
-        ]);
+        // create plan
+        try {
+            $this->planTable->beginTransaction();
 
-        $this->planTable->create($record);
+            $record = new Table\Generated\PlanRow([
+                'status'      => Table\Plan::STATUS_ACTIVE,
+                'name'        => $plan->getName(),
+                'description' => $plan->getDescription(),
+                'price'       => $plan->getPrice(),
+                'points'      => $plan->getPoints(),
+                'period_type' => $plan->getPeriod(),
+            ]);
 
-        // get last insert id
-        $planId = $this->planTable->getLastInsertId();
-        $plan->setId($planId);
+            $this->planTable->create($record);
+
+            $planId = $this->planTable->getLastInsertId();
+            $plan->setId($planId);
+
+            $this->planTable->commit();
+        } catch (\Throwable $e) {
+            $this->planTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($plan, $context));
 

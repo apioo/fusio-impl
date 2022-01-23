@@ -53,19 +53,28 @@ class Subscription
 
     public function create(Event_Subscription_Create $subscription, UserContext $context): int
     {
-        // create event
-        $record = new Table\Generated\EventSubscriptionRow([
-            'event_id' => $subscription->getEventId(),
-            'user_id'  => $subscription->getUserId(),
-            'status'   => Table\Event\Subscription::STATUS_ACTIVE,
-            'endpoint' => $subscription->getEndpoint(),
-        ]);
+        // create subscription
+        try {
+            $this->subscriptionTable->beginTransaction();
 
-        $this->subscriptionTable->create($record);
+            $record = new Table\Generated\EventSubscriptionRow([
+                'event_id' => $subscription->getEventId(),
+                'user_id'  => $subscription->getUserId(),
+                'status'   => Table\Event\Subscription::STATUS_ACTIVE,
+                'endpoint' => $subscription->getEndpoint(),
+            ]);
 
-        // get last insert id
-        $subscriptionId = $this->subscriptionTable->getLastInsertId();
-        $subscription->setId($subscriptionId);
+            $this->subscriptionTable->create($record);
+
+            $subscriptionId = $this->subscriptionTable->getLastInsertId();
+            $subscription->setId($subscriptionId);
+
+            $this->subscriptionTable->commit();
+        } catch (\Throwable $e) {
+            $this->subscriptionTable->rollBack();
+
+            throw $e;
+        }
 
         $this->eventDispatcher->dispatch(new CreatedEvent($subscription, $context));
 
