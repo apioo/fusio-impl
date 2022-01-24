@@ -32,7 +32,7 @@ use Composer\InstalledVersions;
  */
 class Base
 {
-    public static function getVersion(): string
+    public static function getVersion(): ?string
     {
         return InstalledVersions::getVersion('fusio/impl');
     }
