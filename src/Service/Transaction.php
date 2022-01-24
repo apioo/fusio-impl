@@ -230,7 +230,7 @@ class Transaction
     private function buildReturnUrl(TransactionInterface $transaction): string
     {
         $returnUrl = $transaction->getReturnUrl();
-        $returnUrl = str_replace('{transaction_id}', $transaction->getId(), $returnUrl);
+        $returnUrl = str_replace('{transaction_id}', (string) $transaction->getId(), $returnUrl);
 
         return $returnUrl;
     }

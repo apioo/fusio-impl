@@ -48,8 +48,7 @@ class GetAll extends ActionAbstract
     {
         return $this->table->getCollection(
             $context->getUser()->getId(),
-            (int) $request->get('startIndex'),
-            $request->get('search')
+            (int) $request->get('startIndex')
         );
     }
 }

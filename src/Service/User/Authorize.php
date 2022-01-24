@@ -79,7 +79,7 @@ class Authorize
                 throw new StatusCode\BadRequestException('Invalid redirect uri scheme');
             }
 
-            $url = $app['url'];
+            $url = $app->getUrl();
             if (!empty($url)) {
                 $url = new Url($url);
                 if ($url->getHost() != $redirectUri->getHost()) {
@@ -93,14 +93,14 @@ class Authorize
         }
 
         // scopes
-        $scopes = $this->scopeService->getValidScopes($request->getScope(), (int) $app['id'], (int) $userId);
+        $scopes = $this->scopeService->getValidScopes($request->getScope(), $app->getId(), $userId);
         if (empty($scopes)) {
             throw new StatusCode\BadRequestException('No valid scopes provided');
         }
 
         // save the decision of the user. We save the decision so that it is
         // possible for the user to revoke the access later on
-        $this->saveUserDecision($userId, $app['id'], $request->getAllow());
+        $this->saveUserDecision($userId, $app->getId(), $request->getAllow());
 
         $state = $request->getState();
         if ($request->getAllow()) {

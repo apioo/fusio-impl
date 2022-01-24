@@ -76,7 +76,7 @@ class Facebook implements ProviderInterface
             return null;
         }
 
-        $data  = Parser::decode($response->getBody());
+        $data  = Parser::decode((string) $response->getBody());
         $id    = $data->id ?? null;
         $name  = $data->name ?? null;
         $email = $data->email ?? null;
@@ -103,7 +103,7 @@ class Facebook implements ProviderInterface
             return null;
         }
 
-        $data = Parser::decode($response->getBody());
+        $data = Parser::decode((string) $response->getBody());
         if (isset($data->access_token)) {
             return $data->access_token;
         } else {

@@ -70,7 +70,7 @@ class OpenAPI implements ProviderInterface
             $schema = new Schema(TypeFactory::getReference($name), clone $definitions);
             (new SchemaResolver())->resolve($schema);
 
-            $result = $generator->generate($schema);
+            $result = (string) $generator->generate($schema);
 
             $this->schemas[$name] = $setup->addSchema($name, (array) \json_decode($result));
         }

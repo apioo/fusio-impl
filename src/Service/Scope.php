@@ -247,7 +247,7 @@ class Scope
      */
     protected function insertRoutes(int $scopeId, ?array $routes): void
     {
-        if (!empty($routes) && is_array($routes)) {
+        if (!empty($routes)) {
             foreach ($routes as $route) {
                 if ($route->getAllow()) {
                     $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([

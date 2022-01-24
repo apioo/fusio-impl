@@ -90,7 +90,7 @@ class Method extends Generated\RoutesMethodTable
         return $this->project($sql, $params);
     }
 
-    public function getAllowedMethods(int $routeId, ?string $version): array
+    public function getAllowedMethods(int $routeId, ?int $version): array
     {
         $methods = $this->getMethods($routeId, $version);
         $names   = [];
@@ -145,7 +145,7 @@ class Method extends Generated\RoutesMethodTable
         ]);
     }
 
-    public function getVersion(int $routeId, ?string $version): string|false
+    public function getVersion(int $routeId, int $version): string|false
     {
         $sql = 'SELECT version
                   FROM fusio_routes_method

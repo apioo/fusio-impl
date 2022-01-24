@@ -65,7 +65,7 @@ class GetSchema extends ActionAbstract
         }
 
         $type = $this->loader->getSchema($schema['name']);
-        $json = \json_decode((new Generator\TypeSchema())->generate($type));
+        $json = \json_decode((string) (new Generator\TypeSchema())->generate($type));
 
         return [
             'schema' => $json,

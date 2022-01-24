@@ -79,7 +79,7 @@ class App extends ViewAbstract
         return $this->build($definition);
     }
 
-    public function getEntity(string $id)
+    public function getEntity(int $id)
     {
         $definition = $this->doEntity([$this->getTable(Table\App::class), 'find'], [$id], [
             'id' => $this->fieldInteger('id'),

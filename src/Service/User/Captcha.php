@@ -68,7 +68,7 @@ class Captcha
         $response = $this->httpClient->request($request);
 
         if ($response->getStatusCode() == 200) {
-            $data = Parser::decode($response->getBody());
+            $data = Parser::decode((string) $response->getBody());
             if ($data->success === true) {
                 return true;
             }

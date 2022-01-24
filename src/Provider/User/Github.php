@@ -73,7 +73,7 @@ class Github implements ProviderInterface
             return null;
         }
 
-        $data  = Parser::decode($response->getBody());
+        $data  = Parser::decode((string) $response->getBody());
         $id    = $data->id ?? null;
         $name  = $data->login ?? null;
         $email = $data->email ?? null;
@@ -105,7 +105,7 @@ class Github implements ProviderInterface
             return null;
         }
 
-        $data = Parser::decode($response->getBody());
+        $data = Parser::decode((string) $response->getBody());
         if (isset($data->access_token)) {
             return $data->access_token;
         } else {

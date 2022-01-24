@@ -65,7 +65,7 @@ class Method
         if ($version === '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         } else {
-            $version = $this->methodTable->getVersion($routeId, $version);
+            $version = $this->methodTable->getVersion($routeId, (int) $version);
         }
 
         if (empty($version)) {
@@ -77,15 +77,21 @@ class Method
 
     public function getAllowedMethods(int $routeId, ?string $version): array
     {
+        if ($version === '*' || empty($version)) {
+            $version = $this->methodTable->getLatestVersion($routeId);
+        } else {
+            $version = (int) $version;
+        }
+
         return $this->methodTable->getAllowedMethods($routeId, $version);
     }
 
-    public function getRequestSchemas(int $routeId, string $version): array
+    public function getRequestSchemas(int $routeId, ?string $version): array
     {
-        if ($version == '*' || empty($version)) {
+        if ($version === '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         } else {
-            $version = $this->methodTable->getVersion($routeId, $version);
+            $version = $this->methodTable->getVersion($routeId, (int) $version);
         }
 
         if (empty($version)) {

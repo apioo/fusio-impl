@@ -115,7 +115,7 @@ class NewInstallation
         $bag->addRate('Default', 0, 720, 'PT1H');
         $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
         $bag->addRateAllocation('Default');
-        $bag->addRateAllocation('Default-Anonymous', null, null, 0);
+        $bag->addRateAllocation('Default-Anonymous', null, null, false);
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
         $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
         $bag->addAction('backend', 'Backend_Action_Plan_Billing', Backend\Action\Plan\Billing::class);

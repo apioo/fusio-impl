@@ -82,7 +82,7 @@ class Config
             if ($status == Resource::STATUS_DEVELOPMENT) {
                 // invalidate resource cache
                 if ($this->listing instanceof CachedListing) {
-                    $this->listing->invalidateResource($path, $ver);
+                    $this->listing->invalidateResource($path, (string) $ver);
                 }
                 
                 // delete all responses from existing responses

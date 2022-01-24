@@ -205,9 +205,9 @@ class Invoice
     private function generateInvoiceId(int $userId): string
     {
         $parts = [
-            str_pad($userId, 4, '0', STR_PAD_LEFT),
+            str_pad((string) $userId, 4, '0', STR_PAD_LEFT),
             date('Y'),
-            str_pad(substr(intval(microtime(true) * 10), -6), 6, '0', STR_PAD_LEFT)
+            str_pad(substr((string) intval(microtime(true) * 10), -6), 6, '0', STR_PAD_LEFT)
         ];
 
         return implode('-', $parts);

@@ -118,7 +118,7 @@ class ErrorsPerRoute extends ViewAbstract
 
         return [
             'labels' => $labels,
-            'data'   => array_values($values),
+            'data'   => $values,
             'series' => array_values($series),
         ];
     }

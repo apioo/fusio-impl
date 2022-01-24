@@ -160,7 +160,7 @@ class Cronjob
     public function execute(string|int $cronjobId)
     {
         if (is_numeric($cronjobId)) {
-            $existing = $this->cronjobTable->find($cronjobId);
+            $existing = $this->cronjobTable->find((int) $cronjobId);
         } else {
             $existing = $this->cronjobTable->findOneByName($cronjobId);
         }

@@ -164,8 +164,8 @@ class Rate
         $rateLimit = (int) $rate['rate_limit'];
 
         if ($response !== null) {
-            $response->setHeader('X-RateLimit-Limit', $rateLimit);
-            $response->setHeader('X-RateLimit-Remaining', $rateLimit - $count);
+            $response->setHeader('X-RateLimit-Limit', '' . $rateLimit);
+            $response->setHeader('X-RateLimit-Remaining', '' . ($rateLimit - $count));
         }
 
         if ($count >= $rateLimit) {

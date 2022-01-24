@@ -151,7 +151,7 @@ class ResourceListing extends ControllerDocumentation
         if ($version == '*' || empty($version)) {
             $version = $this->methodTable->getLatestVersion($routeId);
         } else {
-            $version = $this->methodTable->getVersion($routeId, $version);
+            $version = $this->methodTable->getVersion($routeId, (int) $version);
         }
 
         if (empty($version)) {

@@ -169,9 +169,9 @@ class Role
         }
     }
 
-    protected function insertScopes(int $roleId, array $scopes): void
+    protected function insertScopes(int $roleId, ?array $scopes): void
     {
-        if (!empty($scopes) && is_array($scopes)) {
+        if (!empty($scopes)) {
             $scopes = $this->scopeTable->getValidScopes($scopes);
 
             foreach ($scopes as $scope) {

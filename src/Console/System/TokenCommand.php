@@ -76,7 +76,7 @@ class TokenCommand extends Command
         if (!is_numeric($appId)) {
             $app = $this->appTable->findOneByName($appId);
         } else {
-            $app = $this->appTable->find($appId);
+            $app = $this->appTable->find((int) $appId);
         }
 
         if (empty($app)) {
@@ -86,7 +86,7 @@ class TokenCommand extends Command
         if (!is_numeric($userId)) {
             $user = $this->userTable->findOneByName($userId);
         } else {
-            $user = $this->userTable->find($userId);
+            $user = $this->userTable->find((int) $userId);
         }
 
         if (empty($user)) {
