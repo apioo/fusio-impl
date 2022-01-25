@@ -77,10 +77,10 @@ JSON;
     "warning": [
         "199 PSX \"Resource is in development\""
     ],
-    "x-ratelimit-limit": [
+    "ratelimit-limit": [
         "8"
     ],
-    "x-ratelimit-remaining": [
+    "ratelimit-remaining": [
         "8"
     ],
     "vary": [
@@ -134,10 +134,10 @@ JSON;
     "warning": [
         "199 PSX \"Resource is in development\""
     ],
-    "x-ratelimit-limit": [
+    "ratelimit-limit": [
         "16"
     ],
-    "x-ratelimit-remaining": [
+    "ratelimit-remaining": [
         "16"
     ],
     "vary": [
@@ -230,10 +230,10 @@ JSON;
     "warning": [
         "199 PSX \"Resource is in development\""
     ],
-    "x-ratelimit-limit": [
+    "ratelimit-limit": [
         "8"
     ],
-    "x-ratelimit-remaining": [
+    "ratelimit-remaining": [
         "8"
     ],
     "vary": [
@@ -327,10 +327,10 @@ JSON;
     "warning": [
         "199 PSX \"Resource is in development\""
     ],
-    "x-ratelimit-limit": [
+    "ratelimit-limit": [
         "16"
     ],
-    "x-ratelimit-remaining": [
+    "ratelimit-remaining": [
         "16"
     ],
     "vary": [

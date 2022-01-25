@@ -174,8 +174,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['720'],
-                    'x-ratelimit-remaining' => [720 - $key],
+                    'ratelimit-limit' => ['720'],
+                    'ratelimit-remaining' => [720 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $actual);
@@ -208,8 +208,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['720'],
-                    'x-ratelimit-remaining' => [720 - $key],
+                    'ratelimit-limit' => ['720'],
+                    'ratelimit-remaining' => [720 - $key],
                 ];
 
                 if ($status === Resource::STATUS_DEVELOPMENT) {
@@ -286,8 +286,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['720'],
-                    'x-ratelimit-remaining' => [720 - $key],
+                    'ratelimit-limit' => ['720'],
+                    'ratelimit-remaining' => [720 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $body);
@@ -299,8 +299,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['720'],
-                    'x-ratelimit-remaining' => [720 - $key],
+                    'ratelimit-limit' => ['720'],
+                    'ratelimit-remaining' => [720 - $key],
                 ];
 
                 if ($status === Resource::STATUS_DEVELOPMENT) {

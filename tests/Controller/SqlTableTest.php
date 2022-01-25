@@ -89,8 +89,8 @@ JSON;
             'vary' => ['Accept'],
             'content-type' => ['application/json'],
             'warning' => ['199 PSX "Resource is in development"'],
-            'x-ratelimit-limit' => ['16'],
-            'x-ratelimit-remaining' => ['16'],
+            'ratelimit-limit' => ['16'],
+            'ratelimit-remaining' => ['16'],
         ];
 
         $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -158,8 +158,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => [16 - $key],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => [16 - $key],
                 ];
 
                 $this->assertEquals(410, $response->getStatusCode(), $body);
@@ -193,8 +193,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => [16 - $key],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => [16 - $key],
                 ];
 
                 if ($status === Resource::STATUS_DEVELOPMENT) {
@@ -243,8 +243,8 @@ JSON;
             'vary' => ['Accept'],
             'content-type' => ['application/json'],
             'warning' => ['199 PSX "Resource is in development"'],
-            'x-ratelimit-limit' => ['16'],
-            'x-ratelimit-remaining' => ['16'],
+            'ratelimit-limit' => ['16'],
+            'ratelimit-remaining' => ['16'],
         ];
 
         $this->assertEquals(201, $response->getStatusCode(), $body);
@@ -273,8 +273,8 @@ JSON;
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
                     'warning' => ['199 PSX "Resource is in development"'],
-                    'x-ratelimit-limit' => ['8'],
-                    'x-ratelimit-remaining' => [8 - $i],
+                    'ratelimit-limit' => ['8'],
+                    'ratelimit-remaining' => [8 - $i],
                 ];
 
                 $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -283,8 +283,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['8'],
-                    'x-ratelimit-remaining' => ['0'],
+                    'ratelimit-limit' => ['8'],
+                    'ratelimit-remaining' => ['0'],
                 ];
 
                 $this->assertEquals(429, $response->getStatusCode(), $body);
@@ -317,8 +317,8 @@ JSON;
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
                     'warning' => ['199 PSX "Resource is in development"'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => [16 - $i],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => [16 - $i],
                 ];
 
                 $this->assertEquals(200, $response->getStatusCode(), $body);
@@ -327,8 +327,8 @@ JSON;
                 $headers = [
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => ['0'],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => ['0'],
                 ];
 
                 $this->assertEquals(429, $response->getStatusCode(), $body);
@@ -373,8 +373,8 @@ JSON;
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
                     'warning' => ['199 PSX "Resource is in development"'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => [16 - $i],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => [16 - $i],
                 ];
 
                 $this->assertEquals(201, $response->getStatusCode(), $body);
@@ -388,8 +388,8 @@ JSON;
                     'vary' => ['Accept'],
                     'content-type' => ['application/json'],
                     'warning' => ['199 PSX "Resource is in development"'],
-                    'x-ratelimit-limit' => ['16'],
-                    'x-ratelimit-remaining' => [16 - $i],
+                    'ratelimit-limit' => ['16'],
+                    'ratelimit-remaining' => [16 - $i],
                 ];
 
                 $this->assertEquals(429, $response->getStatusCode(), $body);
@@ -455,8 +455,8 @@ JSON;
 
         $expectHeaders = [
             'warning' => ['199 PSX "Resource is in development"'],
-            'x-ratelimit-limit' => ['16'],
-            'x-ratelimit-remaining' => ['16'],
+            'ratelimit-limit' => ['16'],
+            'ratelimit-remaining' => ['16'],
             'vary' => ['Accept'],
             'content-type' => ['application/json'],
         ];
@@ -487,8 +487,8 @@ JSON;
         $body = (string) $response->getBody();
 
         $headers = [
-            'x-ratelimit-limit' => ['8'],
-            'x-ratelimit-remaining' => ['8'],
+            'ratelimit-limit' => ['8'],
+            'ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
         ];
 
@@ -512,8 +512,8 @@ JSON;
         $body = (string) $response->getBody();
 
         $headers = [
-            'x-ratelimit-limit' => ['8'],
-            'x-ratelimit-remaining' => ['8'],
+            'ratelimit-limit' => ['8'],
+            'ratelimit-remaining' => ['8'],
             'access-control-allow-origin' => ['*'],
             'warning' => ['199 PSX "Resource is in development"'],
             'vary' => ['Accept'],
@@ -541,8 +541,8 @@ JSON;
         $body = (string) $response->getBody();
 
         $headers = [
-            'x-ratelimit-limit' => ['8'],
-            'x-ratelimit-remaining' => ['8'],
+            'ratelimit-limit' => ['8'],
+            'ratelimit-remaining' => ['8'],
             'allow' => ['OPTIONS, HEAD, GET, POST'],
             'access-control-allow-origin' => ['*'],
             'access-control-allow-methods' => ['OPTIONS, HEAD, GET, POST, PUT, DELETE, PATCH'],
