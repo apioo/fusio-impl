@@ -26,9 +26,11 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Backend\Marketplace_Install;
 use Fusio\Impl\Service\Marketplace\Installer;
+use Fusio\Model\Backend\Marketplace_Install;
+use PSX\Framework\Config\Config;
 use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Exception as StatusCode;
 
 /**
  * Install
@@ -40,14 +42,20 @@ use PSX\Http\Environment\HttpResponse;
 class Install extends ActionAbstract
 {
     private Installer $installerService;
+    private Config $config;
 
-    public function __construct(Installer $installerService)
+    public function __construct(Installer $installerService, Config $config)
     {
         $this->installerService = $installerService;
+        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        if (!$this->config->get('fusio_marketplace')) {
+            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
+        }
+
         $body = $request->getPayload();
 
         assert($body instanceof Marketplace_Install);

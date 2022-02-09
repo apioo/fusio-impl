@@ -55,6 +55,10 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         $response = $this->sendRequest('/backend/marketplace/fusio', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -98,6 +102,10 @@ JSON;
 
     public function testPost()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         $response = $this->sendRequest('/backend/marketplace/fusio', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -112,6 +120,10 @@ JSON;
 
     public function testPut()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
         $response = $this->sendRequest('/backend/marketplace/fusio', 'PUT', array(
@@ -134,6 +146,10 @@ JSON;
 
     public function testDelete()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         $response = $this->sendRequest('/backend/marketplace/fusio', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'

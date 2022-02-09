@@ -51,6 +51,19 @@ class GetAll extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        if ($this->config->get('fusio_marketplace')) {
+            $result = $this->fetchRemoteApps();
+        } else {
+            $result = $this->fetchLocalApps();
+        }
+
+        return [
+            'apps' => $result
+        ];
+    }
+
+    private function fetchRemoteApps(): array
+    {
         $apps = $this->remoteRepository->fetchAll();
         $result = [];
 
@@ -66,8 +79,22 @@ class GetAll extends ActionAbstract
             $result[$remoteApp->getName()] = $app;
         }
 
-        return [
-            'apps' => $result
-        ];
+        return $result;
+    }
+
+    private function fetchLocalApps(): array
+    {
+        $apps = $this->localRepository->fetchAll();
+        $result = [];
+
+        foreach ($apps as $localApp) {
+            $app = $localApp->toArray();
+            $app['local'] = $localApp->toArray();
+            $app['local']['startUrl'] = $this->config->get('fusio_apps_url') . '/' . $localApp->getName();
+
+            $result[$localApp->getName()] = $app;
+        }
+
+        return $result;
     }
 }

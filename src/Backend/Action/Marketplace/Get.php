@@ -60,12 +60,15 @@ class Get extends ActionAbstract
             throw new StatusCode\NotFoundException('Could not find local app');
         }
 
-        $remoteApp = $this->remoteRepository->fetchByName(
-            $request->get('app_name')
-        );
+        if ($this->config->get('fusio_marketplace')) {
+            $remoteApp = $this->remoteRepository->fetchByName(
+                $request->get('app_name')
+            );
+        } else {
+            $remoteApp = null;
+        }
 
         $app = $localApp->toArray();
-
         if ($remoteApp instanceof App) {
             $app['remote'] = $remoteApp->toArray();
         }

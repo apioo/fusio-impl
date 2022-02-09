@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests\Backend\Api\Marketplace;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
 
 /**
  * CollectionTest
@@ -54,6 +55,10 @@ class CollectionTest extends ControllerDbTestCase
 
     public function testGet()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         $response = $this->sendRequest('/backend/marketplace', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
@@ -82,8 +87,31 @@ class CollectionTest extends ControllerDbTestCase
         }
     }
 
+    public function testGetLocal()
+    {
+        if (Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace enabled');
+        }
+
+        $response = $this->sendRequest('/backend/marketplace', 'GET', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ));
+
+        $body = (string) $response->getBody();
+        $data = \json_decode($body, true);
+
+        $this->assertEquals(200, $response->getStatusCode(), $body);
+        $this->assertArrayHasKey('apps', $data);
+        $this->assertEquals([], $data['apps']);
+    }
+
     public function testPost()
     {
+        if (!Environment::getConfig()->get('fusio_marketplace')) {
+            $this->markTestSkipped('Marketplace not enabled');
+        }
+
         $response = $this->sendRequest('/backend/marketplace', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
