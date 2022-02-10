@@ -69,10 +69,6 @@ class Installer
 
     public function update(string $name, UserContext $context): App
     {
-        if (!$this->config->get('fusio_marketplace')) {
-            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
-        }
-
         $remoteApp = $this->remoteRepository->fetchByName($name);
         $localApp = $this->localRepository->fetchByName($name);
 
@@ -97,10 +93,6 @@ class Installer
 
     public function remove(string $name, UserContext $context): App
     {
-        if (!$this->config->get('fusio_marketplace')) {
-            throw new StatusCode\InternalServerErrorException('Marketplace is not enabled, please change the setting "fusio_marketplace" at the configuration.php to "true" in order to activate the marketplace');
-        }
-
         $localApp = $this->localRepository->fetchByName($name);
 
         if (!$localApp instanceof App) {
