@@ -94,6 +94,6 @@ class WaitForCommand extends Command
             $count++;
         }
 
-        return false;
+        throw new \RuntimeException('Could not connect to ' . $name);
     }
 }
