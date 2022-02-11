@@ -120,11 +120,10 @@ function getConnectionParams($db)
             return [
                 'dbname'   => 'fusio',
                 'user'     => 'root',
-                'password' => '',
+                'password' => 'test1234',
                 'host'     => 'localhost',
                 'driver'   => 'pdo_mysql',
             ];
-            break;
 
         case 'pgsql':
             return [
@@ -134,7 +133,6 @@ function getConnectionParams($db)
                 'host'     => 'localhost',
                 'driver'   => 'pdo_pgsql',
             ];
-            break;
 
         default:
         case 'sqlite':
@@ -142,6 +140,5 @@ function getConnectionParams($db)
                 'memory' => true,
                 'driver' => 'pdo_sqlite',
             ];
-            break;
     }
 }
