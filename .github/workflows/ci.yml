@@ -24,8 +24,11 @@ jobs:
     strategy:
       matrix:
         php-versions:
-         - 8.0
-         - 8.1
+          - 8.0
+          - 8.1
+        database:
+          - sqlite
+          - mysql
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,4 +45,4 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Run PHPUnit
-        run: vendor/bin/phpunit
+        run: DB=${{ matrix.database }} vendor/bin/phpunit
