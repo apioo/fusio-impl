@@ -28,16 +28,8 @@ jobs:
           - 8.1
         database:
           - sqlite
-          - mysql
           - postgres
     services:
-      mysql:
-        image: mysql
-        env:
-          MYSQL_ROOT_PASSWORD: test1234
-          MYSQL_DATABASE: fusio
-        ports:
-          - 33306:3306
       postgres:
         image: postgres
         env:
@@ -57,6 +49,10 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Wait for
-        run: DB=${{ matrix.database }} php bin/fusio system:wait_for
+        env:
+          DB: ${{ matrix.database }}
+        run: php bin/fusio system:wait_for
       - name: Run PHPUnit
-        run: DB=${{ matrix.database }} vendor/bin/phpunit
+        env:
+          DB: ${{ matrix.database }}
+        run: vendor/bin/phpunit
