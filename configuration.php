@@ -122,6 +122,7 @@ function getConnectionParams($db)
                 'user'     => 'root',
                 'password' => 'test1234',
                 'host'     => 'localhost',
+                'port'     => 33306,
                 'driver'   => 'pdo_mysql',
             ];
 
