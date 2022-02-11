@@ -64,7 +64,7 @@ class Page extends ViewAbstract
     public function getEntity(string $pageId)
     {
         if (str_starts_with($pageId, '~')) {
-            $method = 'findOneByTitle';
+            $method = 'findOneBySlug';
             $pageId = urldecode(substr($pageId, 1));
         } else {
             $method = 'find';
