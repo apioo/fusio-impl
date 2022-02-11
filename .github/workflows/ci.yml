@@ -31,6 +31,16 @@ jobs:
           - mysql
           - postgres
     services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: test1234
+          MYSQL_DATABASE: fusio
+        options: >-
+          --health-cmd mysqladmin ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       postgres:
         image: postgres
         env:
@@ -50,11 +60,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
-      - name: Setup MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE fusio;" -uroot -proot
-          mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test1234';" -uroot -proot
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Run PHPUnit
