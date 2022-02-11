@@ -59,7 +59,7 @@ class Log
         self::$level++;
 
         $this->stack[self::$level] = [
-            self::START_TIME => hrtime(),
+            self::START_TIME => hrtime(true),
             self::LOG_ID => null
         ];
 
@@ -97,16 +97,10 @@ class Log
 
         self::$level--;
 
-        $endTime = hrtime();
-
-        [$startSec, $startUsec] = $startTime;
-        [$endSec, $endUsec] = $endTime;
-
-        $diffSec  = $startSec != $endSec ? $endSec - $startSec : 0;
-        $diffUsec = $endUsec - $startUsec;
+        $endTime = hrtime(true);
 
         $this->connection->update('fusio_log', [
-            'execution_time' => intval(($diffSec + $diffUsec) * 1000000),
+            'execution_time' => (int) ($endTime - $startTime),
         ], [
             'id' => $logId,
         ]);
