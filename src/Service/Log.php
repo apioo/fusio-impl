@@ -44,7 +44,7 @@ class Log
     private DBALConnection $connection;
 
     /**
-     * @var array<array{0: array{0: int, 1: int}, 1: int|null}>
+     * @var array<array{0: float, 1: int|null}>
      */
     private array $stack;
 
