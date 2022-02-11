@@ -156,13 +156,26 @@ JSON;
 
     public function testPost()
     {
+        $connection = Environment::getConfig()->get('psx_connection');
+        if (!isset($connection['host'])) {
+            $this->markTestSkipped('Host not available in config');
+        }
+
+        $config = [
+            'type'     => $connection['driver'],
+            'host'     => $connection['host'],
+            'username' => $connection['user'],
+            'password' => $connection['password'],
+            'database' => $connection['dbname'],
+        ];
+
         $response = $this->sendRequest('/backend/connection', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
             'name'   => 'Foo',
             'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
-            'config' => Environment::getConfig()->get('psx_connection'),
+            'config' => $config,
         ]));
 
         $body   = (string) $response->getBody();

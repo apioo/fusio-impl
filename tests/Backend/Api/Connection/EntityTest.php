@@ -136,7 +136,18 @@ JSON;
 
     public function testPut()
     {
-        $config = Environment::getConfig()->get('psx_connection');
+        $connection = Environment::getConfig()->get('psx_connection');
+        if (!isset($connection['host'])) {
+            $this->markTestSkipped('Host not available in config');
+        }
+
+        $config = [
+            'type'     => $connection['driver'],
+            'host'     => $connection['host'],
+            'username' => $connection['user'],
+            'password' => $connection['password'],
+            'database' => $connection['dbname'],
+        ];
 
         $response = $this->sendRequest('/backend/connection/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
