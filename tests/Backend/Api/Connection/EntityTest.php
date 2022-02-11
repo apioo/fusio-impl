@@ -136,13 +136,7 @@ JSON;
 
     public function testPut()
     {
-        $config = [
-            'type'     => 'pdo_mysql',
-            'host'     => '127.0.0.1',
-            'username' => 'root',
-            'password' => 'test1234',
-            'database' => 'fusio',
-        ];
+        $config = Environment::getConfig()->get('psx_connection');
 
         $response = $this->sendRequest('/backend/connection/1', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',

@@ -162,13 +162,7 @@ JSON;
         ), json_encode([
             'name'   => 'Foo',
             'class'  => 'Fusio\Adapter\Sql\Connection\Sql',
-            'config' => [
-                'type'     => 'pdo_mysql',
-                'host'     => '127.0.0.1',
-                'username' => 'root',
-                'password' => 'test1234',
-                'database' => 'fusio',
-            ],
+            'config' => Environment::getConfig()->get('psx_connection'),
         ]));
 
         $body   = (string) $response->getBody();
