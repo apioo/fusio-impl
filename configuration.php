@@ -125,11 +125,11 @@ function getConnectionParams($db)
                 'driver'   => 'pdo_mysql',
             ];
 
-        case 'pgsql':
+        case 'postgres':
             return [
                 'dbname'   => 'fusio',
                 'user'     => 'postgres',
-                'password' => '',
+                'password' => 'postgres',
                 'host'     => 'localhost',
                 'driver'   => 'pdo_pgsql',
             ];
