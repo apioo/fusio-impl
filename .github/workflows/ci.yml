@@ -53,6 +53,6 @@ jobs:
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Wait for
-        run: php bin/fusio system:wait_for
+        run: DB=${{ matrix.database }} php bin/fusio system:wait_for
       - name: Run PHPUnit
         run: DB=${{ matrix.database }} vendor/bin/phpunit
