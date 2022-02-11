@@ -36,22 +36,12 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: test1234
           MYSQL_DATABASE: fusio
-        options: >-
-          --health-cmd mysqladmin ping
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
       postgres:
         image: postgres
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_USER: postgres
           POSTGRES_DB: fusio
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -62,5 +52,7 @@ jobs:
           coverage: none
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
+      - name: Wait for
+        run: php bin/fusio system:wait_for
       - name: Run PHPUnit
         run: DB=${{ matrix.database }} vendor/bin/phpunit
