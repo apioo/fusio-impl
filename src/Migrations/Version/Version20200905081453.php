@@ -175,7 +175,7 @@ final class Version20200905081453 extends AbstractMigration
             $eventTable->addColumn('status', 'integer');
             $eventTable->addColumn('name', 'string', ['length' => 64]);
             $eventTable->addColumn('description', 'string', ['length' => 255]);
-            $eventTable->addColumn('schema', 'string', ['notnull' => false]);
+            $eventTable->addColumn('event_schema', 'string', ['notnull' => false]);
             $eventTable->setPrimaryKey(['id']);
             $eventTable->addUniqueIndex(['name']);
         }
