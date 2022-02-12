@@ -34,11 +34,11 @@ use Fusio\Impl\Table\Generated;
  */
 class Invoice extends Generated\PlanInvoiceTable
 {
-    const STATUS_OPEN = 0;
-    const STATUS_PAYED = 1;
-    const STATUS_DELETED = 2;
+    public const STATUS_OPEN = 0;
+    public const STATUS_PAYED = 1;
+    public const STATUS_DELETED = 2;
 
-    public function getLastInvoiceByContract($contractId)
+    public function findLastInvoiceByContract($contractId)
     {
         $condition = new Condition(['contract_id', '=', $contractId]);
         $result    = $this->findBy($condition, 0, 1, 'id', Sql::SORT_DESC);
@@ -46,7 +46,7 @@ class Invoice extends Generated\PlanInvoiceTable
         return $result[0] ?? null;
     }
 
-    public function getPlanByInvoiceId($invoiceId)
+    public function findPlanByInvoiceId($invoiceId)
     {
         $sql = 'SELECT plan.id,
                        plan.name,
