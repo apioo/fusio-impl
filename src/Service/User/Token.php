@@ -63,7 +63,7 @@ class Token
 
         $this->resetToken($user->getId());
 
-        return $user->getId();
+        return $user->getId() ?? throw new \RuntimeException('No user id available');
     }
 
     /**

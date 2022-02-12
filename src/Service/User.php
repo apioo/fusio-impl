@@ -176,8 +176,8 @@ class User
         $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remote->getRemoteId());
 
         $existing = $this->userTable->findOneBy($condition);
-        if (!empty($existing)) {
-            return $existing->getId();
+        if ($existing instanceof Table\Generated\UserRow) {
+            return $existing->getId() ?? throw new \RuntimeException('No user id available');
         }
 
         // replace spaces with a dot
