@@ -220,12 +220,12 @@ class CategoriesTest extends ControllerDbTestCase
                     "description": ""
                 },
                 {
-                    "id": 31,
+                    "id": 30,
                     "name": "consumer.grant",
                     "description": ""
                 },
                 {
-                    "id": 30,
+                    "id": 31,
                     "name": "consumer.log",
                     "description": ""
                 },

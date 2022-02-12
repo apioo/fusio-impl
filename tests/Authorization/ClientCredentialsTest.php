@@ -51,7 +51,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         // if we provide no explicit scopes we get all scopes assigned to the user
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.user,consumer,consumer.app,consumer.event,consumer.log,consumer.grant,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.user,consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
     }
 
     public function testPostSpecificScope()
@@ -75,7 +75,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
             'Content-Type'  => 'application/x-www-form-urlencoded',
         ], $body);
 
-        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.user,consumer,consumer.app,consumer.event,consumer.log,consumer.grant,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
+        $this->assertAccessToken($response, 'backend,backend.account,backend.action,backend.app,backend.audit,backend.category,backend.config,backend.connection,backend.cronjob,backend.dashboard,backend.event,backend.log,backend.marketplace,backend.page,backend.plan,backend.rate,backend.role,backend.route,backend.schema,backend.scope,backend.sdk,backend.statistic,backend.transaction,backend.user,consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 4);
     }
 
     /**
@@ -91,7 +91,7 @@ class ClientCredentialsTest extends ControllerDbTestCase
         ], $body);
 
         // we receive only the authorization scope since out user has not the backend scope
-        $this->assertAccessToken($response, 'consumer,consumer.app,consumer.event,consumer.log,consumer.grant,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 2);
+        $this->assertAccessToken($response, 'consumer,consumer.app,consumer.event,consumer.grant,consumer.log,consumer.page,consumer.plan,consumer.scope,consumer.subscription,consumer.transaction,consumer.user,authorization,foo,bar', 2);
     }
 
     /**

@@ -457,17 +457,17 @@ class NewInstallation
                 '/event' => [
                     'GET' => new Method(Consumer\Action\Event\GetAll::class, null, [200 => Model\Consumer\Event_Collection::class], Collection_Query::class, 'consumer.event'),
                 ],
-                '/log' => [
-                    'GET' => new Method(Consumer\Action\Log\GetAll::class, null, [200 => Model\Consumer\Log_Collection::class], Collection_Query::class, 'consumer.log'),
-                ],
-                '/log/$log_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Log\Get::class, null, [200 => Model\Consumer\Log::class], Collection_Query::class, 'consumer.log'),
-                ],
                 '/grant' => [
                     'GET' => new Method(Consumer\Action\Grant\GetAll::class, null, [200 => Model\Consumer\Grant_Collection::class], Collection_Query::class, 'consumer.grant'),
                 ],
                 '/grant/$grant_id<[0-9]+>' => [
                     'DELETE' => new Method(Consumer\Action\Grant\Delete::class, null, [204 => Message::class], null, 'consumer.grant'),
+                ],
+                '/log' => [
+                    'GET' => new Method(Consumer\Action\Log\GetAll::class, null, [200 => Model\Consumer\Log_Collection::class], Collection_Query::class, 'consumer.log'),
+                ],
+                '/log/$log_id<[0-9]+>' => [
+                    'GET' => new Method(Consumer\Action\Log\Get::class, null, [200 => Model\Consumer\Log::class], Collection_Query::class, 'consumer.log'),
                 ],
                 '/page' => [
                     'GET' => new Method(Consumer\Action\Page\GetAll::class, null, [200 => Model\Consumer\Page_Collection::class], Collection_Query::class, 'consumer.page', null, true),
