@@ -47,7 +47,7 @@ return array(
     // https://symfony.com/doc/current/mailer.html#using-built-in-transports
     'fusio_mailer'            => 'native://default',
 
-    // Describes the default mail sender which Fusio uses to send mails
+    // Describes the default email which Fusio uses as from address
     'fusio_mail_sender'       => null,
 
     // Indicates whether the marketplace is enabled. If yes it is possible to download and install other apps through
