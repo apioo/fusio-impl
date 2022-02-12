@@ -44,12 +44,12 @@ class EventRow extends \PSX\Record\Record
     {
         return $this->getProperty('description');
     }
-    public function setSchema(?string $schema) : void
+    public function setEventSchema(?string $eventSchema) : void
     {
-        $this->setProperty('schema', $schema);
+        $this->setProperty('event_schema', $eventSchema);
     }
-    public function getSchema() : ?string
+    public function getEventSchema() : ?string
     {
-        return $this->getProperty('schema');
+        return $this->getProperty('event_schema');
     }
 }

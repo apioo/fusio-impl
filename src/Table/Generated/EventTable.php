@@ -13,14 +13,14 @@ class EventTable extends \PSX\Sql\TableAbstract
     public const COLUMN_STATUS = 'status';
     public const COLUMN_NAME = 'name';
     public const COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_SCHEMA = 'schema';
+    public const COLUMN_EVENT_SCHEMA = 'event_schema';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_SCHEMA => 0x40a000ff);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_CATEGORY_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_EVENT_SCHEMA => 0x40a000ff);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\EventRow>
@@ -153,19 +153,19 @@ class EventTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\EventRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findBySchema(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByEventSchema(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->like('schema', $value);
+        $condition->like('event_schema', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneBySchema(string $value) : ?\Fusio\Impl\Table\Generated\EventRow
+    public function findOneByEventSchema(string $value) : ?\Fusio\Impl\Table\Generated\EventRow
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->like('schema', $value);
+        $condition->like('event_schema', $value);
         return $this->doFindOneBy($condition);
     }
     /**
