@@ -29,6 +29,7 @@ jobs:
         database:
           - sqlite
           - postgres
+          - mysql
     services:
       postgres:
         image: postgres
@@ -46,6 +47,11 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
+      - name: Setup MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e "CREATE DATABASE fusio;" -uroot -proot
+          mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'test1234';" -uroot -proot
       - name: Composer install
         run: composer install --no-interaction --no-ansi --no-progress
       - name: Wait for
