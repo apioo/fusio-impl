@@ -62,8 +62,8 @@ class Category
 
             // create category
             $record = new Table\Generated\CategoryRow([
-                'status' => Table\Rate::STATUS_ACTIVE,
-                'name'   => $category->getName(),
+                Table\Generated\CategoryTable::COLUMN_STATUS => Table\Rate::STATUS_ACTIVE,
+                Table\Generated\CategoryTable::COLUMN_NAME => $category->getName(),
             ]);
 
             $this->categoryTable->create($record);
@@ -90,7 +90,7 @@ class Category
             throw new StatusCode\NotFoundException('Could not find category');
         }
 
-        if ($existing['status'] == Table\Category::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Category::STATUS_DELETED) {
             throw new StatusCode\GoneException('Category was deleted');
         }
 
@@ -99,8 +99,8 @@ class Category
 
             // update category
             $record = new Table\Generated\CategoryRow([
-                'id'   => $existing['id'],
-                'name' => $category->getName(),
+                Table\Generated\CategoryTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\CategoryTable::COLUMN_NAME => $category->getName(),
             ]);
 
             $this->categoryTable->update($record);
@@ -125,8 +125,8 @@ class Category
         }
 
         $record = new Table\Generated\CategoryRow([
-            'id'     => $existing['id'],
-            'status' => Table\Category::STATUS_DELETED,
+            Table\Generated\CategoryTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\CategoryTable::COLUMN_STATUS => Table\Category::STATUS_DELETED,
         ]);
 
         $this->categoryTable->update($record);
@@ -139,13 +139,13 @@ class Category
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->notEquals('status', Table\Category::STATUS_DELETED);
-        $condition->equals('name', $name);
+        $condition->notEquals(Table\Generated\CategoryTable::COLUMN_STATUS, Table\Category::STATUS_DELETED);
+        $condition->equals(Table\Generated\CategoryTable::COLUMN_NAME, $name);
 
         $category = $this->categoryTable->findOneBy($condition);
 
-        if (!empty($category)) {
-            return $category['id'];
+        if ($category instanceof Table\Generated\CategoryRow) {
+            return $category->getId() ?? false;
         } else {
             return false;
         }

@@ -45,12 +45,12 @@ class Code
         $code = TokenGenerator::generateCode();
 
         $this->appCodeTable->create(new Table\Generated\AppCodeRow([
-            'app_id'       => $appId,
-            'user_id'      => $userId,
-            'code'         => $code,
-            'redirect_uri' => $redirectUri,
-            'scope'        => implode(',', $scopes),
-            'date'         => new \DateTime(),
+            Table\Generated\AppCodeTable::COLUMN_APP_ID => $appId,
+            Table\Generated\AppCodeTable::COLUMN_USER_ID => $userId,
+            Table\Generated\AppCodeTable::COLUMN_CODE => $code,
+            Table\Generated\AppCodeTable::COLUMN_REDIRECT_URI => $redirectUri,
+            Table\Generated\AppCodeTable::COLUMN_SCOPE => implode(',', $scopes),
+            Table\Generated\AppCodeTable::COLUMN_DATE => new \DateTime(),
         ]));
 
         return $code;

@@ -69,9 +69,9 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             $record = new Table\Generated\ScopeRow([
-                'category_id' => $categoryId,
-                'name'        => $scope->getName(),
-                'description' => $scope->getDescription() ?? '',
+                Table\Generated\ScopeTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
+                Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription() ?? '',
             ]);
 
             $this->scopeTable->create($record);
@@ -101,13 +101,13 @@ class Scope
         // insert new scopes
         foreach ($scopeNames as $scopeName) {
             $scope = $this->scopeTable->findOneByName($scopeName);
-            if (!empty($scope)) {
+            if ($scope instanceof Table\Generated\ScopeRow) {
                 // assign route to scope
                 $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
-                    'scope_id' => $scope['id'],
-                    'route_id' => $routeId,
-                    'allow'    => 1,
-                    'methods'  => 'GET|POST|PUT|PATCH|DELETE',
+                    Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID => $scope->getId(),
+                    Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID => $routeId,
+                    Table\Generated\ScopeRoutesTable::COLUMN_ALLOW => 1,
+                    Table\Generated\ScopeRoutesTable::COLUMN_METHODS => 'GET|POST|PUT|PATCH|DELETE',
                 ]));
             } else {
                 // create new scope
@@ -133,7 +133,7 @@ class Scope
         }
 
         // check whether this is a system scope
-        if (in_array($existing['id'], [1, 2, 3])) {
+        if (in_array($existing->getId(), [1, 2, 3])) {
             throw new StatusCode\BadRequestException('It is not possible to change this scope');
         }
 
@@ -141,16 +141,16 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             $record = new Table\Generated\ScopeRow([
-                'id'          => $existing['id'],
-                'name'        => $scope->getName(),
-                'description' => $scope->getDescription(),
+                Table\Generated\ScopeTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\ScopeTable::COLUMN_NAME => $scope->getName(),
+                Table\Generated\ScopeTable::COLUMN_DESCRIPTION => $scope->getDescription(),
             ]);
 
             $this->scopeTable->update($record);
 
-            $this->scopeRouteTable->deleteAllFromScope($existing['id']);
+            $this->scopeRouteTable->deleteAllFromScope($existing->getId());
 
-            $this->insertRoutes($existing['id'], $scope->getRoutes() ?? []);
+            $this->insertRoutes($existing->getId(), $scope->getRoutes() ?? []);
 
             $this->scopeTable->commit();
         } catch (\Throwable $e) {
@@ -172,18 +172,18 @@ class Scope
         }
 
         // check whether the scope is used by an app or user
-        $appScopes = $this->appScopeTable->getCount(new Condition(['scope_id', '=', $existing['id']]));
+        $appScopes = $this->appScopeTable->getCount(new Condition([Table\Generated\AppScopeTable::COLUMN_SCOPE_ID, '=', $existing->getId()]));
         if ($appScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an app. Remove the scope from the app in order to delete the scope');
         }
 
-        $userScopes = $this->userScopeTable->getCount(new Condition(['scope_id', '=', $existing['id']]));
+        $userScopes = $this->userScopeTable->getCount(new Condition([Table\Generated\UserScopeTable::COLUMN_SCOPE_ID, '=', $existing->getId()]));
         if ($userScopes > 0) {
             throw new StatusCode\ConflictException('Scope is assigned to an user. Remove the scope from the user in order to delete the scope');
         }
 
         // check whether this is a system scope
-        if (in_array($existing['id'], [1, 2, 3])) {
+        if (in_array($existing->getId(), [1, 2, 3])) {
             throw new StatusCode\BadRequestException('It is not possible to change this scope');
         }
 
@@ -191,10 +191,10 @@ class Scope
             $this->scopeTable->beginTransaction();
 
             // delete all routes assigned to the scope
-            $this->scopeRouteTable->deleteAllFromScope($existing['id']);
+            $this->scopeRouteTable->deleteAllFromScope($existing->getId());
 
             $record = new Table\Generated\ScopeRow([
-                'id' => $existing['id']
+                Table\Generated\ScopeTable::COLUMN_ID => $existing->getId()
             ]);
 
             $this->scopeTable->delete($record);
@@ -231,12 +231,12 @@ class Scope
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_NAME, $name);
 
         $scope = $this->scopeTable->findOneBy($condition);
 
-        if (!empty($scope)) {
-            return $scope['id'];
+        if ($scope instanceof Table\Generated\ScopeRow) {
+            return $scope->getId() ?? false;
         } else {
             return false;
         }
@@ -251,10 +251,10 @@ class Scope
             foreach ($routes as $route) {
                 if ($route->getAllow()) {
                     $this->scopeRouteTable->create(new Table\Generated\ScopeRoutesRow([
-                        'scope_id' => $scopeId,
-                        'route_id' => $route->getRouteId(),
-                        'allow'    => $route->getAllow() ? 1 : 0,
-                        'methods'  => $route->getMethods(),
+                        Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID => $scopeId,
+                        Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID => $route->getRouteId(),
+                        Table\Generated\ScopeRoutesTable::COLUMN_ALLOW => $route->getAllow() ? 1 : 0,
+                        Table\Generated\ScopeRoutesTable::COLUMN_METHODS => $route->getMethods(),
                     ]));
                 }
             }

@@ -62,12 +62,12 @@ class Plan
             $this->planTable->beginTransaction();
 
             $record = new Table\Generated\PlanRow([
-                'status'      => Table\Plan::STATUS_ACTIVE,
-                'name'        => $plan->getName(),
-                'description' => $plan->getDescription(),
-                'price'       => $plan->getPrice(),
-                'points'      => $plan->getPoints(),
-                'period_type' => $plan->getPeriod(),
+                Table\Generated\PlanTable::COLUMN_STATUS => Table\Plan::STATUS_ACTIVE,
+                Table\Generated\PlanTable::COLUMN_NAME => $plan->getName(),
+                Table\Generated\PlanTable::COLUMN_DESCRIPTION => $plan->getDescription(),
+                Table\Generated\PlanTable::COLUMN_PRICE => $plan->getPrice(),
+                Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
+                Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
             ]);
 
             $this->planTable->create($record);
@@ -94,18 +94,18 @@ class Plan
             throw new StatusCode\NotFoundException('Could not find plan');
         }
 
-        if ($existing['status'] == Table\Event::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Event::STATUS_DELETED) {
             throw new StatusCode\GoneException('Plan was deleted');
         }
 
         // update event
         $record = new Table\Generated\PlanRow([
-            'id'          => $existing['id'],
-            'name'        => $plan->getName(),
-            'description' => $plan->getDescription(),
-            'price'       => $plan->getPrice(),
-            'points'      => $plan->getPoints(),
-            'period_type' => $plan->getPeriod(),
+            Table\Generated\PlanTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanTable::COLUMN_NAME => $plan->getName(),
+            Table\Generated\PlanTable::COLUMN_DESCRIPTION => $plan->getDescription(),
+            Table\Generated\PlanTable::COLUMN_PRICE => $plan->getPrice(),
+            Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
+            Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
         ]);
 
         $this->planTable->update($record);
@@ -123,8 +123,8 @@ class Plan
         }
 
         $record = new Table\Generated\PlanRow([
-            'id'     => $existing['id'],
-            'status' => Table\Rate::STATUS_DELETED,
+            Table\Generated\PlanTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
         ]);
 
         $this->planTable->update($record);
@@ -137,13 +137,13 @@ class Plan
     public function exists(string $name): int|false
     {
         $condition = new Condition();
-        $condition->equals('status', Table\Event::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_NAME, $name);
 
         $plan = $this->planTable->findOneBy($condition);
 
-        if (!empty($plan)) {
-            return $plan['id'];
+        if ($plan instanceof Table\Generated\PlanRow) {
+            return $plan->getId() ?? false;
         } else {
             return false;
         }

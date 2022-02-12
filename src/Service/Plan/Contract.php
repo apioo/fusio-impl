@@ -58,13 +58,13 @@ class Contract
             $this->contractTable->beginTransaction();
 
             $record = new Table\Generated\PlanContractRow([
-                'user_id' => $userId,
-                'plan_id' => $product->getId(),
-                'status' => Table\Plan\Contract::STATUS_ACTIVE,
-                'amount' => $product->getPrice(),
-                'points' => $product->getPoints(),
-                'period_type' => $product->getInterval(),
-                'insert_date' => new \DateTime(),
+                Table\Generated\PlanContractTable::COLUMN_USER_ID => $userId,
+                Table\Generated\PlanContractTable::COLUMN_PLAN_ID => $product->getId(),
+                Table\Generated\PlanContractTable::COLUMN_STATUS => Table\Plan\Contract::STATUS_ACTIVE,
+                Table\Generated\PlanContractTable::COLUMN_AMOUNT => $product->getPrice(),
+                Table\Generated\PlanContractTable::COLUMN_POINTS => $product->getPoints(),
+                Table\Generated\PlanContractTable::COLUMN_PERIOD_TYPE => $product->getInterval(),
+                Table\Generated\PlanContractTable::COLUMN_INSERT_DATE => new \DateTime(),
             ]);
 
             $this->contractTable->create($record);
@@ -95,17 +95,17 @@ class Contract
             throw new StatusCode\NotFoundException('Could not find contract');
         }
 
-        if ($existing['status'] == Table\Plan\Contract::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Plan\Contract::STATUS_DELETED) {
             throw new StatusCode\GoneException('Contract was deleted');
         }
 
         // update contract
         $record = new Table\Generated\PlanContractRow([
-            'id'      => $existing['id'],
-            'plan_id' => $contract->getPlan(),
-            'status'  => $contract->getStatus(),
-            'amount'  => $contract->getAmount(),
-            'points'  => $contract->getPoints(),
+            Table\Generated\PlanContractTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanContractTable::COLUMN_PLAN_ID => $contract->getPlan(),
+            Table\Generated\PlanContractTable::COLUMN_STATUS => $contract->getStatus(),
+            Table\Generated\PlanContractTable::COLUMN_AMOUNT => $contract->getAmount(),
+            Table\Generated\PlanContractTable::COLUMN_POINTS => $contract->getPoints(),
         ]);
 
         $this->contractTable->update($record);
@@ -123,8 +123,8 @@ class Contract
         }
 
         $record = new Table\Generated\PlanContractRow([
-            'id'     => $existing['id'],
-            'status' => Table\Plan\Contract::STATUS_DELETED,
+            Table\Generated\PlanContractTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanContractTable::COLUMN_STATUS => Table\Plan\Contract::STATUS_DELETED,
         ]);
 
         $this->contractTable->update($record);

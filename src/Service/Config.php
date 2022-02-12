@@ -54,8 +54,8 @@ class Config
         }
 
         $record = new Table\Generated\ConfigRow([
-            'id'    => $existing['id'],
-            'value' => $config->getValue(),
+            Table\Generated\ConfigTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\ConfigTable::COLUMN_VALUE => $config->getValue(),
         ]);
 
         $this->configTable->update($record);

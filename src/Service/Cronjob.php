@@ -74,11 +74,11 @@ class Cronjob
             $this->cronjobTable->beginTransaction();
 
             $record = new Table\Generated\CronjobRow([
-                'category_id' => $categoryId,
-                'status'      => Table\Cronjob::STATUS_ACTIVE,
-                'name'        => $cronjob->getName(),
-                'cron'        => $cronjob->getCron(),
-                'action'      => $cronjob->getAction(),
+                Table\Generated\CronjobTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\CronjobTable::COLUMN_STATUS => Table\Cronjob::STATUS_ACTIVE,
+                Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
+                Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
+                Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
             ]);
 
             $this->cronjobTable->create($record);
@@ -109,15 +109,15 @@ class Cronjob
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
         $record = new Table\Generated\CronjobRow([
-            'id'     => $existing['id'],
-            'name'   => $cronjob->getName(),
-            'cron'   => $cronjob->getCron(),
-            'action' => $cronjob->getAction(),
+            Table\Generated\CronjobTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\CronjobTable::COLUMN_NAME => $cronjob->getName(),
+            Table\Generated\CronjobTable::COLUMN_CRON => $cronjob->getCron(),
+            Table\Generated\CronjobTable::COLUMN_ACTION => $cronjob->getAction(),
         ]);
 
         $this->cronjobTable->update($record);
@@ -136,13 +136,13 @@ class Cronjob
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
         $record = new Table\Generated\CronjobRow([
-            'id'     => $existing['id'],
-            'status' => Table\Cronjob::STATUS_DELETED,
+            Table\Generated\CronjobTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\CronjobTable::COLUMN_STATUS => Table\Cronjob::STATUS_DELETED,
         ]);
 
         $this->cronjobTable->update($record);
@@ -169,25 +169,24 @@ class Cronjob
             throw new StatusCode\NotFoundException('Could not find cronjob');
         }
 
-        if ($existing['status'] == Table\Cronjob::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Cronjob::STATUS_DELETED) {
             throw new StatusCode\GoneException('Cronjob was deleted');
         }
 
-        $exitCode = null;
         try {
             $execute = new Action_Execute_Request();
             $execute->setMethod('GET');
 
-            $this->executorService->execute($existing['action'], $execute);
+            $this->executorService->execute($existing->getAction(), $execute);
 
             $exitCode = Table\Cronjob::CODE_SUCCESS;
         } catch (\Throwable $e) {
             $this->errorTable->create(new Table\Generated\CronjobErrorRow([
-                'cronjob_id' => $existing['id'],
-                'message'    => $e->getMessage(),
-                'trace'      => $e->getTraceAsString(),
-                'file'       => $e->getFile(),
-                'line'       => $e->getLine(),
+                Table\Generated\CronjobErrorTable::COLUMN_CRONJOB_ID => $existing->getId(),
+                Table\Generated\CronjobErrorTable::COLUMN_MESSAGE => $e->getMessage(),
+                Table\Generated\CronjobErrorTable::COLUMN_TRACE => $e->getTraceAsString(),
+                Table\Generated\CronjobErrorTable::COLUMN_FILE => $e->getFile(),
+                Table\Generated\CronjobErrorTable::COLUMN_LINE => $e->getLine(),
             ]));
 
             $exitCode = Table\Cronjob::CODE_ERROR;
@@ -195,9 +194,9 @@ class Cronjob
 
         // set execute date
         $record = new Table\Generated\CronjobRow([
-            'id' => $existing['id'],
-            'execute_date' => new \DateTime(),
-            'exit_code' => $exitCode,
+            Table\Generated\CronjobTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE => new \DateTime(),
+            Table\Generated\CronjobTable::COLUMN_EXIT_CODE => $exitCode,
         ]);
 
         $this->cronjobTable->update($record);
@@ -206,13 +205,13 @@ class Cronjob
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_NAME, $name);
 
         $cronjob = $this->cronjobTable->findOneBy($condition);
 
-        if (!empty($cronjob)) {
-            return $cronjob['id'];
+        if ($cronjob instanceof Table\Generated\CronjobRow) {
+            return $cronjob->getId() ?? false;
         } else {
             return false;
         }
@@ -241,13 +240,13 @@ class Cronjob
     private function generateCron(): string
     {
         $condition = new Condition();
-        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
 
         $result = $this->cronjobTable->findAll($condition, 0, 1024);
         $lines  = [];
 
         foreach ($result as $row) {
-            $lines[] = $row['cron'] . ' ' . $this->cronExec . ' cronjob ' . $row['id'];
+            $lines[] = $row->getCron() . ' ' . $this->cronExec . ' cronjob ' . $row->getId();
         }
 
         $cron = '# Generated by Fusio on ' . date('Y-m-d H:i:s') . "\n";

@@ -69,11 +69,11 @@ class Rate
             $this->rateTable->beginTransaction();
 
             $record = new Table\Generated\RateRow([
-                'status'     => Table\Rate::STATUS_ACTIVE,
-                'priority'   => $rate->getPriority(),
-                'name'       => $rate->getName(),
-                'rate_limit' => $rate->getRateLimit(),
-                'timespan'   => $rate->getTimespan(),
+                Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_ACTIVE,
+                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
+                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
+                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
+                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
             ]);
 
             $this->rateTable->create($record);
@@ -102,7 +102,7 @@ class Rate
             throw new StatusCode\NotFoundException('Could not find rate');
         }
 
-        if ($existing['status'] == Table\Rate::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Rate::STATUS_DELETED) {
             throw new StatusCode\GoneException('Rate was deleted');
         }
 
@@ -111,16 +111,16 @@ class Rate
 
             // update rate
             $record = new Table\Generated\RateRow([
-                'id'         => $existing['id'],
-                'priority'   => $rate->getPriority(),
-                'name'       => $rate->getName(),
-                'rate_limit' => $rate->getRateLimit(),
-                'timespan'   => $rate->getTimespan(),
+                Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\RateTable::COLUMN_PRIORITY => $rate->getPriority(),
+                Table\Generated\RateTable::COLUMN_NAME => $rate->getName(),
+                Table\Generated\RateTable::COLUMN_RATE_LIMIT => $rate->getRateLimit(),
+                Table\Generated\RateTable::COLUMN_TIMESPAN => $rate->getTimespan(),
             ]);
 
             $this->rateTable->update($record);
 
-            $this->handleAllocations($existing['id'], $rate->getAllocation());
+            $this->handleAllocations($existing->getId(), $rate->getAllocation());
 
             $this->rateTable->commit();
         } catch (\Throwable $e) {
@@ -142,8 +142,8 @@ class Rate
         }
 
         $record = new Table\Generated\RateRow([
-            'id'     => $existing['id'],
-            'status' => Table\Rate::STATUS_DELETED,
+            Table\Generated\RateTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\RateTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
         ]);
 
         $this->rateTable->update($record);
@@ -178,13 +178,13 @@ class Rate
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->notEquals('status', Table\Rate::STATUS_DELETED);
-        $condition->equals('name', $name);
+        $condition->notEquals(Table\Generated\RateTable::COLUMN_STATUS, Table\Rate::STATUS_DELETED);
+        $condition->equals(Table\Generated\RateTable::COLUMN_NAME, $name);
 
-        $app = $this->rateTable->findOneBy($condition);
+        $rate = $this->rateTable->findOneBy($condition);
 
-        if (!empty($app)) {
-            return $app['id'];
+        if ($rate instanceof Table\Generated\RateRow) {
+            return $rate->getId() ?? false;
         } else {
             return false;
         }
@@ -202,15 +202,15 @@ class Rate
 
         $condition = new Condition();
         // we count only requests to the default category
-        $condition->equals('category_id', 1);
+        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, 1);
 
         if ($app->isAnonymous()) {
-            $condition->equals('ip', $ip);
+            $condition->equals(Table\Generated\LogTable::COLUMN_IP, $ip);
         } else {
-            $condition->equals('app_id', $app->getId());
+            $condition->equals(Table\Generated\LogTable::COLUMN_APP_ID, $app->getId());
         }
 
-        $condition->between('date', $past->format('Y-m-d H:i:s'), $now->format('Y-m-d H:i:s'));
+        $condition->between(Table\Generated\LogTable::COLUMN_DATE, $past->format('Y-m-d H:i:s'), $now->format('Y-m-d H:i:s'));
 
         return $this->logTable->getCount($condition);
     }
@@ -225,11 +225,11 @@ class Rate
         if (!empty($allocations)) {
             foreach ($allocations as $allocation) {
                 $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
-                    'rate_id'       => $rateId,
-                    'route_id'      => $allocation->getRouteId(),
-                    'app_id'        => $allocation->getAppId(),
-                    'authenticated' => $allocation->getAuthenticated(),
-                    'parameters'    => $allocation->getParameters(),
+                    Table\Generated\RateAllocationTable::COLUMN_RATE_ID => $rateId,
+                    Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID => $allocation->getRouteId(),
+                    Table\Generated\RateAllocationTable::COLUMN_APP_ID => $allocation->getAppId(),
+                    Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $allocation->getAuthenticated(),
+                    Table\Generated\RateAllocationTable::COLUMN_PARAMETERS => $allocation->getParameters(),
                 ]));
             }
         }

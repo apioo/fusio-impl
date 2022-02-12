@@ -75,18 +75,17 @@ class Invoice
             $this->invoiceTable->beginTransaction();
 
             $record = new Table\Generated\PlanInvoiceRow([
-                'contract_id' => $contract['id'],
-                'user_id' => $contract['user_id'],
-                'transaction_id' => null,
-                'display_id' => $displayId,
-                'prev_id' => $prevId,
-                'status' => Table\Plan\Invoice::STATUS_OPEN,
-                'amount' => $contract['amount'],
-                'points' => $contract['points'],
-                'from_date' => $from,
-                'to_date' => $to,
-                'pay_date' => null,
-                'insert_date' => new \DateTime(),
+                Table\Generated\PlanInvoiceTable::COLUMN_CONTRACT_ID => $contract->getId(),
+                Table\Generated\PlanInvoiceTable::COLUMN_USER_ID => $contract->getUserId(),
+                Table\Generated\PlanInvoiceTable::COLUMN_DISPLAY_ID => $displayId,
+                Table\Generated\PlanInvoiceTable::COLUMN_PREV_ID => $prevId,
+                Table\Generated\PlanInvoiceTable::COLUMN_STATUS => Table\Plan\Invoice::STATUS_OPEN,
+                Table\Generated\PlanInvoiceTable::COLUMN_AMOUNT => $contract->getAmount(),
+                Table\Generated\PlanInvoiceTable::COLUMN_POINTS => $contract->getPoints(),
+                Table\Generated\PlanInvoiceTable::COLUMN_FROM_DATE => $from,
+                Table\Generated\PlanInvoiceTable::COLUMN_TO_DATE => $to,
+                Table\Generated\PlanInvoiceTable::COLUMN_PAY_DATE => null,
+                Table\Generated\PlanInvoiceTable::COLUMN_INSERT_DATE => new \DateTime(),
             ]);
 
             $this->invoiceTable->create($record);
@@ -113,14 +112,14 @@ class Invoice
             throw new StatusCode\NotFoundException('Could not find invoice');
         }
 
-        if ($existing['status'] == Table\Plan\Invoice::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Plan\Invoice::STATUS_DELETED) {
             throw new StatusCode\GoneException('Invoice was deleted');
         }
 
         // update invoice
         $record = new Table\Generated\PlanInvoiceRow([
-            'id'     => $existing['id'],
-            'status' => $invoice->getStatus(),
+            Table\Generated\PlanInvoiceTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanInvoiceTable::COLUMN_STATUS => $invoice->getStatus(),
         ]);
 
         $this->invoiceTable->update($record);
@@ -138,8 +137,8 @@ class Invoice
         }
 
         $record = new Table\Generated\PlanInvoiceRow([
-            'id'     => $existing['id'],
-            'status' => Table\Plan\Invoice::STATUS_DELETED,
+            Table\Generated\PlanInvoiceTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PlanInvoiceTable::COLUMN_STATUS => Table\Plan\Invoice::STATUS_DELETED,
         ]);
 
         $this->invoiceTable->update($record);
@@ -160,7 +159,7 @@ class Invoice
             throw new \RuntimeException('Invalid invoice id');
         }
 
-        if ($invoice['status'] == Table\Plan\Invoice::STATUS_PAYED) {
+        if ($invoice->getStatus() == Table\Plan\Invoice::STATUS_PAYED) {
             throw new \InvalidArgumentException('Invoice already payed');
         }
 
@@ -168,34 +167,34 @@ class Invoice
             throw new \InvalidArgumentException('Cant mark invoice as payed since the transaction is not approved');
         }
 
-        $contract = $this->contractTable->find($invoice['contract_id']);
+        $contract = $this->contractTable->find($invoice->getContractId());
         if (empty($contract)) {
             throw new \RuntimeException('Invalid contract id');
         }
 
-        if ($contract['status'] == Table\Plan\Contract::STATUS_DELETED) {
+        if ($contract->getStatus() == Table\Plan\Contract::STATUS_DELETED) {
             throw new \InvalidArgumentException('Contract was deleted');
-        } elseif ($contract['status'] == Table\Plan\Contract::STATUS_CANCELLED) {
+        } elseif ($contract->getStatus() == Table\Plan\Contract::STATUS_CANCELLED) {
             throw new \InvalidArgumentException('Contract was cancelled');
-        } elseif ($contract['status'] == Table\Plan\Contract::STATUS_CLOSED) {
+        } elseif ($contract->getStatus() == Table\Plan\Contract::STATUS_CLOSED) {
             throw new \InvalidArgumentException('Contract was closed');
         }
 
         // mark invoice as payed
         $record = new Table\Generated\PlanInvoiceRow([
-            'id' => $invoice['id'],
-            'status' => Table\Plan\Invoice::STATUS_PAYED,
-            'pay_date' => new \DateTime(),
+            Table\Generated\PlanInvoiceTable::COLUMN_ID => $invoice->getId(),
+            Table\Generated\PlanInvoiceTable::COLUMN_STATUS => Table\Plan\Invoice::STATUS_PAYED,
+            Table\Generated\PlanInvoiceTable::COLUMN_PAY_DATE => new \DateTime(),
         ]);
 
         $this->invoiceTable->update($record);
 
         // credit points
-        $this->userTable->creditPoints($contract['user_id'], $invoice['points']);
+        $this->userTable->creditPoints($contract->getUserId(), $invoice->getPoints());
 
         // dispatch payed event
-        $context = UserContext::newContext($contract['user_id'], 2);
-        $this->eventDispatcher->dispatch(new PayedEvent($invoice['id'], $invoice, $transaction, $context));
+        $context = UserContext::newContext($contract->getUserId(), 2);
+        $this->eventDispatcher->dispatch(new PayedEvent($invoice->getId(), $invoice, $transaction, $context));
     }
 
     /**

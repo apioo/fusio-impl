@@ -90,13 +90,13 @@ class Transaction
 
         try {
             $record = new Table\Generated\TransactionRow([
-                'invoice_id' => $prepare->getInvoiceId(),
-                'status' => TransactionModel::STATUS_CREATED,
-                'provider' => $name,
-                'transaction_id' => Uuid::pseudoRandom(),
-                'amount' => $product->getPrice(),
-                'return_url' => $returnUrl,
-                'insert_date' => new \DateTime(),
+                Table\Generated\TransactionTable::COLUMN_INVOICE_ID => $prepare->getInvoiceId(),
+                Table\Generated\TransactionTable::COLUMN_STATUS => TransactionModel::STATUS_CREATED,
+                Table\Generated\TransactionTable::COLUMN_PROVIDER => $name,
+                Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID => Uuid::pseudoRandom(),
+                Table\Generated\TransactionTable::COLUMN_AMOUNT => $product->getPrice(),
+                Table\Generated\TransactionTable::COLUMN_RETURN_URL => $returnUrl,
+                Table\Generated\TransactionTable::COLUMN_INSERT_DATE => new \DateTime(),
             ]);
 
             $this->transactionTable->create($record);
@@ -167,7 +167,7 @@ class Transaction
 
     private function getProduct(int $invoiceId): ProductInterface
     {
-        $plan = $this->invoiceTable->getPlanByInvoiceId($invoiceId);
+        $plan = $this->invoiceTable->findPlanByInvoiceId($invoiceId);
         if (empty($plan)) {
             throw new StatusCode\BadRequestException('Invalid invoice id');
         }
@@ -188,7 +188,7 @@ class Transaction
             throw new StatusCode\BadRequestException('Invalid transaction id');
         }
 
-        if ($result['status'] == TransactionInterface::STATUS_APPROVED) {
+        if ($result->getStatus() == TransactionInterface::STATUS_APPROVED) {
             throw new StatusCode\BadRequestException('Transaction is already approved');
         }
 
@@ -202,10 +202,10 @@ class Transaction
     {
         // update transaction
         $record = new Table\Generated\TransactionRow([
-            'id' => $transaction->getId(),
-            'status' => $transaction->getStatus(),
-            'remote_id' => $transaction->getRemoteId(),
-            'update_date' => new \DateTime(),
+            Table\Generated\TransactionTable::COLUMN_ID => $transaction->getId(),
+            Table\Generated\TransactionTable::COLUMN_STATUS => $transaction->getStatus(),
+            Table\Generated\TransactionTable::COLUMN_REMOTE_ID => $transaction->getRemoteId(),
+            Table\Generated\TransactionTable::COLUMN_UPDATE_DATE => new \DateTime(),
         ]);
 
         $this->transactionTable->update($record);

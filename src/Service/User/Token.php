@@ -61,9 +61,9 @@ class Token
             throw new StatusCode\BadRequestException('Could not find user for token');
         }
 
-        $this->resetToken($user['id']);
+        $this->resetToken($user->getId());
 
-        return $user['id'];
+        return $user->getId();
     }
 
     /**
@@ -79,8 +79,8 @@ class Token
         $token = JWT::encode($payload, $this->psxConfig->get('fusio_project_key'), 'HS256');
 
         $record = new Table\Generated\UserRow([
-            'id'    => $userId,
-            'token' => $token
+            Table\Generated\UserTable::COLUMN_ID => $userId,
+            Table\Generated\UserTable::COLUMN_TOKEN => $token
         ]);
 
         $this->userTable->update($record);
@@ -96,8 +96,8 @@ class Token
     public function resetToken(int $userId)
     {
         $record = new Table\Generated\UserRow([
-            'id'    => $userId,
-            'token' => ''
+            Table\Generated\UserTable::COLUMN_ID => $userId,
+            Table\Generated\UserTable::COLUMN_TOKEN => ''
         ]);
 
         $this->userTable->update($record);

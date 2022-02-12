@@ -66,9 +66,9 @@ class Role
 
             // create role
             $record = new Table\Generated\RoleRow([
-                'category_id' => $role->getCategoryId(),
-                'status'      => Table\Role::STATUS_ACTIVE,
-                'name'        => $role->getName(),
+                Table\Generated\RoleTable::COLUMN_CATEGORY_ID => $role->getCategoryId(),
+                Table\Generated\RoleTable::COLUMN_STATUS => Table\Role::STATUS_ACTIVE,
+                Table\Generated\RoleTable::COLUMN_NAME => $role->getName(),
             ]);
 
             $this->roleTable->create($record);
@@ -99,7 +99,7 @@ class Role
             throw new StatusCode\NotFoundException('Could not find role');
         }
 
-        if ($existing['status'] == Table\Role::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Role::STATUS_DELETED) {
             throw new StatusCode\GoneException('Role was deleted');
         }
 
@@ -108,19 +108,19 @@ class Role
 
             // update role
             $record = new Table\Generated\RoleRow([
-                'id'          => $existing['id'],
-                'category_id' => $role->getCategoryId(),
-                'name'        => $role->getName(),
+                Table\Generated\RoleTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\RoleTable::COLUMN_CATEGORY_ID => $role->getCategoryId(),
+                Table\Generated\RoleTable::COLUMN_NAME => $role->getName(),
             ]);
 
             $this->roleTable->update($record);
 
             if ($role->getScopes() !== null) {
                 // delete existing scopes
-                $this->roleScopeTable->deleteAllFromRole($existing['id']);
+                $this->roleScopeTable->deleteAllFromRole($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing['id'], $role->getScopes());
+                $this->insertScopes($existing->getId(), $role->getScopes());
             }
 
             $this->roleTable->commit();
@@ -143,8 +143,8 @@ class Role
         }
 
         $record = new Table\Generated\RoleRow([
-            'id'     => $existing['id'],
-            'status' => Table\Role::STATUS_DELETED,
+            Table\Generated\RoleTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\RoleTable::COLUMN_STATUS => Table\Role::STATUS_DELETED,
         ]);
 
         $this->roleTable->update($record);
@@ -157,13 +157,13 @@ class Role
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->notEquals('status', Table\Role::STATUS_DELETED);
-        $condition->equals('name', $name);
+        $condition->notEquals(Table\Generated\RoleTable::COLUMN_STATUS, Table\Role::STATUS_DELETED);
+        $condition->equals(Table\Generated\RoleTable::COLUMN_NAME, $name);
 
         $role = $this->roleTable->findOneBy($condition);
 
-        if (!empty($role)) {
-            return $role['id'];
+        if ($role instanceof Table\Generated\RoleRow) {
+            return $role->getId() ?? false;
         } else {
             return false;
         }
@@ -176,8 +176,8 @@ class Role
 
             foreach ($scopes as $scope) {
                 $this->roleScopeTable->create(new Table\Generated\RoleScopeRow([
-                    'role_id'  => $roleId,
-                    'scope_id' => $scope['id'],
+                    Table\Generated\RoleScopeTable::COLUMN_ROLE_ID => $roleId,
+                    Table\Generated\RoleScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
                 ]));
             }
         }

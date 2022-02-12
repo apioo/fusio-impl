@@ -24,6 +24,8 @@ namespace Fusio\Impl\Service\Action\Queue;
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Processor;
 use Fusio\Impl\Repository\ActionDatabase;
+use Fusio\Impl\Table\Generated\ActionQueueRow;
+use Fusio\Impl\Table\Generated\ActionQueueTable;
 
 /**
  * Consumer
@@ -49,22 +51,22 @@ class Consumer
         $repository->setAsync(false);
         $this->processor->push($repository);
 
-        $sql = 'SELECT id,
-                       action,
-                       request,
-                       context
-                  FROM fusio_action_queue
-              ORDER BY id ASC';
+        $qb = $this->connection->createQueryBuilder();
+        $qb->select([ActionQueueTable::COLUMN_ID, ActionQueueTable::COLUMN_ACTION, ActionQueueTable::COLUMN_REQUEST, ActionQueueTable::COLUMN_CONTEXT]);
+        $qb->from(ActionQueueTable::NAME);
+        $qb->orderBy(ActionQueueTable::COLUMN_ID, 'DESC');
 
-        $result = $this->connection->fetchAll($sql);
+        $result = $this->connection->fetchAllAssociative($qb->getSQL(), $qb->getParameters());
         foreach ($result as $row) {
-            $this->connection->delete('fusio_action_queue', ['id' => $row['id']]);
+            $this->connection->delete(ActionQueueTable::NAME, [
+                ActionQueueTable::COLUMN_ID => $row[ActionQueueTable::COLUMN_ID]
+            ]);
 
-            $request = Serializer::unserializeRequest($row['request']);
-            $context = Serializer::unserializeContext($row['context']);
+            $request = Serializer::unserializeRequest($row[ActionQueueTable::COLUMN_REQUEST]);
+            $context = Serializer::unserializeContext($row[ActionQueueTable::COLUMN_CONTEXT]);
 
             try {
-                $this->processor->execute($row['action'], $request, $context);
+                $this->processor->execute($row[ActionQueueTable::COLUMN_ACTION], $request, $context);
             } catch (\Throwable $e) {
                 // ignore error and execute next request
                 // @TODO maybe log this in the future?

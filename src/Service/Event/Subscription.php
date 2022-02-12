@@ -58,10 +58,10 @@ class Subscription
             $this->subscriptionTable->beginTransaction();
 
             $record = new Table\Generated\EventSubscriptionRow([
-                'event_id' => $subscription->getEventId(),
-                'user_id'  => $subscription->getUserId(),
-                'status'   => Table\Event\Subscription::STATUS_ACTIVE,
-                'endpoint' => $subscription->getEndpoint(),
+                Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID => $subscription->getEventId(),
+                Table\Generated\EventSubscriptionTable::COLUMN_USER_ID => $subscription->getUserId(),
+                Table\Generated\EventSubscriptionTable::COLUMN_STATUS => Table\Event\Subscription::STATUS_ACTIVE,
+                Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT => $subscription->getEndpoint(),
             ]);
 
             $this->subscriptionTable->create($record);
@@ -90,8 +90,8 @@ class Subscription
 
         // update subscription
         $record = new Table\Generated\EventSubscriptionRow([
-            'id'       => $existing['id'],
-            'endpoint' => $subscription->getEndpoint(),
+            Table\Generated\EventSubscriptionTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT => $subscription->getEndpoint(),
         ]);
 
         $this->subscriptionTable->update($record);
@@ -113,7 +113,7 @@ class Subscription
 
         // remove subscription
         $record = new Table\Generated\EventSubscriptionRow([
-            'id' => $existing['id'],
+            Table\Generated\EventSubscriptionTable::COLUMN_ID => $existing->getId(),
         ]);
 
         $this->subscriptionTable->delete($record);

@@ -61,15 +61,15 @@ class ResetPassword
             throw new StatusCode\NotFoundException('Could not find user');
         }
 
-        if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
+        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
             throw new StatusCode\BadRequestException('Provided user is not a local user');
         }
 
         // set onetime token for the user
-        $token = $this->tokenService->generateToken($user['id']);
+        $token = $this->tokenService->generateToken($user->getId());
 
         // send reset mail
-        $this->mailerService->sendResetPasswordMail($token, $user['name'], $user['email']);
+        $this->mailerService->sendResetPasswordMail($token, $user->getName(), $user->getEmail());
     }
 
     public function changePassword(User_PasswordReset $reset): void

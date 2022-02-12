@@ -76,11 +76,11 @@ class Schema
             $this->schemaTable->beginTransaction();
 
             $record = new Table\Generated\SchemaRow([
-                'category_id' => $categoryId,
-                'status'      => Table\Schema::STATUS_ACTIVE,
-                'name'        => $schema->getName(),
-                'source'      => $this->parseSource($schema->getSource()),
-                'form'        => $this->parseForm($schema->getForm()),
+                Table\Generated\SchemaTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_ACTIVE,
+                Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
+                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
+                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
             ]);
 
             $this->schemaTable->create($record);
@@ -110,7 +110,7 @@ class Schema
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
@@ -118,10 +118,10 @@ class Schema
             $this->schemaTable->beginTransaction();
 
             $record = new Table\Generated\SchemaRow([
-                'id'     => $existing['id'],
-                'name'   => $schema->getName(),
-                'source' => $this->parseSource($schema->getSource()),
-                'form'   => $this->parseForm($schema->getForm()),
+                Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\SchemaTable::COLUMN_NAME => $schema->getName(),
+                Table\Generated\SchemaTable::COLUMN_SOURCE => $this->parseSource($schema->getSource()),
+                Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($schema->getForm()),
             ]);
 
             $this->schemaTable->update($record);
@@ -148,13 +148,13 @@ class Schema
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($existing['status'] == Table\Schema::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
         $record = new Table\Generated\SchemaRow([
-            'id'     => $existing['id'],
-            'status' => Table\Schema::STATUS_DELETED,
+            Table\Generated\SchemaTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\SchemaTable::COLUMN_STATUS => Table\Schema::STATUS_DELETED,
         ]);
 
         $this->schemaTable->update($record);
@@ -171,13 +171,13 @@ class Schema
             throw new StatusCode\NotFoundException('Could not find schema');
         }
 
-        if ($schema['status'] == Table\Schema::STATUS_DELETED) {
+        if ($schema->getStatus() == Table\Schema::STATUS_DELETED) {
             throw new StatusCode\GoneException('Schema was deleted');
         }
 
         $record = new Table\Generated\SchemaRow([
-            'id'   => $schema['id'],
-            'form' => $this->parseForm($form),
+            Table\Generated\SchemaTable::COLUMN_ID => $schema->getId(),
+            Table\Generated\SchemaTable::COLUMN_FORM => $this->parseForm($form),
         ]);
 
         $this->schemaTable->update($record);
@@ -195,13 +195,13 @@ class Schema
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Schema::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_STATUS, Table\Schema::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\SchemaTable::COLUMN_NAME, $name);
 
-        $connection = $this->schemaTable->findOneBy($condition);
+        $schema = $this->schemaTable->findOneBy($condition);
 
-        if (!empty($connection)) {
-            return $connection['id'];
+        if ($schema instanceof Table\Generated\SchemaRow) {
+            return $schema->getId() ?? false;
         } else {
             return false;
         }

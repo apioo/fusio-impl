@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Doctrine\DBAL\Connection as DBALConnection;
 use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Table;
 use PSX\Framework\DisplayException;
 use PSX\Http\RequestInterface;
 use PSX\Http\Stream\Util;
@@ -69,18 +70,18 @@ class Log
             $path = substr($path, 0, 1023);
         }
 
-        $this->connection->insert('fusio_log', array(
-            'category_id' => $context->getCategoryId(),
-            'route_id'    => $context->getRouteId(),
-            'app_id'      => $context->getAppId(),
-            'user_id'     => $context->getUserId(),
-            'ip'          => $remoteIp,
-            'user_agent'  => $userAgent,
-            'method'      => $method,
-            'path'        => $path,
-            'header'      => $request !== null ? $this->getHeadersAsString($request) : '',
-            'body'        => $request !== null ? $this->getBodyAsString($request) : '',
-            'date'        => $now->format('Y-m-d H:i:s'),
+        $this->connection->insert(Table\Generated\LogTable::NAME, array(
+            Table\Generated\LogTable::COLUMN_CATEGORY_ID => $context->getCategoryId(),
+            Table\Generated\LogTable::COLUMN_ROUTE_ID => $context->getRouteId(),
+            Table\Generated\LogTable::COLUMN_APP_ID => $context->getAppId(),
+            Table\Generated\LogTable::COLUMN_USER_ID => $context->getUserId(),
+            Table\Generated\LogTable::COLUMN_IP => $remoteIp,
+            Table\Generated\LogTable::COLUMN_USER_AGENT => $userAgent,
+            Table\Generated\LogTable::COLUMN_METHOD => $method,
+            Table\Generated\LogTable::COLUMN_PATH => $path,
+            Table\Generated\LogTable::COLUMN_HEADER => $request !== null ? $this->getHeadersAsString($request) : '',
+            Table\Generated\LogTable::COLUMN_BODY => $request !== null ? $this->getBodyAsString($request) : '',
+            Table\Generated\LogTable::COLUMN_DATE => $now->format('Y-m-d H:i:s'),
         ));
 
         $this->stack[self::$level][self::LOG_ID] = $this->connection->lastInsertId();
@@ -99,10 +100,10 @@ class Log
 
         $endTime = hrtime(true);
 
-        $this->connection->update('fusio_log', [
-            'execution_time' => (int) ($endTime - $startTime),
+        $this->connection->update(Table\Generated\LogTable::NAME, [
+            Table\Generated\LogTable::COLUMN_EXECUTION_TIME => (int) ($endTime - $startTime),
         ], [
-            'id' => $logId,
+            Table\Generated\LogTable::COLUMN_ID => $logId,
         ]);
     }
 
@@ -128,12 +129,12 @@ class Log
             $message = substr($message, 0, 500);
         }
 
-        $this->connection->insert('fusio_log_error', array(
-            'log_id'  => $logId,
-            'message' => $message,
-            'trace'   => $exception->getTraceAsString(),
-            'file'    => $exception->getFile(),
-            'line'    => $exception->getLine(),
+        $this->connection->insert(Table\Generated\LogErrorTable::NAME, array(
+            Table\Generated\LogErrorTable::COLUMN_LOG_ID => $logId,
+            Table\Generated\LogErrorTable::COLUMN_MESSAGE => $message,
+            Table\Generated\LogErrorTable::COLUMN_TRACE => $exception->getTraceAsString(),
+            Table\Generated\LogErrorTable::COLUMN_FILE => $exception->getFile(),
+            Table\Generated\LogErrorTable::COLUMN_LINE => $exception->getLine(),
         ));
     }
 

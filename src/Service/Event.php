@@ -62,11 +62,11 @@ class Event
             $this->eventTable->beginTransaction();
 
             $record = new Table\Generated\EventRow([
-                'category_id' => $categoryId,
-                'status'      => Table\Event::STATUS_ACTIVE,
-                'name'        => $event->getName(),
-                'description' => $event->getDescription(),
-                'schema'      => $event->getSchema(),
+                Table\Generated\EventTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\EventTable::COLUMN_STATUS => Table\Event::STATUS_ACTIVE,
+                Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
+                Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
+                Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
             ]);
 
             $this->eventTable->create($record);
@@ -93,16 +93,16 @@ class Event
             throw new StatusCode\NotFoundException('Could not find event');
         }
 
-        if ($existing['status'] == Table\Event::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Event::STATUS_DELETED) {
             throw new StatusCode\GoneException('Event was deleted');
         }
 
         // update event
         $record = new Table\Generated\EventRow([
-            'id'          => $existing['id'],
-            'name'        => $event->getName(),
-            'description' => $event->getDescription(),
-            'schema'      => $event->getSchema(),
+            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\EventTable::COLUMN_NAME => $event->getName(),
+            Table\Generated\EventTable::COLUMN_DESCRIPTION => $event->getDescription(),
+            Table\Generated\EventTable::COLUMN_EVENT_SCHEMA => $event->getSchema(),
         ]);
 
         $this->eventTable->update($record);
@@ -120,8 +120,8 @@ class Event
         }
 
         $record = new Table\Generated\EventRow([
-            'id'     => $existing['id'],
-            'status' => Table\Rate::STATUS_DELETED,
+            Table\Generated\EventTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\EventTable::COLUMN_STATUS => Table\Rate::STATUS_DELETED,
         ]);
 
         $this->eventTable->update($record);
@@ -134,13 +134,13 @@ class Event
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Event::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $name);
 
         $event = $this->eventTable->findOneBy($condition);
 
-        if (!empty($event)) {
-            return $event['id'];
+        if ($event instanceof Table\Generated\EventRow) {
+            return $event->getId() ?? false;
         } else {
             return false;
         }

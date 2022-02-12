@@ -61,7 +61,7 @@ class Subscription
 
         // check whether the event exists
         $condition  = new Condition();
-        $condition->equals('name', $subscription->getEvent());
+        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $subscription->getEvent());
 
         $event = $this->eventTable->findOneBy($condition);
         if (empty($event)) {
@@ -70,7 +70,7 @@ class Subscription
 
         $backendSubscription = new \Fusio\Model\Backend\Event_Subscription_Create();
         $backendSubscription->setUserId($context->getUserId());
-        $backendSubscription->setEventId($event['id']);
+        $backendSubscription->setEventId($event->getId());
         $backendSubscription->setEndpoint($subscription->getEndpoint());
 
         return $this->subscriptionService->create($backendSubscription, $context);
@@ -83,7 +83,7 @@ class Subscription
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
-        if ($existing['user_id'] != $context->getUserId()) {
+        if ($existing->getUserId() != $context->getUserId()) {
             throw new StatusCode\BadRequestException('Subscription does not belong to the user');
         }
 
@@ -100,7 +100,7 @@ class Subscription
             throw new StatusCode\NotFoundException('Could not find subscription');
         }
 
-        if ($subscription['user_id'] != $context->getUserId()) {
+        if ($subscription->getUserId() != $context->getUserId()) {
             throw new StatusCode\BadRequestException('Subscription does not belong to the user');
         }
 

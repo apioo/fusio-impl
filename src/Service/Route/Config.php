@@ -111,8 +111,8 @@ class Config
                 // update only existing methods
                 foreach ($existingMethods as $existingMethod) {
                     $record = new Table\Generated\RoutesMethodRow([
-                        'id'     => $existingMethod['id'],
-                        'status' => $status,
+                        Table\Generated\RoutesMethodTable::COLUMN_ID => $existingMethod['id'],
+                        Table\Generated\RoutesMethodTable::COLUMN_STATUS => $status,
                     ]);
 
                     $this->methodTable->update($record);
@@ -145,18 +145,18 @@ class Config
 
         // create method
         $data = new Table\Generated\RoutesMethodRow([
-            'route_id'     => $routeId,
-            'method'       => $method,
-            'version'      => $ver,
-            'status'       => $status,
-            'active'       => $active ? 1 : 0,
-            'public'       => $public ? 1 : 0,
-            'description'  => $description,
-            'operation_id' => $operationId,
-            'parameters'   => $parameters,
-            'request'      => $request,
-            'action'       => $action,
-            'costs'        => $costs,
+            Table\Generated\RoutesMethodTable::COLUMN_ROUTE_ID => $routeId,
+            Table\Generated\RoutesMethodTable::COLUMN_METHOD => $method,
+            Table\Generated\RoutesMethodTable::COLUMN_VERSION => $ver,
+            Table\Generated\RoutesMethodTable::COLUMN_STATUS => $status,
+            Table\Generated\RoutesMethodTable::COLUMN_ACTIVE => $active ? 1 : 0,
+            Table\Generated\RoutesMethodTable::COLUMN_PUBLIC => $public ? 1 : 0,
+            Table\Generated\RoutesMethodTable::COLUMN_DESCRIPTION => $description,
+            Table\Generated\RoutesMethodTable::COLUMN_OPERATION_ID => $operationId,
+            Table\Generated\RoutesMethodTable::COLUMN_PARAMETERS => $parameters,
+            Table\Generated\RoutesMethodTable::COLUMN_REQUEST => $request,
+            Table\Generated\RoutesMethodTable::COLUMN_ACTION => $action,
+            Table\Generated\RoutesMethodTable::COLUMN_COSTS => $costs,
         ]);
 
         $this->methodTable->create($data);
@@ -176,18 +176,18 @@ class Config
         if (!empty($responses)) {
             foreach ($responses as $statusCode => $response) {
                 $record = new Table\Generated\RoutesResponseRow([
-                    'method_id' => $methodId,
-                    'code'      => $statusCode,
-                    'response'  => $response,
+                    Table\Generated\RoutesResponseTable::COLUMN_METHOD_ID => $methodId,
+                    Table\Generated\RoutesResponseTable::COLUMN_CODE => $statusCode,
+                    Table\Generated\RoutesResponseTable::COLUMN_RESPONSE => $response,
                 ]);
 
                 $this->responseTable->create($record);
             }
         } elseif (!empty($response)) {
             $record = new Table\Generated\RoutesResponseRow([
-                'method_id' => $methodId,
-                'code'      => 200,
-                'response'  => $response,
+                Table\Generated\RoutesResponseTable::COLUMN_METHOD_ID => $methodId,
+                Table\Generated\RoutesResponseTable::COLUMN_CODE => 200,
+                Table\Generated\RoutesResponseTable::COLUMN_RESPONSE => $response,
             ]);
 
             $this->responseTable->create($record);

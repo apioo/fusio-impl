@@ -83,14 +83,14 @@ class User
 
         // allow login either through username or email
         if (preg_match('/^[a-zA-Z0-9\-\_\.]{3,32}$/', $username)) {
-            $column = 'name';
+            $column = Table\Generated\UserTable::COLUMN_NAME;
         } else {
-            $column = 'email';
+            $column = Table\Generated\UserTable::COLUMN_EMAIL;
         }
 
         $condition = new Condition();
         $condition->equals($column, $username);
-        $condition->equals('status', Table\User::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_ACTIVE);
 
         $user = $this->userTable->findOneBy($condition);
         if (empty($user)) {
@@ -98,15 +98,15 @@ class User
         }
 
         // we can authenticate only local users
-        if ($user['provider'] != ProviderInterface::PROVIDER_SYSTEM) {
+        if ($user->getProvider() != ProviderInterface::PROVIDER_SYSTEM) {
             return null;
         }
 
         // check password
-        if (password_verify($password, $user['password'])) {
-            return (int) $user['id'];
+        if (password_verify($password, $user->getPassword())) {
+            return $user->getId();
         } else {
-            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user['id'])));
+            $this->eventDispatcher->dispatch(new FailedAuthenticationEvent(UserContext::newContext($user->getId())));
         }
 
         return null;
@@ -115,12 +115,12 @@ class User
     public function create(User_Create $user, UserContext $context): int
     {
         // check whether user name exists
-        if ($this->userTable->getCount(new Condition(['name', '=', $user->getName()])) > 0) {
+        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_NAME, '=', $user->getName()])) > 0) {
             throw new StatusCode\BadRequestException('User name already exists');
         }
 
         // check whether user email exists
-        if ($this->userTable->getCount(new Condition(['email', '=', $user->getEmail()])) > 0) {
+        if ($this->userTable->getCount(new Condition([Table\Generated\UserTable::COLUMN_EMAIL, '=', $user->getEmail()])) > 0) {
             throw new StatusCode\BadRequestException('User email already exists');
         }
 
@@ -138,14 +138,14 @@ class User
             $this->userTable->beginTransaction();
 
             $record = new Table\Generated\UserRow([
-                'role_id'  => $user->getRoleId(),
-                'provider' => ProviderInterface::PROVIDER_SYSTEM,
-                'status'   => $user->getStatus(),
-                'name'     => $user->getName(),
-                'email'    => $user->getEmail(),
-                'password' => $user->getPassword() !== null ? \password_hash($user->getPassword(), PASSWORD_DEFAULT) : null,
-                'points'   => $this->configService->getValue('points_default') ?: null,
-                'date'     => new DateTime(),
+                Table\Generated\UserTable::COLUMN_ROLE_ID => $user->getRoleId(),
+                Table\Generated\UserTable::COLUMN_PROVIDER => ProviderInterface::PROVIDER_SYSTEM,
+                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
+                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
+                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
+                Table\Generated\UserTable::COLUMN_PASSWORD => $user->getPassword() !== null ? \password_hash($user->getPassword(), PASSWORD_DEFAULT) : null,
+                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
+                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
             ]);
 
             $this->userTable->create($record);
@@ -172,12 +172,12 @@ class User
     {
         // check whether user exists
         $condition  = new Condition();
-        $condition->equals('provider', $remote->getProvider());
-        $condition->equals('remote_id', $remote->getRemoteId());
+        $condition->equals(Table\Generated\UserTable::COLUMN_PROVIDER, $remote->getProvider());
+        $condition->equals(Table\Generated\UserTable::COLUMN_REMOTE_ID, $remote->getRemoteId());
 
         $existing = $this->userTable->findOneBy($condition);
         if (!empty($existing)) {
-            return $existing['id'];
+            return $existing->getId();
         }
 
         // replace spaces with a dot
@@ -198,19 +198,19 @@ class User
                 throw new StatusCode\InternalServerErrorException('Invalid default role configured');
             }
 
-            $roleId = (int) $role['id'];
+            $roleId = $role->getId();
 
             // create user
             $record = new Table\Generated\UserRow([
-                'role_id'   => $roleId,
-                'provider'  => $remote->getProvider(),
-                'status'    => Table\User::STATUS_ACTIVE,
-                'remote_id' => $remote->getRemoteId(),
-                'name'      => $remote->getName(),
-                'email'     => $remote->getEmail(),
-                'password'  => null,
-                'points'    => $this->configService->getValue('points_default') ?: null,
-                'date'      => new DateTime(),
+                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
+                Table\Generated\UserTable::COLUMN_PROVIDER => $remote->getProvider(),
+                Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_ACTIVE,
+                Table\Generated\UserTable::COLUMN_REMOTE_ID => $remote->getRemoteId(),
+                Table\Generated\UserTable::COLUMN_NAME => $remote->getName(),
+                Table\Generated\UserTable::COLUMN_EMAIL => $remote->getEmail(),
+                Table\Generated\UserTable::COLUMN_PASSWORD => null,
+                Table\Generated\UserTable::COLUMN_POINTS => $this->configService->getValue('points_default') ?: null,
+                Table\Generated\UserTable::COLUMN_DATE => new DateTime(),
             ]);
 
             $this->userTable->create($record);
@@ -245,15 +245,15 @@ class User
         }
 
         if ($user->getRoleId() === null) {
-            $user->setRoleId((int) $existing['role_id']);
+            $user->setRoleId($existing->getRoleId());
         }
 
         if ($user->getStatus() === null) {
-            $user->setStatus($existing['status']);
+            $user->setStatus($existing->getStatus());
         }
 
         if ($user->getName() === null) {
-            $user->setName($existing['name']);
+            $user->setName($existing->getName());
         }
 
         // check values
@@ -265,25 +265,25 @@ class User
 
             // update user
             $record = new Table\Generated\UserRow([
-                'id'      => $existing['id'],
-                'role_id' => $user->getRoleId(),
-                'status'  => $user->getStatus(),
-                'name'    => $user->getName(),
-                'email'   => $user->getEmail(),
+                Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\UserTable::COLUMN_ROLE_ID => $user->getRoleId(),
+                Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
+                Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
+                Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
             ]);
 
             $this->userTable->update($record);
 
             if ($user->getScopes() !== null) {
                 // delete existing scopes
-                $this->userScopeTable->deleteAllFromUser($existing['id']);
+                $this->userScopeTable->deleteAllFromUser($existing->getId());
 
                 // add scopes
-                $this->insertScopes($existing['id'], $user->getScopes());
+                $this->insertScopes($existing->getId(), $user->getScopes());
             }
 
             // update attributes
-            $this->updateAttributes($existing['id'], $user->getAttributes());
+            $this->updateAttributes($existing->getId(), $user->getAttributes());
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -305,8 +305,8 @@ class User
         }
 
         $record = new Table\Generated\UserRow([
-            'id'     => $existing['id'],
-            'status' => Table\User::STATUS_DELETED,
+            Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\UserTable::COLUMN_STATUS => Table\User::STATUS_DELETED,
         ]);
 
         $this->userTable->update($record);
@@ -324,13 +324,13 @@ class User
         }
 
         $record = new Table\Generated\UserRow([
-            'id'     => $user['id'],
-            'status' => $status,
+            Table\Generated\UserTable::COLUMN_ID => $user->getId(),
+            Table\Generated\UserTable::COLUMN_STATUS => $status,
         ]);
 
         $this->userTable->update($record);
 
-        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user['status'], $status, $context));
+        $this->eventDispatcher->dispatch(new ChangedStatusEvent($userId, $user->getStatus(), $status, $context));
     }
 
     public function changePassword(Account_ChangePassword $changePassword, UserContext $context): bool
@@ -387,8 +387,8 @@ class User
 
         foreach ($scopes as $scope) {
             $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                'user_id'  => $userId,
-                'scope_id' => $scope['id'],
+                Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
+                Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
             ]));
         }
     }
@@ -399,8 +399,8 @@ class User
         if (!empty($scopes)) {
             foreach ($scopes as $scope) {
                 $this->userScopeTable->create(new Table\Generated\UserScopeRow([
-                    'user_id'  => $userId,
-                    'scope_id' => $scope['id'],
+                    Table\Generated\UserScopeTable::COLUMN_USER_ID => $userId,
+                    Table\Generated\UserScopeTable::COLUMN_SCOPE_ID => $scope['id'],
                 ]));
             }
         }

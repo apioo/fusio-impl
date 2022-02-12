@@ -72,7 +72,7 @@ class Register
         }
 
         $user = new User_Create();
-        $user->setRoleId((int) $role['id']);
+        $user->setRoleId($role->getId());
         $user->setStatus($status);
         $user->setName($register->getName());
         $user->setEmail($register->getEmail());

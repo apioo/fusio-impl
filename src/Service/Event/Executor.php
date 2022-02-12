@@ -68,11 +68,11 @@ class Executor
 
             foreach ($subscriptions as $subscription) {
                 $record = new Table\Generated\EventResponseRow([
-                    'trigger_id' => $trigger['id'],
-                    'subscription_id' => $subscription['id'],
-                    'status' => Table\Event\Response::STATUS_PENDING,
-                    'attempts' => 0,
-                    'insert_date' => new \DateTime(),
+                    Table\Generated\EventResponseTable::COLUMN_TRIGGER_ID => $trigger['id'],
+                    Table\Generated\EventResponseTable::COLUMN_SUBSCRIPTION_ID => $subscription['id'],
+                    Table\Generated\EventResponseTable::COLUMN_STATUS => Table\Event\Response::STATUS_PENDING,
+                    Table\Generated\EventResponseTable::COLUMN_ATTEMPTS => 0,
+                    Table\Generated\EventResponseTable::COLUMN_INSERT_DATE => new \DateTime(),
                 ]);
 
                 $this->responseTable->create($record);

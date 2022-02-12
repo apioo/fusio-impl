@@ -47,7 +47,7 @@ class Dispatcher implements DispatcherInterface
     {
         // check whether event exists
         $condition  = new Condition();
-        $condition->equals('name', $eventName);
+        $condition->equals(Table\Generated\EventTable::COLUMN_NAME, $eventName);
 
         $event = $this->eventTable->findOneBy($condition);
         if (empty($event)) {
@@ -55,10 +55,10 @@ class Dispatcher implements DispatcherInterface
         }
 
         $record = new Table\Generated\EventTriggerRow([
-            'event_id' => $event['id'],
-            'status' => Table\Event\Trigger::STATUS_PENDING,
-            'payload' => json_encode($payload),
-            'insert_date' => new \DateTime(),
+            Table\Generated\EventTriggerTable::COLUMN_EVENT_ID => $event->getId(),
+            Table\Generated\EventTriggerTable::COLUMN_STATUS => Table\Event\Trigger::STATUS_PENDING,
+            Table\Generated\EventTriggerTable::COLUMN_PAYLOAD => json_encode($payload),
+            Table\Generated\EventTriggerTable::COLUMN_INSERT_DATE => new \DateTime(),
         ]);
 
         $this->triggerTable->create($record);

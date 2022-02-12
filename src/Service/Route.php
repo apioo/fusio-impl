@@ -86,12 +86,12 @@ class Route
             $this->routesTable->beginTransaction();
 
             $record = new Table\Generated\RoutesRow([
-                'category_id' => $categoryId,
-                'status'      => Table\Route::STATUS_ACTIVE,
-                'priority'    => $route->getPriority(),
-                'methods'     => 'ANY',
-                'path'        => $route->getPath(),
-                'controller'  => $route->getController(),
+                Table\Generated\RoutesTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\RoutesTable::COLUMN_STATUS => Table\Route::STATUS_ACTIVE,
+                Table\Generated\RoutesTable::COLUMN_PRIORITY => $route->getPriority(),
+                Table\Generated\RoutesTable::COLUMN_METHODS => 'ANY',
+                Table\Generated\RoutesTable::COLUMN_PATH => $route->getPath(),
+                Table\Generated\RoutesTable::COLUMN_CONTROLLER => $route->getController(),
             ]);
 
             $this->routesTable->create($record);
@@ -127,7 +127,7 @@ class Route
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($existing['status'] == Table\Route::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Route::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
@@ -143,8 +143,8 @@ class Route
 
             // update route
             $record = new Table\Generated\RoutesRow([
-                'id'       => $existing['id'],
-                'priority' => $priority,
+                Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\RoutesTable::COLUMN_PRIORITY => $priority,
             ]);
 
             $this->routesTable->update($record);
@@ -152,11 +152,11 @@ class Route
             // assign scopes
             $scopes = $route->getScopes();
             if (!empty($scopes)) {
-                $this->scopeService->createFromRoute($existing['category_id'], $existing['id'], $scopes, $context);
+                $this->scopeService->createFromRoute($existing->getCategoryId(), $existing->getId(), $scopes, $context);
             }
 
             // handle config
-            $this->configService->handleConfig($existing['category_id'], $existing['id'], $existing['path'], $route->getConfig(), $context);
+            $this->configService->handleConfig($existing->getCategoryId(), $existing->getId(), $existing->getPath(), $route->getConfig(), $context);
 
             $this->routesTable->commit();
         } catch (\Throwable $e) {
@@ -177,19 +177,19 @@ class Route
             throw new StatusCode\NotFoundException('Could not find route');
         }
 
-        if ($existing['status'] == Table\Route::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Route::STATUS_DELETED) {
             throw new StatusCode\GoneException('Route was deleted');
         }
 
         // check whether route has a production version
-        if ($this->methodTable->hasProductionVersion($existing['id'])) {
+        if ($this->methodTable->hasProductionVersion($existing->getId())) {
             throw new StatusCode\ConflictException('It is not possible to delete a route which contains an active production or deprecated method');
         }
 
         // delete route
         $record = new Table\Generated\RoutesRow([
-            'id'     => $existing['id'],
-            'status' => Table\Route::STATUS_DELETED
+            Table\Generated\RoutesTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\RoutesTable::COLUMN_STATUS => Table\Route::STATUS_DELETED
         ]);
 
         $this->routesTable->update($record);
@@ -205,13 +205,13 @@ class Route
     public function exists(string $path): int|false
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Route::STATUS_ACTIVE);
-        $condition->equals('path', $path);
+        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Route::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\RoutesTable::COLUMN_PATH, $path);
 
         $route = $this->routesTable->findOneBy($condition);
 
-        if (!empty($route)) {
-            return $route['id'];
+        if ($route instanceof Table\Generated\RoutesRow) {
+            return $route->getId() ?? false;
         } else {
             return false;
         }

@@ -56,11 +56,11 @@ class Payer
 
         // add usage entry
         $record = new Table\Generated\PlanUsageRow([
-            'route_id' => $context->getRouteId(),
-            'user_id' => $context->getUser()->getId(),
-            'app_id' => $context->getApp()->getId(),
-            'points' => $points,
-            'insert_date' => new \DateTime(),
+            Table\Generated\PlanUsageTable::COLUMN_ROUTE_ID => $context->getRouteId(),
+            Table\Generated\PlanUsageTable::COLUMN_USER_ID => $context->getUser()->getId(),
+            Table\Generated\PlanUsageTable::COLUMN_APP_ID => $context->getApp()->getId(),
+            Table\Generated\PlanUsageTable::COLUMN_POINTS => $points,
+            Table\Generated\PlanUsageTable::COLUMN_INSERT_DATE => new \DateTime(),
         ]);
 
         $this->usageTable->create($record);

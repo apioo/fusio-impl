@@ -66,11 +66,11 @@ class Page
             $this->pageTable->beginTransaction();
 
             $record = new Table\Generated\PageRow([
-                'status'  => $page->getStatus(),
-                'title'   => $page->getTitle(),
-                'slug'    => $slug,
-                'content' => $page->getContent(),
-                'date'    => new \DateTime(),
+                Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
+                Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
+                Table\Generated\PageTable::COLUMN_SLUG => $slug,
+                Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
+                Table\Generated\PageTable::COLUMN_DATE => new \DateTime(),
             ]);
 
             $this->pageTable->create($record);
@@ -97,7 +97,7 @@ class Page
             throw new StatusCode\NotFoundException('Could not find page');
         }
 
-        if ($existing['status'] == Table\Page::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Page::STATUS_DELETED) {
             throw new StatusCode\GoneException('Page was deleted');
         }
 
@@ -107,11 +107,11 @@ class Page
 
         // update action
         $record = new Table\Generated\PageRow([
-            'id'      => $existing['id'],
-            'status'  => $page->getStatus(),
-            'title'   => $page->getTitle(),
-            'slug'    => $slug,
-            'content' => $page->getContent(),
+            Table\Generated\PageTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PageTable::COLUMN_STATUS => $page->getStatus(),
+            Table\Generated\PageTable::COLUMN_TITLE => $page->getTitle(),
+            Table\Generated\PageTable::COLUMN_SLUG => $slug,
+            Table\Generated\PageTable::COLUMN_CONTENT => $page->getContent(),
         ]);
 
         $this->pageTable->update($record);
@@ -128,13 +128,13 @@ class Page
             throw new StatusCode\NotFoundException('Could not find page');
         }
 
-        if ($existing['status'] == Table\Page::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Page::STATUS_DELETED) {
             throw new StatusCode\GoneException('Page was deleted');
         }
 
         $record = new Table\Generated\PageRow([
-            'id'     => $existing['id'],
-            'status' => Table\Page::STATUS_DELETED,
+            Table\Generated\PageTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\PageTable::COLUMN_STATUS => Table\Page::STATUS_DELETED,
         ]);
 
         $this->pageTable->update($record);
@@ -147,13 +147,13 @@ class Page
     public function exists(string $slug): int|false
     {
         $condition  = new Condition();
-        $condition->in('status', [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
-        $condition->equals('slug', $slug);
+        $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
+        $condition->equals(Table\Generated\PageTable::COLUMN_SLUG, $slug);
 
         $page = $this->pageTable->findOneBy($condition);
 
-        if (!empty($page)) {
-            return $page['id'];
+        if ($page instanceof Table\Generated\PageRow) {
+            return $page->getId() ?? false;
         } else {
             return false;
         }

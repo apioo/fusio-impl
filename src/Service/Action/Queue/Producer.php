@@ -25,6 +25,7 @@ use Doctrine\DBAL\Connection;
 use Fusio\Engine\Action\QueueInterface;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Table\Generated\ActionQueueTable;
 
 /**
  * Producer
@@ -44,11 +45,11 @@ class Producer implements QueueInterface
 
     public function push(string|int $actionId, RequestInterface $request, ContextInterface $context): void
     {
-        $this->connection->insert('fusio_action_queue', [
-            'action'  => $actionId,
-            'request' => Serializer::serializeRequest($request),
-            'context' => Serializer::serializeContext($context),
-            'date'    => (new \DateTime())->format('Y-m-d H:i:s'),
+        $this->connection->insert(ActionQueueTable::NAME, [
+            ActionQueueTable::COLUMN_ACTION => $actionId,
+            ActionQueueTable::COLUMN_REQUEST => Serializer::serializeRequest($request),
+            ActionQueueTable::COLUMN_CONTEXT => Serializer::serializeContext($context),
+            ActionQueueTable::COLUMN_DATE => (new \DateTime())->format('Y-m-d H:i:s'),
         ]);
     }
 }

@@ -91,10 +91,10 @@ class Connection
             $this->connectionTable->beginTransaction();
 
             $record = new Table\Generated\ConnectionRow([
-                'status' => Table\Connection::STATUS_ACTIVE,
-                'name'   => $connection->getName(),
-                'class'  => $connection->getClass(),
-                'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
+                Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_ACTIVE,
+                Table\Generated\ConnectionTable::COLUMN_NAME => $connection->getName(),
+                Table\Generated\ConnectionTable::COLUMN_CLASS => $connection->getClass(),
+                Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
             ]);
 
             $this->connectionTable->create($record);
@@ -121,7 +121,7 @@ class Connection
             throw new StatusCode\NotFoundException('Could not find connection');
         }
 
-        if ($existing['status'] == Table\Connection::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
@@ -141,8 +141,8 @@ class Connection
 
         // update connection
         $record = new Table\Generated\ConnectionRow([
-            'id'     => $existing['id'],
-            'config' => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
+            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\ConnectionTable::COLUMN_CONFIG => Connection\Encrypter::encrypt($parameters->toArray(), $this->secretKey),
         ]);
 
         $this->connectionTable->update($record);
@@ -159,30 +159,30 @@ class Connection
             throw new StatusCode\NotFoundException('Could not find connection');
         }
 
-        if ($existing['status'] == Table\Connection::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Connection::STATUS_DELETED) {
             throw new StatusCode\GoneException('Connection was deleted');
         }
 
-        $config = Connection\Encrypter::decrypt($existing['config'], $this->secretKey);
+        $config = Connection\Encrypter::decrypt($existing->getConfig(), $this->secretKey);
 
         $parameters = new Parameters($config ?: []);
-        $factory    = $this->connectionFactory->factory($existing['class']);
+        $factory    = $this->connectionFactory->factory($existing->getClass());
 
         // call deployment
         if ($factory instanceof DeploymentInterface) {
-            $factory->onDown($existing['name'], $parameters);
+            $factory->onDown($existing->getName(), $parameters);
         }
 
         $conn = $factory->getConnection($parameters);
 
         // call lifecycle
         if ($factory instanceof LifecycleInterface) {
-            $factory->onDelete($existing['name'], $parameters, $conn);
+            $factory->onDelete($existing->getName(), $parameters, $conn);
         }
 
         $record = new Table\Generated\ConnectionRow([
-            'id'     => $existing['id'],
-            'status' => Table\Connection::STATUS_DELETED,
+            Table\Generated\ConnectionTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\ConnectionTable::COLUMN_STATUS => Table\Connection::STATUS_DELETED,
         ]);
 
         $this->connectionTable->update($record);
@@ -195,13 +195,13 @@ class Connection
     public function exists(string $name): int|false
     {
         $condition  = new Condition();
-        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_NAME, $name);
 
         $connection = $this->connectionTable->findOneBy($condition);
 
-        if (!empty($connection)) {
-            return $connection['id'];
+        if ($connection instanceof Table\Generated\ConnectionRow) {
+            return $connection->getId() ?? false;
         } else {
             return false;
         }

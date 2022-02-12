@@ -77,15 +77,15 @@ class Token
         $refreshToken = TokenGenerator::generateToken();
 
         $record = new Table\Generated\AppTokenRow([
-            'app_id'  => $app['id'],
-            'user_id' => $user['id'],
-            'status'  => Table\App\Token::STATUS_ACTIVE,
-            'token'   => $accessToken,
-            'refresh' => $refreshToken,
-            'scope'   => implode(',', $scopes),
-            'ip'      => $ip,
-            'expire'  => $expires,
-            'date'    => $now,
+            Table\Generated\AppTokenTable::COLUMN_APP_ID => $app->getId(),
+            Table\Generated\AppTokenTable::COLUMN_USER_ID => $user->getId(),
+            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
+            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
+            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
+            Table\Generated\AppTokenTable::COLUMN_SCOPE => implode(',', $scopes),
+            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
+            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
+            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
         ]);
 
         $this->appTokenTable->create($record);
@@ -122,7 +122,7 @@ class Token
 
         // check expire date
         $now = new \DateTime();
-        $date = $token['date'];
+        $date = $token->getDate();
         if ($date instanceof \DateTime) {
             $expires = clone $date;
             $expires->add($expireRefresh);
@@ -133,14 +133,14 @@ class Token
         }
 
         // check whether the refresh was requested from the same app
-        if ($token['app_id'] != $appId) {
+        if ($token->getAppId() != $appId) {
             throw new StatusCode\BadRequestException('Token was requested from another app');
         }
 
-        $app  = $this->getApp($token['app_id']);
-        $user = $this->getUser($token['user_id']);
+        $app  = $this->getApp($token->getAppId());
+        $user = $this->getUser($token->getUserId());
 
-        $scopes  = explode(',', $token['scope']);
+        $scopes  = explode(',', $token->getScope());
         $expires = new \DateTime();
         $expires->add($expireApp);
 
@@ -149,26 +149,26 @@ class Token
         $refreshToken = TokenGenerator::generateToken();
 
         $record = new Table\Generated\AppTokenRow([
-            'id'      => $token['id'],
-            'status'  => Table\App\Token::STATUS_ACTIVE,
-            'token'   => $accessToken,
-            'refresh' => $refreshToken,
-            'ip'      => $ip,
-            'expire'  => $expires,
-            'date'    => $now,
+            Table\Generated\AppTokenTable::COLUMN_ID => $token->getId(),
+            Table\Generated\AppTokenTable::COLUMN_STATUS => Table\App\Token::STATUS_ACTIVE,
+            Table\Generated\AppTokenTable::COLUMN_TOKEN => $accessToken,
+            Table\Generated\AppTokenTable::COLUMN_REFRESH => $refreshToken,
+            Table\Generated\AppTokenTable::COLUMN_IP => $ip,
+            Table\Generated\AppTokenTable::COLUMN_EXPIRE => $expires,
+            Table\Generated\AppTokenTable::COLUMN_DATE => $now,
         ]);
 
         $this->appTokenTable->update($record);
 
         // dispatch event
         $this->eventDispatcher->dispatch(new GeneratedTokenEvent(
-            $app['id'],
-            $token['id'],
+            $app->getId(),
+            $token->getId(),
             $accessToken,
             $scopes,
             $expires,
             $now,
-            new UserContext($app['id'], $token['user_id'], $ip)
+            new UserContext($token->getUserId(), $app->getId(), $ip)
         ));
 
         return new AccessToken(
@@ -184,7 +184,7 @@ class Token
     {
         $app = $this->getApp($appId);
 
-        $this->appTokenTable->removeTokenFromApp($app['id'], $tokenId);
+        $this->appTokenTable->removeTokenFromApp($app->getId(), $tokenId);
 
         $this->eventDispatcher->dispatch(new RemovedTokenEvent($appId, $tokenId, $context));
     }
@@ -195,10 +195,10 @@ class Token
 
         $payload = [
             'iss'  => $baseUrl,
-            'sub'  => Uuid::nameBased($baseUrl . '-' . $user['id']),
+            'sub'  => Uuid::nameBased($baseUrl . '-' . $user->getId()),
             'iat'  => $now->getTimestamp(),
             'exp'  => $expires->getTimestamp(),
-            'name' => $user['name']
+            'name' => $user->getName()
         ];
 
         return JWT::encode($payload, $this->config->get('fusio_project_key'));
@@ -211,7 +211,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid app');
         }
 
-        if ($app['status'] != Table\App::STATUS_ACTIVE) {
+        if ($app->getStatus() != Table\App::STATUS_ACTIVE) {
             throw new StatusCode\BadRequestException('Invalid app status');
         }
 
@@ -225,7 +225,7 @@ class Token
             throw new StatusCode\BadRequestException('Invalid user');
         }
 
-        if ($user['status'] != Table\User::STATUS_ACTIVE) {
+        if ($user->getStatus() != Table\User::STATUS_ACTIVE) {
             throw new StatusCode\BadRequestException('Invalid user status');
         }
 

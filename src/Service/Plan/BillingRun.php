@@ -63,23 +63,23 @@ class BillingRun
 
         foreach ($contracts as $contract) {
             // skip contracts which have no interval
-            if ($contract['period_type'] == Table\Plan::INTERVAL_NONE) {
+            if ($contract->getPeriodType() == Table\Plan::INTERVAL_NONE) {
                 continue;
             }
 
             // get last invoice of the contract
-            $lastInvoice = $this->invoiceTable->getLastInvoiceByContract($contract['id']);
+            $lastInvoice = $this->invoiceTable->findLastInvoiceByContract($contract->getId());
 
-            $startDate = $lastInvoice === null ? $contract['insert_date'] : $lastInvoice['to_date'];
+            $startDate = $lastInvoice === null ? $contract->getInsertDate() : $lastInvoice->getToDate();
 
             if ($startDate instanceof \DateTime && $startDate < $now) {
                 // if the to date is in the past we generate a new invoice for
                 // the next time period. This creates a new invoice which the
                 // user can pay
                 $create = new Plan_Invoice_Create();
-                $create->setContractId($contract['id']);
+                $create->setContractId($contract->getId());
                 $create->setStartDate($startDate);
-                $invoiceId = $this->invoiceService->create($create, UserContext::newAnonymousContext(), $lastInvoice['id']);
+                $invoiceId = $this->invoiceService->create($create, UserContext::newAnonymousContext(), $lastInvoice->getId());
 
                 // @TODO we need a mechanism to reset the points of a user after
                 // a billing period. Currently we have more a pay-per-use

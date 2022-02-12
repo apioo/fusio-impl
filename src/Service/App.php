@@ -64,9 +64,9 @@ class App
     {
         // check whether app exists
         $condition  = new Condition();
-        $condition->equals('user_id', $app->getUserId());
-        $condition->notEquals('status', Table\App::STATUS_DELETED);
-        $condition->equals('name', $app->getName());
+        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $app->getUserId());
+        $condition->notEquals(Table\Generated\AppTable::COLUMN_STATUS, Table\App::STATUS_DELETED);
+        $condition->equals(Table\Generated\AppTable::COLUMN_NAME, $app->getName());
 
         $existing = $this->appTable->findOneBy($condition);
         if (!empty($existing)) {
@@ -87,14 +87,14 @@ class App
             $appSecret = TokenGenerator::generateAppSecret();
 
             $record = new Table\Generated\AppRow([
-                'user_id'    => $app->getUserId(),
-                'status'     => $app->getStatus(),
-                'name'       => $app->getName(),
-                'url'        => $app->getUrl(),
-                'parameters' => $parameters,
-                'app_key'    => $appKey,
-                'app_secret' => $appSecret,
-                'date'       => new DateTime(),
+                Table\Generated\AppTable::COLUMN_USER_ID => $app->getUserId(),
+                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
+                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
+                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
+                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
+                Table\Generated\AppTable::COLUMN_APP_KEY => $appKey,
+                Table\Generated\AppTable::COLUMN_APP_SECRET => $appSecret,
+                Table\Generated\AppTable::COLUMN_DATE => new DateTime(),
             ]);
 
             $this->appTable->create($record);
@@ -126,7 +126,7 @@ class App
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($existing['status'] == Table\App::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\App::STATUS_DELETED) {
             throw new StatusCode\GoneException('App was deleted');
         }
 
@@ -135,18 +135,18 @@ class App
         if ($parameters !== null) {
             $parameters = $this->parseParameters($parameters);
         } else {
-            $parameters = $existing['parameters'];
+            $parameters = $existing->getParameters();
         }
 
         try {
             $this->appTable->beginTransaction();
 
             $record = new Table\Generated\AppRow([
-                'id'         => $existing['id'],
-                'status'     => $app->getStatus(),
-                'name'       => $app->getName(),
-                'url'        => $app->getUrl(),
-                'parameters' => $parameters,
+                Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
+                Table\Generated\AppTable::COLUMN_STATUS => $app->getStatus(),
+                Table\Generated\AppTable::COLUMN_NAME => $app->getName(),
+                Table\Generated\AppTable::COLUMN_URL => $app->getUrl(),
+                Table\Generated\AppTable::COLUMN_PARAMETERS => $parameters,
             ]);
 
             $this->appTable->update($record);
@@ -154,10 +154,10 @@ class App
             $scopes = $app->getScopes();
             if ($scopes !== null) {
                 // delete existing scopes
-                $this->appScopeTable->deleteAllFromApp($existing['id']);
+                $this->appScopeTable->deleteAllFromApp($existing->getId());
 
                 // insert scopes
-                $this->insertScopes($existing['id'], $scopes);
+                $this->insertScopes($existing->getId(), $scopes);
             }
 
             $this->appTable->commit();
@@ -179,13 +179,13 @@ class App
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($existing['status'] == Table\App::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\App::STATUS_DELETED) {
             throw new StatusCode\GoneException('App was deleted');
         }
 
         $record = new Table\Generated\AppRow([
-            'id'     => $existing['id'],
-            'status' => Table\App::STATUS_DELETED,
+            Table\Generated\AppTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\AppTable::COLUMN_STATUS => Table\App::STATUS_DELETED,
         ]);
 
         $this->appTable->update($record);
@@ -202,8 +202,8 @@ class App
 
             foreach ($scopes as $scope) {
                 $this->appScopeTable->create(new Table\Generated\AppScopeRow([
-                    'app_id'   => $appId,
-                    'scope_id' => $scope['id'],
+                    Table\Generated\AppScopeTable::COLUMN_APP_ID => $appId,
+                    Table\Generated\AppScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
                 ]));
             }
         }

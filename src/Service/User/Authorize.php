@@ -112,7 +112,7 @@ class Authorize
 
                 // generate access token
                 $accessToken = $this->appTokenService->generateAccessToken(
-                    $app['id'],
+                    $app->getId(),
                     $userId,
                     $scopes,
                     $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
@@ -140,7 +140,7 @@ class Authorize
                 // generate code which can be later exchanged by the app with an
                 // access token
                 $code = $this->appCodeService->generateCode(
-                    $app['id'],
+                    $app->getId(),
                     $userId,
                     $redirectUri,
                     $scopes
@@ -208,7 +208,7 @@ class Authorize
             $this->userGrantTable->create($record);
         } else {
             $record = new Table\Generated\UserGrantRow([
-                'id'      => $userApp['id'],
+                'id'      => $userApp->getId(),
                 'user_id' => $userId,
                 'app_id'  => $appId,
                 'allow'   => $allow ? 1 : 0,

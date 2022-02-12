@@ -97,14 +97,14 @@ class Action
             $this->actionTable->beginTransaction();
 
             $record = new Table\Generated\ActionRow([
-                'category_id' => $categoryId,
-                'status'      => Table\Action::STATUS_ACTIVE,
-                'name'        => $action->getName(),
-                'class'       => $class,
-                'async'       => $action->getAsync(),
-                'engine'      => $engine,
-                'config'      => self::serializeConfig($config),
-                'date'        => new \DateTime(),
+                Table\Generated\ActionTable::COLUMN_CATEGORY_ID => $categoryId,
+                Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_ACTIVE,
+                Table\Generated\ActionTable::COLUMN_NAME => $action->getName(),
+                Table\Generated\ActionTable::COLUMN_CLASS => $class,
+                Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
+                Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
+                Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
+                Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
             ]);
 
             $this->actionTable->create($record);
@@ -133,19 +133,19 @@ class Action
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($existing['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
         // in case the class is empty use the existing class
         $class = $action->getClass();
         if (empty($class)) {
-            $class = $existing['class'];
+            $class = $existing->getClass();
         }
 
         $engine = $action->getEngine();
         if (empty($engine)) {
-            $engine = $existing['engine'];
+            $engine = $existing->getEngine();
         }
 
         // check source
@@ -160,13 +160,13 @@ class Action
 
         // update action
         $record = new Table\Generated\ActionRow([
-            'id'     => $existing['id'],
-            'name'   => $action->getName(),
-            'class'  => $class,
-            'async'  => $action->getAsync(),
-            'engine' => $engine,
-            'config' => self::serializeConfig($config),
-            'date'   => new \DateTime(),
+            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\ActionTable::COLUMN_NAME => $action->getName(),
+            Table\Generated\ActionTable::COLUMN_CLASS => $class,
+            Table\Generated\ActionTable::COLUMN_ASYNC => $action->getAsync(),
+            Table\Generated\ActionTable::COLUMN_ENGINE => $engine,
+            Table\Generated\ActionTable::COLUMN_CONFIG => self::serializeConfig($config),
+            Table\Generated\ActionTable::COLUMN_DATE => new \DateTime(),
         ]);
 
         $this->actionTable->update($record);
@@ -183,22 +183,22 @@ class Action
             throw new StatusCode\NotFoundException('Could not find action');
         }
 
-        if ($existing['status'] == Table\Action::STATUS_DELETED) {
+        if ($existing->getStatus() == Table\Action::STATUS_DELETED) {
             throw new StatusCode\GoneException('Action was deleted');
         }
 
-        $config     = self::unserializeConfig($existing['config']);
+        $config     = self::unserializeConfig($existing->getConfig());
         $parameters = new Parameters($config ?: []);
-        $handler    = $this->newAction($existing['class'], $existing['engine']);
+        $handler    = $this->newAction($existing->getClass(), $existing->getEngine());
 
         // call lifecycle
         if ($handler instanceof LifecycleInterface) {
-            $handler->onDelete($existing['name'], $parameters);
+            $handler->onDelete($existing->getName(), $parameters);
         }
 
         $record = new Table\Generated\ActionRow([
-            'id'     => $existing['id'],
-            'status' => Table\Action::STATUS_DELETED,
+            Table\Generated\ActionTable::COLUMN_ID => $existing->getId(),
+            Table\Generated\ActionTable::COLUMN_STATUS => Table\Action::STATUS_DELETED,
         ]);
 
         $this->actionTable->update($record);
@@ -211,13 +211,13 @@ class Action
     public function exists(string $name): int|false
     {
         $condition = new Condition();
-        $condition->equals('status', Table\Action::STATUS_ACTIVE);
-        $condition->equals('name', $name);
+        $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\ActionTable::COLUMN_NAME, $name);
 
         $action = $this->actionTable->findOneBy($condition);
 
-        if (!empty($action)) {
-            return $action['id'];
+        if ($action instanceof Table\Generated\ActionRow) {
+            return $action->getId() ?? false;
         } else {
             return false;
         }

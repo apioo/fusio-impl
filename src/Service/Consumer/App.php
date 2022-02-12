@@ -83,7 +83,7 @@ class App
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($existing['user_id'] != $context->getUserId()) {
+        if ($existing->getUserId() != $context->getUserId()) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
@@ -113,7 +113,7 @@ class App
             throw new StatusCode\NotFoundException('Could not find app');
         }
 
-        if ($app['user_id'] != $userId) {
+        if ($app->getUserId() != $userId) {
             throw new StatusCode\BadRequestException('App does not belong to the user');
         }
 
@@ -166,8 +166,8 @@ class App
         $appCount = $this->configService->getValue('app_consumer');
 
         $condition = new Condition();
-        $condition->equals('user_id', $userId);
-        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
+        $condition->equals(Table\Generated\AppTable::COLUMN_USER_ID, $userId);
+        $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING, Table\App::STATUS_DEACTIVATED]);
 
         if ($this->appTable->getCount($condition) > $appCount) {
             throw new StatusCode\BadRequestException('Maximal amount of apps reached. Please delete another app in order to register a new one');
