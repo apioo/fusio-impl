@@ -195,7 +195,6 @@ class Container extends DefaultContainer
     public function getMailer(): Mail\MailerInterface
     {
         return new Mail\Mailer(
-            $this->get('config_service'),
             $this->get('connection_resolver_service'),
             $this->get('mailer_sender_factory'),
             $this->get('config'),
