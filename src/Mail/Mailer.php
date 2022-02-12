@@ -39,15 +39,13 @@ use Symfony\Component\Mailer\Mailer as SymfonyMailer;
  */
 class Mailer implements MailerInterface
 {
-    private Service\Config $configService;
     private Resolver $resolver;
     private SenderFactory $senderFactory;
     private Config $config;
     private LoggerInterface $logger;
 
-    public function __construct(Service\Config $configService, Resolver $resolver, SenderFactory $senderFactory, Config $config, LoggerInterface $logger)
+    public function __construct(Resolver $resolver, SenderFactory $senderFactory, Config $config, LoggerInterface $logger)
     {
-        $this->configService = $configService;
         $this->resolver      = $resolver;
         $this->senderFactory = $senderFactory;
         $this->config        = $config;
@@ -61,7 +59,7 @@ class Mailer implements MailerInterface
             $dispatcher = new SymfonyMailer($this->createTransport());
         }
 
-        $from = $this->configService->getValue('mail_sender');
+        $from = $this->config->get('fusio_mail_sender');
         if (empty($from)) {
             $from = 'registration@' . $this->getHostname();
         }

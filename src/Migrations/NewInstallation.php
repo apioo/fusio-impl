@@ -96,7 +96,6 @@ class NewInstallation
         $bag->addConfig('mail_register_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have successful registered at Fusio.' . "\n" . 'To activate you account please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#activate?token={token}', 'Body of the activation mail');
         $bag->addConfig('mail_pw_reset_subject', Table\Config::FORM_STRING, 'Fusio password reset', 'Subject of the password reset mail');
         $bag->addConfig('mail_pw_reset_body', Table\Config::FORM_TEXT, 'Hello {name},' . "\n\n" . 'you have requested to reset your password.' . "\n" . 'To set a new password please visit the following link:' . "\n" . 'http://127.0.0.1/projects/fusio/public/consumer/#password_reset?token={token}' . "\n\n" . 'Please ignore this email if you have not requested a password reset.', 'Body of the password reset mail');
-        $bag->addConfig('mail_sender', Table\Config::FORM_STRING, '', 'Email address which is used in the "From" header');
         $bag->addConfig('provider_facebook_key', Table\Config::FORM_STRING, '', 'Facebook app key');
         $bag->addConfig('provider_facebook_secret', Table\Config::FORM_STRING, '', 'Facebook app secret');
         $bag->addConfig('provider_google_key', Table\Config::FORM_STRING, '', 'Google app key');
