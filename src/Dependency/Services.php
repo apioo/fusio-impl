@@ -23,7 +23,6 @@ namespace Fusio\Impl\Dependency;
 
 use Fusio\Engine\Payment;
 use Fusio\Engine\User;
-use Fusio\Impl\Deploy\EnvProperties;
 use Fusio\Impl\Provider\ProviderConfig;
 use Fusio\Impl\Provider\ProviderFactory;
 use Fusio\Impl\Service;
