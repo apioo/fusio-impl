@@ -21,29 +21,20 @@
 
 namespace Fusio\Impl\Controller;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Engine\Processor;
 use Fusio\Engine\Record\PassthruRecord;
 use Fusio\Engine\Request;
 use Fusio\Impl\Schema\Loader;
 use Fusio\Impl\Service\Action\Invoker;
-use Fusio\Impl\Service\Config;
 use Fusio\Impl\Service\Log;
 use Fusio\Impl\Service\Rate;
 use Fusio\Impl\Service\Route\Method;
 use Fusio\Impl\Service\Security\TokenValidator;
-use PSX\Api\DocumentedInterface;
 use PSX\Api\Resource\MethodAbstract;
-use PSX\Api\SpecificationInterface;
 use PSX\Dependency\Attribute\Inject;
 use PSX\Framework\Controller\ControllerAbstract;
-use PSX\Framework\Controller\SchemaApiAbstract;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Environment\HttpContextInterface;
-use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\RequestInterface;
-use PSX\Http\ResponseInterface;
 use PSX\Record\Record;
 use PSX\Record\RecordInterface;
 
