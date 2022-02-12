@@ -46,18 +46,20 @@ class Audit extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\AuditTable::COLUMN_ID;
+
         $condition = $filter->getCondition();
 
         $definition = [
             'totalResults' => $this->getTable(Table\Audit::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger('id'),
-                'event' => 'event',
-                'ip' => 'ip',
-                'message' => 'message',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Audit::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
+                'event' => Table\Generated\AuditTable::COLUMN_EVENT,
+                'ip' => Table\Generated\AuditTable::COLUMN_IP,
+                'message' => Table\Generated\AuditTable::COLUMN_MESSAGE,
+                'date' => $this->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
             ]),
         ];
 
@@ -67,23 +69,23 @@ class Audit extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Audit::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
+            'id' => $this->fieldInteger(Table\Generated\AuditTable::COLUMN_ID),
             'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+                'name' => Table\Generated\AppTable::COLUMN_NAME,
             ]),
             'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
-            'refId' => 'ref_id',
-            'event' => 'event',
-            'ip' => 'ip',
-            'message' => 'message',
-            'content' => $this->fieldJson('content'),
-            'date' => $this->fieldDateTime('date'),
+            'refId' => Table\Generated\AuditTable::COLUMN_REF_ID,
+            'event' => Table\Generated\AuditTable::COLUMN_EVENT,
+            'ip' => Table\Generated\AuditTable::COLUMN_IP,
+            'message' => Table\Generated\AuditTable::COLUMN_MESSAGE,
+            'content' => $this->fieldJson(Table\Generated\AuditTable::COLUMN_CONTENT),
+            'date' => $this->fieldDateTime(Table\Generated\AuditTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

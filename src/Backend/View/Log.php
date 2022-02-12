@@ -47,22 +47,24 @@ class Log extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\LogTable::COLUMN_ID;
+
         $condition = $filter->getCondition();
-        $condition->equals('category_id', $categoryId ?: 1);
+        $condition->equals(Table\Generated\LogTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC, Fields::blacklist(['header', 'body'])], [
-                'id' => $this->fieldInteger('id'),
-                'appId' => $this->fieldInteger('app_id'),
-                'routeId' => $this->fieldInteger('route_id'),
-                'ip' => 'ip',
-                'userAgent' => 'user_agent',
-                'method' => 'method',
-                'path' => 'path',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+                'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+                'ip' => Table\Generated\LogTable::COLUMN_IP,
+                'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
+                'method' => Table\Generated\LogTable::COLUMN_METHOD,
+                'path' => Table\Generated\LogTable::COLUMN_PATH,
+                'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
@@ -72,22 +74,22 @@ class Log extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Log::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'appId' => $this->fieldInteger('app_id'),
-            'routeId' => $this->fieldInteger('route_id'),
-            'ip' => 'ip',
-            'userAgent' => 'user_agent',
-            'method' => 'method',
-            'path' => 'path',
-            'header' => 'header',
-            'body' => 'body',
+            'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+            'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+            'routeId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ROUTE_ID),
+            'ip' => Table\Generated\LogTable::COLUMN_IP,
+            'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
+            'method' => Table\Generated\LogTable::COLUMN_METHOD,
+            'path' => Table\Generated\LogTable::COLUMN_PATH,
+            'header' => Table\Generated\LogTable::COLUMN_HEADER,
+            'body' => Table\Generated\LogTable::COLUMN_BODY,
             'errors' => $this->doCollection([$this->getTable(Table\Log\Error::class), 'findByLogId'], [new Reference('id')], [
-                'message' => 'message',
-                'trace' => 'trace',
-                'file' => 'file',
-                'line' => 'line',
+                'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
+                'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
+                'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
+                'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
             ]),
-            'date' => $this->fieldDateTime('date'),
+            'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

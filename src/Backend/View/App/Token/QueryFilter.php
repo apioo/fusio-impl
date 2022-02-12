@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\App\Token;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use PSX\Sql\Condition;
 
 /**
  * QueryFilter
@@ -33,57 +34,39 @@ use Fusio\Impl\Backend\View\QueryFilterAbstract;
  */
 class QueryFilter extends QueryFilterAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $appId;
+    protected ?int $appId = null;
+    protected ?int $userId = null;
+    protected ?int $status = null;
+    protected ?string $scope = null;
 
-    /**
-     * @var integer
-     */
-    protected $userId;
+    protected ?string $ip = null;
 
-    /**
-     * @var integer
-     */
-    protected $status;
-
-    /**
-     * @var string
-     */
-    protected $scope;
-
-    /**
-     * @var string
-     */
-    protected $ip;
-
-    public function getAppId()
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
 
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function getStatus()
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
-    public function getScope()
+    public function getScope(): ?string
     {
         return $this->scope;
     }
 
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }
 
-    public function getCondition($alias = null)
+    public function getCondition(?string $alias = null): Condition
     {
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
@@ -111,7 +94,7 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request)
+    public static function create(RequestInterface $request): static
     {
         $filter = parent::create($request);
         $appId  = $request->get('appId');

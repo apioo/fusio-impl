@@ -46,7 +46,7 @@ class Event extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'name';
+            $sortBy = Table\Generated\EventTable::COLUMN_NAME;
         }
 
         if ($sortOrder === null) {
@@ -54,11 +54,11 @@ class Event extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->in('status', [Table\Event::STATUS_ACTIVE]);
+        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->in(Table\Generated\EventTable::COLUMN_STATUS, [Table\Event::STATUS_ACTIVE]);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\EventTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -66,10 +66,10 @@ class Event extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'description' => 'description',
+                'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
+                'name' => Table\Generated\EventTable::COLUMN_NAME,
+                'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
             ]),
         ];
 
@@ -87,10 +87,10 @@ class Event extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Event::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'description' => 'description',
+            'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_STATUS),
+            'name' => Table\Generated\EventTable::COLUMN_NAME,
+            'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
         ]);
 
         return $this->build($definition);

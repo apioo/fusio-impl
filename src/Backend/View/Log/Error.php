@@ -92,12 +92,12 @@ class Error extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Log\Error::class), 'find'], [$id], [
-            'id' => 'id',
-            'logId' => 'log_id',
-            'message' => 'message',
-            'trace' => 'trace',
-            'file' => 'file',
-            'line' => 'line',
+            'id' => Table\Generated\LogErrorTable::COLUMN_ID,
+            'logId' => Table\Generated\LogErrorTable::COLUMN_LOG_ID,
+            'message' => Table\Generated\LogErrorTable::COLUMN_MESSAGE,
+            'trace' => Table\Generated\LogErrorTable::COLUMN_TRACE,
+            'file' => Table\Generated\LogErrorTable::COLUMN_FILE,
+            'line' => Table\Generated\LogErrorTable::COLUMN_LINE,
         ]);
 
         return $this->build($definition);

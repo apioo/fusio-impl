@@ -42,19 +42,20 @@ class Page extends ViewAbstract
         }
 
         $count = 32;
+        $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
 
         $condition = new Condition();
-        $condition->equals('status', Table\Page::STATUS_VISIBLE);
+        $condition->equals(Table\Generated\PageTable::COLUMN_STATUS, Table\Page::STATUS_VISIBLE);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Page::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, 'slug', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger('id'),
-                'title' => 'title',
-                'slug' => 'slug',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_ASC], [
+                'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+                'title' => Table\Generated\PageTable::COLUMN_TITLE,
+                'slug' => Table\Generated\PageTable::COLUMN_SLUG,
+                'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
             ]),
         ];
 
@@ -72,11 +73,11 @@ class Page extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Page::class), $method], [$pageId], [
-            'id' => $this->fieldInteger('id'),
-            'title' => 'title',
-            'slug' => 'slug',
-            'content' => 'content',
-            'date' => $this->fieldDateTime('date'),
+            'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+            'title' => Table\Generated\PageTable::COLUMN_TITLE,
+            'slug' => Table\Generated\PageTable::COLUMN_SLUG,
+            'content' => Table\Generated\PageTable::COLUMN_CONTENT,
+            'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

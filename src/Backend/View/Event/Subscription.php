@@ -46,22 +46,24 @@ class Subscription extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\EventSubscriptionTable::COLUMN_ID;
+
         $condition = new Condition();
-        $condition->in('status', [Table\Event\Subscription::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\EventSubscriptionTable::COLUMN_STATUS, [Table\Event\Subscription::STATUS_ACTIVE]);
 
         if (!empty($search)) {
-            $condition->like('endpoint', '%' . $search . '%');
+            $condition->like(Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT, '%' . $search . '%');
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Event\Subscription::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Event\Subscription::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger('id'),
-                'eventId' => $this->fieldInteger('event_id'),
-                'userId' => $this->fieldInteger('user_id'),
-                'endpoint' => 'endpoint',
+            'entry' => $this->doCollection([$this->getTable(Table\Event\Subscription::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_ID),
+                'eventId' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID),
+                'userId' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_USER_ID),
+                'endpoint' => Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT,
             ]),
         ];
 
@@ -71,16 +73,16 @@ class Subscription extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Event\Subscription::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'eventId' => $this->fieldInteger('event_id'),
-            'userId' => $this->fieldInteger('user_id'),
-            'endpoint' => 'endpoint',
+            'id' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_ID),
+            'eventId' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_EVENT_ID),
+            'userId' => $this->fieldInteger(Table\Generated\EventSubscriptionTable::COLUMN_USER_ID),
+            'endpoint' => Table\Generated\EventSubscriptionTable::COLUMN_ENDPOINT,
             'responses' => $this->doCollection([$this->getTable(Table\Event\Response::class), 'getAllBySubscription'], [new Reference('id')], [
-                'status' => $this->fieldInteger('status'),
-                'code' => $this->fieldInteger('code'),
-                'attempts' => $this->fieldInteger('attempts'),
-                'error' => 'error',
-                'executeDate' => $this->fieldDateTime('execute_date'),
+                'status' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_STATUS),
+                'code' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_CODE),
+                'attempts' => $this->fieldInteger(Table\Generated\EventResponseTable::COLUMN_ATTEMPTS),
+                'error' => Table\Generated\EventResponseTable::COLUMN_ERROR,
+                'executeDate' => $this->fieldDateTime(Table\Generated\EventResponseTable::COLUMN_EXECUTE_DATE),
             ]),
         ]);
 

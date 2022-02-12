@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Log;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use PSX\Sql\Condition;
 
 /**
  * QueryFilter
@@ -33,97 +34,62 @@ use Fusio\Impl\Backend\View\QueryFilterAbstract;
  */
 class QueryFilter extends QueryFilterAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $routeId;
+    protected ?int $routeId = null;
+    protected ?int $appId = null;
+    protected ?int $userId = null;
+    protected ?string $ip = null;
+    protected ?string $userAgent = null;
+    protected ?string $method = null;
+    protected ?string $path = null;
+    protected ?string $header = null;
+    protected ?string $body = null;
 
-    /**
-     * @var integer
-     */
-    protected $appId;
-
-    /**
-     * @var integer
-     */
-    protected $userId;
-
-    /**
-     * @var string
-     */
-    protected $ip;
-
-    /**
-     * @var string
-     */
-    protected $userAgent;
-
-    /**
-     * @var string
-     */
-    protected $method;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
-    /**
-     * @var string
-     */
-    protected $header;
-
-    /**
-     * @var string
-     */
-    protected $body;
-
-    public function getRouteId()
+    public function getRouteId(): ?int
     {
         return $this->routeId;
     }
 
-    public function getAppId()
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
 
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function getIp()
+    public function getIp(): ?string
     {
         return $this->ip;
     }
 
-    public function getUserAgent()
+    public function getUserAgent(): ?string
     {
         return $this->userAgent;
     }
 
-    public function getMethod()
+    public function getMethod(): ?string
     {
         return $this->method;
     }
 
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function getHeader()
+    public function getHeader(): ?string
     {
         return $this->header;
     }
 
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->body;
     }
 
-    public function getCondition($alias = null)
+    public function getCondition(?string $alias = null): Condition
     {
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
@@ -167,7 +133,7 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    public static function create(RequestInterface $request)
+    public static function create(RequestInterface $request): static
     {
         $filter    = parent::create($request);
         $routeId   = $request->get('routeId');

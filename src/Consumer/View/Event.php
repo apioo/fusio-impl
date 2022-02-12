@@ -44,17 +44,17 @@ class Event extends ViewAbstract
         $count = 16;
 
         $condition = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->equals('status', Table\Event::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\EventTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\EventTable::COLUMN_STATUS, Table\Event::STATUS_ACTIVE);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Event::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Event::class), 'findAll'], [$condition, $startIndex, $count, 'name', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
+                'id' => $this->fieldInteger(Table\Generated\EventTable::COLUMN_ID),
+                'name' => Table\Generated\EventTable::COLUMN_NAME,
+                'description' => Table\Generated\EventTable::COLUMN_DESCRIPTION,
             ]),
         ];
 

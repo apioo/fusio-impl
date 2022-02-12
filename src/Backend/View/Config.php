@@ -46,7 +46,7 @@ class Config extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'name';
+            $sortBy = Table\Generated\ConfigTable::COLUMN_NAME;
         }
 
         if ($sortOrder === null) {
@@ -56,7 +56,7 @@ class Config extends ViewAbstract
         $condition = new Condition();
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\ConfigTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -64,11 +64,11 @@ class Config extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Config::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'type' => $this->fieldInteger('type'),
-                'name' => 'name',
-                'description' => 'description',
-                'value' => 'value',
+                'id' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
+                'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
+                'name' => Table\Generated\ConfigTable::COLUMN_NAME,
+                'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
+                'value' => Table\Generated\ConfigTable::COLUMN_VALUE,
             ]),
         ];
 
@@ -86,11 +86,11 @@ class Config extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Config::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'type' => $this->fieldInteger('type'),
-            'name' => 'name',
-            'description' => 'description',
-            'value' => 'value',
+            'id' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_ID),
+            'type' => $this->fieldInteger(Table\Generated\ConfigTable::COLUMN_TYPE),
+            'name' => Table\Generated\ConfigTable::COLUMN_NAME,
+            'description' => Table\Generated\ConfigTable::COLUMN_DESCRIPTION,
+            'value' => Table\Generated\ConfigTable::COLUMN_VALUE,
         ]);
 
         return $this->build($definition);

@@ -33,27 +33,20 @@ use PSX\Sql\Condition;
  */
 abstract class QueryFilterAbstract
 {
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $from;
+    protected ?\DateTimeImmutable $from = null;
+    protected ?\DateTimeImmutable $to = null;
 
-    /**
-     * @var \DateTimeImmutable
-     */
-    protected $to;
-
-    public function getFrom()
+    public function getFrom(): ?\DateTimeImmutable
     {
         return $this->from;
     }
 
-    public function getTo()
+    public function getTo(): ?\DateTimeImmutable
     {
         return $this->to;
     }
 
-    public function getCondition($alias = null)
+    public function getCondition(?string $alias = null): Condition
     {
         $alias     = $alias !== null ? $alias . '.' : '';
         $condition = new Condition();
@@ -63,12 +56,12 @@ abstract class QueryFilterAbstract
         return $condition;
     }
 
-    protected function getDateColumn()
+    protected function getDateColumn(): string
     {
         return 'date';
     }
 
-    public static function create(RequestInterface $request)
+    public static function create(RequestInterface $request): static
     {
         $from = new \DateTimeImmutable($request->get('from') ?? '-1 month');
         $to   = new \DateTimeImmutable($request->get('to') ?? 'now');

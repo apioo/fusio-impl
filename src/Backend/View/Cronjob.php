@@ -47,7 +47,7 @@ class Cronjob extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\CronjobTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
@@ -55,11 +55,11 @@ class Cronjob extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->equals('status', Table\Cronjob::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\CronjobTable::COLUMN_STATUS, Table\Cronjob::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\CronjobTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -67,12 +67,12 @@ class Cronjob extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Cronjob::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'cron' => 'cron',
-                'executeDate' => $this->fieldDateTime('execute_date'),
-                'exitCode' => $this->fieldInteger('exit_code'),
+                'id' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_STATUS),
+                'name' => Table\Generated\CronjobTable::COLUMN_NAME,
+                'cron' => Table\Generated\CronjobTable::COLUMN_CRON,
+                'executeDate' => $this->fieldDateTime(Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE),
+                'exitCode' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_EXIT_CODE),
             ]),
         ];
 
@@ -90,18 +90,18 @@ class Cronjob extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Cronjob::class), $method], [$id], [
-            'id' => 'id',
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'cron' => 'cron',
-            'action' => 'action',
-            'executeDate' => $this->fieldDateTime('execute_date'),
-            'exitCode' => $this->fieldInteger('exit_code'),
+            'id' => Table\Generated\CronjobTable::COLUMN_ID,
+            'status' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_STATUS),
+            'name' => Table\Generated\CronjobTable::COLUMN_NAME,
+            'cron' => Table\Generated\CronjobTable::COLUMN_CRON,
+            'action' => Table\Generated\CronjobTable::COLUMN_ACTION,
+            'executeDate' => $this->fieldDateTime(Table\Generated\CronjobTable::COLUMN_EXECUTE_DATE),
+            'exitCode' => $this->fieldInteger(Table\Generated\CronjobTable::COLUMN_EXIT_CODE),
             'errors' => $this->doCollection([$this->getTable(Table\Cronjob\Error::class), 'findByCronjobId'], [new Reference('id')], [
-                'message' => 'message',
-                'trace' => 'trace',
-                'file' => 'file',
-                'line' => 'line',
+                'message' => Table\Generated\CronjobErrorTable::COLUMN_MESSAGE,
+                'trace' => Table\Generated\CronjobErrorTable::COLUMN_TRACE,
+                'file' => Table\Generated\CronjobErrorTable::COLUMN_FILE,
+                'line' => Table\Generated\CronjobErrorTable::COLUMN_LINE,
             ]),
         ]);
 

@@ -46,7 +46,7 @@ class Plan extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'price';
+            $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
         }
 
         if ($sortOrder === null) {
@@ -54,10 +54,10 @@ class Plan extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\PlanTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -65,13 +65,13 @@ class Plan extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'description' => 'description',
-                'price' => $this->fieldNumber('price'),
-                'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period_type'),
+                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
+                'name' => Table\Generated\PlanTable::COLUMN_NAME,
+                'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
+                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
         ];
 
@@ -89,13 +89,13 @@ class Plan extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Plan::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'description' => 'description',
-            'price' => $this->fieldNumber('price'),
-            'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period_type'),
+            'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_STATUS),
+            'name' => Table\Generated\PlanTable::COLUMN_NAME,
+            'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
+            'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+            'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+            'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
         ]);
 
         return $this->build($definition);

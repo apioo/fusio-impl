@@ -48,7 +48,7 @@ class Action extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\ActionTable::COLUMN_ID;
         }
         
         if ($sortOrder === null) {
@@ -56,22 +56,22 @@ class Action extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->equals('status', Table\Action::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\ActionTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\ActionTable::COLUMN_STATUS, Table\Action::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\ActionTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Action::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['class', 'config'])], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Action::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
+                'name' => Table\Generated\ActionTable::COLUMN_NAME,
+                'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
             ]),
         ];
 
@@ -89,16 +89,16 @@ class Action extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Action::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'class' => 'class',
-            'async' => 'async',
-            'engine' => 'engine',
-            'config' => $this->fieldCallback('config', function ($config) {
+            'id' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\ActionTable::COLUMN_STATUS),
+            'name' => Table\Generated\ActionTable::COLUMN_NAME,
+            'class' => Table\Generated\ActionTable::COLUMN_CLASS,
+            'async' => Table\Generated\ActionTable::COLUMN_ASYNC,
+            'engine' => Table\Generated\ActionTable::COLUMN_ENGINE,
+            'config' => $this->fieldCallback(Table\Generated\ActionTable::COLUMN_CONFIG, function ($config) {
                 return Service\Action::unserializeConfig($config);
             }),
-            'date' => $this->fieldDateTime('date'),
+            'date' => $this->fieldDateTime(Table\Generated\ActionTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

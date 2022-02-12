@@ -44,22 +44,23 @@ class Log extends ViewAbstract
         }
 
         $count = 16;
+        $sortBy = Table\Generated\LogTable::COLUMN_ID;
 
         $condition = $filter->getCondition();
-        $condition->equals('user_id', $userId);
+        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Log::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC, Fields::blacklist(['header', 'body'])], [
-                'id' => $this->fieldInteger('id'),
-                'appId' => $this->fieldInteger('app_id'),
-                'ip' => 'ip',
-                'userAgent' => 'user_agent',
-                'method' => 'method',
-                'path' => 'path',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Log::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+                'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+                'ip' => Table\Generated\LogTable::COLUMN_IP,
+                'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
+                'method' => Table\Generated\LogTable::COLUMN_METHOD,
+                'path' => Table\Generated\LogTable::COLUMN_PATH,
+                'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
             ]),
         ];
 
@@ -69,19 +70,19 @@ class Log extends ViewAbstract
     public function getEntity(int $userId, int $logId)
     {
         $condition = new Condition();
-        $condition->equals('id', $logId);
-        $condition->equals('user_id', $userId);
+        $condition->equals(Table\Generated\LogTable::COLUMN_ID, $logId);
+        $condition->equals(Table\Generated\LogTable::COLUMN_USER_ID, $userId);
 
         $definition = $this->doEntity([$this->getTable(Table\Log::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger('id'),
-            'appId' => $this->fieldInteger('app_id'),
-            'ip' => 'ip',
-            'userAgent' => 'user_agent',
-            'method' => 'method',
-            'path' => 'path',
-            'header' => 'header',
-            'body' => 'body',
-            'date' => $this->fieldDateTime('date'),
+            'id' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_ID),
+            'appId' => $this->fieldInteger(Table\Generated\LogTable::COLUMN_APP_ID),
+            'ip' => Table\Generated\LogTable::COLUMN_IP,
+            'userAgent' => Table\Generated\LogTable::COLUMN_USER_AGENT,
+            'method' => Table\Generated\LogTable::COLUMN_METHOD,
+            'path' => Table\Generated\LogTable::COLUMN_PATH,
+            'header' => Table\Generated\LogTable::COLUMN_HEADER,
+            'body' => Table\Generated\LogTable::COLUMN_BODY,
+            'date' => $this->fieldDateTime(Table\Generated\LogTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

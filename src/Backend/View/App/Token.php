@@ -53,14 +53,14 @@ class Token extends ViewAbstract
             'totalResults' => $this->getTable(Table\App\Token::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, Sql::SORT_DESC, Fields::blacklist(['token'])], [
-                'id' => $this->fieldInteger('id'),
-                'appId' => $this->fieldInteger('app_id'),
-                'userId' => $this->fieldInteger('user_id'),
-                'status' => $this->fieldInteger('status'),
-                'scope' => $this->fieldCsv('scope'),
-                'ip' => 'ip',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\App\Token::class), 'findAll'], [$condition, $startIndex, $count, null, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
+                'appId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_APP_ID),
+                'userId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
+                'status' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
+                'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+                'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
+                'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
         ];
 
@@ -70,24 +70,24 @@ class Token extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\App\Token::class), 'find'], [$id], [
-            'id' => 'id',
+            'id' => Table\Generated\AppTokenTable::COLUMN_ID,
             'app' => $this->doEntity([$this->getTable(Table\App::class), 'find'], [new Reference('app_id')], [
-                'id' => 'id',
-                'userId' => 'user_id',
-                'status' => 'status',
-                'name' => 'name',
+                'id' => Table\Generated\AppTable::COLUMN_ID,
+                'userId' => Table\Generated\AppTable::COLUMN_USER_ID,
+                'status' => Table\Generated\AppTable::COLUMN_STATUS,
+                'name' => Table\Generated\AppTable::COLUMN_NAME,
             ]),
             'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                'id' => 'id',
-                'status' => 'status',
-                'name' => 'name',
+                'id' => Table\Generated\UserTable::COLUMN_ID,
+                'status' => Table\Generated\UserTable::COLUMN_STATUS,
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
-            'status' => 'status',
-            'token' => 'token',
-            'scope' => $this->fieldCsv('scope'),
-            'ip' => 'ip',
-            'expire' => $this->fieldDateTime('expire'),
-            'date' => $this->fieldDateTime('date'),
+            'status' => Table\Generated\AppTokenTable::COLUMN_STATUS,
+            'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
+            'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+            'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
+            'expire' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_EXPIRE),
+            'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

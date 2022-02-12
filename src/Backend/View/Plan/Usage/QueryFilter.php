@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Plan\Usage;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use PSX\Sql\Condition;
 
 /**
  * QueryFilter
@@ -33,37 +34,26 @@ use Fusio\Impl\Backend\View\QueryFilterAbstract;
  */
 class QueryFilter extends QueryFilterAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $routeId;
+    protected ?int $routeId = null;
+    protected ?int $userId = null;
+    protected ?int $appId = null;
 
-    /**
-     * @var integer
-     */
-    protected $userId;
-
-    /**
-     * @var integer
-     */
-    protected $appId;
-
-    public function getRouteId()
+    public function getRouteId(): ?int
     {
         return $this->routeId;
     }
 
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    public function getAppId()
+    public function getAppId(): ?int
     {
         return $this->appId;
     }
 
-    public function getCondition($alias = null)
+    public function getCondition(?string $alias = null): Condition
     {
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
@@ -83,26 +73,18 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    protected function getDateColumn()
+    protected function getDateColumn(): string
     {
         return 'insert_date';
     }
 
-    public static function create(RequestInterface $request)
+    public static function create(RequestInterface $request): static
     {
         $filter  = parent::create($request);
         $routeId = $request->get('routeId');
         $userId  = $request->get('userId');
         $appId   = $request->get('appId');
         $search  = $request->get('search');
-
-        // parse search if available
-        if (!empty($search)) {
-            $parts = explode(',', $search);
-            foreach ($parts as $part) {
-                $part = trim($part);
-            }
-        }
 
         $filter->routeId = $routeId;
         $filter->userId  = $userId;

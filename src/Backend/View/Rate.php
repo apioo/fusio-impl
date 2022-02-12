@@ -47,7 +47,7 @@ class Rate extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'priority';
+            $sortBy = Table\Generated\RateTable::COLUMN_PRIORITY;
         }
 
         if ($sortOrder === null) {
@@ -55,10 +55,10 @@ class Rate extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Rate::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\RateTable::COLUMN_STATUS, [Table\Rate::STATUS_ACTIVE]);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\RateTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -66,12 +66,12 @@ class Rate extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Rate::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'priority' => $this->fieldInteger('priority'),
-                'name' => 'name',
-                'rateLimit' => 'rate_limit',
-                'timespan' => 'timespan',
+                'id' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
+                'priority' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
+                'name' => Table\Generated\RateTable::COLUMN_NAME,
+                'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
+                'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
             ]),
         ];
 
@@ -89,19 +89,19 @@ class Rate extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Rate::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'priority' => $this->fieldInteger('priority'),
-            'name' => 'name',
-            'rateLimit' => 'rate_limit',
-            'timespan' => 'timespan',
+            'id' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_STATUS),
+            'priority' => $this->fieldInteger(Table\Generated\RateTable::COLUMN_PRIORITY),
+            'name' => Table\Generated\RateTable::COLUMN_NAME,
+            'rateLimit' => Table\Generated\RateTable::COLUMN_RATE_LIMIT,
+            'timespan' => Table\Generated\RateTable::COLUMN_TIMESPAN,
             'allocation' => $this->doCollection([$this->getTable(Table\Rate\Allocation::class), 'findByRateId'], [new Reference('id')], [
-                'id' => $this->fieldInteger('id'),
-                'rateId' => $this->fieldInteger('rate_id'),
-                'routeId' => $this->fieldInteger('route_id'),
-                'appId' => $this->fieldInteger('app_id'),
-                'authenticated' => $this->fieldBoolean('authenticated'),
-                'parameters' => 'parameters',
+                'id' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ID),
+                'rateId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_RATE_ID),
+                'routeId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID),
+                'appId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_APP_ID),
+                'authenticated' => $this->fieldBoolean(Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED),
+                'parameters' => Table\Generated\RateAllocationTable::COLUMN_PARAMETERS,
             ]),
         ]);
 

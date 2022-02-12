@@ -46,7 +46,7 @@ class Category extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'name';
+            $sortBy = Table\Generated\CategoryTable::COLUMN_NAME;
         }
 
         if ($sortOrder === null) {
@@ -54,10 +54,10 @@ class Category extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Category::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\CategoryTable::COLUMN_STATUS, [Table\Category::STATUS_ACTIVE]);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\CategoryTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -65,9 +65,9 @@ class Category extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
+                'name' => Table\Generated\CategoryTable::COLUMN_NAME,
             ]),
         ];
 
@@ -77,9 +77,9 @@ class Category extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Category::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
+            'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_STATUS),
+            'name' => Table\Generated\CategoryTable::COLUMN_NAME,
         ]);
 
         return $this->build($definition);

@@ -47,7 +47,7 @@ class User extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\UserTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
@@ -55,10 +55,10 @@ class User extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->notEquals('status', Table\User::STATUS_DELETED);
+        $condition->notEquals(Table\Generated\UserTable::COLUMN_STATUS, Table\User::STATUS_DELETED);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\UserTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -66,13 +66,13 @@ class User extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\User::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'roleId' => $this->fieldInteger('role_id'),
-                'provider' => 'provider',
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'email' => 'email',
-                'date' => $this->fieldDateTime('date'),
+                'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+                'provider' => Table\Generated\UserTable::COLUMN_PROVIDER,
+                'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
+                'email' => Table\Generated\UserTable::COLUMN_EMAIL,
+                'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
             ]),
         ];
 
@@ -82,25 +82,25 @@ class User extends ViewAbstract
     public function getEntity($id, array $userAttributes = null)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'roleId' => $this->fieldInteger('role_id'),
-            'provider' => $this->fieldInteger('provider'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'email' => 'email',
-            'points' => $this->fieldInteger('points'),
+            'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+            'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'provider' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_PROVIDER),
+            'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+            'name' => Table\Generated\UserTable::COLUMN_NAME,
+            'email' => Table\Generated\UserTable::COLUMN_EMAIL,
+            'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'apps' => $this->doCollection([$this->getTable(Table\App::class), 'findByUserId'], [new Reference('id')], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'url' => 'url',
-                'appKey' => 'app_key',
-                'date' => 'date',
+                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+                'name' => Table\Generated\AppTable::COLUMN_NAME,
+                'url' => Table\Generated\AppTable::COLUMN_URL,
+                'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
+                'date' => Table\Generated\AppTable::COLUMN_DATE,
             ]),
             'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
-                'name' => 'name',
-                'value' => 'value',
+                'name' => Table\Generated\UserAttributeTable::COLUMN_NAME,
+                'value' => Table\Generated\UserAttributeTable::COLUMN_VALUE,
             ], null, function (array $result) use ($userAttributes) {
                 $values = [];
                 foreach ($result as $row) {
@@ -116,7 +116,7 @@ class User extends ViewAbstract
 
                 return $data ?: null;
             }),
-            'date' => $this->fieldDateTime('date'),
+            'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

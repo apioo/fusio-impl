@@ -50,7 +50,7 @@ class Connection extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\ConnectionTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
@@ -58,20 +58,20 @@ class Connection extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('status', Table\Connection::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\ConnectionTable::COLUMN_STATUS, Table\Connection::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\ConnectionTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Connection::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['class', 'config'])], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+            'entry' => $this->doCollection([$this->getTable(Table\Connection::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+                'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
             ]),
         ];
 
@@ -89,10 +89,10 @@ class Connection extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'class' => 'class',
+            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+            'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
+            'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
         ]);
 
         return $this->build($definition);
@@ -109,16 +109,16 @@ class Connection extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Connection::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'class' => 'class',
-            'config' => $this->fieldCallback('config', function ($config, $row) use ($secretKey, $connectionParser) {
+            'id' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\ConnectionTable::COLUMN_STATUS),
+            'name' => Table\Generated\ConnectionTable::COLUMN_NAME,
+            'class' => Table\Generated\ConnectionTable::COLUMN_CLASS,
+            'config' => $this->fieldCallback(Table\Generated\ConnectionTable::COLUMN_CONFIG, function ($config, $row) use ($secretKey, $connectionParser) {
                 $config = Service\Connection\Encrypter::decrypt($config, $secretKey);
 
                 // remove all password fields from the config
                 if (!empty($config) && is_array($config)) {
-                    $form = $connectionParser->getForm($row['class']);
+                    $form = $connectionParser->getForm($row[Table\Generated\ConnectionTable::COLUMN_CLASS]);
                     if ($form instanceof Form\Container) {
                         $elements = $form->getElements();
                         foreach ($elements as $element) {

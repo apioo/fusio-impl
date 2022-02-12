@@ -46,33 +46,35 @@ class Invoice extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\PlanInvoiceTable::COLUMN_ID;
+
         $condition = new Condition();
-        $condition->in('status', [Table\Plan\Invoice::STATUS_OPEN, Table\Plan\Invoice::STATUS_PAYED]);
+        $condition->in(Table\Generated\PlanInvoiceTable::COLUMN_STATUS, [Table\Plan\Invoice::STATUS_OPEN, Table\Plan\Invoice::STATUS_PAYED]);
 
         if (!empty($search)) {
-            $condition->like('displayId', '%' . $search . '%');
+            $condition->like(Table\Generated\PlanInvoiceTable::COLUMN_DISPLAY_ID, '%' . $search . '%');
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Plan\Invoice::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger('id'),
-                'contractId' => $this->fieldInteger('contract_id'),
-                'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                    'id' => $this->fieldInteger('id'),
-                    'name' => 'name',
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Invoice::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_ID),
+                'contractId' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_CONTRACT_ID),
+                'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference(Table\Generated\PlanInvoiceTable::COLUMN_USER_ID)], [
+                    'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                    'name' => Table\Generated\UserTable::COLUMN_NAME,
                 ]),
-                'prevId' => $this->fieldInteger('prev_id'),
-                'displayId' => 'display_id',
-                'status' => $this->fieldInteger('status'),
-                'amount' => $this->fieldNumber('amount'),
-                'points' => $this->fieldInteger('points'),
-                'fromDate' => $this->fieldDateTime('from_date'),
-                'toDate' => $this->fieldDateTime('to_date'),
-                'payDate' => $this->fieldDateTime('pay_date'),
-                'insertDate' => $this->fieldDateTime('insert_date'),
+                'prevId' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_PREV_ID),
+                'displayId' => Table\Generated\PlanInvoiceTable::COLUMN_DISPLAY_ID,
+                'status' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_STATUS),
+                'amount' => $this->fieldNumber(Table\Generated\PlanInvoiceTable::COLUMN_AMOUNT),
+                'points' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_POINTS),
+                'fromDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_FROM_DATE),
+                'toDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_TO_DATE),
+                'payDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_PAY_DATE),
+                'insertDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -82,21 +84,21 @@ class Invoice extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Plan\Invoice::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'contractId' => $this->fieldInteger('contract_id'),
-            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
+            'id' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_ID),
+            'contractId' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_CONTRACT_ID),
+            'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference(Table\Generated\PlanInvoiceTable::COLUMN_USER_ID)], [
                 'id' => $this->fieldInteger('id'),
                 'name' => 'name',
             ]),
-            'prevId' => $this->fieldInteger('prev_id'),
-            'displayId' => 'display_id',
-            'status' => $this->fieldInteger('status'),
-            'amount' => $this->fieldNumber('amount'),
-            'points' => $this->fieldInteger('points'),
-            'fromDate' => $this->fieldDateTime('from_date'),
-            'toDate' => $this->fieldDateTime('to_date'),
-            'payDate' => $this->fieldDateTime('pay_date'),
-            'insertDate' => $this->fieldDateTime('insert_date'),
+            'prevId' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_PREV_ID),
+            'displayId' => Table\Generated\PlanInvoiceTable::COLUMN_DISPLAY_ID,
+            'status' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_STATUS),
+            'amount' => $this->fieldNumber(Table\Generated\PlanInvoiceTable::COLUMN_AMOUNT),
+            'points' => $this->fieldInteger(Table\Generated\PlanInvoiceTable::COLUMN_POINTS),
+            'fromDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_FROM_DATE),
+            'toDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_TO_DATE),
+            'payDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_PAY_DATE),
+            'insertDate' => $this->fieldDateTime(Table\Generated\PlanInvoiceTable::COLUMN_INSERT_DATE),
 
         ]);
 

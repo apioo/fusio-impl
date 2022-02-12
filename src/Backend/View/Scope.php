@@ -47,7 +47,7 @@ class Scope extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\ScopeTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
@@ -55,10 +55,10 @@ class Scope extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
+        $condition->equals(Table\Generated\ScopeTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\ScopeTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -66,9 +66,9 @@ class Scope extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Scope::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
+                'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+                'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+                'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             ]),
         ];
 
@@ -86,15 +86,15 @@ class Scope extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Scope::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'name' => 'name',
-            'description' => 'description',
+            'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+            'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+            'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
             'routes' => $this->doCollection([$this->getTable(Table\Scope\Route::class), 'findByScopeId'], [new Reference('id'), null, 0, 1024], [
-                'id' => $this->fieldInteger('id'),
-                'scopeId' => $this->fieldInteger('scope_id'),
-                'routeId' => $this->fieldInteger('route_id'),
-                'allow' => $this->fieldInteger('allow'),
-                'methods' => 'methods',
+                'id' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ID),
+                'scopeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_SCOPE_ID),
+                'routeId' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ROUTE_ID),
+                'allow' => $this->fieldInteger(Table\Generated\ScopeRoutesTable::COLUMN_ALLOW),
+                'methods' => Table\Generated\ScopeRoutesTable::COLUMN_METHODS,
             ]),
         ]);
 
@@ -105,12 +105,12 @@ class Scope extends ViewAbstract
     {
         $definition = [
             'categories' => $this->doCollection([$this->getTable(Table\Category::class), 'findAll'], [null, 0, 1024, 'name', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\CategoryTable::COLUMN_ID),
+                'name' => Table\Generated\CategoryTable::COLUMN_NAME,
                 'scopes' => $this->doCollection([$this->getTable(Table\Scope::class), 'findByCategoryId'], [new Reference('id'), 0, 1024, 'name', Sql::SORT_ASC], [
-                    'id' => $this->fieldInteger('id'),
-                    'name' => 'name',
-                    'description' => 'description',
+                    'id' => $this->fieldInteger(Table\Generated\ScopeTable::COLUMN_ID),
+                    'name' => Table\Generated\ScopeTable::COLUMN_NAME,
+                    'description' => Table\Generated\ScopeTable::COLUMN_DESCRIPTION,
                 ])
             ]),
         ];

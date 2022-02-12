@@ -37,12 +37,12 @@ class User extends ViewAbstract
     public function getEntity(int $id, array $userAttributes = null)
     {
         $definition = $this->doEntity([$this->getTable(Table\User::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'roleId' => $this->fieldInteger('role_id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'email' => 'email',
-            'points' => $this->fieldInteger('points'),
+            'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+            'roleId' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ROLE_ID),
+            'status' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_STATUS),
+            'name' => Table\Generated\UserTable::COLUMN_NAME,
+            'email' => Table\Generated\UserTable::COLUMN_EMAIL,
+            'points' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_POINTS),
             'scopes' => $this->doColumn([$this->getTable(Table\User\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'attributes' => $this->doCollection([$this->getTable(Table\User\Attribute::class), 'findByUserId'], [new Reference('id')], [
                 'name' => 'name',
@@ -62,7 +62,7 @@ class User extends ViewAbstract
 
                 return $data ?: null;
             }),
-            'date' => $this->fieldDateTime('date'),
+            'date' => $this->fieldDateTime(Table\Generated\UserTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

@@ -45,20 +45,22 @@ class Transaction extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\TransactionTable::COLUMN_ID;
+
         $condition = $filter->getCondition();
 
         $definition = [
             'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'provider' => 'provider',
-                'transactionId' => 'transaction_id',
-                'amount' => $this->fieldNumber('amount'),
-                'updateDate' => $this->fieldDateTime('update_date'),
-                'insertDate' => $this->fieldDateTime('insert_date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_STATUS),
+                'provider' => Table\Generated\TransactionTable::COLUMN_PROVIDER,
+                'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+                'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+                'updateDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_UPDATE_DATE),
+                'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -68,13 +70,13 @@ class Transaction extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'provider' => 'provider',
-            'transactionId' => 'transaction_id',
-            'amount' => $this->fieldNumber('amount'),
-            'updateDate' => $this->fieldDateTime('update_date'),
-            'insertDate' => $this->fieldDateTime('insert_date'),
+            'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_STATUS),
+            'provider' => Table\Generated\TransactionTable::COLUMN_PROVIDER,
+            'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+            'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+            'updateDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_UPDATE_DATE),
+            'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 
         return $this->build($definition);

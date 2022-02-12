@@ -46,32 +46,34 @@ class Contract extends ViewAbstract
             $count = 16;
         }
 
+        $sortBy = Table\Generated\PlanContractTable::COLUMN_ID;
+
         $condition = new Condition();
-        $condition->in('status', [Table\Plan\Contract::STATUS_ACTIVE, Table\Plan\Contract::STATUS_CLOSED, Table\Plan\Contract::STATUS_CANCELLED]);
+        $condition->in(Table\Generated\PlanContractTable::COLUMN_STATUS, [Table\Plan\Contract::STATUS_ACTIVE, Table\Plan\Contract::STATUS_CLOSED, Table\Plan\Contract::STATUS_CANCELLED]);
 
         if (!empty($search)) {
-            $condition->like('user_id', $search);
+            $condition->like(Table\Generated\PlanContractTable::COLUMN_USER_ID, $search);
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\Plan\Contract::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
-                'id' => $this->fieldInteger('id'),
+            'entry' => $this->doCollection([$this->getTable(Table\Plan\Contract::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_ID),
                 'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                    'id' => $this->fieldInteger('id'),
-                    'name' => 'name',
+                    'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                    'name' => Table\Generated\UserTable::COLUMN_NAME,
                 ]),
                 'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('plan_id')], [
-                    'id' => $this->fieldInteger('id'),
-                    'name' => 'name',
+                    'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                    'name' => Table\Generated\PlanTable::COLUMN_NAME,
                 ]),
-                'status' => $this->fieldInteger('status'),
-                'amount' => $this->fieldNumber('amount'),
-                'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period_type'),
-                'insertDate' => $this->fieldDateTime('insert_date'),
+                'status' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_STATUS),
+                'amount' => $this->fieldNumber(Table\Generated\PlanContractTable::COLUMN_AMOUNT),
+                'points' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_POINTS),
+                'period' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_PERIOD_TYPE),
+                'insertDate' => $this->fieldDateTime(Table\Generated\PlanContractTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -81,20 +83,20 @@ class Contract extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Plan\Contract::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
+            'id' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_ID),
             'user' => $this->doEntity([$this->getTable(Table\User::class), 'find'], [new Reference('user_id')], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\UserTable::COLUMN_ID),
+                'name' => Table\Generated\UserTable::COLUMN_NAME,
             ]),
             'plan' => $this->doEntity([$this->getTable(Table\Plan::class), 'find'], [new Reference('plan_id')], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                'name' => Table\Generated\PlanTable::COLUMN_NAME,
             ]),
-            'status' => $this->fieldInteger('status'),
-            'amount' => $this->fieldNumber('amount'),
-            'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period_type'),
-            'insertDate' => $this->fieldDateTime('insert_date'),
+            'status' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_STATUS),
+            'amount' => $this->fieldNumber(Table\Generated\PlanContractTable::COLUMN_AMOUNT),
+            'points' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_POINTS),
+            'period' => $this->fieldInteger(Table\Generated\PlanContractTable::COLUMN_PERIOD_TYPE),
+            'insertDate' => $this->fieldDateTime(Table\Generated\PlanContractTable::COLUMN_INSERT_DATE),
 
         ]);
 

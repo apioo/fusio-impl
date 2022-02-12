@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View\Transaction;
 
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Backend\View\QueryFilterAbstract;
+use PSX\Sql\Condition;
 
 /**
  * QueryFilter
@@ -33,37 +34,26 @@ use Fusio\Impl\Backend\View\QueryFilterAbstract;
  */
 class QueryFilter extends QueryFilterAbstract
 {
-    /**
-     * @var integer
-     */
-    protected $invoiceId;
+    protected ?int $invoiceId = null;
+    protected ?int $status = null;
+    protected ?string $provider = null;
 
-    /**
-     * @var integer
-     */
-    protected $status;
-
-    /**
-     * @var string
-     */
-    protected $provider;
-
-    public function getInvoiceId()
+    public function getInvoiceId(): ?int
     {
         return $this->invoiceId;
     }
 
-    public function getStatus()
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
-    public function getProvider()
+    public function getProvider(): ?string
     {
         return $this->provider;
     }
 
-    public function getCondition($alias = null)
+    public function getCondition(?string $alias = null): Condition
     {
         $condition = parent::getCondition($alias);
         $alias     = $alias !== null ? $alias . '.' : '';
@@ -83,12 +73,12 @@ class QueryFilter extends QueryFilterAbstract
         return $condition;
     }
 
-    protected function getDateColumn()
+    protected function getDateColumn(): string
     {
         return 'insert_date';
     }
 
-    public static function create(RequestInterface $request)
+    public static function create(RequestInterface $request): static
     {
         $filter    = parent::create($request);
         $invoiceId = $request->get('invoiceId');

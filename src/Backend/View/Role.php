@@ -47,7 +47,7 @@ class Role extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'name';
+            $sortBy = Table\Generated\RoleTable::COLUMN_NAME;
         }
 
         if ($sortOrder === null) {
@@ -55,10 +55,10 @@ class Role extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Role::STATUS_ACTIVE]);
+        $condition->in(Table\Generated\RoleTable::COLUMN_STATUS, [Table\Role::STATUS_ACTIVE]);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\RoleTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
@@ -66,10 +66,10 @@ class Role extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Role::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'categoryId' => $this->fieldInteger('category_id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
+                'id' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
+                'categoryId' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
+                'status' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
+                'name' => Table\Generated\RoleTable::COLUMN_NAME,
             ]),
         ];
 
@@ -87,10 +87,10 @@ class Role extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Role::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'categoryId' => $this->fieldInteger('category_id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
+            'id' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_ID),
+            'categoryId' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_CATEGORY_ID),
+            'status' => $this->fieldInteger(Table\Generated\RoleTable::COLUMN_STATUS),
+            'name' => Table\Generated\RoleTable::COLUMN_NAME,
             'scopes' => $this->doColumn([$this->getTable(Table\Role\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
         ]);
 

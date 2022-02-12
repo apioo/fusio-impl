@@ -47,7 +47,7 @@ class Route extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'priority';
+            $sortBy = Table\Generated\RoutesTable::COLUMN_PRIORITY;
         }
 
         if ($sortOrder === null) {
@@ -55,11 +55,11 @@ class Route extends ViewAbstract
         }
 
         $condition  = new Condition();
-        $condition->equals('category_id', $categoryId ?: 1);
-        $condition->equals('status', Table\Route::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\RoutesTable::COLUMN_CATEGORY_ID, $categoryId ?: 1);
+        $condition->equals(Table\Generated\RoutesTable::COLUMN_STATUS, Table\Route::STATUS_ACTIVE);
 
         if (!empty($search)) {
-            $condition->like('path', '%' . $search . '%');
+            $condition->like(Table\Generated\RoutesTable::COLUMN_PATH, '%' . $search . '%');
         }
 
         $definition = [
@@ -67,10 +67,10 @@ class Route extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Route::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'path' => 'path',
-                'controller' => 'controller',
+                'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
+                'path' => Table\Generated\RoutesTable::COLUMN_PATH,
+                'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
             ]),
         ];
 
@@ -88,24 +88,24 @@ class Route extends ViewAbstract
         }
 
         $definition = $this->doEntity([$this->getTable(Table\Route::class), $method], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'path' => 'path',
-            'controller' => 'controller',
+            'id' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\RoutesTable::COLUMN_STATUS),
+            'path' => Table\Generated\RoutesTable::COLUMN_PATH,
+            'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
             'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
             'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id')], [
-                'version' => 'version',
-                'status' => 'status',
-                'method' => 'method',
-                'active' => 'active',
-                'public' => 'public',
-                'description' => 'description',
-                'operationId' => 'operation_id',
-                'parameters' => 'parameters',
-                'request' => 'request',
+                'version' => Table\Generated\RoutesMethodTable::COLUMN_VERSION,
+                'status' => Table\Generated\RoutesMethodTable::COLUMN_STATUS,
+                'method' => Table\Generated\RoutesMethodTable::COLUMN_METHOD,
+                'active' => Table\Generated\RoutesMethodTable::COLUMN_ACTIVE,
+                'public' => Table\Generated\RoutesMethodTable::COLUMN_PUBLIC,
+                'description' => Table\Generated\RoutesMethodTable::COLUMN_DESCRIPTION,
+                'operationId' => Table\Generated\RoutesMethodTable::COLUMN_OPERATION_ID,
+                'parameters' => Table\Generated\RoutesMethodTable::COLUMN_PARAMETERS,
+                'request' => Table\Generated\RoutesMethodTable::COLUMN_REQUEST,
                 'responses' => $this->doCollection([$this->getTable(Table\Route\Response::class), 'getResponses'], [new Reference('id')], [
-                    'code' => 'code',
-                    'response' => 'response',
+                    'code' => Table\Generated\RoutesResponseTable::COLUMN_CODE,
+                    'response' => Table\Generated\RoutesResponseTable::COLUMN_RESPONSE,
                 ]),
                 'action' => 'action',
                 'costs' => 'costs',

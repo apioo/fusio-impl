@@ -48,7 +48,7 @@ class Page extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'slug';
+            $sortBy = Table\Generated\PageTable::COLUMN_SLUG;
         }
         
         if ($sortOrder === null) {
@@ -56,10 +56,10 @@ class Page extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
+        $condition->in(Table\Generated\PageTable::COLUMN_STATUS, [Table\Page::STATUS_VISIBLE, Table\Page::STATUS_INVISIBLE]);
 
         if (!empty($search)) {
-            $condition->like('title', '%' . $search . '%');
+            $condition->like(Table\Generated\PageTable::COLUMN_TITLE, '%' . $search . '%');
         }
 
         $definition = [
@@ -67,11 +67,11 @@ class Page extends ViewAbstract
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Page::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'title' => 'title',
-                'slug' => 'slug',
-                'date' => $this->fieldDateTime('date'),
+                'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+                'status' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
+                'title' => Table\Generated\PageTable::COLUMN_TITLE,
+                'slug' => Table\Generated\PageTable::COLUMN_SLUG,
+                'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
             ]),
         ];
 
@@ -81,12 +81,12 @@ class Page extends ViewAbstract
     public function getEntity($id)
     {
         $definition = $this->doEntity([$this->getTable(Table\Page::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'status' => $this->fieldInteger('status'),
-            'title' => 'title',
-            'slug' => 'slug',
-            'content' => 'content',
-            'date' => $this->fieldDateTime('date'),
+            'id' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_ID),
+            'status' => $this->fieldInteger(Table\Generated\PageTable::COLUMN_STATUS),
+            'title' => Table\Generated\PageTable::COLUMN_TITLE,
+            'slug' => Table\Generated\PageTable::COLUMN_SLUG,
+            'content' => Table\Generated\PageTable::COLUMN_CONTENT,
+            'date' => $this->fieldDateTime(Table\Generated\PageTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

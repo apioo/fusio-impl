@@ -48,7 +48,7 @@ class App extends ViewAbstract
         }
 
         if ($sortBy === null) {
-            $sortBy = 'id';
+            $sortBy = Table\Generated\AppTable::COLUMN_ID;
         }
 
         if ($sortOrder === null) {
@@ -56,23 +56,23 @@ class App extends ViewAbstract
         }
 
         $condition = new Condition();
-        $condition->in('status', [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
+        $condition->in(Table\Generated\AppTable::COLUMN_STATUS, [Table\App::STATUS_ACTIVE, Table\App::STATUS_PENDING]);
 
         if (!empty($search)) {
-            $condition->like('name', '%' . $search . '%');
+            $condition->like(Table\Generated\AppTable::COLUMN_NAME, '%' . $search . '%');
         }
 
         $definition = [
             'totalResults' => $this->getTable(Table\App::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder, Fields::blacklist(['url', 'parameters', 'appSecret'])], [
-                'id' => $this->fieldInteger('id'),
-                'userId' => $this->fieldInteger('user_id'),
-                'status' => $this->fieldInteger('status'),
-                'name' => 'name',
-                'appKey' => 'app_key',
-                'date' => $this->fieldDateTime('date'),
+            'entry' => $this->doCollection([$this->getTable(Table\App::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, $sortOrder], [
+                'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+                'userId' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
+                'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+                'name' => Table\Generated\AppTable::COLUMN_NAME,
+                'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
+                'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
             ]),
         ];
 
@@ -82,26 +82,26 @@ class App extends ViewAbstract
     public function getEntity(int $id)
     {
         $definition = $this->doEntity([$this->getTable(Table\App::class), 'find'], [$id], [
-            'id' => $this->fieldInteger('id'),
-            'userId' => $this->fieldInteger('user_id'),
-            'status' => $this->fieldInteger('status'),
-            'name' => 'name',
-            'url' => 'url',
-            'parameters' => 'parameters',
-            'appKey' => 'app_key',
-            'appSecret' => 'app_secret',
+            'id' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_ID),
+            'userId' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_USER_ID),
+            'status' => $this->fieldInteger(Table\Generated\AppTable::COLUMN_STATUS),
+            'name' => Table\Generated\AppTable::COLUMN_NAME,
+            'url' => Table\Generated\AppTable::COLUMN_URL,
+            'parameters' => Table\Generated\AppTable::COLUMN_PARAMETERS,
+            'appKey' => Table\Generated\AppTable::COLUMN_APP_KEY,
+            'appSecret' => Table\Generated\AppTable::COLUMN_APP_SECRET,
             'scopes' => $this->doColumn([$this->getTable(Table\App\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
             'tokens' => $this->doCollection([$this->getTable(Table\App\Token::class), 'getTokensByApp'], [new Reference('id')], [
-                'id' => $this->fieldInteger('id'),
-                'userId' => $this->fieldInteger('user_id'),
-                'status' => $this->fieldInteger('status'),
-                'token' => 'token',
-                'scope' => $this->fieldCsv('scope'),
-                'ip' => 'ip',
-                'expire' => 'expire',
-                'date' => $this->fieldDateTime('date'),
+                'id' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_ID),
+                'userId' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_USER_ID),
+                'status' => $this->fieldInteger(Table\Generated\AppTokenTable::COLUMN_STATUS),
+                'token' => Table\Generated\AppTokenTable::COLUMN_TOKEN,
+                'scope' => $this->fieldCsv(Table\Generated\AppTokenTable::COLUMN_SCOPE),
+                'ip' => Table\Generated\AppTokenTable::COLUMN_IP,
+                'expire' => Table\Generated\AppTokenTable::COLUMN_EXPIRE,
+                'date' => $this->fieldDateTime(Table\Generated\AppTokenTable::COLUMN_DATE),
             ]),
-            'date' => $this->fieldDateTime('date'),
+            'date' => $this->fieldDateTime(Table\Generated\AppTable::COLUMN_DATE),
         ]);
 
         return $this->build($definition);

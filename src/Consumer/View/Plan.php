@@ -42,21 +42,22 @@ class Plan extends ViewAbstract
         }
 
         $count = 16;
+        $sortBy = Table\Generated\PlanTable::COLUMN_PRICE;
 
         $condition = new Condition();
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $definition = [
             'totalResults' => $this->getTable(Table\Plan::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, 'price', Sql::SORT_ASC], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
-                'price' => $this->fieldNumber('price'),
-                'points' => $this->fieldInteger('points'),
-                'period' => $this->fieldInteger('period_type'),
+            'entry' => $this->doCollection([$this->getTable(Table\Plan::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_ASC], [
+                'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+                'name' => Table\Generated\PlanTable::COLUMN_NAME,
+                'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
+                'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+                'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+                'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             ]),
         ];
 
@@ -66,16 +67,16 @@ class Plan extends ViewAbstract
     public function getEntity(int $userId, int $planId)
     {
         $condition = new Condition();
-        $condition->equals('id', $planId);
-        $condition->equals('status', Table\Plan::STATUS_ACTIVE);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_ID, $planId);
+        $condition->equals(Table\Generated\PlanTable::COLUMN_STATUS, Table\Plan::STATUS_ACTIVE);
 
         $definition = $this->doEntity([$this->getTable(Table\Plan::class), 'findOneBy'], [$condition], [
-            'id' => $this->fieldInteger('id'),
-            'name' => 'name',
-            'description' => 'description',
-            'price' => $this->fieldNumber('price'),
-            'points' => $this->fieldInteger('points'),
-            'period' => $this->fieldInteger('period_type'),
+            'id' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_ID),
+            'name' => Table\Generated\PlanTable::COLUMN_NAME,
+            'description' => Table\Generated\PlanTable::COLUMN_DESCRIPTION,
+            'price' => $this->fieldNumber(Table\Generated\PlanTable::COLUMN_PRICE),
+            'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
+            'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
         ]);
 
         return $this->build($definition);
