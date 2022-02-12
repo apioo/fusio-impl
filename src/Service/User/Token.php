@@ -61,7 +61,7 @@ class Token
             throw new StatusCode\BadRequestException('Could not find user for token');
         }
 
-        $this->resetToken($user->getId());
+        $this->resetToken($user);
 
         return $user->getId() ?? throw new \RuntimeException('No user id available');
     }
@@ -90,13 +90,11 @@ class Token
 
     /**
      * Removes any token from the provided user
-     * 
-     * @param int $userId
      */
-    public function resetToken(int $userId)
+    public function resetToken(Table\Generated\UserRow $user): void
     {
         $record = new Table\Generated\UserRow([
-            Table\Generated\UserTable::COLUMN_ID => $userId,
+            Table\Generated\UserTable::COLUMN_ID => $user->getId(),
             Table\Generated\UserTable::COLUMN_TOKEN => ''
         ]);
 
