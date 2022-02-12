@@ -38,7 +38,6 @@ class QueryFilter extends QueryFilterAbstract
     protected ?int $userId = null;
     protected ?int $status = null;
     protected ?string $scope = null;
-
     protected ?string $ip = null;
 
     public function getAppId(): ?int
@@ -117,11 +116,13 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        $filter->appId  = $appId;
-        $filter->userId = $userId;
-        $filter->status = $status;
-        $filter->scope  = $scope;
-        $filter->ip     = $ip;
+        if ($filter instanceof self) {
+            $filter->appId  = $appId;
+            $filter->userId = $userId;
+            $filter->status = $status;
+            $filter->scope  = $scope;
+            $filter->ip     = $ip;
+        }
 
         return $filter;
     }

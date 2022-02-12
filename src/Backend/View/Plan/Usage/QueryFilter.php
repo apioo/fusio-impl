@@ -84,11 +84,12 @@ class QueryFilter extends QueryFilterAbstract
         $routeId = $request->get('routeId');
         $userId  = $request->get('userId');
         $appId   = $request->get('appId');
-        $search  = $request->get('search');
 
-        $filter->routeId = $routeId;
-        $filter->userId  = $userId;
-        $filter->appId   = $appId;
+        if ($filter instanceof self) {
+            $filter->routeId = $routeId;
+            $filter->userId  = $userId;
+            $filter->appId   = $appId;
+        }
 
         return $filter;
     }

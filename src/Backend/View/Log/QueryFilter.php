@@ -166,15 +166,17 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        $filter->routeId   = $routeId;
-        $filter->appId     = $appId;
-        $filter->userId    = $userId;
-        $filter->ip        = $ip;
-        $filter->userAgent = $userAgent;
-        $filter->method    = $method;
-        $filter->path      = $path;
-        $filter->header    = $header;
-        $filter->body      = $body;
+        if ($filter instanceof self) {
+            $filter->routeId   = $routeId;
+            $filter->appId     = $appId;
+            $filter->userId    = $userId;
+            $filter->ip        = $ip;
+            $filter->userAgent = $userAgent;
+            $filter->method    = $method;
+            $filter->path      = $path;
+            $filter->header    = $header;
+            $filter->body      = $body;
+        }
 
         return $filter;
     }

@@ -99,9 +99,11 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        $filter->invoiceId = $invoiceId;
-        $filter->status    = $status;
-        $filter->provider  = $provider;
+        if ($filter instanceof self) {
+            $filter->invoiceId = $invoiceId;
+            $filter->status    = $status;
+            $filter->provider  = $provider;
+        }
 
         return $filter;
     }

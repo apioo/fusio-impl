@@ -116,11 +116,13 @@ class QueryFilter extends QueryFilterAbstract
             }
         }
 
-        $filter->appId   = $appId;
-        $filter->userId  = $userId;
-        $filter->event   = $event;
-        $filter->ip      = $ip;
-        $filter->message = $message;
+        if ($filter instanceof self) {
+            $filter->appId   = $appId;
+            $filter->userId  = $userId;
+            $filter->event   = $event;
+            $filter->ip      = $ip;
+            $filter->message = $message;
+        }
 
         return $filter;
     }
