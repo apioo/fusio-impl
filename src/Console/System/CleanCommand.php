@@ -38,11 +38,11 @@ class CleanCommand extends Command
 {
     private Cleaner $cleaner;
 
-    public function __construct(Cleaner $health)
+    public function __construct(Cleaner $cleaner)
     {
         parent::__construct();
 
-        $this->cleaner = $health;
+        $this->cleaner = $cleaner;
     }
 
     protected function configure()
