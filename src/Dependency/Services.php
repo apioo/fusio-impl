@@ -560,7 +560,8 @@ trait Services
     {
         return new Service\User\Mailer(
             $this->get('config_service'),
-            $this->get('mailer')
+            $this->get('mailer'),
+            $this->get('config')
         );
     }
 

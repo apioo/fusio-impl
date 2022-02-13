@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service\User;
 
 use Fusio\Impl\Mail\MailerInterface;
 use Fusio\Impl\Service;
+use PSX\Framework\Config\Config;
 
 /**
  * Mailer
@@ -33,20 +34,15 @@ use Fusio\Impl\Service;
  */
 class Mailer
 {
-    /**
-     * @var Service\Config
-     */
-    private $configService;
+    private Service\Config $configService;
+    private MailerInterface $mailer;
+    private Config $config;
 
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-
-    public function __construct(Service\Config $configService, MailerInterface $mailer)
+    public function __construct(Service\Config $configService, MailerInterface $mailer, Config $config)
     {
         $this->configService = $configService;
         $this->mailer = $mailer;
+        $this->config = $config;
     }
 
     public function sendActivationMail($token, $name, $email)
@@ -64,11 +60,12 @@ class Mailer
         $subject = $this->configService->getValue($template . '_subject');
         $body    = $this->configService->getValue($template . '_body');
 
-        $values = array(
-            'name'  => $name,
-            'email' => $email,
-            'token' => $token,
-        );
+        $values = [
+            'apps_url' => $this->config->get('fusio_apps_url'),
+            'name'     => $name,
+            'email'    => $email,
+            'token'    => $token,
+        ];
 
         foreach ($values as $key => $value) {
             $body = str_replace('{' . $key . '}', $value, $body);
