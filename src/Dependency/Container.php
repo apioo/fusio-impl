@@ -307,6 +307,7 @@ class Container extends DefaultContainer
         $application->add(new Console\System\CronjobExecuteCommand($this->get('cronjob_service')));
         $application->add(new Console\System\CronjobFlushCommand($this->get('cronjob_service')));
         $application->add(new Console\System\LogRotateCommand($this->get('connection')));
+        $application->add(new Console\System\MailTestCommand($this->get('mailer')));
         $application->add(new Console\System\RegisterCommand($this->get('provider_writer')));
         $application->add(new Console\System\RestoreCommand($this->get('connection')));
         $application->add(new Console\System\TokenCommand($this->get('app_token_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
