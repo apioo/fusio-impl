@@ -302,14 +302,15 @@ class Container extends DefaultContainer
         $application->add(new Console\Migration\VersionCommand($this->get('connection'), $this->get('connector')));
 
         $application->add(new Console\System\CheckCommand($this->get('connection')));
-        $application->add(new Console\System\CleanCommand($this->get('connection')));
+        $application->add(new Console\System\CleanCommand($this->get('system_cleaner_service')));
         $application->add(new Console\System\ClearCacheCommand($this->get('cache'), $this->get('engine_cache')));
         $application->add(new Console\System\CronjobExecuteCommand($this->get('cronjob_service')));
         $application->add(new Console\System\CronjobFlushCommand($this->get('cronjob_service')));
-        $application->add(new Console\System\LogRotateCommand($this->get('connection')));
+        $application->add(new Console\System\HealthCommand($this->get('system_health_service')));
+        $application->add(new Console\System\LogRotateCommand($this->get('system_log_rotator_service')));
         $application->add(new Console\System\MailTestCommand($this->get('mailer')));
         $application->add(new Console\System\RegisterCommand($this->get('provider_writer')));
-        $application->add(new Console\System\RestoreCommand($this->get('connection')));
+        $application->add(new Console\System\RestoreCommand($this->get('system_restorer_service')));
         $application->add(new Console\System\TokenCommand($this->get('app_token_service'), $this->get('scope_service'), $this->get('table_manager')->getTable(Table\App::class), $this->get('table_manager')->getTable(Table\User::class)));
         $application->add(new Console\System\UserAddCommand($this->get('user_service'), $this->get('config_service')));
         $application->add(new Console\System\WaitForCommand($this->get('config')));

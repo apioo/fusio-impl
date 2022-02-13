@@ -22,6 +22,7 @@
 namespace Fusio\Impl\Console\System;
 
 use Doctrine\DBAL\Connection;
+use Fusio\Impl\Service\System\Restorer;
 use Fusio\Impl\Table;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,13 +38,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RestoreCommand extends Command
 {
-    private Connection $connection;
+    private Restorer $restorer;
 
-    public function __construct(Connection $connection)
+    public function __construct(Restorer $restorer)
     {
         parent::__construct();
 
-        $this->connection = $connection;
+        $this->restorer = $restorer;
     }
 
     protected function configure()
@@ -60,7 +61,7 @@ class RestoreCommand extends Command
         $type = $input->getArgument('type');
         $id   = $input->getArgument('id');
 
-        $result = $this->restore($type, $id);
+        $result = $this->restorer->restore($type, $id);
 
         if ($result > 0) {
             $output->writeln('Restored ' . $result . ' record' . ($result > 1 ? 's' : ''));
@@ -69,49 +70,5 @@ class RestoreCommand extends Command
             $output->writeln('Restored no record');
             return 1;
         }
-    }
-
-    private function restore($type, $id)
-    {
-        if (is_numeric($id)) {
-            $id     = (int) $id;
-            $column = 'id';
-        } else {
-            $column = $type == 'routes' ? 'path' : 'name';
-        }
-
-        switch ($type) {
-            case 'action':
-                return $this->restoreRecord($id, $column, 'fusio_action', Table\Action::STATUS_ACTIVE);
-
-            case 'app':
-                return $this->restoreRecord($id, $column, 'fusio_app', Table\App::STATUS_ACTIVE);
-
-            case 'connection':
-                return $this->restoreRecord($id, $column, 'fusio_connection', Table\Connection::STATUS_ACTIVE);
-
-            case 'cronjob':
-                return $this->restoreRecord($id, $column, 'fusio_cronjob', Table\Cronjob::STATUS_ACTIVE);
-
-            case 'routes':
-                return $this->restoreRecord($id, $column, 'fusio_routes', Table\Route::STATUS_ACTIVE);
-
-            case 'schema':
-                return $this->restoreRecord($id, $column, 'fusio_schema', Table\Schema::STATUS_ACTIVE);
-
-            case 'user':
-                return $this->restoreRecord($id, $column, 'fusio_user', Table\User::STATUS_DISABLED);
-        }
-
-        return 0;
-    }
-
-    private function restoreRecord($id, $column, $table, $status)
-    {
-        return $this->connection->update($table, [
-            'status' => $status,
-        ], [
-            $column => $id
-        ]);
     }
 }

@@ -24,6 +24,7 @@ namespace Fusio\Impl\Console\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Schema;
+use Fusio\Impl\Service\System\LogRotator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,13 +38,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class LogRotateCommand extends Command
 {
-    private Connection $connection;
+    private LogRotator $logRotator;
 
-    public function __construct(Connection $connection)
+    public function __construct(LogRotator $logRotator)
     {
         parent::__construct();
 
-        $this->connection = $connection;
+        $this->logRotator = $logRotator;
     }
 
     protected function configure()
@@ -55,92 +56,10 @@ class LogRotateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $schemaManager = $this->connection->getSchemaManager();
-        $schema = $schemaManager->createSchema();
-
-        $this->archiveAuditTable($schemaManager, $schema, $output);
-        $this->archiveLogTable($schemaManager, $schema, $output);
+        foreach ($this->logRotator->rotate() as $message) {
+            $output->writeln($message);
+        }
 
         return 0;
-    }
-
-    private function archiveAuditTable(AbstractSchemaManager $schemaManager, Schema $schema, OutputInterface $output)
-    {
-        $tableName = 'fusio_audit_' . date('Ymd');
-
-        // create archive table
-        if (!$schema->hasTable($tableName)) {
-            $auditTable = $schema->createTable($tableName);
-            $auditTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $auditTable->addColumn('app_id', 'integer');
-            $auditTable->addColumn('user_id', 'integer');
-            $auditTable->addColumn('ref_id', 'integer', ['notnull' => false]);
-            $auditTable->addColumn('event', 'string');
-            $auditTable->addColumn('ip', 'string', ['length' => 40]);
-            $auditTable->addColumn('message', 'string');
-            $auditTable->addColumn('content', 'text', ['notnull' => false]);
-            $auditTable->addColumn('date', 'datetime');
-            $auditTable->setPrimaryKey(['id']);
-            $auditTable->addOption('engine', 'MyISAM');
-
-            $schemaManager->createTable($auditTable);
-
-            $output->writeln('Created audit archive table ' . $tableName);
-        }
-
-        // copy all data to archive table
-        $result = $this->connection->fetchAll('SELECT app_id, user_id, ref_id, event, ip, message, content, date FROM fusio_audit');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
-
-        $output->writeln('Copied ' . count($result) . ' entries to audit archive table');
-
-        // truncate table
-        $this->connection->executeUpdate('DELETE FROM fusio_audit WHERE 1=1');
-
-        $output->writeln('Truncated audit table');
-    }
-
-    private function archiveLogTable(AbstractSchemaManager $schemaManager, Schema $schema, OutputInterface $output)
-    {
-        $tableName = 'fusio_log_' . date('Ymd');
-
-        // create archive table
-        if (!$schema->hasTable($tableName)) {
-            $logTable = $schema->createTable($tableName);
-            $logTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $logTable->addColumn('route_id', 'integer', ['notnull' => false]);
-            $logTable->addColumn('app_id', 'integer', ['notnull' => false]);
-            $logTable->addColumn('user_id', 'integer', ['notnull' => false]);
-            $logTable->addColumn('ip', 'string', ['length' => 40]);
-            $logTable->addColumn('user_agent', 'string', ['length' => 255]);
-            $logTable->addColumn('method', 'string', ['length' => 16]);
-            $logTable->addColumn('path', 'string', ['length' => 1023]);
-            $logTable->addColumn('header', 'text');
-            $logTable->addColumn('body', 'text', ['notnull' => false]);
-            $logTable->addColumn('execution_time', 'integer', ['notnull' => false, 'default' => null]);
-            $logTable->addColumn('date', 'datetime');
-            $logTable->setPrimaryKey(['id']);
-            $logTable->addOption('engine', 'MyISAM');
-
-            $schemaManager->createTable($logTable);
-
-            $output->writeln('Created log archive table ' . $tableName);
-        }
-
-        // copy all data to archive table
-        $result = $this->connection->fetchAll('SELECT route_id, app_id, user_id, ip, user_agent, method, path, header, body, execution_time, date FROM fusio_log');
-        foreach ($result as $row) {
-            $this->connection->insert($tableName, $row);
-        }
-
-        $output->writeln('Copied ' . count($result) . ' entries to log archive table');
-
-        // truncate table
-        $this->connection->executeUpdate('DELETE FROM fusio_log_error WHERE 1=1');
-        $this->connection->executeUpdate('DELETE FROM fusio_log WHERE 1=1');
-
-        $output->writeln('Truncated log table');
     }
 }

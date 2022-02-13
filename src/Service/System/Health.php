@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service;
+namespace Fusio\Impl\Service\System;
 
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Factory;

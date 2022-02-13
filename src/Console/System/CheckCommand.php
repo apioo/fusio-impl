@@ -55,8 +55,7 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $check  = $input->getArgument('name');
-        $result = null;
+        $check = $input->getArgument('name');
 
         try {
             $result = $this->executeCheck($check);
@@ -76,7 +75,7 @@ class CheckCommand extends Command
         }
     }
 
-    protected function executeCheck($check)
+    protected function executeCheck(string $check): ?bool
     {
         switch ($check) {
             case 'user':
@@ -87,12 +86,10 @@ class CheckCommand extends Command
     }
 
     /**
-     * Check whether we have a row in the user table. The installation inserts
-     * already a system user so we must have at least more then one user
-     *
-     * @return bool
+     * Check whether we have a row in the user table. The installation inserts already a system user so we must have at
+     * least more than one user
      */
-    protected function checkUser()
+    protected function checkUser(): bool
     {
         return $this->connection->fetchColumn('SELECT COUNT(*) FROM fusio_user') > 1;
     }

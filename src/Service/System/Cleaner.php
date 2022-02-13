@@ -19,45 +19,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Service\System;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Impl\Service\System\Cleaner;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * CleanCommand
+ * Cleaner
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+class Cleaner
 {
-    private Cleaner $cleaner;
+    private Connection $connection;
 
-    public function __construct(Cleaner $health)
+    public function __construct(Connection $connection)
     {
-        parent::__construct();
-
-        $this->cleaner = $health;
+        $this->connection = $connection;
     }
 
-    protected function configure()
+    public function cleanUp(): void
     {
-        $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
+        $this->cleanUpExpiredTokens();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    private function cleanUpExpiredTokens(): void
     {
-        $this->cleaner->cleanUp();
+        $now = $this->connection->getDatabasePlatform()->getNowExpression();
 
-        $output->writeln('Clean up successful!');
-
-        return 0;
+        $this->connection->executeStatement('DELETE FROM fusio_app_token WHERE expire < ' . $now);
     }
 }

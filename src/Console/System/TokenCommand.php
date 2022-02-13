@@ -79,7 +79,7 @@ class TokenCommand extends Command
             $app = $this->appTable->find((int) $appId);
         }
 
-        if (empty($app)) {
+        if (!$app instanceof Table\Generated\AppRow) {
             throw new RuntimeException('Invalid app');
         }
 
@@ -89,7 +89,7 @@ class TokenCommand extends Command
             $user = $this->userTable->find((int) $userId);
         }
 
-        if (empty($user)) {
+        if (!$user instanceof Table\Generated\UserRow) {
             throw new RuntimeException('Invalid user');
         }
 

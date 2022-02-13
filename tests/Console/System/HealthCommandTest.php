@@ -19,45 +19,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Console\System;
+namespace Fusio\Impl\Tests\Console\System;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Service\System\Cleaner;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Fusio\Impl\Tests\Fixture;
+use PSX\Framework\Test\ControllerDbTestCase;
+use PSX\Framework\Test\Environment;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * CleanCommand
+ * HealthCommandTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+class HealthCommandTest extends ControllerDbTestCase
 {
-    private Cleaner $cleaner;
-
-    public function __construct(Cleaner $health)
+    public function getDataSet()
     {
-        parent::__construct();
-
-        $this->cleaner = $health;
+        return Fixture::getDataSet();
     }
 
-    protected function configure()
+    public function testCommand()
     {
-        $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
-    }
+        $command = Environment::getService('console')->find('system:health');
 
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->cleaner->cleanUp();
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+        ]);
 
-        $output->writeln('Clean up successful!');
+        $display = $commandTester->getDisplay();
 
-        return 0;
+        $this->assertSame(0, $commandTester->getStatusCode());
     }
 }

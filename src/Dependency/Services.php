@@ -572,12 +572,33 @@ trait Services
         );
     }
 
-    public function getHealthService(): Service\Health
+    public function getSystemCleanerService(): Service\System\Cleaner
     {
-        return new Service\Health(
+        return new Service\System\Cleaner(
+            $this->get('connection')
+        );
+    }
+
+    public function getSystemHealthService(): Service\System\Health
+    {
+        return new Service\System\Health(
             $this->get('table_manager')->getTable(Table\Connection::class),
             $this->get('connection_factory'),
             $this->get('config')->get('fusio_project_key')
+        );
+    }
+
+    public function getSystemLogRotatorService(): Service\System\LogRotator
+    {
+        return new Service\System\LogRotator(
+            $this->get('connection')
+        );
+    }
+
+    public function getSystemRestorerService(): Service\System\Restorer
+    {
+        return new Service\System\Restorer(
+            $this->get('connection')
         );
     }
 }

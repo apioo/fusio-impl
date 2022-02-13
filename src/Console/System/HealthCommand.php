@@ -21,43 +21,49 @@
 
 namespace Fusio\Impl\Console\System;
 
-use Doctrine\DBAL\Connection;
-use Fusio\Impl\Service\System\Cleaner;
+use Fusio\Impl\Service\System\Health;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * CleanCommand
+ * HealthCommand
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class CleanCommand extends Command
+class HealthCommand extends Command
 {
-    private Cleaner $cleaner;
+    private Health $health;
 
-    public function __construct(Cleaner $health)
+    public function __construct(Health $health)
     {
         parent::__construct();
 
-        $this->cleaner = $health;
+        $this->health = $health;
     }
 
     protected function configure()
     {
         $this
-            ->setName('system:clean')
-            ->setDescription('Clean up not needed database entries i.e. expired app tokens');
+            ->setName('system:health')
+            ->setDescription('Checks whether the system is healthy');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->cleaner->cleanUp();
+        $result = $this->health->check();
+        foreach ($result->getChecks() as $name => $check) {
+            $healthy = $check['healthy'] ? '✓' : '✖';
 
-        $output->writeln('Clean up successful!');
+            $output->writeln('[' . $healthy . '] ' . $name);
 
-        return 0;
+            if (isset($check['error'])) {
+                $output->writeln('    ' . $check['error']);
+            }
+        }
+
+        return $result->isHealthy() ? 0 : 1;
     }
 }
