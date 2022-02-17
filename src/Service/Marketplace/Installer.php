@@ -53,7 +53,7 @@ class Installer
         $this->filesystem = new Filesystem();
     }
 
-    public function install(Marketplace_Install $install, UserContext $context): App
+    public function install(Marketplace_Install $install, UserContext $context, bool $replaceEnv = true): App
     {
         $remoteApp = $this->remoteRepository->fetchByName($install->getName());
         $localApp = $this->localRepository->fetchByName($install->getName());
@@ -62,7 +62,7 @@ class Installer
             throw new StatusCode\BadRequestException('App already installed');
         }
 
-        $this->deploy($remoteApp);
+        $this->deploy($remoteApp, $replaceEnv);
 
         return $remoteApp;
     }
@@ -94,7 +94,6 @@ class Installer
     public function remove(string $name, UserContext $context): App
     {
         $localApp = $this->localRepository->fetchByName($name);
-
         if (!$localApp instanceof App) {
             throw new StatusCode\BadRequestException('App is not installed');
         }
@@ -104,7 +103,22 @@ class Installer
         return $localApp;
     }
 
-    private function deploy(App $remoteApp)
+    public function env(string $name): App
+    {
+        $localApp = $this->localRepository->fetchByName($name);
+        if (!$localApp instanceof App) {
+            throw new StatusCode\BadRequestException('App is not installed');
+        }
+
+        $appsDir = $this->config->get('fusio_apps_dir') ?: $this->config->get('psx_path_public');
+        $appsDir.= '/' . $localApp->getName();
+
+        $this->replaceVariables($appsDir);
+
+        return $localApp;
+    }
+
+    private function deploy(App $remoteApp, bool $replaceEnv = true)
     {
         $zipFile = $this->downloadZip($remoteApp);
 
@@ -112,7 +126,10 @@ class Installer
         $appDir = $this->unzipFile($zipFile, $appDir);
 
         $this->writeMetaFile($appDir, $remoteApp);
-        $this->replaceVariables($appDir);
+
+        if ($replaceEnv) {
+            $this->replaceVariables($appDir);
+        }
 
         $this->moveToPublic($appDir, $remoteApp);
     }

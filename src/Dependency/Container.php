@@ -288,10 +288,11 @@ class Container extends DefaultContainer
         Setup::appendCommands($application, $transport, $basePath, $envReplacer, $this->get('schema_parser_import_resolver'));
 
         // internal commands
-        $application->add(new Console\Marketplace\ListCommand($this->get('marketplace_repository_remote')));
+        $application->add(new Console\Marketplace\EnvCommand($this->get('marketplace_installer')));
         $application->add(new Console\Marketplace\InstallCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
-        $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
+        $application->add(new Console\Marketplace\ListCommand($this->get('marketplace_repository_remote')));
         $application->add(new Console\Marketplace\RemoveCommand($this->get('marketplace_installer')));
+        $application->add(new Console\Marketplace\UpdateCommand($this->get('marketplace_installer'), $this->get('marketplace_repository_remote')));
 
         $application->add(new Console\Migration\ExecuteCommand($this->get('connection'), $this->get('connector')));
         $application->add(new Console\Migration\GenerateCommand($this->get('connection'), $this->get('connector')));
