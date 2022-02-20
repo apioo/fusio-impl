@@ -48,7 +48,6 @@ class Cronjob
     private Executor $executorService;
     private ?string $cronFile;
     private ?string $cronExec;
-    private string $cronUser;
     private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(Table\Cronjob $cronjobTable, Table\Cronjob\Error $errorTable, Executor $executorService, ?string $cronFile, ?string $cronExec, EventDispatcherInterface $eventDispatcher)
@@ -58,7 +57,6 @@ class Cronjob
         $this->executorService = $executorService;
         $this->cronFile        = $cronFile;
         $this->cronExec        = $cronExec;
-        $this->cronUser        = 'www-data';
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -250,10 +248,7 @@ class Cronjob
         foreach ($result as $row) {
             $lines[] = implode(' ', [
                 $row->getCron(),
-                $this->cronUser,
-                $this->cronExec,
-                'cronjob',
-                $row->getId()
+                sprintf($this->cronExec, $row->getId()),
             ]);
         }
 
