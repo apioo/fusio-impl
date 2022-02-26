@@ -62,7 +62,7 @@ class CollectionTest extends ControllerDbTestCase
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 30,
+    "totalResults": 33,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -151,6 +151,20 @@ class CollectionTest extends ControllerDbTestCase
             "value": ""
         },
         {
+            "id": 18,
+            "type": 6,
+            "name": "mail_points_body",
+            "description": "Body of the points threshold mail",
+            "value": "Hello {name},\n\nyour account has reached the configured threshold of {points} points.\nIf your account reaches 0 points your are not longer able to invoke specific endpoints.\nTo prevent this please go to the developer portal to purchase new points:\n{apps_url}\/developer"
+        },
+        {
+            "id": 17,
+            "type": 1,
+            "name": "mail_points_subject",
+            "description": "Subject of the points threshold mail",
+            "value": "Fusio points threshold reached"
+        },
+        {
             "id": 16,
             "type": 6,
             "name": "mail_pw_reset_body",
@@ -163,20 +177,6 @@ class CollectionTest extends ControllerDbTestCase
             "name": "mail_pw_reset_subject",
             "description": "Subject of the password reset mail",
             "value": "Fusio password reset"
-        },
-        {
-            "id": 14,
-            "type": 6,
-            "name": "mail_register_body",
-            "description": "Body of the activation mail",
-            "value": "Hello {name},\n\nyou have successful registered at Fusio.\nTo activate you account please visit the following link:\n{apps_url}\/developer\/#!\/register\/activate\/{token}"
-        },
-        {
-            "id": 13,
-            "type": 1,
-            "name": "mail_register_subject",
-            "description": "Subject of the activation mail",
-            "value": "Fusio registration"
         }
     ]
 }
@@ -225,7 +225,7 @@ JSON;
         $actual = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 30,
+    "totalResults": 33,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -314,6 +314,20 @@ JSON;
             "value": ""
         },
         {
+            "id": 18,
+            "type": 6,
+            "name": "mail_points_body",
+            "description": "Body of the points threshold mail",
+            "value": "Hello {name},\n\nyour account has reached the configured threshold of {points} points.\nIf your account reaches 0 points your are not longer able to invoke specific endpoints.\nTo prevent this please go to the developer portal to purchase new points:\n{apps_url}\/developer"
+        },
+        {
+            "id": 17,
+            "type": 1,
+            "name": "mail_points_subject",
+            "description": "Subject of the points threshold mail",
+            "value": "Fusio points threshold reached"
+        },
+        {
             "id": 16,
             "type": 6,
             "name": "mail_pw_reset_body",
@@ -342,98 +356,105 @@ JSON;
             "value": "Fusio registration"
         },
         {
-            "id": 26,
+            "id": 28,
             "type": 3,
             "name": "points_default",
             "description": "The default amount of points which a user receives if he registers",
             "value": "0"
         },
         {
-            "id": 17,
+            "id": 29,
+            "type": 3,
+            "name": "points_threshold",
+            "description": "If a user goes below this points threshold we send an information to the user",
+            "value": "0"
+        },
+        {
+            "id": 19,
             "type": 1,
             "name": "provider_facebook_key",
             "description": "Facebook app key",
             "value": ""
         },
         {
-            "id": 18,
+            "id": 20,
             "type": 1,
             "name": "provider_facebook_secret",
             "description": "Facebook app secret",
             "value": ""
         },
         {
-            "id": 21,
+            "id": 23,
             "type": 1,
             "name": "provider_github_key",
             "description": "GitHub app key",
             "value": ""
         },
         {
-            "id": 22,
+            "id": 24,
             "type": 1,
             "name": "provider_github_secret",
             "description": "GitHub app secret",
             "value": ""
         },
         {
-            "id": 19,
+            "id": 21,
             "type": 1,
             "name": "provider_google_key",
             "description": "Google app key",
             "value": ""
         },
         {
-            "id": 20,
+            "id": 22,
             "type": 1,
             "name": "provider_google_secret",
             "description": "Google app secret",
             "value": ""
         },
         {
-            "id": 23,
+            "id": 25,
             "type": 1,
             "name": "recaptcha_key",
             "description": "ReCaptcha key",
             "value": ""
         },
         {
-            "id": 24,
+            "id": 26,
             "type": 1,
             "name": "recaptcha_secret",
             "description": "ReCaptcha secret",
             "value": ""
         },
         {
-            "id": 25,
+            "id": 27,
             "type": 1,
             "name": "role_default",
             "description": "Default role which a user gets assigned on registration",
             "value": "Consumer"
         },
         {
-            "id": 28,
+            "id": 31,
             "type": 1,
             "name": "system_dispatcher",
             "description": "Optional a HTTP or message queue connection which is used to dispatch events",
             "value": ""
         },
         {
-            "id": 27,
+            "id": 30,
             "type": 1,
             "name": "system_mailer",
             "description": "Optional a SMTP connection which is used as mailer",
             "value": ""
         },
         {
-            "id": 30,
+            "id": 33,
             "type": 2,
             "name": "user_approval",
             "description": "Whether the user needs to activate the account through an email",
             "value": "1"
         },
         {
-            "id": 29,
+            "id": 32,
             "type": 3,
             "name": "user_pw_length",
             "description": "Minimal required password length",
