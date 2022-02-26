@@ -69,7 +69,7 @@ class ResetPassword
         $token = $this->tokenService->generateToken($user->getId());
 
         // send reset mail
-        $this->mailerService->sendResetPasswordMail($token, $user->getName(), $user->getEmail());
+        $this->mailerService->sendResetPasswordMail($user->getName(), $user->getEmail(), $token);
     }
 
     public function changePassword(User_PasswordReset $reset): void

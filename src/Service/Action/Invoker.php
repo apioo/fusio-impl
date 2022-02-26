@@ -65,8 +65,7 @@ class Invoker
                 throw new StatusCode\ForbiddenException('This action costs points because of this you must be authenticated in order to call this action');
             }
 
-            // in case the method has assigned costs check whether the user has
-            // enough points
+            // in case the method has assigned costs check whether the user has enough points
             $remaining = $context->getUser()->getPoints() - $costs;
             if ($remaining < 0) {
                 throw new StatusCode\ClientErrorException('Your account has not enough points to call this action. Please purchase new points in order to execute this action', 429);

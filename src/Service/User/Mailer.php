@@ -45,29 +45,42 @@ class Mailer
         $this->config = $config;
     }
 
-    public function sendActivationMail($token, $name, $email)
+    public function sendActivationMail(string $name, string $email, string $token)
     {
-        $this->sendMail('mail_register', $token, $name, $email);
+        $this->sendMail('mail_register', $email, [
+            'apps_url' => $this->config->get('fusio_apps_url'),
+            'name' => $name,
+            'email' => $email,
+            'token' => $token
+        ]);
     }
 
-    public function sendResetPasswordMail($token, $name, $email)
+    public function sendResetPasswordMail(string $name, string $email, string $token)
     {
-        $this->sendMail('mail_pw_reset', $token, $name, $email);
+        $this->sendMail('mail_pw_reset', $email, [
+            'apps_url' => $this->config->get('fusio_apps_url'),
+            'name' => $name,
+            'email' => $email,
+            'token' => $token
+        ]);
     }
 
-    private function sendMail(string $template, $token, $name, $email)
+    public function sendPointsThresholdMail(string $name, string $email, int $points)
+    {
+        $this->sendMail('mail_points', $email, [
+            'apps_url' => $this->config->get('fusio_apps_url'),
+            'name' => $name,
+            'email' => $email,
+            'points' => $points
+        ]);
+    }
+
+    private function sendMail(string $template, string $email, array $parameters)
     {
         $subject = $this->configService->getValue($template . '_subject');
         $body    = $this->configService->getValue($template . '_body');
 
-        $values = [
-            'apps_url' => $this->config->get('fusio_apps_url'),
-            'name'     => $name,
-            'email'    => $email,
-            'token'    => $token,
-        ];
-
-        foreach ($values as $key => $value) {
+        foreach ($parameters as $key => $value) {
             $body = str_replace('{' . $key . '}', $value, $body);
         }
 

@@ -84,7 +84,7 @@ class Register
         if ($approval) {
             $token = $this->tokenService->generateToken($userId);
 
-            $this->mailerService->sendActivationMail($token, $register->getName(), $register->getEmail());
+            $this->mailerService->sendActivationMail($register->getName(), $register->getEmail(), $token);
         }
 
         return $userId;

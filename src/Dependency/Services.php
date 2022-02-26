@@ -460,7 +460,8 @@ trait Services
         return new Service\Plan\Payer(
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\Plan\Usage::class),
-            $this->get('event_dispatcher')
+            $this->get('config_service'),
+            $this->get('user_mailer_service')
         );
     }
 

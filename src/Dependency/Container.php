@@ -197,8 +197,7 @@ class Container extends DefaultContainer
         return new Mail\Mailer(
             $this->get('connection_resolver_service'),
             $this->get('mailer_sender_factory'),
-            $this->get('config'),
-            $this->get('logger')
+            $this->get('config')
         );
     }
 

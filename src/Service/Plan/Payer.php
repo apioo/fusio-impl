@@ -22,8 +22,8 @@
 namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ContextInterface;
+use Fusio\Impl\Service;
 use Fusio\Impl\Table;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Payer
@@ -36,13 +36,15 @@ class Payer
 {
     private Table\User $userTable;
     private Table\Plan\Usage $usageTable;
-    private EventDispatcherInterface $eventDispatcher;
+    private Service\Config $configService;
+    private Service\User\Mailer $mailer;
 
-    public function __construct(Table\User $userTable, Table\Plan\Usage $usageTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\User $userTable, Table\Plan\Usage $usageTable, Service\Config $configService, Service\User\Mailer $mailer)
     {
-        $this->userTable       = $userTable;
-        $this->usageTable      = $usageTable;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->userTable = $userTable;
+        $this->usageTable = $usageTable;
+        $this->configService = $configService;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -64,5 +66,13 @@ class Payer
         ]);
 
         $this->usageTable->create($record);
+
+        // send mail in case the points reach a specific threshold
+        $threshold = $this->configService->getValue('points_threshold');
+        if ($threshold > 0) {
+            if ($points === $threshold) {
+                $this->mailer->sendPointsThresholdMail($context->getUser()->getName(), $context->getUser()->getEmail(), $points);
+            }
+        }
     }
 }

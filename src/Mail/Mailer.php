@@ -21,14 +21,12 @@
 
 namespace Fusio\Impl\Mail;
 
-use Fusio\Impl\Service;
 use Fusio\Impl\Service\Connection\Resolver;
-use Psr\Log\LoggerInterface;
 use PSX\Framework\Config\Config;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\NullTransport;
 use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 
 /**
  * Mailer
@@ -42,14 +40,12 @@ class Mailer implements MailerInterface
     private Resolver $resolver;
     private SenderFactory $senderFactory;
     private Config $config;
-    private LoggerInterface $logger;
 
-    public function __construct(Resolver $resolver, SenderFactory $senderFactory, Config $config, LoggerInterface $logger)
+    public function __construct(Resolver $resolver, SenderFactory $senderFactory, Config $config)
     {
         $this->resolver      = $resolver;
         $this->senderFactory = $senderFactory;
         $this->config        = $config;
-        $this->logger        = $logger;
     }
 
     public function send(string $subject, array $to, string $body): void
@@ -75,12 +71,6 @@ class Mailer implements MailerInterface
             $subject,
             $body
         ));
-
-        $this->logger->info('Send registration mail', [
-            'to'      => implode(', ', $to),
-            'subject' => $subject,
-            'body'    => $body,
-        ]);
     }
 
     /**
