@@ -64,13 +64,6 @@ return array(
     // directly, but it is also possible to specify a different folder
     'fusio_apps_dir'          => __DIR__ . '/apps',
 
-    // Location of the automatically generated cron file. Note Fusio writes only to this file if it exists. In order to
-    // use the cronjob service you need to create this file with i.e. "touch /etc/cron.d/fusio"
-    'fusio_cron_file'         => '/etc/cron.d/fusio',
-
-    // Command to execute the Fusio console which is used in the generated cron file
-    'fusio_cron_exec'         => 'root /home/run_cron.sh %s',
-
     // The url to the psx public folder (i.e. http://127.0.0.1/psx/public or http://localhost.com)
     'psx_url'                 => 'http://127.0.0.1',
 
