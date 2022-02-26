@@ -27,6 +27,7 @@ use Fusio\Impl\Table;
 use PSX\Api\Generator;
 use PSX\Api\GeneratorFactory as ApiGeneratorFactory;
 use PSX\Api\GeneratorInterface;
+use PSX\Api\Listing\FilterInterface;
 
 /**
  * GeneratorFactory
@@ -48,7 +49,7 @@ class GeneratorFactory extends ApiGeneratorFactory
         $this->configService = $configService;
     }
 
-    protected function configure(GeneratorInterface $generator): void
+    protected function configure(GeneratorInterface $generator, ?FilterInterface $filter = null): void
     {
         if ($generator instanceof Generator\Spec\OpenAPIAbstract) {
             $generator->setTitle($this->configService->getValue('info_title') ?: 'Fusio');
@@ -60,7 +61,7 @@ class GeneratorFactory extends ApiGeneratorFactory
             $generator->setLicenseName($this->configService->getValue('info_license_name') ?: null);
             $generator->setLicenseUrl($this->configService->getValue('info_license_url') ?: null);
 
-            $scopes     = $this->scopeTable->getAvailableScopes();
+            $scopes     = $this->scopeTable->getAvailableScopes($filter !== null ? (int) $filter->getId() : 1);
             $authUrl    = $this->configService->getValue('authorization_url') ?: $this->url . '/apps/developer/#!/auth';
             $tokenUrl   = $this->url . '/' . $this->dispatch . 'authorization/token';
             $refreshUrl = $this->url . '/' . $this->dispatch . 'authorization/token';

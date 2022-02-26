@@ -74,7 +74,7 @@ class ResourceListing extends ControllerDocumentation
         $this->attributeParser = new Attribute($schemaManager);
     }
 
-    public function getAvailableRoutes(FilterInterface $filter = null): iterable
+    public function getAvailableRoutes(?FilterInterface $filter = null): iterable
     {
         $collections = $this->routingParser->getCollection($filter);
         $result      = array();

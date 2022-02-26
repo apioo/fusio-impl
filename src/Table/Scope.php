@@ -47,9 +47,11 @@ class Scope extends Generated\ScopeTable
         }
     }
 
-    public function getAvailableScopes()
+    public function getAvailableScopes(int $categoryId)
     {
-        $result = $this->findAll(null, 0, 1024, 'name', Sql::SORT_ASC);
+        $condition = new Condition(['category_id', '=', $categoryId]);
+
+        $result = $this->findAll($condition, 0, 1024, 'name', Sql::SORT_ASC);
         $scopes = [];
         foreach ($result as $row) {
             $scopes[$row['name']] = $row['description'];

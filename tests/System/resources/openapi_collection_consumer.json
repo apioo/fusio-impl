@@ -1148,96 +1148,6 @@
         }
       }
     },
-    "\/consumer\/grant\/{grant_id}": {
-      "delete": {
-        "tags": [
-          "consumer.grant"
-        ],
-        "operationId": "Consumer_Action_Grant_Delete",
-        "responses": {
-          "204": {
-            "description": "DELETE 204 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Message"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.grant"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "grant_id",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "\/consumer\/grant": {
-      "get": {
-        "tags": [
-          "consumer.grant"
-        ],
-        "operationId": "Consumer_Action_Grant_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Grant_Collection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.grant"
-            ]
-          }
-        ]
-      }
-    },
     "\/consumer\/log\/{log_id}": {
       "get": {
         "tags": [
@@ -1349,6 +1259,96 @@
           {
             "app": [
               "consumer.log"
+            ]
+          }
+        ]
+      }
+    },
+    "\/consumer\/grant\/{grant_id}": {
+      "delete": {
+        "tags": [
+          "consumer.grant"
+        ],
+        "operationId": "Consumer_Action_Grant_Delete",
+        "responses": {
+          "204": {
+            "description": "DELETE 204 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.grant"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "grant_id",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/grant": {
+      "get": {
+        "tags": [
+          "consumer.grant"
+        ],
+        "operationId": "Consumer_Action_Grant_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Grant_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.grant"
             ]
           }
         ]
@@ -2434,32 +2434,6 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
-              "backend": "",
-              "backend.account": "",
-              "backend.action": "",
-              "backend.app": "",
-              "backend.audit": "",
-              "backend.category": "",
-              "backend.config": "",
-              "backend.connection": "",
-              "backend.cronjob": "",
-              "backend.dashboard": "",
-              "backend.event": "",
-              "backend.log": "",
-              "backend.marketplace": "",
-              "backend.page": "",
-              "backend.plan": "",
-              "backend.rate": "",
-              "backend.role": "",
-              "backend.route": "",
-              "backend.schema": "",
-              "backend.scope": "",
-              "backend.sdk": "",
-              "backend.statistic": "",
-              "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
               "consumer": "",
               "consumer.app": "",
               "consumer.event": "",
@@ -2470,42 +2444,13 @@
               "consumer.scope": "",
               "consumer.subscription": "",
               "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "consumer.user": ""
             }
           },
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
-              "backend": "",
-              "backend.account": "",
-              "backend.action": "",
-              "backend.app": "",
-              "backend.audit": "",
-              "backend.category": "",
-              "backend.config": "",
-              "backend.connection": "",
-              "backend.cronjob": "",
-              "backend.dashboard": "",
-              "backend.event": "",
-              "backend.log": "",
-              "backend.marketplace": "",
-              "backend.page": "",
-              "backend.plan": "",
-              "backend.rate": "",
-              "backend.role": "",
-              "backend.route": "",
-              "backend.schema": "",
-              "backend.scope": "",
-              "backend.sdk": "",
-              "backend.statistic": "",
-              "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
               "consumer": "",
               "consumer.app": "",
               "consumer.event": "",
@@ -2516,10 +2461,7 @@
               "consumer.scope": "",
               "consumer.subscription": "",
               "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "consumer.user": ""
             }
           },
           "authorizationCode": {
@@ -2527,32 +2469,6 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
-              "backend": "",
-              "backend.account": "",
-              "backend.action": "",
-              "backend.app": "",
-              "backend.audit": "",
-              "backend.category": "",
-              "backend.config": "",
-              "backend.connection": "",
-              "backend.cronjob": "",
-              "backend.dashboard": "",
-              "backend.event": "",
-              "backend.log": "",
-              "backend.marketplace": "",
-              "backend.page": "",
-              "backend.plan": "",
-              "backend.rate": "",
-              "backend.role": "",
-              "backend.route": "",
-              "backend.schema": "",
-              "backend.scope": "",
-              "backend.sdk": "",
-              "backend.statistic": "",
-              "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
               "consumer": "",
               "consumer.app": "",
               "consumer.event": "",
@@ -2563,10 +2479,7 @@
               "consumer.scope": "",
               "consumer.subscription": "",
               "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "consumer.user": ""
             }
           }
         }

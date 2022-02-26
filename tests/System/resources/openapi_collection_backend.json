@@ -7146,7 +7146,6 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
               "backend": "",
               "backend.account": "",
               "backend.action": "",
@@ -7170,29 +7169,13 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
-              "consumer": "",
-              "consumer.app": "",
-              "consumer.event": "",
-              "consumer.grant": "",
-              "consumer.log": "",
-              "consumer.page": "",
-              "consumer.plan": "",
-              "consumer.scope": "",
-              "consumer.subscription": "",
-              "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "backend.user": ""
             }
           },
           "clientCredentials": {
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
               "backend": "",
               "backend.account": "",
               "backend.action": "",
@@ -7216,22 +7199,7 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
-              "consumer": "",
-              "consumer.app": "",
-              "consumer.event": "",
-              "consumer.grant": "",
-              "consumer.log": "",
-              "consumer.page": "",
-              "consumer.plan": "",
-              "consumer.scope": "",
-              "consumer.subscription": "",
-              "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "backend.user": ""
             }
           },
           "authorizationCode": {
@@ -7239,7 +7207,6 @@
             "tokenUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "refreshUrl": "http:\/\/127.0.0.1\/authorization\/token",
             "scopes": {
-              "authorization": "",
               "backend": "",
               "backend.account": "",
               "backend.action": "",
@@ -7263,22 +7230,7 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
-              "backend.user": "",
-              "bar": "Bar access",
-              "consumer": "",
-              "consumer.app": "",
-              "consumer.event": "",
-              "consumer.grant": "",
-              "consumer.log": "",
-              "consumer.page": "",
-              "consumer.plan": "",
-              "consumer.scope": "",
-              "consumer.subscription": "",
-              "consumer.transaction": "",
-              "consumer.user": "",
-              "default": "",
-              "foo": "Foo access",
-              "system": ""
+              "backend.user": ""
             }
           }
         }
