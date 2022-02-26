@@ -43,6 +43,7 @@ class Guzzle implements SenderInterface
     public function send(object $dispatcher, Message $message): int
     {
         $response = $dispatcher->post($message->getEndpoint(), [
+            'http_errors' => false,
             'headers' => [
                 'Content-Type' => 'application/json',
                 'User-Agent'   => Base::getUserAgent(),
