@@ -23,8 +23,8 @@ namespace Fusio\Impl\Console\System;
 
 use Fusio\Impl\Service;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,13 +36,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronjobExecuteCommand extends Command
 {
-    private Service\Cronjob $cronjobService;
+    private Service\Cronjob\Executor $executor;
 
-    public function __construct(Service\Cronjob $cronjobService)
+    public function __construct(Service\Cronjob\Executor $executor)
     {
         parent::__construct();
 
-        $this->cronjobService = $cronjobService;
+        $this->executor = $executor;
     }
 
     protected function configure()
@@ -50,15 +50,18 @@ class CronjobExecuteCommand extends Command
         $this
             ->setName('system:cronjob_execute')
             ->setAliases(['cronjob'])
-            ->setDescription('Executes a specific cronjob')
-            ->addArgument('cronjob', InputArgument::REQUIRED, 'The cronjob name to execute');
+            ->setDescription('Entrypoint to execute cronjobs')
+            ->addOption('daemon', 'd', InputOption::VALUE_NONE, 'Whether to execute in daemon mode');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->cronjobService->execute($input->getArgument('cronjob'));
-
-        $output->writeln('Execution successful');
+        if ($input->getOption('daemon')) {
+            $this->executor->executeDaemon();
+        } else {
+            $this->executor->execute();
+            $output->writeln('Execution successful');
+        }
 
         return 0;
     }

@@ -238,11 +238,16 @@ trait Services
     {
         return new Service\Cronjob(
             $this->get('table_manager')->getTable(Table\Cronjob::class),
-            $this->get('table_manager')->getTable(Table\Cronjob\Error::class),
-            $this->get('action_executor_service'),
-            $this->get('config')->get('fusio_cron_file'),
-            $this->get('config')->get('fusio_cron_exec'),
             $this->get('event_dispatcher')
+        );
+    }
+
+    public function getCronjobExecutorService(): Service\Cronjob\Executor
+    {
+        return new Service\Cronjob\Executor(
+            $this->get('table_manager')->getTable(Table\Cronjob::class),
+            $this->get('table_manager')->getTable(Table\Cronjob\Error::class),
+            $this->get('action_executor_service')
         );
     }
 

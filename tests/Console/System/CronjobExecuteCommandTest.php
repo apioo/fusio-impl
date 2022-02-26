@@ -47,7 +47,6 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            'cronjob' => 'Test-Cron',
         ]);
 
         $actual = $commandTester->getDisplay();
@@ -59,7 +58,7 @@ class CronjobExecuteCommandTest extends ControllerDbTestCase
         $this->assertEquals(5, $cronjob['id']);
         $this->assertEquals(1, $cronjob['status']);
         $this->assertEquals('Test-Cron', $cronjob['name']);
-        $this->assertEquals('*/30 * * * *', $cronjob['cron']);
+        $this->assertEquals('* * * * *', $cronjob['cron']);
         $this->assertEquals('Sql-Select-All', $cronjob['action']);
         $this->assertEquals(date('Y-m-d'), date('Y-m-d', strtotime($cronjob['execute_date'])));
         $this->assertEquals(0, $cronjob['exit_code']);

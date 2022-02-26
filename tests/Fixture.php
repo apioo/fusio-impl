@@ -94,7 +94,7 @@ class Fixture
         $data->addAudit('Backend', 'Administrator', 1, 'app.update', 'Created schema foo', '2015-06-25 22:49:09');
         $data->addConnection('Test', Native::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
         $data->addConnection('paypal', PaypalConnection::class, Service\Connection\Encrypter::encrypt(['foo' => 'bar'], $secretKey));
-        $data->addCronjob('default', 'Test-Cron', '*/30 * * * *', 'Sql-Select-All');
+        $data->addCronjob('default', 'Test-Cron', '* * * * *', 'Sql-Select-All');
         $data->addCronjobError('Test-Cron', 'Syntax error, malformed JSON');
         $data->addEvent('default', 'foo-event', 'Foo event description');
         $data->addEventSubscription('foo-event', 'Administrator', 'http://www.fusio-project.org/ping');
