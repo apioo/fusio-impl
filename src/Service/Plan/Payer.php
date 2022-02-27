@@ -67,12 +67,22 @@ class Payer
 
         $this->usageTable->create($record);
 
-        // send mail in case the points reach a specific threshold
+        // send mail in case the points crossed a specific threshold
         $threshold = $this->configService->getValue('points_threshold');
-        if ($threshold > 0) {
-            if ($points === $threshold) {
-                $this->mailer->sendPointsThresholdMail($context->getUser()->getName(), $context->getUser()->getEmail(), $points);
-            }
+        if ($threshold > 0 && $this->hasCrossedThreshold($threshold, $context->getUser()->getPoints(), $points)) {
+            $this->mailer->sendPointsThresholdMail(
+                $context->getUser()->getName(),
+                $context->getUser()->getEmail(),
+                $context->getUser()->getPoints()
+            );
         }
+    }
+
+    private function hasCrossedThreshold(int $threshold, int $points, int $costs): bool
+    {
+        $maxPoints = $points;
+        $minPoints = $points - $costs;
+
+        return $threshold > $minPoints && $threshold <= $maxPoints;
     }
 }
