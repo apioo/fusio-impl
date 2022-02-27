@@ -42,7 +42,7 @@ class PayerTest extends TestCase
     /**
      * @dataProvider thresholdProvider
      */
-    public function testHasCrossedThreshold(int $threshold, int $points, int $cost, bool $sendMail)
+    public function testHasCrossedThreshold(?int $threshold, int $points, int $cost, bool $sendMail)
     {
         $userTable = $this->getMockBuilder(Table\User::class)
             ->disableOriginalConstructor()
@@ -124,6 +124,26 @@ class PayerTest extends TestCase
             [100, 98, 4, false],
             [100, 97, 4, false],
             [100, 96, 4, false],
+
+            [0, 104, 1, false],
+            [0, 103, 1, false],
+            [0, 102, 1, false],
+            [0, 101, 1, false],
+            [0, 100, 1, false],
+            [0, 99, 1, false],
+            [0, 98, 1, false],
+            [0, 97, 1, false],
+            [0, 96, 1, false],
+
+            [null, 104, 1, false],
+            [null, 103, 1, false],
+            [null, 102, 1, false],
+            [null, 101, 1, false],
+            [null, 100, 1, false],
+            [null, 99, 1, false],
+            [null, 98, 1, false],
+            [null, 97, 1, false],
+            [null, 96, 1, false],
         ];
     }
 }
