@@ -48,12 +48,8 @@ class Executor
 
     public function execute(): void
     {
-        $result = $this->cronjobTable->findByStatus(Table\Cronjob::STATUS_ACTIVE);
+        $result = $this->getCronjobsToExecute();
         foreach ($result as $cronjob) {
-            if (!$this->shouldExecute($cronjob)) {
-                continue;
-            }
-
             $this->executeCronjob($cronjob);
         }
     }
@@ -64,6 +60,21 @@ class Executor
             $this->execute();
             sleep(60);
         }
+    }
+
+    private function getCronjobsToExecute(): array
+    {
+        $execute = [];
+        $result = $this->cronjobTable->findByStatus(Table\Cronjob::STATUS_ACTIVE);
+        foreach ($result as $cronjob) {
+            if (!$this->shouldExecute($cronjob)) {
+                continue;
+            }
+
+            $execute[] = $cronjob;
+        }
+
+        return $execute;
     }
 
     private function shouldExecute(Table\Generated\CronjobRow $cronjob): bool
