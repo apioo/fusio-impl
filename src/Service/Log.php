@@ -101,7 +101,7 @@ class Log
         $endTime = hrtime(true);
 
         $this->connection->update(Table\Generated\LogTable::NAME, [
-            Table\Generated\LogTable::COLUMN_EXECUTION_TIME => (int) ($endTime - $startTime),
+            Table\Generated\LogTable::COLUMN_EXECUTION_TIME => (int) (($endTime - $startTime) / 1e+6),
         ], [
             Table\Generated\LogTable::COLUMN_ID => $logId,
         ]);
