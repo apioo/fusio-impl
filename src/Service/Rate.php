@@ -224,11 +224,19 @@ class Rate
 
         if (!empty($allocations)) {
             foreach ($allocations as $allocation) {
+                if ($allocation->getAuthenticated() === true) {
+                    $authenticated = 1;
+                } elseif ($allocation->getAuthenticated() === false) {
+                    $authenticated = 0;
+                } else {
+                    $authenticated = null;
+                }
+
                 $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
                     Table\Generated\RateAllocationTable::COLUMN_RATE_ID => $rateId,
                     Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID => $allocation->getRouteId(),
                     Table\Generated\RateAllocationTable::COLUMN_APP_ID => $allocation->getAppId(),
-                    Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $allocation->getAuthenticated(),
+                    Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $authenticated,
                     Table\Generated\RateAllocationTable::COLUMN_PARAMETERS => $allocation->getParameters(),
                 ]));
             }
