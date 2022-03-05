@@ -93,7 +93,7 @@ class Route extends ViewAbstract
             'path' => Table\Generated\RoutesTable::COLUMN_PATH,
             'controller' => Table\Generated\RoutesTable::COLUMN_CONTROLLER,
             'scopes' => $this->doColumn([$this->getTable(Table\Scope\Route::class), 'getScopeNamesForRoute'], [new Reference('id')], 'name'),
-            'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id')], [
+            'config' => $this->doCollection([$this->getTable(Table\Route\Method::class), 'getMethods'], [new Reference('id'), null, null], [
                 'version' => Table\Generated\RoutesMethodTable::COLUMN_VERSION,
                 'status' => Table\Generated\RoutesMethodTable::COLUMN_STATUS,
                 'method' => Table\Generated\RoutesMethodTable::COLUMN_METHOD,
