@@ -63,7 +63,7 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 4,
+    "totalResults": 5,
     "startIndex": 0,
     "itemsPerPage": 32,
     "entry": [
@@ -83,6 +83,12 @@ class CollectionTest extends ControllerDbTestCase
             "id": 2,
             "title": "Getting started",
             "slug": "getting-started",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
+            "id": 6,
+            "title": "SDK",
+            "slug": "sdk",
             "date": "2021-07-03T13:53:09Z"
         },
         {

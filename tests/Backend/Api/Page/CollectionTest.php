@@ -68,7 +68,7 @@ class CollectionTest extends ControllerDbTestCase
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
@@ -101,6 +101,13 @@ class CollectionTest extends ControllerDbTestCase
             "date": "2021-07-03T13:53:09Z"
         },
         {
+            "id": 6,
+            "status": 1,
+            "title": "SDK",
+            "slug": "sdk",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
             "id": 5,
             "status": 1,
             "title": "Support",
@@ -126,7 +133,7 @@ JSON;
 
         $expect = <<<'JSON'
 {
-    "totalResults": 5,
+    "totalResults": 6,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
@@ -156,6 +163,13 @@ JSON;
             "status": 2,
             "title": "Overview",
             "slug": "overview",
+            "date": "2021-07-03T13:53:09Z"
+        },
+        {
+            "id": 6,
+            "status": 1,
+            "title": "SDK",
+            "slug": "sdk",
             "date": "2021-07-03T13:53:09Z"
         },
         {

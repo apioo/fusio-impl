@@ -78,7 +78,7 @@ class EntityTest extends ControllerDbTestCase
     "status": 1,
     "title": "Getting started",
     "slug": "getting-started",
-    "content": "\n<p>This is a quick introduction to help you get started using this API. On the\nleft sidebar you see all available documentation resources. The\n<a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to\ndiscover the endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a>\npage you can see all available support options if you get stuck.<\/p>\n\n<p>You can also <a href=\"#!\/register\">register<\/a> a new account to create a new\napp. Through this app you can access protected parts of the API. The\n<a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains\nmore information how you can authenticate.<\/p>\n",
+    "content": "\n<p>This is a quick introduction to help you get started using this API. On the left sidebar you see all available\ndocumentation resources. The <a href=\"#!\/documentation\/api\">API<\/a> reference lists all available resources to\ndiscover the endpoints. On the <a href=\"#!\/documentation\/support\">support<\/a> page you can see all available support\noptions if you get stuck. The <a href=\"#!\/documentation\/sdk\">SDK<\/a> provides an overview of available clients SDKs\nwhich help you to work with the API.<\/p>\n\n<p>You can also <a href=\"#!\/register\">register<\/a> a new account to create a new app. Through this app you can access\nprotected parts of the API. The <a href=\"#!\/documentation\/authorization\">authorization<\/a> documentation contains\nmore information how you can authenticate.<\/p>",
     "date": "2021-07-03T13:53:09Z"
 }
 JSON;
