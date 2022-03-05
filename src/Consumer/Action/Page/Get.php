@@ -26,6 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Consumer\View;
+use PSX\Framework\Config\Config;
 use PSX\Sql\TableManagerInterface;
 
 /**
@@ -38,16 +39,28 @@ use PSX\Sql\TableManagerInterface;
 class Get extends ActionAbstract
 {
     private View\Page $table;
+    private Config $config;
 
-    public function __construct(TableManagerInterface $tableManager)
+    public function __construct(TableManagerInterface $tableManager, Config $config)
     {
         $this->table = $tableManager->getTable(View\Page::class);
+        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        return $this->table->getEntity(
+        $entity = $this->table->getEntity(
             $request->get('page_id')
         );
+
+        $env = [
+            'APPS_URL' => $this->config->get('fusio_apps_url')
+        ];
+
+        foreach ($env as $key => $value) {
+            $entity['content'] = str_replace(['{' . $key . '}'], [$value], $entity['content']);
+        }
+
+        return $entity;
     }
 }
