@@ -53,14 +53,27 @@ class Get extends ActionAbstract
             $request->get('page_id')
         );
 
+        $entity['content'] = $this->replaceVariables($entity['content']);
+
+        return $entity;
+    }
+
+    private function replaceVariables(string $content): string
+    {
+        $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
+        $url = $this->config->get('fusio_apps_url');
+        $basePath = parse_url($url, PHP_URL_PATH);
+
         $env = [
-            'APPS_URL' => $this->config->get('fusio_apps_url')
+            'API_URL' => $apiUrl,
+            'URL' => $url,
+            'BASE_PATH' => $basePath,
         ];
 
         foreach ($env as $key => $value) {
-            $entity['content'] = str_replace(['{' . $key . '}'], [$value], $entity['content']);
+            $content = str_replace(['{' . $key . '}'], [$value], $content);
         }
 
-        return $entity;
+        return $content;
     }
 }
