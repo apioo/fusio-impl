@@ -90,7 +90,7 @@ class Sdk
         $types  = GeneratorFactory::getPossibleTypes();
 
         foreach ($types as $type) {
-            $fileName = 'sdk-' . $type . '.zip';
+            $fileName = 'sdk-' . $type . '-external.zip';
             $sdkZip = $sdkDir . '/' . $fileName;
             if (is_file($sdkZip)) {
                 $result[$type] = $this->config['psx_url'] . '/sdk/' . $fileName;
