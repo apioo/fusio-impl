@@ -60,13 +60,15 @@ class Get extends ActionAbstract
 
     private function replaceVariables(string $content): string
     {
-        $apiUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
+        $baseUrl = $this->config->get('psx_url');
+        $apiUrl = $baseUrl . '/' . $this->config->get('psx_dispatch');
         $url = $this->config->get('fusio_apps_url');
         $basePath = parse_url($url, PHP_URL_PATH);
 
         $env = [
             'API_URL' => $apiUrl,
             'URL' => $url,
+            'BASE_URL' => $baseUrl,
             'BASE_PATH' => $basePath,
         ];
 
