@@ -84,7 +84,7 @@ class ListTest extends ControllerDbTestCase
             "class": "Fusio\\Adapter\\Sql\\Connection\\Sql"
         },
         {
-            "name": "SQL (advanced)",
+            "name": "SQL-Advanced",
             "class": "Fusio\\Adapter\\Sql\\Connection\\SqlAdvanced"
         },
         {
