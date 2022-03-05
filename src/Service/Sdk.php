@@ -23,6 +23,7 @@ namespace Fusio\Impl\Service;
 
 use Fusio\Model\Backend\Sdk_Generate;
 use PSX\Api\GeneratorFactory;
+use PSX\Api\GeneratorFactoryInterface;
 use PSX\Http\Exception as StatusCode;
 use PSX\Framework\Config\Config as FrameworkConfig;
 use Symfony\Component\Console\Application;
@@ -90,7 +91,7 @@ class Sdk
         $types  = GeneratorFactory::getPossibleTypes();
 
         foreach ($types as $type) {
-            $fileName = 'sdk-' . $type . '-external.zip';
+            $fileName = $this->getFileName($type);
             $sdkZip = $sdkDir . '/' . $fileName;
             if (is_file($sdkZip)) {
                 $result[$type] = $this->config['psx_url'] . '/sdk/' . $fileName;
@@ -105,5 +106,26 @@ class Sdk
     private function getSdkDir(): string
     {
         return $this->config->get('psx_path_public') . '/sdk';
+    }
+
+    private function getFileName(string $type): string
+    {
+        switch ($type) {
+            case GeneratorFactoryInterface::MARKUP_HTML:
+                return 'output-' . $type . '-external.html';
+
+            case GeneratorFactoryInterface::MARKUP_MARKDOWN:
+                return 'output-' . $type . '-external.md';
+
+            case GeneratorFactoryInterface::SPEC_RAML:
+                return 'output-' . $type . '-external.raml';
+
+            case GeneratorFactoryInterface::SPEC_OPENAPI:
+            case GeneratorFactoryInterface::SPEC_TYPESCHEMA:
+                return 'output-' . $type . '-external.json';
+
+            default:
+                return 'sdk-' . $type . '-external.zip';
+        }
     }
 }
