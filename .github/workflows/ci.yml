@@ -25,10 +25,15 @@ jobs:
       matrix:
         php-versions:
           - 8.0
+          - 8.1
         database:
           - sqlite
           - postgres
           - mysql
+        exclude:
+          # exclude PHP 8.0 mysql build which is really slow
+          - php-versions: 8.0
+            database: mysql
     services:
       postgres:
         image: postgres
