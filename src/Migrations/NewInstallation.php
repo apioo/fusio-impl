@@ -147,6 +147,7 @@ class NewInstallation
         $bag->addPage('API', 'api', self::readFile('api.html'));
         $bag->addPage('Authorization', 'authorization', self::readFile('authorization.html'));
         $bag->addPage('Support', 'support', self::readFile('support.html'));
+        $bag->addPage('SDK', 'sdk', self::readFile('sdk.html'));
 
         foreach (self::getRoutes() as $category => $routes) {
             $bag->addRoutes($category, $routes);
