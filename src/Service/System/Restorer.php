@@ -61,7 +61,7 @@ class Restorer
             $nameColumn = 'id';
         }
 
-        return $this->connection->update($table, [
+        return (int) $this->connection->update($table, [
             $statusColumn => $status,
         ], [
             $nameColumn => $id
