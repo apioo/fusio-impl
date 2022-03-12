@@ -23,8 +23,6 @@ final class Version20220212130627 extends AbstractMigration
         $eventTable = $schema->getTable('fusio_event');
         if ($eventTable instanceof Table && !$eventTable->hasColumn('event_schema')) {
             $eventTable->addColumn('event_schema', 'string', ['notnull' => false]);
-            $this->addSql('UPDATE fusio_event SET event_schema = ' . $this->connection->quoteIdentifier('schema'));
-            $eventTable->dropColumn('schema');
         }
     }
 
