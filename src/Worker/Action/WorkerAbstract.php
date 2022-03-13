@@ -103,7 +103,7 @@ abstract class WorkerAbstract extends ActionAbstract
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
-        $builder->add($elementFactory->newTextArea('code', 'Code', $this->getLanguage(), 'Click <a ng-click="help.showDialog(\'help/action/worker-' . $this->getLanguage() . '.md\')">here</a> for more information.'));
+        $builder->add($elementFactory->newTextArea('code', 'Code', $this->getLanguage(), ''));
     }
 
     abstract protected function getLanguage(): string;
