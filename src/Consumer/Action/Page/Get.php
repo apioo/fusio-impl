@@ -67,7 +67,7 @@ class Get extends ActionAbstract
 
         $env = [
             'API_URL' => $apiUrl,
-            'URL' => $url,
+            'APPS_URL' => $url,
             'BASE_URL' => $baseUrl,
             'BASE_PATH' => $basePath,
         ];
