@@ -34,19 +34,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Local implements RepositoryInterface
 {
-    /**
-     * @var string
-     */
-    private $appsPath;
+    private string $appsPath;
+    private array $apps;
 
-    /**
-     * @var array
-     */
-    private $apps;
-
-    /**
-     * @param string $appsPath
-     */
     public function __construct(string $appsPath)
     {
         $this->appsPath = $appsPath;
@@ -76,6 +66,10 @@ class Local implements RepositoryInterface
 
     private function scanDir(): array
     {
+        if (!is_dir($this->appsPath)) {
+            return [];
+        }
+
         $apps = scandir($this->appsPath);
         $result = [];
 
