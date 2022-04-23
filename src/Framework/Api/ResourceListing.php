@@ -166,6 +166,7 @@ class ResourceListing extends ControllerDocumentation
 
         $this->buildPathParameters($path, $resource, $definitions);
 
+        $scopeNames = [];
         foreach ($methods as $method) {
             $resourceMethod = Resource\Factory::getMethod($method['method']);
 
@@ -188,6 +189,7 @@ class ResourceListing extends ControllerDocumentation
             }
 
             if (isset($scopes[$method['method']])) {
+                $scopeNames = $scopes[$method['method']];
                 $resourceMethod->setTags($scopes[$method['method']]);
             }
 
@@ -214,6 +216,8 @@ class ResourceListing extends ControllerDocumentation
 
             $resource->addMethod($resourceMethod);
         }
+
+        $resource->setTags($scopeNames);
 
         return Specification::fromResource($resource, $definitions);
     }
