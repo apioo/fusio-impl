@@ -35,7 +35,7 @@ use Symfony\Component\Yaml\Yaml;
 class Local implements RepositoryInterface
 {
     private string $appsPath;
-    private array $apps;
+    private array $apps = [];
 
     public function __construct(string $appsPath)
     {
@@ -47,7 +47,7 @@ class Local implements RepositoryInterface
      */
     public function fetchAll(): array
     {
-        if (!$this->apps) {
+        if (count($this->apps) === 0) {
             $this->apps = $this->scanDir();
         }
 
