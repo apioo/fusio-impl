@@ -398,36 +398,6 @@ class DataBag
         ];
     }
 
-    public function addPlanContract(string $user, string $plan, float $amount, int $points, int $period, ?string $date = null)
-    {
-        $this->data['fusio_plan_contract'][] = [
-            'user_id' => $this->getId('fusio_user', $user),
-            'plan_id' => $this->getId('fusio_plan', $plan),
-            'status' => Table\Plan\Contract::STATUS_ACTIVE,
-            'amount' => $amount,
-            'points' => $points,
-            'period_type' => $period,
-            'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
-        ];
-    }
-
-    public function addPlanInvoice(int $contract, ?int $prevId, string $user, string $displayId, int $status, float $amount, int $points, string $fromDate, string $toDate, ?string $payDate, ?string $date = null)
-    {
-        $this->data['fusio_plan_invoice'][] = [
-            'contract_id' => $this->getId('fusio_plan_contract', $contract),
-            'prev_id' => $prevId,
-            'user_id' => $this->getId('fusio_user', $user),
-            'display_id' => $displayId,
-            'status' => $status,
-            'amount' => $amount,
-            'points' => $points,
-            'from_date' => $fromDate,
-            'to_date' => $toDate,
-            'pay_date' => $payDate,
-            'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
-        ];
-    }
-
     public function addPlanUsage(string $route, string $user, string $app, int $points, ?string $date = null)
     {
         $this->data['fusio_plan_usage'][] = [
@@ -439,17 +409,14 @@ class DataBag
         ];
     }
 
-    public function addTransaction(int $invoice, string $provider, string $transactionId, string $remoteId, float $amount, string $returnUrl, ?string $date = null)
+    public function addTransaction(string $user, string $plan, float $amount, ?string $date = null)
     {
         $this->data['fusio_transaction'][] = [
-            'invoice_id' => $this->getId('fusio_plan_invoice', $invoice),
-            'status' => 1,
-            'provider' => $provider,
-            'transaction_id' => $transactionId,
-            'remote_id' => $remoteId,
+            'user_id' => $this->getId('fusio_user', $user),
+            'plan_id' => $this->getId('fusio_plan', $plan),
+            'transaction_id' => '[transaction_id]',
             'amount' => $amount,
-            'return_url' => $returnUrl,
-            'update_date' => null,
+            'points' => 1000,
             'insert_date' => $date === null ? (new \DateTime())->format('Y-m-d H:i:s') : $date,
         ];
     }
