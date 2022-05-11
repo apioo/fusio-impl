@@ -25,7 +25,7 @@ use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Payment;
+use Fusio\Impl\Service\Plan\Payment;
 use PSX\Framework\Config\Config;
 
 /**

@@ -26,7 +26,7 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Payment;
+use Fusio\Impl\Service\Plan\Payment;
 use Fusio\Model\Consumer\Transaction_Prepare_Request;
 
 /**

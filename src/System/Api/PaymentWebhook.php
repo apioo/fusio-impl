@@ -21,7 +21,7 @@
 
 namespace Fusio\Impl\System\Api;
 
-use Fusio\Impl\Service\Payment;
+use Fusio\Impl\Service\Plan\Payment;
 use PSX\Dependency\Attribute\Inject;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Framework\Loader\Context;

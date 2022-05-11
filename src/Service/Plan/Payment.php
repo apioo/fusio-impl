@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Service;
+namespace Fusio\Impl\Service\Plan;
 
 use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Model\Product;
@@ -31,11 +31,9 @@ use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
 use Fusio\Impl\Provider\ProviderFactory;
-use Fusio\Impl\Service\Plan\WebhookHandler;
 use Fusio\Impl\Table;
 use Fusio\Model\Consumer\Transaction_Prepare_Request;
 use PSX\Framework\Config\Config;
-use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
 use PSX\Http\RequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -53,14 +51,16 @@ class Payment
     private ProviderFactory $providerFactory;
     private Config $config;
     private Table\Transaction $transactionTable;
+    private Webhook $webhookHandler;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Config $config, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Config $config, Table\Transaction $transactionTable, Webhook $webhookHandler, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
         $this->providerFactory = $providerFactory;
         $this->config = $config;
         $this->transactionTable = $transactionTable;
+        $this->webhookHandler = $webhookHandler;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -99,9 +99,7 @@ class Payment
 
         $webhookSecret = $this->configService->get('payment_' . strtolower($name) . '_secret');
 
-        $handler = new WebhookHandler();
-
-        return $provider->webhook($connection, $request, $handler, $webhookSecret);
+        return $provider->webhook($connection, $request, $this->webhookHandler, $webhookSecret);
     }
 
     public function portal(string $name, UserInterface $user, string $returnUrl)
