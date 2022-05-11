@@ -20,6 +20,14 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('role_id');
     }
+    public function setPlanId(?int $planId) : void
+    {
+        $this->setProperty('plan_id', $planId);
+    }
+    public function getPlanId() : ?int
+    {
+        return $this->getProperty('plan_id');
+    }
     public function setProvider(?int $provider) : void
     {
         $this->setProperty('provider', $provider);
