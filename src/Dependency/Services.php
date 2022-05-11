@@ -415,46 +415,6 @@ trait Services
         );
     }
 
-    public function getPlanContractService(): Service\Plan\Contract
-    {
-        return new Service\Plan\Contract(
-            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
-            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
-            $this->get('event_dispatcher')
-        );
-    }
-
-    public function getPlanInvoiceService(): Service\Plan\Invoice
-    {
-        return new Service\Plan\Invoice(
-            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
-            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
-            $this->get('table_manager')->getTable(Table\User::class),
-            $this->get('event_dispatcher')
-        );
-    }
-
-    public function getPlanOrderService(): Service\Plan\Order
-    {
-        return new Service\Plan\Order(
-            $this->get('plan_contract_service'),
-            $this->get('plan_invoice_service'),
-            $this->get('table_manager')->getTable(Table\Plan::class),
-            $this->get('event_dispatcher')
-        );
-    }
-
-    public function getPlanBillingRunService(): Service\Plan\BillingRun
-    {
-        return new Service\Plan\BillingRun(
-            $this->get('plan_invoice_service'),
-            $this->get('table_manager')->getTable(Table\Plan\Contract::class),
-            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
-            $this->get('table_manager')->getTable(Table\User::class),
-            $this->get('event_dispatcher')
-        );
-    }
-
     public function getPlanPayerService(): Service\Plan\Payer
     {
         return new Service\Plan\Payer(
@@ -465,7 +425,7 @@ trait Services
         );
     }
 
-    public function getTransactionService(): Service\Transaction
+    public function getPlanPaymentService(): Service\Plan\Payment
     {
         $factory = new ProviderFactory(
             $this->get('provider_loader'),
@@ -474,14 +434,21 @@ trait Services
             Payment\ProviderInterface::class
         );
 
-        return new Service\Transaction(
+        return new Service\Plan\Payment(
             $this->get('connector'),
-            $this->get('plan_invoice_service'),
             $factory,
             $this->get('config'),
-            $this->get('table_manager')->getTable(Table\Plan\Invoice::class),
             $this->get('table_manager')->getTable(Table\Transaction::class),
             $this->get('event_dispatcher')
+        );
+    }
+
+    public function getPlanWebhookHandlerService(): Service\Plan\Webhook
+    {
+        return new Service\Plan\Webhook(
+            $this->get('table_manager')->getTable(Table\User::class),
+            $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('table_manager')->getTable(Table\Transaction::class),
         );
     }
 
