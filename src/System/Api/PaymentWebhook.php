@@ -19,47 +19,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Backend\Action\Plan\Invoice;
+namespace Fusio\Impl\System\Api;
 
-use Fusio\Engine\ActionAbstract;
-use Fusio\Engine\ContextInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Plan;
-use Fusio\Model\Backend\Plan_Invoice_Create;
-use PSX\Http\Environment\HttpResponse;
+use Fusio\Impl\Service\Payment;
+use PSX\Dependency\Attribute\Inject;
+use PSX\Framework\Http\ResponseWriter;
+use PSX\Framework\Loader\Context;
+use PSX\Http\FilterChainInterface;
+use PSX\Http\FilterInterface;
+use PSX\Http\RequestInterface;
+use PSX\Http\ResponseInterface;
 
 /**
- * Create
+ * PaymentWebhook
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Create extends ActionAbstract
+class PaymentWebhook implements FilterInterface
 {
-    private Plan\Invoice $invoiceService;
+    #[Inject]
+    private Payment $transactionService;
 
-    public function __construct(Plan\Invoice $invoiceService)
+    #[Inject]
+    private ResponseWriter $responseWriter;
+
+    private Context $context;
+
+    public function __construct(Context $context = null)
     {
-        $this->invoiceService = $invoiceService;
+        $this->context = $context ?? new Context();
     }
 
-    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
-        $body = $request->getPayload();
+        $this->transactionService->webhook($this->context->getParameter('provider'), $request);
 
-        assert($body instanceof Plan_Invoice_Create);
-
-        $this->invoiceService->create(
-            $body,
-            UserContext::newActionContext($context)
-        );
-
-        return new HttpResponse(201, [], [
+        $this->responseWriter->setBody($response, [
             'success' => true,
-            'message' => 'Invoice successfully created',
+            'message' => 'Execution successful'
         ]);
+
+        $filterChain->handle($request, $response);
     }
 }

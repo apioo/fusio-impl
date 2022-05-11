@@ -26,50 +26,45 @@ use Fusio\Engine\Model\Product;
 use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Model\Transaction as TransactionModel;
 use Fusio\Engine\Model\TransactionInterface;
-use Fusio\Engine\Parameters;
+use Fusio\Engine\Model\UserInterface;
 use Fusio\Engine\Payment\PrepareContext;
 use Fusio\Engine\Payment\ProviderInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Model\Consumer\Transaction_Prepare_Request;
-use Fusio\Impl\Event\Transaction\ExecutedEvent;
-use Fusio\Impl\Event\Transaction\PreparedEvent;
 use Fusio\Impl\Provider\ProviderFactory;
+use Fusio\Impl\Service\Plan\WebhookHandler;
 use Fusio\Impl\Table;
+use Fusio\Model\Consumer\Transaction_Prepare_Request;
 use PSX\Framework\Config\Config;
 use PSX\Framework\Util\Uuid;
 use PSX\Http\Exception as StatusCode;
-use PSX\Sql\Condition;
+use PSX\Http\RequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Transaction
+ * Payment
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Transaction
+class Payment
 {
     private ConnectorInterface $connector;
-    private Plan\Invoice $invoiceService;
     private ProviderFactory $providerFactory;
     private Config $config;
-    private Table\Plan\Invoice $invoiceTable;
     private Table\Transaction $transactionTable;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ConnectorInterface $connector, Plan\Invoice $invoiceService, ProviderFactory $providerFactory, Config $config, Table\Plan\Invoice $invoiceTable, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(ConnectorInterface $connector, ProviderFactory $providerFactory, Config $config, Table\Transaction $transactionTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->connector = $connector;
-        $this->invoiceService = $invoiceService;
         $this->providerFactory = $providerFactory;
         $this->config = $config;
-        $this->invoiceTable = $invoiceTable;
         $this->transactionTable = $transactionTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function prepare(string $name, Transaction_Prepare_Request $prepare, UserContext $context): string
+    public function checkout(string $name, Transaction_Prepare_Request $prepare, UserInterface $user, UserContext $context): string
     {
         $provider = $this->providerFactory->factory($name);
         if (!$provider instanceof ProviderInterface) {
@@ -85,84 +80,43 @@ class Transaction
             throw new StatusCode\BadRequestException('Invalid return url');
         }
 
-        // create transaction
-        $this->transactionTable->beginTransaction();
-
-        try {
-            $record = new Table\Generated\TransactionRow([
-                Table\Generated\TransactionTable::COLUMN_INVOICE_ID => $prepare->getInvoiceId(),
-                Table\Generated\TransactionTable::COLUMN_STATUS => TransactionModel::STATUS_CREATED,
-                Table\Generated\TransactionTable::COLUMN_PROVIDER => $name,
-                Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID => Uuid::pseudoRandom(),
-                Table\Generated\TransactionTable::COLUMN_AMOUNT => $product->getPrice(),
-                Table\Generated\TransactionTable::COLUMN_RETURN_URL => $returnUrl,
-                Table\Generated\TransactionTable::COLUMN_INSERT_DATE => new \DateTime(),
-            ]);
-
-            $this->transactionTable->create($record);
-
-            // set transaction id
-            $record->setId($this->transactionTable->getLastInsertId());
-            $transaction = $this->newTransactionModel($record);
-
-            // prepare payment
-            $approvalUrl = $provider->prepare(
-                $connection,
-                $product,
-                $transaction,
-                $this->buildPrepareContext($transaction)
-            );
-
-            // update transaction
-            $this->updateTransaction($transaction);
-
-            // trigger event
-            $this->eventDispatcher->dispatch(new PreparedEvent($transaction));
-
-            $this->transactionTable->commit();
-
-            return $approvalUrl;
-        } catch (\Throwable $e) {
-            $this->transactionTable->rollBack();
-
-            throw $e;
-        }
+        return $provider->checkout(
+            $connection,
+            $product,
+            $user,
+            $this->buildPrepareContext($returnUrl)
+        );
     }
 
-    public function execute(string $transactionId, array $parameters): string
+    public function webhook(string $name, RequestInterface $request)
     {
-        $transaction = $this->createTransaction($transactionId);
-        $provider    = $this->providerFactory->factory($transaction->getProvider());
-
+        $provider = $this->providerFactory->factory($name);
         if (!$provider instanceof ProviderInterface) {
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $connection = $this->connector->getConnection($transaction->getProvider());
+        $connection = $this->connector->getConnection($name);
 
-        $this->transactionTable->beginTransaction();
+        $webhookSecret = $this->configService->get('payment_' . strtolower($name) . '_secret');
 
-        try {
-            // create product
-            $product = $this->getProduct($transaction->getInvoiceId());
+        $handler = new WebhookHandler();
 
-            // execute transaction
-            $provider->execute($connection, $product, $transaction, new Parameters($parameters));
+        return $provider->webhook($connection, $request, $handler, $webhookSecret);
+    }
 
-            // update transaction
-            $this->updateTransaction($transaction);
-
-            // trigger event
-            $this->eventDispatcher->dispatch(new ExecutedEvent($transaction));
-
-            $this->transactionTable->commit();
-
-            return $this->buildReturnUrl($transaction);
-        } catch (\Throwable $e) {
-            $this->transactionTable->rollBack();
-
-            throw $e;
+    public function portal(string $name, UserInterface $user, string $returnUrl)
+    {
+        $provider = $this->providerFactory->factory($name);
+        if (!$provider instanceof ProviderInterface) {
+            throw new StatusCode\BadRequestException('Provider is not available');
         }
+
+        $externalId = $user->getExternalId();
+        if (empty($externalId)) {
+            throw new StatusCode\BadRequestException('User ');
+        }
+
+        return $provider->portal($user, $returnUrl);
     }
 
     private function getProduct(int $invoiceId): ProductInterface
@@ -216,23 +170,14 @@ class Transaction
         }
     }
 
-    private function buildPrepareContext(TransactionInterface $transaction): PrepareContext
+    private function buildPrepareContext(string $returnUrl, string $customerId): PrepareContext
     {
-        $baseUrl = $this->config->get('psx_url') . '/' . $this->config->get('psx_dispatch');
-
         return new PrepareContext(
-            $baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId(),
-            $baseUrl . 'consumer/transaction/execute/' . $transaction->getTransactionId(),
-            $this->config->get('fusio_payment_currency')
+            $returnUrl,
+            $returnUrl,
+            $this->config->get('fusio_payment_currency'),
+            $customerId
         );
-    }
-
-    private function buildReturnUrl(TransactionInterface $transaction): string
-    {
-        $returnUrl = $transaction->getReturnUrl();
-        $returnUrl = str_replace('{transaction_id}', (string) $transaction->getId(), $returnUrl);
-
-        return $returnUrl;
     }
 
     private function newTransactionModel(Table\Generated\TransactionRow $row): TransactionModel

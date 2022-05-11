@@ -19,44 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\Transaction;
+namespace Fusio\Impl\Consumer\Action\Payment;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Request\HttpRequest;
 use Fusio\Engine\RequestInterface;
-use Fusio\Impl\Service\Transaction;
-use PSX\Http\Exception as StatusCode;
+use Fusio\Impl\Service\Payment;
+use PSX\Framework\Config\Config;
 
 /**
- * Execute
+ * Portal
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Execute extends ActionAbstract
+class Portal extends ActionAbstract
 {
-    private Transaction $transactionService;
+    private Payment $transactionService;
+    private Config $config;
 
-    public function __construct(Transaction $transactionService)
+    public function __construct(Payment $transactionService, Config $config)
     {
         $this->transactionService = $transactionService;
+        $this->config = $config;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-        $parameters = [];
-        if ($request instanceof HttpRequest) {
-            $parameters = $request->getParameters();
-        }
+        $returnUrl = $this->config->get('fusio_apps_url') . '/apps/developer';
 
-        $returnUrl = $this->transactionService->execute(
-            $request->get('transaction_id'),
-            $parameters
+        $redirectUrl = $this->transactionService->portal(
+            $request->get('provider'),
+            $context->getUser(),
+            $returnUrl
         );
 
-        throw new StatusCode\TemporaryRedirectException($returnUrl);
+        return [
+            'redirectUrl' => $redirectUrl,
+        ];
     }
 }

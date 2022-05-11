@@ -19,30 +19,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Consumer\Action\Transaction;
+namespace Fusio\Impl\Consumer\Action\Payment;
 
 use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Transaction;
+use Fusio\Impl\Service\Payment;
 use Fusio\Model\Consumer\Transaction_Prepare_Request;
 
 /**
- * Prepare
+ * Checkout
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Prepare extends ActionAbstract
+class Checkout extends ActionAbstract
 {
-    private Transaction $transactionService;
+    private Payment $paymentService;
 
-    public function __construct(Transaction $transactionService)
+    public function __construct(Payment $paymentService)
     {
-        $this->transactionService = $transactionService;
+        $this->paymentService = $paymentService;
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
@@ -51,9 +51,10 @@ class Prepare extends ActionAbstract
 
         assert($body instanceof Transaction_Prepare_Request);
 
-        $approvalUrl = $this->transactionService->prepare(
+        $approvalUrl = $this->paymentService->checkout(
             $request->get('provider'),
             $body,
+            $context->getUser(),
             UserContext::newActionContext($context)
         );
 
