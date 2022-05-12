@@ -265,6 +265,7 @@ final class Version20200905081453 extends AbstractMigration
             $planTable->addColumn('points', 'integer');
             $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
             $planTable->addColumn('period_count', 'integer', ['notnull' => false]);
+            $planTable->addColumn('external_id', 'string', ['notnull' => false]);
             $planTable->setPrimaryKey(['id']);
             $planTable->addUniqueIndex(['name']);
         }
@@ -427,6 +428,7 @@ final class Version20200905081453 extends AbstractMigration
             $userTable->addColumn('provider', 'integer', ['default' => ProviderInterface::PROVIDER_SYSTEM]);
             $userTable->addColumn('status', 'integer');
             $userTable->addColumn('remote_id', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
+            $userTable->addColumn('external_id', 'string', ['notnull' => false]);
             $userTable->addColumn('name', 'string', ['length' => 64]);
             $userTable->addColumn('email', 'string', ['length' => 128, 'notnull' => false, 'default' => null]);
             $userTable->addColumn('password', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
@@ -496,17 +498,6 @@ final class Version20200905081453 extends AbstractMigration
             $eventTriggerTable->addForeignKeyConstraint($schema->getTable('fusio_event'), ['event_id'], ['id'], [], 'event_trigger_event_id');
         }
 
-        if (isset($planContractTable)) {
-            $planContractTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_contract_user_id');
-            $planContractTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_contract_plan_id');
-        }
-
-        if (isset($planInvoiceTable)) {
-            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_contract'), ['contract_id'], ['id'], [], 'plan_invoice_contract_id');
-            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_user'), ['user_id'], ['id'], [], 'plan_invoice_user_id');
-            $planInvoiceTable->addForeignKeyConstraint($schema->getTable('fusio_plan_invoice'), ['prev_id'], ['id'], [], 'plan_invoice_prev_id');
-        }
-
         if (isset($rateAllocationTable)) {
             $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_rate'), ['rate_id'], ['id'], [], 'rate_allocation_rate_id');
             $rateAllocationTable->addForeignKeyConstraint($schema->getTable('fusio_routes'), ['route_id'], ['id'], [], 'rate_allocation_route_id');
@@ -569,8 +560,6 @@ final class Version20200905081453 extends AbstractMigration
         $schema->dropTable('fusio_log');
         $schema->dropTable('fusio_log_error');
         $schema->dropTable('fusio_plan');
-        $schema->dropTable('fusio_plan_contract');
-        $schema->dropTable('fusio_plan_invoice');
         $schema->dropTable('fusio_plan_usage');
         $schema->dropTable('fusio_provider');
         $schema->dropTable('fusio_rate');

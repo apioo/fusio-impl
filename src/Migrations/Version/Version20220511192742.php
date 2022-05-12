@@ -27,6 +27,7 @@ final class Version20220511192742 extends AbstractMigration
         $planTable = $schema->getTable('fusio_plan');
         if (!$planTable->hasColumn('period_count')) {
             $planTable->addColumn('period_count', 'integer', ['notnull' => false]);
+            $planTable->addColumn('external_id', 'string', ['notnull' => false]);
         }
 
         $transactionTable = $schema->getTable('fusio_transaction');
@@ -43,6 +44,7 @@ final class Version20220511192742 extends AbstractMigration
         $userTable = $schema->getTable('fusio_user');
         if (!$userTable->hasColumn('plan_id')) {
             $userTable->addColumn('plan_id', 'integer', ['notnull' => false]);
+            $userTable->addColumn('external_id', 'string', ['notnull' => false]);
         }
     }
 

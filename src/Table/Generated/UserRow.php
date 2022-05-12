@@ -52,6 +52,14 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('remote_id');
     }
+    public function setExternalId(?string $externalId) : void
+    {
+        $this->setProperty('external_id', $externalId);
+    }
+    public function getExternalId() : ?string
+    {
+        return $this->getProperty('external_id');
+    }
     public function setName(?string $name) : void
     {
         $this->setProperty('name', $name);
