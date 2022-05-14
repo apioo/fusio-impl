@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\Plan;
 
+use Fusio\Engine\Payment\WebhookInterface;
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated\PlanRow;
 use Fusio\Impl\Table\Generated\TransactionRow;
@@ -33,7 +34,7 @@ use Fusio\Impl\Table\Generated\UserRow;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Webhook
+class Webhook implements WebhookInterface
 {
     private Table\User $userTable;
     private Table\Plan $planTable;
@@ -46,26 +47,25 @@ class Webhook
         $this->transactionTable = $transactionTable;
     }
 
-    public function completed(int $userId, int $planId, string $externalId, int $amountTotal, string $sessionId): void
+    public function completed(int $userId, int $planId, string $customerId, int $amountTotal, string $sessionId): void
     {
         $user = $this->planTable->find($userId);
         if (!$user instanceof UserRow) {
-            throw new \RuntimeException('Provided user id does not exist');
+            return;
         }
 
         $plan = $this->planTable->find($planId);
         if (!$plan instanceof PlanRow) {
-            throw new \RuntimeException('Provided plan id does not exist');
+            return;
         }
 
-        if ($this->shouldReset($plan)) {
-            $points = $plan->getPoints();
-        } else {
-            $points = $user->getPoints() + $plan->getPoints();
+        if (!empty($plan->getPeriodType())) {
+            // we only assign a plan id to the user for interval subscription
+            $user->setPlanId($planId);
         }
 
-        $user->setPlanId($planId);
-        $user->setPoints($points);
+        $user->setPoints($user->getPoints() + $plan->getPoints());
+        $user->setExternalId($customerId);
         $this->userTable->update($user);
 
         $transaction = new TransactionRow();
@@ -78,9 +78,9 @@ class Webhook
         $this->transactionTable->create($transaction);
     }
 
-    public function paid(int $userId, int $amountPaid, string $invoiceId): void
+    public function paid(string $customerId, int $amountPaid, string $invoiceId): void
     {
-        $user = $this->planTable->find($userId);
+        $user = $this->userTable->findOneByExternalId($customerId);
         if (!$user instanceof UserRow) {
             return;
         }
@@ -90,13 +90,7 @@ class Webhook
             return;
         }
 
-        if ($this->shouldReset($plan)) {
-            $points = $plan->getPoints();
-        } else {
-            $points = $user->getPoints() + $plan->getPoints();
-        }
-
-        $user->setPoints($points);
+        $user->setPoints($user->getPoints() + $plan->getPoints());
         $this->userTable->update($user);
 
         $transaction = new TransactionRow();
@@ -109,9 +103,9 @@ class Webhook
         $this->transactionTable->create($transaction);
     }
 
-    public function failed(int $userId): void
+    public function failed(string $customerId): void
     {
-        $user = $this->planTable->find($userId);
+        $user = $this->userTable->findOneByExternalId($customerId);
         if (!$user instanceof UserRow) {
             return;
         }
@@ -121,15 +115,8 @@ class Webhook
             return;
         }
 
+        // remove plan from user in case the payment has failed
         $user->setPlanId(null);
-        if ($this->shouldReset($plan)) {
-            $user->setPoints(0);
-        }
         $this->userTable->update($user);
-    }
-
-    private function shouldReset(PlanRow $row): bool
-    {
-        return true;
     }
 }
