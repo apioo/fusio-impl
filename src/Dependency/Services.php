@@ -425,7 +425,7 @@ trait Services
         );
     }
 
-    public function getPlanPaymentService(): Service\Plan\Payment
+    public function getPaymentService(): Service\Payment
     {
         $factory = new ProviderFactory(
             $this->get('provider_loader'),
@@ -434,18 +434,19 @@ trait Services
             Payment\ProviderInterface::class
         );
 
-        return new Service\Plan\Payment(
+        return new Service\Payment(
             $this->get('connector'),
             $factory,
-            $this->get('config'),
-            $this->get('table_manager')->getTable(Table\Transaction::class),
+            $this->get('payment_webhook_service'),
+            $this->get('config_service'),
+            $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('event_dispatcher')
         );
     }
 
-    public function getPlanWebhookHandlerService(): Service\Plan\Webhook
+    public function getPaymentWebhookService(): Service\Payment\Webhook
     {
-        return new Service\Plan\Webhook(
+        return new Service\Payment\Webhook(
             $this->get('table_manager')->getTable(Table\User::class),
             $this->get('table_manager')->getTable(Table\Plan::class),
             $this->get('table_manager')->getTable(Table\Transaction::class),

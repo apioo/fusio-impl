@@ -104,6 +104,8 @@ class NewInstallation
         $bag->addConfig('provider_google_secret', Table\Config::FORM_STRING, '', 'Google app secret');
         $bag->addConfig('provider_github_key', Table\Config::FORM_STRING, '', 'GitHub app key');
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
+        $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request');
+        $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments');
         $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
         $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
@@ -461,10 +463,10 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Page\Get::class, null, [200 => Model\Consumer\Page::class], null, 'consumer.page', null, true),
                 ],
                 '/payment/:provider/portal' => [
-                    'GET' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Message::class], null, 'consumer.payment'),
+                    'GET' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
                 ],
                 '/payment/:provider/checkout' => [
-                    'POST' => new Method(Consumer\Action\Payment\Checkout::class, Model\Consumer\Transaction_Prepare_Request::class, [200 => Model\Consumer\Transaction_Prepare_Response::class], null, 'consumer.payment'),
+                    'POST' => new Method(Consumer\Action\Payment\Checkout::class, Model\Consumer\Payment_Checkout_Request::class, [200 => Model\Consumer\Payment_Checkout_Response::class], null, 'consumer.payment'),
                 ],
                 '/plan' => [
                     'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Model\Consumer\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),

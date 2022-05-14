@@ -26,8 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Authorization\UserContext;
-use Fusio\Impl\Service\Plan\Payment;
-use Fusio\Model\Consumer\Transaction_Prepare_Request;
+use Fusio\Impl\Service\Payment;
+use Fusio\Model\Consumer\Payment_Checkout_Request;
 
 /**
  * Checkout
@@ -49,7 +49,7 @@ class Checkout extends ActionAbstract
     {
         $body = $request->getPayload();
 
-        assert($body instanceof Transaction_Prepare_Request);
+        assert($body instanceof Payment_Checkout_Request);
 
         $approvalUrl = $this->paymentService->checkout(
             $request->get('provider'),
