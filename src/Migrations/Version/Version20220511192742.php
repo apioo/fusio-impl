@@ -25,8 +25,7 @@ final class Version20220511192742 extends AbstractMigration
         }
 
         $planTable = $schema->getTable('fusio_plan');
-        if (!$planTable->hasColumn('period_count')) {
-            $planTable->addColumn('period_count', 'integer', ['notnull' => false]);
+        if (!$planTable->hasColumn('external_id')) {
             $planTable->addColumn('external_id', 'string', ['notnull' => false]);
         }
 

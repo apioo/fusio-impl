@@ -264,7 +264,6 @@ final class Version20200905081453 extends AbstractMigration
             $planTable->addColumn('price', 'decimal', ['precision' => 8, 'scale' => 2]);
             $planTable->addColumn('points', 'integer');
             $planTable->addColumn('period_type', 'integer', ['notnull' => false]);
-            $planTable->addColumn('period_count', 'integer', ['notnull' => false]);
             $planTable->addColumn('external_id', 'string', ['notnull' => false]);
             $planTable->setPrimaryKey(['id']);
             $planTable->addUniqueIndex(['name']);
