@@ -60,14 +60,6 @@ class PlanRow extends \PSX\Record\Record
     {
         return $this->getProperty('period_type');
     }
-    public function setPeriodCount(?int $periodCount) : void
-    {
-        $this->setProperty('period_count', $periodCount);
-    }
-    public function getPeriodCount() : ?int
-    {
-        return $this->getProperty('period_count');
-    }
     public function setExternalId(?string $externalId) : void
     {
         $this->setProperty('external_id', $externalId);
