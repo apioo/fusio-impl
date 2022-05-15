@@ -72,7 +72,7 @@ class CollectionTest extends ControllerDbTestCase
             "userId": 1,
             "planId": 2,
             "transactionId": 0,
-            "amount": 39,
+            "amount": 3999,
             "points": "2022-05-15T10:00:00Z",
             "insertDate": "2018-10-05T18:18:00Z"
         }

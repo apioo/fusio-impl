@@ -427,7 +427,7 @@
         "user_id": 1,
         "plan_id": 2,
         "transactionId": "[transaction_id]",
-        "amount": 39.99,
+        "amount": 3999,
         "date": "[datetime]"
       }
     ]

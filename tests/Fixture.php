@@ -105,7 +105,7 @@ class Fixture
         $data->addRate('gold', 10, 16, 'P1M');
         $data->addPlan('Plan A', 39.99, 500, 1);
         $data->addPlan('Plan B', 49.99, 1000, null);
-        $data->addTransaction('Administrator', 'Plan B', 39.99, '2018-10-05 18:18:00');
+        $data->addTransaction('Administrator', 'Plan B', 3999, '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addScope('default', 'foo', 'Foo access');

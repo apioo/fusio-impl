@@ -409,7 +409,7 @@ class DataBag
         ];
     }
 
-    public function addTransaction(string $user, string $plan, float $amount, ?string $date = null)
+    public function addTransaction(string $user, string $plan, int $amount, ?string $date = null)
     {
         $this->data['fusio_transaction'][] = [
             'user_id' => $this->getId('fusio_user', $user),
