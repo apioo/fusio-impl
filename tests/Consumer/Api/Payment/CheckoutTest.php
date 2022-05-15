@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Consumer\Api\Transaction;
+namespace Fusio\Impl\Tests\Consumer\Api\Payment;
 
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
@@ -27,13 +27,13 @@ use PSX\Framework\Test\ControllerDbTestCase;
 use PSX\Framework\Test\Environment;
 
 /**
- * PrepareTest
+ * CheckoutTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class PrepareTest extends ControllerDbTestCase
+class CheckoutTest extends ControllerDbTestCase
 {
     public function getDataSet()
     {
@@ -42,20 +42,20 @@ class PrepareTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/consumer/transaction/prepare/paypal', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/consumer/payment/paypal/checkout', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
 
         $actual = Documentation::getResource($response);
-        $expect = file_get_contents(__DIR__ . '/resource/prepare.json');
+        $expect = file_get_contents(__DIR__ . '/resource/checkout.json');
 
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
     }
 
     public function testGet()
     {
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'GET', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
@@ -67,11 +67,11 @@ class PrepareTest extends ControllerDbTestCase
 
     public function testPost()
     {
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'invoiceId' => 1,
+            'planId' => 1,
             'returnUrl' => 'http://myapp.com',
         ]));
 
@@ -90,7 +90,7 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -102,32 +102,7 @@ JSON;
 {
     "success": false,
     "title": "Internal Server Error",
-    "message": "\/ the following properties are required: invoiceId, returnUrl"
-}
-JSON;
-
-        $this->assertEquals(400, $response->getStatusCode(), $body);
-        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
-    }
-
-    public function testPostInvalidInvoice()
-    {
-        Environment::getContainer()->get('config')->set('psx_debug', false);
-
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'POST', array(
-            'User-Agent'    => 'Fusio TestCase',
-            'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
-        ), json_encode([
-            'invoiceId' => 10,
-            'returnUrl' => 'http://myapp.com',
-        ]));
-
-        $body   = (string) $response->getBody();
-        $expect = <<<'JSON'
-{
-    "success": false,
-    "title": "Internal Server Error",
-    "message": "Invalid invoice id"
+    "message": "No plan id provided"
 }
 JSON;
 
@@ -139,11 +114,11 @@ JSON;
     {
         Environment::getContainer()->get('config')->set('psx_debug', false);
 
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'POST', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
-            'invoiceId' => 2,
+            'planId' => 1,
             'returnUrl' => 'foobar',
         ]));
 
@@ -162,7 +137,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'PUT', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ), json_encode([
@@ -176,7 +151,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/consumer/transaction/prepare/paypal', 'DELETE', array(
+        $response = $this->sendRequest('/consumer/payment/paypal/checkout', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer b8f6f61bd22b440a3e4be2b7491066682bfcde611dbefa1b15d2e7f6522d77e2'
         ));
