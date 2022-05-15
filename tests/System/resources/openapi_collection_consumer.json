@@ -410,72 +410,6 @@
         }
       ]
     },
-    "\/consumer\/transaction\/prepare\/{provider}": {
-      "post": {
-        "tags": [
-          "consumer.transaction"
-        ],
-        "operationId": "Consumer_Action_Transaction_Prepare",
-        "requestBody": {
-          "description": "POST Request",
-          "content": {
-            "application\/json": {
-              "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "POST 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Transaction_Prepare_Response"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.transaction"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "provider",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "\/consumer\/transaction\/execute\/{transaction_id}": {
-      "get": {
-        "tags": [
-          "consumer.transaction"
-        ],
-        "operationId": "Consumer_Action_Transaction_Execute",
-        "responses": {}
-      },
-      "parameters": [
-        {
-          "name": "transaction_id",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "\/consumer\/transaction": {
       "get": {
         "tags": [
@@ -857,207 +791,29 @@
         ]
       }
     },
-    "\/consumer\/plan\/invoice\/{invoice_id}": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_Invoice_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "invoice_id",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "\/consumer\/plan\/invoice": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_Invoice_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Invoice_Collection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
-      }
-    },
-    "\/consumer\/plan\/contract\/{contract_id}": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_Contract_Get",
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "contract_id",
-          "in": "path",
-          "required": false,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "\/consumer\/plan\/contract": {
-      "get": {
-        "tags": [
-          "consumer.plan"
-        ],
-        "operationId": "Consumer_Action_Plan_Contract_GetAll",
-        "parameters": [
-          {
-            "name": "startIndex",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "count",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "GET 200 Response",
-            "content": {
-              "application\/json": {
-                "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Contract_Collection"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "app": [
-              "consumer.plan"
-            ]
-          }
-        ]
-      },
+    "\/consumer\/payment\/{provider}\/checkout": {
       "post": {
         "tags": [
-          "consumer.plan"
+          "consumer.payment"
         ],
-        "operationId": "Consumer_Action_Plan_Contract_Create",
+        "operationId": "Consumer_Action_Payment_Checkout",
         "requestBody": {
           "description": "POST Request",
           "content": {
             "application\/json": {
               "schema": {
-                "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Request"
+                "$ref": "#\/components\/schemas\/Consumer_Payment_Checkout_Request"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "POST 201 Response",
+          "200": {
+            "description": "POST 200 Response",
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Consumer_Plan_Order_Response"
+                  "$ref": "#\/components\/schemas\/Consumer_Payment_Checkout_Response"
                 }
               }
             }
@@ -1066,11 +822,58 @@
         "security": [
           {
             "app": [
-              "consumer.plan"
+              "consumer.payment"
             ]
           }
         ]
-      }
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/consumer\/payment\/{provider}\/portal": {
+      "post": {
+        "tags": [
+          "consumer.payment"
+        ],
+        "operationId": "Consumer_Action_Payment_Portal",
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Consumer_Payment_Portal_Response"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "consumer.payment"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "provider",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
     },
     "\/consumer\/page\/{page_id}": {
       "get": {
@@ -1854,29 +1657,20 @@
       "Consumer_Page_Collection": {
         "$ref": "#\/components\/schemas\/Page_Collection"
       },
+      "Consumer_Payment_Checkout_Request": {
+        "$ref": "#\/components\/schemas\/Payment_Checkout_Request"
+      },
+      "Consumer_Payment_Checkout_Response": {
+        "$ref": "#\/components\/schemas\/Payment_Checkout_Response"
+      },
+      "Consumer_Payment_Portal_Response": {
+        "$ref": "#\/components\/schemas\/Payment_Portal_Response"
+      },
       "Consumer_Plan": {
         "$ref": "#\/components\/schemas\/Plan"
       },
       "Consumer_Plan_Collection": {
         "$ref": "#\/components\/schemas\/Plan_Collection"
-      },
-      "Consumer_Plan_Contract": {
-        "$ref": "#\/components\/schemas\/Plan_Contract"
-      },
-      "Consumer_Plan_Contract_Collection": {
-        "$ref": "#\/components\/schemas\/Plan_Contract_Collection"
-      },
-      "Consumer_Plan_Invoice": {
-        "$ref": "#\/components\/schemas\/Plan_Invoice"
-      },
-      "Consumer_Plan_Invoice_Collection": {
-        "$ref": "#\/components\/schemas\/Plan_Invoice_Collection"
-      },
-      "Consumer_Plan_Order_Request": {
-        "$ref": "#\/components\/schemas\/Plan_Order_Request"
-      },
-      "Consumer_Plan_Order_Response": {
-        "$ref": "#\/components\/schemas\/Plan_Order_Response"
       },
       "Consumer_Scope_Collection": {
         "$ref": "#\/components\/schemas\/Scope_Collection"
@@ -1886,12 +1680,6 @@
       },
       "Consumer_Transaction_Collection": {
         "$ref": "#\/components\/schemas\/Transaction_Collection"
-      },
-      "Consumer_Transaction_Prepare_Request": {
-        "$ref": "#\/components\/schemas\/Transaction_Prepare_Request"
-      },
-      "Consumer_Transaction_Prepare_Response": {
-        "$ref": "#\/components\/schemas\/Transaction_Prepare_Response"
       },
       "Consumer_User_Account": {
         "$ref": "#\/components\/schemas\/User_Account"
@@ -2095,6 +1883,33 @@
       "Page_Collection": {
         "$ref": "#\/components\/schemas\/Collection"
       },
+      "Payment_Checkout_Request": {
+        "type": "object",
+        "properties": {
+          "planId": {
+            "type": "integer"
+          },
+          "returnUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "Payment_Checkout_Response": {
+        "type": "object",
+        "properties": {
+          "approvalUrl": {
+            "type": "string"
+          }
+        }
+      },
+      "Payment_Portal_Response": {
+        "type": "object",
+        "properties": {
+          "redirectUrl": {
+            "type": "string"
+          }
+        }
+      },
       "Plan": {
         "type": "object",
         "properties": {
@@ -2117,92 +1932,6 @@
       },
       "Plan_Collection": {
         "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Plan_Contract": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "plan": {
-            "$ref": "#\/components\/schemas\/Plan"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "period": {
-            "type": "integer"
-          },
-          "invoices": {
-            "type": "array",
-            "items": {
-              "$ref": "#\/components\/schemas\/Plan_Invoice"
-            }
-          },
-          "insertDate": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "Plan_Contract_Collection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Plan_Invoice": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "integer"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "points": {
-            "type": "integer"
-          },
-          "payDate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "insertDate": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "Plan_Invoice_Collection": {
-        "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Plan_Order_Request": {
-        "type": "object",
-        "properties": {
-          "planId": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "planId"
-        ]
-      },
-      "Plan_Order_Response": {
-        "type": "object",
-        "properties": {
-          "contractId": {
-            "type": "integer"
-          },
-          "invoiceId": {
-            "type": "integer"
-          }
-        }
       },
       "Scope": {
         "type": "object",
@@ -2247,29 +1976,6 @@
       },
       "Transaction_Collection": {
         "$ref": "#\/components\/schemas\/Collection"
-      },
-      "Transaction_Prepare_Request": {
-        "type": "object",
-        "properties": {
-          "invoiceId": {
-            "type": "integer"
-          },
-          "returnUrl": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "invoiceId",
-          "returnUrl"
-        ]
-      },
-      "Transaction_Prepare_Response": {
-        "type": "object",
-        "properties": {
-          "approvalUrl": {
-            "type": "string"
-          }
-        }
       },
       "User_Account": {
         "type": "object",
@@ -2440,6 +2146,7 @@
               "consumer.grant": "",
               "consumer.log": "",
               "consumer.page": "",
+              "consumer.payment": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -2457,6 +2164,7 @@
               "consumer.grant": "",
               "consumer.log": "",
               "consumer.page": "",
+              "consumer.payment": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
@@ -2475,6 +2183,7 @@
               "consumer.grant": "",
               "consumer.log": "",
               "consumer.page": "",
+              "consumer.payment": "",
               "consumer.plan": "",
               "consumer.scope": "",
               "consumer.subscription": "",
