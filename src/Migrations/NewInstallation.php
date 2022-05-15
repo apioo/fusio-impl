@@ -122,7 +122,6 @@ class NewInstallation
         $bag->addRateAllocation('Default-Anonymous', null, null, false);
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
         $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
-        $bag->addAction('backend', 'Backend_Action_Plan_Billing', Backend\Action\Plan\Billing::class);
         $bag->addAction('backend', 'Backend_Action_Connection_RenewToken', Backend\Action\Connection\RenewToken::class);
         $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
         $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
