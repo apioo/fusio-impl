@@ -80,7 +80,7 @@ class CollectionTest extends ControllerDbTestCase
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 6,
+            "id": 7,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
@@ -148,7 +148,7 @@ JSON;
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
         },
         {
-            "id": 6,
+            "id": 7,
             "status": 1,
             "path": "\/",
             "controller": "Fusio\\Impl\\Controller\\SchemaApiController"
