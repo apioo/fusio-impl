@@ -49,7 +49,7 @@ class Webhook implements WebhookInterface
 
     public function completed(int $userId, int $planId, string $customerId, int $amountTotal, string $sessionId): void
     {
-        $user = $this->planTable->find($userId);
+        $user = $this->userTable->find($userId);
         if (!$user instanceof UserRow) {
             return;
         }
