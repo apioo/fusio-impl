@@ -34,8 +34,8 @@ class LatestTransactions extends ViewAbstract
 {
     public function getView()
     {
-        $sql = '  SELECT trans.status,
-                         trans.provider,
+        $sql = '  SELECT trans.user_id,
+                         trans.plan_id,
                          trans.transaction_id,
                          trans.amount,
                          trans.insert_date
@@ -46,8 +46,8 @@ class LatestTransactions extends ViewAbstract
 
         $definition = [
             'entry' => $this->doCollection($sql, [], [
-                'status' => $this->fieldInteger('status'),
-                'provider' => 'provider',
+                'user_id' => $this->fieldInteger('user_id'),
+                'plan_id' => $this->fieldInteger('plan_id'),
                 'transactionId' => 'transaction_id',
                 'amount' => $this->fieldNumber('amount'),
                 'date' => $this->fieldDateTime('insert_date'),

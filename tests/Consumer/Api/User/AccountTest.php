@@ -101,6 +101,7 @@ class AccountTest extends ControllerDbTestCase
         "consumer.grant",
         "consumer.log",
         "consumer.page",
+        "consumer.payment",
         "consumer.plan",
         "consumer.scope",
         "consumer.subscription",

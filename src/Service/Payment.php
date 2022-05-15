@@ -70,7 +70,12 @@ class Payment
             throw new StatusCode\BadRequestException('Provider is not available');
         }
 
-        $product    = $this->getProduct($checkout->getPlanId());
+        $planId = $checkout->getPlanId();
+        if (empty($planId)) {
+            throw new StatusCode\BadRequestException('No plan id provided');
+        }
+
+        $product    = $this->getProduct($planId);
         $connection = $this->connector->getConnection($name);
 
         // validate return url

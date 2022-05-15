@@ -64,11 +64,12 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<JSON
 {
     "id": 1,
-    "status": 1,
-    "provider": "paypal",
-    "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",
-    "amount": 39.99,
-    "insertDate": "2018-10-05T18:18:00Z"
+    "userId": 2,
+    "planId": 2,
+    "transactionId": 0,
+    "amount": 39,
+    "points": "2022-05-15T10:00:00Z",
+    "insertDate": "2022-05-11T22:22:00Z"
 }
 JSON;
 

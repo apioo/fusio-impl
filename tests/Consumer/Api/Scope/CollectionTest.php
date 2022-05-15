@@ -68,12 +68,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 39,
+            "id": 40,
             "name": "foo",
             "description": "Foo access"
         },
         {
-            "id": 40,
+            "id": 41,
             "name": "bar",
             "description": "Bar access"
         }

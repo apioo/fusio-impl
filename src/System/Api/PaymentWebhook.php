@@ -22,9 +22,11 @@
 namespace Fusio\Impl\System\Api;
 
 use Fusio\Impl\Service\Payment;
+use PSX\Api\Exception\InvalidMethodException;
 use PSX\Dependency\Attribute\Inject;
 use PSX\Framework\Http\ResponseWriter;
 use PSX\Framework\Loader\Context;
+use PSX\Http\Exception\MethodNotAllowedException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -54,6 +56,10 @@ class PaymentWebhook implements FilterInterface
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
+        if (!in_array($request->getMethod(), ['GET', 'POST'])) {
+            throw new MethodNotAllowedException('Provided request method not allowed', ['GET', 'POST']);
+        }
+
         $this->transactionService->webhook($this->context->getParameter('provider'), $request);
 
         $this->responseWriter->setBody($response, [

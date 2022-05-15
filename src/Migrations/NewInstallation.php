@@ -135,6 +135,7 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
+        $bag->addRoute('system', 3, '/system/payment/:provider/webhook', System\Api\PaymentWebhook::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
         $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
         $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
@@ -462,7 +463,7 @@ class NewInstallation
                     'GET' => new Method(Consumer\Action\Page\Get::class, null, [200 => Model\Consumer\Page::class], null, 'consumer.page', null, true),
                 ],
                 '/payment/:provider/portal' => [
-                    'GET' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
+                    'POST' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
                 ],
                 '/payment/:provider/checkout' => [
                     'POST' => new Method(Consumer\Action\Payment\Checkout::class, Model\Consumer\Payment_Checkout_Request::class, [200 => Model\Consumer\Payment_Checkout_Response::class], null, 'consumer.payment'),
@@ -542,9 +543,6 @@ class NewInstallation
                 ],
                 '/connection/:name/callback' => [
                     'GET' => new Method(System\Action\ConnectionCallback::class, null, [200 => Message::class], null, null, null, true),
-                ],
-                '/payment/:provider/webhook' => [
-                    'GET' => new Method(System\Api\PaymentWebhook::class, null, [200 => Message::class], null, null, null, true),
                 ],
             ],
             'authorization' => [

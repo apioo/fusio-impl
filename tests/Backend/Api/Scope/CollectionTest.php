@@ -68,12 +68,12 @@ class CollectionTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 40,
+            "id": 41,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 39,
+            "id": 40,
             "name": "foo",
             "description": "Foo access"
         },
@@ -105,7 +105,7 @@ JSON;
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": 39,
+            "id": 40,
             "name": "foo",
             "description": "Foo access"
         }
@@ -132,12 +132,12 @@ JSON;
     "itemsPerPage": 80,
     "entry": [
         {
-            "id": 40,
+            "id": 41,
             "name": "bar",
             "description": "Bar access"
         },
         {
-            "id": 39,
+            "id": 40,
             "name": "foo",
             "description": "Foo access"
         },
@@ -195,7 +195,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(41, $row['id']);
+        $this->assertEquals(42, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 

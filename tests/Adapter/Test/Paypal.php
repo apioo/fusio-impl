@@ -22,10 +22,11 @@
 namespace Fusio\Impl\Tests\Adapter\Test;
 
 use Fusio\Engine\Model\ProductInterface;
-use Fusio\Engine\Model\TransactionInterface;
-use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Payment\PrepareContext;
+use Fusio\Engine\Model\UserInterface;
+use Fusio\Engine\Payment\CheckoutContext;
 use Fusio\Engine\Payment\ProviderInterface;
+use Fusio\Engine\Payment\WebhookInterface;
+use PSX\Http\RequestInterface;
 
 /**
  * Paypal
@@ -36,21 +37,19 @@ use Fusio\Engine\Payment\ProviderInterface;
  */
 class Paypal implements ProviderInterface
 {
-    public function prepare(mixed $connection, ProductInterface $product, TransactionInterface $transaction, PrepareContext $context): string
+    public function checkout(mixed $connection, ProductInterface $product, UserInterface $user, CheckoutContext $context): string
     {
-        // here the payment provider needs to create the transaction using the
-        // remote connection and return an approval url
-
         $approvalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-60385559L1062554J';
 
         return $approvalUrl;
     }
 
-    public function execute(mixed $connection, ProductInterface $product, TransactionInterface $transaction, ParametersInterface $parameters): void
+    public function webhook(RequestInterface $request, WebhookInterface $handler, ?string $webhookSecret = null): void
     {
-        // here the payment provider needs to execute the transaction and set
-        // the transaction to approved
+    }
 
-        $transaction->setStatus(TransactionInterface::STATUS_APPROVED);
+    public function portal(mixed $connection, UserInterface $user, string $returnUrl): ?string
+    {
+        return 'https://paypal.com';
     }
 }

@@ -23,7 +23,9 @@ namespace Fusio\Impl\Consumer\View;
 
 use PSX\Sql\Condition;
 use PSX\Sql\Reference;
+use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
+use Fusio\Impl\Table;
 
 /**
  * Transaction
@@ -43,28 +45,20 @@ class Transaction extends ViewAbstract
         $count = 16;
 
         $condition = new Condition();
-        $condition->equals('contract.user_id', $userId);
-
-        if (!empty($invoiceId)) {
-            $condition->equals('transact.invoice_id', $invoiceId);
-        }
-
-        $countSql = $this->getBaseQuery(['COUNT(*) AS cnt'], $condition);
-        $querySql = $this->getBaseQuery(['transact.id', 'transact.status', 'transact.provider', 'transact.transaction_id', 'transact.amount', 'transact.update_date', 'transact.insert_date'], $condition);
-        $querySql = $this->connection->getDatabasePlatform()->modifyLimitQuery($querySql, $count, $startIndex);
+        $condition->equals('user_id', $userId);
 
         $definition = [
-            'totalResults' => $this->doValue($countSql, $condition->getValues(), $this->fieldInteger('cnt')),
+            'totalResults' => $this->getTable(Table\Transaction::class)->getCount($condition),
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $this->doCollection($querySql, $condition->getValues(), [
-                'id' => $this->fieldInteger('id'),
-                'status' => $this->fieldInteger('status'),
-                'provider' => 'provider',
-                'transactionId' => 'transaction_id',
-                'amount' => $this->fieldNumber('amount'),
-                'updateDate' => $this->fieldDateTime('update_date'),
-                'insertDate' => $this->fieldDateTime('insert_date'),
+            'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, 'id', Sql::SORT_DESC], [
+                'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+                'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+                'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+                'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
+                'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+                'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
+                'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
 
@@ -74,52 +68,19 @@ class Transaction extends ViewAbstract
     public function getEntity(int $userId, int $transactionId)
     {
         $condition = new Condition();
-        $condition->equals('transact.id', $transactionId);
-        $condition->equals('contract.user_id', $userId);
+        $condition->equals('id', $transactionId);
+        $condition->equals('user_id', $userId);
 
-        $querySql = $this->getBaseQuery(['transact.id', 'contract.plan_id', 'transact.status', 'transact.provider', 'transact.transaction_id', 'transact.amount', 'transact.update_date', 'transact.insert_date'], $condition);
-
-        $definition = $this->doEntity($querySql, $condition->getValues(), [
-            'id' => $this->fieldInteger('id'),
-            'plan' => $this->doEntity([$this->getTable(Plan::class), 'getEntity'], [$userId, new Reference('plan_id')], [
-                'id' => $this->fieldInteger('id'),
-                'name' => 'name',
-                'description' => 'description',
-                'price' => $this->fieldNumber('price'),
-                'points' => $this->fieldInteger('points'),
-            ]),
-            'status' => $this->fieldInteger('status'),
-            'provider' => 'provider',
-            'transactionId' => 'transaction_id',
-            'amount' => $this->fieldNumber('amount'),
-            'updateDate' => $this->fieldDateTime('update_date'),
-            'insertDate' => $this->fieldDateTime('insert_date'),
+        $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'findOneBy'], [$condition], [
+            'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
+            'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+            'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+            'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
+            'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
+            'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
+            'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 
         return $this->build($definition);
-    }
-
-    /**
-     * @param array $fields
-     * @param \PSX\Sql\Condition $condition
-     * @param string $orderBy
-     * @return string
-     */
-    private function getBaseQuery(array $fields, Condition $condition, $orderBy = null)
-    {
-        $fields  = implode(',', $fields);
-        $where   = $condition->getStatement($this->connection->getDatabasePlatform());
-        $orderBy = $orderBy !== null ? 'ORDER BY ' . $orderBy : '';
-
-        return <<<SQL
-    SELECT {$fields}
-      FROM fusio_transaction transact
-INNER JOIN fusio_plan_invoice invoice
-        ON invoice.id = transact.invoice_id
-INNER JOIN fusio_plan_contract contract
-        ON contract.id = invoice.contract_id
-           {$where}
-           {$orderBy}
-SQL;
     }
 }
