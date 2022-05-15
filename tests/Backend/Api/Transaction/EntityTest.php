@@ -64,12 +64,12 @@ class EntityTest extends ControllerDbTestCase
         $expect = <<<JSON
 {
     "id": 1,
-    "userId": 2,
+    "userId": 1,
     "planId": 2,
-    "transactionId": 0,
+    "transactionId": "[transaction_id]",
     "amount": 39,
     "points": "2022-05-15T10:00:00Z",
-    "insertDate": "2022-05-11T22:22:00Z"
+    "insertDate": "2018-10-05T18:18:00Z"
 }
 JSON;
 
