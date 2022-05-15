@@ -55,11 +55,11 @@ class Transaction extends ViewAbstract
             'itemsPerPage' => $count,
             'entry' => $this->doCollection([$this->getTable(Table\Transaction::class), 'findAll'], [$condition, $startIndex, $count, $sortBy, Sql::SORT_DESC], [
                 'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
-                'status' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_STATUS),
-                'provider' => Table\Generated\TransactionTable::COLUMN_PROVIDER,
-                'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+                'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+                'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+                'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
                 'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-                'updateDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_UPDATE_DATE),
+                'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
                 'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
@@ -71,11 +71,11 @@ class Transaction extends ViewAbstract
     {
         $definition = $this->doEntity([$this->getTable(Table\Transaction::class), 'find'], [$id], [
             'id' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_ID),
-            'status' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_STATUS),
-            'provider' => Table\Generated\TransactionTable::COLUMN_PROVIDER,
-            'transactionId' => Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID,
+            'userId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_USER_ID),
+            'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
+            'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
             'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-            'updateDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_UPDATE_DATE),
+            'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
             'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 
