@@ -44,7 +44,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/cronjob/5', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/cronjob/4', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -57,7 +57,7 @@ class EntityTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/cronjob/5', 'GET', array(
+        $response = $this->sendRequest('/backend/cronjob/4', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -65,7 +65,7 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 5,
+    "id": 4,
     "status": 1,
     "name": "Test-Cron",
     "cron": "* * * * *",
@@ -97,7 +97,7 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 5,
+    "id": 4,
     "status": 1,
     "name": "Test-Cron",
     "cron": "* * * * *",
@@ -143,7 +143,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/cronjob/5', 'POST', array(
+        $response = $this->sendRequest('/backend/cronjob/4', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -157,7 +157,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/cronjob/5', 'PUT', array(
+        $response = $this->sendRequest('/backend/cronjob/4', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -184,9 +184,9 @@ JSON;
             ->where('id = :id')
             ->getSQL();
 
-        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 5]);
+        $row = Environment::getService('connection')->fetchAssoc($sql, ['id' => 4]);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals('Foo-Cron', $row['name']);
         $this->assertEquals('10 * * * *', $row['cron']);
         $this->assertEquals('Inspect', $row['action']);
@@ -194,7 +194,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/cronjob/5', 'DELETE', array(
+        $response = $this->sendRequest('/backend/cronjob/4', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -214,12 +214,12 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'status')
             ->from('fusio_cronjob')
-            ->where('id = 5')
+            ->where('id = 4')
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(4, $row['id']);
         $this->assertEquals(Table\Cronjob::STATUS_DELETED, $row['status']);
     }
 }
