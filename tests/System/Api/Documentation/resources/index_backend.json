@@ -225,34 +225,6 @@
       "version": "*"
     },
     {
-      "path": "\/backend\/plan\/invoice\/$invoice_id<[0-9]+>",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/plan\/invoice",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/plan\/contract\/$contract_id<[0-9]+>",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
-      "path": "\/backend\/plan\/contract",
-      "methods": [
-        "ANY"
-      ],
-      "version": "*"
-    },
-    {
       "path": "\/backend\/page\/$page_id<[0-9]+|^~>",
       "methods": [
         "ANY"

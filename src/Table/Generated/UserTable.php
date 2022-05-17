@@ -10,9 +10,11 @@ class UserTable extends \PSX\Sql\TableAbstract
     public const NAME = 'fusio_user';
     public const COLUMN_ID = 'id';
     public const COLUMN_ROLE_ID = 'role_id';
+    public const COLUMN_PLAN_ID = 'plan_id';
     public const COLUMN_PROVIDER = 'provider';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_REMOTE_ID = 'remote_id';
+    public const COLUMN_EXTERNAL_ID = 'external_id';
     public const COLUMN_NAME = 'name';
     public const COLUMN_EMAIL = 'email';
     public const COLUMN_PASSWORD = 'password';
@@ -25,7 +27,7 @@ class UserTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_ROLE_ID => 0x20000a, self::COLUMN_PROVIDER => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_NAME => 0xa00040, self::COLUMN_EMAIL => 0x40a00080, self::COLUMN_PASSWORD => 0x40a000ff, self::COLUMN_POINTS => 0x4020000a, self::COLUMN_TOKEN => 0x40a000ff, self::COLUMN_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_ROLE_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_PROVIDER => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_EXTERNAL_ID => 0x40a000ff, self::COLUMN_NAME => 0xa00040, self::COLUMN_EMAIL => 0x40a00080, self::COLUMN_PASSWORD => 0x40a000ff, self::COLUMN_POINTS => 0x4020000a, self::COLUMN_TOKEN => 0x40a000ff, self::COLUMN_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
@@ -101,6 +103,25 @@ class UserTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\UserRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
+    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('plan_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByPlanId(int $value) : ?\Fusio\Impl\Table\Generated\UserRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('plan_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\UserRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
     public function findByProvider(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
@@ -152,6 +173,25 @@ class UserTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->like('remote_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\UserRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByExternalId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('external_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByExternalId(string $value) : ?\Fusio\Impl\Table\Generated\UserRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('external_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**

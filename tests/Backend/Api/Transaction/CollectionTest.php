@@ -68,10 +68,11 @@ class CollectionTest extends ControllerDbTestCase
     "entry": [
         {
             "id": 1,
-            "status": 1,
-            "provider": "paypal",
-            "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",
-            "amount": 39.99,
+            "userId": 1,
+            "planId": 2,
+            "transactionId": "[transaction_id]",
+            "amount": 3999,
+            "points": "2022-05-15T10:00:00Z",
             "insertDate": "2018-10-05T18:18:00Z"
         }
     ]

@@ -12,29 +12,21 @@ class TransactionRow extends \PSX\Record\Record
     {
         return $this->getProperty('id');
     }
-    public function setInvoiceId(?int $invoiceId) : void
+    public function setUserId(?int $userId) : void
     {
-        $this->setProperty('invoice_id', $invoiceId);
+        $this->setProperty('user_id', $userId);
     }
-    public function getInvoiceId() : ?int
+    public function getUserId() : ?int
     {
-        return $this->getProperty('invoice_id');
+        return $this->getProperty('user_id');
     }
-    public function setStatus(?int $status) : void
+    public function setPlanId(?int $planId) : void
     {
-        $this->setProperty('status', $status);
+        $this->setProperty('plan_id', $planId);
     }
-    public function getStatus() : ?int
+    public function getPlanId() : ?int
     {
-        return $this->getProperty('status');
-    }
-    public function setProvider(?string $provider) : void
-    {
-        $this->setProperty('provider', $provider);
-    }
-    public function getProvider() : ?string
-    {
-        return $this->getProperty('provider');
+        return $this->getProperty('plan_id');
     }
     public function setTransactionId(?string $transactionId) : void
     {
@@ -44,37 +36,21 @@ class TransactionRow extends \PSX\Record\Record
     {
         return $this->getProperty('transaction_id');
     }
-    public function setRemoteId(?string $remoteId) : void
-    {
-        $this->setProperty('remote_id', $remoteId);
-    }
-    public function getRemoteId() : ?string
-    {
-        return $this->getProperty('remote_id');
-    }
-    public function setAmount(?float $amount) : void
+    public function setAmount(?int $amount) : void
     {
         $this->setProperty('amount', $amount);
     }
-    public function getAmount() : ?float
+    public function getAmount() : ?int
     {
         return $this->getProperty('amount');
     }
-    public function setReturnUrl(?string $returnUrl) : void
+    public function setPoints(?int $points) : void
     {
-        $this->setProperty('return_url', $returnUrl);
+        $this->setProperty('points', $points);
     }
-    public function getReturnUrl() : ?string
+    public function getPoints() : ?int
     {
-        return $this->getProperty('return_url');
-    }
-    public function setUpdateDate(?\DateTime $updateDate) : void
-    {
-        $this->setProperty('update_date', $updateDate);
-    }
-    public function getUpdateDate() : ?\DateTime
-    {
-        return $this->getProperty('update_date');
+        return $this->getProperty('points');
     }
     public function setInsertDate(?\DateTime $insertDate) : void
     {

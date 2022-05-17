@@ -9,14 +9,11 @@ class TransactionTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_transaction';
     public const COLUMN_ID = 'id';
-    public const COLUMN_INVOICE_ID = 'invoice_id';
-    public const COLUMN_STATUS = 'status';
-    public const COLUMN_PROVIDER = 'provider';
+    public const COLUMN_USER_ID = 'user_id';
+    public const COLUMN_PLAN_ID = 'plan_id';
     public const COLUMN_TRANSACTION_ID = 'transaction_id';
-    public const COLUMN_REMOTE_ID = 'remote_id';
     public const COLUMN_AMOUNT = 'amount';
-    public const COLUMN_RETURN_URL = 'return_url';
-    public const COLUMN_UPDATE_DATE = 'update_date';
+    public const COLUMN_POINTS = 'points';
     public const COLUMN_INSERT_DATE = 'insert_date';
     public function getName() : string
     {
@@ -24,7 +21,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_INVOICE_ID => 0x20000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PROVIDER => 0xa000ff, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_REMOTE_ID => 0x40a000ff, self::COLUMN_AMOUNT => 0x500000, self::COLUMN_RETURN_URL => 0xa000ff, self::COLUMN_UPDATE_DATE => 0x40800000, self::COLUMN_INSERT_DATE => 0x800000);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_USER_ID => 0x20000a, self::COLUMN_PLAN_ID => 0x20000a, self::COLUMN_TRANSACTION_ID => 0xa000ff, self::COLUMN_AMOUNT => 0x20000a, self::COLUMN_POINTS => 0x20000a, self::COLUMN_INSERT_DATE => 0x800000);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
@@ -81,57 +78,38 @@ class TransactionTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByInvoiceId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->equals('invoice_id', $value);
+        $condition->equals('user_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByInvoiceId(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    public function findOneByUserId(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->equals('invoice_id', $value);
+        $condition->equals('user_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByStatus(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->equals('status', $value);
+        $condition->equals('plan_id', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByStatus(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    public function findOneByPlanId(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->equals('status', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByProvider(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('provider', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByProvider(string $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('provider', $value);
+        $condition->equals('plan_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**
@@ -157,26 +135,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByRemoteId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('remote_id', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByRemoteId(string $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('remote_id', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByAmount(float $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByAmount(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('amount', $value);
@@ -185,7 +144,7 @@ class TransactionTable extends \PSX\Sql\TableAbstract
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByAmount(float $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    public function findOneByAmount(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('amount', $value);
@@ -195,38 +154,19 @@ class TransactionTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findByReturnUrl(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    public function findByPoints(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->like('return_url', $value);
+        $condition->equals('points', $value);
         return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
     }
     /**
      * @throws \PSX\Sql\Exception\QueryException
      */
-    public function findOneByReturnUrl(string $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
+    public function findOneByPoints(int $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
     {
         $condition = new \PSX\Sql\Condition();
-        $condition->like('return_url', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\TransactionRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByUpdateDate(\DateTime $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->equals('update_date', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByUpdateDate(\DateTime $value) : ?\Fusio\Impl\Table\Generated\TransactionRow
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->equals('update_date', $value);
+        $condition->equals('points', $value);
         return $this->doFindOneBy($condition);
     }
     /**

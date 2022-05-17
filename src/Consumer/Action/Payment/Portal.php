@@ -19,37 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Adapter\Test;
+namespace Fusio\Impl\Consumer\Action\Payment;
 
-use Fusio\Engine\Model\ProductInterface;
-use Fusio\Engine\Model\UserInterface;
-use Fusio\Engine\Payment\CheckoutContext;
-use Fusio\Engine\Payment\ProviderInterface;
-use Fusio\Engine\Payment\WebhookInterface;
-use PSX\Http\RequestInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Service\Payment;
+use PSX\Framework\Config\Config;
 
 /**
- * Paypal
+ * Portal
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Paypal implements ProviderInterface
+class Portal extends ActionAbstract
 {
-    public function checkout(mixed $connection, ProductInterface $product, UserInterface $user, CheckoutContext $context): string
-    {
-        $approvalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-60385559L1062554J';
+    private Payment $transactionService;
+    private Config $config;
 
-        return $approvalUrl;
+    public function __construct(Payment $transactionService, Config $config)
+    {
+        $this->transactionService = $transactionService;
+        $this->config = $config;
     }
 
-    public function webhook(RequestInterface $request, WebhookInterface $handler, ?string $webhookSecret = null): void
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-    }
+        $returnUrl = $this->config->get('fusio_apps_url') . '/apps/developer';
 
-    public function portal(mixed $connection, UserInterface $user, string $returnUrl): ?string
-    {
-        return 'https://paypal.com';
+        $redirectUrl = $this->transactionService->portal(
+            $request->get('provider'),
+            $context->getUser(),
+            $returnUrl
+        );
+
+        return [
+            'redirectUrl' => $redirectUrl,
+        ];
     }
 }

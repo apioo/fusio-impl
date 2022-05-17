@@ -12,6 +12,14 @@ class RateRow extends \PSX\Record\Record
     {
         return $this->getProperty('id');
     }
+    public function setPlanId(?int $planId) : void
+    {
+        $this->setProperty('plan_id', $planId);
+    }
+    public function getPlanId() : ?int
+    {
+        return $this->getProperty('plan_id');
+    }
     public function setStatus(?int $status) : void
     {
         $this->setProperty('status', $status);

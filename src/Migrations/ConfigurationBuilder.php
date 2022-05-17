@@ -47,7 +47,7 @@ class ConfigurationBuilder
         return $configuration;
     }
 
-    public static function fromConnector(string|int $connectionId, ConnectorInterface $connector, ?Migrations\OutputWriter $outputWriter = null): Migrations\Configuration\Configuration
+    public static function fromConnector(mixed $connectionId, ConnectorInterface $connector, ?Migrations\OutputWriter $outputWriter = null): Migrations\Configuration\Configuration
     {
         if (is_numeric($connectionId)) {
             throw new \InvalidArgumentException('Connection id must be a name');

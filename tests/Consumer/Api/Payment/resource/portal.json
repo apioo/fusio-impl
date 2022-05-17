@@ -1,0 +1,42 @@
+{
+  "status": 1,
+  "path": "\/consumer\/payment\/:provider\/portal",
+  "pathParameters": "ConsumerPaymentProviderPortalPath",
+  "methods": {
+    "POST": {
+      "operationId": "Consumer_Action_Payment_Portal",
+      "security": {
+        "app": [
+          "consumer.payment"
+        ]
+      },
+      "tags": [
+        "consumer.payment"
+      ],
+      "responses": {
+        "200": "Consumer_Payment_Portal_Response"
+      }
+    }
+  },
+  "definitions": {
+    "ConsumerPaymentProviderPortalPath": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "Consumer_Payment_Portal_Response": {
+      "$ref": "Payment_Portal_Response"
+    },
+    "Payment_Portal_Response": {
+      "type": "object",
+      "properties": {
+        "redirectUrl": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

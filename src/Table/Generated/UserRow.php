@@ -20,6 +20,14 @@ class UserRow extends \PSX\Record\Record
     {
         return $this->getProperty('role_id');
     }
+    public function setPlanId(?int $planId) : void
+    {
+        $this->setProperty('plan_id', $planId);
+    }
+    public function getPlanId() : ?int
+    {
+        return $this->getProperty('plan_id');
+    }
     public function setProvider(?int $provider) : void
     {
         $this->setProperty('provider', $provider);
@@ -43,6 +51,14 @@ class UserRow extends \PSX\Record\Record
     public function getRemoteId() : ?string
     {
         return $this->getProperty('remote_id');
+    }
+    public function setExternalId(?string $externalId) : void
+    {
+        $this->setProperty('external_id', $externalId);
+    }
+    public function getExternalId() : ?string
+    {
+        return $this->getProperty('external_id');
     }
     public function setName(?string $name) : void
     {

@@ -311,84 +311,6 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onPlanContractCreate(Event\Plan\Contract\CreatedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getContract()->getId(),
-            'contract.create',
-            'Created contract',
-            $event->getContract()
-        );
-    }
-
-    public function onPlanContractDelete(Event\Plan\Contract\DeletedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getExisting()->getProperty('id'),
-            'contract.delete',
-            'Deleted contract'
-        );
-    }
-
-    public function onPlanContractUpdate(Event\Plan\Contract\UpdatedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getContract()->getId(),
-            'contract.update',
-            'Updated contract',
-            $event->getContract()
-        );
-    }
-
-    public function onPlanInvoiceCreate(Event\Plan\Invoice\CreatedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getInvoice()->getId(),
-            'invoice.create',
-            'Created invoice',
-            $event->getInvoice()
-        );
-    }
-
-    public function onPlanInvoiceDelete(Event\Plan\Invoice\DeletedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getExisting()->getProperty('id'),
-            'invoice.delete',
-            'Deleted invoice'
-        );
-    }
-
-    public function onPlanInvoiceUpdate(Event\Plan\Invoice\UpdatedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getInvoice()->getId(),
-            'invoice.update',
-            'Updated invoice',
-            $event->getInvoice()
-        );
-    }
-
-    public function onPlanInvoicePayed(Event\Plan\Invoice\PayedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getInvoiceId(),
-            'invoice.payed',
-            'Payed invoice',
-            (object) [
-                'transactionId' => $event->getTransaction()->getId(),
-                'transaction' => $event->getTransaction()->getTransactionId(),
-            ]
-        );
-    }
-
     public function onRateCreate(Event\Rate\CreatedEvent $event)
     {
         $this->log(
@@ -517,44 +439,6 @@ class AuditListener implements EventSubscriberInterface
         );
     }
 
-    public function onTransactionPrepare(Event\Transaction\PreparedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getTransaction()->getId(),
-            'transaction.prepare',
-            sprintf('Prepared transaction %s', $event->getTransaction()->getTransactionId()),
-            Record::fromArray([
-                'invoiceId' => $event->getTransaction()->getInvoiceId(),
-                'transactionId' => $event->getTransaction()->getTransactionId(),
-                'provider' => $event->getTransaction()->getProvider(),
-                'status' => $event->getTransaction()->getStatus(),
-                'remoteId' => $event->getTransaction()->getRemoteId(),
-                'amount' => $event->getTransaction()->getAmount(),
-                'returnUrl' => $event->getTransaction()->getReturnUrl(),
-            ])
-        );
-    }
-
-    public function onTransactionExecute(Event\Transaction\ExecutedEvent $event)
-    {
-        $this->log(
-            $event->getContext(),
-            $event->getTransaction()->getId(),
-            'transaction.execute',
-            sprintf('Executed transaction %s', $event->getTransaction()->getTransactionId()),
-            Record::fromArray([
-                'invoiceId' => $event->getTransaction()->getInvoiceId(),
-                'transactionId' => $event->getTransaction()->getTransactionId(),
-                'provider' => $event->getTransaction()->getProvider(),
-                'status' => $event->getTransaction()->getStatus(),
-                'remoteId' => $event->getTransaction()->getRemoteId(),
-                'amount' => $event->getTransaction()->getAmount(),
-                'returnUrl' => $event->getTransaction()->getReturnUrl(),
-            ])
-        );
-    }
-
     public function onUserChangePassword(Event\User\ChangedPasswordEvent $event)
     {
         $this->log(
@@ -667,15 +551,6 @@ class AuditListener implements EventSubscriberInterface
             Event\Plan\DeletedEvent::class          => 'onPlanDelete',
             Event\Plan\UpdatedEvent::class          => 'onPlanUpdate',
 
-            Event\Plan\Contract\CreatedEvent::class => 'onPlanContractCreate',
-            Event\Plan\Contract\DeletedEvent::class => 'onPlanContractDelete',
-            Event\Plan\Contract\UpdatedEvent::class => 'onPlanContractUpdate',
-
-            Event\Plan\Invoice\CreatedEvent::class  => 'onPlanInvoiceCreate',
-            Event\Plan\Invoice\DeletedEvent::class  => 'onPlanInvoiceDelete',
-            Event\Plan\Invoice\UpdatedEvent::class  => 'onPlanInvoiceUpdate',
-            Event\Plan\Invoice\PayedEvent::class    => 'onPlanInvoicePayed',
-
             Event\Rate\CreatedEvent::class          => 'onRateCreate',
             Event\Rate\DeletedEvent::class          => 'onRateDelete',
             Event\Rate\UpdatedEvent::class          => 'onRateUpdate',
@@ -691,9 +566,6 @@ class AuditListener implements EventSubscriberInterface
             Event\Scope\CreatedEvent::class         => 'onScopeCreate',
             Event\Scope\DeletedEvent::class         => 'onScopeDelete',
             Event\Scope\UpdatedEvent::class         => 'onScopeUpdate',
-
-            Event\Transaction\PreparedEvent::class  => 'onTransactionPrepare',
-            Event\Transaction\ExecutedEvent::class  => 'onTransactionExecute',
 
             Event\User\ChangedPasswordEvent::class  => 'onUserChangePassword',
             Event\User\ChangedStatusEvent::class    => 'onUserChangeStatus',

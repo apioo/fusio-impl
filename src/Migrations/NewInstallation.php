@@ -106,6 +106,8 @@ class NewInstallation
         $bag->addConfig('provider_github_secret', Table\Config::FORM_STRING, '', 'GitHub app secret');
         $bag->addConfig('recaptcha_key', Table\Config::FORM_STRING, '', 'ReCaptcha key');
         $bag->addConfig('recaptcha_secret', Table\Config::FORM_STRING, '', 'ReCaptcha secret');
+        $bag->addConfig('payment_stripe_secret', Table\Config::FORM_STRING, '', 'The stripe webhook secret which is needed to verify a webhook request');
+        $bag->addConfig('payment_currency', Table\Config::FORM_STRING, '', 'The three-character ISO-4217 currency code which is used to process payments');
         $bag->addConfig('role_default', Table\Config::FORM_STRING, 'Consumer', 'Default role which a user gets assigned on registration');
         $bag->addConfig('points_default', Table\Config::FORM_NUMBER, 0, 'The default amount of points which a user receives if he registers');
         $bag->addConfig('points_threshold', Table\Config::FORM_NUMBER, 0, 'If a user goes below this points threshold we send an information to the user');
@@ -120,7 +122,6 @@ class NewInstallation
         $bag->addRateAllocation('Default-Anonymous', null, null, false);
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
         $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
-        $bag->addAction('backend', 'Backend_Action_Plan_Billing', Backend\Action\Plan\Billing::class);
         $bag->addAction('backend', 'Backend_Action_Connection_RenewToken', Backend\Action\Connection\RenewToken::class);
         $bag->addCronjob('backend', 'Execute_Async', '* * * * *', 'Backend_Action_Action_Async');
         $bag->addCronjob('backend', 'Dispatch_Event', '* * * * *', 'Backend_Action_Event_Execute');
@@ -134,6 +135,7 @@ class NewInstallation
         $bag->addRoleScope('Consumer', 'authorization');
         $bag->addRoleScope('Consumer', 'consumer');
         $bag->addRoute('system', 0, '/system/jsonrpc', System\Api\JsonRpc::class);
+        $bag->addRoute('system', 3, '/system/payment/:provider/webhook', System\Api\PaymentWebhook::class);
         $bag->addRoute('system', 2, '/system/doc', Tool\Documentation\IndexController::class);
         $bag->addRoute('system', 1, '/system/doc/:version/*path', Tool\Documentation\DetailController::class);
         $bag->addRoute('system', 30, '/system/export/:type/:version/*path', Generator\GeneratorController::class);
@@ -308,24 +310,6 @@ class NewInstallation
                     'PUT' => new Method(Backend\Action\Page\Update::class, Model\Backend\Page_Update::class, [200 => Message::class], null, 'backend.page', 'fusio.page.update'),
                     'DELETE' => new Method(Backend\Action\Page\Delete::class, null, [200 => Message::class], null, 'backend.page', 'fusio.page.delete'),
                 ],
-                '/plan/contract' => [
-                    'GET' => new Method(Backend\Action\Plan\Contract\GetAll::class, null, [200 => Model\Backend\Plan_Contract_Collection::class], Collection_Query::class, 'backend.plan'),
-                    'POST' => new Method(Backend\Action\Plan\Contract\Create::class, Model\Backend\Plan_Contract_Create::class, [201 => Message::class], null, 'backend.plan'),
-                ],
-                '/plan/contract/$contract_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Plan\Contract\Get::class, null, [200 => Model\Backend\Plan_Contract::class], null, 'backend.plan'),
-                    'PUT' => new Method(Backend\Action\Plan\Contract\Update::class, Model\Backend\Plan_Contract_Update::class, [200 => Message::class], null, 'backend.plan'),
-                    'DELETE' => new Method(Backend\Action\Plan\Contract\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
-                ],
-                '/plan/invoice' => [
-                    'GET' => new Method(Backend\Action\Plan\Invoice\GetAll::class, null, [200 => Model\Backend\Plan_Invoice_Collection::class], Collection_Query::class, 'backend.plan'),
-                    'POST' => new Method(Backend\Action\Plan\Invoice\Create::class, Model\Backend\Plan_Invoice_Create::class, [201 => Message::class], null, 'backend.plan'),
-                ],
-                '/plan/invoice/$invoice_id<[0-9]+>' => [
-                    'GET' => new Method(Backend\Action\Plan\Invoice\Get::class, null, [200 => Model\Backend\Plan_Invoice::class], null, 'backend.plan'),
-                    'PUT' => new Method(Backend\Action\Plan\Invoice\Update::class, Model\Backend\Plan_Invoice_Update::class, [200 => Message::class], null, 'backend.plan'),
-                    'DELETE' => new Method(Backend\Action\Plan\Invoice\Delete::class, null, [200 => Message::class], null, 'backend.plan'),
-                ],
                 '/plan' => [
                     'GET' => new Method(Backend\Action\Plan\GetAll::class, null, [200 => Model\Backend\Plan_Collection::class], Collection_Query::class, 'backend.plan'),
                     'POST' => new Method(Backend\Action\Plan\Create::class, Model\Backend\Plan_Create::class, [201 => Message::class], null, 'backend.plan', 'fusio.plan.create'),
@@ -478,18 +462,11 @@ class NewInstallation
                 '/page/:page_id' => [
                     'GET' => new Method(Consumer\Action\Page\Get::class, null, [200 => Model\Consumer\Page::class], null, 'consumer.page', null, true),
                 ],
-                '/plan/contract' => [
-                    'GET' => new Method(Consumer\Action\Plan\Contract\GetAll::class, null, [200 => Model\Consumer\Plan_Contract_Collection::class], Collection_Query::class, 'consumer.plan'),
-                    'POST' => new Method(Consumer\Action\Plan\Contract\Create::class, Model\Consumer\Plan_Order_Request::class, [201 => Model\Consumer\Plan_Order_Response::class], null, 'consumer.plan'),
+                '/payment/:provider/portal' => [
+                    'POST' => new Method(Consumer\Action\Payment\Portal::class, null, [200 => Model\Consumer\Payment_Portal_Response::class], null, 'consumer.payment'),
                 ],
-                '/plan/contract/$contract_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Plan\Contract\Get::class, null, [200 => Model\Consumer\Plan_Contract::class], null, 'consumer.plan'),
-                ],
-                '/plan/invoice' => [
-                    'GET' => new Method(Consumer\Action\Plan\Invoice\GetAll::class, null, [200 => Model\Consumer\Plan_Invoice_Collection::class], Collection_Query::class, 'consumer.plan'),
-                ],
-                '/plan/invoice/$invoice_id<[0-9]+>' => [
-                    'GET' => new Method(Consumer\Action\Plan\Invoice\Get::class, null, [200 => Model\Consumer\Plan_Invoice::class], null, 'consumer.plan'),
+                '/payment/:provider/checkout' => [
+                    'POST' => new Method(Consumer\Action\Payment\Checkout::class, Model\Consumer\Payment_Checkout_Request::class, [200 => Model\Consumer\Payment_Checkout_Response::class], null, 'consumer.payment'),
                 ],
                 '/plan' => [
                     'GET' => new Method(Consumer\Action\Plan\GetAll::class, null, [200 => Model\Consumer\Plan_Collection::class], Collection_Query::class, 'consumer.plan'),
@@ -511,12 +488,6 @@ class NewInstallation
                 ],
                 '/transaction' => [
                     'GET' => new Method(Consumer\Action\Transaction\GetAll::class, null, [200 => Model\Consumer\Transaction_Collection::class], Collection_Query::class, 'consumer.transaction'),
-                ],
-                '/transaction/execute/:transaction_id' => [
-                    'GET' => new Method(Consumer\Action\Transaction\Execute::class, null, [], null, 'consumer.transaction', null, true),
-                ],
-                '/transaction/prepare/:provider' => [
-                    'POST' => new Method(Consumer\Action\Transaction\Prepare::class, Model\Consumer\Transaction_Prepare_Request::class, [200 => Model\Consumer\Transaction_Prepare_Response::class], null, 'consumer.transaction'),
                 ],
                 '/transaction/$transaction_id<[0-9]+>' => [
                     'GET' => new Method(Consumer\Action\Transaction\Get::class, null, [200 => Model\Consumer\Transaction::class], null, 'consumer.transaction'),

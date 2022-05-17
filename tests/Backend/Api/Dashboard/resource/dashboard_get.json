@@ -424,10 +424,10 @@
   "latestTransactions": {
     "entry": [
       {
-        "status": 1,
-        "provider": "paypal",
-        "transactionId": "9e239bb3-cfb4-4783-92e0-18ce187041bc",
-        "amount": 39.99,
+        "user_id": 1,
+        "plan_id": 2,
+        "transactionId": "[transaction_id]",
+        "amount": 3999,
         "date": "[datetime]"
       }
     ]

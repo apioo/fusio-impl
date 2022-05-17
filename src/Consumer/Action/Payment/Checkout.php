@@ -19,37 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Adapter\Test;
+namespace Fusio\Impl\Consumer\Action\Payment;
 
-use Fusio\Engine\Model\ProductInterface;
-use Fusio\Engine\Model\UserInterface;
-use Fusio\Engine\Payment\CheckoutContext;
-use Fusio\Engine\Payment\ProviderInterface;
-use Fusio\Engine\Payment\WebhookInterface;
-use PSX\Http\RequestInterface;
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+use Fusio\Impl\Authorization\UserContext;
+use Fusio\Impl\Service\Payment;
+use Fusio\Model\Consumer\Payment_Checkout_Request;
 
 /**
- * Paypal
+ * Checkout
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org
  */
-class Paypal implements ProviderInterface
+class Checkout extends ActionAbstract
 {
-    public function checkout(mixed $connection, ProductInterface $product, UserInterface $user, CheckoutContext $context): string
-    {
-        $approvalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-60385559L1062554J';
+    private Payment $paymentService;
 
-        return $approvalUrl;
+    public function __construct(Payment $paymentService)
+    {
+        $this->paymentService = $paymentService;
     }
 
-    public function webhook(RequestInterface $request, WebhookInterface $handler, ?string $webhookSecret = null): void
+    public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
-    }
+        $body = $request->getPayload();
 
-    public function portal(mixed $connection, UserInterface $user, string $returnUrl): ?string
-    {
-        return 'https://paypal.com';
+        assert($body instanceof Payment_Checkout_Request);
+
+        $approvalUrl = $this->paymentService->checkout(
+            $request->get('provider'),
+            $body,
+            $context->getUser(),
+            UserContext::newActionContext($context)
+        );
+
+        return [
+            'approvalUrl' => $approvalUrl,
+        ];
     }
 }

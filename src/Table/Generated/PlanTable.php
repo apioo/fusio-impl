@@ -15,13 +15,14 @@ class PlanTable extends \PSX\Sql\TableAbstract
     public const COLUMN_PRICE = 'price';
     public const COLUMN_POINTS = 'points';
     public const COLUMN_PERIOD_TYPE = 'period_type';
+    public const COLUMN_EXTERNAL_ID = 'external_id';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_PRICE => 0x500000, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_TYPE => 0x4020000a);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_NAME => 0xa000ff, self::COLUMN_DESCRIPTION => 0xa000ff, self::COLUMN_PRICE => 0x500000, self::COLUMN_POINTS => 0x20000a, self::COLUMN_PERIOD_TYPE => 0x4020000a, self::COLUMN_EXTERNAL_ID => 0x40a000ff);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\PlanRow>
@@ -186,6 +187,25 @@ class PlanTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('period_type', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\PlanRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByExternalId(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('external_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByExternalId(string $value) : ?\Fusio\Impl\Table\Generated\PlanRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->like('external_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**

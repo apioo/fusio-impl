@@ -228,6 +228,7 @@
         "responses": {}
       }
     },
+    "\/system\/payment\/{provider}\/webhook": {},
     "\/system\/doc": {
       "get": {
         "operationId": "PSX_Framework_Controller_Tool_Documentation_IndexController_doGet",
