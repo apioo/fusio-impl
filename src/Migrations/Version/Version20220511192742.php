@@ -59,6 +59,9 @@ final class Version20220511192742 extends AbstractMigration
                 $this->addSql('INSERT INTO fusio_config (type, name, description, value) VALUES (?, ?, ?, ?)', $row);
             }
         }
+
+        // remove billing run
+        $this->addSql('DELETE FROM fusio_cronjob WHERE name = ?', ['Billing_Run']);
     }
 
     public function down(Schema $schema) : void
