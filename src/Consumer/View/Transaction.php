@@ -57,7 +57,7 @@ class Transaction extends ViewAbstract
                 'planId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_PLAN_ID),
                 'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
                 'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-                'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
+                'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
                 'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
             ]),
         ];
@@ -84,7 +84,7 @@ class Transaction extends ViewAbstract
             ]),
             'transactionId' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_TRANSACTION_ID),
             'amount' => $this->fieldNumber(Table\Generated\TransactionTable::COLUMN_AMOUNT),
-            'points' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_POINTS),
+            'points' => $this->fieldInteger(Table\Generated\TransactionTable::COLUMN_POINTS),
             'insertDate' => $this->fieldDateTime(Table\Generated\TransactionTable::COLUMN_INSERT_DATE),
         ]);
 
