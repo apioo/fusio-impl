@@ -432,7 +432,7 @@ class User
         }
     }
 
-    private function getRoleId(\Fusio\Model\Backend\User $user): int
+    private function getRoleId(\Fusio\Model\Backend\User $user): ?int
     {
         $roleId = $user->getRoleId();
         if (!empty($roleId)) {
