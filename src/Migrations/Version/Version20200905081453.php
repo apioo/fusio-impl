@@ -291,7 +291,6 @@ final class Version20200905081453 extends AbstractMigration
         if (!$schema->hasTable('fusio_rate')) {
             $rateTable = $schema->createTable('fusio_rate');
             $rateTable->addColumn('id', 'integer', ['autoincrement' => true]);
-            $rateTable->addColumn('plan_id', 'integer', ['notnull' => false]);
             $rateTable->addColumn('status', 'integer');
             $rateTable->addColumn('priority', 'integer');
             $rateTable->addColumn('name', 'string', ['length' => 64]);
@@ -306,9 +305,10 @@ final class Version20200905081453 extends AbstractMigration
             $rateAllocationTable->addColumn('id', 'integer', ['autoincrement' => true]);
             $rateAllocationTable->addColumn('rate_id', 'integer');
             $rateAllocationTable->addColumn('route_id', 'integer', ['notnull' => false, 'default' => null]);
+            $rateAllocationTable->addColumn('user_id', 'integer', ['notnull' => false, 'default' => null]);
+            $rateAllocationTable->addColumn('plan_id', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('app_id', 'integer', ['notnull' => false, 'default' => null]);
             $rateAllocationTable->addColumn('authenticated', 'integer', ['notnull' => false, 'default' => null]);
-            $rateAllocationTable->addColumn('parameters', 'string', ['length' => 255, 'notnull' => false, 'default' => null]);
             $rateAllocationTable->setPrimaryKey(['id']);
         }
 

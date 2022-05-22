@@ -20,9 +20,10 @@ final class Version20220511192742 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $rateTable = $schema->getTable('fusio_rate');
-        if (!$rateTable->hasColumn('plan_id')) {
-            $rateTable->addColumn('plan_id', 'integer', ['notnull' => false]);
+        $rateAllocationTable = $schema->getTable('fusio_rate_allocation');
+        if (!$rateAllocationTable->hasColumn('plan_id')) {
+            $rateAllocationTable->addColumn('user_id', 'integer', ['notnull' => false]);
+            $rateAllocationTable->addColumn('plan_id', 'integer', ['notnull' => false]);
         }
 
         $planTable = $schema->getTable('fusio_plan');
