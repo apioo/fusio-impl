@@ -117,9 +117,9 @@ class NewInstallation
         $bag->addConfig('user_approval', Table\Config::FORM_BOOLEAN, 1, 'Whether the user needs to activate the account through an email');
         $bag->addConnection('System', ConnectionSystem::class);
         $bag->addRate('Default', 0, 720, 'PT1H');
-        $bag->addRate('Default-Anonymous', 4, 60, 'PT1H');
+        $bag->addRate('Default-Anonymous', 4, 300, 'PT1H');
         $bag->addRateAllocation('Default');
-        $bag->addRateAllocation('Default-Anonymous', null, null, false);
+        $bag->addRateAllocation('Default-Anonymous', null, null, null, null, false);
         $bag->addAction('backend', 'Backend_Action_Action_Async', Backend\Action\Action\Async::class);
         $bag->addAction('backend', 'Backend_Action_Event_Execute', Backend\Action\Event\Execute::class);
         $bag->addAction('backend', 'Backend_Action_Connection_RenewToken', Backend\Action\Connection\RenewToken::class);

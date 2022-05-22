@@ -55,8 +55,6 @@ class DataBag
             'fusio_event' => [],
             'fusio_log' => [],
             'fusio_plan' => [],
-            'fusio_plan_contract' => [],
-            'fusio_plan_invoice' => [],
             'fusio_provider' => [],
             'fusio_page' => [],
             'fusio_role' => [],
@@ -432,14 +430,15 @@ class DataBag
         ];
     }
 
-    public function addRateAllocation(string $rate, ?string $route = null, ?string $app = null, ?bool $authenticated = null, ?string $parameters = null)
+    public function addRateAllocation(string $rate, ?string $route = null, ?string $user = null, ?string $plan = null, ?string $app = null, ?bool $authenticated = null)
     {
         $this->data['fusio_rate_allocation'][] = [
             'rate_id' => $this->getId('fusio_rate', $rate),
             'route_id' => $route !== null ? $this->getId('fusio_routes', $route) : null,
+            'user_id' => $user !== null ? $this->getId('fusio_user', $user) : null,
+            'plan_id' => $plan !== null ? $this->getId('fusio_plan', $plan) : null,
             'app_id' => $app !== null ? $this->getId('fusio_app', $app) : null,
             'authenticated' => $authenticated !== null ? ($authenticated ? 1 : 0) : null,
-            'parameters' => $parameters
         ];
     }
 
