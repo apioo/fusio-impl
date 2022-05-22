@@ -23,6 +23,7 @@ namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection;
 use Fusio\Engine\Model\User;
+use Fusio\Engine\Model\UserInterface;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 
@@ -45,8 +46,13 @@ class UserDatabase implements Repository\UserInterface
     public function getAll(): array
     {
         $sql = 'SELECT id,
+                       role_id,
+                       plan_id,
                        status,
-                       name
+                       external_id,
+                       name,
+                       email,
+                       points
                   FROM fusio_user
                  WHERE status = :status
               ORDER BY id DESC';
@@ -71,14 +77,16 @@ class UserDatabase implements Repository\UserInterface
 
         $sql = 'SELECT id,
                        role_id,
+                       plan_id,
                        status,
+                       external_id,
                        name,
                        email,
                        points
                   FROM fusio_user
                  WHERE id = :id';
 
-        $row = $this->connection->fetchAssoc($sql, array('id' => $id));
+        $row = $this->connection->fetchAssoc($sql, ['id' => $id]);
 
         if (!empty($row)) {
             return $this->newUser($row);
@@ -87,7 +95,7 @@ class UserDatabase implements Repository\UserInterface
         }
     }
 
-    private function newUser(array $row)
+    private function newUser(array $row): UserInterface
     {
         return new User(
             false,
@@ -98,6 +106,8 @@ class UserDatabase implements Repository\UserInterface
             $row['name'],
             $row['email'],
             $row['points'] ?? 0,
+            $row['external_id'] ?? null,
+            $row['plan_id'] ?? null
         );
     }
 
