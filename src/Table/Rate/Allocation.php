@@ -42,7 +42,7 @@ class Allocation extends Generated\RateAllocationTable
         $this->connection->executeUpdate($sql, ['rate_id' => $rateId]);
     }
 
-    public function getRateForRequest($routeId, Model\AppInterface $app)
+    public function getRateForRequest(int $routeId, Model\AppInterface $app, Model\UserInterface $user)
     {
         $sql = '    SELECT rate.rate_limit,
                            rate.timespan
@@ -51,24 +51,19 @@ class Allocation extends Generated\RateAllocationTable
                         ON rate_allocation.rate_id = rate.id 
                      WHERE rate.status = :status
                        AND (rate_allocation.route_id IS NULL OR rate_allocation.route_id = :route_id)
+                       AND (rate_allocation.user_id IS NULL OR rate_allocation.user_id = :user_id)
+                       AND (rate_allocation.plan_id IS NULL OR rate_allocation.plan_id = :plan_id)
                        AND (rate_allocation.app_id IS NULL OR rate_allocation.app_id = :app_id)
                        AND (rate_allocation.authenticated IS NULL OR rate_allocation.authenticated = :authenticated)';
 
         $params = [
             'status' => Rate::STATUS_ACTIVE,
             'route_id' => $routeId,
+            'user_id' => $user->getId(),
+            'plan_id' => $user->getPlanId(),
             'app_id' => $app->getId(),
             'authenticated' => $app->isAnonymous() ? 0 : 1,
         ];
-
-        $parameters = $app->getParameters();
-        if (!empty($parameters)) {
-            $sql.= ' AND (rate_allocation.parameters IS NULL OR ';
-            $sql.= $this->connection->getDatabasePlatform()->getLocateExpression(':parameters', 'rate_allocation.parameters');
-            $sql.= ' > 0)';
-
-            $params['parameters'] = http_build_query($parameters, '', '&');
-        }
 
         $sql.= ' ORDER BY rate.priority DESC';
 
