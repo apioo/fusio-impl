@@ -53,6 +53,9 @@
         "id": {
           "type": "integer"
         },
+        "planId": {
+          "type": "integer"
+        },
         "status": {
           "type": "integer"
         },

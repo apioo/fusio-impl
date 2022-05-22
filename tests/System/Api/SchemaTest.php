@@ -194,6 +194,9 @@ JSON;
                     "roleId": {
                         "type": "integer"
                     },
+                    "planId": {
+                        "type": "integer"
+                    },
                     "status": {
                         "type": "integer"
                     },

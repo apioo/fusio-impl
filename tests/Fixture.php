@@ -154,7 +154,7 @@ class Fixture
         $data->addLogError(0);
         $data->addPlanUsage('/foo', 'Administrator', 'Foo-App', 1, '2018-10-05 18:18:00');
         $data->addRateAllocation('silver', '/foo');
-        $data->addRateAllocation('gold', '/foo', 'Consumer', 'Plan A', 'Foo-App', true);
+        $data->addRateAllocation('gold', '/foo', null, null, null, true);
         $data->addScopeRoute('bar', '/foo');
         $data->addScopeRoute('foo', '/inspect/:foo');
         $data->addScopeRoute('bar', '/inspect/:foo');

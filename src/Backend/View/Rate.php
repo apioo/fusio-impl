@@ -99,9 +99,10 @@ class Rate extends ViewAbstract
                 'id' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ID),
                 'rateId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_RATE_ID),
                 'routeId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID),
+                'userId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_USER_ID),
+                'planId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_PLAN_ID),
                 'appId' => $this->fieldInteger(Table\Generated\RateAllocationTable::COLUMN_APP_ID),
                 'authenticated' => $this->fieldBoolean(Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED),
-                'parameters' => Table\Generated\RateAllocationTable::COLUMN_PARAMETERS,
             ]),
         ]);
 
