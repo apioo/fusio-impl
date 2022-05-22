@@ -22,8 +22,7 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection;
-use Fusio\Engine\Model\User;
-use Fusio\Engine\Model\UserInterface;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 
@@ -69,7 +68,7 @@ class UserDatabase implements Repository\UserInterface
         return $users;
     }
 
-    public function get(string|int $id): ?User
+    public function get(string|int $id): ?Model\UserInterface
     {
         if (empty($id)) {
             return null;
@@ -95,9 +94,9 @@ class UserDatabase implements Repository\UserInterface
         }
     }
 
-    private function newUser(array $row): UserInterface
+    private function newUser(array $row): Model\UserInterface
     {
-        return new User(
+        return new Model\User(
             false,
             $row['id'],
             $row['role_id'],

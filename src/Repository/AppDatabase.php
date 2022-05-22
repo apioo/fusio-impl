@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Engine\Model\App;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Table;
 
@@ -67,7 +67,7 @@ class AppDatabase implements Repository\AppInterface
         return $apps;
     }
 
-    public function get(string|int $id): ?App
+    public function get(string|int $id): ?Model\AppInterface
     {
         if (empty($id)) {
             return null;
@@ -110,14 +110,14 @@ class AppDatabase implements Repository\AppInterface
         return $names;
     }
 
-    protected function newApp(array $row, array $scopes)
+    protected function newApp(array $row, array $scopes): Model\AppInterface
     {
         $parameters = [];
         if (!empty($row['parameters'])) {
             parse_str($row['parameters'], $parameters);
         }
 
-        return new App(
+        return new Model\App(
             false,
             $row['id'],
             $row['user_id'],

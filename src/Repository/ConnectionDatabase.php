@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Engine\Model\Connection;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service\Connection as ConnectionService;
 
@@ -52,17 +52,17 @@ class ConnectionDatabase implements Repository\ConnectionInterface
                   FROM fusio_connection 
               ORDER BY name ASC';
 
-        $conns  = [];
+        $connections = [];
         $result = $this->connection->fetchAll($sql);
 
         foreach ($result as $row) {
-            $conns[] = $this->newConnection($row);
+            $connections[] = $this->newConnection($row);
         }
 
-        return $conns;
+        return $connections;
     }
 
-    public function get(string|int $id): ?Connection
+    public function get(string|int $id): ?Model\ConnectionInterface
     {
         if (is_numeric($id)) {
             $column = 'id';
@@ -86,11 +86,11 @@ class ConnectionDatabase implements Repository\ConnectionInterface
         }
     }
 
-    protected function newConnection(array $row)
+    private function newConnection(array $row): Model\ConnectionInterface
     {
         $config = !empty($row['config']) ? ConnectionService\Encrypter::decrypt($row['config'], $this->secretKey) : [];
 
-        return new Connection(
+        return new Model\Connection(
             $row['id'],
             $row['name'],
             $row['class'],

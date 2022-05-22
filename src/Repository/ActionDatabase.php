@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Repository;
 
 use Doctrine\DBAL\Connection as DBALConnection;
-use Fusio\Engine\Model\Action;
+use Fusio\Engine\Model;
 use Fusio\Engine\Repository;
 use Fusio\Impl\Service;
 use Fusio\Impl\Table;
@@ -69,7 +69,7 @@ class ActionDatabase implements Repository\ActionInterface
         return $actions;
     }
 
-    public function get(string|int $id): ?Action
+    public function get(string|int $id): ?Model\ActionInterface
     {
         if (empty($id)) {
             return null;
@@ -105,11 +105,11 @@ class ActionDatabase implements Repository\ActionInterface
         $this->async = $async;
     }
 
-    protected function newAction(array $row): Action
+    protected function newAction(array $row): Model\ActionInterface
     {
         $config = !empty($row['config']) ? Service\Action::unserializeConfig($row['config']) : [];
 
-        return new Action(
+        return new Model\Action(
             $row['id'],
             $row['name'],
             $row['class'],
