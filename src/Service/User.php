@@ -55,17 +55,19 @@ class User
     private Table\User\Scope $userScopeTable;
     private Table\Role\Scope $roleScopeTable;
     private Table\Role $roleTable;
+    private Table\Plan $planTable;
     private Service\Config $configService;
     private EventDispatcherInterface $eventDispatcher;
     private ?array $userAttributes;
 
-    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, ?array $userAttributes = null)
+    public function __construct(Table\User $userTable, Table\Scope $scopeTable, Table\User\Scope $userScopeTable, Table\Role\Scope $roleScopeTable, Table\Role $roleTable, Table\Plan $planTable, Service\Config $configService, EventDispatcherInterface $eventDispatcher, ?array $userAttributes = null)
     {
         $this->userTable       = $userTable;
         $this->scopeTable      = $scopeTable;
         $this->userScopeTable  = $userScopeTable;
         $this->roleScopeTable  = $roleScopeTable;
         $this->roleTable       = $roleTable;
+        $this->planTable       = $planTable;
         $this->configService   = $configService;
         $this->eventDispatcher = $eventDispatcher;
         $this->userAttributes  = $userAttributes;
@@ -129,16 +131,16 @@ class User
         User\Validator::assertEmail($user->getEmail());
         User\Validator::assertPassword($user->getPassword(), $this->configService->getValue('user_pw_length'));
 
-        if ($user->getRoleId() === null) {
-            throw new StatusCode\BadRequestException('No role provided');
-        }
+        $roleId = $this->getRoleId($user);
+        $planId = $this->getPlanId($user);
 
         // create user
         try {
             $this->userTable->beginTransaction();
 
             $record = new Table\Generated\UserRow([
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $user->getRoleId(),
+                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
+                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
                 Table\Generated\UserTable::COLUMN_PROVIDER => ProviderInterface::PROVIDER_SYSTEM,
                 Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
                 Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
@@ -154,7 +156,7 @@ class User
             $user->setId($userId);
 
             // add scopes
-            $this->insertScopesByRole($userId, $user->getRoleId());
+            $this->insertScopesByRole($userId, $roleId);
 
             $this->userTable->commit();
         } catch (\Throwable $e) {
@@ -248,6 +250,10 @@ class User
             $user->setRoleId($existing->getRoleId());
         }
 
+        if ($user->getPlanId() === null) {
+            $user->setPlanId($existing->getPlanId());
+        }
+
         if ($user->getStatus() === null) {
             $user->setStatus($existing->getStatus());
         }
@@ -260,13 +266,17 @@ class User
         User\Validator::assertName($user->getName());
         User\Validator::assertEmail($user->getEmail());
 
+        $roleId = $this->getRoleId($user);
+        $planId = $this->getPlanId($user);
+
         try {
             $this->userTable->beginTransaction();
 
             // update user
             $record = new Table\Generated\UserRow([
                 Table\Generated\UserTable::COLUMN_ID => $existing->getId(),
-                Table\Generated\UserTable::COLUMN_ROLE_ID => $user->getRoleId(),
+                Table\Generated\UserTable::COLUMN_ROLE_ID => $roleId,
+                Table\Generated\UserTable::COLUMN_PLAN_ID => $planId,
                 Table\Generated\UserTable::COLUMN_STATUS => $user->getStatus(),
                 Table\Generated\UserTable::COLUMN_NAME => $user->getName(),
                 Table\Generated\UserTable::COLUMN_EMAIL => $user->getEmail(),
@@ -420,5 +430,35 @@ class User
                 }
             }
         }
+    }
+
+    private function getRoleId(\Fusio\Model\Backend\User $user): int
+    {
+        $roleId = $user->getRoleId();
+        if (!empty($roleId)) {
+            $role = $this->roleTable->find($roleId);
+            if ($role instanceof Table\Generated\RoleRow) {
+                return $role->getId();
+            } else {
+                throw new StatusCode\BadRequestException('Provided role id does not exist');
+            }
+        } else {
+            throw new StatusCode\BadRequestException('No role provided');
+        }
+    }
+
+    private function getPlanId(\Fusio\Model\Backend\User $user): ?int
+    {
+        $planId = $user->getPlanId();
+        if (!empty($planId)) {
+            $plan = $this->planTable->find($planId);
+            if ($plan instanceof Table\Generated\PlanRow) {
+                return $plan->getId();
+            } else {
+                throw new StatusCode\BadRequestException('Provided plan id does not exist');
+            }
+        }
+
+        return null;
     }
 }
