@@ -53,6 +53,7 @@ class RequestLimit implements FilterInterface
             $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
             $this->context->getRouteId(),
             $this->context->getApp(),
+            $this->context->getUser(),
             $response
         );
 

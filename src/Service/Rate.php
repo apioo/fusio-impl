@@ -153,9 +153,9 @@ class Rate
         return $rateId;
     }
 
-    public function assertLimit(string $ip, int $routeId, Model\AppInterface $app, ?ResponseInterface $response = null): bool
+    public function assertLimit(string $ip, int $routeId, Model\AppInterface $app, Model\UserInterface $user, ?ResponseInterface $response = null): bool
     {
-        $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app);
+        $rate = $this->rateAllocationTable->getRateForRequest($routeId, $app, $user);
         if (empty($rate)) {
             return false;
         }
@@ -190,7 +190,7 @@ class Rate
         }
     }
 
-    protected function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int
+    private function getRequestCount(string $ip, string $timespan, Model\AppInterface $app): int
     {
         if (empty($timespan)) {
             return 0;
@@ -218,7 +218,7 @@ class Rate
     /**
      * @param Rate_Allocation[] $allocations
      */
-    protected function handleAllocations(int $rateId, ?array $allocations = null): void
+    private function handleAllocations(int $rateId, ?array $allocations = null): void
     {
         $this->rateAllocationTable->deleteAllFromRate($rateId);
 
@@ -235,9 +235,10 @@ class Rate
                 $this->rateAllocationTable->create(new Table\Generated\RateAllocationRow([
                     Table\Generated\RateAllocationTable::COLUMN_RATE_ID => $rateId,
                     Table\Generated\RateAllocationTable::COLUMN_ROUTE_ID => $allocation->getRouteId(),
+                    Table\Generated\RateAllocationTable::COLUMN_USER_ID => $allocation->getUserId(),
+                    Table\Generated\RateAllocationTable::COLUMN_PLAN_ID => $allocation->getPlanId(),
                     Table\Generated\RateAllocationTable::COLUMN_APP_ID => $allocation->getAppId(),
                     Table\Generated\RateAllocationTable::COLUMN_AUTHENTICATED => $authenticated,
-                    Table\Generated\RateAllocationTable::COLUMN_PARAMETERS => $allocation->getParameters(),
                 ]));
             }
         }
