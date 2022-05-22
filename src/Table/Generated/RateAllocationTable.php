@@ -12,15 +12,16 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     public const COLUMN_RATE_ID = 'rate_id';
     public const COLUMN_ROUTE_ID = 'route_id';
     public const COLUMN_APP_ID = 'app_id';
+    public const COLUMN_USER_ID = 'user_id';
+    public const COLUMN_PLAN_ID = 'plan_id';
     public const COLUMN_AUTHENTICATED = 'authenticated';
-    public const COLUMN_PARAMETERS = 'parameters';
     public function getName() : string
     {
         return self::NAME;
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_RATE_ID => 0x20000a, self::COLUMN_ROUTE_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_AUTHENTICATED => 0x4020000a, self::COLUMN_PARAMETERS => 0x40a000ff);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_RATE_ID => 0x20000a, self::COLUMN_ROUTE_ID => 0x4020000a, self::COLUMN_APP_ID => 0x4020000a, self::COLUMN_USER_ID => 0x4020000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_AUTHENTICATED => 0x4020000a);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
@@ -134,6 +135,44 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
      * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
      * @throws \PSX\Sql\Exception\QueryException
      */
+    public function findByUserId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('user_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByUserId(int $value) : ?\Fusio\Impl\Table\Generated\RateAllocationRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('user_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('plan_id', $value);
+        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
+    }
+    /**
+     * @throws \PSX\Sql\Exception\QueryException
+     */
+    public function findOneByPlanId(int $value) : ?\Fusio\Impl\Table\Generated\RateAllocationRow
+    {
+        $condition = new \PSX\Sql\Condition();
+        $condition->equals('plan_id', $value);
+        return $this->doFindOneBy($condition);
+    }
+    /**
+     * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
+     * @throws \PSX\Sql\Exception\QueryException
+     */
     public function findByAuthenticated(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
     {
         $condition = new \PSX\Sql\Condition();
@@ -147,25 +186,6 @@ class RateAllocationTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('authenticated', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\RateAllocationRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByParameters(string $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('parameters', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByParameters(string $value) : ?\Fusio\Impl\Table\Generated\RateAllocationRow
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->like('parameters', $value);
         return $this->doFindOneBy($condition);
     }
     /**

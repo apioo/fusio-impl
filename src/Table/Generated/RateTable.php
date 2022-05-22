@@ -9,7 +9,6 @@ class RateTable extends \PSX\Sql\TableAbstract
 {
     public const NAME = 'fusio_rate';
     public const COLUMN_ID = 'id';
-    public const COLUMN_PLAN_ID = 'plan_id';
     public const COLUMN_STATUS = 'status';
     public const COLUMN_PRIORITY = 'priority';
     public const COLUMN_NAME = 'name';
@@ -21,7 +20,7 @@ class RateTable extends \PSX\Sql\TableAbstract
     }
     public function getColumns() : array
     {
-        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_PLAN_ID => 0x4020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PRIORITY => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_RATE_LIMIT => 0x20000a, self::COLUMN_TIMESPAN => 0xa000ff);
+        return array(self::COLUMN_ID => 0x3020000a, self::COLUMN_STATUS => 0x20000a, self::COLUMN_PRIORITY => 0x20000a, self::COLUMN_NAME => 0xa00040, self::COLUMN_RATE_LIMIT => 0x20000a, self::COLUMN_TIMESPAN => 0xa000ff);
     }
     /**
      * @return array<\Fusio\Impl\Table\Generated\RateRow>
@@ -72,25 +71,6 @@ class RateTable extends \PSX\Sql\TableAbstract
     {
         $condition = new \PSX\Sql\Condition();
         $condition->equals('id', $value);
-        return $this->doFindOneBy($condition);
-    }
-    /**
-     * @return array<\Fusio\Impl\Table\Generated\RateRow>
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findByPlanId(int $value, ?int $startIndex = null, ?int $count = null, ?string $sortBy = null, ?int $sortOrder = null) : array
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->equals('plan_id', $value);
-        return $this->doFindBy($condition, $startIndex, $count, $sortBy, $sortOrder);
-    }
-    /**
-     * @throws \PSX\Sql\Exception\QueryException
-     */
-    public function findOneByPlanId(int $value) : ?\Fusio\Impl\Table\Generated\RateRow
-    {
-        $condition = new \PSX\Sql\Condition();
-        $condition->equals('plan_id', $value);
         return $this->doFindOneBy($condition);
     }
     /**

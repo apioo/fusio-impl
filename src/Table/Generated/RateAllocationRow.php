@@ -36,6 +36,22 @@ class RateAllocationRow extends \PSX\Record\Record
     {
         return $this->getProperty('app_id');
     }
+    public function setUserId(?int $userId) : void
+    {
+        $this->setProperty('user_id', $userId);
+    }
+    public function getUserId() : ?int
+    {
+        return $this->getProperty('user_id');
+    }
+    public function setPlanId(?int $planId) : void
+    {
+        $this->setProperty('plan_id', $planId);
+    }
+    public function getPlanId() : ?int
+    {
+        return $this->getProperty('plan_id');
+    }
     public function setAuthenticated(?int $authenticated) : void
     {
         $this->setProperty('authenticated', $authenticated);
@@ -43,13 +59,5 @@ class RateAllocationRow extends \PSX\Record\Record
     public function getAuthenticated() : ?int
     {
         return $this->getProperty('authenticated');
-    }
-    public function setParameters(?string $parameters) : void
-    {
-        $this->setProperty('parameters', $parameters);
-    }
-    public function getParameters() : ?string
-    {
-        return $this->getProperty('parameters');
     }
 }
