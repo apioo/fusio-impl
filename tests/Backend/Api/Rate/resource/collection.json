@@ -121,14 +121,17 @@
         "routeId": {
           "type": "integer"
         },
+        "userId": {
+          "type": "integer"
+        },
+        "planId": {
+          "type": "integer"
+        },
         "appId": {
           "type": "integer"
         },
         "authenticated": {
           "type": "boolean"
-        },
-        "parameters": {
-          "type": "string"
         }
       }
     },

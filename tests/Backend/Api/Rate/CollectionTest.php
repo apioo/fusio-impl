@@ -88,7 +88,7 @@ class CollectionTest extends ControllerDbTestCase
             "status": 1,
             "priority": 4,
             "name": "Default-Anonymous",
-            "rateLimit": 60,
+            "rateLimit": 300,
             "timespan": "PT1H"
         },
         {
@@ -172,7 +172,7 @@ JSON;
             "status": 1,
             "priority": 4,
             "name": "Default-Anonymous",
-            "rateLimit": 60,
+            "rateLimit": 300,
             "timespan": "PT1H"
         },
         {
@@ -204,7 +204,6 @@ JSON;
             'allocation'  => [[
                 'routeId' => 1,
                 'authenticated' => true,
-                'parameters' => 'premium=1',
             ]],
         ]));
 
@@ -238,7 +237,7 @@ JSON;
         $this->assertEquals('P2M', $row['timespan']);
 
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'rate_id', 'route_id', 'app_id', 'authenticated', 'parameters')
+            ->select('id', 'rate_id', 'route_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
             ->from('fusio_rate_allocation')
             ->where('rate_id = :rate_id')
             ->orderBy('id', 'DESC')
@@ -252,9 +251,79 @@ JSON;
         $this->assertEquals(5, $result[0]['id']);
         $this->assertEquals(5, $result[0]['rate_id']);
         $this->assertEquals(1, $result[0]['route_id']);
+        $this->assertEquals(null, $result[0]['user_id']);
+        $this->assertEquals(null, $result[0]['plan_id']);
         $this->assertEquals(null, $result[0]['app_id']);
         $this->assertEquals(1, $result[0]['authenticated']);
-        $this->assertEquals('premium=1', $result[0]['parameters']);
+    }
+
+    public function testPostSpecific()
+    {
+        $response = $this->sendRequest('/backend/rate', 'POST', array(
+            'User-Agent'    => 'Fusio TestCase',
+            'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
+        ), json_encode([
+            'priority'  => 2,
+            'name'      => 'Premium',
+            'rateLimit' => 20,
+            'timespan'  => 'P2M',
+            'allocation'  => [[
+                'routeId' => 1,
+                'userId' => 1,
+                'planId' => 1,
+                'appId' => 1,
+                'authenticated' => true,
+            ]],
+        ]));
+
+        $body   = (string) $response->getBody();
+        $expect = <<<'JSON'
+{
+    "success": true,
+    "message": "Rate successfully created"
+}
+JSON;
+
+        $this->assertEquals(201, $response->getStatusCode(), $body);
+        $this->assertJsonStringEqualsJsonString($expect, $body, $body);
+
+        // check database
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'status', 'priority', 'name', 'rate_limit', 'timespan')
+            ->from('fusio_rate')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $row = Environment::getService('connection')->fetchAssoc($sql);
+
+        $this->assertEquals(5, $row['id']);
+        $this->assertEquals(1, $row['status']);
+        $this->assertEquals(2, $row['priority']);
+        $this->assertEquals('Premium', $row['name']);
+        $this->assertEquals(20, $row['rate_limit']);
+        $this->assertEquals('P2M', $row['timespan']);
+
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('id', 'rate_id', 'route_id', 'user_id', 'plan_id', 'app_id', 'authenticated')
+            ->from('fusio_rate_allocation')
+            ->where('rate_id = :rate_id')
+            ->orderBy('id', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+            ->getSQL();
+
+        $result = Environment::getService('connection')->fetchAll($sql, ['rate_id' => $row['id']]);
+
+        $this->assertNotEmpty($result);
+        $this->assertEquals(5, $result[0]['id']);
+        $this->assertEquals(5, $result[0]['rate_id']);
+        $this->assertEquals(1, $result[0]['route_id']);
+        $this->assertEquals(1, $result[0]['user_id']);
+        $this->assertEquals(1, $result[0]['plan_id']);
+        $this->assertEquals(1, $result[0]['app_id']);
+        $this->assertEquals(1, $result[0]['authenticated']);
     }
 
     public function testPut()
