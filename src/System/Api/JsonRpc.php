@@ -21,13 +21,13 @@
 
 namespace Fusio\Impl\System\Api;
 
+use Fusio\Impl\Controller\Filter;
 use Fusio\Impl\Rpc\InvokerFactory;
+use Fusio\Impl\Service\Log;
 use Fusio\Model\System;
 use PSX\Api\Attribute\Description;
 use PSX\Api\Attribute\Incoming;
 use PSX\Api\Attribute\Outgoing;
-use PSX\Api\Resource;
-use PSX\Api\SpecificationInterface;
 use PSX\Dependency\Attribute\Inject;
 use PSX\Framework\Controller\ControllerAbstract;
 use PSX\Framework\Schema\Passthru;
@@ -47,6 +47,9 @@ class JsonRpc extends ControllerAbstract
     #[Inject]
     private InvokerFactory $rpcInvokerFactory;
 
+    #[Inject]
+    private Log $logService;
+
     public function getPreFilter(): array
     {
         $filter = [];
@@ -54,6 +57,11 @@ class JsonRpc extends ControllerAbstract
         // it is required for every request to have an user agent which
         // identifies the client
         $filter[] = new UserAgentEnforcer();
+
+        $filter[] = new Filter\Logger(
+            $this->logService,
+            $this->context
+        );
 
         return $filter;
     }
