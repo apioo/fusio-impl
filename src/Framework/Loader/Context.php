@@ -72,7 +72,7 @@ class Context extends FrameworkContext
 
     public function getAppId(): ?int
     {
-        return $this->app->getId();
+        return $this->app?->getId();
     }
 
     public function setApp(AppInterface $app): void
@@ -87,7 +87,7 @@ class Context extends FrameworkContext
 
     public function getUserId(): ?int
     {
-        return $this->user->getId();
+        return $this->user?->getId();
     }
 
     public function setUser(UserInterface $user): void

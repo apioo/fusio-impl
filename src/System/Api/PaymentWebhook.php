@@ -21,11 +21,11 @@
 
 namespace Fusio\Impl\System\Api;
 
+use Fusio\Impl\Framework\Loader\Context;
+use Fusio\Impl\Service\Log;
 use Fusio\Impl\Service\Payment;
-use PSX\Api\Exception\InvalidMethodException;
 use PSX\Dependency\Attribute\Inject;
 use PSX\Framework\Http\ResponseWriter;
-use PSX\Framework\Loader\Context;
 use PSX\Http\Exception\MethodNotAllowedException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -47,11 +47,14 @@ class PaymentWebhook implements FilterInterface
     #[Inject]
     private ResponseWriter $responseWriter;
 
+    #[Inject]
+    private Log $logService;
+
     private Context $context;
 
-    public function __construct(Context $context = null)
+    public function __construct(Context $context)
     {
-        $this->context = $context ?? new Context();
+        $this->context = $context;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
@@ -60,7 +63,24 @@ class PaymentWebhook implements FilterInterface
             throw new MethodNotAllowedException('Provided request method not allowed', ['GET', 'POST']);
         }
 
-        $this->transactionService->webhook($this->context->getParameter('provider'), $request);
+        $this->logService->log(
+            $request->getAttribute('REMOTE_ADDR') ?: '127.0.0.1',
+            $request->getMethod(),
+            $request->getRequestTarget(),
+            $request->getHeader('User-Agent'),
+            $this->context,
+            $request
+        );
+
+        try {
+            $this->transactionService->webhook($this->context->getParameter('provider'), $request);
+        } catch (\Throwable $e) {
+            $this->logService->error($e);
+
+            throw $e;
+        } finally {
+            $this->logService->finish();
+        }
 
         $this->responseWriter->setBody($response, [
             'success' => true,
