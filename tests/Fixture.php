@@ -24,6 +24,7 @@ namespace Fusio\Impl\Tests;
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
 use Fusio\Adapter\Util\Action\UtilStaticResponse;
+use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Connection\Native;
 use Fusio\Impl\Migrations\DataBag;
 use Fusio\Impl\Migrations\Method;
@@ -103,7 +104,7 @@ class Fixture
         $data->addEventResponse(0, 0);
         $data->addRate('silver', 5, 8, 'P1M');
         $data->addRate('gold', 10, 16, 'P1M');
-        $data->addPlan('Plan A', 39.99, 500, 1);
+        $data->addPlan('Plan A', 39.99, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu');
         $data->addPlan('Plan B', 49.99, 1000, null);
         $data->addTransaction('Administrator', 'Plan B', 3999, '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource);

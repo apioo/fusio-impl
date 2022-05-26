@@ -384,7 +384,7 @@ class DataBag
         ];
     }
 
-    public function addPlan(string $name, float $price, int $points, ?int $period)
+    public function addPlan(string $name, float $price, int $points, ?int $period, ?string $externalId = null)
     {
         $this->data['fusio_plan'][$name] = [
             'status' => Table\Plan::STATUS_ACTIVE,
@@ -392,7 +392,8 @@ class DataBag
             'description' => '',
             'price' => $price,
             'points' => $points,
-            'period_type' => $period
+            'period_type' => $period,
+            'external_id' => $externalId,
         ];
     }
 

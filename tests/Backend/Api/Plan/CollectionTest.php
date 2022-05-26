@@ -75,7 +75,8 @@ class CollectionTest extends ControllerDbTestCase
             "description": "",
             "price": 39.99,
             "points": 500,
-            "period": 1
+            "period": 1,
+            "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
         },
         {
             "id": 2,

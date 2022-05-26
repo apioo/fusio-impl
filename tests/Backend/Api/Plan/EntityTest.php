@@ -70,7 +70,8 @@ class EntityTest extends ControllerDbTestCase
     "description": "",
     "price": 39.99,
     "points": 500,
-    "period": 1
+    "period": 1,
+    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
 }
 JSON;
 
@@ -94,7 +95,8 @@ JSON;
     "description": "",
     "price": 39.99,
     "points": 500,
-    "period": 1
+    "period": 1,
+    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
 }
 JSON;
 
