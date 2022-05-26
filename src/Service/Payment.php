@@ -128,7 +128,8 @@ class Payment
             $plan->getName(),
             $plan->getPrice(),
             $plan->getPoints(),
-            $plan->getPeriodType()
+            $plan->getPeriodType(),
+            $plan->getExternalId()
         );
     }
 

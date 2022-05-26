@@ -102,6 +102,9 @@
         },
         "period": {
           "type": "integer"
+        },
+        "externalId": {
+          "type": "string"
         }
       }
     },

@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Tests\Backend\Api\Plan;
 
+use Fusio\Engine\Model\ProductInterface;
 use Fusio\Impl\Tests\Documentation;
 use Fusio\Impl\Tests\Fixture;
 use PSX\Framework\Test\ControllerDbTestCase;
@@ -102,7 +103,8 @@ JSON;
             'description' => 'Test description',
             'price'       => 59.99,
             'points'      => 1000,
-            'period'      => 2,
+            'period'      => ProductInterface::INTERVAL_SUBSCRIPTION,
+            'externalId'  => 'price_1L3dOA2Tb35ankTn36cCgliu',
         ]));
 
         $body   = (string) $response->getBody();
@@ -118,7 +120,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type')
+            ->select('id', 'status', 'name', 'description', 'price', 'points', 'period_type', 'external_id')
             ->from('fusio_plan')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -133,7 +135,8 @@ JSON;
         $this->assertEquals('Test description', $row['description']);
         $this->assertEquals(59.99, $row['price']);
         $this->assertEquals(1000, $row['points']);
-        $this->assertEquals(2, $row['period_type']);
+        $this->assertEquals(ProductInterface::INTERVAL_SUBSCRIPTION, $row['period_type']);
+        $this->assertEquals('price_1L3dOA2Tb35ankTn36cCgliu', $row['external_id']);
     }
 
     public function testPut()

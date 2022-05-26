@@ -21,11 +21,6 @@
 
 namespace Fusio\Impl\Table;
 
-use Fusio\Engine\Model\Product;
-use Fusio\Engine\Model\ProductInterface;
-use PSX\Http\Exception as StatusCode;
-use PSX\Sql\TableAbstract;
-
 /**
  * Plan
  *
@@ -37,31 +32,4 @@ class Plan extends Generated\PlanTable
 {
     public const STATUS_ACTIVE  = 1;
     public const STATUS_DELETED = 0;
-
-    public const INTERVAL_NONE = 0;
-    public const INTERVAL_1MONTH = 1;
-    public const INTERVAL_3MONTH = 2;
-    public const INTERVAL_6MONTH = 3;
-    public const INTERVAL_12MONTH = 4;
-
-    public function getProduct(int $planId): ProductInterface
-    {
-        $plan = $this->find($planId);
-
-        if (empty($plan)) {
-            throw new StatusCode\BadRequestException('Invalid plan id');
-        }
-
-        if ($plan['status'] != self::STATUS_ACTIVE) {
-            throw new StatusCode\BadRequestException('Invalid plan status');
-        }
-
-        return new Product(
-            $plan['id'],
-            $plan['name'],
-            $plan['price'],
-            $plan['points'],
-            $plan['period_type']
-        );
-    }
 }

@@ -68,6 +68,7 @@ class Plan
                 Table\Generated\PlanTable::COLUMN_PRICE => $plan->getPrice(),
                 Table\Generated\PlanTable::COLUMN_POINTS => $plan->getPoints(),
                 Table\Generated\PlanTable::COLUMN_PERIOD_TYPE => $plan->getPeriod(),
+                Table\Generated\PlanTable::COLUMN_EXTERNAL_ID => $plan->getExternalId(),
             ]);
 
             $this->planTable->create($record);
