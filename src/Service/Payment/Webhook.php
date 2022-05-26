@@ -21,6 +21,7 @@
 
 namespace Fusio\Impl\Service\Payment;
 
+use Fusio\Engine\Model\ProductInterface;
 use Fusio\Engine\Payment\WebhookInterface;
 use Fusio\Impl\Table;
 use Fusio\Impl\Table\Generated\PlanRow;
@@ -59,7 +60,7 @@ class Webhook implements WebhookInterface
             return;
         }
 
-        if (!empty($plan->getPeriodType())) {
+        if ($plan->getPeriodType() === ProductInterface::INTERVAL_SUBSCRIPTION) {
             // we only assign a plan id to the user for interval subscription
             $user->setPlanId($planId);
         }
