@@ -61,11 +61,14 @@ class Webhook implements WebhookInterface
         }
 
         if ($plan->getPeriodType() === ProductInterface::INTERVAL_SUBSCRIPTION) {
-            // we only assign a plan id to the user for interval subscription
+            // we only assign a plan id to the user for subscriptions since we receive later on a paid event which
+            // credits the points to the user
             $user->setPlanId($planId);
+        } else {
+            // for one time payments we directly credit the points to the user but we dont assign a plan id to the user
+            $user->setPoints($user->getPoints() + $plan->getPoints());
         }
 
-        $user->setPoints($user->getPoints() + $plan->getPoints());
         $user->setExternalId($customerId);
         $this->userTable->update($user);
 
