@@ -64,7 +64,7 @@ class Webhook implements WebhookInterface
             // we only assign a plan id to the user for subscriptions since we receive later on a paid event which
             // credits the points to the user
             $user->setPlanId($planId);
-        } else {
+        } elseif ($plan->getPeriodType() === ProductInterface::INTERVAL_ONETIME) {
             // for one time payments we directly credit the points to the user but we dont assign a plan id to the user
             $user->setPoints($user->getPoints() + $plan->getPoints());
         }
@@ -72,14 +72,17 @@ class Webhook implements WebhookInterface
         $user->setExternalId($customerId);
         $this->userTable->update($user);
 
-        $transaction = new TransactionRow();
-        $transaction->setUserId($user->getId());
-        $transaction->setPlanId($plan->getId());
-        $transaction->setTransactionId($sessionId);
-        $transaction->setAmount($amountTotal);
-        $transaction->setPoints($plan->getPoints());
-        $transaction->setInsertDate(new \DateTime());
-        $this->transactionTable->create($transaction);
+        if ($plan->getPeriodType() === ProductInterface::INTERVAL_ONETIME) {
+            // create transaction only for one time payments
+            $transaction = new TransactionRow();
+            $transaction->setUserId($user->getId());
+            $transaction->setPlanId($plan->getId());
+            $transaction->setTransactionId($sessionId);
+            $transaction->setAmount($amountTotal);
+            $transaction->setPoints($plan->getPoints());
+            $transaction->setInsertDate(new \DateTime());
+            $this->transactionTable->create($transaction);
+        }
     }
 
     public function paid(string $customerId, int $amountPaid, string $invoiceId): void
