@@ -48,6 +48,15 @@ final class Version20220511192742 extends AbstractMigration
             $userTable->addColumn('external_id', 'string', ['notnull' => false]);
         }
 
+        if (!$schema->hasTable('fusio_plan_scope')) {
+            $planScopeTable = $schema->createTable('fusio_plan_scope');
+            $planScopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planScopeTable->addColumn('plan_id', 'integer');
+            $planScopeTable->addColumn('scope_id', 'integer');
+            $planScopeTable->setPrimaryKey(['id']);
+            $planScopeTable->addUniqueIndex(['plan_id', 'scope_id']);
+        }
+
         // add new config
         $configs = [
             [Table\Config::FORM_STRING, 'payment_stripe_secret', 'The stripe webhook secret which is needed to verify a webhook request', ''],
@@ -63,6 +72,12 @@ final class Version20220511192742 extends AbstractMigration
 
         // remove billing run
         $this->addSql('DELETE FROM fusio_cronjob WHERE name = ?', ['Billing_Run']);
+
+        //
+        // @TODO add missing routes
+        // /system/payment/stripe/webhook
+        // /consumer/payment/:provider/portal
+        // /consumer/payment/:provider/checkout
     }
 
     public function down(Schema $schema) : void

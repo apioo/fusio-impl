@@ -280,6 +280,15 @@ final class Version20200905081453 extends AbstractMigration
             $planUsageTable->setPrimaryKey(['id']);
         }
 
+        if (!$schema->hasTable('fusio_plan_scope')) {
+            $planScopeTable = $schema->createTable('fusio_plan_scope');
+            $planScopeTable->addColumn('id', 'integer', ['autoincrement' => true]);
+            $planScopeTable->addColumn('plan_id', 'integer');
+            $planScopeTable->addColumn('scope_id', 'integer');
+            $planScopeTable->setPrimaryKey(['id']);
+            $planScopeTable->addUniqueIndex(['plan_id', 'scope_id']);
+        }
+
         if (!$schema->hasTable('fusio_provider')) {
             $providerTable = $schema->createTable('fusio_provider');
             $providerTable->addColumn('id', 'integer', ['autoincrement' => true]);

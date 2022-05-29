@@ -23,6 +23,7 @@ namespace Fusio\Impl\Backend\View;
 
 use Fusio\Impl\Table;
 use PSX\Sql\Condition;
+use PSX\Sql\Reference;
 use PSX\Sql\Sql;
 use PSX\Sql\ViewAbstract;
 
@@ -98,6 +99,7 @@ class Plan extends ViewAbstract
             'points' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_POINTS),
             'period' => $this->fieldInteger(Table\Generated\PlanTable::COLUMN_PERIOD_TYPE),
             'externalId' => Table\Generated\PlanTable::COLUMN_EXTERNAL_ID,
+            'scopes' => $this->doColumn([$this->getTable(Table\Plan\Scope::class), 'getAvailableScopes'], [new Reference('id')], 'name'),
         ]);
 
         return $this->build($definition);

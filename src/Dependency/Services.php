@@ -412,6 +412,8 @@ trait Services
     {
         return new Service\Plan(
             $this->get('table_manager')->getTable(Table\Plan::class),
+            $this->get('table_manager')->getTable(Table\Scope::class),
+            $this->get('table_manager')->getTable(Table\Plan\Scope::class),
             $this->get('event_dispatcher')
         );
     }

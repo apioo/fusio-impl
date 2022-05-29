@@ -42,11 +42,15 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Plan
 {
     private Table\Plan $planTable;
+    private Table\Scope $scopeTable;
+    private Table\Plan\Scope $planScopeTable;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(Table\Plan $planTable, EventDispatcherInterface $eventDispatcher)
+    public function __construct(Table\Plan $planTable, Table\Scope $scopeTable, Table\Plan\Scope $planScopeTable, EventDispatcherInterface $eventDispatcher)
     {
         $this->planTable       = $planTable;
+        $this->scopeTable      = $scopeTable;
+        $this->planScopeTable  = $planScopeTable;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -76,6 +80,11 @@ class Plan
             $planId = $this->planTable->getLastInsertId();
             $plan->setId($planId);
 
+            if ($plan->getScopes() !== null) {
+                // add scopes
+                $this->insertScopes($planId, $plan->getScopes());
+            }
+
             $this->planTable->commit();
         } catch (\Throwable $e) {
             $this->planTable->rollBack();
@@ -86,6 +95,18 @@ class Plan
         $this->eventDispatcher->dispatch(new CreatedEvent($plan, $context));
 
         return $planId;
+    }
+
+    protected function insertScopes(int $planId, array $scopes): void
+    {
+        $scopes = $this->scopeTable->getValidScopes($scopes);
+
+        foreach ($scopes as $scope) {
+            $this->planScopeTable->create(new Table\Generated\PlanScopeRow([
+                Table\Generated\PlanScopeTable::COLUMN_PLAN_ID => $planId,
+                Table\Generated\PlanScopeTable::COLUMN_SCOPE_ID => $scope->getId(),
+            ]));
+        }
     }
 
     public function update(int $planId, Plan_Update $plan, UserContext $context): int
@@ -111,6 +132,14 @@ class Plan
         ]);
 
         $this->planTable->update($record);
+
+        if ($plan->getScopes() !== null) {
+            // delete existing scopes
+            $this->planScopeTable->deleteAllFromPlan($existing->getId());
+
+            // add scopes
+            $this->insertScopes($existing->getId(), $plan->getScopes());
+        }
 
         $this->eventDispatcher->dispatch(new UpdatedEvent($plan, $existing, $context));
 

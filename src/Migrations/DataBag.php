@@ -408,6 +408,14 @@ class DataBag
         ];
     }
 
+    public function addPlanScope(string $plan, string $scope)
+    {
+        $this->data['fusio_plan_scope'][] = [
+            'plan_id' => $this->getId('fusio_plan', $plan),
+            'scope_id' => $this->getId('fusio_scope', $scope),
+        ];
+    }
+
     public function addTransaction(string $user, string $plan, int $amount, ?string $date = null)
     {
         $this->data['fusio_transaction'][] = [

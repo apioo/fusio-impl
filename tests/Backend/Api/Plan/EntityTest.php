@@ -71,7 +71,11 @@ class EntityTest extends ControllerDbTestCase
     "price": 39.99,
     "points": 500,
     "period": 1,
-    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
+    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
+    "scopes": [
+        "foo",
+        "bar"
+    ]
 }
 JSON;
 
@@ -96,7 +100,11 @@ JSON;
     "price": 39.99,
     "points": 500,
     "period": 1,
-    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu"
+    "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
+    "scopes": [
+        "foo",
+        "bar"
+    ]
 }
 JSON;
 
@@ -150,6 +158,8 @@ JSON;
             'description' => 'Test new description',
             'price'       => 49.99,
             'points'      => 4000,
+            'externalId'  => 'foobar',
+            'scopes'      => ['bar']
         ]));
 
         $body   = (string) $response->getBody();
@@ -165,7 +175,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'name', 'description', 'price', 'points', 'period_type')
+            ->select('id', 'name', 'description', 'price', 'points', 'period_type', 'external_id')
             ->from('fusio_plan')
             ->where('id = 1')
             ->getSQL();
@@ -178,6 +188,19 @@ JSON;
         $this->assertEquals(49.99, $row['price']);
         $this->assertEquals(4000, $row['points']);
         $this->assertEquals(1, $row['period_type']);
+        $this->assertEquals('foobar', $row['external_id']);
+
+        // check scopes
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('plan_id', 'scope_id')
+            ->from('fusio_plan_scope')
+            ->where('plan_id = :plan_id')
+            ->getSQL();
+
+        $result = Environment::getService('connection')->fetchAll($sql, ['plan_id' => 1]);
+
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(41, $result[0]['scope_id']);
     }
 
     public function testDelete()

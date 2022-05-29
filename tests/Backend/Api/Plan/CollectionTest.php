@@ -106,6 +106,7 @@ JSON;
             'points'      => 1000,
             'period'      => ProductInterface::INTERVAL_SUBSCRIPTION,
             'externalId'  => 'price_1L3dOA2Tb35ankTn36cCgliu',
+            'scopes'      => ['foo']
         ]));
 
         $body   = (string) $response->getBody();
@@ -138,6 +139,18 @@ JSON;
         $this->assertEquals(1000, $row['points']);
         $this->assertEquals(ProductInterface::INTERVAL_SUBSCRIPTION, $row['period_type']);
         $this->assertEquals('price_1L3dOA2Tb35ankTn36cCgliu', $row['external_id']);
+
+        // check scopes
+        $sql = Environment::getService('connection')->createQueryBuilder()
+            ->select('plan_id', 'scope_id')
+            ->from('fusio_plan_scope')
+            ->where('plan_id = :plan_id')
+            ->getSQL();
+
+        $result = Environment::getService('connection')->fetchAll($sql, ['plan_id' => $row['id']]);
+
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(40, $result[0]['scope_id']);
     }
 
     public function testPut()
