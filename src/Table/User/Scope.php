@@ -32,7 +32,7 @@ use Fusio\Impl\Table\Generated;
  */
 class Scope extends Generated\UserScopeTable
 {
-    public function deleteAllFromUser($userId)
+    public function deleteAllFromUser(int $userId): void
     {
         $sql = 'DELETE FROM fusio_user_scope
                       WHERE user_id = :id';
@@ -40,7 +40,7 @@ class Scope extends Generated\UserScopeTable
         $this->connection->executeQuery($sql, array('id' => $userId));
     }
 
-    public function getValidScopes($userId, array $scopes)
+    public function getValidScopes(int $userId, array $scopes): array
     {
         $result = $this->getAvailableScopes($userId);
         $data   = array();
@@ -54,17 +54,15 @@ class Scope extends Generated\UserScopeTable
         return $data;
     }
 
-    public function getAvailableScopes($userId)
+    public function getAvailableScopes(int $userId): array
     {
-        $sql = '    SELECT scope.id,
-                           scope.name,
-                           scope.description
-                      FROM fusio_user_scope user_scope
-                INNER JOIN fusio_scope scope
-                        ON scope.id = user_scope.scope_id
-                     WHERE user_scope.user_id = :user_id
-                  ORDER BY scope.id ASC';
-        $assignedScopes = $this->connection->fetchAll($sql, array('user_id' => $userId)) ?: [];
+        $assignedScopes = $this->getScopesForUser($userId);
+
+        // get scopes from plan
+        $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
+        if (!empty($planId)) {
+            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($planId));
+        }
 
         $scopes = [];
         foreach ($assignedScopes as $assignedScope) {
@@ -85,5 +83,31 @@ class Scope extends Generated\UserScopeTable
         }
 
         return array_values($scopes);
+    }
+
+    private function getScopesForUser(int $userId): array
+    {
+        $sql = '    SELECT scope.id,
+                           scope.name,
+                           scope.description
+                      FROM fusio_user_scope user_scope
+                INNER JOIN fusio_scope scope
+                        ON scope.id = user_scope.scope_id
+                     WHERE user_scope.user_id = :user_id
+                  ORDER BY scope.id ASC';
+        return $this->connection->fetchAll($sql, ['user_id' => $userId]) ?: [];
+    }
+
+    private function getScopesForPlan(int $planId): array
+    {
+        $sql = '    SELECT scope.id,
+                           scope.name,
+                           scope.description
+                      FROM fusio_plan_scope plan_scope
+                INNER JOIN fusio_scope scope
+                        ON scope.id = plan_scope.scope_id
+                     WHERE plan_scope.user_id = :plan_id
+                  ORDER BY scope.id ASC';
+        return $this->connection->fetchAll($sql, ['plan_id' => $planId]) ?: [];
     }
 }

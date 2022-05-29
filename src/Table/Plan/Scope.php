@@ -40,20 +40,6 @@ class Scope extends Generated\PlanScopeTable
         $this->connection->executeQuery($sql, array('id' => $planId));
     }
 
-    public function getValidScopes($planId, array $scopes): array
-    {
-        $result = $this->getAvailableScopes($planId);
-        $data   = [];
-
-        foreach ($result as $scope) {
-            if (in_array($scope['name'], $scopes)) {
-                $data[] = $scope;
-            }
-        }
-
-        return $data;
-    }
-
     public function getAvailableScopes(int $planId): array
     {
         $sql = '    SELECT scope.id,

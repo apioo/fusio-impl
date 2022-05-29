@@ -32,7 +32,7 @@ use Fusio\Impl\Table\Generated;
  */
 class Scope extends Generated\AppScopeTable
 {
-    public function deleteAllFromApp($appId)
+    public function deleteAllFromApp(int $appId): void
     {
         $sql = 'DELETE FROM fusio_app_scope
                       WHERE app_id = :app_id';
@@ -40,7 +40,7 @@ class Scope extends Generated\AppScopeTable
         $this->connection->executeQuery($sql, array('app_id' => $appId));
     }
 
-    public function getValidScopes($appId, array $scopes)
+    public function getValidScopes(int $appId, array $scopes): array
     {
         $result = $this->getAvailableScopes($appId);
         $data   = array();
@@ -54,7 +54,7 @@ class Scope extends Generated\AppScopeTable
         return $data;
     }
 
-    public function getAvailableScopes($appId)
+    public function getAvailableScopes(int $appId): array
     {
         $sql = '    SELECT scope.id,
                            scope.name,
