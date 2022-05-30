@@ -55,6 +55,9 @@ final class Version20220511192742 extends AbstractMigration
             $planScopeTable->addColumn('scope_id', 'integer');
             $planScopeTable->setPrimaryKey(['id']);
             $planScopeTable->addUniqueIndex(['plan_id', 'scope_id']);
+
+            $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'plan_scope_scope_id');
+            $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_scope_user_id');
         }
 
         // add new config

@@ -74,7 +74,8 @@ class EntityTest extends ControllerDbTestCase
     "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
     "scopes": [
         "foo",
-        "bar"
+        "bar",
+        "plan_scope"
     ]
 }
 JSON;
@@ -103,7 +104,8 @@ JSON;
     "externalId": "price_1L3dOA2Tb35ankTn36cCgliu",
     "scopes": [
         "foo",
-        "bar"
+        "bar",
+        "plan_scope"
     ]
 }
 JSON;

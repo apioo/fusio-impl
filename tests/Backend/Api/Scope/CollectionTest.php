@@ -63,10 +63,15 @@ class CollectionTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 16,
     "entry": [
+        {
+            "id": 42,
+            "name": "plan_scope",
+            "description": "Plan scope access"
+        },
         {
             "id": 41,
             "name": "bar",
@@ -127,10 +132,15 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<'JSON'
 {
-    "totalResults": 3,
+    "totalResults": 4,
     "startIndex": 0,
     "itemsPerPage": 80,
     "entry": [
+        {
+            "id": 42,
+            "name": "plan_scope",
+            "description": "Plan scope access"
+        },
         {
             "id": 41,
             "name": "bar",
@@ -195,7 +205,7 @@ JSON;
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
 
-        $this->assertEquals(42, $row['id']);
+        $this->assertEquals(43, $row['id']);
         $this->assertEquals('test', $row['name']);
         $this->assertEquals('Test description', $row['description']);
 

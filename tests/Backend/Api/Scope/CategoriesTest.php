@@ -284,6 +284,11 @@ class CategoriesTest extends ControllerDbTestCase
                     "id": 40,
                     "name": "foo",
                     "description": "Foo access"
+                },
+                {
+                    "id": 42,
+                    "name": "plan_scope",
+                    "description": "Plan scope access"
                 }
             ]
         },

@@ -42,7 +42,7 @@ class Scope extends Generated\UserScopeTable
 
     public function getValidScopes(int $userId, array $scopes): array
     {
-        $result = $this->getAvailableScopes($userId);
+        $result = $this->getAvailableScopes($userId, true);
         $data   = array();
 
         foreach ($result as $scope) {
@@ -54,21 +54,20 @@ class Scope extends Generated\UserScopeTable
         return $data;
     }
 
-    public function getAvailableScopes(int $userId): array
+    public function getAvailableScopes(int $userId, bool $includePlanScopes = false): array
     {
         $assignedScopes = $this->getScopesForUser($userId);
 
-        // get scopes from plan
-        $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
-        if (!empty($planId)) {
-            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($planId));
+        // get scopes for plan
+        if ($includePlanScopes) {
+            $assignedScopes = array_merge($assignedScopes, $this->getScopesForPlan($userId));
         }
 
         $scopes = [];
         foreach ($assignedScopes as $assignedScope) {
             $scopes[$assignedScope['name']] = $assignedScope;
 
-            if (strpos($assignedScope['name'], '.') === false) {
+            if (!str_contains($assignedScope['name'], '.')) {
                 // load all sub scopes
                 $sql = 'SELECT scope.id,
                                scope.name,
@@ -98,15 +97,20 @@ class Scope extends Generated\UserScopeTable
         return $this->connection->fetchAll($sql, ['user_id' => $userId]) ?: [];
     }
 
-    private function getScopesForPlan(int $planId): array
+    private function getScopesForPlan(int $userId): array
     {
+        $planId = (int) $this->connection->fetchOne('SELECT plan_id FROM fusio_user WHERE id = :user_id', ['user_id' => $userId]);
+        if (empty($planId)) {
+            return [];
+        }
+
         $sql = '    SELECT scope.id,
                            scope.name,
                            scope.description
                       FROM fusio_plan_scope plan_scope
                 INNER JOIN fusio_scope scope
                         ON scope.id = plan_scope.scope_id
-                     WHERE plan_scope.user_id = :plan_id
+                     WHERE plan_scope.plan_id = :plan_id
                   ORDER BY scope.id ASC';
         return $this->connection->fetchAll($sql, ['plan_id' => $planId]) ?: [];
     }

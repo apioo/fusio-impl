@@ -80,6 +80,17 @@ class EntityTest extends ControllerDbTestCase
     "appSecret": "[app_secret]",
     "scopes": [
         "consumer",
+        "consumer.app",
+        "consumer.event",
+        "consumer.grant",
+        "consumer.log",
+        "consumer.page",
+        "consumer.payment",
+        "consumer.plan",
+        "consumer.scope",
+        "consumer.subscription",
+        "consumer.transaction",
+        "consumer.user",
         "authorization"
     ],
     "tokens": [

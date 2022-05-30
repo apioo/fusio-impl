@@ -80,10 +80,12 @@ class Fixture
 
         $secretKey = '42eec18ffdbffc9fda6110dcc705d6ce';
 
-        $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, '2015-02-27 19:59:15');
-        $data->addUser('Consumer', 'Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED, '2015-02-27 19:59:15');
-        $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE, '2015-02-27 19:59:15');
-        $data->addUser('Backend', 'Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED, '2015-02-27 19:59:15');
+        $data->addPlan('Plan A', 39.99, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu');
+        $data->addPlan('Plan B', 49.99, 1000, null);
+        $data->addUser('Consumer', 'Consumer', 'consumer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 100, Table\User::STATUS_ACTIVE, 'Plan A', '2015-02-27 19:59:15');
+        $data->addUser('Consumer', 'Disabled', 'disabled@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DISABLED, null, '2015-02-27 19:59:15');
+        $data->addUser('Backend', 'Developer', 'developer@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', 10, Table\User::STATUS_ACTIVE, null, '2015-02-27 19:59:15');
+        $data->addUser('Backend', 'Deleted', 'deleted@localhost.com', '$2y$10$8EZyVlUy.oNrF8NcDxY7OeTBt6.3fikdH82JlfeRhqSlXitxJMdB6', null, Table\User::STATUS_DELETED, null, '2015-02-27 19:59:15');
         $data->addAction('default', 'Util-Static-Response', UtilStaticResponse::class, Service\Action::serializeConfig(['response' => '{"foo": "bar"}']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Sql-Select-All', SqlSelectAll::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
         $data->addAction('default', 'Sql-Insert', SqlInsert::class, Service\Action::serializeConfig(['connection' => 2, 'table' => 'app_news']), '2015-02-27 19:59:15');
@@ -104,13 +106,12 @@ class Fixture
         $data->addEventResponse(0, 0);
         $data->addRate('silver', 5, 8, 'P1M');
         $data->addRate('gold', 10, 16, 'P1M');
-        $data->addPlan('Plan A', 39.99, 500, ProductInterface::INTERVAL_SUBSCRIPTION, 'price_1L3dOA2Tb35ankTn36cCgliu');
-        $data->addPlan('Plan B', 49.99, 1000, null);
         $data->addTransaction('Administrator', 'Plan B', 3999, '2018-10-05 18:18:00');
         $data->addSchema('default', 'Collection-Schema', $schemaCollectionSource);
         $data->addSchema('default', 'Entry-Schema', $schemaEntrySource, $schemaEntryForm);
         $data->addScope('default', 'foo', 'Foo access');
         $data->addScope('default', 'bar', 'Bar access');
+        $data->addScope('default', 'plan_scope', 'Plan scope access');
         $data->addAppScope('Foo-App', 'authorization');
         $data->addAppScope('Foo-App', 'foo');
         $data->addAppScope('Foo-App', 'bar');
@@ -122,6 +123,7 @@ class Fixture
         $data->addAppToken('Backend', 'Developer', 'bae8116c20aaa2a13774345f4a5d98bacbb2062ae79122c9c4f5ea6b767c1b9a', 'da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf', 'backend', $expire->format('Y-m-d H:i:s'));
         $data->addPlanScope('Plan A', 'foo');
         $data->addPlanScope('Plan A', 'bar');
+        $data->addPlanScope('Plan A', 'plan_scope');
         $data->addUserScope('Administrator', 'foo');
         $data->addUserScope('Administrator', 'bar');
         $data->addUserScope('Consumer', 'consumer');

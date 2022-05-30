@@ -221,6 +221,7 @@ class Scope
         if ($appId !== null) {
             $scopes = Table\Scope::getNames($this->appScopeTable->getValidScopes($appId, $scopes));
         }
+
         if ($userId !== null) {
             $scopes = Table\Scope::getNames($this->userScopeTable->getValidScopes($userId, $scopes));
         }

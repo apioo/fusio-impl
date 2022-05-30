@@ -536,10 +536,11 @@ class DataBag
         ];
     }
 
-    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $date = null)
+    public function addUser(string $role, string $name, string $email, string $password, ?int $points = null, int $status = Table\User::STATUS_ACTIVE, ?string $plan = null, ?string $date = null)
     {
         $this->data['fusio_user'][$name] = [
             'role_id' => self::getId('fusio_role', $role),
+            'plan_id' => $plan !== null ? self::getId('fusio_plan', $plan) : null,
             'status' => $status,
             'name' => $name,
             'email' => $email,

@@ -194,9 +194,7 @@ JSON;
         $sql = Environment::getService('connection')->createQueryBuilder()
             ->select('id', 'name')
             ->from('fusio_scope')
-            ->orderBy('id', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(1)
+            ->where('id = ' . $this->id)
             ->getSQL();
 
         $row = Environment::getService('connection')->fetchAssoc($sql);
