@@ -87,11 +87,20 @@ class Restorer
         $query = $this->connection->getDatabasePlatform()->modifyLimitQuery($query, $count, $startIndex);
         $result = $this->connection->fetchAllAssociative($query, ['status' => $config[self::ACTIVE_STATUS]]);
 
+        $entries = [];
+        foreach ($result as $row) {
+            $entries[] = [
+                'id' => (int) $row['id'],
+                'status' => (int) $row['status'],
+                'name' => $row['name'],
+            ];
+        }
+
         return [
             'totalResults' => $totalResults,
             'startIndex' => $startIndex,
             'itemsPerPage' => $count,
-            'entry' => $result,
+            'entry' => $entries,
         ];
     }
 
