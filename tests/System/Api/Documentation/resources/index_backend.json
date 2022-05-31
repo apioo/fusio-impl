@@ -15,6 +15,20 @@
       "version": "*"
     },
     {
+      "path": "\/backend\/trash\/:type",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
+      "path": "\/backend\/trash",
+      "methods": [
+        "ANY"
+      ],
+      "version": "*"
+    },
+    {
       "path": "\/backend\/transaction\/$transaction_id<[0-9]+>",
       "methods": [
         "ANY"

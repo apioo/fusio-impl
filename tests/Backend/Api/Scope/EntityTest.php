@@ -72,21 +72,21 @@ class EntityTest extends ControllerDbTestCase
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 41,
+    "id": 42,
     "name": "bar",
     "description": "Bar access",
     "routes": [
         {
-            "id": 101,
-            "scopeId": 41,
-            "routeId": 113,
+            "id": 103,
+            "scopeId": 42,
+            "routeId": 115,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 99,
-            "scopeId": 41,
-            "routeId": 112,
+            "id": 101,
+            "scopeId": 42,
+            "routeId": 114,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }
@@ -108,21 +108,21 @@ JSON;
         $body   = (string) $response->getBody();
         $expect = <<<JSON
 {
-    "id": 41,
+    "id": 42,
     "name": "bar",
     "description": "Bar access",
     "routes": [
         {
-            "id": 101,
-            "scopeId": 41,
-            "routeId": 113,
+            "id": 103,
+            "scopeId": 42,
+            "routeId": 115,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         },
         {
-            "id": 99,
-            "scopeId": 41,
-            "routeId": 112,
+            "id": 101,
+            "scopeId": 42,
+            "routeId": 114,
             "allow": 1,
             "methods": "GET|POST|PUT|PATCH|DELETE"
         }

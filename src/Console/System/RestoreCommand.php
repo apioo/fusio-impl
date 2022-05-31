@@ -42,9 +42,9 @@ class RestoreCommand extends Command
 
     public function __construct(Restorer $restorer)
     {
-        parent::__construct();
-
         $this->restorer = $restorer;
+
+        parent::__construct();
     }
 
     protected function configure()

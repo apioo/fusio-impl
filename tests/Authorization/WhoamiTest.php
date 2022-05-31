@@ -79,6 +79,7 @@ class WhoamiTest extends ControllerDbTestCase
         "backend.sdk",
         "backend.statistic",
         "backend.transaction",
+        "backend.trash",
         "backend.user",
         "consumer",
         "consumer.app",

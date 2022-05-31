@@ -195,6 +195,121 @@
         ]
       }
     },
+    "\/backend\/trash\/{type}": {
+      "get": {
+        "tags": [
+          "backend.trash"
+        ],
+        "operationId": "Backend_Action_Trash_GetAll",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Trash_Data_Collection"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.trash"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "backend.trash"
+        ],
+        "operationId": "Backend_Action_Trash_Restore",
+        "responses": {
+          "200": {
+            "description": "POST 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Message"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.trash"
+            ]
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "type",
+          "in": "path",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "\/backend\/trash": {
+      "get": {
+        "tags": [
+          "backend.trash"
+        ],
+        "operationId": "Backend_Action_Trash_GetTypes",
+        "responses": {
+          "200": {
+            "description": "GET 200 Response",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Backend_Trash_Types"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "app": [
+              "backend.trash"
+            ]
+          }
+        ]
+      }
+    },
     "\/backend\/transaction\/{transaction_id}": {
       "get": {
         "tags": [
@@ -5043,6 +5158,12 @@
       "Backend_Transaction_Collection_Query": {
         "$ref": "#\/components\/schemas\/Transaction_Collection_Query"
       },
+      "Backend_Trash_Data_Collection": {
+        "$ref": "#\/components\/schemas\/Trash_Data_Collection"
+      },
+      "Backend_Trash_Types": {
+        "$ref": "#\/components\/schemas\/Trash_Types"
+      },
       "Backend_User": {
         "$ref": "#\/components\/schemas\/User"
       },
@@ -6530,6 +6651,34 @@
           }
         ]
       },
+      "Trash_Data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Trash_Data_Collection": {
+        "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Trash_Types": {
+        "type": "object",
+        "properties": {
+          "types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -6649,6 +6798,7 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
+              "backend.trash": "",
               "backend.user": ""
             }
           },
@@ -6679,6 +6829,7 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
+              "backend.trash": "",
               "backend.user": ""
             }
           },
@@ -6710,6 +6861,7 @@
               "backend.sdk": "",
               "backend.statistic": "",
               "backend.transaction": "",
+              "backend.trash": "",
               "backend.user": ""
             }
           }
