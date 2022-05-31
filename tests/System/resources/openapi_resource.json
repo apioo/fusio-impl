@@ -125,7 +125,8 @@
             "scopes": {
               "bar": "Bar access",
               "default": "",
-              "foo": "Foo access"
+              "foo": "Foo access",
+              "plan_scope": "Plan scope access"
             }
           },
           "clientCredentials": {
@@ -134,7 +135,8 @@
             "scopes": {
               "bar": "Bar access",
               "default": "",
-              "foo": "Foo access"
+              "foo": "Foo access",
+              "plan_scope": "Plan scope access"
             }
           },
           "authorizationCode": {
@@ -144,7 +146,8 @@
             "scopes": {
               "bar": "Bar access",
               "default": "",
-              "foo": "Foo access"
+              "foo": "Foo access",
+              "plan_scope": "Plan scope access"
             }
           }
         }
