@@ -1,0 +1,111 @@
+{
+  "status": 1,
+  "path": "\/backend\/trash\/:type",
+  "pathParameters": "BackendTrashTypePath",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Trash_GetAll",
+      "security": {
+        "app": [
+          "backend.trash"
+        ]
+      },
+      "tags": [
+        "backend.trash"
+      ],
+      "queryParameters": "Collection_Query",
+      "responses": {
+        "200": "Backend_Trash_Data_Collection"
+      }
+    },
+    "POST": {
+      "operationId": "Backend_Action_Trash_Restore",
+      "security": {
+        "app": [
+          "backend.trash"
+        ]
+      },
+      "tags": [
+        "backend.trash"
+      ],
+      "responses": {
+        "200": "Message"
+      }
+    }
+  },
+  "definitions": {
+    "BackendTrashTypePath": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "Backend_Trash_Data_Collection": {
+      "$ref": "Trash_Data_Collection"
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer"
+        },
+        "startIndex": {
+          "type": "integer"
+        },
+        "entry": {
+          "type": "array",
+          "items": {
+            "$generic": "T"
+          }
+        }
+      }
+    },
+    "Collection_Query": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "search": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Trash_Data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Trash_Data_Collection": {
+      "$ref": "Collection",
+      "$template": {
+        "T": "Trash_Data"
+      }
+    }
+  }
+}

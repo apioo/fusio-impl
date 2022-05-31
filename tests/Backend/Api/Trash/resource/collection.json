@@ -1,0 +1,36 @@
+{
+  "status": 1,
+  "path": "\/backend\/trash",
+  "methods": {
+    "GET": {
+      "operationId": "Backend_Action_Trash_GetTypes",
+      "security": {
+        "app": [
+          "backend.trash"
+        ]
+      },
+      "tags": [
+        "backend.trash"
+      ],
+      "responses": {
+        "200": "Backend_Trash_Types"
+      }
+    }
+  },
+  "definitions": {
+    "Backend_Trash_Types": {
+      "$ref": "Trash_Types"
+    },
+    "Trash_Types": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

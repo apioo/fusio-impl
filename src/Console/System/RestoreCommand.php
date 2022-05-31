@@ -52,7 +52,7 @@ class RestoreCommand extends Command
         $this
             ->setName('system:restore')
             ->setDescription('Restores a deleted database record')
-            ->addArgument('type', InputArgument::REQUIRED, 'Type must be one of: action, app, connection, cronjob, routes, schema, user')
+            ->addArgument('type', InputArgument::REQUIRED, 'Type must be one of: ' . implode(', ', $this->restorer->getTypes()))
             ->addArgument('id', InputArgument::REQUIRED, 'Name or id of the record');
     }
 

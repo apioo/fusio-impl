@@ -420,6 +420,13 @@ class NewInstallation
                 '/transaction/$transaction_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Transaction\Get::class, null, [200 => Model\Backend\Transaction::class], null, 'backend.transaction'),
                 ],
+                '/trash' => [
+                    'GET' => new Method(Backend\Action\Trash\GetTypes::class, null, [200 => Model\Backend\Trash_Types::class], null, 'backend.trash'),
+                ],
+                '/trash/:type' => [
+                    'GET' => new Method(Backend\Action\Trash\GetAll::class, null, [200 => Model\Backend\Trash_Data_Collection::class], Collection_Query::class, 'backend.trash'),
+                    'POST' => new Method(Backend\Action\Trash\Restore::class, null, [200 => Message::class], null, 'backend.trash'),
+                ],
                 '/user' => [
                     'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Model\Backend\User_Collection::class], Collection_Query::class, 'backend.user'),
                     'POST' => new Method(Backend\Action\User\Create::class, Model\Backend\User_Create::class, [201 => Message::class], null, 'backend.user', 'fusio.user.create'),
