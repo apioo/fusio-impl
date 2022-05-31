@@ -77,6 +77,9 @@ class AboutTest extends ControllerDbTestCase
         "foo",
         "plan_scope"
     ],
+    "apps": {
+        "fusio": "http:\/\/127.0.0.1\/apps\/fusio"
+    },
     "links": [
         {
             "rel": "root",
