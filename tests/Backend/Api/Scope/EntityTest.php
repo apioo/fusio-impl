@@ -207,6 +207,7 @@ JSON;
         // delete all scope references to successful delete an scope
         Environment::getService('connection')->executeUpdate('DELETE FROM fusio_app_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
         Environment::getService('connection')->executeUpdate('DELETE FROM fusio_user_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
+        Environment::getService('connection')->executeUpdate('DELETE FROM fusio_plan_scope WHERE scope_id = :scope_id', ['scope_id' => $this->id]);
 
         $response = $this->sendRequest('/backend/scope/' . $this->id, 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
