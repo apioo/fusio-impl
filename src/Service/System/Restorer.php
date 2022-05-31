@@ -82,7 +82,8 @@ class Restorer
 
         $query = 'SELECT ' . implode(', ', $columns) . '
                     FROM ' . $config[self::TABLE_NAME] . '
-                   WHERE ' . $config[self::STATUS_COLUMN] . ' != :status';
+                   WHERE ' . $config[self::STATUS_COLUMN] . ' != :status
+                ORDER BY id DESC';
         $query = $this->connection->getDatabasePlatform()->modifyLimitQuery($query, $count, $startIndex);
         $result = $this->connection->fetchAllAssociative($query, ['status' => $config[self::ACTIVE_STATUS]]);
 

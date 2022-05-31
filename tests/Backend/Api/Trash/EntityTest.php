@@ -68,14 +68,14 @@ class EntityTest extends ControllerDbTestCase
     "itemsPerPage": 16,
     "entry": [
         {
-            "id": "4",
-            "status": "2",
-            "name": "Pending"
-        },
-        {
             "id": "5",
             "status": "3",
             "name": "Deactivated"
+        },
+        {
+            "id": "4",
+            "status": "2",
+            "name": "Pending"
         }
     ]
 }
