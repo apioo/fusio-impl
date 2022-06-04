@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Impl\Migrations\DataSyncronizer;
 
@@ -37,7 +38,7 @@ final class Version20220511192742 extends AbstractMigration
             $transactionTable->addColumn('user_id', 'integer');
             $transactionTable->addColumn('plan_id', 'integer');
             $transactionTable->addColumn('points', 'integer');
-            $transactionTable->changeColumn('amount', ['type' => 'integer']);
+            $transactionTable->changeColumn('amount', ['type' => Type::getType('integer')]);
             $transactionTable->dropColumn('invoice_id');
             $transactionTable->dropColumn('status');
             $transactionTable->dropColumn('remote_id');
