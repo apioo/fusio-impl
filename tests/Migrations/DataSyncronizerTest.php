@@ -72,6 +72,8 @@ class DataSyncronizerTest extends DbTestCase
     {
         $route = $this->connection->fetchAssociative('SELECT * FROM fusio_routes WHERE path = :path', ['path' => $path]);
         $route['methods'] = $this->getMethods((int) $route['id']);
+        $this->connection->delete('fusio_scope_routes', ['route_id' => $route['id']]);
+        $this->connection->delete('fusio_rate_allocation', ['route_id' => $route['id']]);
         $this->connection->delete('fusio_routes', ['id' => $route['id']]);
         unset($route['id']);
 
