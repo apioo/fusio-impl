@@ -24,6 +24,7 @@ final class Version20220511192742 extends AbstractMigration
         if (!$rateAllocationTable->hasColumn('plan_id')) {
             $rateAllocationTable->addColumn('user_id', 'integer', ['notnull' => false]);
             $rateAllocationTable->addColumn('plan_id', 'integer', ['notnull' => false]);
+            $rateAllocationTable->dropColumn('parameters');
         }
 
         $planTable = $schema->getTable('fusio_plan');
@@ -35,9 +36,12 @@ final class Version20220511192742 extends AbstractMigration
         if (!$transactionTable->hasColumn('user_id')) {
             $transactionTable->addColumn('user_id', 'integer');
             $transactionTable->addColumn('plan_id', 'integer');
+            $transactionTable->addColumn('points', 'integer');
+            $transactionTable->changeColumn('amount', ['type' => 'integer']);
             $transactionTable->dropColumn('invoice_id');
             $transactionTable->dropColumn('status');
             $transactionTable->dropColumn('remote_id');
+            $transactionTable->dropColumn('provider');
             $transactionTable->dropColumn('return_url');
             $transactionTable->dropColumn('update_date');
         }
@@ -58,6 +62,14 @@ final class Version20220511192742 extends AbstractMigration
 
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'plan_scope_scope_id');
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_scope_user_id');
+        }
+
+        if ($schema->hasTable('fusio_plan_contract')) {
+            $schema->dropTable('fusio_plan_contract');
+        }
+
+        if ($schema->hasTable('fusio_plan_invoice')) {
+            $schema->dropTable('fusio_plan_invoice');
         }
     }
 
