@@ -22,7 +22,7 @@
 namespace Fusio\Impl\Tests\Migrations;
 
 use Fusio\Impl\Backend;
-use Fusio\Impl\Migrations\MigrationUtil;
+use Fusio\Impl\Migrations\DataSyncronizer;
 use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Table\Config;
 use Fusio\Impl\Tests\Fixture;

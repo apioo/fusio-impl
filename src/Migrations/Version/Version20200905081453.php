@@ -7,6 +7,8 @@ namespace Fusio\Impl\Migrations\Version;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 use Fusio\Engine\User\ProviderInterface;
+use Fusio\Impl\Migrations\DataSyncronizer;
+use Fusio\Impl\Migrations\NewInstallation;
 use Fusio\Impl\Table;
 
 /**
@@ -597,5 +599,23 @@ final class Version20200905081453 extends AbstractMigration
     public function isTransactional(): bool
     {
         return false;
+    }
+
+    public function postUp(Schema $schema): void
+    {
+        $inserts = NewInstallation::getData()->toArray();
+
+        foreach ($inserts as $tableName => $rows) {
+            if (!empty($rows)) {
+                $count = $this->connection->fetchColumn('SELECT COUNT(*) AS cnt FROM ' . $tableName);
+                if ($count > 0) {
+                    continue;
+                }
+
+                foreach ($rows as $row) {
+                    $this->connection->insert($tableName, $row);
+                }
+            }
+        }
     }
 }

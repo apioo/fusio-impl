@@ -40,7 +40,7 @@ class DataBag
     private array $data;
 
     private static array $priorities = [];
-    
+
     public function __construct()
     {
         $this->data = [
@@ -608,6 +608,19 @@ class DataBag
         if (isset($this->data[$type][$name][$key])) {
             $this->data[$type][$name][$key] = $value;
         }
+    }
+
+    public function getData(string $table, ?string $column = null, mixed $value = null): array
+    {
+        $data = $this->data[$table] ?? throw new \InvalidArgumentException('Provided table ' . $table . ' does not exist');
+
+        if ($column !== null && $value !== null) {
+            $data = array_filter($data, function(array $row) use ($column, $value) {
+                return $row[$column] === $value;
+            });
+        }
+
+        return $data;
     }
 
     private function hasId(string $type, $name): bool

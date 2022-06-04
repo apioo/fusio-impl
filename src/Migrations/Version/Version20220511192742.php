@@ -6,7 +6,7 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Fusio\Impl\Table;
+use Fusio\Impl\Migrations\DataSyncronizer;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -59,31 +59,16 @@ final class Version20220511192742 extends AbstractMigration
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_scope'), ['scope_id'], ['id'], [], 'plan_scope_scope_id');
             $planScopeTable->addForeignKeyConstraint($schema->getTable('fusio_plan'), ['plan_id'], ['id'], [], 'plan_scope_user_id');
         }
-
-        // add new config
-        $configs = [
-            [Table\Config::FORM_STRING, 'payment_stripe_secret', 'The stripe webhook secret which is needed to verify a webhook request', ''],
-            [Table\Config::FORM_STRING, 'payment_currency', 'The three-character ISO-4217 currency code which is used to process payments', ''],
-        ];
-
-        foreach ($configs as $row) {
-            $id = $this->connection->fetchOne('SELECT id FROM fusio_config WHERE name = ?', [$row[1]]);
-            if (empty($id)) {
-                $this->addSql('INSERT INTO fusio_config (type, name, description, value) VALUES (?, ?, ?, ?)', $row);
-            }
-        }
-
-        // remove billing run
-        $this->addSql('DELETE FROM fusio_cronjob WHERE name = ?', ['Billing_Run']);
-
-        //
-        // @TODO add missing routes
-        // /system/payment/stripe/webhook
-        // /consumer/payment/:provider/portal
-        // /consumer/payment/:provider/checkout
     }
 
     public function down(Schema $schema) : void
     {
+    }
+
+    public function postUp(Schema $schema): void
+    {
+        DataSyncronizer::sync($this->connection);
+
+        $this->connection->delete('fusio_cronjob', ['name' => 'Billing_Run']);
     }
 }
