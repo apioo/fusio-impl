@@ -49,14 +49,6 @@ class DataSyncronizerTest extends DbTestCase
         $event = $this->getEvent('fusio.action.create');
         $cronjob = $this->getCronjob('Dispatch_Event');
 
-        // we delete several entries and check whether the sync inserts those entries
-        $this->connection->delete('fusio_config', ['name' => 'info_title']);
-        $this->connection->delete('fusio_routes', ['path' => '/backend/action']);
-        $this->connection->delete('fusio_action', ['name' => 'Backend_Action_Action_Get']);
-        $this->connection->delete('fusio_schema', ['name' => 'Backend_Action']);
-        $this->connection->delete('fusio_event', ['name' => 'fusio.action.create']);
-        $this->connection->delete('fusio_cronjob', ['name' => 'Dispatch_Event']);
-
         DataSyncronizer::sync($this->connection);
 
         $this->assertEquals($config, $this->getConfig('info_title'));
@@ -70,6 +62,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getConfig(string $name): array
     {
         $config = $this->connection->fetchAssociative('SELECT * FROM fusio_config WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_config', ['id' => $config['id']]);
         unset($config['id']);
 
         return $config;
@@ -79,6 +72,7 @@ class DataSyncronizerTest extends DbTestCase
     {
         $route = $this->connection->fetchAssociative('SELECT * FROM fusio_routes WHERE path = :path', ['path' => $path]);
         $route['methods'] = $this->getMethods((int) $route['id']);
+        $this->connection->delete('fusio_routes', ['id' => $route['id']]);
         unset($route['id']);
 
         return $route;
@@ -95,6 +89,8 @@ class DataSyncronizerTest extends DbTestCase
             $result[] = $method;
         }
 
+        $this->connection->delete('fusio_routes_method', ['route_id' => $routeId]);
+
         return $result;
     }
 
@@ -108,12 +104,15 @@ class DataSyncronizerTest extends DbTestCase
             $result[] = $response;
         }
 
+        $this->connection->delete('fusio_routes_response', ['method_id' => $methodId]);
+
         return $result;
     }
 
     private function getAction(string $name): array
     {
         $action = $this->connection->fetchAssociative('SELECT * FROM fusio_action WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_action', ['id' => $action['id']]);
         unset($action['id']);
 
         return $action;
@@ -122,6 +121,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getSchema(string $name): array
     {
         $schema = $this->connection->fetchAssociative('SELECT * FROM fusio_schema WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_schema', ['id' => $schema['id']]);
         unset($schema['id']);
 
         return $schema;
@@ -130,6 +130,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getEvent(string $name): array
     {
         $event = $this->connection->fetchAssociative('SELECT * FROM fusio_event WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_event', ['id' => $event['id']]);
         unset($event['id']);
 
         return $event;
@@ -138,6 +139,7 @@ class DataSyncronizerTest extends DbTestCase
     private function getCronjob(string $name): array
     {
         $cronjob = $this->connection->fetchAssociative('SELECT * FROM fusio_cronjob WHERE name = :name', ['name' => $name]);
+        $this->connection->delete('fusio_cronjob', ['id' => $cronjob['id']]);
         unset($cronjob['id']);
 
         return $cronjob;
