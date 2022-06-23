@@ -3311,6 +3311,16 @@
           "backend.connection"
         ],
         "operationId": "Backend_Action_Connection_GetForm",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
@@ -4265,6 +4275,16 @@
           "backend.action"
         ],
         "operationId": "Backend_Action_Action_GetForm",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "GET 200 Response",
@@ -4733,11 +4753,17 @@
           "id": {
             "type": "integer"
           },
+          "status": {
+            "type": "integer"
+          },
           "token": {
             "type": "string"
           },
           "scope": {
-            "type": "string"
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "ip": {
             "type": "string"
@@ -5807,6 +5833,9 @@
       "Log_Error": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "message": {
             "type": "integer"
           },

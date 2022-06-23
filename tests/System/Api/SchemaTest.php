@@ -166,11 +166,17 @@ JSON;
                     "id": {
                         "type": "integer"
                     },
+                    "status": {
+                        "type": "integer"
+                    },
                     "token": {
                         "type": "string"
                     },
                     "scope": {
-                        "type": "string"
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
                     },
                     "ip": {
                         "type": "string"

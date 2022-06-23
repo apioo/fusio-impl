@@ -181,7 +181,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Action\GetIndex::class, null, [200 => Model\Backend\Action_Index::class], null, 'backend.action'),
                 ],
                 '/action/form' => [
-                    'GET' => new Method(Backend\Action\Action\GetForm::class, null, [200 => Form_Container::class], null, 'backend.action'),
+                    'GET' => new Method(Backend\Action\Action\GetForm::class, null, [200 => Form_Container::class], Model\Form_Query::class, 'backend.action'),
                 ],
                 '/action/execute/:action_id' => [
                     'POST' => new Method(Backend\Action\Action\Execute::class, Model\Backend\Action_Execute_Request::class, [200 => Model\Backend\Action_Execute_Response::class], null, 'backend.action'),
@@ -239,7 +239,7 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Connection\GetIndex::class, null, [200 => Model\Backend\Connection_Index::class], null, 'backend.connection'),
                 ],
                 '/connection/form' => [
-                    'GET' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], null, 'backend.connection'),
+                    'GET' => new Method(Backend\Action\Connection\GetForm::class, null, [200 => Form_Container::class], Model\Form_Query::class, 'backend.connection'),
                 ],
                 '/connection/$connection_id<[0-9]+|^~>' => [
                     'GET' => new Method(Backend\Action\Connection\Get::class, null, [200 => Model\Backend\Connection::class], null, 'backend.connection'),
