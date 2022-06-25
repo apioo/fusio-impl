@@ -13,7 +13,7 @@
         "backend.sdk"
       ],
       "responses": {
-        "200": "Backend_Sdk_Types"
+        "200": "Backend_Sdk_Response"
       }
     },
     "POST": {
@@ -36,8 +36,8 @@
     "Backend_Sdk_Generate": {
       "$ref": "Sdk_Generate"
     },
-    "Backend_Sdk_Types": {
-      "$ref": "Sdk_Types"
+    "Backend_Sdk_Response": {
+      "$ref": "Sdk_Response"
     },
     "Message": {
       "type": "object",
@@ -58,6 +58,14 @@
         },
         "config": {
           "type": "string"
+        }
+      }
+    },
+    "Sdk_Response": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "$ref": "Sdk_Types"
         }
       }
     },

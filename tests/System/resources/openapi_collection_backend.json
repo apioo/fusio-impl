@@ -656,7 +656,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Sdk_Types"
+                  "$ref": "#\/components\/schemas\/Backend_Sdk_Response"
                 }
               }
             }
@@ -5169,8 +5169,8 @@
       "Backend_Sdk_Generate": {
         "$ref": "#\/components\/schemas\/Sdk_Generate"
       },
-      "Backend_Sdk_Types": {
-        "$ref": "#\/components\/schemas\/Sdk_Types"
+      "Backend_Sdk_Response": {
+        "$ref": "#\/components\/schemas\/Sdk_Response"
       },
       "Backend_Statistic_Count": {
         "$ref": "#\/components\/schemas\/Statistic_Count"
@@ -6562,6 +6562,14 @@
           },
           "config": {
             "type": "string"
+          }
+        }
+      },
+      "Sdk_Response": {
+        "type": "object",
+        "properties": {
+          "types": {
+            "$ref": "#\/components\/schemas\/Sdk_Types"
           }
         }
       },
