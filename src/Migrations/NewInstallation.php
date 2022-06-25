@@ -381,7 +381,7 @@ class NewInstallation
                     'DELETE' => new Method(Backend\Action\Scope\Delete::class, null, [200 => Message::class], null, 'backend.scope', 'fusio.scope.delete'),
                 ],
                 '/sdk' => [
-                    'GET' => new Method(Backend\Action\Sdk\GetAll::class, null, [200 => Model\Backend\Sdk_Types::class], null, 'backend.sdk'),
+                    'GET' => new Method(Backend\Action\Sdk\GetAll::class, null, [200 => Model\Backend\Sdk_Response::class], null, 'backend.sdk'),
                     'POST' => new Method(Backend\Action\Sdk\Generate::class, Model\Backend\Sdk_Generate::class, [200 => Message::class], null, 'backend.sdk'),
                 ],
                 '/statistic/count_requests' => [
