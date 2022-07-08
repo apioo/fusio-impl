@@ -89,6 +89,7 @@ JSON;
         ), json_encode([
             'name'        => 'bar-event',
             'description' => 'Test description',
+            'schema'      => 'my_schema',
         ]));
 
         $body   = (string) $response->getBody();
@@ -104,7 +105,7 @@ JSON;
 
         // check database
         $sql = Environment::getService('connection')->createQueryBuilder()
-            ->select('id', 'status', 'name', 'description')
+            ->select('id', 'status', 'name', 'description', 'event_schema')
             ->from('fusio_event')
             ->orderBy('id', 'DESC')
             ->setFirstResult(0)
@@ -117,6 +118,7 @@ JSON;
         $this->assertEquals(1, $row['status']);
         $this->assertEquals('bar-event', $row['name']);
         $this->assertEquals('Test description', $row['description']);
+        $this->assertEquals('my_schema', $row['event_schema']);
     }
 
     public function testPut()
