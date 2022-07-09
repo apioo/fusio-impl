@@ -28,7 +28,7 @@ use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\Restorer;
 use Fusio\Model\Backend\Plan_Create;
 use Fusio\Model\Backend\Trash_Restore;
-
+use PSX\Http\Exception as StatusCode;
 /**
  * Restore
  *
@@ -51,9 +51,14 @@ class Restore extends ActionAbstract
 
         assert($body instanceof Trash_Restore);
 
+        $id = $body->getId();
+        if ($id === null) {
+            throw new StatusCode\BadRequestException('No id to restore provided');
+        }
+
         $this->restorer->restore(
             $request->get('type'),
-            $body->getId()
+            $id
         );
 
         return [
