@@ -36,7 +36,10 @@
         "id": {
           "type": "integer"
         },
-        "status": {
+        "userId": {
+          "type": "integer"
+        },
+        "planId": {
           "type": "integer"
         },
         "transactionId": {
@@ -45,9 +48,8 @@
         "amount": {
           "type": "number"
         },
-        "updateDate": {
-          "format": "date-time",
-          "type": "string"
+        "points": {
+          "type": "number"
         },
         "insertDate": {
           "format": "date-time",

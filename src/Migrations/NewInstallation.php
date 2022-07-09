@@ -425,7 +425,7 @@ class NewInstallation
                 ],
                 '/trash/:type' => [
                     'GET' => new Method(Backend\Action\Trash\GetAll::class, null, [200 => Model\Backend\Trash_Data_Collection::class], Collection_Query::class, 'backend.trash'),
-                    'POST' => new Method(Backend\Action\Trash\Restore::class, null, [200 => Message::class], null, 'backend.trash'),
+                    'POST' => new Method(Backend\Action\Trash\Restore::class, Model\Backend\Trash_Restore::class, [200 => Message::class], null, 'backend.trash'),
                 ],
                 '/user' => [
                     'GET' => new Method(Backend\Action\User\GetAll::class, null, [200 => Model\Backend\User_Collection::class], Collection_Query::class, 'backend.user'),

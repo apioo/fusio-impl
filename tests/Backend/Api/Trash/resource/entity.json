@@ -28,6 +28,7 @@
       "tags": [
         "backend.trash"
       ],
+      "request": "Backend_Trash_Restore",
       "responses": {
         "200": "Message"
       }
@@ -44,6 +45,9 @@
     },
     "Backend_Trash_Data_Collection": {
       "$ref": "Trash_Data_Collection"
+    },
+    "Backend_Trash_Restore": {
+      "$ref": "Trash_Restore"
     },
     "Collection": {
       "type": "object",
@@ -105,6 +109,14 @@
       "$ref": "Collection",
       "$template": {
         "T": "Trash_Data"
+      }
+    },
+    "Trash_Restore": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        }
       }
     }
   }

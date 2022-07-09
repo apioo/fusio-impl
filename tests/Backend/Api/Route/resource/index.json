@@ -21,40 +21,27 @@
     "Backend_Route_Index_Providers": {
       "$ref": "Route_Index_Providers"
     },
+    "Route_Index_Provider": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        }
+      }
+    },
     "Route_Index_Providers": {
       "type": "object",
       "properties": {
         "providers": {
           "type": "array",
           "items": {
-            "$ref": "Route_Provider"
+            "$ref": "Route_Index_Provider"
           }
         }
       }
-    },
-    "Route_Provider": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "config": {
-          "$ref": "Route_Provider_Config"
-        }
-      }
-    },
-    "Route_Provider_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      },
-      "maxProperties": 16
     }
   }
 }

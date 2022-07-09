@@ -252,6 +252,16 @@
           "backend.trash"
         ],
         "operationId": "Backend_Action_Trash_Restore",
+        "requestBody": {
+          "description": "POST Request",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/Backend_Trash_Restore"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "POST 200 Response",
@@ -5190,6 +5200,9 @@
       "Backend_Trash_Data_Collection": {
         "$ref": "#\/components\/schemas\/Trash_Data_Collection"
       },
+      "Backend_Trash_Restore": {
+        "$ref": "#\/components\/schemas\/Trash_Restore"
+      },
       "Backend_Trash_Types": {
         "$ref": "#\/components\/schemas\/Trash_Types"
       },
@@ -6253,13 +6266,24 @@
           }
         ]
       },
+      "Route_Index_Provider": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          }
+        }
+      },
       "Route_Index_Providers": {
         "type": "object",
         "properties": {
           "providers": {
             "type": "array",
             "items": {
-              "$ref": "#\/components\/schemas\/Route_Provider"
+              "$ref": "#\/components\/schemas\/Route_Index_Provider"
             }
           }
         }
@@ -6631,7 +6655,10 @@
           "id": {
             "type": "integer"
           },
-          "status": {
+          "userId": {
+            "type": "integer"
+          },
+          "planId": {
             "type": "integer"
           },
           "transactionId": {
@@ -6640,9 +6667,8 @@
           "amount": {
             "type": "number"
           },
-          "updateDate": {
-            "format": "date-time",
-            "type": "string"
+          "points": {
+            "type": "number"
           },
           "insertDate": {
             "format": "date-time",
@@ -6707,6 +6733,14 @@
       },
       "Trash_Data_Collection": {
         "$ref": "#\/components\/schemas\/Collection"
+      },
+      "Trash_Restore": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
       },
       "Trash_Types": {
         "type": "object",
