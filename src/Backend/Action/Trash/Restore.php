@@ -26,6 +26,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Impl\Service\System\Restorer;
+use Fusio\Model\Backend\Plan_Create;
+use Fusio\Model\Backend\Trash_Restore;
 
 /**
  * Restore
@@ -45,9 +47,13 @@ class Restore extends ActionAbstract
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): mixed
     {
+        $body = $request->getPayload();
+
+        assert($body instanceof Trash_Restore);
+
         $this->restorer->restore(
             $request->get('type'),
-            $request->get('id')
+            $body->getId()
         );
 
         return [
