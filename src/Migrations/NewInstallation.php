@@ -388,31 +388,31 @@ class NewInstallation
                     'GET' => new Method(Backend\Action\Statistic\GetCountRequests::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/errors_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetErrorsPerRoute::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_requests' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingRequests::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/incoming_transactions' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Transaction_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIncomingTransactions::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Transaction_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/issued_tokens' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\App_Token_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetIssuedTokens::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\App_Token_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_apps' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedApps::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/most_used_routes' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetMostUsedRoutes::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_average' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimeAverage::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/time_per_route' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetTimePerRoute::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Log_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/statistic/used_points' => [
-                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Model\Backend\Statistic_Count::class], Model\Backend\Plan_Usage_Collection_Query::class, 'backend.statistic'),
+                    'GET' => new Method(Backend\Action\Statistic\GetUsedPoints::class, null, [200 => Model\Backend\Statistic_Chart::class], Model\Backend\Plan_Usage_Collection_Query::class, 'backend.statistic'),
                 ],
                 '/transaction' => [
                     'GET' => new Method(Backend\Action\Transaction\GetAll::class, null, [200 => Model\Backend\Transaction_Collection::class], Model\Backend\Transaction_Collection_Query::class, 'backend.transaction'),

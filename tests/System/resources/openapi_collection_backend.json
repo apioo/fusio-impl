@@ -386,7 +386,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -413,7 +413,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -440,7 +440,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -467,7 +467,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -494,7 +494,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -521,7 +521,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -548,7 +548,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -575,7 +575,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -602,7 +602,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Statistic_Count"
+                  "$ref": "#\/components\/schemas\/Backend_Statistic_Chart"
                 }
               }
             }
@@ -5171,6 +5171,9 @@
       },
       "Backend_Sdk_Response": {
         "$ref": "#\/components\/schemas\/Sdk_Response"
+      },
+      "Backend_Statistic_Chart": {
+        "$ref": "#\/components\/schemas\/Statistic_Chart"
       },
       "Backend_Statistic_Count": {
         "$ref": "#\/components\/schemas\/Statistic_Count"
