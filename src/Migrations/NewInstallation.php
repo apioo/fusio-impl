@@ -293,7 +293,7 @@ class NewInstallation
                 ],
                 '/marketplace' => [
                     'GET' => new Method(Backend\Action\Marketplace\GetAll::class, null, [200 => Model\Backend\Marketplace_Collection::class], null, 'backend.marketplace'),
-                    'POST' => new Method(Backend\Action\Marketplace\Install::class, Model\Backend\Marketplace_Install::class, [201 => Model\Backend\Marketplace_Install::class], null, 'backend.marketplace'),
+                    'POST' => new Method(Backend\Action\Marketplace\Install::class, Model\Backend\Marketplace_Install::class, [201 => Message::class], null, 'backend.marketplace'),
                 ],
                 '/marketplace/:app_name' => [
                     'GET' => new Method(Backend\Action\Marketplace\Get::class, null, [200 => Model\Backend\Marketplace_Local_App::class], null, 'backend.marketplace'),

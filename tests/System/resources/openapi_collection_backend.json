@@ -2404,7 +2404,7 @@
             "content": {
               "application\/json": {
                 "schema": {
-                  "$ref": "#\/components\/schemas\/Backend_Marketplace_Install"
+                  "$ref": "#\/components\/schemas\/Message"
                 }
               }
             }

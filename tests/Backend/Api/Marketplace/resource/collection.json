@@ -28,7 +28,7 @@
       ],
       "request": "Backend_Marketplace_Install",
       "responses": {
-        "201": "Backend_Marketplace_Install"
+        "201": "Message"
       }
     }
   },
@@ -90,6 +90,17 @@
       "properties": {
         "local": {
           "$ref": "Marketplace_App"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
         }
       }
     }
