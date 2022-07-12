@@ -58,7 +58,7 @@ class Restore extends ActionAbstract
 
         $this->restorer->restore(
             $request->get('type'),
-            $id
+            (string) $id
         );
 
         return [
