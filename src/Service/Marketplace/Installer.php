@@ -124,6 +124,7 @@ class Installer
 
         $appDir = $this->config->get('psx_path_cache') . '/app-' . $remoteApp->getName();
         $appDir = $this->unzipFile($zipFile, $appDir);
+        $appDir = $this->findDistFolder($appDir, $remoteApp->getName());
 
         $this->writeMetaFile($appDir, $remoteApp);
 
@@ -167,6 +168,26 @@ class Installer
         } else {
             return $appDir;
         }
+    }
+
+    /**
+     * Specific apps have a dedicated apps folder which we only need to deploy. In this method we try to find the dist
+     * folder i.e. for angular apps by looking at specific config files
+     */
+    private function findDistFolder(string $appDir, string $appName): string
+    {
+        $angular = $appDir . '/angular.json';
+        if (is_file($angular)) {
+            $config = \json_decode(\file_get_contents($angular), true);
+            if (isset($config['projects']) && is_array($config['projects'])) {
+                $outputPath = $config['projects'][$appName]['architect']['build']['options']['outputPath'] ?? null;
+                if (!empty($outputPath) && is_string($outputPath) && is_dir($appDir . '/' . ltrim($outputPath, '/'))) {
+                    return $appDir . '/' . ltrim($outputPath, '/');
+                }
+            }
+        }
+
+        return $appDir;
     }
 
     private function writeMetaFile(string $appDir, App $app): void
