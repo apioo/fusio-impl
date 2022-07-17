@@ -68,11 +68,11 @@ class ProviderTest extends ControllerDbTestCase
 {
     "element": [
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "text",
+            "element": "input",
             "name": "table",
             "title": "Table",
-            "help": null
+            "help": null,
+            "type": "text"
         }
     ]
 }

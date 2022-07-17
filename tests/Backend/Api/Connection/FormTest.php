@@ -65,7 +65,10 @@ class FormTest extends ControllerDbTestCase
 {
     "element": [
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/select",
+            "element": "select",
+            "name": "type",
+            "title": "Type",
+            "help": "The driver which is used to connect to the database",
             "options": [
                 {
                     "key": "pdo_mysql",
@@ -87,38 +90,35 @@ class FormTest extends ControllerDbTestCase
                     "key": "sqlanywhere",
                     "value": "SAP Sybase SQL Anywhere"
                 }
-            ],
-            "name": "type",
-            "title": "Type",
-            "help": "The driver which is used to connect to the database"
+            ]
         },
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "text",
+            "element": "input",
             "name": "host",
             "title": "Host",
-            "help": "The IP or hostname of the database server"
+            "help": "The IP or hostname of the database server",
+            "type": "text"
         },
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "text",
+            "element": "input",
             "name": "username",
             "title": "Username",
-            "help": "The name of the database user"
+            "help": "The name of the database user",
+            "type": "text"
         },
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "password",
+            "element": "input",
             "name": "password",
             "title": "Password",
-            "help": "The password of the database user"
+            "help": "The password of the database user",
+            "type": "password"
         },
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/input",
-            "type": "text",
+            "element": "input",
             "name": "database",
             "title": "Database",
-            "help": "The name of the database which is used upon connection"
+            "help": "The name of the database which is used upon connection",
+            "type": "text"
         }
     ]
 }

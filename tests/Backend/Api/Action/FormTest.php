@@ -65,11 +65,11 @@ class FormTest extends ControllerDbTestCase
 {
     "element": [
         {
-            "element": "http:\/\/fusio-project.org\/ns\/2015\/form\/textarea",
-            "mode": "json",
+            "element": "textarea",
             "name": "response",
             "title": "Response",
-            "help": "The response in JSON format"
+            "help": "The response in JSON format",
+            "mode": "json"
         }
     ]
 }

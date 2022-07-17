@@ -83,6 +83,16 @@ trait Services
         );
     }
 
+    public function getGeneratorEntityCreatorService(): Service\Generator\EntityCreator
+    {
+        return new Service\Generator\EntityCreator(
+            $this->get('routes_service'),
+            $this->get('schema_service'),
+            $this->get('action_service'),
+            $this->get('schema_manager')
+        );
+    }
+
     public function getRoutesProviderService(): Service\Route\Provider
     {
         $factory = new ProviderFactory(
@@ -95,12 +105,8 @@ trait Services
         return new Service\Route\Provider(
             $this->get('connection'),
             $factory,
-            $this,
-            $this->get('routes_service'),
-            $this->get('schema_service'),
-            $this->get('action_service'),
-            $this->get('form_element_factory'),
-            $this->get('schema_manager')
+            $this->get('generator_entity_creator_service'),
+            $this->get('form_element_factory')
         );
     }
 
