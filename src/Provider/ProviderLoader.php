@@ -120,8 +120,8 @@ class ProviderLoader
                 User\Github::class,
                 User\Google::class,
             ],
-            ProviderConfig::TYPE_ROUTES => [
-                Adapter\Sql\Routes\SqlTable::class,
+            ProviderConfig::TYPE_GENERATOR => [
+                Adapter\Sql\Generator\SqlTable::class,
             ],
         ];
     }

@@ -19,15 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Provider\Routes;
+namespace Fusio\Impl\Provider\Generator;
 
 use Fusio\Adapter\Http\Action\HttpProcessor;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
+use Fusio\Engine\Generator\ProviderInterface;
+use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
-use Fusio\Engine\Routes\ProviderInterface;
-use Fusio\Engine\Routes\SetupInterface;
 use Fusio\Impl\Controller\SchemaApiController;
 use PSX\Api\Util\Inflection;
 

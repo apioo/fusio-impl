@@ -19,12 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Provider\Routes;
+namespace Fusio\Impl\Tests\Provider\Generator;
 
+use Fusio\Engine\Generator\Setup;
 use Fusio\Engine\Parameters;
-use Fusio\Engine\Routes\Setup;
-use Fusio\Impl\Provider\Routes\OpenAPI;
-use Fusio\Impl\Provider\Routes\Postman;
+use Fusio\Impl\Provider\Generator\Postman;
 use Fusio\Impl\Tests\DbTestCase;
 
 /**
