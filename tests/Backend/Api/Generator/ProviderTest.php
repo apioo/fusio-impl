@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Impl\Tests\Backend\Api\Route;
+namespace Fusio\Impl\Tests\Backend\Api\Generator;
 
 use Fusio\Adapter\Sql\Action\SqlInsert;
 use Fusio\Adapter\Sql\Action\SqlSelectAll;
@@ -45,7 +45,7 @@ class ProviderTest extends ControllerDbTestCase
 
     public function testDocumentation()
     {
-        $response = $this->sendRequest('/system/doc/*/backend/routes/provider/testprovider', 'GET', array(
+        $response = $this->sendRequest('/system/doc/*/backend/generator/testprovider', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -58,7 +58,7 @@ class ProviderTest extends ControllerDbTestCase
 
     public function testGet()
     {
-        $response = $this->sendRequest('/backend/routes/provider/testprovider', 'GET', array(
+        $response = $this->sendRequest('/backend/generator/testprovider', 'GET', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ));
@@ -84,7 +84,7 @@ JSON;
 
     public function testPost()
     {
-        $response = $this->sendRequest('/backend/routes/provider/testprovider', 'POST', array(
+        $response = $this->sendRequest('/backend/generator/testprovider', 'POST', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -181,7 +181,7 @@ JSON;
 
     public function testPut()
     {
-        $response = $this->sendRequest('/backend/routes/provider/testprovider', 'PUT', array(
+        $response = $this->sendRequest('/backend/generator/testprovider', 'PUT', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([
@@ -289,7 +289,7 @@ JSON;
 
     public function testDelete()
     {
-        $response = $this->sendRequest('/backend/routes/provider/testprovider', 'DELETE', array(
+        $response = $this->sendRequest('/backend/generator/testprovider', 'DELETE', array(
             'User-Agent'    => 'Fusio TestCase',
             'Authorization' => 'Bearer da250526d583edabca8ac2f99e37ee39aa02a3c076c0edc6929095e20ca18dcf'
         ), json_encode([

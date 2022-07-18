@@ -1,50 +1,50 @@
 {
   "status": 1,
-  "path": "\/backend\/routes\/provider\/:provider",
-  "pathParameters": "BackendRoutesProviderProviderPath",
+  "path": "\/backend\/generator\/:provider",
+  "pathParameters": "BackendGeneratorProviderPath",
   "methods": {
     "GET": {
-      "operationId": "Backend_Action_Route_Provider_Form",
+      "operationId": "Backend_Action_Generator_Form",
       "security": {
         "app": [
-          "backend.route"
+          "backend.generator"
         ]
       },
       "tags": [
-        "backend.route"
+        "backend.generator"
       ],
       "responses": {
         "200": "Form_Container"
       }
     },
     "POST": {
-      "operationId": "Backend_Action_Route_Provider_Create",
+      "operationId": "Backend_Action_Generator_Create",
       "security": {
         "app": [
-          "backend.route"
+          "backend.generator"
         ]
       },
       "tags": [
-        "backend.route"
+        "backend.generator"
       ],
-      "request": "Backend_Route_Provider",
+      "request": "Backend_Generator_Provider",
       "responses": {
         "201": "Message"
       }
     },
     "PUT": {
-      "operationId": "Backend_Action_Route_Provider_Changelog",
+      "operationId": "Backend_Action_Generator_Changelog",
       "security": {
         "app": [
-          "backend.route"
+          "backend.generator"
         ]
       },
       "tags": [
-        "backend.route"
+        "backend.generator"
       ],
-      "request": "Backend_Route_Provider_Config",
+      "request": "Backend_Generator_Provider_Config",
       "responses": {
-        "200": "Backend_Route_Provider_Changelog"
+        "200": "Backend_Generator_Provider_Changelog"
       }
     }
   },
@@ -82,7 +82,7 @@
         "type": "any"
       }
     },
-    "BackendRoutesProviderProviderPath": {
+    "BackendGeneratorProviderPath": {
       "type": "object",
       "properties": {
         "provider": {
@@ -90,14 +90,14 @@
         }
       }
     },
-    "Backend_Route_Provider": {
-      "$ref": "Route_Provider"
+    "Backend_Generator_Provider": {
+      "$ref": "Generator_Provider"
     },
-    "Backend_Route_Provider_Changelog": {
-      "$ref": "Route_Provider_Changelog"
+    "Backend_Generator_Provider_Changelog": {
+      "$ref": "Generator_Provider_Changelog"
     },
-    "Backend_Route_Provider_Config": {
-      "$ref": "Route_Provider_Config"
+    "Backend_Generator_Provider_Config": {
+      "$ref": "Generator_Provider_Config"
     },
     "Form_Container": {
       "type": "object",
@@ -187,6 +187,53 @@
           "type": "string"
         }
       }
+    },
+    "Generator_Provider": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "$ref": "Generator_Provider_Config"
+        }
+      }
+    },
+    "Generator_Provider_Changelog": {
+      "type": "object",
+      "properties": {
+        "schemas": {
+          "type": "array",
+          "items": {
+            "$ref": "Schema"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "Action"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "Route"
+          }
+        }
+      }
+    },
+    "Generator_Provider_Config": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "any"
+      },
+      "maxProperties": 16
     },
     "Message": {
       "type": "object",
@@ -283,53 +330,6 @@
       "additionalProperties": {
         "$ref": "Route_Method"
       }
-    },
-    "Route_Provider": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string"
-        },
-        "scopes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "config": {
-          "$ref": "Route_Provider_Config"
-        }
-      }
-    },
-    "Route_Provider_Changelog": {
-      "type": "object",
-      "properties": {
-        "schemas": {
-          "type": "array",
-          "items": {
-            "$ref": "Schema"
-          }
-        },
-        "actions": {
-          "type": "array",
-          "items": {
-            "$ref": "Action"
-          }
-        },
-        "routes": {
-          "type": "array",
-          "items": {
-            "$ref": "Route"
-          }
-        }
-      }
-    },
-    "Route_Provider_Config": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "any"
-      },
-      "maxProperties": 16
     },
     "Route_Version": {
       "type": "object",
