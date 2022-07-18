@@ -6,6 +6,8 @@ namespace Fusio\Impl\Migrations\Version;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Fusio\Impl\Migrations\DataSyncronizer;
+use Fusio\Impl\Table;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -28,15 +30,19 @@ final class Version20220718210602 extends AbstractMigration
     public function postUp(Schema $schema): void
     {
         $routes = [
-            '/backend/routes/provider' => '/backend/generator',
-            '/backend/routes/provider/:provider' => '/backend/generator/:provider',
+            '/backend/routes/provider',
+            '/backend/routes/provider/:provider',
         ];
 
-        foreach ($routes as $oldPath => $newPath) {
-            $this->connection->executeStatement('UPDATE fusio_routes SET path = :new_path WHERE path = :old_path', [
-                'new_path' => $newPath,
-                'old_path' => $oldPath,
-            ]);
+        foreach ($routes as $path) {
+            $routeId = $this->connection->fetchOne('SELECT id FROM fusio_routes WHERE path = :path', ['path' => $path]);
+            if (empty($routeId)) {
+                continue;
+            }
+
+            $this->connection->update('fusio_routes', ['status' => Table\Route::STATUS_DELETED], ['id' => $routeId]);
         }
+
+        DataSyncronizer::sync($this->connection);
     }
 }
