@@ -279,6 +279,14 @@ class NewInstallation
                     'PUT' => new Method(Backend\Action\Event\Update::class, Model\Backend\Event_Update::class, [200 => Message::class], null, 'backend.event', 'fusio.event.update'),
                     'DELETE' => new Method(Backend\Action\Event\Delete::class, null, [200 => Message::class], null, 'backend.event', 'fusio.event.delete'),
                 ],
+                '/generator' => [
+                    'GET' => new Method(Backend\Action\Generator\Index::class, null, [200 => Model\Backend\Generator_Index_Providers::class], null, 'backend.generator'),
+                ],
+                '/generator/:provider' => [
+                    'GET' => new Method(Backend\Action\Generator\Form::class, null, [200 => Form_Container::class], null, 'backend.generator'),
+                    'POST' => new Method(Backend\Action\Generator\Create::class, Model\Backend\Generator_Provider::class, [201 => Message::class], null, 'backend.generator'),
+                    'PUT' => new Method(Backend\Action\Generator\Changelog::class, Model\Backend\Generator_Provider_Config::class, [200 => Model\Backend\Generator_Provider_Changelog::class], null, 'backend.generator'),
+                ],
                 '/log/error' => [
                     'GET' => new Method(Backend\Action\Log\Error\GetAll::class, null, [200 => Model\Backend\Log_Error_Collection::class], Collection_Query::class, 'backend.log'),
                 ],
@@ -339,14 +347,6 @@ class NewInstallation
                 '/routes' => [
                     'GET' => new Method(Backend\Action\Route\GetAll::class, null, [200 => Model\Backend\Route_Collection::class], Collection_Category_Query::class, 'backend.route'),
                     'POST' => new Method(Backend\Action\Route\Create::class, Model\Backend\Route_Create::class, [201 => Message::class], null, 'backend.route', 'fusio.route.create'),
-                ],
-                '/routes/provider' => [
-                    'GET' => new Method(Backend\Action\Route\Provider\Index::class, null, [200 => Model\Backend\Route_Index_Providers::class], null, 'backend.route'),
-                ],
-                '/routes/provider/:provider' => [
-                    'GET' => new Method(Backend\Action\Route\Provider\Form::class, null, [200 => Form_Container::class], null, 'backend.route'),
-                    'POST' => new Method(Backend\Action\Route\Provider\Create::class, Model\Backend\Route_Provider::class, [201 => Message::class], null, 'backend.route'),
-                    'PUT' => new Method(Backend\Action\Route\Provider\Changelog::class, Model\Backend\Route_Provider_Config::class, [200 => Model\Backend\Route_Provider_Changelog::class], null, 'backend.route'),
                 ],
                 '/routes/$route_id<[0-9]+>' => [
                     'GET' => new Method(Backend\Action\Route\Get::class, null, [200 => Model\Backend\Route::class], null, 'backend.route'),
